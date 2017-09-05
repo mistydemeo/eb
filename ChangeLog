@@ -1,3 +1,40 @@
+2002-09-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.3beta1.
+
+	* eb/book.c (eb_load_catalog_epwing): Don't complain when it fails
+	to read extended information block.
+
+	* configure.ac (AC_INIT): Set version to `3.3beta1'.
+
+2002-09-26  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.ac (AM_CONFIG_HEADER): Use `AC_CONFIG_HEADER' instead.
+	* configure.ac (AC_CYGWIN, AC_MINGW32): Removed.
+	* configure.ac (AC_INIT, AM_INIT_AUTOMAKE): Package name and version
+	are set with AC_INIT, not AM_INIT_AUTOMAKE.
+
+2002-09-08  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h.in (EB_Text_Context): Rename `text_end_flag' to
+	`text_status'.
+	* eb/defs.h.in (EB_Text_Status_Code): Define the type and its
+	possible values.
+	* eb/readtext.c (eb_forward_text): Fix a bug that eb_forward_text()
+	doesn't return EB_ERR_END_OF_CONTENT when the current file pointer
+	is at 1f03.
+
+2002-09-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/appsub.c (eb_load_appendix_subbook): Fix a bug that the function
+	resets alt-text data for local characters if the appendix doesn't
+	define stop code.
+
+2002-08-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/multi.c (eb_multi_label): Generate labels written in ASCII
+	if the book is written in ISO 8859-1.
+
 2002-08-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.3beta0.

@@ -203,6 +203,7 @@ typedef int EB_Subbook_Code;
 typedef int EB_Index_Style_Code;
 typedef int EB_Search_Code;
 typedef int EB_Text_Code;
+typedef int EB_Text_Status_Code;
 typedef int EB_Multi_Search_Code;
 typedef int EB_Hook_Code;
 typedef int EB_Binary_Code;
@@ -733,9 +734,9 @@ struct EB_Text_Context_Struct {
     int file_end_flag;
 
     /*
-     * Whether the current text content ends or not.
+     * Status of the current text processing.
      */
-    int text_end_flag;
+    EB_Text_Status_Code text_status;
 
     /*
      * Skip until `skipcoe' appears.

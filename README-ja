@@ -10,6 +10,16 @@ CD-ROM 書籍は、日本で一般的に使われています。CD-ROM 書籍自体は ISO 9
 形式になっていますので、他の ISO 9660 形式と同じ要領でマウントすること
 ができます。
 
+また、EB ライブラリは幾つかのユーテリティコマンドも提供しています。
+
+	ebappendix	付録 (appendix) データを整形する
+	ebfont		CD-ROM 書籍内の外字のフォントデータを取り出す
+	ebinfo		CD-ROM 書籍に関する情報を出力する
+	ebrefile	CD-ROM 書籍のカタログファイルの構成し直す
+	ebunzip		CD-ROM 書籍を伸長する
+	ebzip		CD-ROM 書籍を圧縮する
+	ebzipinfo	CD-ROM 書籍の圧縮情報を出力する
+
 
 EB ライブラリは はフリーソフトウェアです。あなたは、Free Software
 Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)

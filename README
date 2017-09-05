@@ -10,6 +10,18 @@ formats are popular in Japan.  Since CD-ROM books themseves are stands
 on the ISO 9660 format, you can mount the discs by the same way as other
 ISO 9660 discs.
 
+EB Library also provides some utility commands:
+
+	ebappendix	format appendix files for a CD-ROM book.
+	ebfont		get font data of local defined characters in
+			a CD-ROM book.
+	ebinfo		list information about a CD-ROM book.
+	ebrefile	refile a catalog file in a CD-ROM book.
+	ebunzip		uncompress a CD-ROM book.
+	ebzip		compress a CD-ROM book.
+	ebzipinfo	output information about a compressed CD-ROM
+			book.
+
 
 EB Library is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -26,7 +26,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3beta0 版です。
+   この文書は第 3.3beta1 版です。
 
 * Menu:
 
@@ -168,9 +168,9 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 3.3beta0 に対応しています。 本書
+   この文書は、EB ライブラリバージョン 3.3beta1 に対応しています。 本書
 の内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成す
-るには、お使用いのシステムに EB ライブラリバージョン 3.3beta0 と C コン
+るには、お使用いのシステムに EB ライブラリバージョン 3.3beta1 と C コン
 パイラをインストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
@@ -522,7 +522,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 3.3beta0 のソースードを展開します。
+  1. EB ライブラリ 3.3beta1 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -1995,11 +1995,11 @@ File: eb-ja.info,  Node: Keyword Search,  Next: Multi Search,  Prev: Word Search
 条件検索
 ========
 
-   条件検索は、複数個の入力語にすべて適合するエントリを検索します。 た
+   条件検索は、複数個の入力語にすべて一致するエントリを検索します。 た
 とえば、英々辞典の条件検索では、入力語をすべて含んだ例文を検索するよう
 になっているかも知れません。
 
-   以下は、条件検索で `make', `with' という語の双方と適合するエントリ
+   以下は、条件検索で `make', `with' という語の双方と一致するエントリ
 を、選択中の副本の中から探し出すプログラムの断片です。
 
      /* `book' が `EB_Book' のオブジェクトで、すでに書籍に結び付け
@@ -2036,7 +2036,7 @@ File: eb-ja.info,  Node: Multi Search,  Next: EB_Hit,  Prev: Keyword Search,  Up
 複合検索
 ========
 
-   複合検索は、条件検索と同じく、複数個の入力語にすべて適合するエントリ
+   複合検索は、条件検索と同じく、複数個の入力語にすべて一致するエントリ
 を検索しますが、個々の入力語にあらかじめ題目が付けられています。
 
    また、前方一致、後方一致、完全一致、条件検索はすべて、各副本につき
@@ -2172,7 +2172,7 @@ File: eb-ja.info,  Node: Get Remained Entries,  Next: Search Data Types,  Prev: 
 残っているエントリの取得
 ========================
 
-   前に述べたように、`eb_hit_list()' を呼び出すときは、適合するエント
+   前に述べたように、`eb_hit_list()' を呼び出すときは、一致するエント
 リを最大で何個まで探すのかを引数で指定します。 また、`eb_hit_list()' は
 処理が成功すると、実際に見つかったエントリの数をアプリケーションプログ
 ラムに教えます。
@@ -2181,7 +2181,7 @@ File: eb-ja.info,  Node: Get Remained Entries,  Next: Search Data Types,  Prev: 
      if (error_code == EB_SUCCESS)
          printf("%d entries found\n", hit_count);
 
-指定した最大個数よりも多くの適合エントリが副本に存在している場合は、
+指定した最大個数よりも多くの一致エントリが副本に存在している場合は、
 `eb_hit_list()' を繰り返し呼び出すことで、残りのエントリを取得すること
 ができます。
 
@@ -2193,14 +2193,14 @@ File: eb-ja.info,  Node: Get Remained Entries,  Next: Search Data Types,  Prev: 
          }
          if (hit_count == 0)
              break;
-         /* 取得した適合エントリの処理 */
+         /* 取得した一致エントリの処理 */
      }
 
-適合エントリがもう残っていなければ、`eb_hit_list()' は `&hit_count' の
+一致エントリがもう残っていなければ、`eb_hit_list()' は `&hit_count' の
 指す領域に 0 を書き込んで、`EB_SUCCESS' を返します。
 
    ただし、途中で `eb_hit_list()' が失敗すると (`EB_SUCCESS' 以外の値を
-返すと)、検索リクエストに関する状態記録はリセットされるため、 適合エン
+返すと)、検索リクエストに関する状態記録はリセットされるため、 一致エン
 トリの取得をそれ以上続けることはできません。
 
 
@@ -2215,7 +2215,7 @@ File: eb-ja.info,  Node: Search Data Types,  Next: Search Functions,  Prev: Get 
      #include <eb/eb.h>
 
  - Data type: EB_Hit
-     `EB_Hit' は、検索に適合したエントリの情報を格納するためのデータ型
+     `EB_Hit' は、検索に一致したエントリの情報を格納するためのデータ型
      です。 内部構造は、次のように定義されています。
 
           typedef struct EB_Hit_Struct EB_Hit;
@@ -2417,8 +2417,8 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      ます。 このとき、配列の末尾の要素には `NULL' を置き、配列の終端を
      明示します。
 
-     どちらの関数も検索をリクエストするだけで、適合したエントリの情報を
-     返すことはしません。 適合したエントリの取得には `eb_hit_list()' を
+     どちらの関数も検索をリクエストするだけで、一致したエントリの情報を
+     返すことはしません。 一致したエントリの取得には `eb_hit_list()' を
      使います。 関数は、成功すると `EB_SUCCESS' を返します。
      失敗すると、原因を示すエラーコードを返します。 失敗すると、関数を
      呼び出す前にリクエストしていた検索の状態記録はリセットされますの
@@ -2447,13 +2447,13 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      ますので、注意が必要です。
 
      あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
-     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 なお、適合
+     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 なお、一致
      するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
 
  - Function: EB_Error_Code eb_hit_list (EB_Book *BOOK, int
           MAX_HIT_COUNT, EB_Hit *HIT_LIST, int *HIT_COUNT)
      関数 `eb_hit_list()' は、あらかじめ以下のいずれかの関数でリクエス
-     トされた検索を実行し、適合したエントリを取得します。
+     トされた検索を実行し、一致したエントリを取得します。
 
         * `eb_search_word()' (前方一致検索)
 
@@ -2468,14 +2468,14 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      したがって、この関数を呼ぶ前に、上記のいずれかの関数の呼び出しに成
      功していなくてはなりません。
 
-     `eb_hit_list()' は最大で HIT_COUNT 個の適合エントリを HIT_LIST に
-     書き込みます。 書き込んだ適合エントリの数は HIT_COUNT が指す領域に
-     書き込みます。 それ以上の個数の適合エントリが存在する場合、残った
+     `eb_hit_list()' は最大で HIT_COUNT 個の一致エントリを HIT_LIST に
+     書き込みます。 書き込んだ一致エントリの数は HIT_COUNT が指す領域に
+     書き込みます。 それ以上の個数の一致エントリが存在する場合、残った
      エントリの情報は、 この関数を繰り返し呼び出すことで得ることができ
      ます。
 
      ただし、以下に挙げた関数を呼び出すと、リクエストした検索に関する状
-     態記録がリセットされますので、適合したエントリの取得は継続できな
+     態記録がリセットされますので、一致したエントリの取得は継続できな
      くなります。
 
         * `eb_set_subbook()'
@@ -2498,17 +2498,17 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
 
         * `eb_search_multi()'
 
-     繰り返し呼んだ場合も、適合したエントリの情報はその都度 HIT_LIST の
+     繰り返し呼んだ場合も、一致したエントリの情報はその都度 HIT_LIST の
      先頭から書き込み、 HIT_COUNT が指す領域に書き込む値も、その回の
-     `eb_hit_list()' の呼び出しで書き込んだ適合エントリの数になります。
+     `eb_hit_list()' の呼び出しで書き込んだ一致エントリの数になります。
 
-     成功すると、この関数は `EB_SUCCESS' を返します。 たとえ適合したエ
+     成功すると、この関数は `EB_SUCCESS' を返します。 たとえ一致したエ
      ントリがなくても、処理が正常に終了すれば、関数は `EB_SUCCESS' を返
      します。
 
      失敗すると、HIT_COUNT が指す領域に 0 を書き込み、原因を示すエラー
      コードを返します。 この場合、リクエストしていた検索の状態記録はリ
-     セットされますので、 これ以上 `eb_hit_list()' を呼んで、残った適合
+     セットされますので、 これ以上 `eb_hit_list()' を呼んで、残った一致
      エントリを取得することはできなくなります。
 
      あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
@@ -2590,11 +2590,20 @@ File: eb-ja.info,  Node: Seek and Read Text Data,  Next: Text Data Format,  Prev
          return;
      }
 
-さらに、検索を行って適合したエントリの見出しや本文を読み込む際にも、 位
-置情報の指定には `EB_Position' 型が使われます。 適合したエントリの情報
-は、関数 `eb_hit_list()' によって `EB_Hit' という型のオブジェクトに書き
-込まれますが、 `EB_Hit' 型は次のように定義されています。 (詳しくは *note
-[検索] データ型の詳細: Search Data Types.。)
+参考までに、`EB_Position' 型の内部構造は、次のようになっています。
+
+     typedef struct EB_Position_Struct EB_Position;
+     
+     struct EB_Position_Struct {
+         int page;     /* ページ番号 */
+         int offset;   /* ページ内のオフセット */
+     };
+
+   ところで、検索時に一致したエントリの見出しや本文を読み込む際にも、
+位置情報の指定には `EB_Position' 型が使われます。 一致したエントリの情
+報は、関数 `eb_hit_list()' によって `EB_Hit' という型のオブジェクトに書
+き込まれますが、 `EB_Hit' 型は次のように定義されています。 (詳しくは
+*note [検索] データ型の詳細: Search Data Types.。)
 
      typedef struct {
          EB_Position heading;   /* 見出しの位置 */
@@ -3749,7 +3758,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_GRAY_GRAPHIC:
  - EB_HOOK_END_GRAY_GRAPHIC:
      これらのフック名称は、グレースケール図版のために予約されていますが、
-     EB ライブラリ 3.3beta0 ではまだ対応していません。
+     EB ライブラリ 3.3beta1 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_COLOR_BMP:
  - EB_HOOK_BEGIN_COLOR_JPEG:
@@ -3782,8 +3791,30 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_IN_COLOR_BMP:
  - EB_HOOK_BEGIN_IN_COLOR_JPEG:
  - EB_HOOK_END_IN_COLOR_GRAPHIC:
-     これらのフック名称は、インラインカラー図版のために予約されています
-     が、 EB ライブラリ 3.3beta0 ではまだ対応していません。
+     `EB_HOOK_BEGIN_IN_COLOR_BMP' と `EB_HOOK_IN_COLOR_JPEG' は、 それ
+     ぞれ BMP 形式と JPEG 形式のインラインカラー図版の参照開始を表すエ
+     スケープシーケンスに対するフックです。 参照開始のフックは BMP と
+     JPEG とでフックが分かれていますが、終了のフックは共通で、
+     `EB_HOOK_END_IN_COLOR_GRAPIHC' になります。
+
+     フック `EB_HOOK_BEGIN_IN_COLOR_BMP' と `EB_HOOK_IN_COLOR_JPEG'
+     が、フック関数に渡す `argc' は 4 です。 `argv[0]' はエスケープシー
+     ケンスのコードそのもので、 `0x1f3c' になります。 `argv[2]' と
+     `argv[3]' は、図版の幅と高さ (ピクセル数) を意味します。
+     `argv[1]' の意味は不明です。
+
+     フック `EB_HOOK_END_IN_COLOR_BMP' が、フック関数に渡す `argc' は 3
+     です。 `argv[0]' はエスケープシーケンスのコードそのもので、 `0x1f5c'
+     になります。 `argv[1]' と `argv[2]' は、図版データのページ番号とオ
+     フセットです。 これは、`EB_Position' オブジェクト (*note [検索]
+     データ型の詳細: Search Data Types.)  の `page' および `offset' メ
+     ンバの値に相当します。
+
+     図版データの取り出し方については、*note カラー図版: Color Image.
+     を参照してください。
+
+     フック関数を登録していない状態では、これらのフックはテキストデータ
+     に何も書き込みません。
 
  - EB_HOOK_BEGIN_WAVE:
  - EB_HOOK_END_WAVE:
@@ -5250,9 +5281,9 @@ CD-ROM 書籍から取得する機能だけです。 表示したり再生したりする機能は用
 
    以下、この章では種類別にバイナリデータの扱い方について説明します。
 
-   データの種類毎にデータの取り出し方は微妙に異なりますが
-(これはデータの収録方法が微妙に異なっているからに他なりません)、大体の
-手順はデータの種類によらず、次のようなものになります。
+   バイナリデータの種類毎にデータの取り出し方は微妙に異なりますが (これ
+はデータの収録方法が微妙に異なっているからに他なりません)、おおよそ手
+順は、次のようなものになります。
 
   1. テキストデータのフックを用いて、バイナリデータの参照情報を取得す
      る
@@ -5280,9 +5311,8 @@ File: eb-ja.info,  Node: Monochrome Image,  Next: Color Image,  Prev: Binary Dat
 ============
 
    2 階調のモノクロ図版は、電子ブック、EPWING 双方に存在し、EB ライブラ
-リではどちらのモノクロ図版も扱うことができます。 (電子ブックに存在する
-16 階調のモノクロ図版は、今のところ EB
-ライブラリでは対応していません。)
+リではどちらも扱うことができます。 (電子ブックに存在する 16 階調のモノ
+クロ図版は、今のところ EB ライブラリでは対応していません。)
 
    モノクロ図版データの内部形式は外字と同じですが、 EB ライブラリでは、
 1 ピクセルに 1bit を割り当てた BMP 形式に変換してアプリケーションに渡
@@ -5350,9 +5380,9 @@ File: eb-ja.info,  Node: Color Image,  Next: WAVE Sound,  Prev: Monochrome Image
 ==========
 
    カラー図版は、電子ブックでは JPEG 形式、 EPWING では JPEG と BMP (DIB)
-形式のものが使用されています。 EB ライブラリではいずれのカラー図版も扱
-うことができますが、電子ブックへの対応は限定的なものになっています。(
-詳しくは後述します。)
+形式のものが使用されています。 EB ライブラリはこれらをすべて扱うことが
+できますが、電子ブックへの対応は限定的なものになっています。(詳しくは
+後述します。)
 
    カラー図版のデータを取り出すには、まず
 `eb_set_binary_color_graphic()' を呼び出して、これからアプリケーション
@@ -5491,12 +5521,12 @@ File: eb-ja.info,  Node: Binary Data Functions,  Prev: MPEG Movie,  Up: Binary D
  - Function: EB_Error_Code eb_compose_movie_file_name (const unsigned
           int *ARGV, char *COMPOSED_FILE_NAME)
 
+ - Function: EB_Error_Code eb_unset_binary (EB_Book *BOOK)
+
  - Function: EB_Error_Code eb_compose_movie_file_name (const unsigned
           int *ARGV, char *COMPOSED_FILE_NAME)
  - Function: EB_Error_Code eb_decompose_movie_file_name (unsigned int
           *ARGV, const char *COMPOSED_FILE_NAME)
-
- - Function: EB_Error_Code eb_unset_binary (EB_Book *BOOK)
 
 
 File: eb-ja.info,  Node: Index,  Prev: Binary Data,  Up: Top
@@ -5885,40 +5915,40 @@ Node: Search Data Types79538
 Node: Search Functions81470
 Node: Text Data92964
 Node: Seek and Read Text Data94421
-Node: Text Data Format98286
-Node: Hook100973
-Node: Hook and Character Code105130
-Node: Copyright Notice107224
-Node: Menu108369
-Node: Multi Candidates112278
-Node: Stop Code Issue116215
-Node: Text Data Sample118639
-Node: Text Data Types123070
-Node: Hook Function Details124923
-Node: Hook Code List127297
-Node: Hookset Access Functions142947
-Node: Builtin Hook Functions146023
-Node: Text Data Functions149199
-Node: Local Character165988
-Node: Narrow & Wide Font167741
-Node: Font Size and Font Code169878
-Node: Current Font Height171439
-Node: Get Font174011
-Node: Convert Font176640
-Node: Local Character in Text177803
-Node: Font Data Types178459
-Node: Font Constants179202
-Node: Font Functions183260
-Node: Font Sample197346
-Node: Binary Data202039
-Node: Monochrome Image204053
-Node: Color Image206881
-Node: WAVE Sound209306
-Node: MPEG Movie210491
-Node: Binary Data Functions211687
-Node: Index212938
-Node: Data Type Index213162
-Node: Function Index214011
-Node: Variable Index220503
+Node: Text Data Format98544
+Node: Hook101231
+Node: Hook and Character Code105388
+Node: Copyright Notice107482
+Node: Menu108627
+Node: Multi Candidates112536
+Node: Stop Code Issue116473
+Node: Text Data Sample118897
+Node: Text Data Types123328
+Node: Hook Function Details125181
+Node: Hook Code List127555
+Node: Hookset Access Functions144286
+Node: Builtin Hook Functions147362
+Node: Text Data Functions150538
+Node: Local Character167327
+Node: Narrow & Wide Font169080
+Node: Font Size and Font Code171217
+Node: Current Font Height172778
+Node: Get Font175350
+Node: Convert Font177979
+Node: Local Character in Text179142
+Node: Font Data Types179798
+Node: Font Constants180541
+Node: Font Functions184599
+Node: Font Sample198685
+Node: Binary Data203378
+Node: Monochrome Image205383
+Node: Color Image208198
+Node: WAVE Sound210615
+Node: MPEG Movie211800
+Node: Binary Data Functions212996
+Node: Index214247
+Node: Data Type Index214471
+Node: Function Index215320
+Node: Variable Index221812
 
 End Tag Table

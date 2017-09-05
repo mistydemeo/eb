@@ -1,10 +1,10 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT
+AC_INIT(zlib, 1.1.4-lt)
 AC_CONFIG_SRCDIR(zlib.h)
 AC_PREREQ(2.52)
-AM_INIT_AUTOMAKE(zlib, 1.1.4-lt)
+AM_INIT_AUTOMAKE
 
 dnl *
 dnl * Library version info.

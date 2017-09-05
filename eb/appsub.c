@@ -55,6 +55,8 @@ eb_initialize_appendix_subbooks(appendix)
 	subbook->wide_end = -1;
 	subbook->narrow_page = 0;
 	subbook->wide_page = 0;
+	subbook->stop_code0 = 0;
+	subbook->stop_code1 = 0;
 	zio_initialize(&subbook->zio);
     }
 
@@ -228,21 +230,20 @@ eb_load_appendix_subbook(appendix)
 	goto failed;
     }
     stop_code_page = eb_uint4(buffer);
-    if (zio_lseek(&subbook->zio, (off_t)(stop_code_page - 1) * EB_SIZE_PAGE,
-	SEEK_SET) < 0) {
-	error_code = EB_ERR_FAIL_SEEK_APP;
-	goto failed;
-    }
-    if (zio_read(&subbook->zio, buffer, 16) != 16) {
-	error_code = EB_ERR_FAIL_READ_APP;
-	goto failed;
-    }
-    if (eb_uint2(buffer) != 0) {
-	subbook->stop_code0 = eb_uint2(buffer + 2);
-	subbook->stop_code1 = eb_uint2(buffer + 4);
-    } else {
-	subbook->stop_code0 = 0;
-	subbook->stop_code1 = 0;
+    if (0 < stop_code_page) {
+	if (zio_lseek(&subbook->zio,
+	    (off_t)(stop_code_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	    error_code = EB_ERR_FAIL_SEEK_APP;
+	    goto failed;
+	}
+	if (zio_read(&subbook->zio, buffer, 16) != 16) {
+	    error_code = EB_ERR_FAIL_READ_APP;
+	    goto failed;
+	}
+	if (eb_uint2(buffer) != 0) {
+	    subbook->stop_code0 = eb_uint2(buffer + 2);
+	    subbook->stop_code1 = eb_uint2(buffer + 4);
+	}
     }
 
     /*

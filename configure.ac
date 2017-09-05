@@ -1,10 +1,10 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT
+AC_INIT(eb, 3.3beta1)
 AC_CONFIG_SRCDIR(eb/eb.c)
-AC_PREREQ(2.52)
-AM_INIT_AUTOMAKE(eb, 3.3beta0)
+AC_PREREQ(2.54)
+AM_INIT_AUTOMAKE
 
 dnl *
 dnl * Library version info.
@@ -251,8 +251,6 @@ fi
 dnl *
 dnl * System services
 dnl *
-AC_CYGWIN
-AC_MINGW32
 AC_EXEEXT
 AC_OBJEXT
 AM_CONDITIONAL(EXEEXT_EXE, test X$ac_exeext = Xyes)
@@ -291,7 +289,7 @@ AC_SUBST(EBCONF_EBLIBS)
 dnl * 
 dnl * Output Files.
 dnl * 
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADER(config.h)
 AC_CONFIG_FILES([Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile
     ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebzip/Makefile
     doc/Makefile doc-ja/Makefile po-eb/Makefile po-ebutils/Makefile

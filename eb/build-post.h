@@ -109,6 +109,13 @@
 #define EB_BINARY_INVALID		-1
 
 /*
+ * Text-stop status.
+ */
+#define EB_TEXT_STATUS_CONTINUED	0
+#define EB_TEXT_STATUS_SOFT_STOP	1
+#define EB_TEXT_STATUS_HARD_STOP	2
+
+/*
  * The maximum index depth of search indexes.
  */
 #define EB_MAX_INDEX_DEPTH		6

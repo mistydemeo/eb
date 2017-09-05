@@ -185,7 +185,7 @@ eb_load_multi_searches(book)
 /*
  * Default multi search titles (written in JIS X 0208).
  */
-static const char *default_multi_titles[] = {
+static const char *default_multi_titles_jisx0208[] = {
     "J#9g8!:w#1",    /* Multi search 1. */
     "J#9g8!:w#2",    /* Multi search 2. */
     "J#9g8!:w#3",    /* Multi search 3. */
@@ -196,6 +196,22 @@ static const char *default_multi_titles[] = {
     "J#9g8!:w#8",    /* Multi search 8. */
     "J#9g8!:w#9",    /* Multi search 9. */
     "J#9g8!:w#1#0",  /* Multi search 10. */
+};
+
+/*
+ * Default multi search titles (written in ASCII, subset of ISO 8859-1).
+ */
+static const char *default_multi_titles_latin[] = {
+    "Multi search 1",
+    "Multi search 2",
+    "Multi search 3",
+    "Multi search 4",
+    "Multi search 5",
+    "Multi search 6",
+    "Multi search 7",
+    "Multi search 8",
+    "Multi search 9",
+    "Multi search 10",
 };
 
 /*
@@ -220,10 +236,17 @@ eb_load_multi_titles(book)
     /*
      * Set default titles.
      */
-    for (i = 0; i < subbook->multi_count; i++) {
-	title = subbook->multis[i].title;
-	strcpy(title, default_multi_titles[i]);
-	eb_jisx0208_to_euc(title, title);
+    if (book->character_code == EB_CHARCODE_ISO8859_1) {
+	for (i = 0; i < subbook->multi_count; i++) {
+	    title = subbook->multis[i].title;
+	    strcpy(title, default_multi_titles_latin[i]);
+	}
+    } else {
+	for (i = 0; i < subbook->multi_count; i++) {
+	    title = subbook->multis[i].title;
+	    strcpy(title, default_multi_titles_jisx0208[i]);
+	    eb_jisx0208_to_euc(title, title);
+	}
     }
 
     if (book->disc_code != EB_DISC_EPWING || subbook->search_title_page == 0)

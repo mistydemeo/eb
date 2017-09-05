@@ -1,3 +1,7 @@
+Major changes in release 3.3beta1.
+
+* Fix some bugs.
+
 Major changes in release 3.3beta0.
 
 * Revise file name and compression type detection codes for EPWING.

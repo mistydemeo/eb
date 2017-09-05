@@ -46,7 +46,7 @@
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
 #else /* not __STDC__ */
-int strcasecmp()
+int strcasecmp();
 int strncasecmp();
 #endif /* not __STDC__ */
 #endif /* not HAVE_STRCASECMP */
