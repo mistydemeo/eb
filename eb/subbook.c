@@ -915,7 +915,9 @@ eb_set_subbook(book, subbook_code)
 	}
     }
 
-    if (zip_code != EB_ZIP_INVALID) {
+    if (zip_code == EB_ZIP_INVALID)
+	subbook->text_file = -1;
+    else {
 	subbook->text_file = eb_zopen(&subbook->text_zip, text_path_name,
 	    zip_code);
 	if (subbook->text_file < 0) {

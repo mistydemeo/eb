@@ -647,7 +647,7 @@ eb_read_text_internal(book, appendix, hookset, text_max_length, text,
 		book->text_context.file_end_flag = 1;
 
 	    cache_book_code = book->code;
-	    cache_location = book->text_context.location - cache_rest_length;
+	    cache_location = book->text_context.location;
 	    cache_length = cache_rest_length + read_result;
 	    cache_p = cache_buffer;
 	    cache_rest_length = cache_length;

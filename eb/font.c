@@ -400,6 +400,7 @@ eb_font_list(book, font_list, font_count)
     /*
      * Current subbook must have been set.
      */
+    subbook = book->subbook_current;
     if (subbook == NULL) {
 	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
