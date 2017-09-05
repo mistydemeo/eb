@@ -123,9 +123,11 @@ void
 eb_reset_search_contexts(book)
     EB_Book *book;
 {
-    LOG(("in+out: eb_reset_search_context(book=%d)", (int)book->code));
+    LOG(("in: eb_reset_search_context(book=%d)", (int)book->code));
 
     eb_initialize_search_contexts(book);
+
+    LOG(("out: eb_reset_search_context()"));
 }
 
 

@@ -101,9 +101,9 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 localedir = @localedir@
 
-EXTRA_DIST = eb3.m4 gettext.m4 lcmessage.m4 libtool.m4 ssizet.m4 utimbuf.m4
+EXTRA_DIST = eb3.m4 gettext.m4 lcmessage.m4 libtool.m4 utimbuf.m4
 
-pkgdata_DATA = eb3.m4 ssizet.m4
+pkgdata_DATA = eb3.m4
 subdir = m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h

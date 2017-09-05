@@ -4,12 +4,12 @@ dnl *
 AC_INIT
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.52)
-AM_INIT_AUTOMAKE(eb, 3.1)
+AM_INIT_AUTOMAKE(eb, 3.2beta0)
 
 dnl *
 dnl * Library version info.
 dnl *
-LIBEB_VERSION_INFO=5:0:0
+LIBEB_VERSION_INFO=6:0:0
 AC_SUBST(LIBEB_VERSION_INFO)
 
 dnl *
@@ -38,6 +38,18 @@ dnl *
 dnl * GNU gettext
 dnl * 
 eb_GNU_GETTEXT
+
+dnl *
+dnl * --enable-samples option.
+dnl *
+AC_ARG_ENABLE(samples,
+[  --enable-samples        compile sample programs [default=no]],
+[case "${enableval}" in
+   yes) samples=true  ;;
+   no)  samples=false ;;
+   *)   AC_MSG_ERROR(invalid argument to --enable-samples) ;;
+esac], samples=false)
+AM_CONDITIONAL(ENABLE_SAMPLES, test ${samples} = true)
 
 dnl *
 dnl * --enable-debug option.
@@ -239,7 +251,7 @@ dnl *
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_TYPE_MODE_T
-AC_TYPE_SSIZE_T
+AC_CHECK_TYPE(ssize_t, int)
 
 AC_TYPE_SIGNAL
 if test "$ac_cv_type_signal" = void; then
@@ -293,5 +305,5 @@ AM_CONFIG_HEADER(config.h)
 AC_CONFIG_FILES([Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile
     ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebzip/Makefile
     doc/Makefile doc-ja/Makefile po-eb/Makefile po-ebutils/Makefile
-    m4/Makefile])
+    m4/Makefile samples/Makefile])
 AC_OUTPUT

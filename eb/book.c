@@ -74,7 +74,7 @@ eb_bind(book, path)
     const char *path;
 {
     EB_Error_Code error_code;
-    char temporary_path[PATH_MAX + 1];
+    char temporary_path[EB_MAX_PATH_LENGTH + 1];
 
     eb_lock(&book->lock);
     LOG(("in: eb_bind(path=%s)", path));
@@ -97,9 +97,9 @@ eb_bind(book, path)
     /*
      * Set the path of the book.
      * The length of the file name "<path>/subdir/subsubdir/file.ebz;1" must
-     * be PATH_MAX maximum.
+     * be EB_MAX_PATH_LENGTH maximum.
      */
-    if (PATH_MAX < strlen(path)) {
+    if (EB_MAX_PATH_LENGTH < strlen(path)) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;
 	goto failed;
     }
@@ -109,7 +109,8 @@ eb_bind(book, path)
 	goto failed;
 
     book->path_length = strlen(temporary_path);
-    if (PATH_MAX < book->path_length + 1 + EB_MAX_DIRECTORY_NAME_LENGTH + 1
+    if (EB_MAX_PATH_LENGTH
+	< book->path_length + 1 + EB_MAX_DIRECTORY_NAME_LENGTH + 1
 	+ EB_MAX_DIRECTORY_NAME_LENGTH + 1 + EB_MAX_FILE_NAME_LENGTH) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;
 	goto failed;
@@ -148,23 +149,6 @@ eb_bind(book, path)
     LOG(("out: eb_bind() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
-}
-
-
-/*
- * Suspend using `book'.
- */
-void
-eb_suspend(book)
-    EB_Book *book;
-{
-    eb_lock(&book->lock);
-    LOG(("in: eb_suspend(book=%d)", (int)book->code));
-
-    eb_unset_subbook(book);
-
-    LOG(("out: eb_suspend()"));
-    eb_unlock(&book->lock);
 }
 
 
@@ -266,7 +250,7 @@ eb_load_catalog(book)
     EB_Error_Code error_code;
     char buffer[EB_SIZE_PAGE];
     char catalog_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
-    char catalog_path_name[PATH_MAX + 1];
+    char catalog_path_name[EB_MAX_PATH_LENGTH + 1];
     char *space;
     EB_Subbook *subbook;
     size_t catalog_size;
@@ -482,7 +466,7 @@ eb_load_language(book)
 {
     Zio zio;
     Zio_Code zio_code;
-    char language_path_name[PATH_MAX + 1];
+    char language_path_name[EB_MAX_PATH_LENGTH + 1];
     char language_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char buffer[16];
 

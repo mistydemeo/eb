@@ -17,11 +17,11 @@
 #include "eb.h"
 #include "build-post.h"
 
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 #include <stdarg.h>
-#else /* not __STDC__ */
+#else /* not (__STDC__ || defined(WIN32)) */
 #include <varargs.h>
-#endif /* not __STDC__ */
+#endif /* not (__STDC__ || defined(WIN32)) */
 
 
 /*
@@ -72,6 +72,8 @@ eb_log(message, va_alist)
 	eb_log_function(message, ap);
 	pthread_mutex_unlock(&log_mutex);
     }
+
+    va_end(ap);
 }
 
 /*

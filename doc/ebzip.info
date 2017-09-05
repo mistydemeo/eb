@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.1, for EB Library version 3.1.
+   This is edition 3.2beta0, for EB Library version 3.2beta0.
 
 * Menu:
 
@@ -101,7 +101,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 3.1, for EB Library version 3.1.
+   This is edition 3.2beta0, for EB Library version 3.2beta0.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -921,7 +921,7 @@ significant byte first.  For example, 0x1234 is stored as follows.
 First byte holds 0x12, and second byte holds 0x34.
 
      +---------+---------+
-     |0001 0010|0011 1000|
+     |0001 0010|0011 0100|
      +---------+---------+
        (0x12)    (0x34)
 
@@ -964,7 +964,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     3.1, only 1 (0001 in binary digits) can be prescribed as this
+     3.2beta0, only 1 (0001 in binary digits) can be prescribed as this
      version.
 
 `compression level (4 bits of the least-significant-bit side)'
@@ -1002,31 +1002,31 @@ significant byte first.
 
 Tag Table:
 Node: Top1042
-Node: Introduction2727
-Node: Action and Command Name4108
-Node: Invoking ebzip5718
-Node: Compression6489
-Node: Compression Example 17094
-Node: Compression Example 28674
-Node: Compression Level10221
-Node: Test10812
-Node: Partial Compression11158
-Node: Overwrite Old Files14021
-Node: Compress Compressed Book14767
-Node: Uncompression15579
-Node: Uncompression Example16017
-Node: Options for Uncompression17574
-Node: Uncompress Compressed Book18755
-Node: Information19270
-Node: Information Example19657
-Node: Options for Information20310
-Node: Delete a Book20853
-Node: Summary of Options21151
-Node: Comparision Result24639
-Node: Compressed File Format27103
-Node: Format Overview27528
-Node: Data Part28384
-Node: Index Part31050
-Node: Header Part33377
+Node: Introduction2737
+Node: Action and Command Name4128
+Node: Invoking ebzip5738
+Node: Compression6509
+Node: Compression Example 17114
+Node: Compression Example 28694
+Node: Compression Level10241
+Node: Test10832
+Node: Partial Compression11178
+Node: Overwrite Old Files14041
+Node: Compress Compressed Book14787
+Node: Uncompression15599
+Node: Uncompression Example16037
+Node: Options for Uncompression17594
+Node: Uncompress Compressed Book18775
+Node: Information19290
+Node: Information Example19677
+Node: Options for Information20330
+Node: Delete a Book20873
+Node: Summary of Options21171
+Node: Comparision Result24659
+Node: Compressed File Format27123
+Node: Format Overview27548
+Node: Data Part28404
+Node: Index Part31070
+Node: Header Part33397
 
 End Tag Table

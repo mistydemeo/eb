@@ -101,7 +101,10 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 localedir = @localedir@
 
-info_TEXINFOS = ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi ebzip-ja.texi
+info_TEXINFOS = eb-ja.texi ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi ebzip-ja.texi
+eb_ja_TEXINFOS = eb-ver.texi initexit-c.texi disctype-c.texi subbook-c.texi \
+	word-c.texi text-c.texi
+
 ebfont_ja_TEXINFOS = ebfont-ver.texi
 ebinfo_ja_TEXINFOS = ebinfo-ver.texi
 ebrefile_ja_TEXINFOS = ebrefile-ver.texi
@@ -109,21 +112,27 @@ ebzip_ja_TEXINFOS = ebzip-ver.texi
 
 samplesdir = $(srcdir)/../samples
 
+C2TEXI = $(srcdir)/c2texi
+
 CLEANFILES = vti.tmp
 EXTRA_DIST = texinfo-ja.tex stamp-ebfont stamp-ebinfo \
-	stamp-ebrefile stamp-ebzip
+	stamp-ebrefile stamp-ebzip c2texi
 
 subdir = doc-ja
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
-INFO_DEPS = ebfont-ja.info ebinfo-ja.info ebrefile-ja.info ebzip-ja.info
-DVIS = ebfont-ja.dvi ebinfo-ja.dvi ebrefile-ja.dvi ebzip-ja.dvi
-TEXINFOS = ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi ebzip-ja.texi
-DIST_COMMON = $(ebfont_ja_TEXINFOS) $(ebinfo_ja_TEXINFOS) \
-	$(ebrefile_ja_TEXINFOS) $(ebzip_ja_TEXINFOS) Makefile.am \
-	Makefile.in mdate-sh texinfo.tex
+INFO_DEPS = eb-ja.info ebfont-ja.info ebinfo-ja.info ebrefile-ja.info \
+	ebzip-ja.info
+DVIS = eb-ja.dvi ebfont-ja.dvi ebinfo-ja.dvi ebrefile-ja.dvi \
+	ebzip-ja.dvi
+TEXINFOS = eb-ja.texi ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi \
+	ebzip-ja.texi
+DIST_COMMON = $(eb_ja_TEXINFOS) $(ebfont_ja_TEXINFOS) \
+	$(ebinfo_ja_TEXINFOS) $(ebrefile_ja_TEXINFOS) \
+	$(ebzip_ja_TEXINFOS) Makefile.am Makefile.in mdate-sh \
+	texinfo.tex
 all: all-am
 
 .SUFFIXES:
@@ -144,6 +153,9 @@ Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && \
 	  CONFIG_HEADERS= CONFIG_LINKS= \
 	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
+
+eb-ja.info: eb-ja.texi $(eb_ja_TEXINFOS)
+eb-ja.dvi: eb-ja.texi $(eb_ja_TEXINFOS)
 
 ebfont-ja.info: ebfont-ja.texi $(ebfont_ja_TEXINFOS)
 ebfont-ja.dvi: ebfont-ja.texi $(ebfont_ja_TEXINFOS)
@@ -210,7 +222,10 @@ dist-info: $(INFO_DEPS)
 	done
 
 mostlyclean-aminfo:
-	-rm -f ebfont-ja.aux ebfont-ja.cp ebfont-ja.dvi ebfont-ja.fn ebfont-ja.ky \
+	-rm -f eb-ja.aux eb-ja.cp eb-ja.dvi eb-ja.fn eb-ja.fns eb-ja.ky eb-ja.log \
+	  eb-ja.pg eb-ja.pgs eb-ja.ps eb-ja.toc eb-ja.tp eb-ja.tps \
+	  eb-ja.vr eb-ja.vrs eb-ja.xf eb-ja.xt eb-ja.xv ebfont-ja.aux \
+	  ebfont-ja.cp ebfont-ja.dvi ebfont-ja.fn ebfont-ja.ky \
 	  ebfont-ja.log ebfont-ja.pg ebfont-ja.ps ebfont-ja.toc \
 	  ebfont-ja.tp ebfont-ja.vr ebinfo-ja.aux ebinfo-ja.cp \
 	  ebinfo-ja.dvi ebinfo-ja.fn ebinfo-ja.ky ebinfo-ja.log \
@@ -411,6 +426,26 @@ stamp-ebzip: ebzip-ja.texi $(top_srcdir)/configure.ac
 	  || (echo "Updating $(srcdir)/stamp-ebzip"; \
 	      cp vti.tmp $(srcdir)/stamp-ebzip)
 	-@rm -f vti.tmp
+
+initexit-c.texi: $(C2TEXI) $(samplesdir)/initexit.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/initexit.c > $@
+
+disctype-c.texi: $(C2TEXI) $(samplesdir)/disctype.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/disctype.c > $@
+
+subbook-c.texi: $(C2TEXI) $(samplesdir)/subbook.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/subbook.c > $@
+
+word-c.texi: $(C2TEXI) $(samplesdir)/word.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/word.c > $@
+
+text-c.texi: $(C2TEXI) $(samplesdir)/text.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/text.c > $@
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

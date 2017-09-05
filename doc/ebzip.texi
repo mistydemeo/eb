@@ -1140,7 +1140,7 @@ First byte holds 0x12, and second byte holds 0x34.
 @example
 @group
 +---------+---------+
-|0001 0010|0011 1000|
+|0001 0010|0011 0100|
 +---------+---------+
   (0x12)    (0x34)
 @end group

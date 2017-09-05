@@ -235,24 +235,70 @@ find_subbook(book, directory, subbook_code)
 }
 
 
+#ifndef DOS_FILE_PATH
+
 /*
- * Canonicalize `path'.
- * It eliminaes `/' at the tail unless `path' is not "/".
+ * Canonicalize `path' (UNIX version).
+ * It eliminaes `/' at the tail of `path' unless `path' is not "/".
  */
 void
 canonicalize_path(path)
     char *path;
 {
-    size_t path_length;
+    char *last_slash;
 
-    if (*path == '\0')
+    last_slash = strrchr(path, '/');
+    if (last_slash == NULL || *(last_slash + 1) != '\0')
 	return;
-    if (*path == '/' && *(path + 1) == '\0')
-	return;
-    
-    path_length = strlen(path);
-    if (*(path + path_length - 1) == '/')
-	*(path + path_length - 1) = '\0';
+
+    if (last_slash != path)
+        *last_slash = '\0';
 }
 
+#else /* DOS_FILE_PATH */
+
+/*
+ * Canonicalize `path' (DOS version).
+ * It eliminaes `\' at the tail of `path' unless `path' is not "X:\".
+ */
+void
+canonicalize_path(path)
+    char *path;
+{
+    char *slash;
+    char *last_backslash;
+
+    /*
+     * Replace `/' with `\\'.
+     */
+    slash = path;
+    for (;;) {
+	slash = strchr(slash, '/');
+	if (slash == NULL)
+	    break;
+	*slash++ = '\\';
+    }
+
+    last_backslash = strrchr(path, '\\');
+    if (last_backslash == NULL || *(last_backslash + 1) != '\0')
+	return;
+
+    /*
+     * Eliminate `\' in the tail of the path.
+     */
+    if (isalpha(*path) && *(path + 1) == ':') {
+	if (last_backslash != path + 2)
+	    *last_backslash = '\0';
+    } else if (*path == '\\' && *(path + 1) == '\\') {
+	if (last_backslash != path + 1)
+	    *last_backslash = '\0';
+    } else if (*path == '\\') {
+	if (last_backslash != path)
+	    *last_backslash = '\0';
+    } else {
+	*last_backslash = '\0';
+    }
+}
+
+#endif /* DOS_FILE_PATH */
 

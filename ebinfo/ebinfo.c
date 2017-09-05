@@ -228,7 +228,9 @@ output_information(book_path, multi_flag)
     /*
      * Start to use a book.
      */
-    eb_initialize_library();
+    error_code = eb_initialize_library();
+    if (error_code != EB_SUCCESS)
+	goto failed;
     eb_initialize_book(&book);
     error_code = eb_bind(&book, book_path);
     if (error_code != EB_SUCCESS)
@@ -432,7 +434,6 @@ output_multi_information(book)
 {
     EB_Error_Code error_code;
     EB_Multi_Search_Code multi_list[EB_MAX_MULTI_SEARCHES];
-    EB_Multi_Entry_Code entry_list[EB_MAX_MULTI_ENTRIES];
     int multi_count;
     int entry_count;
     char entry_label[EB_MAX_MULTI_LABEL_LENGTH + 1];
@@ -445,15 +446,14 @@ output_multi_information(book)
     }
     for (i = 0; i < multi_count; i++) {
 	printf(_("  multi search %d:\n"), i + 1);
-	error_code = eb_multi_entry_list(book, multi_list[i], entry_list,
-	    &entry_count);
+	error_code = eb_multi_entry_count(book, multi_list[i], &entry_count);
 	if (error_code != EB_SUCCESS) {
 	    output_error_message(error_code);
 	    continue;
 	}
 	for (j = 0; j < entry_count; j++) {
-	    error_code = eb_multi_entry_label(book, multi_list[i],
-		entry_list[j], entry_label);
+	    error_code = eb_multi_entry_label(book, multi_list[i], j,
+		entry_label);
 	    if (error_code != EB_SUCCESS) {
 		output_error_message(error_code);
 		continue;
@@ -461,8 +461,7 @@ output_multi_information(book)
 
 	    printf(_("    label %d: %s\n"), j + 1, entry_label);
 	    fputs(_("      candidates: "), stdout);
-	    if (eb_multi_entry_have_candidates(book, multi_list[i],
-		entry_list[j]))
+	    if (eb_multi_entry_have_candidates(book, multi_list[i], j))
 		fputs(_("exist\n"), stdout);
 	    else 
 		fputs(_("not-exist\n"), stdout);

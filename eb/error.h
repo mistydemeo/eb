@@ -91,20 +91,21 @@ extern "C" {
 
 #define EB_ERR_NO_SUCH_HOOK		50
 #define EB_ERR_NO_SUCH_BINARY		51
-#define EB_ERR_STOP_CODE		52
-#define EB_ERR_DIFF_CONTENT		53
-#define EB_ERR_NO_PREV_SEARCH		54
+#define EB_ERR_DIFF_CONTENT		52
+#define EB_ERR_NO_PREV_SEARCH		53
+#define EB_ERR_NO_SUCH_MULTI_ID		54
 
-#define EB_ERR_NO_SUCH_MULTI_ID		55
-#define EB_ERR_NO_SUCH_ENTRY_ID		56
-#define EB_ERR_TOO_MANY_WORDS		57
-#define EB_ERR_NO_WORD			58
-#define EB_ERR_NO_CANDIDATES		59
+#define EB_ERR_NO_SUCH_ENTRY_ID		55
+#define EB_ERR_TOO_MANY_WORDS		56
+#define EB_ERR_NO_WORD			57
+#define EB_ERR_NO_CANDIDATES		58
+#define EB_ERR_END_OF_CONTENT		59
+#define EB_ERR_NO_PREV_SEEK		60
 
 /*
  * The number of error codes.
  */
-#define EB_NUMBER_OF_ERRORS		60
+#define EB_NUMBER_OF_ERRORS		61
 
 /*
  * The maximum length of an error message.

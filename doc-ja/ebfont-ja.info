@@ -28,8 +28,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.1 版です。 EB ライブラリバージョン 3.1 に対応していま
-す。
+   この文書は第 3.2beta0 版です。 EB ライブラリバージョン 3.2beta0 に対
+応しています。
 
 * Menu:
 
@@ -301,12 +301,12 @@ File: ebfont-ja.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: To
 
 Tag Table:
 Node: Top1062
-Node: Introduction1590
-Node: What is Local Character2408
-Node: Invoking ebfont3971
-Node: Image Formats5315
-Node: Heights6173
-Node: Subbooks6994
-Node: Summary of Options8865
+Node: Introduction1600
+Node: What is Local Character2418
+Node: Invoking ebfont3981
+Node: Image Formats5325
+Node: Heights6183
+Node: Subbooks7004
+Node: Summary of Options8875
 
 End Tag Table

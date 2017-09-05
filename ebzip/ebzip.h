@@ -170,6 +170,7 @@ char *memset();
 #include "eb.h"
 #include "error.h"
 #include "font.h"
+#include "build-post.h"
 
 #include "getopt.h"
 #include "getumask.h"

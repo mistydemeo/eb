@@ -212,7 +212,7 @@ struct Zio_Struct {
 /*
  * Function declarations.
  */
-#if defined(__STDC__) || defined(__cplusplus)
+#if defined(__STDC__) || defined(__cplusplus) || defined(WIN32)
 /* zio.c */
 int zio_initialize_library(void);
 void zio_finalize_library(void);
@@ -226,7 +226,8 @@ Zio_Code zio_mode(Zio *);
 off_t zio_lseek(Zio *, off_t, int);
 ssize_t zio_read(Zio *, char *, size_t);
 
-#else /* !defined(__STDC__) && !defined(__cplusplus) */
+#else /* !defined(__STDC__) && !defined(__cplusplus) && ... */
+
 /* zio.c */
 int zio_initialize_library();
 void zio_finalize_library();
@@ -240,7 +241,7 @@ Zio_Code zio_mode();
 off_t zio_lseek();
 ssize_t zio_read();
 
-#endif  /* !defined(__STDC__) && !defined(__cplusplus) */
+#endif  /* !defined(__STDC__) && !defined(__cplusplus) && ... */
 
 #ifdef __cplusplus
 }

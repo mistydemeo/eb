@@ -22,6 +22,10 @@ extern "C" {
 
 #include <sys/types.h>
 
+#ifdef HAVE_LIMITS_H
+#include <limits.h>
+#endif
+
 #ifdef EB_BUILD_LIBRARY
 #include "zio.h"
 #else
@@ -91,92 +95,98 @@ extern "C" {
 #define EB_SIZE_EBZIP_HEADER		22
 
 /*
- * Margin size for ebzip compression buffer.
- * (Since compressed data is larger than original in the worst case,
- * we must add margin to a compression buffer.)
- */
-#define EB_SIZE_EBZIP_MARGIN		1024
-
-/*
- * The maximum length of a word to be searched.
+ * Maximum length of a word to be searched.
  */
 #define EB_MAX_WORD_LENGTH             255
 
 /*
- * The maximum length of an EB* book title.
+ * Maximum length of an EB* book title.
  */
 #define EB_MAX_EB_TITLE_LENGTH		30
 
 /*
- * The maximum length of an EPWING book title.
+ * Maximum length of an EPWING book title.
  */
 #define EB_MAX_EPWING_TITLE_LENGTH	80
 
 /*
- * The maximum length of a book title.
+ * Maximum length of a book title.
  */
 #define EB_MAX_TITLE_LENGTH		80
 
 /*
- * The maximum length of a directory name.
+ * Maximum length of a word to be searched.
+ */
+#ifdef PATH_MAX
+#define EB_MAX_PATH_LENGTH		PATH_MAX
+#else
+#ifdef MAXPATHLEN
+#define EB_MAX_PATH_LENGTH		MAXPATHLEN
+#else /* not MAXPATHLEN */
+#define EB_MAX_PATH_LENGTH		1024
+#endif /* not MAXPATHLEN */
+#endif /* not PATH_MAX */
+
+/*
+ * Maximum length of a directory name.
  */
 #define EB_MAX_DIRECTORY_NAME_LENGTH	8
 
 /*
- * The maximum length of a file name under a certain directory.
+ * Maximum length of a file name under a certain directory.
  * prefix(8 chars) + '.' + suffix(3 chars) + ';' + digit(1 char)
  */
 #define EB_MAX_FILE_NAME_LENGTH		14
 
 /*
- * The maximum length of a label for multi-search entry.
+ * Maximum length of a label for multi-search entry.
  */
 #define EB_MAX_MULTI_LABEL_LENGTH	30
 
 /*
- * The maximum number of font heights that a subbok supports.
+ * Maximum number of font heights that a subbok supports.
  */
 #define EB_MAX_ALTERNATION_TEXT_LENGTH	31
 
 /*
- * The maximum number of font heights in a subbok.
+ * Maximum number of font heights in a subbok.
  */
 #define EB_MAX_FONTS			4
 
 /*
- * The maximum number of subbooks in a book.
+ * Maximum number of subbooks in a book.
  */
 #define EB_MAX_SUBBOOKS			50
 
 /*
- * The maximum number of entries in a keyword search.
- */
-#define EB_MAX_KEYWORDS			5
-
-/*
- * The maximum number of multi-search types in a subbook.
+ * Maximum number of multi-search types in a subbook.
  */
 #define EB_MAX_MULTI_SEARCHES		8
 
 /*
- * The maximum number of entries in a multi-search.
+ * Maximum number of entries in a multi-search.
  */
 #define EB_MAX_MULTI_ENTRIES		5
 
 /*
- * The maximum number of characters for alternation cache.
+ * Maximum number of entries in a keyword search.
+ */
+#define EB_MAX_KEYWORDS			EB_MAX_MULTI_ENTRIES
+
+/*
+ * Maximum number of characters for alternation cache.
  */
 #define EB_MAX_ALTERNATION_CACHE	16
 
 /*
  * The number of text hooks.
  */
-#define EB_NUMBER_OF_HOOKS		41
+#define EB_NUMBER_OF_HOOKS		40
 
 /*
  * The number of search contexts required by a book.
  */
-#define EB_NUMBER_OF_SEARCH_CONTEXTS	5
+#define EB_NUMBER_OF_SEARCH_CONTEXTS	EB_MAX_MULTI_ENTRIES
 
 /*
  * Trick for function protypes.
@@ -205,7 +215,6 @@ typedef int EB_Index_Style_Code;
 typedef int EB_Search_Code;
 typedef int EB_Text_Code;
 typedef int EB_Multi_Search_Code;
-typedef int EB_Multi_Entry_Code;
 typedef int EB_Hook_Code;
 typedef int EB_Binary_Code;
 
@@ -339,8 +348,8 @@ struct EB_Appendix_Subbook_Struct {
     /*
      * Stop code (first and second characters).
      */
-    int stop0;
-    int stop1;
+    int stop_code0;
+    int stop_code1;
 
     /*
      * Compression Information for appendix file.
@@ -695,11 +704,6 @@ struct EB_Text_Context_Struct {
     size_t unprocessed_size;
 
     /*
-     * Length of the current input text phrase.
-     */
-    size_t in_step;
-
-    /*
      * Length of the current output text phrase.
      */
     size_t out_step;
@@ -943,6 +947,9 @@ struct EB_Hookset_Struct {
     EB_Lock lock;
 #endif
 };
+
+/* for backward compatibility */
+#define EB_Multi_Entry_Code int
 
 #ifdef __cplusplus
 }

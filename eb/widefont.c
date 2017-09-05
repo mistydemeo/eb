@@ -39,7 +39,7 @@ eb_load_wide_font(book)
 {
     EB_Error_Code error_code;
     EB_Subbook *subbook;
-    char font_path_name[PATH_MAX + 1];
+    char font_path_name[EB_MAX_PATH_LENGTH + 1];
     char buffer[16];
     int character_count;
     Zio *zio;
@@ -108,6 +108,7 @@ eb_load_wide_font(book)
      */
     character_count = eb_uint2(buffer + 12);
     if (character_count == 0) {
+	zio_close(zio);
 	subbook->wide_current->font_code = EB_FONT_INVALID;
 	subbook->wide_current = NULL;
 	goto succeeded;
@@ -129,13 +130,33 @@ eb_load_wide_font(book)
 	    subbook->wide_current->end += 0xa3;
     }
 
+    if (book->character_code == EB_CHARCODE_ISO8859_1) {
+	if ((subbook->wide_current->start & 0xff) < 0x01
+	    || 0xfe < (subbook->wide_current->start & 0xff)
+	    || subbook->wide_current->start < 0x0001
+	    || 0x1efe < subbook->wide_current->end) {
+	    error_code = EB_ERR_UNEXP_FONT;
+	    goto failed;
+	}
+    } else {
+	if ((subbook->wide_current->start & 0xff) < 0x21
+	    || 0x7e < (subbook->wide_current->start & 0xff)
+	    || subbook->wide_current->start < 0xa121
+	    || 0xfe7e < subbook->wide_current->end) {
+	    error_code = EB_ERR_UNEXP_FONT;
+	    goto failed;
+	}
+    }
+
   succeeded:
+    LOG(("out: eb_load_wide_font()", eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_load_wide_font()", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -214,7 +235,7 @@ eb_wide_font_width(book, width)
     }
 
     /*
-     * The wide font must be exist in the current subbook.
+     * The wide font must exist in the current subbook.
      */
     if (book->subbook_current->wide_current == NULL) {
 	error_code = EB_ERR_NO_CUR_FONT;
@@ -317,7 +338,7 @@ eb_wide_font_size(book, size)
     }
 
     /*
-     * The wide font must be exist in the current subbook.
+     * The wide font must exist in the current subbook.
      */
     if (book->subbook_current->wide_current == NULL) {
 	error_code = EB_ERR_NO_CUR_FONT;
@@ -418,7 +439,7 @@ eb_wide_font_start(book, start)
     }
 
     /*
-     * The wide font must be exist in the current subbook.
+     * The wide font must exist in the current subbook.
      */
     if (book->subbook_current->wide_current == NULL) {
 	error_code = EB_ERR_NO_CUR_FONT;
@@ -466,7 +487,7 @@ eb_wide_font_end(book, end)
     }
 
     /*
-     * The wide font must be exist in the current subbook.
+     * The wide font must exist in the current subbook.
      */
     if (book->subbook_current->wide_current == NULL) {
 	error_code = EB_ERR_NO_CUR_FONT;
@@ -516,7 +537,7 @@ eb_wide_font_character_bitmap(book, character_number, bitmap)
     }
 
     /*
-     * The wide font must be exist in the current subbook.
+     * The wide font must exist in the current subbook.
      */
     if (book->subbook_current->wide_current == NULL) {
 	error_code = EB_ERR_NO_CUR_FONT;
@@ -766,7 +787,7 @@ character_number=%d)",
     }
 
     /*
-     * The wide font must be exist in the current subbook.
+     * The wide font must exist in the current subbook.
      */
     if (book->subbook_current->wide_current == NULL) {
 	error_code = EB_ERR_NO_CUR_FONT;
@@ -877,7 +898,7 @@ character_number=%d)",
     }
 
     /*
-     * The wide font must be exist in the current subbook.
+     * The wide font must exist in the current subbook.
      */
     if (book->subbook_current->wide_current == NULL) {
 	error_code = EB_ERR_NO_CUR_FONT;

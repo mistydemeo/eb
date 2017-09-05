@@ -226,6 +226,7 @@ main(argc, argv)
     int argc;
     char *argv[];
 {
+    EB_Error_Code error_code;
     char out_path[PATH_MAX + 1];
     char book_path[PATH_MAX + 1];
     char subbook_name_list[EB_MAX_SUBBOOKS][EB_MAX_DIRECTORY_NAME_LENGTH + 1];
@@ -240,16 +241,21 @@ main(argc, argv)
      */
 #ifdef ENABLE_NLS
 #ifdef HAVE_SETLOCALE
-       setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "");
 #endif
-       bindtextdomain(TEXT_DOMAIN_NAME, LOCALEDIR);
-       textdomain(TEXT_DOMAIN_NAME);
+    bindtextdomain(TEXT_DOMAIN_NAME, LOCALEDIR);
+    textdomain(TEXT_DOMAIN_NAME);
 #endif
 
     /*
      * Initialize `book'.
      */
-    eb_initialize_library();
+    error_code = eb_initialize_library();
+    if (error_code != EB_SUCCESS) {
+	fprintf(stderr, "%s: %s\n", invoked_name,
+	    eb_error_message(error_code));
+	goto die;
+    }
 
     /*
      * Parse command line options.

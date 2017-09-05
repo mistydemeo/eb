@@ -130,23 +130,6 @@ eb_finalize_appendix(appendix)
 
 
 /*
- * Suspend `appendix'.
- */
-void
-eb_suspend_appendix(appendix)
-    EB_Appendix *appendix;
-{
-    eb_lock(&appendix->lock);
-    LOG(("in: eb_suspend_appendix(appendix=%d)", (int)appendix->code));
-
-    eb_unset_appendix_subbook(appendix);
-
-    LOG(("out: eb_suspend_appendix()"));
-    eb_unlock(&appendix->lock);
-}
-
-
-/*
  * Bind `appendix' to `path'.
  */
 EB_Error_Code
@@ -155,7 +138,7 @@ eb_bind_appendix(appendix, path)
     const char *path;
 {
     EB_Error_Code error_code;
-    char temporary_path[PATH_MAX + 1];
+    char temporary_path[EB_MAX_PATH_LENGTH + 1];
 
     eb_lock(&appendix->lock);
     LOG(("in: eb_bind_appendix(path=%s)", path));
@@ -178,9 +161,9 @@ eb_bind_appendix(appendix, path)
     /*
      * Set path of the appendix.
      * The length of the file name "path/subdir/subsubdir/file.;1" must
-     * be PATH_MAX maximum.
+     * be EB_MAX_PATH_LENGTH maximum.
      */
-    if (PATH_MAX < strlen(path)) {
+    if (EB_MAX_PATH_LENGTH < strlen(path)) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;
 	goto failed;
     }
@@ -190,7 +173,8 @@ eb_bind_appendix(appendix, path)
 	goto failed;
     appendix->path_length = strlen(temporary_path);
 
-    if (PATH_MAX < appendix->path_length + 1 + EB_MAX_DIRECTORY_NAME_LENGTH
+    if (EB_MAX_PATH_LENGTH
+	< appendix->path_length + 1 + EB_MAX_DIRECTORY_NAME_LENGTH
 	+ 1 + EB_MAX_DIRECTORY_NAME_LENGTH + 1 + EB_MAX_FILE_NAME_LENGTH) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;
 	goto failed;
@@ -238,7 +222,7 @@ eb_load_appendix_catalog(appendix)
     EB_Error_Code error_code;
     char buffer[EB_SIZE_PAGE];
     char catalog_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
-    char catalog_path_name[PATH_MAX + 1];
+    char catalog_path_name[EB_MAX_PATH_LENGTH + 1];
     char *space;
     EB_Appendix_Subbook *subbook;
     size_t catalog_size;

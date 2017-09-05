@@ -201,8 +201,6 @@ eb_load_all_subbooks(book)
     EB_Book *book;
 {
     EB_Error_Code error_code;
-    EB_Subbook_Code subbook_code;
-    EB_Font_Code font_code;
     EB_Subbook *subbook;
     int i, j;
 
@@ -215,22 +213,6 @@ eb_load_all_subbooks(book)
     if (book->path == NULL) {
 	error_code = EB_ERR_UNBOUND_BOOK;
 	goto failed;
-    }
-
-    /*
-     * Get the current subbook and the current font.
-     */
-    if (book->subbook_current != NULL) {
-	subbook_code = book->subbook_current->code;
-	if (book->subbook_current->narrow_current != NULL)
-	    font_code = book->subbook_current->narrow_current->font_code;
-	else if (book->subbook_current->wide_current != NULL)
-	    font_code = book->subbook_current->wide_current->font_code;
-	else
-	    font_code = EB_FONT_INVALID;
-    } else {
-	subbook_code = EB_SUBBOOK_INVALID;
-	font_code = EB_FONT_INVALID;
     }
 
     /*
@@ -253,25 +235,7 @@ eb_load_all_subbooks(book)
 		goto failed;
 	}
     }
-
-    /*
-     * Restore the current subbook and the current font.
-     */
-    if (subbook_code == EB_SUBBOOK_INVALID)
-	eb_unset_subbook(book);
-    else {
-	error_code = eb_set_subbook(book, subbook_code);
-	if (error_code != EB_SUCCESS)
-	    goto failed;
-    }
-
-    if (font_code == EB_FONT_INVALID)
-	eb_unset_font(book);
-    else {
-	error_code = eb_set_font(book, font_code);
-	if (error_code != EB_SUCCESS)
-	    goto failed;
-    }
+    eb_unset_subbook(book);
 
     LOG(("out: eb_load_all_subbooks() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
@@ -902,8 +866,8 @@ eb_set_subbook_eb(book, subbook_code)
 {
     EB_Error_Code error_code;
     EB_Subbook *subbook;
-    char text_path_name[PATH_MAX + 1];
-    char graphic_path_name[PATH_MAX + 1];
+    char text_path_name[EB_MAX_PATH_LENGTH + 1];
+    char graphic_path_name[EB_MAX_PATH_LENGTH + 1];
     Zio_Code text_zio_code;
     Zio_Code graphic_zio_code;
 
@@ -996,9 +960,9 @@ eb_set_subbook_epwing(book, subbook_code)
 {
     EB_Error_Code error_code;
     EB_Subbook *subbook;
-    char text_path_name[PATH_MAX + 1];
-    char graphic_path_name[PATH_MAX + 1];
-    char sound_path_name[PATH_MAX + 1];
+    char text_path_name[EB_MAX_PATH_LENGTH + 1];
+    char graphic_path_name[EB_MAX_PATH_LENGTH + 1];
+    char sound_path_name[EB_MAX_PATH_LENGTH + 1];
     Zio_Code text_zio_code;
     Zio_Code graphic_zio_code;
     Zio_Code sound_zio_code;
@@ -1115,16 +1079,11 @@ eb_set_subbook_epwing(book, subbook_code)
 	    sound_zio_code = ZIO_REOPEN;
     } else {
 	if (strncasecmp(subbook->text_file_name, "honmon2", 7)  == 0) {
-	    if (eb_find_file_name3(book->path, subbook->directory_name,
+	    eb_find_file_name3(book->path, subbook->directory_name,
 		subbook->data_directory_name, "honmons",
-		subbook->sound_file_name) == EB_SUCCESS) {
-		if (book->version < 6)
-		    default_zio_code = ZIO_PLAIN;
-		else
-		    default_zio_code = ZIO_EPWING6;
-		eb_path_name_zio_code(subbook->sound_file_name,
-		    default_zio_code, &sound_zio_code);
-	    }
+		subbook->sound_file_name);
+	    eb_path_name_zio_code(subbook->sound_file_name, ZIO_PLAIN,
+		&sound_zio_code);
 	} else {
 	    strcpy(subbook->sound_file_name, subbook->text_file_name);
 	    sound_zio_code = text_zio_code;
@@ -1162,7 +1121,7 @@ eb_unset_subbook(book)
     EB_Book *book;
 {
     eb_lock(&book->lock);
-    LOG(("in: eb_unset_subbook(book=%d)", (int)book->code));
+    LOG(("in: eb_unset_subbooks(book=%d)", (int)book->code));
 
     /*
      * Close the file of the current subbook.
@@ -1177,7 +1136,7 @@ eb_unset_subbook(book)
 	book->subbook_current = NULL;
     }
 
-    LOG(("out: eb_unset_subbook()"));
+    LOG(("out: eb_unset_subbooks()"));
     eb_unlock(&book->lock);
 }
 

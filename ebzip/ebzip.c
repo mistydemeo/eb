@@ -108,6 +108,7 @@ main(argc, argv)
     int argc;
     char *argv[];
 {
+    EB_Error_Code error_code;
     char out_top_path[PATH_MAX + 1];
     char book_path[PATH_MAX + 1];
     int ch;
@@ -163,9 +164,14 @@ main(argc, argv)
 	ebzip_overwrite_mode = EBZIP_OVERWRITE_NO;
 
     /*
-     * Initialize `book'.
+     * Initialize EB Library.
      */
-    eb_initialize_library();
+    error_code = eb_initialize_library();
+    if (error_code != EB_SUCCESS) {
+	fprintf(stderr, "%s: %s\n", invoked_name,
+	    eb_error_message(error_code));
+	goto die;
+    }
 
     /*
      * Parse command line options.

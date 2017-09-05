@@ -106,8 +106,11 @@ ACLOCAL_AMFLAGS = -I m4
 @INCLUDED_ZLIB_TRUE@ZLIB_SUBDIR = zlib
 @INCLUDED_ZLIB_FALSE@ZLIB_SUBDIR = 
 
+@ENABLE_SAMPLES_TRUE@SAMPLES_SUBDIR = samples
+@ENABLE_SAMPLES_FALSE@SAMPLES_SUBDIR = 
+
 SUBDIRS = $(ZLIB_SUBDIR) eb libebutils ebappendix ebfont ebinfo \
-   ebrefile ebzip doc doc-ja po-eb po-ebutils m4
+   ebrefile ebzip doc doc-ja po-eb po-ebutils m4 $(SAMPLES_SUBDIR)
 
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 INSTALL-ja README-ja move-if-change \
@@ -136,7 +139,7 @@ DIST_COMMON = README ./stamp-h.in AUTHORS COPYING ChangeLog INSTALL \
 	config.h.in config.sub configure configure.ac depcomp \
 	install-sh ltmain.sh missing mkinstalldirs
 DIST_SUBDIRS = zlib eb libebutils ebappendix ebfont ebinfo ebrefile \
-	ebzip doc doc-ja po-eb po-ebutils m4
+	ebzip doc doc-ja po-eb po-ebutils m4 samples
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -163,7 +166,7 @@ $(top_builddir)/config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 $(srcdir)/configure:  $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
-$(ACLOCAL_M4):  configure.ac m4/eb3.m4 m4/gettext.m4 m4/lcmessage.m4 m4/libtool.m4 m4/ssizet.m4 m4/utimbuf.m4
+$(ACLOCAL_M4):  configure.ac m4/eb3.m4 m4/gettext.m4 m4/lcmessage.m4 m4/libtool.m4 m4/utimbuf.m4
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 config.h: stamp-h
 	@if test ! -f $@; then \

@@ -288,6 +288,11 @@ main(argc, argv)
      * Initialize `book'.
      */
     eb_initialize_library();
+    if (error_code != EB_SUCCESS) {
+	fprintf(stderr, "%s: %s\n", invoked_name,
+	    eb_error_message(error_code));
+	goto die;
+    }
     eb_initialize_book(&book);
 
     /*

@@ -36,7 +36,6 @@ extern "C" {
 /* book.c */
 void eb_initialize_book EB_P((EB_Book *));
 EB_Error_Code eb_bind EB_P((EB_Book *, const char *));
-void eb_suspend EB_P((EB_Book *));
 void eb_finalize_book EB_P((EB_Book *));
 int eb_is_bound EB_P((EB_Book *));
 EB_Error_Code eb_path EB_P((EB_Book *, char *));
@@ -82,16 +81,22 @@ EB_Error_Code eb_menu EB_P((EB_Book *, EB_Position *));
 int eb_have_multi_search EB_P((EB_Book *));
 EB_Error_Code eb_multi_search_list EB_P((EB_Book *, EB_Multi_Search_Code *,
     int *));
+EB_Error_Code eb_multi_entry_count EB_P((EB_Book *, EB_Multi_Search_Code,
+    int *));
 EB_Error_Code eb_multi_entry_list EB_P((EB_Book *, EB_Multi_Search_Code,
-    EB_Multi_Entry_Code *, int *));
+    int *, int *));
 EB_Error_Code eb_multi_entry_label EB_P((EB_Book *, EB_Multi_Search_Code,
-    EB_Multi_Entry_Code, char *));
+    int, char *));
 int eb_multi_entry_have_candidates EB_P((EB_Book *, EB_Multi_Search_Code,
-    EB_Multi_Entry_Code));
-EB_Error_Code eb_multi_entry_candidates EB_P((EB_Book *, 
-    EB_Multi_Search_Code, EB_Multi_Entry_Code, EB_Position *));
+    int));
+EB_Error_Code eb_multi_entry_candidates EB_P((EB_Book *, EB_Multi_Search_Code,
+    int, EB_Position *));
 EB_Error_Code eb_search_multi EB_P((EB_Book *, EB_Multi_Search_Code,
     const char * const []));
+
+/* text.c */
+int eb_have_text EB_P((EB_Book *));
+EB_Error_Code eb_text EB_P((EB_Book *, EB_Position *));
 
 /* search.c */
 EB_Error_Code eb_hit_list EB_P((EB_Book *, int, EB_Hit *, int *));
@@ -113,6 +118,7 @@ int eb_have_word_search EB_P((EB_Book *));
 EB_Error_Code eb_search_word EB_P((EB_Book *, const char *));
 
 /* for backward compatibility */
+#define eb_suspend eb_unset_subbook
 #define eb_initialize_all_subbooks eb_load_all_subbooks
 
 #ifdef __cplusplus

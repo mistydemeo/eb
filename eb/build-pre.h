@@ -94,22 +94,17 @@
 #include <libintl.h>
 #endif
 
+/*
+ * strchr() and strrchr().
+ */
 #ifndef HAVE_STRCHR
 #define strchr index
 #define strrchr rindex
 #endif /* HAVE_STRCHR */
 
 /*
- * The maximum length of path name.
+ * memcpy(), memchr(), memcmp(), memmove() and memset().
  */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX        MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX        1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
-
 #ifndef HAVE_MEMCPY
 #define memcpy(d, s, n) bcopy((s), (d), (n))
 #ifdef __STDC__
@@ -125,11 +120,17 @@ char *memset();
 #endif /* not __STDC__ */
 #endif
 
+/*
+ * Mutual exclusion lock of Pthreads.
+ */
 #ifndef ENABLE_PTHREAD
 #define pthread_mutex_lock(m)
 #define pthread_mutex_unlock(m)
 #endif
 
+/*
+ * stat() macros.
+ */
 #ifdef  STAT_MACROS_BROKEN
 #ifdef  S_ISREG
 #undef  S_ISREG
@@ -155,6 +156,9 @@ char *memset();
 #define SEEK_END 2
 #endif
 
+/*
+ * Flags for open().
+ */
 #ifndef O_BINARY
 #define O_BINARY 0
 #endif

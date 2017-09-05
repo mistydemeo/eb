@@ -59,7 +59,7 @@
 #define EB_TEXT_HEADING			2
 #define EB_TEXT_RAWTEXT			3
 #define EB_TEXT_OPTIONAL_TEXT		4
-#define EB_TEXT_NONE			0
+#define EB_TEXT_SEEKED			0
 #define EB_TEXT_INVALID			-1
 
 /*
@@ -144,8 +144,8 @@ void eb_finalize_appendix_subbooks EB_P((EB_Appendix *));
 
 /* binary.c */
 void eb_initialize_binary_context EB_P((EB_Book *));
-void eb_finalize_binary_context EB_P((EB_Book *));
 void eb_reset_binary_context EB_P((EB_Book *));
+void eb_finalize_binary_context EB_P((EB_Book *));
 
 /* filename.c */
 EB_Error_Code eb_canonicalize_path_name EB_P((char *));

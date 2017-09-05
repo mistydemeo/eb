@@ -112,8 +112,9 @@ INCLUDES = -DEB_BUILD_LIBRARY $(INTLINCS) $(ZLIBINCS)
 libeb_la_SOURCES = appendix.c appsub.c bcd.c binary.c bitmap.c book.c \
 	copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
 	hook.c jacode.c keyword.c lock.c log.c match.c menu.c memmove.c \
-	multi.c narwalt.c narwfont.c search.c setword.c stopcode.c \
-	strcasecmp.c subbook.c text.c widealt.c widefont.c word.c zio.c
+	multi.c narwalt.c narwfont.c readtext.c search.c setword.c \
+	stopcode.c strcasecmp.c subbook.c text.c widealt.c widefont.c \
+	word.c zio.c
 
 libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
 
@@ -133,8 +134,8 @@ am_libeb_la_OBJECTS = appendix.lo appsub.lo bcd.lo binary.lo bitmap.lo \
 	book.lo copyright.lo eb.lo endword.lo error.lo exactword.lo \
 	filename.lo font.lo hook.lo jacode.lo keyword.lo lock.lo log.lo \
 	match.lo menu.lo memmove.lo multi.lo narwalt.lo narwfont.lo \
-	search.lo setword.lo stopcode.lo strcasecmp.lo subbook.lo \
-	text.lo widealt.lo widefont.lo word.lo zio.lo
+	readtext.lo search.lo setword.lo stopcode.lo strcasecmp.lo \
+	subbook.lo text.lo widealt.lo widefont.lo word.lo zio.lo
 libeb_la_OBJECTS = $(am_libeb_la_OBJECTS)
 
 DEFS = @DEFS@
@@ -155,11 +156,12 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 @AMDEP_TRUE@	$(DEPDIR)/match.Plo $(DEPDIR)/memmove.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/menu.Plo $(DEPDIR)/multi.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/narwalt.Plo $(DEPDIR)/narwfont.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/search.Plo $(DEPDIR)/setword.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/stopcode.Plo $(DEPDIR)/strcasecmp.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/subbook.Plo $(DEPDIR)/text.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/widealt.Plo $(DEPDIR)/widefont.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/word.Plo $(DEPDIR)/zio.Plo
+@AMDEP_TRUE@	$(DEPDIR)/readtext.Plo $(DEPDIR)/search.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/setword.Plo $(DEPDIR)/stopcode.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/strcasecmp.Plo $(DEPDIR)/subbook.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/text.Plo $(DEPDIR)/widealt.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/widefont.Plo $(DEPDIR)/word.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/zio.Plo
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -248,6 +250,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/multi.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/narwalt.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/narwfont.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/readtext.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/search.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/setword.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/stopcode.Plo@am__quote@

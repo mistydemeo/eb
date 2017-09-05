@@ -8,8 +8,9 @@ INCLUDES = -DEB_BUILD_LIBRARY $(INTLINCS) $(ZLIBINCS)
 libeb_la_SOURCES = appendix.c appsub.c bcd.c binary.c bitmap.c book.c \
 	copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
 	hook.c jacode.c keyword.c lock.c log.c match.c menu.c memmove.c \
-	multi.c narwalt.c narwfont.c search.c setword.c stopcode.c \
-	strcasecmp.c subbook.c text.c widealt.c widefont.c word.c zio.c
+	multi.c narwalt.c narwfont.c readtext.c search.c setword.c \
+	stopcode.c strcasecmp.c subbook.c text.c widealt.c widefont.c \
+	word.c zio.c
 libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
 
 EXTRA_DIST = build-post.h.in

@@ -1,3 +1,9 @@
+Major changes in release 3.2beta0.
+
+* Implement eb_backward_text() and revise eb_forward_text().
+* The EB Library programming document (Japanese edition) is back.
+* Samples programs are back.
+
 Major changes in release 3.1.
 
 * Fix bugs in compressed S-EBXA support.

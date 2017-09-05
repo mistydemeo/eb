@@ -13,11 +13,6 @@
  * GNU General Public License for more details.
  */
 
-#include "eb.h"
-#include "error.h"
-#include "font.h"
-#include "build-post.h"
-
 #include "ebzip.h"
 #include "ebutils.h"
 

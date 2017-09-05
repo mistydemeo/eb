@@ -32,7 +32,6 @@ extern "C" {
 /* appendix.c */
 void eb_initialize_appendix EB_P((EB_Appendix *));
 void eb_finalize_appendix EB_P((EB_Appendix *));
-void eb_suspend_appendix EB_P((EB_Appendix *));
 EB_Error_Code eb_bind_appendix EB_P((EB_Appendix *, const char *));
 int eb_is_appendix_bound EB_P((EB_Appendix *));
 EB_Error_Code eb_appendix_path EB_P((EB_Appendix *, char *));
@@ -71,6 +70,7 @@ EB_Error_Code eb_forward_wide_alt_character EB_P((EB_Appendix *, int, int *));
 EB_Error_Code eb_backward_wide_alt_character EB_P((EB_Appendix *, int, int *));
 
 /* for backward compatibility */
+#define eb_suspend_appendix eb_unset_appendix_subbook
 #define eb_initialize_all_appendix_subbooks eb_load_all_appendix_subbooks
 
 #ifdef __cplusplus

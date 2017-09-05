@@ -33,7 +33,6 @@ extern "C" {
  */
 
 /* binary.c */
-void eb_initialize_binary EB_P((EB_Book *));
 EB_Error_Code eb_set_binary_mono_graphic EB_P((EB_Book *, const EB_Position *,
    int, int));
 EB_Error_Code eb_set_binary_gray_graphic EB_P((EB_Book *, const EB_Position *,

@@ -270,21 +270,18 @@ eb_multi_search_list(book, search_list, search_count)
 
 
 /*
- * Return a list of entries that the multi search `multi_id' in `book' has.
+ * Return the number of entries that the multi search `multi_id' in `book'.
  */
 EB_Error_Code
-eb_multi_entry_list(book, multi_id, entry_list, entry_count)
+eb_multi_entry_count(book, multi_id, entry_count)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
-    EB_Multi_Entry_Code *entry_list;
     int *entry_count;
 {
     EB_Error_Code error_code;
-    EB_Subbook_Code *list_p;
-    int i;
 
     eb_lock(&book->lock);
-    LOG(("in: eb_multi_entry_list(book=%d, multi_id=%d)", (int)book->code,
+    LOG(("in: eb_multi_entry_count(book=%d, multi_id=%d)", (int)book->code,
 	(int)multi_id));
 
     /*
@@ -312,10 +309,8 @@ eb_multi_entry_list(book, multi_id, entry_list, entry_count)
     }
 
     *entry_count = book->subbook_current->multis[multi_id].entry_count;
-    for (i = 0, list_p = entry_list; i < *entry_count; i++, list_p++)
-	*list_p = i;
 
-    LOG(("out: eb_multi_entry_list(entry_count=%d) = %s", (int)*entry_count,
+    LOG(("out: eb_multi_entry_count(entry_count=%d) = %s", (int)*entry_count,
 	eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
@@ -326,27 +321,54 @@ eb_multi_entry_list(book, multi_id, entry_list, entry_count)
      */
   failed:
     *entry_count = 0;
-    LOG(("out: eb_multi_entry_list() = %s", eb_error_string(error_code)));
+    LOG(("out: eb_multi_entry_count() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }
 
 
 /*
- * Return a lable of the entry `entry_id' in the multi search `multi_id'.
+ * Return a list of entries that the multi search `multi_id' in `book' has.
+ * (Legacy function)
  */
 EB_Error_Code
-eb_multi_entry_label(book, multi_id, entry_id, label)
+eb_multi_entry_list(book, multi_id, entry_list, entry_count)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
-    EB_Multi_Entry_Code entry_id;
+    int *entry_list;
+    int *entry_count;
+{
+    EB_Error_Code error_code;
+    EB_Subbook_Code *list_p;
+    int i;
+
+    error_code = eb_multi_entry_count(book, multi_id, entry_count);
+    if (error_code != EB_SUCCESS)
+	return error_code;
+
+    for (i = 0, list_p = entry_list; i < *entry_count; i++, list_p++)
+	*list_p = i;
+
+    return EB_SUCCESS;
+}
+
+
+/*
+ * Return a lable of the entry `entry_index' in the multi search `multi_id'.
+ */
+EB_Error_Code
+eb_multi_entry_label(book, multi_id, entry_index, label)
+    EB_Book *book;
+    EB_Multi_Search_Code multi_id;
+    int entry_index;
     char *label;
 {
     EB_Error_Code error_code;
+    EB_Subbook *subbook;
 
     eb_lock(&book->lock);
-    LOG(("in: eb_multi_entry_label(book=%d, multi_id=%d, entry_id=%d)",
-	(int)book->code, (int)multi_id, (int)entry_id));
+    LOG(("in: eb_multi_entry_label(book=%d, multi_id=%d, entry_index=%d)",
+	(int)book->code, (int)multi_id, entry_index));
 
     /*
      * The book must have been bound.
@@ -359,7 +381,8 @@ eb_multi_entry_label(book, multi_id, entry_id, label)
     /*
      * Current subbook must have been set.
      */
-    if (book->subbook_current == NULL) {
+    subbook = book->subbook_current;
+    if (subbook == NULL) {
 	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
     }
@@ -367,22 +390,21 @@ eb_multi_entry_label(book, multi_id, entry_id, label)
     /*
      * `multi_id' must be a valid code.
      */
-    if (multi_id < 0 || book->subbook_current->multi_count <= multi_id) {
+    if (multi_id < 0 || subbook->multi_count <= multi_id) {
 	error_code = EB_ERR_NO_SUCH_MULTI_ID;
 	goto failed;
     }
 
     /*
-     * `entry_id' must be a valid code.
+     * `entry_index' must be a valid code.
      */
-    if (entry_id < 0
-	|| book->subbook_current->multis[multi_id].entry_count <= entry_id) {
+    if (entry_index < 0
+	|| subbook->multis[multi_id].entry_count <= entry_index) {
 	error_code = EB_ERR_NO_SUCH_ENTRY_ID;
 	goto failed;
     }
 
-    strcpy(label,
-	book->subbook_current->multis[multi_id].entries[entry_id].label);
+    strcpy(label, subbook->multis[multi_id].entries[entry_index].label);
 
     LOG(("out: eb_multi_entry_label(label=%s) = %s", label,
 	eb_error_string(EB_SUCCESS)));
@@ -402,21 +424,21 @@ eb_multi_entry_label(book, multi_id, entry_id, label)
 
 
 /*
- * Whether the entry `entry_id' in the multi search `multi_id' has
+ * Whether the entry `entry_index' in the multi search `multi_id' has
  * candidates or not.
  */
 int
-eb_multi_entry_have_candidates(book, multi_id, entry_id)
+eb_multi_entry_have_candidates(book, multi_id, entry_index)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
-    EB_Multi_Entry_Code entry_id;
+    int entry_index;
 {
     EB_Multi_Search *multi;
 
     eb_lock(&book->lock);
     LOG(("in: eb_multi_entry_have_candidates(book=%d, multi_id=%d, \
-entry_id=%d)",
-	(int)book->code, (int)multi_id, (int)entry_id));
+entry_index=%d)",
+	(int)book->code, (int)multi_id, entry_index));
 
     /*
      * The book must have been bound.
@@ -437,13 +459,13 @@ entry_id=%d)",
 	goto failed;
 
     /*
-     * `entry_id' must be a valid code.
+     * `entry_index' must be a valid code.
      */
     multi = book->subbook_current->multis + multi_id;
-    if (entry_id < 0 || multi->entry_count <= entry_id)
+    if (entry_index < 0 || multi->entry_count <= entry_index)
 	goto failed;
 
-    if (multi->entries[entry_id].candidates_page == 0)
+    if (multi->entries[entry_index].candidates_page == 0)
 	goto failed;
 
     LOG(("out: eb_multi_entry_have_candidates() = %d", 1));
@@ -462,22 +484,22 @@ entry_id=%d)",
 
 
 /*
- * Return a position of candidates for the entry `entry_id' in the multi
+ * Return a position of candidates for the entry `entry_index' in the multi
  * search `multi_id'.
  */
 EB_Error_Code
-eb_multi_entry_candidates(book, multi_id, entry_id, position)
+eb_multi_entry_candidates(book, multi_id, entry_index, position)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
-    EB_Multi_Entry_Code entry_id;
+    int entry_index;
     EB_Position *position;
 {
     EB_Error_Code error_code;
     EB_Multi_Search *multi;
 
     eb_lock(&book->lock);
-    LOG(("in: eb_multi_entry_candidates(book=%d, multi_id=%d, entry_id=%d)",
-	(int)book->code, (int)multi_id, (int)entry_id));
+    LOG(("in: eb_multi_entry_candidates(book=%d, multi_id=%d, entry_index=%d)",
+	(int)book->code, (int)multi_id, entry_index));
 
     /*
      * The book must have been bound.
@@ -504,20 +526,20 @@ eb_multi_entry_candidates(book, multi_id, entry_id, position)
     }
 
     /*
-     * `entry_id' must be a valid code.
+     * `entry_index' must be a valid code.
      */
     multi = book->subbook_current->multis + multi_id;
-    if (entry_id < 0 || multi->entry_count <= entry_id) {
+    if (entry_index < 0 || multi->entry_count <= entry_index) {
 	error_code = EB_ERR_NO_SUCH_ENTRY_ID;
 	goto failed;
     }
 
-    if (multi->entries[entry_id].candidates_page == 0) {
+    if (multi->entries[entry_index].candidates_page == 0) {
 	error_code = EB_ERR_NO_CANDIDATES;
 	goto failed;
     }
 
-    position->page = multi->entries[entry_id].candidates_page;
+    position->page = multi->entries[entry_index].candidates_page;
     position->offset = 0;
 
     LOG(("out: eb_multi_entry_candidates(position={%d,%d}) = %s", 

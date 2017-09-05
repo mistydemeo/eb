@@ -1,4 +1,6 @@
-info_TEXINFOS = ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi ebzip-ja.texi
+info_TEXINFOS = eb-ja.texi ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi ebzip-ja.texi
+eb_ja_TEXINFOS = eb-ver.texi initexit-c.texi disctype-c.texi subbook-c.texi \
+	word-c.texi text-c.texi
 ebfont_ja_TEXINFOS = ebfont-ver.texi
 ebinfo_ja_TEXINFOS = ebinfo-ver.texi
 ebrefile_ja_TEXINFOS = ebrefile-ver.texi
@@ -6,9 +8,11 @@ ebzip_ja_TEXINFOS = ebzip-ver.texi
 
 samplesdir = $(srcdir)/../samples
 
+C2TEXI = $(srcdir)/c2texi
+
 CLEANFILES = vti.tmp
 EXTRA_DIST = texinfo-ja.tex stamp-ebfont stamp-ebinfo \
-	stamp-ebrefile stamp-ebzip
+	stamp-ebrefile stamp-ebzip c2texi
 
 ebfont-ver.texi: stamp-ebfont
 	cp $(srcdir)/stamp-ebfont $(srcdir)/ebfont-ver.texi
@@ -61,3 +65,23 @@ stamp-ebzip: ebzip-ja.texi $(top_srcdir)/configure.ac
 	  || (echo "Updating $(srcdir)/stamp-ebzip"; \
 	      cp vti.tmp $(srcdir)/stamp-ebzip)
 	-@rm -f vti.tmp
+
+initexit-c.texi: $(C2TEXI) $(samplesdir)/initexit.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/initexit.c > $@
+
+disctype-c.texi: $(C2TEXI) $(samplesdir)/disctype.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/disctype.c > $@
+
+subbook-c.texi: $(C2TEXI) $(samplesdir)/subbook.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/subbook.c > $@
+
+word-c.texi: $(C2TEXI) $(samplesdir)/word.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/word.c > $@
+
+text-c.texi: $(C2TEXI) $(samplesdir)/text.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/text.c > $@

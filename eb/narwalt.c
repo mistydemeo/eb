@@ -184,7 +184,7 @@ eb_narrow_alt_character_text(appendix, character_number, text)
     }
 
     /*
-     * The narrow font must be exist in the current subbook.
+     * The narrow font must exist in the current subbook.
      */
     if (appendix->subbook_current->narrow_page == 0) {
 	error_code = EB_ERR_NO_SUCH_CHAR_TEXT;
@@ -436,7 +436,7 @@ character_number=%d)",
     }
 
     /*
-     * The narrow font must be exist in the current subbook.
+     * The narrow font must exist in the current subbook.
      */
     if (appendix->subbook_current->narrow_page == 0) {
 	error_code = EB_ERR_NO_SUCH_CHAR_TEXT;
@@ -548,7 +548,7 @@ character_number=%d)",
     }
 
     /*
-     * The narrow font must be exist in the current subbook.
+     * The narrow font must exist in the current subbook.
      */
     if (appendix->subbook_current->narrow_page == 0) {
 	error_code = EB_ERR_NO_CUR_FONT;

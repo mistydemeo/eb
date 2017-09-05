@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.1 版です。 EB ライブラリバージョン 3.1 に対応していま
-す。
+   この文書は第 3.2beta0 版です。 EB ライブラリバージョン 3.2beta0 に対
+応しています。
 
 * Menu:
 
@@ -915,7 +915,7 @@ File: ebzip-ja.info,  Node: Index Part,  Next: Header Part,  Prev: Data Part,  U
 次のバイトは 0x34 になります。
 
      +---------+---------+
-     |0001 0010|0011 1000|
+     |0001 0010|0011 0100|
      +---------+---------+
        (0x12)    (0x34)
 
@@ -958,8 +958,8 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 3.1 では、1 (2 進数
-     で 0001) だけが規定されています。
+     圧縮モードを表します。 EB ライブラリバージョン 3.2beta0 では、 1 (2
+     進数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
      圧縮レベルを表します。
@@ -997,31 +997,31 @@ significant bit) を含んでいます。 `zip モード' が 1 で、 `圧縮レベル' が
 
 Tag Table:
 Node: Top1018
-Node: Introduction2522
-Node: Action and Command Name3874
-Node: Invoking ebzip5615
-Node: Compression6248
-Node: Compression Example 16796
-Node: Compression Example 28380
-Node: Compression Level9944
-Node: Test10443
-Node: Partial Compression10793
-Node: Overwrite Old Files13546
-Node: Compress Compressed Book14340
-Node: Uncompression15031
-Node: Uncompression Example15412
-Node: Options for Uncompression16937
-Node: Uncompress Compressed Book18111
-Node: Information18590
-Node: Information Example18929
-Node: Options for Information19618
-Node: Delete a Book20117
-Node: Summary of Options20413
-Node: Comparision Result23979
-Node: Compressed File Format26297
-Node: Format Overview26701
-Node: Data Part27555
-Node: Index Part30130
-Node: Header Part32797
+Node: Introduction2532
+Node: Action and Command Name3884
+Node: Invoking ebzip5625
+Node: Compression6258
+Node: Compression Example 16806
+Node: Compression Example 28390
+Node: Compression Level9954
+Node: Test10453
+Node: Partial Compression10803
+Node: Overwrite Old Files13556
+Node: Compress Compressed Book14350
+Node: Uncompression15041
+Node: Uncompression Example15422
+Node: Options for Uncompression16947
+Node: Uncompress Compressed Book18121
+Node: Information18600
+Node: Information Example18939
+Node: Options for Information19628
+Node: Delete a Book20127
+Node: Summary of Options20423
+Node: Comparision Result23989
+Node: Compressed File Format26307
+Node: Format Overview26711
+Node: Data Part27565
+Node: Index Part30140
+Node: Header Part32807
 
 End Tag Table

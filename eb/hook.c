@@ -32,9 +32,11 @@ EB_Hookset eb_default_hookset;
 void
 eb_initialize_default_hookset()
 {
-    LOG(("in+out: eb_initialize_default_hookset()"));
+    LOG(("in: eb_initialize_default_hookset()"));
 
     eb_initialize_hookset(&eb_default_hookset);
+
+    LOG(("out: eb_initialize_default_hookset()"));
 }
 
 
@@ -55,8 +57,6 @@ eb_initialize_hookset(hookset)
 	hookset->hooks[i].code = i;
 	hookset->hooks[i].function = NULL;
     }
-    hookset->hooks[EB_HOOK_STOP_CODE].function
-	= eb_hook_stop_code;
     hookset->hooks[EB_HOOK_NARROW_JISX0208].function
 	= eb_hook_euc_to_ascii;
     hookset->hooks[EB_HOOK_NARROW_FONT].function
@@ -249,35 +249,6 @@ eb_hook_euc_to_ascii(book, appendix, container, hook_code, argc, argv)
 
 
 /*
- * Hook for stop-code.
- */
-EB_Error_Code
-eb_hook_stop_code(book, appendix, container, hook_code, argc, argv)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    VOID *container;
-    EB_Hook_Code hook_code;
-    int argc;
-    const unsigned int *argv;
-{
-    EB_Error_Code error_code = EB_SUCCESS;
-
-    if (appendix == NULL
-	|| appendix->subbook_current == NULL
-	|| appendix->subbook_current->stop0 == 0) {
-	if (argv[0] == 0x1f41 && argv[1] == book->text_context.auto_stop_code)
-	    error_code = EB_ERR_STOP_CODE;
-    } else {
-	if (argv[0] == appendix->subbook_current->stop0
-	    && argv[1] == appendix->subbook_current->stop1)
-	    error_code = EB_ERR_STOP_CODE;
-    }
-
-    return error_code;
-}
-
-
-/*
  * Hook for narrow local character.
  */
 EB_Error_Code
@@ -343,7 +314,7 @@ eb_hook_newline(book, appendix, container, code, argc, argv)
 {
     eb_write_text_byte1(book, '\n');
 
-    return 0;
+    return EB_SUCCESS;
 }
 
 

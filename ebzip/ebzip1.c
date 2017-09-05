@@ -48,11 +48,10 @@ ebzip1_slice(out_buffer, out_byte_length, in_buffer, in_byte_length)
     stream.next_in = (Bytef *) in_buffer;
     stream.avail_in = in_byte_length;
     stream.next_out = (Bytef *) out_buffer;
-    stream.avail_out = in_byte_length + EB_SIZE_EBZIP_MARGIN;
+    stream.avail_out = in_byte_length;
 
     if (deflate(&stream, Z_FINISH) != Z_STREAM_END) {
 	*out_byte_length = in_byte_length;
-	deflateEnd(&stream);
 	return 0;
     }
 

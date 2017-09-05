@@ -385,7 +385,7 @@ eb_font_height(book, height)
     }
 
     /*
-     * The narrow font must be exist in the current subbook.
+     * The narrow font must exist in the current subbook.
      */
     if (book->subbook_current->narrow_current != NULL)
 	font_code = book->subbook_current->narrow_current->font_code;

@@ -64,24 +64,22 @@ extern "C" {
 #define EB_HOOK_WIDE_JISX0208		24
 
 #define EB_HOOK_GB2312			25
-#define EB_HOOK_STOP_CODE		26
-#define EB_HOOK_BEGIN_MONO_GRAPHIC	27
-#define EB_HOOK_END_MONO_GRAPHIC	28
-#define EB_HOOK_BEGIN_GRAY_GRAPHIC	29
+#define EB_HOOK_BEGIN_MONO_GRAPHIC	26
+#define EB_HOOK_END_MONO_GRAPHIC	27
+#define EB_HOOK_BEGIN_GRAY_GRAPHIC	28
+#define EB_HOOK_END_GRAY_GRAPHIC	29
 
-#define EB_HOOK_END_GRAY_GRAPHIC	30
-#define EB_HOOK_BEGIN_COLOR_BMP		31
-#define EB_HOOK_BEGIN_COLOR_JPEG	32
-#define EB_HOOK_END_COLOR_GRAPHIC	33
-#define EB_HOOK_BEGIN_IN_COLOR_BMP	34
+#define EB_HOOK_BEGIN_COLOR_BMP		30
+#define EB_HOOK_BEGIN_COLOR_JPEG	31
+#define EB_HOOK_END_COLOR_GRAPHIC	32
+#define EB_HOOK_BEGIN_IN_COLOR_BMP	33
+#define EB_HOOK_BEGIN_IN_COLOR_JPEG	34
 
-#define EB_HOOK_BEGIN_IN_COLOR_JPEG	35
-#define EB_HOOK_END_IN_COLOR_GRAPHIC	36
-#define EB_HOOK_BEGIN_WAVE		37
-#define EB_HOOK_END_WAVE		38
-#define EB_HOOK_BEGIN_MPEG		39
-
-#define EB_HOOK_END_MPEG		40
+#define EB_HOOK_END_IN_COLOR_GRAPHIC	35
+#define EB_HOOK_BEGIN_WAVE		36
+#define EB_HOOK_END_WAVE		37
+#define EB_HOOK_BEGIN_MPEG		38
+#define EB_HOOK_END_MPEG		39
 
 /*
  * Function declarations.
@@ -104,8 +102,7 @@ EB_Error_Code eb_hook_newline EB_P((EB_Book *, EB_Appendix *, void *,
 EB_Error_Code eb_hook_empty EB_P((EB_Book *, EB_Appendix *, void *,
     EB_Hook_Code, int, const unsigned int *));
 
-/* text.c */
-void eb_initialize_text EB_P((EB_Book *));
+/* readtext.c */
 EB_Error_Code eb_seek_text EB_P((EB_Book *, const EB_Position *));
 EB_Error_Code eb_tell_text EB_P((EB_Book *, EB_Position *));
 EB_Error_Code eb_read_text EB_P((EB_Book *, EB_Appendix *, EB_Hookset *,
@@ -113,12 +110,14 @@ EB_Error_Code eb_read_text EB_P((EB_Book *, EB_Appendix *, EB_Hookset *,
 EB_Error_Code eb_read_heading EB_P((EB_Book *, EB_Appendix *, EB_Hookset *,
     void *, size_t, char *, ssize_t *));
 EB_Error_Code eb_read_rawtext EB_P((EB_Book *, size_t, char *, ssize_t *));
+int eb_is_text_stopped EB_P((EB_Book *));
 EB_Error_Code eb_write_text_byte1 EB_P((EB_Book *, int));
 EB_Error_Code eb_write_text_byte2 EB_P((EB_Book *, int, int));
 EB_Error_Code eb_write_text_string EB_P((EB_Book *, const char *));
 EB_Error_Code eb_write_text EB_P((EB_Book *, const char *, size_t));
 const char *eb_current_candidate EB_P((EB_Book *));
-EB_Error_Code eb_forward_text EB_P((EB_Book *, EB_Hookset *));
+EB_Error_Code eb_forward_text EB_P((EB_Book *, EB_Appendix *));
+EB_Error_Code eb_backward_text EB_P((EB_Book *, EB_Appendix *));
 
 #ifdef __cplusplus
 }

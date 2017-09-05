@@ -1,3 +1,161 @@
+2001-10-27  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.2beta0.
+
+	* doc-ja/Makefile.am (info_TEXINFOS): List in one line to avoid
+	a bug of GNU automake-1.5.
+
+	* configure.ac (AC_ARG_ENABLE): Add `--enable-samples'.
+	* Makefile.am (SAMPLES_SUBDIR): New variable.
+	* Makefile.am (SUBDIRS): Add $(SAMPLES_SUBDIR).
+	* samples/Makefile.am, samples/disctype.c, samples/subbook.c,
+	samples/word.c: Revised.
+	* samples/initexit.c, samples/text.c: New files.
+
+	* configure.ac (LIBEB_VERSION_INFO): Set to `6:0:0'.
+
+2001-10-26  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* m4/libtool.m4, ltmain.sh: Import libtool-1.4.2.
+
+2001-10-25  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/error.h (EB_ERR_TEXT_END): Renamed to `EB_ERR_END_OF_CONTENT'.
+
+	* doc-ja/Makefile.am (info_TEXINFOS): Add `eb-ja.texi'.
+	* doc-ja/Makefile.am (eb_ja_TEXINFOS): Defined.
+	* doc-ja/Makefile.am (C2TEXI): Defined.
+	* doc-ja/eb-ja.texi: Added.
+	* doc-ja/Makefile.am (EXTRA_DIST): Add `c2texi'.
+
+	* doc-ja/c2texi: Delete copyright notice, #ifdef and #endif lines.
+
+2001-10-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/build-post.h.in (EB_TEXT_NONE): Renamed to EB_TEXT_SEEKED.
+	* eb/error.h (EB_ERR_NO_PREV_SEEK): New error code.
+	* eb/readtext.c (eb_read_text, eb_read_heading, eb_read_rawtext,
+	eb_forward_text, eb_backward_text): If text_context code is
+	EB_TEXT_INVALID, return EB_ERR_NO_PREV_SEEK.
+
+	* eb/readtext.c (eb_backward_text): Fix a bug that it misses
+	detecting the backward location.
+
+2001-10-22  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h (EB_Appendix_Subbook_Struct): Rename `stop0' to
+	`stop_code0', and `stop1' to `stop_code1' respectively.
+
+	* eb/text.c, eb/readtext.c: Rename text.c to readtext.c, and
+	create text.c, again.
+	* eb/Makefile.am (libeb_la_SOURCES): Add `readtext.c'.
+
+	* eb/readtext.c (eb_backward_text): New function.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to 3.2beta0.
+
+2001-10-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/text.h (EB_HOOK_STOP_CODE): Removed.
+	* eb/error.h (EB_ERR_STOP_CODE): Removed.
+	* eb/hook.c: (eb_hook_stop_code): Removed.
+	* eb/text.c (eb_is_stop_code): New function.
+	* eb/text.c (eb_reset_text_context): Don't reset `location'.
+	* eb/text.c (eb_seek_text, eb_read_text, eb_read_heading,
+	eb_read_rawtext, eb_forward_text, eb_forward_heading): Use
+	eb_reset_text_context().
+	* eb/error.h (EB_ERR_STOP_CODE): Removed.
+	* eb/error.h (EB_ERR_TEXT_END): New error code.
+
+	* eb/text.c (eb_read_text_internal): Add the `forward_only' argument.
+	* eb/text.c (eb_forward_text): Remove the `hookset' argument.
+	* eb/text.c (eb_forward_text, eb_forward_heading): Revised.
+	* eb/defs.h (EB_Text_Context_Struct): Delete `in_step'.
+
+	* eb/search.c (eb_reset_search_context): Fix log format.
+	* eb/search.c (eb_initialize_default_hookset): Ditto.
+
+2001-10-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/narwfont.c (eb_load_narrow_font): Check range of character
+	numbers strictly.
+	* eb/appsub.c (eb_load_appendix_subbook): Likewise.
+
+	* eb/narwfont.c (eb_load_narrow_font): Close a font file if the
+	number of local character is 0.
+
+2001-10-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/text.c (eb_is_text_stopped): New function.
+
+2001-10-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* m4/Makefile.am (EXTRA_DIST, pkgdata_DATA): Remove `ssizet.m4'.
+
+	* eb/filename.c (eb_path_name_zio_code): Fix a bug in path name
+	adjustment.
+
+	* eb/hook.c (eb_hook_newline): Use `EB_SUCCESS', not `0'.
+
+	* eb/narwfont.c (eb_load_narrow_font): Log on exit.
+
+2001-10-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/log.c (eb_log): Add missing va_end() call.
+
+	* eb/defs.h (EB_MAX_KEYWORDS, EB_NUMBER_OF_SEARCH_CONTEXTS): They
+	are now aliases of EB_MAX_MULTI_ENTRIES.
+
+2001-09-27  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* m4/eb3.m4 (AC_REQUIRE): Don't request `AC_TYPE_SSIZE_T'.
+	Check with AC_CHECK_TYPE(ssize_t, int), instead.
+	* m4/ssizet.m4: Removed.
+        * configure.ac (AC_TYPE_SSIZE_T): Removed.  Use AC_CHECK_TYPE instead.
+
+2001-09-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/subbook.c (eb_load_all_subbooks): Upon return, unset subbook.
+
+	* eb/defs.h: Include <limits.h>.
+	* eb/defs.h (EB_MAX_PATH_LENGTH): New macro.
+	* eb/build-pre.h (PATH_MAX): Removed.  Use EB_MAX_PATH_LENGTH instead.
+
+	* m4/eb3.m4 (AC_CHECK_HEADERS): Defined.  Check `limits.h'.
+
+	* eb/multi.c (eb_multi_entry_count): New function.
+	* eb/multi.c (eb_multi_entry_list): Revised.
+	New implementation is based on eb_multi_entry_count().
+	* ebinfo/ebinfo.c (output_multi_information):
+	Use eb_multi_entry_count() instead of eb_multi_entry_list().
+
+2001-09-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebfont/ebfont.c, ebinfo/ebinfo.c, ebrefile/ebrefile.c,
+	ebzip/ebzip.c (main): Check return value of eb_initialize_library().
+
+2001-09-08  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebzip/copyfile.c, ebzip/sebxa.c, ebzip/unzipbook.c, 
+	ebzip/unzipfile.c, ebzip/zipbook.c, ebzip/zipfile.c, 
+	ebzip/zipinfobook.c, ebzip/zipinfofile.c: Don't include "eb.h",
+	"error.h", "font.h" nor "build-post.h", reported by satomii.
+	* ebzip/ebzip.h: Include "build-post.h", reported by satomii.
+
+	* ebrefile/ebrefile.c (main): Fix the bug of the order of
+	arguments passed to refile_book(), reported by satomii.
+
+	* ebzip/ebzip1.c, eb/defs.h: Don't use `EB_SIZE_EBZIP_MARGIN'.
+
+	* eb/binary.h: Delete declaration of eb_initialize_binary(), reported
+	by Takashi NEMOTO.
+	* eb/log.c: Include <stdarg.h> instead of <varargs.h> if `WIN32' is
+	defined, requested by satomii.
+	* eb/zio.h: In function declaration, describe types of arguments if
+	`WIN32' is defined, requested by satomii.
+
+	* libebutils/ebutils.c (canonicalize_path): Add DOS version.
+
 2001-08-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.1.

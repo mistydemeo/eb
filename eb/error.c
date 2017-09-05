@@ -102,16 +102,21 @@ static const char * const error_strings[] = {
     /* 50 -- 54 */
     "EB_ERR_NO_SUCH_HOOK",
     "EB_ERR_NO_SUCH_BINARY",
-    "EB_ERR_STOP_CODE",
     "EB_ERR_DIFF_CONTENT",
     "EB_ERR_NO_PREV_SEARCH",
+    "EB_ERR_NO_SUCH_MULTI_ID",
 
     /* 55 -- 59 */
-    "EB_ERR_NO_SUCH_MULTI_ID",
     "EB_ERR_NO_SUCH_ENTRY_ID",
     "EB_ERR_TOO_MANY_WORDS",
     "EB_ERR_NO_WORD",
     "EB_ERR_NO_CANDIDATES"
+    "EB_ERR_END_OF_CONTENT",
+
+    /* 60 -- 64 */
+    "EB_ERR_NO_PREV_SEEK",
+
+    NULL
 };
 
 /*
@@ -209,16 +214,19 @@ static const char * const error_messages[] = {
     /* 50 -- 54 */
     N_("no such hook"),
     N_("no such binary"),
-    N_("stop code found"),
     N_("different content type"),
     N_("no previous search"),
+    N_("no such multi search"),
 
     /* 55 -- 59 */
-    N_("no such multi search"),
     N_("no such multi search entry"),
     N_("too many words specified"),
     N_("no word specified"),
     N_("no candidates"),
+    N_("end of content"),
+
+    /* 60 -- 64 */
+    N_("no previous seek"),
 
     NULL
 };

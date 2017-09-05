@@ -139,13 +139,39 @@ eb_load_appendix_subbook(appendix)
 	error_code = EB_ERR_FAIL_READ_APP;
 	goto failed;
     }
+
     character_count = eb_uint2(buffer + 12);
     subbook->narrow_page = eb_uint4(buffer);
     subbook->narrow_start = eb_uint2(buffer + 10);
-    subbook->narrow_end = subbook->narrow_start
-	+ ((character_count / 0x5e) << 8) + (character_count % 0x5e) - 1;
-    if (0x7e < (subbook->narrow_end & 0xff))
-	subbook->narrow_end += 0xa3;
+    if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
+	subbook->narrow_end = subbook->narrow_start
+	    + ((character_count / 0xfe) << 8) + (character_count % 0xfe) - 1;
+	if (0xfe < (subbook->narrow_end & 0xff))
+	    subbook->narrow_end += 3;
+    } else {
+	subbook->narrow_end = subbook->narrow_start
+	    + ((character_count / 0x5e) << 8) + (character_count % 0x5e) - 1;
+	if (0x7e < (subbook->narrow_end & 0xff))
+	    subbook->narrow_end += 0xa3;
+    }
+
+    if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
+	if ((subbook->narrow_start & 0xff) < 0x01
+	    || 0xfe < (subbook->narrow_start & 0xff)
+	    || subbook->narrow_start < 0x0001
+	    || 0x1efe < subbook->narrow_end) {
+	    error_code = EB_ERR_UNEXP_APP;
+	    goto failed;
+	}
+    } else {
+	if ((subbook->narrow_start & 0xff) < 0x21
+	    || 0x7e < (subbook->narrow_start & 0xff)
+	    || subbook->narrow_start < 0xa121
+	    || 0xfe7e < subbook->narrow_end) {
+	    error_code = EB_ERR_UNEXP_APP;
+	    goto failed;
+	}
+    }
 
     /*
      * Set information about alternation text of wide font.
@@ -154,14 +180,40 @@ eb_load_appendix_subbook(appendix)
 	error_code = EB_ERR_FAIL_READ_APP;
 	goto failed;
     }
+
     character_count = eb_uint2(buffer + 12);
     subbook->wide_page = eb_uint4(buffer);
     subbook->wide_start = eb_uint2(buffer + 10);
-    subbook->wide_end = subbook->wide_start
-	+ ((character_count / 0x5e) << 8) + (character_count % 0x5e) - 1;
-    if (0x7e < (subbook->wide_end & 0xff))
-	subbook->wide_end += 0xa3;
+    if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
+	subbook->wide_end = subbook->wide_start
+	    + ((character_count / 0xfe) << 8) + (character_count % 0xfe) - 1;
+	if (0xfe < (subbook->wide_end & 0xff))
+	    subbook->wide_end += 3;
+    } else {
+	subbook->wide_end = subbook->wide_start
+	    + ((character_count / 0x5e) << 8) + (character_count % 0x5e) - 1;
+	if (0x7e < (subbook->wide_end & 0xff))
+	    subbook->wide_end += 0xa3;
+    }
     
+    if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
+	if ((subbook->wide_start & 0xff) < 0x01
+	    || 0xfe < (subbook->wide_start & 0xff)
+	    || subbook->wide_start < 0x0001
+	    || 0x1efe < subbook->wide_end) {
+	    error_code = EB_ERR_UNEXP_APP;
+	    goto failed;
+	}
+    } else {
+	if ((subbook->wide_start & 0xff) < 0x21
+	    || 0x7e < (subbook->wide_start & 0xff)
+	    || subbook->wide_start < 0xa121
+	    || 0xfe7e < subbook->wide_end) {
+	    error_code = EB_ERR_UNEXP_APP;
+	    goto failed;
+	}
+    }
+
     /*
      * Set stop-code.
      */
@@ -180,11 +232,11 @@ eb_load_appendix_subbook(appendix)
 	goto failed;
     }
     if (eb_uint2(buffer) != 0) {
-	subbook->stop0 = eb_uint2(buffer + 2);
-	subbook->stop1 = eb_uint2(buffer + 4);
+	subbook->stop_code0 = eb_uint2(buffer + 2);
+	subbook->stop_code1 = eb_uint2(buffer + 4);
     } else {
-	subbook->stop0 = 0;
-	subbook->stop1 = 0;
+	subbook->stop_code0 = 0;
+	subbook->stop_code1 = 0;
     }
 
     /*
@@ -559,7 +611,7 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
 {
     EB_Error_Code error_code;
     EB_Appendix_Subbook *subbook;
-    char appendix_path_name[PATH_MAX + 1];
+    char appendix_path_name[EB_MAX_PATH_LENGTH + 1];
     Zio_Code zio_code;
 
     LOG(("in: eb_set_appendix_subbook_eb(appendix=%d, subbook=%d)",
@@ -614,7 +666,7 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
 {
     EB_Error_Code error_code;
     EB_Appendix_Subbook *subbook;
-    char appendix_path_name[PATH_MAX + 1];
+    char appendix_path_name[EB_MAX_PATH_LENGTH + 1];
     Zio_Code zio_code;
 
     LOG(("in: eb_set_appendix_subbook_epwing(appendix=%d, subbook=%d)",

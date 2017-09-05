@@ -36,7 +36,7 @@ eb_have_stop_code(appendix)
     if (appendix->subbook_current == NULL)
 	goto failed;
 
-    if (appendix->subbook_current->stop0 == 0)
+    if (appendix->subbook_current->stop_code0 == 0)
 	goto failed;
 
     LOG(("out: eb_have_stop_code() = %d", 1));
@@ -75,8 +75,8 @@ eb_stop_code(appendix, stop_code)
 	goto failed;
     }
 
-    *stop_code = (appendix->subbook_current->stop0 << 16)
-	+ appendix->subbook_current->stop1;
+    *stop_code = (appendix->subbook_current->stop_code0 << 16)
+	+ appendix->subbook_current->stop_code1;
 
     LOG(("out: eb_stop_code() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);

@@ -13,9 +13,6 @@
  * GNU General Public License for more details.
  */
 
-#include "eb.h"
-#include "build-post.h"
-
 #include "ebzip.h"
 
 #define zio_uint4(p) ((*(const unsigned char *)(p) << 24) \

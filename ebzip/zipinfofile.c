@@ -13,9 +13,6 @@
  * GNU General Public License for more details.
  */
 
-#include "eb.h"
-#include "build-post.h"
-
 #include "ebzip.h"
 
 #include "samefile.h"
