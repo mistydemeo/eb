@@ -27,18 +27,18 @@
  * returned according as `pattern' is greater or less than `word'.
  */
 int
-eb_match_canonicalized_word(canonicalized_word, pattern, length)
-    const char *canonicalized_word;
+eb_match_word(word, pattern, length)
+    const char *word;
     const char *pattern;
     size_t length;
 {
     int i = 0;
-    unsigned char *word_p = (unsigned char *)canonicalized_word;
+    unsigned char *word_p = (unsigned char *)word;
     unsigned char *pattern_p = (unsigned char *)pattern;
     int result;
 
-    LOG(("in: eb_match_canonicalized_word(canonicalized_word=%s, pattern=%s)",
-	eb_quoted_stream(canonicalized_word, EB_MAX_WORD_LENGTH),
+    LOG(("in: eb_match_word(word=%s, pattern=%s)",
+	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
 	eb_quoted_stream(pattern, length)));
 
     for (;;) {
@@ -61,13 +61,13 @@ eb_match_canonicalized_word(canonicalized_word, pattern, length)
 	i++;
     }
 
-    LOG(("out: eb_match_canonicalized_word() = %d", result));
+    LOG(("out: eb_match_word() = %d", result));
     return result;
 }
 
 
 /*
- * Compare `word' and `pattern'.
+ * Compare `word' and `pattern' in JIS X 0208.
  * `word' must be terminated by `\0' and `pattern' is assumed to be
  * `length' characters long.
  * 
@@ -76,18 +76,71 @@ eb_match_canonicalized_word(canonicalized_word, pattern, length)
  * less than `word'.
  */
 int
-eb_exact_match_canonicalized_word(canonicalized_word, pattern, length)
-    const char *canonicalized_word;
+eb_exact_match_word_jis(word, pattern, length)
+    const char *word;
     const char *pattern;
     size_t length;
 {
     int i = 0;
-    unsigned char *word_p = (unsigned char *)canonicalized_word;
+    unsigned char *word_p = (unsigned char *)word;
     unsigned char *pattern_p = (unsigned char *)pattern;
     int result;
 
-    LOG(("in: eb_exact_match_canonicalized_word(word=%s, pattern=%s)",
-	eb_quoted_stream(canonicalized_word, EB_MAX_WORD_LENGTH),
+    LOG(("in: eb_exact_match_word_jis(word=%s, pattern=%s)",
+	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
+	eb_quoted_stream(pattern, length)));
+
+    for (;;) {
+	if (length <= i) {
+	    result = 0;
+	    break;
+	}
+	if (*word_p == '\0') {
+	    /* ignore spaces in the tail of the pattern */
+	    while (i < length && *pattern_p == '\0') {
+		pattern_p++;
+		i++;
+	    }
+	    result = (i - length);
+	    break;
+	}
+	if (*word_p != *pattern_p) {
+	    result = *word_p - *pattern_p;
+	    break;
+	}
+
+	word_p++;
+	pattern_p++;
+	i++;
+    }
+
+    LOG(("out: eb_exact_match_word_jis() = %d", result));
+    return result;
+}
+
+
+/*
+ * Compare `word' and `pattern' in Latin1.
+ * `word' must be terminated by `\0' and `pattern' is assumed to be
+ * `length' characters long.
+ * 
+ * When the word is equal to the pattern, 0 is returned.  A positive or
+ * negateive integer is returned according as `pattern' is greater or
+ * less than `word'.
+ */
+int
+eb_exact_match_word_latin(word, pattern, length)
+    const char *word;
+    const char *pattern;
+    size_t length;
+{
+    int i = 0;
+    unsigned char *word_p = (unsigned char *)word;
+    unsigned char *pattern_p = (unsigned char *)pattern;
+    int result;
+
+    LOG(("in: eb_exact_match_word_latin(word=%s, pattern=%s)",
+	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
 	eb_quoted_stream(pattern, length)));
 
     for (;;) {
@@ -114,77 +167,19 @@ eb_exact_match_canonicalized_word(canonicalized_word, pattern, length)
 	i++;
     }
 
-    LOG(("out: eb_exact_match_canonicalized_word() = %d", result));
+    LOG(("out: eb_exact_match_word_latin() = %d", result));
     return result;
 }
 
 
 /*
- * Compare `word' and `pattern'.
+ * Compare `word' and `pattern' in JIS X 0208.
  *
- * This function is equivalent to eb_match_canonicalized_word() except
- * that this function ignores difference of case.  The word and pattern
- * are assumed to be written in ISO 8859-1.
+ * This function is equivalent to eb_match_word() except that this function
+ * ignores differences of kana (katakana and hiragana).
  */
 int
-eb_match_word_latin(word, pattern, length)
-    const char *word;
-    const char *pattern;
-    size_t length;
-{
-    int i = 0;
-    unsigned char *word_p = (unsigned char *)word;
-    unsigned char *pattern_p = (unsigned char *)pattern;
-    int result;
-
-    LOG(("in: eb_match_word_latin(word=%s, pattern=%s)",
-	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
-	eb_quoted_stream(pattern, length)));
-
-    for (;;) {
-	if (length <= i) {
-	    result = *word_p;
-	    break;
-	}
-	if (*word_p == '\0') {
-	    result = 0;
-	    break;
-	}
-	if (isalpha(*word_p)
-	    || (0xc0 <= *word_p && *word_p <= 0xd6)
-	    || (0xd8 <= *word_p && *word_p <= 0xde)
-	    || (0xe0 <= *word_p && *word_p <= 0xf6)
-	    || (0xf8 <= *word_p && *word_p <= 0xfe)) {
-	    if ((*word_p | 0x20) != (*pattern_p | 0x20)) {
-		result = *word_p - *pattern_p;
-		break;
-	    }
-	} else {
-	    if (*word_p != *pattern_p) {
-		result = *word_p - *pattern_p;
-		break;
-	    }
-	}
-	word_p++;
-	pattern_p++;
-	i++;
-    }
-
-    LOG(("out: eb_match_word_latin() = %d", result));
-    return result;
-}
-
-
-/*
- * Compare `word' and `pattern'.
- *
- * This function is equivalent to eb_match_canonicalized_word() except
- * that this function ignores differences of case and kana (katakana and
- * hiragana).  The word and pattern are assumed to be written in JIS X
- * 0208.
- */
-int
-eb_match_word_jis(word, pattern, length)
+eb_match_word_jis_kana(word, pattern, length)
     const char *word;
     const char *pattern;
     size_t length;
@@ -195,7 +190,7 @@ eb_match_word_jis(word, pattern, length)
     unsigned char wc0, wc1, pc0, pc1;
     int result;
 
-    LOG(("in: eb_match_word_jis(word=%s, pattern=%s)",
+    LOG(("in: eb_match_word_jis_kana(word=%s, pattern=%s)",
 	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
 	eb_quoted_stream(pattern, length)));
 
@@ -219,22 +214,13 @@ eb_match_word_jis(word, pattern, length)
 	pc1 = *(pattern_p + 1);
 
 	if ((wc0 == 0x24 || wc0 == 0x25) && (pc0 == 0x24 || pc0 == 0x25)) {
-	    if (wc1 != pc1) {
-		result = wc1 - pc1;
-		break;
-	    }
-	} else if (wc0 == 0x23 && pc0 == 0x23 && isalpha(wc1)) {
-	    if ((wc1 | 0x20) != (pc1 | 0x20)) {
-		result = wc1 - pc1;
+	    if (wc0 <= pc1 && wc1 != pc1) {
+		result = ((wc0 << 8) + wc1) - ((pc0 << 8) + pc1);
 		break;
 	    }
 	} else {
-	    if (wc0 != pc0) {
-		result = wc0 - pc0;
-		break;
-	    }
-	    if (wc1 != pc1) {
-		result = wc1 - pc1;
+	    if (wc0 != pc0 || wc1 != pc1) {
+		result = ((wc0 << 8) + wc1) - ((pc0 << 8) + pc1);
 		break;
 	    }
 	}
@@ -243,82 +229,19 @@ eb_match_word_jis(word, pattern, length)
 	i += 2;
     }
 
-    LOG(("out: eb_match_word_jis() = %d", result));
+    LOG(("out: eb_match_word_jis_kana() = %d", result));
     return result;
 }
 
 
 /*
- * Compare `word' and `pattern'.
+ * Compare `word' and `pattern' in JIS X 0208.
  *
- * This function is equivalent to eb_exact_match_canonicalized_word()
- * except that this function ignores difference of case.  The word and
- * pattern are assumed to be written in ISO 8859-1.
+ * This function is equivalent to eb_exact_match_word_jis() except that
+ * this function ignores differences of kana (katakana and hiragana).
  */
 int
-eb_exact_match_word_latin(word, pattern, length)
-    const char *word;
-    const char *pattern;
-    size_t length;
-{
-    int i = 0;
-    unsigned char *word_p = (unsigned char *)word;
-    unsigned char *pattern_p = (unsigned char *)pattern;
-    int result;
-
-    LOG(("in: eb_exact_match_word_latin(word=%s, pattern=%s)",
-	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
-	eb_quoted_stream(pattern, length)));
-
-    for (;;) {
-	if (length <= i) {
-	    result = *word_p;
-	    break;
-	}
-	if (*word_p == '\0') {
-	    /* ignore spaces in the tail of the pattern */
-	    while (i < length && (*pattern_p == ' ' || *pattern_p == '\0')) {
-		pattern_p++;
-		i++;
-	    }
-	    result = (i - length);
-	    break;
-	}
-	if (isalpha(*word_p)
-	    || (0xc0 <= *word_p && *word_p <= 0xd6)
-	    || (0xd8 <= *word_p && *word_p <= 0xde)
-	    || (0xe0 <= *word_p && *word_p <= 0xf6)
-	    || (0xf8 <= *word_p && *word_p <= 0xfe)) {
-	    if ((*word_p | 0x20) != (*pattern_p | 0x20)) {
-		result = *word_p - *pattern_p;
-		break;
-	    }
-	} else {
-	    if (*word_p != *pattern_p) {
-		result = *word_p - *pattern_p;
-		break;
-	    }
-	}
-	word_p++;
-	pattern_p++;
-	i++;
-    }
-
-    LOG(("out: eb_exact_match_word_latin() = %d", result));
-    return result;
-}
-
-
-/*
- * Compare `word' and `pattern'.
- *
- * This function is equivalent to eb_exact_match_canonicalized_word()
- * except that this function ignores differences of case and kana
- * (katakana and hiragana).  The word and pattern are assumed to be
- * written in JIS X 02028.
- */
-int
-eb_exact_match_word_jis(word, pattern, length)
+eb_exact_match_word_jis_kana(word, pattern, length)
     const char *word;
     const char *pattern;
     size_t length;
@@ -329,7 +252,7 @@ eb_exact_match_word_jis(word, pattern, length)
     unsigned char wc0, wc1, pc0, pc1;
     int result;
 
-    LOG(("in: eb_exact_match_word_jis(word=%s, pattern=%s)",
+    LOG(("in: eb_exact_match_word_jis_kana(word=%s, pattern=%s)",
 	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
 	eb_quoted_stream(pattern, length)));
 
@@ -353,21 +276,12 @@ eb_exact_match_word_jis(word, pattern, length)
 
 	if ((wc0 == 0x24 || wc0 == 0x25) && (pc0 == 0x24 || pc0 == 0x25)) {
 	    if (wc1 != pc1) {
-		result = wc1 - pc1;
-		break;
-	    }
-	} else if (wc0 == 0x23 && pc0 == 0x23 && isalpha(wc1)) {
-	    if ((wc1 | 0x20) != (pc1 | 0x20)) {
-		result = wc1 - pc1;
+		result = ((wc0 << 8) + wc1) - ((pc0 << 8) + pc1);
 		break;
 	    }
 	} else {
-	    if (wc0 != pc0) {
-		result = wc0 - pc0;
-		break;
-	    }
-	    if (wc1 != pc1) {
-		result = wc1 - pc1;
+	    if (wc0 != pc0 || wc1 != pc1) {
+		result = ((wc0 << 8) + wc1) - ((pc0 << 8) + pc1);
 		break;
 	    }
 	}
@@ -376,7 +290,7 @@ eb_exact_match_word_jis(word, pattern, length)
 	i += 2;
     }
 
-    LOG(("out: eb_exact_match_word_jis() = %d", result));
+    LOG(("out: eb_exact_match_word_jis_kana() = %d", result));
     return result;
 }
 

@@ -4,7 +4,7 @@
 @settitle ebzip
 @c %** end of header
 
-@include ebzip-ver.texi
+@include version-ebzip.texi
 
 @dircategory CD-ROM Book Utilities
 @direntry
@@ -72,7 +72,7 @@ This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 @menu
 * Introduction::                Introduction.
 * Action and Command Name::     Action and Command Name.
-* Invoking ebzip::              Invoking @code{ebzip}.
+* Invoke ebzip::                Invoke @code{ebzip}.
 * Compression::                 About the Compression Action.
 * Uncompression::               About the Uncompression Action.
 * Information::                 About the Information Action.
@@ -148,7 +148,7 @@ hard disk (nor other strage devices), please give up compress the book.
 This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 
 @c ===================================================================
-@node Action and Command Name, Invoking ebzip, Introduction, Top
+@node Action and Command Name, Invoke ebzip, Introduction, Top
 @chapter Action and Command Name
 
 @code{ebzip} has three @dfn{action} modes; compression, uncompression
@@ -212,8 +212,8 @@ ebzipinfo --uncompress
 @end example
 
 @c ===================================================================
-@node Invoking ebzip, Compression, Action and Command Name, Top
-@chapter Invoking @code{ebzip}
+@node Invoke ebzip, Compression, Action and Command Name, Top
+@chapter Invoke @code{ebzip}
 
 Its usual way to invoke @code{ebzip}, @code{ebunzip} and @code{ebzipinfo}
 are as follows:
@@ -228,7 +228,7 @@ are as follows:
 
 @noindent
 @var{book-path} points to the top directory of a CD-ROM book where
-the file @file{CATALOG} or @file{CATALOGS} resides.
+the file @file{catalog} or @file{catalogs} resides.
 @code{ebzip} compresses a book at @var{book-path},
 @code{ebunzip} uncompresses a book at @var{book-path},
 and @code{ebzipinfo} outputs information about a book at @var{book-path}.
@@ -259,7 +259,7 @@ ebzip: ebnet is not supported
 @end example
 
 @c ===================================================================
-@node Compression, Uncompression, Invoking ebzip, Top
+@node Compression, Uncompression, Invoke ebzip, Top
 @chapter Compression
 
 @code{ebzip} (equivalent to @code{ebunzip --compress} and
@@ -411,7 +411,7 @@ under @file{/dict}.
 @noindent
 The intermediate directories, @file{/dict/german}, @file{/dict/french}
 and @file{/dict/italian}, are created by @code{ebzip} if missing.
-@file{CATALOG} and @file{CATALOGS} are simply copied to the output
+@file{catalog} and @file{catalogs} are simply copied to the output
 directory.
 @code{ebzip} ignores files and directories not supported by EB Library
 (i.e. not compressed or copied to the output directory).
@@ -501,7 +501,7 @@ subbook 3:
 @end example
 
 @noindent
-(@xref{Invoking ebinfo, , Invoking @code{ebinfo}, ebinfo, ebinfo},
+(@xref{Invoke ebinfo, , Invoke @code{ebinfo}, ebinfo, ebinfo},
 for more details about the @code{ebinfo} command).
 @*
 In this example, there are three subbooks in the book, and their
@@ -526,7 +526,7 @@ compressed nor copied, so that the compression procedure for the book
 is incompleted at this point.
 In order to use the book, you must compress the rest subbooks in a
 further operation, or deletes the rest subbooks from a subbook list in
-the @file{CATALOG(S)} file by using the @code{ebrefile} command
+the @file{catalog(s)} file by using the @code{ebrefile} command
 (@xref{Combination with ebzip, , Combination with @code{ebzip}, ebrefile,
 ebrefile}, for more details).
 You can compress subbooks with different compression levels

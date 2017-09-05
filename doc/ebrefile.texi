@@ -4,7 +4,7 @@
 @settitle ebrefile
 @c %** end of header
 
-@include ebrefile-ver.texi
+@include version-ebrefile.texi
 
 @dircategory CD-ROM Book Utilities
 @direntry
@@ -71,19 +71,22 @@ This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 
 @menu
 * Introduction::                Introduction.
-* Invoking ebrefile::           Invoking @code{ebrefile}.
+* Invoke ebrefile::             Invoke @code{ebrefile}.
 * Summary of Options::          Summary of Options to @code{ebrefile}.
 
+@detailmenu
  --- The Detailed Node Listing ---
 
-Invoking @code{ebrefile}
+Invoke @code{ebrefile}
 
 * Select Subbooks::             Select Subbooks.
 * Combination with ebzip::      Combination with @code{ebzip}.
+
+@end detailmenu
 @end menu
 
 @c ===================================================================
-@node Introduction, Invoking ebrefile, Top, Top
+@node Introduction, Invoke ebrefile, Top, Top
 @chapter Introduction
 
 A CD-ROM book usually has some @dfn{subbooks}.
@@ -103,8 +106,8 @@ Each subbook itself is an independent @dfn{book}.
 @end example
 
 A CD-ROM book of EB/EBG/EBXA/EBXA-C/S-EBXA format has the file
-@file{CATALOG},
-and a CD-ROM book of EPWING format has the file @file{CATALOGS}.
+@file{catalog},
+and a CD-ROM book of EPWING format has the file @file{catalogs}.
 The files define what subbooks the CD-ROM book has.
 They are resides at the top directory of the CD-ROM book.
 
@@ -136,8 +139,8 @@ Please be careful.
 This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 
 @c ===================================================================
-@node Invoking ebrefile, Summary of Options, Introduction, Top
-@chapter Invoking @code{ebrefile}
+@node Invoke ebrefile, Summary of Options, Introduction, Top
+@chapter Invoke @code{ebrefile}
 
 Its usual way to invoke @code{ebrefile} is as follows:
 
@@ -147,7 +150,7 @@ Its usual way to invoke @code{ebrefile} is as follows:
 
 @noindent
 @var{book-path} points to the top directory of a CD-ROM book where
-the file @file{CATALOG} or @file{CATALOGS} resides.
+the file @file{catalog} or @file{catalogs} resides.
 Though you cannot specify two or more book-paths, 
 you can omit book-path like as follows:
 
@@ -175,7 +178,7 @@ ebrefile: ebnet is not supported
 @end menu
 
 @c -------------------------------------------------------------------
-@node Select Subbooks, Combination with ebzip, Invoking ebrefile, Invoking ebrefile
+@node Select Subbooks, Combination with ebzip, Invoke ebrefile, Invoke ebrefile
 @section Select Subbooks
 
 By default, @code{ebrefile} imports all subbook definitions in an original
@@ -233,7 +236,7 @@ subbook 3:
 @end example
 
 @noindent
-(@xref{Invoking ebinfo, , Invoking @code{ebinfo}, ebinfo, ebinfo},
+(@xref{Invoke ebinfo, , Invoke @code{ebinfo}, ebinfo, ebinfo},
 for more details about the @code{ebinfo} command).
 @*
 In this example, there are three subbooks in the book, and their 
@@ -258,7 +261,7 @@ An argument to @samp{--subbook} can be splitted like as follows:
 Since @code{ebrefile} cannot change an order of subbook definitions,
 the order of arguments to @samp{--subbook} is not matter.
 
-@code{ebrefile} generates new catalog file as @file{CATALOGS(S).new}.
+@code{ebrefile} generates new catalog file as @file{catalogs(s).new}.
 To replace original catalog file by new one, type the following
 commands:
 
@@ -272,7 +275,7 @@ If you don't have to backup the original file, only the second command
 is needed.
 
 Now, refiling has been completed.
-Invoke @code{ebinfo} again.
+Execute @code{ebinfo} again.
 The subbook @code{germgan} is diappeared.
 
 @example
@@ -313,7 +316,7 @@ When the directory name consists of lower case letters, type:
 @end example
 
 @c -------------------------------------------------------------------
-@node Combination with ebzip,  , Select Subbooks, Invoking ebrefile
+@node Combination with ebzip,  , Select Subbooks, Invoke ebrefile
 @section Combination with @code{ebzip}
 
 @code{ebrefile} can be used together with the @code{ebzip} command,
@@ -344,7 +347,7 @@ of the current working directory, type the following:
 @end example
 
 @c ===================================================================
-@node Summary of Options,  , Invoking ebrefile, Top
+@node Summary of Options,  , Invoke ebrefile, Top
 @chapter Summary of @code{ebrefile} Options
 
 The @code{ebrefile} command supports both traditional single-letter
@@ -362,7 +365,7 @@ Output help message to standard out, then exit.
 Output a new catalog file under @var{directory}.
 By default, @code{ebrefile} generates a new catalog file under the
 current working directory (@code{.}).
-(@xref{Invoking ebrefile}, for more details).
+(@xref{Invoke ebrefile}, for more details).
 
 @item -S @var{subbooks}
 @itemx --subbook @var{subbooks}

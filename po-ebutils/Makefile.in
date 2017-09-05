@@ -19,7 +19,7 @@ POTFILES = \
 	$(top_srcdir)/ebfont/ebfont.c \
 	$(top_srcdir)/ebinfo/ebinfo.c \
 	$(top_srcdir)/ebrefile/ebrefile.c \
-	$(top_srcdir)/ebstopchk/ebstopchk.c \
+	$(top_srcdir)/ebstopcode/ebstopcode.c \
 	$(top_srcdir)/ebzip/copyfile.c \
 	$(top_srcdir)/ebzip/ebzip.c \
 	$(top_srcdir)/ebzip/ebzip1.c \

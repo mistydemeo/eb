@@ -1,5 +1,5 @@
-This is ebrefile-ja.info, produced by makeinfo version 4.0 from
-ebrefile-ja.texi.
+これは ebrefile-ja.info、 ebrefile-ja.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,13 +27,13 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta0 版です。 EB ライブラリバージョン 4.0beta0 に対
+   この文書は第 4.0beta1 版です。 EB ライブラリバージョン 4.0beta1 に対
 応しています。
 
 * Menu:
 
 * Introduction::                はじめに
-* Invoking ebrefile::           `ebrefile' の実行
+* Invoke ebrefile::           `ebrefile' の実行
 * Summary of Options::          `ebrefile' のオプション一覧
 
  --- The Detailed Node Listing ---
@@ -44,7 +44,7 @@ File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir
 * Combination with ebzip::      `ebzip' との連携
 
 
-File: ebrefile-ja.info,  Node: Introduction,  Next: Invoking ebrefile,  Prev: Top,  Up: Top
+File: ebrefile-ja.info,  Node: Introduction,  Next: Invoke ebrefile,  Prev: Top,  Up: Top
 
 はじめに
 ********
@@ -61,8 +61,8 @@ File: ebrefile-ja.info,  Node: Introduction,  Next: Invoking ebrefile,  Prev: To
      |   [和英辞典] (副本)   |
      +-----------------------+
 
-   EB/EBG/EBXA/EBXA-C/S-EBXA 形式の CD-ROM 書籍は `CATALOG' というファ
-イルを、EPWING 形式の CD-ROM 書籍は `CATALOGS' というファイルを持って
+   EB/EBG/EBXA/EBXA-C/S-EBXA 形式の CD-ROM 書籍は `catalog' というファ
+イルを、EPWING 形式の CD-ROM 書籍は `catalogs' というファイルを持って
 います。 これらのファイルは、その CD-ROM 書籍にはどんな副本が収められて
 いるのかを定義しています。 これらのファイルは、CD-ROM 書籍のトップディ
 レクトリに置かれています。
@@ -83,19 +83,19 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 ができます。
 
    `ebrefile' は有用とは思いますが、頒布にあたっては、市場性及び特定目
-的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。 詳
+的 適合性についての暗黙の保証を含めて、いかなる保証も行ないません。 詳
 細については GNU General Public License をお読み下さい。
 
    加えて、あなたは自分の所有する CD-ROM 書籍の使用許諾も守らなくてはい
-けません。 `ebrefile' はフリーソフトウェアですが、あなたの書籍が自由に
+け ません。 `ebrefile' はフリーソフトウェアですが、あなたの書籍が自由に
 使えるものであるとは限りません。 `ebrefile' は、CD-ROM 書籍のあるファ
 イルの内容に変更を加えます。 ご注意下さい。
 
-   この文書は第 4.0beta0 版です。 EB ライブラリバージョン 4.0beta0 に対
+   この文書は第 4.0beta1 版です。 EB ライブラリバージョン 4.0beta1 に対
 応しています。
 
 
-File: ebrefile-ja.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
+File: ebrefile-ja.info,  Node: Invoke ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
 
 `ebrefile' の実行
 *****************
@@ -104,8 +104,8 @@ File: ebrefile-ja.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Pr
 
      % ebrefile 書籍へのパス
 
-書籍へのパスには、CD-ROM 書籍のトップディレクトリ、つまり `CATALOG' ま
-たは `CATALOGS' ファイルが存在するディレクトリを指定します。 複数のパ
+書籍へのパスには、CD-ROM 書籍のトップディレクトリ、つまり `catalog' ま
+たは `catalogs' ファイルが存在するディレクトリを指定します。 複数のパ
 スを書くことはできませんが、以下のように、パスの指定を省くことはできま
 す。
 
@@ -126,7 +126,7 @@ File: ebrefile-ja.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Pr
 * Combination with ebzip::      `ebzip' との連携
 
 
-File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Combination with ebzip,  Prev: Invoking ebrefile,  Up: Invoking ebrefile
+File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Combination with ebzip,  Prev: Invoke ebrefile,  Up: Invoke ebrefile
 
 副本の選択
 ==========
@@ -169,7 +169,7 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Combination with ebzip,  
        全角フォントの文字: 0xa321 -- 0xa27e
 
 (`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行 :
-(ebinfo-ja)Invoking ebinfo.)。
+(ebinfo-ja)Invoke ebinfo.)。
 この例では、 3 つの副本が書籍には含まれており、その名前は `english'
 `french', `german' だということが分かります。
 
@@ -186,7 +186,7 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Combination with ebzip,  
 `ebrefile' は副本の定義順序を変えることはできませんので、 `--subbook'
 に与える引数の順序は、任意です。
 
-   `ebrefile' は新たなカタログを `CATALOGS(S).new' として生成します。
+   `ebrefile' は新たなカタログを `catalogs(s).new' として生成します。
 元のカタログファイルを新しいものに置き換えるには、次のコマンドを実行し
 ます。
 
@@ -225,7 +225,7 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Combination with ebzip,  
      % rm -r german
 
 
-File: ebrefile-ja.info,  Node: Combination with ebzip,  Prev: Select Subbooks,  Up: Invoking ebrefile
+File: ebrefile-ja.info,  Node: Combination with ebzip,  Prev: Select Subbooks,  Up: Invoke ebrefile
 
 `ebzip' との連携
 ================
@@ -249,7 +249,7 @@ File: ebrefile-ja.info,  Node: Combination with ebzip,  Prev: Select Subbooks,  
      % ebrefile --output-directory /dict --subbook english,french /cdrom
 
 
-File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up: Top
+File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoke ebrefile,  Up: Top
 
 `ebrefile' のオプション一覧
 ***************************
@@ -267,7 +267,7 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 `--output-directory DIRECTORY'
      新しいカタログファイルを置くディレクトリを指定します。 指定しなか
      ったときは、カレントディレクトリ (`.') になります。 (詳しくは
-     *note `ebrefile' の実行: Invoking ebrefile.)。
+     *note `ebrefile' の実行: Invoke ebrefile.)。
 
 `-S SUBBOOKS'
 `--subbook SUBBOOKS'
@@ -284,11 +284,11 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 
 
 Tag Table:
-Node: Top1034
-Node: Introduction1516
-Node: Invoking ebrefile3669
-Node: Select Subbooks4479
-Node: Combination with ebzip7871
-Node: Summary of Options8834
+Node: Top1049
+Node: Introduction1529
+Node: Invoke ebrefile3682
+Node: Select Subbooks4490
+Node: Combination with ebzip7876
+Node: Summary of Options8837
 
 End Tag Table

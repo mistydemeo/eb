@@ -1,0 +1,189 @@
+This is ebstopcode.info, produced by makeinfo version 4.2 from
+ebstopcode.texi.
+
+INFO-DIR-SECTION CD-ROM Book Utilities
+START-INFO-DIR-ENTRY
+* ebstopcode: (ebstopcode).       Analyze text in a CD-ROM book for stop code.
+END-INFO-DIR-ENTRY
+
+   ebstopcode: Analyze text in a CD-ROM book for stop code, by Motoyuki
+Kasahara.
+
+   Copyright (C) 2003  Motoyuki Kasahara
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by Free Software Foundation, Inc.
+
+
+File: ebstopcode.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
+
+   This is edition 4.0beta1, for EB Library version 4.0beta1.
+
+* Menu:
+
+* Introduction::                Introduction.
+* Invoke ebstopcode::           Invoke `ebstopcode'.
+* Summary of Options::          Summary of Options to `ebstopcode'.
+
+
+File: ebstopcode.info,  Node: Introduction,  Next: Invoke ebstopcode,  Prev: Top,  Up: Top
+
+Introduction
+************
+
+   When you look up a word in a CD-ROM book using EB Library
+application, you might wish the application stops displaying book's
+text at the point where explanation of the word ends.  Howerver, EB
+Library cannot ensure it, since CD-ROM book has no marker in its text
+which indicates end of paragraph.
+
+   Fortunately, many CD-ROM books have a "text stop code" which could
+be used for substitute for end of paragraph.  EB Library guesses text
+stop code automatically by default, but sometimes takes a false code.
+In that case, you have to tell EB Library a correct stop code using
+"Appendix".
+
+   The `ebstopcode' command is a utility to analyze text stop code in a
+CD-ROM book.
+
+   This is edition 4.0beta1, for EB Library version 4.0beta1.
+
+
+File: ebstopcode.info,  Node: Invoke ebstopcode,  Next: Summary of Options,  Prev: Introduction,  Up: Top
+
+Invoke `ebstopcode'
+*******************
+
+   Its usual way to invoke `ebstopcode' is as follows:
+
+     % ebstopcode BOOK-PATH SUBBOOK
+
+BOOK-PATH points to the top directory of a CD-ROM book where the file
+`catalog' or `catalogs' resides.  It may be a remote access identifer
+(`ebnet://...').  If BOOK-PATH is omitted, the current working
+directory is assumed.
+
+SUBBOOK is a directory name of the target subbook.  Use the `ebinfo'
+command to see what subbooks your CD-ROM has:
+
+     % ebinfo /cdrom
+     disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
+     character code: JIS X 0208
+     the number of subbooks: 2
+     subbook 1:
+       title: New English Japanese Dictionary (4th edition)
+       directory: english
+       search methods: word endword keyword menu
+       font sizes: 16 24 30 48
+       narrow font characters: 0xa121 -- 0xa24e
+       wide font characters: 0xa321 -- 0xa27e
+     subbook 2:
+       title: CD-ROM French Japanese Dictionary (3rd edition)
+       directory: french
+       search methods: word endword keyword menu
+       font sizes: 16 24 30 48
+       narrow font characters:
+       wide font characters: 0xa321 -- 0xa27e
+
+(*Note Invoke `ebinfo': (ebinfo)Invoke ebinfo, for more details about
+the `ebinfo' command).
+In this example, there are two subbooks in the book, and their
+directory names are `english' and `french'.
+
+   Type the follwing to analyze text stop code of the `english' subbook:
+
+     % ebstopcode /cdrom english
+
+`ebstopcode' outputs text and candidates for stop code of the subbook,
+like this:
+
+     === stop-code?: 0x1f09 0x0001 ===
+     
+     === stop-code?: 0x1f41 0x0100 ===
+     A
+     
+     === stop-code?: 0x1f09 0x0001 ===
+     n 1: the blood group whose red cells carry the A antigen.
+     
+     === stop-code?: 0x1f09 0x0001 ===
+     2: a metric unit of length equal to one ten billionth of a meter.
+     
+     === stop-code?: 0x1f09 0x0001 ===
+     3: the basic unit of electric current adopted under the System
+     International d'Unites.
+     
+     === stop-code?: 0x1f09 0x0001 ===
+     
+     === stop-code?: 0x1f41 0x0100 ===
+     (snip)
+
+   Each `stop-code?:' line shows a candidate for stop code.  Specifying
+it as text stop code, EB Library stops displaying text at the point.
+
+   The appropriate stop code of the `english' subbook is "0x1f41
+0x0100".  Test the stop code using `--no-candidate' and `--code'
+options:
+
+     % ebstopcode --no-candidate --code "0x1f41 0x0100" /cdrom english
+     A
+     n 1: the blood group whose red cells carry the A antigen.
+     2: a metric unit of length equal to one ten billionth of a meter.
+     3: the basic unit of electric current adopted under the System
+     International d'Unites.
+
+
+File: ebstopcode.info,  Node: Summary of Options,  Prev: Invoke ebstopcode,  Up: Top
+
+Summary of `ebstopcode' Options
+*******************************
+
+   The `ebstopcode' command supports both traditional single-letter
+options and mnemonic long option names.  Long option names are
+indicated with `--' instead of `-'.  Abbreviations for option names are
+allowed as long as they are unique.
+
+`-c CODE'
+`--code CODE'
+     Specify CODE as text stop code (e.g. "0x1f09 0x0001").
+     `ebstopcode' displays text until CODE is appeared.
+
+`-h'
+`--help'
+     Output help message to standard out, then exit.
+
+`-l LENGTH'
+`--length LENGTH'
+     Outputs text data LENGTH bytes maximum.  If LENGTH is set to 0,
+     `ebstopcode' outputs the whole text.  By default, the length is
+     set to 2048.
+
+`-n'
+`--no-candidates'
+     Suppress stop code candidates on output.
+
+`-v'
+`--version'
+     Output version number to standard out, then exit.
+
+   `--code' (`-c') and `--length' (`-l') options override each other.
+
+
+
+Tag Table:
+Node: Top1040
+Node: Introduction1364
+Node: Invoke ebstopcode2227
+Node: Summary of Options5019
+
+End Tag Table

@@ -1,0 +1,20 @@
+#! /usr/bin/perl
+
+use Getopt::Std;
+getopts('zn') or die "Usage: $0 [-z|-n] [file...]\n";
+$opt_z = 1 if (defined($opt_n));   # `-n' implies `-z'.
+
+$indent = 0;
+
+while (<>) {
+    chomp;
+    if (/^\[EB\] (.*)$/) {
+	$message = $1;
+	next if (!$opt_z && $message =~ /^\S+: zio_/);
+	next if (!$opt_n && $message =~ /^\S+: ebnet_/);
+	$indent-- if ($message =~ /^out: /);
+	$_ = '[EB] ' . (' ' x ($indent * 2)) . $message;
+	$indent++ if ($message =~ /^in: /);
+    }
+    print $_, "\n";
+}

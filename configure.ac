@@ -1,7 +1,7 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT(eb, 4.0beta0)
+AC_INIT(eb, 4.0beta1)
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.54)
 AM_INIT_AUTOMAKE
@@ -345,7 +345,7 @@ dnl * Output Files.
 dnl * 
 AC_CONFIG_HEADER(config.h)
 AC_CONFIG_FILES([Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile
-    ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebstopchk/Makefile 
+    ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebstopcode/Makefile 
     ebzip/Makefile doc/Makefile doc-ja/Makefile po-eb/Makefile
     po-ebutils/Makefile m4/Makefile samples/Makefile])
 AC_OUTPUT

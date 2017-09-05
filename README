@@ -17,7 +17,7 @@ EB Library also provides some utility commands:
 			a CD-ROM book.
 	ebinfo		list information about a CD-ROM book.
 	ebrefile	refile a catalog file in a CD-ROM book.
-	ebstopchk	utility to analyze text data in a CD-ROM book for
+	ebstopcode	utility to analyze text data in a CD-ROM book for
 			stop code.
 	ebunzip		uncompress a CD-ROM book.
 	ebzip		compress a CD-ROM book.

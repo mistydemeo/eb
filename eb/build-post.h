@@ -26,7 +26,7 @@
 /*
  * Locale directory.
  */
-#define LOCALEDIR		"/usr/local/share/locale"
+#define LOCALEDIR		"/usr/private/share/locale"
 
 /*
  * Data size of a book entry in a catalog file.
@@ -193,6 +193,10 @@ void eb_initialize_binary_context EB_P((EB_Book *));
 void eb_reset_binary_context EB_P((EB_Book *));
 void eb_finalize_binary_context EB_P((EB_Book *));
 
+/* booklist.c */
+EB_Error_Code eb_booklist_add_book EB_P((EB_BookList *, const char *,
+    const char *));
+
 /* filename.c */
 EB_Error_Code eb_canonicalize_path_name EB_P((char *));
 void eb_canonicalize_file_name EB_P((char *));
@@ -243,13 +247,11 @@ const char *eb_quoted_stream EB_P((const char *, size_t));
 const char *eb_quoted_string EB_P((const char *));
 
 /* match.c */
-int eb_match_canonicalized_word EB_P((const char *, const char *, size_t));
-int eb_exact_match_canonicalized_word EB_P((const char *, const char *,
-    size_t));
-int eb_match_word_latin EB_P((const char *, const char *, size_t));
-int eb_match_word_jis EB_P((const char *, const char *, size_t));
-int eb_exact_match_word_latin EB_P((const char *, const char *, size_t));
+int eb_match_word EB_P((const char *, const char *, size_t));
 int eb_exact_match_word_jis EB_P((const char *, const char *, size_t));
+int eb_exact_match_word_latin EB_P((const char *, const char *, size_t));
+int eb_match_word_jis_kana EB_P((const char *, const char *, size_t));
+int eb_exact_match_word_jis_kana EB_P((const char *, const char *, size_t));
 
 /* message.c */
 EB_Error_Code eb_initialize_messages EB_P((EB_Book *));

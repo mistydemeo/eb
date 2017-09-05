@@ -70,7 +70,7 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define if you have the \`LC_MESSAGES' locale category */
+/* Define to 1 if you have the `LC_MESSAGES' locale category */
 #undef HAVE_LC_MESSAGES
 
 /* Define to 1 if you have the `bind' library (-lbind). */
@@ -157,16 +157,16 @@
 /* Define to 1 if you have the `strtol' function. */
 #undef HAVE_STRTOL
 
-/* Define if <netinet/in.h> defines \`struct in6_addr' */
+/* Define to 1 if <netinet/in.h> defines `struct in6_addr' */
 #undef HAVE_STRUCT_IN6_ADDR
 
-/* Define if <netinet/in.h> defines \`struct sockaddr_in6' */
+/* Define to 1 if <netinet/in.h> defines `struct sockaddr_in6' */
 #undef HAVE_STRUCT_SOCKADDR_IN6
 
-/* Define if <netinet/in.h> defines \`struct sockaddr_storage' */
+/* Define to 1 if <netinet/in.h> defines `struct sockaddr_storage' */
 #undef HAVE_STRUCT_SOCKADDR_STORAGE
 
-/* Define if \`struct utimbuf' is declared -- usually in <utime.h>. */
+/* Define to 1 if `struct utimbuf' is declared -- usually in <utime.h>. */
 #undef HAVE_STRUCT_UTIMBUF
 
 /* Define to 1 if you have the `syslog' function. */
@@ -222,10 +222,10 @@
 /* Define to 1 if you have the `__argz_stringify' function. */
 #undef HAVE___ARGZ_STRINGIFY
 
-/* Define if \`in6addr_any' is declared by <netinet/in.h> */
+/* Define to 1 if `in6addr_any' is declared by <netinet/in.h> */
 #undef IN6ADDR_ANY_DECLARED
 
-/* Define if \`in6addr_loopback' is declared by <netinet/in.h> */
+/* Define to 1 if `in6addr_loopback' is declared by <netinet/in.h> */
 #undef IN6ADDR_LOOPBACK_DECLARED
 
 /* Mailing address */
@@ -278,7 +278,10 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
-/* Define to \`int' if <sys/types.h> or <sys/socket.h> does not define. */
+/* Define to `unsigned char', `unsigned short', `unsigned int' or `unsigned
+   long' according with size of `sin_port' in `struct sockaddr_in', if
+   <sys/types.h>, <sys/socket.h> or <netinet/in.h> does not define
+   `in_port_t'. */
 #undef in_port_t
 
 /* Define as `__inline' if that's what the C compiler calls it, or to nothing
@@ -291,13 +294,15 @@
 /* Define to `long' if <sys/types.h> does not define. */
 #undef off_t
 
-/* Define to \`int' if <sys/types.h> or <sys/socket.h> does not define. */
+/* Define to `unsigned char', `unsigned short', `unsigned int' or `unsigned
+   long' according with size of `sa_family' in `struct sockaddr', if
+   <sys/types.h> or <sys/socket.h> does not define `sa_family_t'. */
 #undef sa_family_t
 
 /* Define to `unsigned' if <sys/types.h> does not define. */
 #undef size_t
 
-/* Define to \`int' if <sys/types.h> or <sys/socket.h> does not define. */
+/* Define to `int' if <sys/types.h> or <sys/socket.h> does not define. */
 #undef socklen_t
 
 /* Define to `int' if <sys/types.h> does not define. */

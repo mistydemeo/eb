@@ -229,6 +229,8 @@ typedef struct EB_Book_Struct              EB_Book;
 typedef struct EB_Hit_Struct               EB_Hit;
 typedef struct EB_Hook_Struct              EB_Hook;
 typedef struct EB_Hookset_Struct           EB_Hookset;
+typedef struct EB_BookList_Entry           EB_BookList_Entry;
+typedef struct EB_BookList                 EB_BookList;
 
 /*
  * Pthreads lock.
@@ -788,8 +790,8 @@ struct EB_Search_Context_Struct {
     /*
      * Function which compares word to search and pattern in an index page.
      */
-    int (*compare_pre) EB_P((const char *, const char *, size_t));
-    int (*compare_hit) EB_P((const char *, const char *, size_t));
+    int (*compare_single) EB_P((const char *, const char *, size_t));
+    int (*compare_group) EB_P((const char *, const char *, size_t));
 
     /*
      * Result of comparison by `compare'.
@@ -973,6 +975,41 @@ struct EB_Hookset_Struct {
 #ifdef EBCONF_ENABLE_PTHREAD
     EB_Lock lock;
 #endif
+};
+
+/*
+ * An entry of book list.
+ */
+struct EB_BookList_Entry {
+    /*
+     * name.
+     */
+    char *name;
+
+    /*
+     * Title.
+     */
+    char *title;
+};
+
+/*
+ * Book list.
+ */
+struct EB_BookList {
+    /*
+     * The number of book entries this list has.
+     */
+    int entry_count;
+
+    /*
+     * The maximum number of book entries that `entries' can memory.
+     */
+    int max_entry_count;
+
+    /*
+     * Book entries.
+     */
+    EB_BookList_Entry *entries;
 };
 
 /* for backward compatibility */

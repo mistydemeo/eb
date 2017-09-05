@@ -28,23 +28,23 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 4.0beta0, for EB Library version 4.0beta0.
+   This is edition 4.0beta1, for EB Library version 4.0beta1.
 
 * Menu:
 
 * Introduction::                Introduction.
-* Invoking ebrefile::           Invoking `ebrefile'.
+* Invoke ebrefile::             Invoke `ebrefile'.
 * Summary of Options::          Summary of Options to `ebrefile'.
 
  --- The Detailed Node Listing ---
 
-Invoking `ebrefile'
+Invoke `ebrefile'
 
 * Select Subbooks::             Select Subbooks.
 * Combination with ebzip::      Combination with `ebzip'.
 
 
-File: ebrefile.info,  Node: Introduction,  Next: Invoking ebrefile,  Prev: Top,  Up: Top
+File: ebrefile.info,  Node: Introduction,  Next: Invoke ebrefile,  Prev: Top,  Up: Top
 
 Introduction
 ************
@@ -62,7 +62,7 @@ independent "book".
      +-----------------------------------+
 
    A CD-ROM book of EB/EBG/EBXA/EBXA-C/S-EBXA format has the file
-`CATALOG', and a CD-ROM book of EPWING format has the file `CATALOGS'.
+`catalog', and a CD-ROM book of EPWING format has the file `catalogs'.
 The files define what subbooks the CD-ROM book has.  They are resides
 at the top directory of the CD-ROM book.
 
@@ -90,20 +90,20 @@ Though `ebzip' is free software, your books may not be free.
 `ebrefile' modifies contents of a certain file in a CD-ROM book.
 Please be careful.
 
-   This is edition 4.0beta0, for EB Library version 4.0beta0.
+   This is edition 4.0beta1, for EB Library version 4.0beta1.
 
 
-File: ebrefile.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
+File: ebrefile.info,  Node: Invoke ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
 
-Invoking `ebrefile'
-*******************
+Invoke `ebrefile'
+*****************
 
    Its usual way to invoke `ebrefile' is as follows:
 
      % ebrefile BOOK-PATH
 
 BOOK-PATH points to the top directory of a CD-ROM book where the file
-`CATALOG' or `CATALOGS' resides.  Though you cannot specify two or more
+`catalog' or `catalogs' resides.  Though you cannot specify two or more
 book-paths, you can omit book-path like as follows:
 
      % ebrefile
@@ -123,7 +123,7 @@ access identifer.
 * Combination with ebzip::      Combination with `ebzip'.
 
 
-File: ebrefile.info,  Node: Select Subbooks,  Next: Combination with ebzip,  Prev: Invoking ebrefile,  Up: Invoking ebrefile
+File: ebrefile.info,  Node: Select Subbooks,  Next: Combination with ebzip,  Prev: Invoke ebrefile,  Up: Invoke ebrefile
 
 Select Subbooks
 ===============
@@ -165,8 +165,8 @@ directory is a top directory of a CD-ROM book.
        narrow font characters:
        wide font characters: 0xa321 -- 0xa27e
 
-(*Note Invoking `ebinfo': (ebinfo)Invoking ebinfo, for more details
-about the `ebinfo' command).
+(*Note Invoke `ebinfo': (ebinfo)Invoke ebinfo, for more details about
+the `ebinfo' command).
 In this example, there are three subbooks in the book, and their
 directory names are `english', `french' and `german'.
 
@@ -183,7 +183,7 @@ Case of the directory names are not sensitve.  An argument to
 Since `ebrefile' cannot change an order of subbook definitions, the
 order of arguments to `--subbook' is not matter.
 
-   `ebrefile' generates new catalog file as `CATALOGS(S).new'.  To
+   `ebrefile' generates new catalog file as `catalogs(s).new'.  To
 replace original catalog file by new one, type the following commands:
 
      % mv catalogs catalogs.bak
@@ -192,7 +192,7 @@ replace original catalog file by new one, type the following commands:
 If you don't have to backup the original file, only the second command
 is needed.
 
-   Now, refiling has been completed.  Invoke `ebinfo' again.  The
+   Now, refiling has been completed.  Execute `ebinfo' again.  The
 subbook `germgan' is diappeared.
 
      % ebinfo
@@ -222,7 +222,7 @@ consists of lower case letters, type:
      % rm -r german
 
 
-File: ebrefile.info,  Node: Combination with ebzip,  Prev: Select Subbooks,  Up: Invoking ebrefile
+File: ebrefile.info,  Node: Combination with ebzip,  Prev: Select Subbooks,  Up: Invoke ebrefile
 
 Combination with `ebzip'
 ========================
@@ -249,7 +249,7 @@ current working directory, type the following:
      % ebrefile --output-directory /dict --subbook english,french /cdrom
 
 
-File: ebrefile.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up: Top
+File: ebrefile.info,  Node: Summary of Options,  Prev: Invoke ebrefile,  Up: Top
 
 Summary of `ebrefile' Options
 *****************************
@@ -267,7 +267,7 @@ allowed as long as they are unique.
 `--output-directory DIRECTORY'
      Output a new catalog file under DIRECTORY.  By default, `ebrefile'
      generates a new catalog file under the current working directory
-     (`.').  (*Note Invoking ebrefile::, for more details).
+     (`.').  (*Note Invoke ebrefile::, for more details).
 
 `-S SUBBOOKS'
 `--subbook SUBBOOKS'
@@ -284,10 +284,10 @@ allowed as long as they are unique.
 
 Tag Table:
 Node: Top1036
-Node: Introduction1521
-Node: Invoking ebrefile3590
-Node: Select Subbooks4404
-Node: Combination with ebzip7963
-Node: Summary of Options9044
+Node: Introduction1517
+Node: Invoke ebrefile3584
+Node: Select Subbooks4392
+Node: Combination with ebzip7944
+Node: Summary of Options9023
 
 End Tag Table

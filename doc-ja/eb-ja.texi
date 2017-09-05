@@ -11,7 +11,7 @@
 @c instead of v (Variable)
 @defindex xv
 
-@include eb-ver.texi
+@include version-eb.texi
 
 @dircategory CD-ROM Book Utilities
 @direntry
@@ -87,7 +87,8 @@ by Free Software Foundation, Inc.
 * Search::                      検索
 * Text Data::                   テキストデータ
 * Local Character::             外字
-* Binary Data::                 
+* Binary Data::                 バイナリデータ
+* Appendix Data::               appendix データ
 * Index::                       索引
 
 @detailmenu
@@ -180,15 +181,24 @@ CD-ROM 書籍と @code{EB_Book} オブジェクト
 * Font Data Types::             データ型の詳細
 * Font Constants::              定数の詳細
 * Font Functions::              関数の詳細
-* Font Sample::                 
+* Font Sample::                 サンプルプログラム
 
 バイナリデータ
 
 * Monochrome Image::            モノクロ図版
 * Color Image::                 カラー図版
 * WAVE Sound::                  WAVE 音声
-* MPEG Movie::                  MPEG 動画
+* MPEG Movie::                  MPEG1 動画
 * Binary Data Functions::       関数の詳細
+
+appendix データ
+
+* EB_Appendix::                 @code{EB_Appendix} オブジェクト
+* Appendix Subbook::            副本
+* Appendix Stop Code::          本文の区切りコード
+* Appendix Alternation Text::   外字の代替文字列
+* Appendix Functions::          関数の詳細
+* Appendix Sample::             サンプルプログラム
 
 索引
 
@@ -343,7 +353,7 @@ EB ライブラリには、いくつかのヘッダファイルが用意されています。
 
 @table @file
 @item appendix.h
-付録 (appendix) に関連した宣言、定義を行う。
+appendix (付録) に関連した宣言、定義を行う。
 @item binary.h
 バイナリデータに関連した宣言、定義を行う。
 @item eb.h
@@ -385,7 +395,7 @@ EBG (海外の電子ブック) については、データが ISO 8859-1 (ラテン文字 1、
 ただし、外字だけは 2 バイトで表現し、0x0101 〜 0x1efe の領域を使用します。
 (外字領域の下位 16 ビットは 0x01 〜 0xfe の範囲を使用します。) 
 
-EPWING および EGG, EBXA-C を除いた電子ブックについては、データが
+EBG, EBXA-C を除いた電子ブック、および EPWING については、データが
 JIS X 0208 (日本語のかな漢字) で書かれており、JIS X 0208 を 0x2121 〜
 0x7e7e にマッピングし、0xa121 〜 0xfe7e を外字領域にしています (下図)。
 
@@ -513,9 +523,9 @@ ANSI (ANSI X3.159-1989, ISO/IEC 9899-1990) 対応のものを対象としています。
 また、システムには POSIX.1 (IEEE Std. 1003.2-1990, ISO/IEC 9945-1:1990) 
 準拠ないし互換のものを対象としています。
 
-また、EB ライブラリでは、古いコンパイラや UNIX 系システムへの対応も
-それなりに行われています。
-ここでは、古いコンパイラや UNIX 系システムで、アプリケーションプログラム
+ただし、古いコンパイラや UNIX 系システムへの対応もそれなりに行われて
+います。
+ここでは、古いコンパイラや UNIX 系システムでアプリケーションプログラム
 をコンパイルする際の注意点を挙げておきます。
 
 @table @code
@@ -704,7 +714,7 @@ eb_LIB_EB3
 マクロ @code{eb_LIB_EB3} は、@file{eb3.m4} というファイルで提供されて
 います。
 EB ライブラリを @file{/usr/local} にインストールし、個々のファイルの
-インストール先を変更していなければ、@file{/usr/local/share/eb} に
+インストール先を変更していなければ、@file{/usr/local/share/aclocal} に
 インストールされます。
 この @file{eb3.m4} をソースコードの適当なディレクトリの下 (たとえば
 @file{m4}) にコピーして下さい。
@@ -771,30 +781,10 @@ EB ライブラリは標準エラー出力に、次のようなログを (かなり大量ですが)
 
 これらのログは、関数の呼び出し時の引数列、および関数からの戻り値を
 示しています。
-次に示す @code{ebfixlog} という Perl5 スクリプトを使うと、ログを整形
-することができます。
-
-@example
-#! /usr/bin/perl
-
-use Getopt::Std;
-getopts('zn') or die "Usage: $0 [-z|-n] [file...]\n";
-$opt_z = 1 if (defined($opt_n));   # `-n' implies `-z'.
-
-$indent = 0;
-while (<>) @{
-    chomp;
-    if (/^\[EB\] (.*)$/) @{
-        $message = $1;
-        next if (!$opt_z && $message =~ /^\S+: zio_/);
-        next if (!$opt_n && $message =~ /^\S+: ebnet_/);
-        $indent-- if ($message =~ /^out: /);
-        $_ = '[EB] ' . (' ' x ($indent * 2)) . $message;
-        $indent++ if ($message =~ /^in: /);
-    @}
-    print $_, "\n";
-@}
-@end example
+@code{ebfixlog} という Perl5 スクリプトを使うと、ログを整形することが
+できます。
+このスクリプトは、EB ライブラリのソースコードの @code{misc} ディレクトリ
+に収められています。
 
 @code{ebfixlog} は、コマンド行の引数として与えられたファイル (引数が
 指定されなければ標準入力) からメッセージデータを読み込み、次のように
@@ -1011,7 +1001,7 @@ if (eb_bind(&book, "/mnt/cdrom") != EB_SUCCESS) @{
 
 @noindent
 @code{eb_bind()} に渡す書籍のパス (この例では @file{/mnt/cdrom}) は
-書籍のトップディレクトリ、つまり @file{CATALOG} または @file{CATALOGS}
+書籍のトップディレクトリ、つまり @file{catalog} または @file{catalogs}
 ファイルのあるディレクトリを指定します。
 
 @code{EB_Book} オブジェクトを使い終わったら、
@@ -1029,7 +1019,7 @@ eb_finalize_book(book_pointer);
 
 @noindent
 オブジェクトの領域を @code{malloc()} で確保した場合は、
-@code{eb_finalize_bokk()} を呼んだ後ならば、オブジェクトの領域を安全に
+@code{eb_finalize_book()} を呼んだ後ならば、オブジェクトの領域を安全に
 解放することができます。
 
 @example
@@ -1206,7 +1196,7 @@ JIS X 0208 (日本語のかな漢字) と GB 2312 (中国語の簡体字) を併用している
 関数 @code{eb_bind()} は、@var{book} の指す @code{EB_Book} オブジェクト
 を、パス @var{path} にある CD-ROM 書籍に結び付けます。
 パスには、書籍のトップディレクトリか遠隔アクセス識別子を指定します。
-書籍のトップディレクトリとは、@file{CATALOG} あるいは @file{CATALOGS}
+書籍のトップディレクトリとは、@file{catalog} あるいは @file{catalogs}
 ファイルの存在するディレクトリを指します。
 
 オブジェクトがすでに書籍に結び付いていた場合、その書籍との結び付きを
@@ -1554,7 +1544,7 @@ EB ライブラリが、書籍のカタログファイルを開くことに失敗した。
 @defvr Constant EB_ERR_FAIL_OPEN_CATAPP
 @xvindex ERR_FAIL_OPEN_CATAPP
 
-EB ライブラリが、付録のカタログファイルを開くことに失敗した。
+EB ライブラリが、appendix のカタログファイルを開くことに失敗した。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1575,7 +1565,7 @@ EB ライブラリが、書籍の外字ファイルを開くことに失敗した。
 @defvr Constant EB_ERR_FAIL_OPEN_APP
 @xvindex ERR_FAIL_OPEN_APP
 
-EB ライブラリが、付録ファイルを開くことに失敗した。
+EB ライブラリが、appendix ファイルを開くことに失敗した。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1596,7 +1586,7 @@ EB ライブラリが、書籍のカタログファイルを読み込むことに失敗した。
 @defvr Constant EB_ERR_FAIL_READ_CATAPP
 @xvindex ERR_FAIL_READ_CATAPP
 
-EB ライブラリが、付録のカタログファイルを読み込むことに失敗した。
+EB ライブラリが、appendix のカタログファイルを読み込むことに失敗した。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1617,7 +1607,7 @@ EB ライブラリが、書籍の外字ファイルを読み込むことに失敗した。
 @defvr Constant EB_ERR_FAIL_READ_APP
 @xvindex ERR_FAIL_READ_APP
 
-EB ライブラリが、付録ファイルを読み込むことに失敗した。
+EB ライブラリが、appendix のメインファイルを読み込むことに失敗した。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1638,7 +1628,7 @@ EB ライブラリが、書籍のカタログファイルのシークに失敗した。
 @defvr Constant EB_ERR_FAIL_SEEK_CATAPP
 @xvindex ERR_FAIL_SEEK_CATAPP
 
-EB ライブラリが、付録のカタログファイルのシークに失敗した。
+EB ライブラリが、appendix のカタログファイルのシークに失敗した。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1659,7 +1649,7 @@ EB ライブラリが、書籍の外字ファイルのシークに失敗した。
 @defvr Constant EB_ERR_FAIL_SEEK_APP
 @xvindex ERR_FAIL_SEEK_APP
 
-EB ライブラリが、付録ファイルのシークに失敗した。
+EB ライブラリが、appendix のメインファイルのシークに失敗した。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1681,7 +1671,8 @@ EB ライブラリが、書籍のカタログファイル内で、期待とは異なるデータ列を
 @defvr Constant EB_ERR_UNEXP_CATAPP
 @xvindex ERR_UNEXP_CATAPP
 
-EB ライブラリが、付録のカタログファイル内で、想定外のデータ列を見つけた。
+EB ライブラリが、appendix のカタログファイル内で、想定外のデータ列を
+見つけた。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1702,7 +1693,8 @@ EB ライブラリが、書籍の外字ファイル内で、想定外のデータ列を見つけた。
 @defvr Constant EB_ERR_UNEXP_APP
 @xvindex ERR_UNEXP_APP
 
-EB ライブラリが、付録ファイル内で、想定外のデータ列を見つけた。
+EB ライブラリが、appendix のメインファイル内で、想定外のデータ列を
+見つけた。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1726,8 +1718,9 @@ EB ライブラリが、書籍のバイナリデータファイル内で、想定外のデータ列を
 @defvr Constant EB_ERR_UNBOUND_APP
 @xvindex ERR_UNBOUND_APP
 
-呼び出された EB ライブラリの関数は、付録に結び付けられた @code{EB_Appendix} 
-オブジェクトを引数にとるが、与えられたオブジェクトは付録に結び付けられて
+呼び出された EB ライブラリの関数は、appendix に結び付けられた
+@code{EB_Appendix} オブジェクトを引数にとるが、与えられたオブジェクトは
+appendix に結び付けられて
 いなかった。
 @end defvr
 
@@ -1742,7 +1735,7 @@ EB ライブラリが、書籍のバイナリデータファイル内で、想定外のデータ列を
 @defvr Constant EB_ERR_NO_APPSUB
 @xvindex ERR_NO_APPSUB
 
-付録は副本を一つも持っていない。
+appendix は副本を一つも持っていない。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1806,8 +1799,8 @@ EB ライブラリが、書籍のバイナリデータファイル内で、想定外のデータ列を
 @xvindex ERR_NO_SUCH_APPSUB
 
 @code{EB_Appendix} オブジェクトと副本コードが関数に与えられたが、
-@code{EB_Appendix} オブジェクトに結び付けられている付録は、その副本コード
-に一致する副本を持っていない。
+@code{EB_Appendix} オブジェクトに結び付けられている appendix は、その
+副本コードに一致する副本を持っていない。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1833,8 +1826,8 @@ EB ライブラリが、書籍のバイナリデータファイル内で、想定外のデータ列を
 @xvindex ERR_NO_SUCH_CHAR_TEXT
 
 @code{EB_Appendix} オブジェクトと文字番号が関数に与えられたが、
-@code{EB_Appendix} オブジェクトに結び付けられている付録で選択中の副本は、
-その番号の外字の代替文字列を持っていない。
+@code{EB_Appendix} オブジェクトに結び付けられている appendix で選択中の
+副本は、その番号の外字の代替文字列を持っていない。
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -2461,7 +2454,7 @@ if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
 
 一致したエントリの取得は、続く @code{eb_hit_list()} 関数を呼び出した
 際に行われます。
-@code{eb_hit_list()} は一致したエントリの一覧を配列 @code{hits}
+@code{eb_hit_list()} は一致したエントリの一覧を配列 @code{hits[]}
 の指す領域に書き込み、見つかった一致エントリの個数を @code{&hit_count}
 の指す領域に書き込みます。
 この例では、@code{eb_hit_list()} は最大で @code{MAX_HITS} (= 50) 個
@@ -2484,12 +2477,13 @@ if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
 @end example
 
 @noindent
-@code{hits} の中身については、本章の後ろの節で説明します。
+@code{hits[]} の中身については、本章の後ろの節でもう少し詳しく説明
+します。
 
-ここまでは前方一致検索の例でしたが、後方一致の場合は
+ここまでは前方一致検索を例にとりましたが、後方一致の場合は
 @code{eb_search_word()} の代わりに @code{eb_search_endword()}
 を呼ぶようにします。
-後の手順はすべて同じです。
+他はすべて同じです。
 
 @example
 @group
@@ -2501,8 +2495,8 @@ if (eb_search_endword(&book, "nalization") != EB_SUCCESS) @{
 @end example
 
 完全一致の場合も同様です。
-@code{eb_search_exactword()} を呼ぶようにします。
-後の手順もやはり同じです。
+@code{eb_search_exactword()} を呼ぶようにする以外は、すべて同じ
+です。
 
 @example
 @group
@@ -2602,8 +2596,8 @@ if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
 また、検索する際はすべての入力語を埋める必要はなく、少なくとも一個の
 入力語が空でなければ、検索は成功します。
 
-個々の複合検索は、@dfn{複合検索コード (multi search code)} によって
-識別されます。
+副本内の複合検索は、種類毎に @dfn{複合検索コード (multi search code)}
+によって識別されます。
 関数 @code{eb_multi_search_list()} を使うと、選択中の副本で利用可能な
 複合検索の一覧が得られます。
 
@@ -2624,18 +2618,19 @@ if (eb_multi_search_list(&book, multi_codes, &multi_count)
 
 @noindent
 この複合検索コードは、複合検索のための関数で必要となります。
-たとえば、@code{eb_multi_entry_count()} は指定した複合検索の要求する
-入力語の個数を取得する関数ですが、
-このときの複合検索の指定には、複合検索コードを用います。
-以下の例では、最初の複合検索 (@code{multi_codes[0]}) を指定しています。
+たとえば、@code{eb_multi_title()} は、指定した複合検索の題名
+(例:「人名検索」「頻出用語検索」) を取得する関数ですが、このときの
+複合検索の指定には、複合検索コードを用います。
+以下の例では、一覧の先頭に載っている複合検索 (@code{multi_codes[0]})
+を指定しています。
 
 @example
 @group
-int entry_count;
+char title[EB_MAX_MULTI_TITLE_LENGTH + 1];
 
-if (eb_multi_entry_count(&book, multi_codes[0], &entry_count)
+if (eb_multi_title(&book, multi_codes[0], title)
     != EB_SUCCESS) @{
-    printf("eb_multi_entry_count() failed\n");
+    printf("eb_multi_title() failed\n");
     return;
 @}
 @end group
@@ -3112,11 +3107,11 @@ struct EB_Position_Struct @{
 された検索を実行し、一致したエントリを取得します。
 
 @itemize @bullet
-@item @code{eb_search_word()} (前方一致検索)
-@item @code{eb_search_endword()} (後方一致検索)
-@item @code{eb_search_exactword()} (完全一致検索)
-@item @code{eb_search_keyword()} (条件検索)
-@item @code{eb_search_multi()} (複合検索)
+@item @code{eb_search_word()}  (前方一致検索)
+@item @code{eb_search_endword()}  (後方一致検索)
+@item @code{eb_search_exactword()}  (完全一致検索)
+@item @code{eb_search_keyword()}  (条件検索)
+@item @code{eb_search_multi()}  (複合検索)
 @end itemize
 
 したがって、この関数を呼ぶ前に、上記のいずれかの関数の呼び出しに成功して
@@ -3124,7 +3119,8 @@ struct EB_Position_Struct @{
 
 @code{eb_hit_list()} は最大で @var{hit_count} 個の一致エントリを
 @var{hit_list} に書き込みます。
-書き込んだ一致エントリの数は @var{hit_count} が指す領域に書き込みます。
+そして、書き込んだ一致エントリの数を @var{hit_count} が指す領域に
+書き込みます。
 それ以上の個数の一致エントリが存在する場合、残ったエントリの情報は、
 この関数を繰り返し呼び出すことで得ることができます。
 
@@ -3604,14 +3600,14 @@ GB 2312 (中国語の簡体字) 文字へのフック。
 もし、アプリケーションプログラムが、EB ライブラリの内部コードとは異なる
 文字コードを使用したい場合は、これらのフックのフック関数を登録して、
 コード変換処理をするのも手です。
-ただし、一文字毎にフック関数が呼び出されるので、相応の負荷はかかります。
+ただし、一文字毎にフック関数が呼び出されるので、相応の負荷がかかります。
 
 また、EBXA-C を扱うには、特別な処理が必要です。
 EBXA-C では、文字コードとして GB 2312 と JIS X 0208 が使われますが
-(@pxref{Character Code, , 文字コード})、
-テキストデータの処理では、どちらも 0xa1a1 〜 0xfefe にマッピングされて
-衝突するため、最低でもどちらか一方をフックして文字の表現方法を変えないと、
-正しく出力できません。
+(@pxref{Character Code, , 文字コード})、EB ライブラリによる標準の処理
+では、どちらも 0xa1a1 〜 0xfefe にマッピングされて衝突するため、最低
+でもどちらか一方をフックして文字の表現方法を変えないと、正しく出力
+できません。
 
 @c -------------------------------------------------------------------
 @node Copyright Notice, Menu, Hook and Character Code, Text Data
@@ -3941,9 +3937,10 @@ EB ライブラリは区切りコードを自動判定する機能を持っていますが、判定は
 完璧ではないので外れることもあります。
 外れると本文が途中で途切れたり、本文の続きが延々と出力されたりします。
 
-その場合は、明示的に付録 (詳しくは ....) で区切りコードを指定する
-ことによって回避できる書籍もありますが、残念ながら区切りコードがまったく
-存在しない書籍も少数ながら存在します。
+その場合は、明示的に appendix
+(詳しくは @pxref{What is Appendix, , appendix (付録) とは, ebappendix-ja, ebappendix-ja})
+で区切りコードを指定することによって回避できる書籍もありますが、
+残念ながら区切りコードがまったく存在しない書籍も少数ながら存在します。
 区切りコードを持たない書籍に対して、有効な対処方法は今のところありません。
 
 @code{eb_read_text()} による本文の取得では、区切りコードが検出された
@@ -4080,8 +4077,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 そのままフック関数にも渡ってきます。
 
 @var{appendix} というのは、書籍に対する補助データを提供するオブジェクト
-です。
-付録 (appendix) について詳しくは ....。
+です
+(appendix (付録) について詳しくは @pxref{What is Appendix, , appendix (付録) とは, ebappendix-ja, ebappendix-ja})。
 
 引数 @var{container} は、アプリケーションプログラムからフック関数に
 何かデータを渡したいときに使います。
@@ -4123,9 +4120,11 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @item @code{eb_read_heading()}
 @item @code{eb_read_rawtext()}
 @item @code{eb_forward_text()}
+@item @code{eb_backward_text()}
 @item @code{eb_set_subbook()}
 @item @code{eb_unset_subbook()}
 @item @code{eb_load_all_subbook()}
+@item @code{eb_bind()}
 @item @code{eb_finalize_book()}
 @item @code{eb_finalize_library()}
 @end itemize
@@ -4816,13 +4815,13 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 @code{EB_Hookset} オブジェクトを関数 @code{eb_initialiez_hookset()} で
 初期化すると、これらの関数が自動的に登録されます。
 
-この関数は、付録 @var{appendix} の選択中している副本が、@code{argv[0]}
-として渡された外字の代替文字列を持っているかどうか調べます。
+この関数は、@var{appendix} の選択中している副本が、@code{argv[0]} として
+渡された外字の代替文字列を持っているかどうか調べます。
 持っていればその文字列をテキストデータとして書き込み、持っていなければ
 @samp{<?>} という文字列を書き込みます。
 
-付録 @var{appendix} が @code{NULL} の場合や、付録が副本を選択中でない
-場合も、代替文字列を持っていないものとして扱います。
+@var{appendix} が @code{NULL} の場合や、付録が副本を選択中でない場合も、
+代替文字列を持っていないものとして扱います。
 
 この関数は、常に @code{EB_SUCCESS} を返します。
 @end deftypefun
@@ -5285,7 +5284,7 @@ CD-ROM 書籍では、定義した外字の字形データ (つまりフォント) を用意して
 * Font Data Types::             データ型の詳細
 * Font Constants::              定数の詳細
 * Font Functions::              関数の詳細
-* Font Sample::                 
+* Font Sample::                 サンプルプログラム
 @end menu
 
 @c -------------------------------------------------------------------
@@ -5614,7 +5613,7 @@ XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
 外字コードは、外字の高さ (ピクセル数) を表します。
 現在のところ、定義されている高さは次の通りです。
 
-@itemize
+@itemize @bullet
 @item @code{EB_FONT_16}
 @item @code{EB_FONT_24}
 @item @code{EB_FONT_30}
@@ -6214,7 +6213,7 @@ XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
 @include font-c.texi
 
 @c ===================================================================
-@node Binary Data, Index, Local Character, Top
+@node Binary Data, Appendix Data, Local Character, Top
 @chapter バイナリデータ
 
 @dfn{バイナリデータ (binary data)} とは、テキストデータ
@@ -6250,19 +6249,22 @@ CD-ROM 書籍から取得する機能だけです。
 取得する
 
 @item @code{eb_binary_set_...()} 関数を呼び出して、指定した位置の
-バイナリデータを読み込む旨を EB ライブラリに伝える。
+バイナリデータをこれから読み込む旨を EB ライブラリに伝える。
 
 @item @code{eb_read_binary()} で実際にデータを読み込む。
 @end enumerate
 
-なお、テキストデータと同様に、バイナリデータも副本に属するデータ
+テキストデータと同様に、バイナリデータも副本に属するデータ
 ですので、副本を選択していないと取得することはできません。
+バイナリデータの読み込みには、テキストデータとは別の
+ファイルディスクリプタが割り当てられます。
+したがって、双方を交互に読み込んでも、動作には影響はありません。
 
 @menu
 * Monochrome Image::            モノクロ図版
 * Color Image::                 カラー図版
 * WAVE Sound::                  WAVE 音声
-* MPEG Movie::                  MPEG 動画
+* MPEG Movie::                  MPEG1 動画
 * Binary Data Functions::       関数の詳細
 @end menu
 
@@ -6448,9 +6450,9 @@ EB_Position *end_position);
 
 @c -------------------------------------------------------------------
 @node MPEG Movie, Binary Data Functions, WAVE Sound, Binary Data
-@section MPEG 動画
+@section MPEG1 動画
 
-MPEG 形式の動画データは EPWING にだけ存在します。
+MPEG1 形式の動画データは EPWING にだけ存在します。
 動画データは EPWING の CD-ROM の movie というディレクトリの下に、
 動画毎に一個のファイルにした形で収められています。
 
@@ -6462,8 +6464,8 @@ MPEG データの参照開始と終了を表すエスケープシーケンスへのフック
 表すようになっています。
 
 MPEG 動画のデータを得るには、このファイル名を @code{eb_set_binary_mpeg()}
-に渡して、そのファイルの動画データを取り出す旨を EB ライブラリに
-伝えます。
+に渡して、そのファイルの動画データをこれから取り出す旨を EB ライブラリ
+に伝えます。
 ファイル名は、次のようにして @code{argv + 2} (@code{&argv[2]} でも同じ)
 を渡します。
 
@@ -6497,54 +6499,908 @@ if (eb_set_binary_mpeg(&book, argv + 2) != EB_SUCCESS) @{
 @deftypefun EB_Error_Code eb_set_binary_mono_graphic (EB_Book *@var{book}, const EB_Position *@var{position}, int @var{width}, @var{height})
 @xfindex set_binary_mono_graphic
 
+関数 @code{eb_set_binary_mono_graphic()} は、モノクロ図版のデータを
+これから取得しようとしていることを EB ライブラリに伝えます。
+引数 @var{position} は図版の位置、@var{width}, @var{height} には図版の
+幅と高さを渡します。
+これらの情報は、図版の参照元であるテキストデータに記載されており、通常は
+フック関数を通じて得るようにします。
+ただし、電子ブックでは幅と高さの値の情報がテキストデータに記されていない
+ため、0 を渡すことになります。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、原因に応じたエラーコードを返します。
+
+あらかじめ、図版を取り出そうとしている副本を選択しておかなければ
+なりません。
+@var{book} が副本を選択していなければ、@code{EB_ERR_NO_CUR_SUB} を
+返します。
+図版の位置、幅、高さの値が明らかにおかしいと EB ライブラリが判断した
+ときは、@code{EB_ERR_NO_SUCH_BINARY} を返します。
+
+この関数は、実際に図版データを読み込むことはしません。
+読み込みには、@code{eb_read_binary()} を用います。
+モノクロ図版のデータは、1 ピクセルに 1bit を割り当てた BMP 形式になって
+います。
 @end deftypefun
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 @deftypefun EB_Error_Code eb_set_binary_color_graphic (EB_Book *@var{book}, const EB_Position *@var{position})
 @xfindex set_binary_color_graphic
 
+関数 @code{eb_set_binary_color_graphic()} は、EPWING のカラー図版のデータを
+これから取得しようとしていることを EB ライブラリに伝えます。
+引数 @var{position} は図版の位置を渡します。
+位置の情報は、図版の参照元であるテキストデータに記載されており、通常は
+フック関数を通じて得るようにします。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+
+あらかじめ、図版を取り出そうとしている副本を選択しておかなければ
+なりません。
+@var{book} が副本を選択していなければ、@code{EB_ERR_NO_CUR_SUB} を
+返します。
+図版の位置が明らかにおかしいと EB ライブラリが判断したときは、
+@code{EB_ERR_NO_SUCH_BINARY} を返します。
+
+この関数は、実際に図版データを読み込むことはしません。
+読み込みには、@code{eb_read_binary()} を用います。
+カラー図版データは、JPEG か BMP (DIB) のいずかの形式になっています。
 @end deftypefun
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@deftypefun EB_Error_Code eb_set_binary_wave (EB_Book *@var{book}, const EB_Position *@var{start_position}, EB_Position *@var{start_position})
+@deftypefun EB_Error_Code eb_set_binary_wave (EB_Book *@var{book}, const EB_Position *@var{start_position}, EB_Position *@var{end_position})
 @xfindex set_binary_wave
 
+関数 @code{eb_set_binary_wave()} は、WAVE (PCM) 形式の音声のデータを
+これから取得しようとしていることを EB ライブラリに伝えます。
+引数 @var{start_position} と @var{end_position} には音声データの開始位置
+を渡します。
+位置の情報は、音声データの参照元であるテキストデータに記載されており、
+通常はフック関数を通じて得るようにします。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、原因に応じたエラーコードを返します。
+
+あらかじめ、音声データを取り出そうとしている副本を選択しておかなければ
+なりません。
+@var{book} が副本を選択していなければ、@code{EB_ERR_NO_CUR_SUB} を
+返します。
+音声データの位置が明らかにおかしいと EB ライブラリが判断したときは、
+@code{EB_ERR_NO_SUCH_BINARY} を返します。
+
+この関数は、実際に音声データを読み込むことはしません。
+読み込みには、@code{eb_read_binary()} を用います。
 @end deftypefun
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 @deftypefun EB_Error_Code eb_set_binary_mpeg (EB_Book *@var{book}, const unsigned int *@var{argv})
 @xfindex set_binary_mpeg
 
+関数 @code{eb_set_binary_mpeg()} は、MPEG1 形式の動画のデータをこれから
+取得しようとしていることを EB ライブラリに伝えます。
+引数 @var{argv} には動画データのファイル名を渡します。
+ただし、このファイル名は文字列ではなく、フック関数
+@code{EB_HOOK_BEGIN_MPEG} に渡された引数 @code{argv[2]} 〜 @code{argv[5]}
+の部分を渡します。
+つまり、フック関数の引数 @code{argv + 2} を、@code{eb_set_binary_mpeg()} 
+への引数 @var{argv} として渡します。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、原因に応じたエラーコードを返します。
+
+あらかじめ、動画データを取り出そうとしている副本を選択しておかなければ
+なりません。
+@var{book} が副本を選択していなければ、@code{EB_ERR_NO_CUR_SUB} を
+返します。
+存在しない動画ファイル名を EB ライブラリが判断したときは、
+@code{EB_ERR_NO_SUCH_BINARY} を返します。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+
+この関数は、実際に動画データを読み込むことはしません。
+読み込みには、@code{eb_read_binary()} を用います。
 @end deftypefun
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@deftypefun EB_Error_Code eb_read_binary (EB_Book *@var{book}, size_t @code{binary_max_length}, char *@var{binary}, ssize_t *@var{binary_length})
+@deftypefun EB_Error_Code eb_read_binary (EB_Book *@var{book}, size_t @var{binary_max_length}, char *@var{binary}, ssize_t *@var{binary_length})
 @xfindex read_binary
 
+関数 @code{eb_read_binary()} は、バイナリデータを読み込みます。
+読み込もうとしているバイナリデータは、事前に
+
+@itemize @bullet
+@item @code{eb_set_binary_mono_graphic()}
+@item @code{eb_set_binary_color_graphic()}
+@item @code{eb_set_binary_wave()}
+@item @code{eb_set_binary_mpeg()}
+@end itemize
+
+@noindent
+のいずれかの関数で、EB ライブラリに通知しておく必要があります。
+
+読み込んだデータは引数 @var{binary} の指す先の領域に書き込まれます。
+また、このとき書き込まれたバイト数は、@var{binary_length} の指す先の
+領域にセットされます。
+ただし、書き込まれるバイト数は、最長でも引数 @var{binary_max_length} に
+指定した値までとなります。
+
+この関数は、特に読み込んだデータの終端にナル文字を付加するような事は
+しません。
+読み込まれるデータもバイナリ形式なので、途中にナル文字が出現する事も
+あります。
+
+この関数を一回呼び出しだだけで、バイナリデータ全体を一気に取得する
+必要はありません。
+繰り返し呼び出せば、前回の続きからデータが読み込まれます。
+
+ただし、以下に挙げた関数を呼び出すと、バイナリデータの読み込みに関する
+状態記録がリセットされますので、それ以上の読み込みはできなくなります。
+
+@itemize @bullet
+@item @code{eb_set_subbook()}
+@item @code{eb_unset_subbook()}
+@item @code{eb_load_all_subbooks()}
+@item @code{eb_bind()}
+@item @code{eb_finalize_book()}
+@item @code{eb_set_binary_mono_graphic()}
+@item @code{eb_set_binary_color_graphic()}
+@item @code{eb_set_binary_wave()}
+@item @code{eb_set_binary_mpeg()}
+@end itemize
+
+@code{eb_read_binary()} を繰り返し呼んだ場合、バイナリデータはその都度
+@var{binary} の先頭から書き込まれ、*@var{binary_length} の値も、その回
+の @code{eb_read_binary()} の呼び出しで書き込まれたバイト数になります。
+
+データの終端に来ると、それ以上この関数を呼んでも関数は @var{binary} には
+何も書き込まず、*@var{binary_length} に 0 を書き込み、@code{EB_SUCCESS}
+を返します。
+
+成功すると、この関数は @code{EB_SUCCESS} を返します。
+失敗すると、@var{binary_length} が指す領域に -1 を書き込み、原因を示す
+エラーコードを返します。
+この場合、バイナリデータの読み込み状態の記録がリセットされますので、
+データの続きを読み込むことはできなくなります。
+
+あらかじめ、@var{book} はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_SUB} を返します。
+また、冒頭に挙げた関数の呼び出しが成功していない状態でこの関数を呼ぶと、
+@code{EB_ERR_NO_CUR_BINARY} を返します。
 @end deftypefun
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 @deftypefun EB_Error_Code eb_compose_movie_file_name (const unsigned int *@var{argv}, char *@var{composed_file_name})
-@xfindex read_binary
+@xfindex eb_compose_movie_file_name
 
+関数 @code{eb_compose_movie_file_name()} は、動画データのファイル名を
+通常の文字列に変換します。
+
+EB ライブラリでは、動画データのファイル名はフック関数
+@code{EB_HOOK_BEGIN_MPEG} に渡された 4 つの int 型引数
+(@code{argv[2]} 〜 @code{argv[5]}) によって表現されます。
+
+動画データを読み込む際は、これをそのまま @code{eb_set_binary_mpeg()} に
+渡せば良いのですが、ファイル名を通常の文字列で得たい場合は、この関数を
+用います。
+たとえば、個々の動画に一意の ID のようなものを振りたい場合は、ファイル
+名を ID として使うと良いかも知れません。
+
+フック関数の引数 @code{argv + 2} をこの関数への引数 @var{argv} として
+渡すと、@var{composed_file_name} が指す先の領域に、文字列形式に変換された
+ファイル名が格納されます。
+ファイル名は最長で @code{EB_MAX_DIRECTORY_NAME_LENGTH} (= 8) バイトに
+なります。
+この長さには終端のナル文字の分を含んでいませんので、格納領域にははもう
+1 バイト余裕が要ります。
+
+なお、格納されたファイル名は、実際に存在するファイル名とは若干異なっている
+可能性があります。
+たとえば、英字の大文字と小文字、接尾子の有無などの違いがこれに当たります。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
 @end deftypefun
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@deftypefun EB_Error_Code eb_unset_binary (EB_Book *@var{book})
-@xfindex read_binary
-
-@end deftypefun
-
-@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@deftypefun EB_Error_Code eb_compose_movie_file_name (const unsigned int *@var{argv}, char *@var{composed_file_name})
-@deftypefunx EB_Error_Code eb_decompose_movie_file_name (unsigned int *@var{argv}, const char *@var{composed_file_name})
-@xfindex compose_movie_file_name
+@deftypefun EB_Error_Code eb_decompose_movie_file_name (unsigned int *@var{argv}, const char *@var{composed_file_name})
 @xfindex decompose_movie_file_name
 
+関数 @code{eb_compose_movie_file_name()} は、
+@code{eb_compose_movie_file_name()} とちょうど逆の働きをします。
+つまり、通常の文字列に変換された動画データのファイル名
+@var{composed_file_name} を、4 つの int 型引数 @var{argv} に戻します。
+したがって、@var{argv} の指す領域は、少なくとも int 型の値を 4 つ格納
+できる大きさが必要です。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
 @end deftypefun
 
 @c ===================================================================
-@node Index,  , Binary Data, Top
+@node Appendix Data, Index, Binary Data, Top
+@chapter appendix データ
+
+@dfn{appendix} (@dfn{付録}) とは CD-ROM 書籍の補助データのことです。
+appendix は CD-ROM 書籍の出版社から提供されているものではなく、
+EB ライブラリに固有のものです。
+@code{ebappendix} コマンドを用いて生成します
+(詳しくは @pxref{What is Appendix, , appendix (付録) とは, ebappendix-ja, ebappendix-ja})。
+
+appendix は以下のデータを CD-ROM 書籍に対して提供します。
+
+@itemize @bullet
+@item 本文の区切りコード
+@item 外字の代替文字列
+@end itemize
+
+appendix のレイアウトは CD-ROM 書籍のものとよく似ています。
+トップディレクトリには @code{catalog} もしくは @code{catalogs}
+ファイルが存在し、各副本のデータは対応するサブディレクトリに配置されて
+います。
+
+アプリケーションは appendix に対応し、本文の区切りコードの情報を使える
+ようにすることをお薦めします。
+外字の代替文字列については、外字のフォントをそのまま表示できるのであれば、
+対応する必要性はかなり乏しいですが、本文の区切りコードは、扱えないと
+正しく本文を表示できない書籍に対応できません
+(区切りコードについては、@pxref{Stop Code Issue, , 区切りコードの問題})。
+
+@menu
+* EB_Appendix::                 @code{EB_Appendix} オブジェクト
+* Appendix Subbook::            副本
+* Appendix Stop Code::          本文の区切りコード
+* Appendix Alternation Text::   外字の代替文字列
+* Appendix Functions::          関数の詳細
+* Appendix Sample::             サンプルプログラム
+@end menu
+
+@c -------------------------------------------------------------------
+@node EB_Appendix, Appendix Subbook, Appendix Data, Appendix Data
+@section @code{EB_Appendix} オブジェクト
+
+CD-ROM 書籍本体を扱うには @code{EB_Book} オブジェクトを用いましたが、
+appendix を扱うには @code{EB_Appendix} オブジェクトを使います。
+@code{EB_Appendix} オブジェクトを操作するための関数は、@code{EB_Book} 
+のものとは異なりますが、操作手順はよく似ています。
+
+@code{EB_Appendix} オブジェクトは、個々の appendix に対して 1 個ずつ
+作る必要があります。
+
+@example
+EB_Appendix app;
+@end example
+
+@noindent
+もちろん、オブジェクトの領域は、@code{malloc()} で確保しても構いません。
+
+@example
+@group
+EB_Appendix *app_pointer;
+
+app_pointer = (EB_Appendix *) malloc(sizeof(EB_Appendix));
+@end group
+@end example
+
+オブジェクトは、使う前に必ず @code{eb_initialize_appendix()} という関数
+で中身を初期化しなくてはなりません。
+@code{EB_Book} オブジェクトでも @code{eb_initialize_book()} で初期化
+する必要がありましたが、それと同じです。
+
+@example
+@group
+eb_initialize_appendix(&app);
+eb_initialize_appendix(app_pointer);
+@end group
+@end example
+
+続いて、オブジェクトを appendix の実体に結び付けるために、
+@code{eb_bind_appendix()} を呼び出します。
+これは、@code{EB_Book} オブジェクトの @code{eb_bind()} に相当します。
+
+@example
+@group
+ＥＢ＿Ａｐｐｅｎｄｉｘ　　　　　　　　　　ａｐｐｅｎｄｉｘ
+オブジェクト　　　　　　　　　　　　┌────────────┐
+┌───┐　　　　　　　　　　　　　│　　　　　　　　　　　　│
+│　　　┝━━━━━━━━━━━━━┥　／ｍｎｔ／ｄｉｃｔ　　│
+└───┘　ｅｂ＿ｂｉｎｄ　　　　　│　　　　　　　　　　　　│
+　　　　　　＿ａｐｐｅｎｄｉｘ（）　└────────────┘
+@end group
+@end example
+
+@noindent
+実際のプログラムでは、次のようにします。
+
+@example
+@group
+if (eb_bind_appendix(&app, "/mnt/dict") != EB_SUCCESS) @{
+    printf("eb_bind_appendix() failed\n");
+    return;
+@}
+@end group
+@end example
+
+@noindent
+@code{eb_bind_appendix()} に渡す appendix のパス
+(この例では @file{/mnt/dict}) は appendix のトップディレクトリ、つまり
+@file{catalog} または @file{catalogs} ファイルのあるディレクトリを
+指定します。
+パスには、遠隔アクセス識別子 (例: @samp{ebnet://localhost/dict.app})
+を指定することも可能です。
+
+@code{EB_Appendix} オブジェクトを使い終わったら、
+@code{eb_finalize_appendix()} を呼んで後始末をします。
+オブジェクトは appendix との結び付きを解かれた状態に戻り、
+内部で割り当てられたメモリは解放され、開いていたファイルもすべて
+閉じられます。
+
+@example
+@group
+eb_finalize_appendix(&app);
+eb_finalize_appendix(app_pointer);
+@end group
+@end example
+
+@noindent
+オブジェクトの領域を @code{malloc()} で確保した場合は、
+@code{eb_finalize_appendix()} を呼んだ後ならば、オブジェクトの領域を
+安全に解放することができます。
+
+@example
+free(app_pointer);
+@end example
+
+@c -------------------------------------------------------------------
+@node Appendix Subbook, Appendix Stop Code, EB_Appendix, Appendix Data
+@section 副本
+
+CD-ROM と同様に、appendix にも副本が存在します。
+appendix の副本も、副本コードを使って識別します。
+個々の副本コードは、appendix 内で同じものがないようになっています。
+
+CD-ROM 書籍内のすべての副本の副本コードを取得する関数として
+@code{eb_subbook_list()} がありましたが、appendix にも
+@code{eb_appendix_subbook_list()} という同様の関数があります。
+
+@example
+@group
+/* @code{app} が @code{EB_Appendix} のオブジェクトで、すでに書籍に
+ * 結び付けられていると仮定しています。*/
+EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
+int sub_count;
+
+if (eb_appendix_subbook_list(&app, sub_codes, &sub_count)
+    != EB_SUCCESS) @{
+    printf("eb_appendix_subbook_list() failed\n");
+    return;
+@}
+@end group
+@end example
+
+@noindent
+@code{eb_appendix_subbook_list()} が成功すると、書籍内のすべての
+副本コードが 配列 @code{sub_codes[]} に格納されます。
+配列の先頭の副本コードは @code{sub_codes[0]} と表され、次の
+コードは @code{sub_codes[1]}、という具合になります。
+副本の個数は、@code{sub_count} に格納されます。
+
+@code{EB_Book} と同様に @code{EB_Appendix} オブジェクトでも、
+結びつけられた CD-ROM 書籍の中の任意の副本から一つ選んで、
+@dfn{選択中の副本 (current subbook)} として指定することができます。
+複数の副本を、同時に選択することはできません。
+区切りコードや外字の代替文字列といった appendix 内のデータへのアクセス
+は、選択中の副本に対してだけ行えます。
+
+以下は、先頭の副本 (@code{sub_codes[0]}) を選択する場合の例です。
+
+@example
+@group
+/* @code{app} が @code{EB_Appendix} のオブジェクトで、すでに書籍に
+ * 結び付けられていると仮定しています。*/
+if (eb_set_appendix_subbook(&app, sub_codes[0]) != EB_SUCCESS) @{
+    printf("eb_subbook_list() failed\n");
+    return;
+@}
+@end group
+@end example
+
+@code{eb_bind_appendix()} で @code{EB_Appendix} オブジェクトを appendix
+に結び付けた直後は、いずれの副本も選択されていない状態になっています。
+
+@c -------------------------------------------------------------------
+@node Appendix Stop Code, Appendix Alternation Text, Appendix Subbook, Appendix Data
+@section 本文の区切りコード
+
+CD-ROM 書籍によっては、EB ライブラリが本文の表示を正しい位置で止められない
+ことがあります 
+(詳しくは、@pxref{Stop Code Issue, , 区切りコードの問題})。
+これは、本文の区切りコードの推測を EB ライブラリが誤ったために起こる
+のですが、appendix データを使うことで、正しい区切りコードを EB ライブラリ
+に教えてやることができます。
+
+CD-ROM 書籍の本文を取得する関数 @code{eb_read_text()} は第 2 引数に
+@code{EB_Appendix *} をとるのですが、ここに appendix オブジェクトを
+渡してやるようにします。
+
+@example
+@group
+/* @code{book}, @code{app} は、それぞれ @code{EB_Book} および
+ * @code{EB_Appendix} のオブジェクトで、どちらもすでに副本を選択中と
+ * 仮定しています。*/
+#define MAX_LENGTH 1000
+char buffer[MAX_LENGTH + 1];
+ssize_t text_length;
+
+if (eb_read_text(&book, &app, NULL, NULL, MAX_LENGTH,
+    text, &text_length) != EB_SUCCESS) @{
+    fprintf(stderr, "an error occurs.\n");
+    return;
+@}
+@end group
+@end example
+
+@noindent
+@code{eb_read_text()} は、渡された appendix オブジェクトが副本を選択済み
+で、かつ区切りコードの情報を持っていれば、その区切りコードを使用します。
+
+@c -------------------------------------------------------------------
+@node Appendix Alternation Text, Appendix Functions, Appendix Stop Code, Appendix Data
+@section 外字の代替文字列
+
+CD-ROM 書籍は、定義している外字の情報としてフォントのデータしか用意して
+いません。
+つまり、その外字がどのような文字なのかをユーザに分かるようにするには、
+アプリケーションがフォントを表示するしかありません。
+しかしこれでは、テキストインターフェースを用いたアプリケーションでは、
+本文中の外字の部分がまったく分かりません。
+外字を多用している書籍では、本文が解読不能に近い状態になるかも知れません。
+
+そこで EB ライブラリでは、外字の代替となる文字列を appendix 内で定義
+できるようにしています。
+appendix が用意されている場合に限り、アプリケーションは外字のフォント
+を描画する代わりにその代替文字列を出力することにすれば、
+テキストインターフェースを用いたアプリケーションでも書籍が読み易く
+なります。
+
+appendix に定義されている代替文字列を取り出す関数は、2 つあります。
+半角外字用の @code{eb_narrow_alt_character_text()} と全角外字用の
+@code{eb_wide_alt_character_text()} です。
+どちらも、使い方は変わりません。
+
+以下の例では、半角外字の文字番号 0xa121 に対する代替文字列を @samp{buffer}
+に格納しています。
+
+@example
+@group
+/* @code{app} が @code{EB_Appendix} のオブジェクトで、すでに副本を
+ * 選択中であると仮定しています。*/
+char buffer[EB_MAX_ALTERNATION_TEXT_LENGTH + 1];
+
+if (eb_narrow_alt_character_text(&app, buffer, 0xa121)
+    != EB_SUCCESS) @{
+    printf("eb_narrow_alt_character_text() failed\n");
+    return;
+@}
+@end group
+@end example
+
+@noindent
+外字は個々の副本に対して定義されているので、代替文字列を取り出すには、
+あらかじめ副本を選択しておく必要があります。
+外字のフォントを取り出す際は、これに加えて外字の「高さ」も選択しておく
+必要がありましたが、代替文字列には高さの概念がないので必要ありません。
+
+代替文字列は最長で @code{EB_MAX_ALTERNATION_TEXT_LENGTH} バイト
+(= 31 バイト) です。
+ただし、この長さにはナル文字の分は含んでいないので、@samp{buffer} は
+もう 1 バイト分余裕を持たせています。
+
+@c -------------------------------------------------------------------
+@node Appendix Functions, Appendix Sample, Appendix Alternation Text, Appendix Data
+@section 関数の詳細
+
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+
+@example
+#include <eb/appendix.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_initialize_appendix (EB_Appendix *@var{app})
+@xfindex initialize_appendix
+
+関数 @code{eb_initialize_appendix()} は、@var{app} の指す
+@code{EB_Appendix} オブジェクトを初期化します。
+@code{EB_Appendix} オブジェクトに対して EB ライブラリの他の関数を呼ぶ前に、
+必ずそのオブジェクトを初期化しなくてはなりません。
+初期化していないオブジェクトに対して、EB ライブラリの他の関数を呼んだ
+場合の動作は未定義です。
+また、すでに初期化したオブジェクトに対して、
+再度 @code{eb_initialize_appendix()} を呼んではいけません。
+呼んだ場合の動作は未定義です。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_finalize_appendix (EB_Appendix *@var{app})
+@xfindex finalize_appendix
+
+関数 @code{eb_finalize_appendix()} は、@var{app} が指す @code{EB_Appendix}
+オブジェクトの後始末を行います。
+
+オブジェクトが割り当てて管理していたメモリはすべて解放され、
+ファイルディスクリプタもすべて閉じられます。
+オブジェクトが appendix と結び付いていた場合は、結び付きが解かれます。
+
+後始末をしたオブジェクトに対して @code{eb_bind_appendix()} を呼ぶことで、
+オブジェクトを再利用することができます。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_bind_appendix (EB_Appendix *@var{app}, const char *@var{path})
+@xfindex bind_appendix
+
+関数 @code{eb_bind_appendix()} は、@var{app} の指す
+@code{EB_Appendix} オブジェクトを、パス @var{path} にある appendix に
+結び付けます。
+パスには、appendix のトップディレクトリか遠隔アクセス識別子を指定します。
+appendix のトップディレクトリとは、@file{catalog} あるいは @file{catalogs}
+ファイルの存在するディレクトリを指します。
+
+オブジェクトがすでにappendix に結び付いていた場合、その appendix との
+結び付きを解いてから、@var{path} にある appendix に結び付けます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+このとき、副本は未選択の状態になります。
+失敗すると、オブジェクトを appendix との結び付きを解かれた状態にして、
+原因を示すエラーコードを返します。
+
+@var{path} は、@code{EB_MAX_PATH_LENGTH} バイトに収まていなくては
+なりません。
+さらに、@var{path} が相対パスのときは、絶対パスに変換した結果がこの長さ
+に収まっていなくてはなりません。
+これを超えると、@code{EB_ERR_TOO_LONG_FILE_NAME} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_is_appendix_bound (EB_Appendix *@var{app})
+@xfindex is_appendix_bound
+
+関数 @code{eb_is_appendix_bound()} は、@var{app} が appendix に
+結び付いているかどうかを調べます。
+結び付いていれば 1 を返し、そうでなければ 0 を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_appendix_path (EB_Appendix *@var{app}, char *@var{path})
+@xfindex appendix_path
+
+関数 @code{eb_appendix_path()} は、@var{app} に結び付いている appendix 
+のパスもしくは遠隔アクセス識別子を、@var{path} の指す領域に書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、@var{path} の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
+
+@var{app} は、あらかじめ書籍に結び付いている必要があります。
+結びついていない場合は、@code{EB_ERR_UNBOUND_BOOK} を返します。
+
+@var{path} に書き込むパス名のバイト数は、最長で @code{EB_MAX_PATH_LENGTH}
+になります。
+この長さは、末尾のナル文字を含みません。
+関数が返すパスは正規化された形になっているので、@code{eb_bind_appendix()}
+に渡したときのものと同じとは限りません。
+たとえば、相対パスだった場合は、絶対パスに変換されます。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_load_all_appendix_subbooks (EB_Appendix *@var{app})
+@xfindex load_all_appendix_subbooks
+
+関数 @code{eb_load_all_appendix_subbooks()} は、@var{app} 内のすべての
+副本を初期化します。
+通常、副本の初期化は、その副本が初めて選択されたときに自動的に行われますが、
+この関数は初期化を前倒しで行います。
+初期化の対象となるのは、この関数を呼び出した時点でまだ初期化していない
+すべての副本です。
+この関数は、スタンドアロンで動作するサーバアプリケーションなどで有効です。
+クライアントからの接続を受ける前にこの関数を呼ぶことで、副本の初期化の
+ためにクライアントを待たせなくて済みます。
+
+初期化の対象となったすべての副本の初期化に成功すれば、関数は
+@code{EB_SUCCESS} を返します。
+一冊でも初期化に失敗した場合は、残りの副本の初期化を諦め、原因を示す
+エラーコードを返します。
+
+@var{app} は、あらかじめ appendix に結び付けられていなくてはなりません。
+結びついていない場合は、@code{EB_ERR_UNBOUND_APP} を返します。
+
+この関数を呼び出すと、@var{app} は、副本を選択していない状態になります。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_appendix_subbook_list (EB_Book *@var{app}, EB_Subbook_Code *@var{subbook_list}, int *@var{subbook_count})
+@xfindex appendix_subbook_list
+@xvindex MAX_SUBBOOKS
+
+関数 @code{eb_appendix_subbook_list()} は、@var{app} 内のすべて副本の
+副本コードを @code{EB_Subbook_Code} 型の配列にして、@var{subbook_list} 
+の指す領域に書き込みます。
+配列は、最大で @code{EB_MAX_SUBBOOKS} 個の要素を持ちます。
+加えて、appendix が収録している副本の個数を @var{subbook_count} の指す
+領域に書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、@var{subbook_count} の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+
+@var{app} は、あらかじめ appendix に結び付けられていなくてはなりません。
+結びついていない場合は、@code{EB_ERR_UNBOUND_APP} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_appendix_subbook (EB_Book *@var{app}, EB_Subbook_Code *@var{subbook_code})
+@xfindex appendix_subbook
+
+関数 @code{eb_appendix_subbook()} は、@var{app} が選択中の副本の
+副本コードを @var{subbook_code} の指す領域に書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、@var{subbook_code} の指す領域に @code{EB_SUBBOOK_INVALID} 
+を書き込み、原因を示すエラーコードを返します。
+
+あらかじめ、@var{app} はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_APPSUB} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_appendix_subbook_directory (EB_Book *@var{app}, char *@var{directory})
+@xfindex appendix_subbook_directory
+@xvindex MAX_DIRECTORY_NAME_LENGTH
+
+関数 @code{eb_appendix_subbook_directory()} は、@var{app} 内で現在選択中
+の副本のデータファイルを収めたディレクトリ名を、@var{directory} の指す
+領域に書き込みます。
+
+ディレクトリ名の文字列の長さは、最長で @code{EB_MAX_DIRECTORY_NAME_LENGTH}
+バイトです。
+この長さに、末尾のナル文字は含みません。
+ディレクトリ名は ASCII の数字、英小文字、アンダースコアで構成されます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、@var{directory} の指す領域に空文字列を書き込み、原因に
+を示すエラーコードを返します。
+
+あらかじめ、@var{app} 内のいずれかの副本が選択されていなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_APPSUB} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_appendix_subbook_directory2 (EB_Book *@var{app}, EB_Subbook_Code @var{subbook_code}, char *@var{directory})
+@xfindex appendix_subbook_directory
+
+@code{eb_appendix_subbook_directory()} と似ていますが、選択中の副本では
+なく、引数 @var{subbook_code} で指定された副本のディレクトリ名を書き込む
+点が異なります。
+
+@var{app} は副本を選択していなくても構いませんが、あらかじめ
+appendix に結び付けられていなければなりません。
+結びついていない場合は、@code{EB_ERR_UNBOUND_APP} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_set_appendix_subbook (EB_Book *@var{app}, EB_Subbook_Code @var{code})
+@xfindex set_appendix_subbook
+
+関数 @code{eb_set_appendix_subbook()} は、@var{app} の副本 @var{code} 
+を選択します。
+すでに副本を選択していた場合は、いったん未選択の状態にしてから副本
+@var{subbook_code} を選択します。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+このとき、外字は未選択の状態となり、検索、テキストデータの読み込み、
+バイナリデータの読み込みについての状態記録は、すべてリセットされます。
+失敗すると、副本を未選択の状態にして、原因を示すエラーコードを返します。
+
+あらかじめ、@var{app} は appendix に結び付けられていなければなりません。
+結びついていない場合は、@code{EB_ERR_UNBOUND_APP} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_unset_appendix_subbook (EB_Book *@var{app})
+@xfindex unset_appendix_subbook
+
+関数 @code{eb_unset_appendix_subbook()} は、@var{app} が選択している副本
+を未選択の状態にします。
+@var{app} が appendix に結び付いていないか、副本が選択されていない場合は、
+何もしません。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_have_stop_code (EB_Book *@var{app})
+@xfindex have_stop_code
+
+関数 @code{eb_have_stop_code()} は、@var{app} が選択中の副本で
+区切りコードが定義されているかどうかを調べます。
+
+定義していれば 1 を返します。
+定義していないか、そもそも副本が選択されていない場合は 0 を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_stop_code (EB_Book *@var{app}, int *@var{stop_code})
+@xfindex stop_code
+
+関数 @code{eb_stop_code()} は、@var{app} が選択中の副本で定義している
+区切りコードを @var{stop_code} の指す領域に書き込みます。
+@var{stop_code[0]}, @var{stop_code[1]} に、区切りコードの値として
+それぞれ @samp{0x0000} 〜 @samp{0xffff} が書き込まれます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、関数は @var{stop_code[0]} と @var{stop_code[1]} に @samp{-1}
+を書き込み、原因を示すエラーコードを返します。
+
+あらかじめ、@var{app} は副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_APPSUB} を返します。
+副本が区切りコードを定義していない場合は、@code{EB_ERR_NO_STOPCODE} を
+返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_have_narrow_alt (EB_Book *@var{app})
+@deftypefunx int eb_have_wide_alt (EB_Book *@var{app})
+@xfindex have_narrow_alt
+@xfindex have_wide_alt
+
+関数 @code{eb_have_narrow_alt()} は、選択中の副本が半角外字に対する
+代替文字列を定義しているかどうかを調べます。
+同様に、関数 @code{eb_have_wide_alt()} は、全角外字に対する代替文字列
+を定義しているかどうかを調べます。
+
+定義していれば 1 を、定義していなければ 0 を返します。
+@var{app} が副本を選択していない場合も 0 を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_alt_start (EB_Book *@var{app}, int *@var{start})
+@deftypefunx EB_Error_Code eb_wide_alt_start (EB_Book *@var{app}, int *@var{start})
+@xfindex narrow_alt_start
+@xfindex wide_alt_start
+
+関数 @code{eb_narrow_alt_start()} は、@var{app} が選択中の副本における
+半角外字に対する代替文字列の定義範囲を調べ、先頭の文字番号 (半角外字の
+文字番号の中で最小のもの) を @var{start} の指す領域に書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、原因を示すエラーコードを返します。
+
+あらかじめ、@var{app} は副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_APPSUB} を返します。
+副本が半角外字に対する代替文字列を定義していない場合は、
+@code{EB_ERR_NO_ALT} を返します。
+
+関数 @code{eb_wide_font_start()} は、半角外字ではなく全角外字について
+調べるという点を除いて、@code{eb_narrow_font_start()} と同じです。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_alt_end (EB_Book *@var{app}, int *@var{end})
+@deftypefunx EB_Error_Code eb_wide_alt_end (EB_Book *@var{app}, int *@var{end})
+@xfindex narrow_alt_end
+@xfindex wide_alt_end
+
+関数 @code{eb_narrow_alt_end()} は、@var{app} が選択中の副本における
+半角外字に対する代替文字列の定義範囲を調べ、最後の文字番号 (半角外字の
+文字番号の中で最大のもの) を @var{start} の指す領域に書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、原因を示すエラーコードを返します。
+
+あらかじめ、@var{app} は副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_APPSUB} を返します。
+副本が半角外字に対する代替文字列を定義していない場合は、
+@code{EB_ERR_NO_ALT} を返します。
+
+関数 @code{eb_wide_font_start()} は、半角外字ではなく全角外字について
+調べるという点を除いて、@code{eb_narrow_font_start()} と同じです。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_alt_character_text (EB_Book *@var{app}, int @code{character_number}, char *@var{text})
+@deftypefunx EB_Error_Code eb_wide_alt_character_text (EB_Book *@var{app}, int @code{character_number}, char *@var{text})
+@xfindex narrow_alt_character_text
+@xfindex wide_alt_character_text
+
+関数 @code{eb_narrow_alt_character_text()} は、@var{book} が選択中の
+副本で定義している、半角外字の代替文字列を取り出します。
+外字の文字番号を、@var{character_number} で指定します。
+
+成功すると、関数は代替文字列を @var{text} の指す領域に書き込み、
+@code{EB_SUCCESS} を返します。
+失敗すると、@var{text} の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
+
+代替文字列は最長で @code{EB_MAX_ALTERNATION_TEXT_LENGTH} バイト
+(= 31 バイト) です。
+ただし、この長さにはナル文字の分は含んでいないので、@var{text} の領域
+にはもう 1 バイト分必要です。
+
+代替文字列がどの文字コードで書かれているかは、appendix の中には
+記録されていません。
+しかし、appendix は必ず特定の書籍に対応して作成されるものなので、書籍の
+文字コードから次のように判断すれば、問題ないでしょう。
+
+@itemize @bullet
+@item 書籍が ISO 8859-1 で書かれている場合は、代替文字列も ISO 8859-1
+@item それ以外の場合、代替文字列は日本語 EUC
+@end itemize
+
+あらかじめ、@var{app} は副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_APPSUB} を返します。
+文字番号 @var{character_number} が外字の定義範囲外にある場合は、
+@code{EB_ERR_NO_SUCH_CHAR_TEXT} を返します。
+
+副本が半角外字に対する代替文字列を (@var{character_number} に限らず
+まったく) 定義していない場合は、@code{EB_ERR_NO_ALT} を返します。
+そうではなく、一部の文字番号については半角外字に対する代替文字列を
+定義しているものの、@var{character_number} に対する代替文字列は存在しない
+場合、関数は @code{EB_SUCCESS} を返し、@var{text} の指す領域には
+空文字列が書き込まれます。
+
+関数 @code{eb_wide_alt_character_text()} は、半角外字ではなく
+全角外字に対する代替文字列を取り出すという点を除いて、
+@code{eb_narrow_alt_character_text()} と同じです。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_backward_narrow_alt_character (EB_Book *@var{book}, int @var{n}, int *@var{character_number})
+@deftypefunx EB_Error_Code eb_backward_wide_alt_character (EB_Book *@var{book}, int @var{n}, int *@var{character_number})
+@xfindex backward_narrow_alt_character
+@xfindex backward_wide_alt_character
+
+関数 @code{eb_forward_narrow_alt_character()} は、@var{app} が選択中
+の副本において定義されている、半角外字に対する代替文字列の文字番号
+@var{character_number} の @var{n} 個後ろに位置する文字の文字番号を
+取得します。
+
+まず、関数を呼び出す際に、@var{character_number} の指す領域に文字番号を
+書き込んでおきます。
+関数の処理が成功すると、戻ったときに @var{n} 個分だけ後方の文字番号に
+書き換わっています。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、原因を示すエラーコードを返します。
+
+あらかじめ、@var{app} は副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_APPSUB} を返します。
+副本が半角外字に対する代替文字列を定義していない場合は、
+@code{EB_ERR_NO_ALT} を返します。
+
+@var{n} 個後ろにもう外字がない場合や、呼び出した際に
+@var{character_number} の指す領域に書き込んであった文字番号が外字の
+定義範囲外にある場合は @code{EB_ERR_NO_SUCH_CHAR_TEXT} を返します。
+
+@var{n} には負の数を指定することもできます。
+この場合、次の呼び出しと等価になります。
+
+@example
+/* n < 0 とする */
+eb_backward_narrow_font_character (book, -n, character_number);
+@end example
+
+関数 @code{eb_forward_wide_alt_character()} は、半角外字ではなく
+全角外字について操作するという点を除いて、
+@code{eb_forward_narrow_alt_character()} と同じです。
+@end deftypefun
+
+@c -------------------------------------------------------------------
+@node Appendix Sample,  , Appendix Functions, Appendix Data
+@section サンプルプログラム
+
+@pindex appendix.c
+@include appendix-c.texi
+
+@c ===================================================================
+@node Index,  , Appendix Data, Top
 @appendix 索引
 
 @menu

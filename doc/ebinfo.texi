@@ -4,7 +4,7 @@
 @settitle ebinfo
 @c %** end of header
 
-@include ebinfo-ver.texi
+@include version-ebinfo.texi
 
 @dircategory CD-ROM Book Utilities
 @direntry
@@ -71,13 +71,14 @@ This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 
 @menu
 * Introduction::                Introduction.
-* Invoking ebinfo::             Invoking @code{ebinfo}
+* Invoke ebinfo::               Invoke @code{ebinfo}
 * Details about Information::   Details about Information
+* Book list on EBNET server::   Book list on an EBNET server
 * Options to ebinfo::           Options to @code{ebinfo}
 @end menu
 
 @c ===================================================================
-@node Introduction, Invoking ebinfo, Top, Top
+@node Introduction, Invoke ebinfo, Top, Top
 @chapter Introduction
 
 The @code{ebinfo} command outputs various information about a CD-ROM book.
@@ -96,8 +97,8 @@ GNU General Public License for more details.
 This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 
 @c ===================================================================
-@node Invoking ebinfo, Details about Information, Introduction, Top
-@chapter Invoking @code{ebinfo}
+@node Invoke ebinfo, Details about Information, Introduction, Top
+@chapter Invoke @code{ebinfo}
 
 Its usual way to invoke @code{ebinfo} is as follows:
 
@@ -107,7 +108,9 @@ Its usual way to invoke @code{ebinfo} is as follows:
 
 @noindent
 @var{book-path} points to the top directory of a CD-ROM book where
-the file @file{CATALOG} or @file{CATALOGS} resides.
+the file @file{catalog} or @file{catalogs} resides.
+It may be a local path (e.g. @samp{/mnt/dict}) or a remote access
+identifier (e.g. @samp{ebnet://localhost/dict}).
 Though you cannot specify two or more book-paths, 
 you can omit book-path like as follows:
 
@@ -181,7 +184,7 @@ The mulit-search information is like as follows.
 @end example
 
 @c ===================================================================
-@node Details about Information, Options to ebinfo, Invoking ebinfo, Top
+@node Details about Information, Book list on EBNET server, Invoke ebinfo, Top
 @chapter Details about Information
 
 This section explains details about information output by ebinfo.
@@ -253,7 +256,58 @@ Range of character numbers of a wide font defined in the subbook.
 @end table
 
 @c ===================================================================
-@node Options to ebinfo,  , Details about Information, Top
+@node Book list on EBNET server, Options to ebinfo, Details about Information, Top
+@chapter Book list on an EBNET server
+
+Instead of usual output, @code{ebinfo} can output a list of books that
+an EBNET server provides.
+Summary of its command line usage is:
+
+@example
+% ebinfo --book-list @var{remote-server-identifier}
+@end example
+
+@noindent
+where @var{remote-server-identifier} must be a remote access identifier
+without book name.
+For example, 
+
+@example
+@group
+% ebinfo --book-list ebnet://dict.example.com
+Name             Title
+encycl           Brown Concise Encyclopedia
+encycl.app       Brown Concise Encyclopedia (appendix)
+crossword        Crossword Puzzle Dictionary
+travel           World Travel Guide
+@end group
+@end example
+
+@noindent
+The server has three books and one appendix.
+Then, you can see information about the book @samp{encycl} by this way:
+
+@example
+@group
+% ebinfo ebnet://dict.example.com/cncyclopedia
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
+character code: ISO 8859-1
+the number of subbooks: 1
+
+@end group
+@group
+subbook 1:
+  title: Brown Concise Encyclopedia
+  directory: brown
+  search methods: word endword keyword multi menu
+  font sizes: 16 24
+  narrow font characters: 0xa121 -- 0xa452
+  wide font characters: 0xa321 -- 0xa452
+@end group
+@end example
+
+@c ===================================================================
+@node Options to ebinfo,  , Book list on EBNET server, Top
 @chapter @code{ebinfo} Options
 
 The @code{ebinfo} command supports both traditional single-letter
@@ -265,6 +319,12 @@ Abbreviations for option names are allowed as long as they are unique.
 @item -h
 @itemx --help
 Output help message to standard out, then exit.
+
+@item -l
+@itemx --book-list
+Suppress  normal output; instead output a list of books that an EBNET
+server provides.
+@var{book-path} command line argument must be a remote access identifer.
 
 @item -m
 @itemx --multi-search

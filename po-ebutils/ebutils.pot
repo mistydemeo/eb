@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2003-06-11 23:13+0900\n"
+"POT-Creation-Date: 2003-08-15 23:10+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,8 +71,8 @@ msgstr ""
 msgid "%s: too long output directory path\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:397 ../ebinfo/ebinfo.c:174 ../ebrefile/ebrefile.c:323
-#: ../ebstopchk/ebstopchk.c:254 ../ebzip/ebzip.c:313
+#: ../ebfont/ebfont.c:397 ../ebinfo/ebinfo.c:188 ../ebrefile/ebrefile.c:323
+#: ../ebstopcode/ebstopcode.c:243 ../ebzip/ebzip.c:313
 #, c-format
 msgid "%s: too many arguments\n"
 msgstr ""
@@ -103,14 +103,14 @@ msgstr ""
 msgid "%s: unknown image format name `%s'\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:640 ../ebinfo/ebinfo.c:489 ../ebrefile/ebrefile.c:374
+#: ../ebfont/ebfont.c:640 ../ebinfo/ebinfo.c:594 ../ebrefile/ebrefile.c:374
 #: ../ebzip/ebzip.c:466
 #, c-format
 msgid "Usage: %s [option...] [book-directory]\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:641 ../ebinfo/ebinfo.c:491 ../ebrefile/ebrefile.c:375
-#: ../ebstopchk/ebstopchk.c:391 ../ebzip/ebzip.c:467
+#: ../ebfont/ebfont.c:641 ../ebinfo/ebinfo.c:596 ../ebrefile/ebrefile.c:375
+#: ../ebstopcode/ebstopcode.c:380 ../ebzip/ebzip.c:467
 msgid "Options:\n"
 msgstr ""
 
@@ -128,15 +128,15 @@ msgid ""
 msgstr ""
 
 #: ../ebfont/ebfont.c:645 ../ebfont/ebfont.c:650 ../ebfont/ebfont.c:654
-#: ../ebfont/ebfont.c:662 ../ebinfo/ebinfo.c:497 ../ebrefile/ebrefile.c:379
-#: ../ebrefile/ebrefile.c:387 ../ebstopchk/ebstopchk.c:403
+#: ../ebfont/ebfont.c:662 ../ebinfo/ebinfo.c:603 ../ebrefile/ebrefile.c:379
+#: ../ebrefile/ebrefile.c:387 ../ebstopcode/ebstopcode.c:392
 #: ../ebzip/ebzip.c:480 ../ebzip/ebzip.c:495
 #, c-format
 msgid "                             (default: %s)\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:647 ../ebinfo/ebinfo.c:492 ../ebrefile/ebrefile.c:376
-#: ../ebstopchk/ebstopchk.c:394 ../ebzip/ebzip.c:469
+#: ../ebfont/ebfont.c:647 ../ebinfo/ebinfo.c:597 ../ebrefile/ebrefile.c:376
+#: ../ebstopcode/ebstopcode.c:383 ../ebzip/ebzip.c:469
 msgid "  -h  --help                 display this help, then exit\n"
 msgstr ""
 
@@ -169,25 +169,25 @@ msgstr ""
 msgid "                             (default: all subbooks)\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:659 ../ebinfo/ebinfo.c:494 ../ebrefile/ebrefile.c:384
-#: ../ebstopchk/ebstopchk.c:400 ../ebzip/ebzip.c:491
+#: ../ebfont/ebfont.c:659 ../ebinfo/ebinfo.c:600 ../ebrefile/ebrefile.c:384
+#: ../ebstopcode/ebstopcode.c:389 ../ebzip/ebzip.c:491
 msgid "  -v  --version              display version number, then exit\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:660 ../ebinfo/ebinfo.c:495 ../ebrefile/ebrefile.c:385
-#: ../ebstopchk/ebstopchk.c:401 ../ebzip/ebzip.c:493
+#: ../ebfont/ebfont.c:660 ../ebinfo/ebinfo.c:601 ../ebrefile/ebrefile.c:385
+#: ../ebstopcode/ebstopcode.c:390 ../ebzip/ebzip.c:493
 msgid ""
 "\n"
 "Argument:\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:661 ../ebinfo/ebinfo.c:496 ../ebrefile/ebrefile.c:386
-#: ../ebstopchk/ebstopchk.c:402 ../ebzip/ebzip.c:494
+#: ../ebfont/ebfont.c:661 ../ebinfo/ebinfo.c:602 ../ebrefile/ebrefile.c:386
+#: ../ebstopcode/ebstopcode.c:391 ../ebzip/ebzip.c:494
 msgid "  book-directory             top directory of a CD-ROM book\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:664 ../ebinfo/ebinfo.c:499 ../ebrefile/ebrefile.c:390
-#: ../ebstopchk/ebstopchk.c:405 ../ebzip/ebzip.c:507
+#: ../ebfont/ebfont.c:664 ../ebinfo/ebinfo.c:605 ../ebrefile/ebrefile.c:390
+#: ../ebstopcode/ebstopcode.c:394 ../ebzip/ebzip.c:507
 #, c-format
 msgid ""
 "\n"
@@ -214,36 +214,44 @@ msgstr ""
 msgid "%s: failed to close the file, %s: %s\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:245
+#: ../ebinfo/ebinfo.c:247
+msgid "Name"
+msgstr ""
+
+#: ../ebinfo/ebinfo.c:247
+msgid "Title"
+msgstr ""
+
+#: ../ebinfo/ebinfo.c:315
 msgid "disc type: "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:257
+#: ../ebinfo/ebinfo.c:330
 msgid "character code: "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:269
+#: ../ebinfo/ebinfo.c:342
 msgid "unknown\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:279
+#: ../ebinfo/ebinfo.c:355
 #, c-format
 msgid ""
 "the number of subbooks: %d\n"
 "\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:285
+#: ../ebinfo/ebinfo.c:361
 #, c-format
 msgid "subbook %d:\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:293
+#: ../ebinfo/ebinfo.c:371
 #, c-format
 msgid "  title: %s\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:301
+#: ../ebinfo/ebinfo.c:381
 #, c-format
 msgid "  directory: %s\n"
 msgstr ""
@@ -251,83 +259,88 @@ msgstr ""
 #.
 #. * Output supported methods.
 #.
-#: ../ebinfo/ebinfo.c:315
+#: ../ebinfo/ebinfo.c:396
 msgid "  search methods: "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:317
+#: ../ebinfo/ebinfo.c:398
 msgid "word "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:319
+#: ../ebinfo/ebinfo.c:400
 msgid "endword "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:321
+#: ../ebinfo/ebinfo.c:402
 msgid "keyword "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:323
+#: ../ebinfo/ebinfo.c:404
 msgid "multi "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:325
+#: ../ebinfo/ebinfo.c:406
 msgid "menu "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:327
+#: ../ebinfo/ebinfo.c:408
 msgid "copyright "
 msgstr ""
 
 #.
 #. * Output a font list.
 #.
-#: ../ebinfo/ebinfo.c:333
+#: ../ebinfo/ebinfo.c:414
 msgid "  font sizes: "
 msgstr ""
 
 #.
 #. * Output character range of the narrow font.
 #.
-#: ../ebinfo/ebinfo.c:350
+#: ../ebinfo/ebinfo.c:436
 msgid "  narrow font characters: "
 msgstr ""
 
 #.
 #. * Output character range of the wide font.
 #.
-#: ../ebinfo/ebinfo.c:377
+#: ../ebinfo/ebinfo.c:464
 msgid "  wide font characters: "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:449
+#: ../ebinfo/ebinfo.c:548
 #, c-format
 msgid "  multi search %d:\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:461
+#: ../ebinfo/ebinfo.c:562
 #, c-format
 msgid "    title: %s\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:471
+#: ../ebinfo/ebinfo.c:573
 #, c-format
 msgid "    label %d: %s\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:472
+#: ../ebinfo/ebinfo.c:574
 msgid "      candidates: "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:474
+#: ../ebinfo/ebinfo.c:576
 msgid "exist\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:476
+#: ../ebinfo/ebinfo.c:578
 msgid "not-exist\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:493
+#: ../ebinfo/ebinfo.c:598
+msgid ""
+"  -l  --book-list            output a list of books on an EBENT server\n"
+msgstr ""
+
+#: ../ebinfo/ebinfo.c:599
 msgid "  -m  --multi-search         also output multi-search information\n"
 msgstr ""
 
@@ -371,72 +384,72 @@ msgstr ""
 msgid "%s: failed to seek the file, %s: %s\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:249
+#: ../ebstopcode/ebstopcode.c:238
 #, c-format
 msgid "%s: too few argument\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:340
+#: ../ebstopcode/ebstopcode.c:329
 #, c-format
 msgid "%s: invalid stop code `%s'\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:377
+#: ../ebstopcode/ebstopcode.c:366
 #, c-format
 msgid "%s: invalid text length `%s'\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:389
+#: ../ebstopcode/ebstopcode.c:378
 #, c-format
 msgid "Usage: %s [option...] [book-directory] subbook\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:392
-msgid "  -c CODE, --stop-code CODE\n"
+#: ../ebstopcode/ebstopcode.c:381
+msgid "  -c CODE, --code CODE\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:393
+#: ../ebstopcode/ebstopcode.c:382
 msgid "                             set stop code manually\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:395
+#: ../ebstopcode/ebstopcode.c:384
 msgid "  -l LENGTH, --text-length LENGTH\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:396
+#: ../ebstopcode/ebstopcode.c:385
 msgid "                             maximum length of output text\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:397 ../ebzip/ebzip.c:475
+#: ../ebstopcode/ebstopcode.c:386 ../ebzip/ebzip.c:475
 #, c-format
 msgid "                             (default: %d)\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:399
+#: ../ebstopcode/ebstopcode.c:388
 msgid "  -n  --no-candidates        suppress stop code candidates\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:447
+#: ../ebstopcode/ebstopcode.c:436
 #, c-format
 msgid "%s: failed to bind the book, %s: %s\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:466
+#: ../ebstopcode/ebstopcode.c:455
 #, c-format
 msgid "%s: failed to set the current subbook, %s\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:499
+#: ../ebstopcode/ebstopcode.c:488
 #, c-format
 msgid "%s: failed to get text information, %s\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:528
+#: ../ebstopcode/ebstopcode.c:517
 #, c-format
 msgid "%s: failed to read text, %s\n"
 msgstr ""
 
-#: ../ebstopchk/ebstopchk.c:574
+#: ../ebstopcode/ebstopcode.c:563
 #, c-format
 msgid ""
 "\n"

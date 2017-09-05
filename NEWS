@@ -1,3 +1,13 @@
+Major changes in release 4.0beta1.
+
+* Rename `ebstopchk' to `ebstopcode'.
+  Also rename its option name from `--stop-code' to `--code'.
+* Delete `--case' and `--suffix' options of `ebappendix'.
+* Add Japanese edition of `ebappendix' document.
+* Add `--book-list' option to `ebinfo'.
+* Add `eb-index-info', `ebdump' and `ebfixlog' to the `misc' sub-directory.
+* Fix some bugs.
+
 Major changes in release 4.0beta0.
 
 * Support for remote access.

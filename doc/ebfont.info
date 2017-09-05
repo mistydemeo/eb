@@ -27,18 +27,18 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 4.0beta0, for EB Library version 4.0beta0.
+   This is edition 4.0beta1, for EB Library version 4.0beta1.
 
 * Menu:
 
 * Introduction::                Introduction.
 * What is Local Character::     What is Local Character?
-* Invoking ebfont::             Invoking `ebfont'.
+* Invoke ebfont::               Invoke `ebfont'.
 * Summary of Options::          Summary of Options to `ebfont'.
 
  --- The Detailed Node Listing ---
 
-Invoking `ebfont'
+Invoke `ebfont'
 
 * Image Formats::               Image Formats.
 * Heights::                     Heights.
@@ -65,10 +65,10 @@ _without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 4.0beta0, for EB Library version 4.0beta0.
+   This is edition 4.0beta1, for EB Library version 4.0beta1.
 
 
-File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
+File: ebfont.info,  Node: What is Local Character,  Next: Invoke ebfont,  Prev: Introduction,  Up: Top
 
 What is Local Character?
 ************************
@@ -104,17 +104,19 @@ By deafult, `ebfont' generates image files for fonts with the height of
 16 pixels.
 
 
-File: ebfont.info,  Node: Invoking ebfont,  Next: Summary of Options,  Prev: What is Local Character,  Up: Top
+File: ebfont.info,  Node: Invoke ebfont,  Next: Summary of Options,  Prev: What is Local Character,  Up: Top
 
-Invoking `ebfont'
-*****************
+Invoke `ebfont'
+***************
 
    Its usual way to invoke `ebfont' is as follows:
 
      % ebfont BOOK-PATH
 
 BOOK-PATH points to the top directory of a CD-ROM book where the file
-`CATALOG' or `CATALOGS' resides.  Though you cannot specify two or more
+`catalog' or `catalogs' resides.  It may be a local path (e.g.
+`/mnt/dict') or a remote access identifier (e.g.
+`ebnet://localhost/dict').  Though you cannot specify two or more
 book-paths, you can omit book-path like as follows:
 
      % ebfont
@@ -151,7 +153,7 @@ The top directory must have been created before invoking `ebfont'.
 * Subbooks::                    Subbooks.
 
 
-File: ebfont.info,  Node: Image Formats,  Next: Heights,  Prev: Invoking ebfont,  Up: Invoking ebfont
+File: ebfont.info,  Node: Image Formats,  Next: Heights,  Prev: Invoke ebfont,  Up: Invoke ebfont
 
 Image Formats
 =============
@@ -178,7 +180,7 @@ in RGB).
 that the their sizes are too fat.
 
 
-File: ebfont.info,  Node: Heights,  Next: Subbooks,  Prev: Image Formats,  Up: Invoking ebfont
+File: ebfont.info,  Node: Heights,  Next: Subbooks,  Prev: Image Formats,  Up: Invoke ebfont
 
 Heights
 =======
@@ -198,7 +200,7 @@ An argument to `--font-height' can be splitted like as follows:
      % ebfont --font-height 16 --font-height 24 BOOK-PATH
 
 
-File: ebfont.info,  Node: Subbooks,  Prev: Heights,  Up: Invoking ebfont
+File: ebfont.info,  Node: Subbooks,  Prev: Heights,  Up: Invoke ebfont
 
 Subbooks
 ========
@@ -238,8 +240,8 @@ and what their directory names are.
        narrow font characters:
        wide font characters: 0xa321 -- 0xa27e
 
-(*Note Invoking `ebinfo': (ebinfo)Invoking ebinfo, for more details
-about the `ebinfo' command).
+(*Note Invoke `ebinfo': (ebinfo)Invoke ebinfo, for more details about
+the `ebinfo' command).
 In this example, there are three subbooks in the book, and their
 directory names are `english', `french' and `german'.
 
@@ -254,7 +256,7 @@ Case of the directory names are not sensitve.  An argument to
      % ebfont --subbook english --subbook french /mnt/cdrom
 
 
-File: ebfont.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: Top
+File: ebfont.info,  Node: Summary of Options,  Prev: Invoke ebfont,  Up: Top
 
 Summary of `ebfont' Options
 ***************************
@@ -292,7 +294,7 @@ long as they are unique.
 `--output-directory DIRECTORY'
      Output image files under DIRECTORY.  By default, `ebfont'
      generates image files under the current working directory (`.').
-     (*Note Invoking ebfont::, for more details).
+     (*Note Invoke ebfont::, for more details).
 
 `-S SUBBOOKS'
 `--subbook SUBBOOKS'
@@ -309,12 +311,12 @@ long as they are unique.
 
 Tag Table:
 Node: Top1030
-Node: Introduction1587
-Node: What is Local Character2463
-Node: Invoking ebfont4038
-Node: Image Formats5466
-Node: Heights6455
-Node: Subbooks7216
-Node: Summary of Options9155
+Node: Introduction1583
+Node: What is Local Character2459
+Node: Invoke ebfont4032
+Node: Image Formats5560
+Node: Heights6545
+Node: Subbooks7304
+Node: Summary of Options9237
 
 End Tag Table

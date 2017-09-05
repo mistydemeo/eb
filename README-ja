@@ -12,12 +12,11 @@ CD-ROM 書籍は、日本で一般的に使われています。CD-ROM 書籍自体は ISO 9
 
 また、EB ライブラリは幾つかのユーテリティコマンドも提供しています。
 
-	ebappendix	付録 (appendix) データを整形する
+	ebappendix	appendix (付録) データを整形する
 	ebfont		CD-ROM 書籍内の外字のフォントデータを取り出す
 	ebinfo		CD-ROM 書籍に関する情報を出力する
 	ebrefile	CD-ROM 書籍のカタログファイルを構成し直す
-	ebstopchk	CD-ROM 書籍のテキストデータの区切りコードを
-			検査する
+	ebstopcode	CD-ROM 書籍の本文の区切りコードを検査する
 	ebunzip		CD-ROM 書籍を伸長する
 	ebzip		CD-ROM 書籍を圧縮する
 	ebzipinfo	CD-ROM 書籍の圧縮情報を出力する

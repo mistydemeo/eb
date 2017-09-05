@@ -217,16 +217,16 @@ eb_wide_font_xbm_size(height, size)
 
     switch (height) {
     case EB_FONT_16:
-        *size = EB_SIZE_NARROW_FONT_16_XBM;
+        *size = EB_SIZE_WIDE_FONT_16_XBM;
 	break;
     case EB_FONT_24:
-        *size = EB_SIZE_NARROW_FONT_24_XBM;
+        *size = EB_SIZE_WIDE_FONT_24_XBM;
 	break;
     case EB_FONT_30:
-        *size = EB_SIZE_NARROW_FONT_30_XBM;
+        *size = EB_SIZE_WIDE_FONT_30_XBM;
 	break;
     case EB_FONT_48:
-        *size = EB_SIZE_NARROW_FONT_48_XBM;
+        *size = EB_SIZE_WIDE_FONT_48_XBM;
 	break;
     default:
 	error_code = EB_ERR_NO_SUCH_FONT;
@@ -263,16 +263,16 @@ eb_wide_font_xpm_size(height, size)
 
     switch (height) {
     case EB_FONT_16:
-        *size = EB_SIZE_NARROW_FONT_16_XPM;
+        *size = EB_SIZE_WIDE_FONT_16_XPM;
 	break;
     case EB_FONT_24:
-        *size = EB_SIZE_NARROW_FONT_24_XPM;
+        *size = EB_SIZE_WIDE_FONT_24_XPM;
 	break;
     case EB_FONT_30:
-        *size = EB_SIZE_NARROW_FONT_30_XPM;
+        *size = EB_SIZE_WIDE_FONT_30_XPM;
 	break;
     case EB_FONT_48:
-        *size = EB_SIZE_NARROW_FONT_48_XPM;
+        *size = EB_SIZE_WIDE_FONT_48_XPM;
 	break;
     default:
 	error_code = EB_ERR_NO_SUCH_FONT;
@@ -309,16 +309,16 @@ eb_wide_font_gif_size(height, size)
 
     switch (height) {
     case EB_FONT_16:
-        *size = EB_SIZE_NARROW_FONT_16_GIF;
+        *size = EB_SIZE_WIDE_FONT_16_GIF;
 	break;
     case EB_FONT_24:
-        *size = EB_SIZE_NARROW_FONT_24_GIF;
+        *size = EB_SIZE_WIDE_FONT_24_GIF;
 	break;
     case EB_FONT_30:
-        *size = EB_SIZE_NARROW_FONT_30_GIF;
+        *size = EB_SIZE_WIDE_FONT_30_GIF;
 	break;
     case EB_FONT_48:
-        *size = EB_SIZE_NARROW_FONT_48_GIF;
+        *size = EB_SIZE_WIDE_FONT_48_GIF;
 	break;
     default:
 	error_code = EB_ERR_NO_SUCH_FONT;
@@ -355,16 +355,16 @@ eb_wide_font_bmp_size(height, size)
 
     switch (height) {
     case EB_FONT_16:
-        *size = EB_SIZE_NARROW_FONT_16_BMP;
+        *size = EB_SIZE_WIDE_FONT_16_BMP;
 	break;
     case EB_FONT_24:
-        *size = EB_SIZE_NARROW_FONT_24_BMP;
+        *size = EB_SIZE_WIDE_FONT_24_BMP;
 	break;
     case EB_FONT_30:
-        *size = EB_SIZE_NARROW_FONT_30_BMP;
+        *size = EB_SIZE_WIDE_FONT_30_BMP;
 	break;
     case EB_FONT_48:
-        *size = EB_SIZE_NARROW_FONT_48_BMP;
+        *size = EB_SIZE_WIDE_FONT_48_BMP;
 	break;
     default:
 	error_code = EB_ERR_NO_SUCH_FONT;

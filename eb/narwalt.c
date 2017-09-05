@@ -91,7 +91,7 @@ eb_narrow_alt_start(appendix, start)
     }
 
     if (appendix->subbook_current->narrow_page == 0) {
-	error_code = EB_ERR_NO_SUCH_CHAR_TEXT;
+	error_code = EB_ERR_NO_ALT;
 	goto failed;
     }
 
@@ -137,7 +137,7 @@ eb_narrow_alt_end(appendix, end)
     }
 
     if (appendix->subbook_current->narrow_page == 0) {
-	error_code = EB_ERR_NO_SUCH_CHAR_TEXT;
+	error_code = EB_ERR_NO_ALT;
 	goto failed;
     }
 
@@ -187,7 +187,7 @@ eb_narrow_alt_character_text(appendix, character_number, text)
      * The narrow font must exist in the current subbook.
      */
     if (appendix->subbook_current->narrow_page == 0) {
-	error_code = EB_ERR_NO_SUCH_CHAR_TEXT;
+	error_code = EB_ERR_NO_ALT;
 	goto failed;
     }
 
@@ -439,7 +439,7 @@ character_number=%d)",
      * The narrow font must exist in the current subbook.
      */
     if (appendix->subbook_current->narrow_page == 0) {
-	error_code = EB_ERR_NO_SUCH_CHAR_TEXT;
+	error_code = EB_ERR_NO_ALT;
 	goto failed;
     }
 
@@ -551,7 +551,7 @@ character_number=%d)",
      * The narrow font must exist in the current subbook.
      */
     if (appendix->subbook_current->narrow_page == 0) {
-	error_code = EB_ERR_NO_CUR_FONT;
+	error_code = EB_ERR_NO_ALT;
 	goto failed;
     }
 

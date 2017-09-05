@@ -1,0 +1,1339 @@
+これは eb-ja.info、 eb-ja.texi より makeinfo バージョン 4.5
+によって作成されました。
+
+INFO-DIR-SECTION CD-ROM Book Utilities
+START-INFO-DIR-ENTRY
+* eb-ja: (eb-ja).               C library for accessing CD-ROM book.
+END-INFO-DIR-ENTRY
+
+   EB Library: CD-ROM 書籍にアクセスするための C ライブラリ, 笠原基之
+
+   Copyright (C) 1998, 99  Motoyuki Kasahara
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by Free Software Foundation, Inc.
+
+
+File: eb-ja.info,  Node: Error Code List,  Next: Error Functions,  Prev: Error Data Types,  Up: Error Handling
+
+エラーコードの一覧
+==================
+
+   この節で説明しているエラーコードを使うには、次のようにヘッダファイル
+を 読み込んで下さい。
+
+     #include <eb/error.h>
+
+ - Constant: EB_SUCCESS
+     成功。 エラーは起きていない。
+
+ - Constant: EB_ERR_MEMORY_EXHAUSTED
+     EB ライブラリが `malloc()' を呼び出したが、`NULL' が返ってきた。
+
+ - Constant: EB_ERR_TOO_LONG_FILE_NAME
+     与えられた書籍のパス名が長すぎる。
+
+ - Constant: EB_ERR_BAD_FILE_NAME
+     書籍のパス名が不正である。
+
+ - Constant: EB_ERR_BAD_DIR_NAME
+     ディレクトリ名が不正である。 (EB ライブラリの内部処理用なので、 こ
+     のエラーコードがアプリケーションプログラムに返ることはありません。)
+
+ - Constant: EB_ERR_TOO_LONG_WORD
+     与えられた検索語は長すぎる。
+
+ - Constant: EB_ERR_BAD_WORD
+     与えられた検索語に不正な文字が含まれている。
+
+ - Constant: EB_ERR_EMPTY_WORD
+     与えられた検索語は空である。
+
+ - Constant: EB_ERR_FAIL_GETCWD
+     `getcwd()' もしくは `getwd()' が失敗した。
+
+ - Constant: EB_ERR_FAIL_OPEN_CAT
+     EB ライブラリが、書籍のカタログファイルを開くことに失敗した。
+
+ - Constant: EB_ERR_FAIL_OPEN_CATAPP
+     EB ライブラリが、appendix のカタログファイルを開くことに失敗した。
+
+ - Constant: EB_ERR_FAIL_OPEN_TEXT
+     EB ライブラリが、書籍の本文ファイルを開くことに失敗した。
+
+ - Constant: EB_ERR_FAIL_OPEN_FONT
+     EB ライブラリが、書籍の外字ファイルを開くことに失敗した。
+
+ - Constant: EB_ERR_FAIL_OPEN_APP
+     EB ライブラリが、appendix ファイルを開くことに失敗した。
+
+ - Constant: EB_ERR_FAIL_OPEN_BINARY
+     EB ライブラリが、バイナリデータファイルを開くことに失敗した。
+
+ - Constant: EB_ERR_FAIL_READ_CAT
+     EB ライブラリが、書籍のカタログファイルを読み込むことに失敗した。
+
+ - Constant: EB_ERR_FAIL_READ_CATAPP
+     EB ライブラリが、appendix のカタログファイルを読み込むことに失敗し
+     た。
+
+ - Constant: EB_ERR_FAIL_READ_TEXT
+     EB ライブラリが、書籍の本文ファイルを読むことに失敗した。
+
+ - Constant: EB_ERR_FAIL_READ_FONT
+     EB ライブラリが、書籍の外字ファイルを読み込むことに失敗した。
+
+ - Constant: EB_ERR_FAIL_READ_APP
+     EB ライブラリが、 appendix
+     のメインファイルを読み込むことに失敗した。
+
+ - Constant: EB_ERR_FAIL_READ_BINARY
+     EB ライブラリが、書籍のバイナリデータファイルを読み込むことに失敗
+     した。
+
+ - Constant: EB_ERR_FAIL_SEEK_CAT
+     EB ライブラリが、書籍のカタログファイルのシークに失敗した。
+
+ - Constant: EB_ERR_FAIL_SEEK_CATAPP
+     EB ライブラリが、appendix のカタログファイルのシークに失敗した。
+
+ - Constant: EB_ERR_FAIL_SEEK_TEXT
+     EB ライブラリが、書籍の本文ファイルのシークに失敗した。
+
+ - Constant: EB_ERR_FAIL_SEEK_FONT
+     EB ライブラリが、書籍の外字ファイルのシークに失敗した。
+
+ - Constant: EB_ERR_FAIL_SEEK_APP
+     EB ライブラリが、appendix のメインファイルのシークに失敗した。
+
+ - Constant: EB_ERR_FAIL_SEEK_BINARY
+     EB ライブラリが、書籍のバイナリデータファイルのシークに失敗した。
+
+ - Constant: EB_ERR_UNEXP_CAT
+     EB ライブラリが、書籍のカタログファイル内で、期待とは異なるデータ
+     列を見つけた。
+
+ - Constant: EB_ERR_UNEXP_CATAPP
+     EB ライブラリが、appendix のカタログファイル内で、想定外のデータ列
+     を 見つけた。
+
+ - Constant: EB_ERR_UNEXP_TEXT
+     EB ライブラリが、書籍の本文ファイル内で、想定外のデータ列を見つけ
+     た。
+
+ - Constant: EB_ERR_UNEXP_FONT
+     EB ライブラリが、書籍の外字ファイル内で、想定外のデータ列を見つけ
+     た。
+
+ - Constant: EB_ERR_UNEXP_APP
+     EB ライブラリが、 appendix
+     のメインファイル内で、想定外のデータ列を見つけた。
+
+ - Constant: EB_ERR_UNEXP_BINARY
+     EB ライブラリが、書籍のバイナリデータファイル内で、想定外のデータ
+     列を見つけた。
+
+ - Constant: EB_ERR_UNBOUND_BOOK
+     呼び出された EB ライブラリの関数は、書籍に結び付けられた `EB_Book'
+     オブジェクトを引数にとるが、与えられたオブジェクトは書籍に結び付け
+     ら れていなかった。
+
+ - Constant: EB_ERR_UNBOUND_APP
+     呼び出された EB ライブラリの関数は、 appendix に結び付けられた
+     `EB_Appendix' オブジェクトを引数にとるが、与えられたオブジェクトは
+     appendix に結び付けられていなかった。
+
+ - Constant: EB_ERR_NO_SUB
+     書籍は副本を一つも持っていない。
+
+ - Constant: EB_ERR_NO_APPSUB
+     appendix は副本を一つも持っていない。
+
+ - Constant: EB_ERR_NO_FONT
+     選択中の副本は、外字を一種類も持っていない。
+
+ - Constant: EB_ERR_NO_TEXT
+     選択中の副本は、本文データを持っていない。
+
+ - Constant: EB_ERR_NO_CUR_SUB
+     呼び出された関数は、副本が選択されている `EB_Book' オブジェクトを
+     引数としてとるが、与えられたオブジェクトでは選択されていなかった。
+
+ - Constant: EB_ERR_NO_CUR_APPSUB
+     呼び出された関数は、副本が選択されている `EB_Appendix' オブジェク
+     ト
+     を引数にとるが、与えられたオブジェクトでは選択されていなかった。
+
+ - Constant: EB_ERR_NO_CUR_FONT
+     呼び出された関数は、外字が選択されている `EB_Book' オブジェクトを
+     引数にとるが、与えられたオブジェクトでは選択されていなかった。
+
+ - Constant: EB_ERR_NO_CUR_BINARY
+     呼び出された関数は、バイナリデータの読み込み要求をセットしている
+     `EB_Book' オブジェクトを引数にとるが、与えられたオブジェクトでは
+     セットされていなかった。
+
+ - Constant: EB_ERR_NO_SUCH_SUB
+     `EB_Book' オブジェクトと副本コードが関数に与えられたが、 `EB_Book'
+     オブジェクトに結び付けられている書籍は、その副本コードに一致する
+     副本を持っていない。
+
+ - Constant: EB_ERR_NO_SUCH_APPSUB
+     `EB_Appendix' オブジェクトと副本コードが関数に与えられたが、
+     `EB_Appendix' オブジェクトに結び付けられている appendix は、その
+     副本コードに一致する副本を持っていない。
+
+ - Constant: EB_ERR_NO_SUCH_FONT
+     `EB_Book' オブジェクトと外字の縦のサイズが関数に与えられたが、
+     `EB_Book' オブジェクトに結びつけられていた書籍で選択中の副本は、
+     そのサイズの外字を持っていない。
+
+ - Constant: EB_ERR_NO_SUCH_CHAR_BMP
+     `EB_Book' オブジェクトと文字番号が関数に与えられたが、`EB_Book' オ
+     ブジェクトに結び付けられていた書籍で選択中の副本は、その番号の外字
+     の ビットマップデータを持っていない。
+
+ - Constant: EB_ERR_NO_SUCH_CHAR_TEXT
+     `EB_Appendix' オブジェクトと文字番号が関数に与えられたが、
+     `EB_Appendix' オブジェクトに結び付けられている appendix
+     で選択中の副本は、その番号の外字の代替文字列を持っていない。
+
+ - Constant: EB_ERR_NO_SUCH_SEARCH
+     選択中の副本は、指定された検索メソッドを持っていないので、検索は行
+     えない。
+
+ - Constant: EB_ERR_NO_SUCH_HOOK
+     不正なフックコードが関数に渡された。
+
+ - Constant: EB_ERR_NO_SUCH_BINARY
+     指定された位置に、指定された形式のバイナリデータは存在しない。
+
+ - Constant: EB_ERR_DIFF_CONTENT
+     アプリケーションプログラムからテキストデータの取得を要求されたが、
+     指定されたテキストデータの種類が、前回リクエストされたときと一致
+     していない。
+
+ - Constant: EB_ERR_NO_PREV_SEARCH
+     `eb_hit_list()' が呼び出されたが、アプリケーションプログラムから
+     前もって検索のリクエストがなされていない。
+
+ - Constant: EB_ERR_NO_SUCH_MULTI_ID
+     `EB_Book'
+     オブジェクトと複合検索コードが関数に渡されたが、結び付けられた書籍
+     で選択中の副本は、そのコードに一致する複合検索を持っていない。
+
+ - Constant: EB_ERR_NO_SUCH_ENTRY_ID
+     `EB_Book' オブジェクトと複合検索エントリコードが関数に渡されたが、
+     結び付けられた書籍で選択中の副本は、そのエントリコードに一致する
+     複合検索エントリを持っていない。
+
+ - Constant: EB_ERR_TOO_MANY_WORDS
+     アプリケーションプログラムから条件検索もしくは複合検索の検索をリク
+     エストされたが、検索語の個数が多すぎる。
+
+ - Constant: EB_ERR_NO_WORD
+     アプリケーションプログラムから条件検索もしくは複合検索の検索をリク
+     エストされたが、検索語がすべて空である。
+
+ - Constant: EB_ERR_NO_CANDIDATES
+     `eb_multi_entry_candidates()' が呼び出されたが、 指定された複合検
+     索エントリは、検索語の候補一覧データを持っていない。
+
+ - Constant: EB_ERR_END_OF_CONTENT
+     `eb_forward_text()' あるいは `eb_backward_text()' で本文の頭出し
+     を行おうとしたが、すでに本文の末尾ないし先頭に達していて、それ以
+     上先に進むことができなかった。
+
+ - Constant: EB_ERR_NO_PREV_SEEK
+     あらかじめ `eb_seek_text()' でシークを行っていない状態で、 テキス
+     トデータの読み込みや頭出しを行おうとした。
+
+ - Constant: EB_ERR_EBNET_UNSUPPORTED
+     この EB ライブラリは、遠隔ホストへのアクセスには対応していない。
+
+ - Constant: EB_ERR_EBNET_FAIL_CONNECT
+     遠隔ホストへのアクセスを試みたが、サーバ (EBNETD) に接続できなかっ
+     た。
+
+ - Constant: EB_ERR_EBNET_SERVER_BUSY
+     遠隔ホストへの接続を行ったが、書籍にアクセスしているクライアントの
+     数がすでに上限に達しているため、その書籍を利用できなかった。
+
+ - Constant: EB_ERR_EBNET_NO_PERMISSION
+     遠隔ホストへの接続を行ったが、その書籍への利用権限がないため、サー
+     バ からアクセスを拒否された。
+
+
+File: eb-ja.info,  Node: Error Functions,  Prev: Error Code List,  Up: Error Handling
+
+関数の詳細
+==========
+
+   この節で説明している関数を使うには、次のようにヘッダファイルを読み込
+んで下さい。
+
+     #include <eb/error.h>
+
+ - 機能: const char * eb_error_string (EB_Error_Code ERROR_CODE)
+     関数 `eb_error_string()' は、エラーコード ERROR_CODE を文字列に変
+     換したものを返します。 文字列の文字コードは、ASCII になります。 た
+     とえば、エラーコード値 `EB_SUCCESS' を渡すと文字列 `"EB_SUCCESS"'
+     を返します。 未知のエラーコードを渡したときは、`"EB_ERR_UNKNOWN"'
+     を返します。
+
+ - 機能: const char * eb_error_message (EB_Error_Code ERROR_CODE)
+     関数 `eb_error_message()' は、エラーコード ERROR_CODE に対応した
+     メッセージを文字列にして返します。 関数の返すメッセージは、英語か
+     日本語になります。
+
+     国際化機能を有効にして EB ライブラリをコンパイルしていない場合は、
+     常に英語のメッセージを返します。 このときのメッセージの文字コード
+     は、ASCII になります。
+
+     メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイ
+     ル した場合は、ロケールの設定に応じてどちらの言語のメッセージを返
+     すのかが決まります。 また、 GNU gettext バージョン 0.36 以降では
+     iconv() と連携することにより、 メッセージの文字コードもロケールに
+     応じて変化します。 gettext が iconv() との連携を行わなければ、英語
+     のメッセージは ASCII、 日本語のメッセージは日本語 EUC になります。
+     この関数の呼び出しによって、 gettext
+     のテキストドメインの設定は変化しません。
+
+     未知のエラーコードを渡したときに返すメッセージは、 英語では
+     `"unknown error"'、日本語では `"未知のエラーです"' になります。
+
+
+File: eb-ja.info,  Node: Subbook,  Next: Search,  Prev: Error Handling,  Up: Top
+
+副本
+****
+
+   紙に印刷された本では別々の書籍になっているものでも、電子ブックや
+EPWING では 1 枚の CD-ROM にまとめることができます。
+
+   たとえば、ある CD-ROM 書籍は、国語辞書、英々辞典、百科事典という 3
+つ の (印刷された本で言うところの)
+「書籍」を持っていることもあり得ます。 紛らわしさを避けるために、EB ラ
+イブラリではここで言う「書籍」のことを "副本 (subbook)"
+と呼んでいます。
+
+     　　　ＣＤ−ＲＯＭ書籍
+     ┌─────────────┐
+     │　副本０：　［国語辞典］　│
+     │　副本１：　［英々辞典］　│
+     │　副本２：　［百科事典］　│
+     └─────────────┘
+
+CD-ROM 書籍では、それぞれの副本はそれ自体が独立した書籍になっています。
+また、副本のデータも、副本毎に別々のファイルに収められています。 したが
+って、EB ライブラリでも、アプリケーションプログラムの主要な処理である
+単語の検索や本文データの取得などは、すべて副本単位で行うようになってい
+ます。
+
+   本章では、EB ライブラリでの副本の扱い方について説明します。
+
+* Menu:
+
+* Subbook Code::                副本コード
+* Current Subbook::             選択中の副本
+* Subbook Sample::              サンプルプログラム
+* Subbook Data Types::          データ型の詳細
+* Subbook Functions::           関数の詳細
+
+
+File: eb-ja.info,  Node: Subbook Code,  Next: Current Subbook,  Prev: Subbook,  Up: Subbook
+
+副本コード
+==========
+
+EB ライブラリでは、それぞれの副本に対して "副本コード (subbook code)"
+を割り当てます。 このコードは EB ライブラリが副本を識別するために用いま
+すので、個々の副本コードは、書籍内で同じものがないようになっています。
+
+   以下のソースコードは、`eb_subbook_list()' という関数の使用例です。
+この関数は、書籍内のすべての副本の副本コードを取得することができます。
+
+     /* `book' が `EB_Book' のオブジェクトで、すでに書籍に結び付け
+      * られていると仮定しています。*/
+     EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
+     int sub_count;
+     
+     if (eb_subbook_list(&book, sub_codes, &sub_count)
+         != EB_SUCCESS) {
+         printf("eb_subbook_list() failed\n");
+         return;
+     }
+
+`eb_subbook_list()' が成功すると、書籍内のすべての副本コードが配列
+`sub_codes[]' に格納されます。 配列の先頭の副本コードは `sub_codes[0]'
+と表され、次のコードは `sub_codes[1]'、という具合になります。 副本の個
+数は、`sub_count' に格納されます。
+
+   個々の副本には、必ず題名が付けられています。 先頭の副本
+(`sub_codes[0]') の題名は、次のようにして得ることができます。
+
+     char title[EB_MAX_TITLE_LENGTH + 1];
+     
+     if (eb_subbook_title2(&book, sub_codes[0], title)
+         != EB_SUCCESS) {
+         printf("eb_subbook_title2() failed\n");
+         return;
+     }
+
+`eb_subbook_title2()' の呼び出しが成功すると、`title' に題名を表す文字
+列が格納されます。
+
+   蛇足ですが、 (副本ではなく) CD-ROM の題名を取得する関数はありません。
+なぜなら、題名を示すデータが CD-ROM の中には何処にもないからです。
+
+
+File: eb-ja.info,  Node: Current Subbook,  Next: Subbook Sample,  Prev: Subbook Code,  Up: Subbook
+
+選択中の副本
+============
+
+   `EB_Book' オブジェクトは、結びつけられた CD-ROM 書籍の中の任意の副
+本から一つ選んで、"選択中の副本 (current subbook)" として指定すること
+ができます。 複数の副本を、同時に選択することはできません。 単語の検索
+や、本文データの取得など、ほとんどの操作は、選択中の副本に対してだけ行
+えます。
+
+`eb_bind()' で `EB_Book' オブジェクトを書籍に結び付けた直後は、いずれ
+の副本も選択されていない状態になっています。
+
+     ＥＢ＿Ｂｏｏｋ　　　　　　　　　ＣＤ−ＲＯＭ書籍
+     オブジェクト
+     ┌────┐　　　　　　　┌─────────────┐
+     │選択中　│　　　　　　　│　副本０：　［国語辞典］　│
+     │の副本　│　　　　　　　│　副本１：　［英々辞典］　│
+     │＜なし＞│　　　　　　　│　副本２：　［百科事典］　│
+     └────┘　　　　　　　└─────────────┘
+
+   副本の選択を行うには、関数 `eb_set_subbook()' を使用します。
+`eb_set_subbook()' は、引数として渡された副本コードにしたがって副本を
+選択します。 以下は、先頭の副本 (`sub_codes[0]')
+を選択する場合の例です。
+
+     /* `book' が `EB_Book' のオブジェクトで、すでに書籍に結び付け
+      * られていると仮定しています。*/
+     EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
+     int sub_count;
+     
+     if (eb_subbook_list(&book, sub_codes, &sub_count)
+         != EB_SUCCESS) {
+         printf("eb_subbook_list() failed\n");
+         return;
+     }
+     if (eb_set_subbook(&book, sub_codes[0]) != EB_SUCCESS) {
+         printf("eb_subbook_list() failed\n");
+         return;
+     }
+
+成功すると、次のように副本が選択された状態になります。
+
+     ＥＢ＿Ｂｏｏｋ　　　　　　　　　ＣＤ−ＲＯＭ書籍
+     オブジェクト
+     ┌────┐　　　　　　　┌─────────────┐
+     │選択中　│　　┏━━━━┿━副本０：　［国語辞典］　│
+     │の副本　│　　┃　　　　│　副本１：　［英々辞典］　│
+     │　＊━━┿━━┛　　　　│　副本２：　［百科事典］　│
+     └────┘　　　　　　　└─────────────┘
+
+
+File: eb-ja.info,  Node: Subbook Sample,  Next: Subbook Data Types,  Prev: Current Subbook,  Up: Subbook
+
+サンプルプログラム
+==================
+
+     /*
+      * 使用方法:
+      *     subbook <book-path>
+      * 例:
+      *     subbook /cdrom
+      * 説明:
+      *     <boook-path> で指定され CD-ROM 書籍に含まれているすべての副本の
+      *     題名を表示します。
+      */
+     #include "config.h"
+     
+     #include <stdio.h>
+     #include <stdlib.h>
+     
+     #include <eb/eb.h>
+     #include <eb/error.h>
+     
+     int
+     main(argc, argv)
+         int argc;
+         char *argv[];
+     {
+         EB_Error_Code error_code;
+         EB_Book book;
+         EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
+         int subbook_count;
+         char title[EB_MAX_TITLE_LENGTH + 1];
+         int i;
+     
+         /* コマンド行引数をチェック。*/
+         if (argc != 2) {
+     	fprintf(stderr, "Usage: %s book-path\n", argv[0]);
+     	exit(1);
+         }
+     
+         /* EB ライブラリと `book' を初期化。*/
+         error_code = eb_initialize_library();
+         if (error_code != EB_SUCCESS) {
+     	fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+     	    argv[0], eb_error_message(error_code), argv[1]);
+     	goto die;
+         }
+         eb_initialize_book(&book);
+     
+         /* 書籍を `book' に結び付ける。*/
+         error_code = eb_bind(&book, argv[1]);
+         if (error_code != EB_SUCCESS) {
+     	fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+     	    argv[0], eb_error_message(error_code), argv[1]);
+     	goto die;
+         }
+     
+         /* 副本の一覧を取得。*/
+         error_code = eb_subbook_list(&book, subbook_list, &subbook_count);
+         if (error_code != EB_SUCCESS) {
+     	fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
+     	    argv[0], eb_error_message(error_code));
+     	goto die;
+         }
+     
+         /* 書籍に含まれている副本の題名を出力。*/
+         for (i = 0; i < subbook_count; i++) {
+     	error_code = eb_subbook_title2(&book, subbook_list[i], title);
+     	if (error_code != EB_SUCCESS) {
+     	    fprintf(stderr, "%s: failed to get the title, %s\n",
+     		argv[0], eb_error_message(error_code));
+     	    continue;
+     	}
+     	printf("%d: %s\n", i, title);
+         }
+     
+         /* 書籍と EB ライブラリの利用を終了。*/
+         eb_finalize_book(&book);
+         eb_finalize_library();
+         exit(0);
+     
+         /* エラー発生で終了するときの処理。*/
+       die:
+         eb_finalize_book(&book);
+         eb_finalize_library();
+         exit(1);
+     }
+
+
+File: eb-ja.info,  Node: Subbook Data Types,  Next: Subbook Functions,  Prev: Subbook Sample,  Up: Subbook
+
+データ型の詳細
+==============
+
+   この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+
+     #include <eb/eb.h>
+
+ - Data type: EB_Subbook_Code
+     データ型 `EB_Subbook_Code' は副本コードを表します。 一冊の書籍の中
+     の副本は、それぞれ一意の副本コードを持っています。 この型は符合付
+     き整数型の別名として定義されていますので、2 つのコードを 2 項演算
+     子 `==' と `!=' で一致比較することができます。
+
+     また、不正な副本コード値を表す `EB_SUBBOOK_INVALID' という特別な
+     副本コードが定義されています。 利用可能な副本に対して、この副本コ
+     ードが割り当てられることはありません。
+
+
+File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subbook
+
+関数の詳細
+==========
+
+   この節で説明している関数を使うには、次のようにヘッダファイルを読み込
+んで下さい。
+
+     #include <eb/eb.h>
+
+ - 機能: EB_Error_Code eb_load_all_subbooks (EB_Book *BOOK)
+     関数 `eb_load_all_subbooks()' は、BOOK 内のすべての副本を初期化し
+     ます。 通常、副本の初期化は、その副本が初めて選択されたときに自動
+     的に行われますが、 この関数は初期化を前倒しで行います。 初期化の対
+     象となるのは、この関数を呼び出した時点でまだ初期化していないすべ
+     ての副本です。 この関数は、スタンドアロンで動作するサーバアプリケ
+     ーションなどで有効です。 クライアントからの接続を受ける前にこの関
+     数を呼ぶことで、副本の初期化のためにクライアントを待たせなくて済
+     みます。
+
+     初期化の対象となったすべての副本の初期化に成功すれば、関数は
+     `EB_SUCCESS' を返します。 一冊でも初期化に失敗した場合は、残りの副
+     本の初期化を諦め、原因を示すエラーコードを返します。
+
+     BOOK は、あらかじめ書籍に結び付けられていなくてはなりません。 結び
+     ついていない場合は、`EB_ERR_UNBOUND_BOOK' を返します。
+
+     この関数を呼び出すと、 BOOK
+     は、副本を選択していない状態になります。
+
+ - 機能 : EB_Error_Code eb_subbook_list (EB_Book *BOOK, EB_Subbook_Code
+          *SUBBOOK_LIST, int *SUBBOOK_COUNT)
+     関数 `eb_subbook_list()' は、 BOOK 内のすべて副本の副本コードを
+     `EB_Subbook_Code' 型の配列にして、SUBBOOK_LIST の指す領域に書き込
+     みます。 配列は、最大で `EB_MAX_SUBBOOKS' 個の要素を持ちます。 加
+     えて、書籍が収録している副本の個数を SUBBOOK_COUNT の指す領域に書
+     き込みます。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、
+     SUBBOOK_COUNT の指す領域に 0 を書き込み、原因を示すエラーコードを
+     返します。
+
+     BOOK は、あらかじめ書籍に結び付けられていなくてはなりません。 結び
+     ついていない場合は、`EB_ERR_UNBOUND_BOOK' を返します。
+
+ - 機能 : EB_Error_Code eb_subbook (EB_Book *BOOK, EB_Subbook_Code
+          *SUBBOOK_CODE)
+     関数 `eb_subbook()' は、 BOOK が選択中の副本の副本コードを
+     SUBBOOK_CODE の指す領域に書き込みます。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、
+     SUBBOOK_CODE の指す領域に `EB_SUBBOOK_INVALID' を書き込み、原因を
+     示すエラーコードを返します。
+
+     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
+     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
+
+ - 機能: EB_Error_Code eb_subbook_title (EB_Book *BOOK, char *TITLE)
+     関数 `eb_subbook_title()' は、BOOK が選択中の副本の題名を TITLE の
+     指す領域に文字列として書き込みます。 題名の文字列の長さは、最長で
+     `EB_MAX_TITLE_LENGTH' バイトです。 この長さは、末尾のナル文字を含
+     みません。
+
+     書籍の文字コード (*note [CD-ROM 書籍と `EB_Book' オブジェクト] デ
+     ータ型の詳細: EB_Book Data Types.)  が `EB_CHARCODE_ISO8859_1' な
+     ら、題名を表す文字列は ISO 8859-1 になり、それ以外の文字コードな
+     ら日本語 EUC になります。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、TITLE の
+     指す領域に空文字列を書き込み、原因を示すエラーコードを返します。
+
+     あらかじめ、BOOK 内のいずれかの副本が選択されていなくてはなりませ
+     ん。 選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
+
+ - 機能 : EB_Error_Code eb_subbook_title2 (EB_Book *BOOK,
+          EB_Subbook_Code SUBBOOK_CODE, char *TITLE)
+     `eb_subbook_title()' と似ていますが、選択中の副本ではなく、引数
+     SUBBOOK_CODE で指定された副本の題名を書き込む点が異なります。
+
+     BOOK は副本を選択していなくても構いませんが、あらかじめ書籍に結び
+     付けられていなければなりません。 結びついていない場合は、
+     `EB_ERR_UNBOUND_BOOK' を返します。
+
+ - 機能 : EB_Error_Code eb_subbook_directory (EB_Book *BOOK, char
+          *DIRECTORY)
+     関数 `eb_subbook_directory()' は、BOOK 内で現在選択中の副本のデー
+     タファイルを収めたディレクトリ名を、DIRECTORY の指す領域に書き込
+     みます。
+
+     ディレクトリ名の文字列の長さは、最長で
+     `EB_MAX_DIRECTORY_NAME_LENGTH' バイトです。 この長さに、末尾のナル
+     文字は含みません。 ディレクトリ名は ASCII の数字、英小文字、アンダ
+     ースコアで構成されます。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、 DIRECTORY
+     の指す領域に空文字列を書き込み、原因にを示すエラーコードを返しま
+     す。
+
+     あらかじめ、BOOK 内のいずれかの副本が選択されていなくてはなりませ
+     ん。 選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
+
+ - 機能 : EB_Error_Code eb_subbook_directory2 (EB_Book *BOOK,
+          EB_Subbook_Code SUBBOOK_CODE, char *DIRECTORY)
+     `eb_subbook_directory()' と似ていますが、選択中の副本ではなく、引
+     数 SUBBOOK_CODE で指定された副本のディレクトリ名を書き込む点が異
+     なります。
+
+     BOOK は副本を選択していなくても構いませんが、あらかじめ書籍に結び
+     付けられていなければなりません。 結びついていない場合は、
+     `EB_ERR_UNBOUND_BOOK' を返します。
+
+ - 機能 : EB_Error_Code eb_set_subbook (EB_Book *BOOK, EB_Subbook_Code
+          CODE)
+     関数 `eb_set_subbook()' は、BOOK の副本 CODE を選択します。 すで
+     に副本を選択していた場合は、いったん未選択の状態にしてから副本
+     SUBBOOK_CODE を選択します。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 このとき、外字は未選
+     択の状態となり、検索、テキストデータの読み込み、 バイナリデータの
+     読み込みについての状態記録は、すべてリセットされます。
+     失敗すると、副本を未選択の状態にして、原因を示すエラーコードを返し
+     ます。
+
+     あらかじめ、BOOK は書籍に結び付けられていなければなりません。 結び
+     ついていない場合は、`EB_ERR_UNBOUND_BOOK' を返します。
+
+ - 機能: void eb_unset_subbook (EB_Book *BOOK)
+     関数 `eb_unset_subbook()' は、BOOK が選択している副本を未選択の状
+     態にします。 BOOK が書籍に結び付いていないか、副本が選択されていな
+     い場合は、何もしません。
+
+
+File: eb-ja.info,  Node: Search,  Next: Text Data,  Prev: Subbook,  Up: Top
+
+検索
+****
+
+   CD-ROM 書籍において、検索は非常に重要な機能です。 EB
+ライブラリでは、次のような検索メソッドが利用できます。
+
+   * 前方一致検索 (word search)
+
+   * 後方一致検索 (end-word search)
+
+   * 完全一致検索 (exact-word search)
+
+   * 条件検索 (keyword search)
+
+   * 複合検索 (multi search)
+
+   ただし、すべての CD-ROM 書籍、すべての副本で、ここに挙げたすべての
+検索メソッドが利用可能なわけではありません。 副本の中には、いずれの検索
+メソッドも提供しないものも存在します。
+
+   EB ライブラリでは、検索を行うことができるのは、選択中の副本に対して
+だけです。
+
+   この章では、それぞれの検索メソッドの簡単な説明と、EB ライブラリでの
+扱い方について説明します。
+
+* Menu:
+
+* Word Search::                 前方一致、後方一致、完全一致検索
+* Keyword Search::              条件検索
+* Multi Search::                複合検索
+* EB_Hit::                      一致エントリの情報
+* Get Remained Entries::        残っているエントリの取得
+* Search Data Types::           データ型の詳細
+* Search Functions::            関数の詳細
+
+
+File: eb-ja.info,  Node: Word Search,  Next: Keyword Search,  Prev: Search,  Up: Search
+
+前方一致、後方一致、完全一致検索
+================================
+
+   前方一致、後方一致、完全一致検索は、いずれも一個の入力語に一致する
+エントリを探し出す検索メソッドです。
+
+   前方一致検索は、入力語と先頭部分が一致するエントリを検索します。 た
+とえば、「江戸」という語は、「江戸」「江戸時代」「江戸っ子」といったエ
+ントリに一致します。
+
+   後方一致検索は、入力語と末尾が一致するエントリを検索します。 たとえ
+ば、`bye' という語は、`bye'、`good bye'、`bye bye' といったエントリに
+一致します。
+
+完全一致検索は、一個の検索語と完全に一致するエントリだけを検索します。
+
+   以下は、前方一致検索のプログラムの例です。 選択中の副本の中から、先
+頭が `librar' で始まるエントリを探しています。
+
+     /* `book' が `EB_Book' のオブジェクトで、すでに書籍に結び付け
+      * られ、副本を選択中だと仮定しています。*/
+     #define MAX_HITS 50
+     EB_Hit hits[MAX_HITS];
+     int hit_count;
+     
+     if (eb_search_word(&book, "librar") != EB_SUCCESS) {
+         printf("eb_search_word() failed\n");
+         return;
+     }
+     if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
+         != EB_SUCCESS) {
+         printf("eb_hit_list() failed\n");
+         return;
+     }
+
+`eb_search_word()' は前方一致検索をリクエストする関数です。
+この例では、`librar' という検索文字列を与えています。 ただし、この関数
+は一致したエントリを返すことはしません。
+
+   一致したエントリの取得は、続く `eb_hit_list()' 関数を呼び出した際に
+行われます。 `eb_hit_list()' は一致したエントリの一覧を配列 `hits[]' の
+指す領域に書き込み、見つかった一致エントリの個数を `&hit_count' の指す
+領域に書き込みます。 この例では、 `eb_hit_list()' は最大で `MAX_HITS' (=
+50) 個のエントリを探します。 (つまり、 50
+個見つかったら検索を止めます。)
+
+   もし、選択中の副本が英々辞典だとすると、少なくとも `library' と
+`librarian' という 2 つのエントリに関する情報が得られるでしょう。 この
+とき、配列 `hits[]' は次のようになっています。 (ただし、 `library' と
+`librarian' エントリの順序は、 下の絵とは異なっているかも知れません。)
+
+     ┌───────────┬───────────┬─
+     │　ｌｉｂｒａｒｉａｎ　│　　ｌｉｂｒａｒｙ　　│
+     └───────────┴───────────┴─
+     　　　ｈｉｔｓ［０］　　　　　ｈｉｔｓ［１］
+
+`hits[]' の中身については、本章の後ろの節でもう少し詳しく説明します。
+
+   ここまでは前方一致検索を例にとりましたが、後方一致の場合は
+`eb_search_word()' の代わりに `eb_search_endword()'
+を呼ぶようにします。 他はすべて同じです。
+
+     if (eb_search_endword(&book, "nalization") != EB_SUCCESS) {
+         printf("eb_search_endword() failed\n");
+         return;
+     }
+
+   完全一致の場合も同様です。 `eb_search_exactword()' を呼ぶようにする
+以外は、すべて同じです。
+
+     if (eb_search_exactword(&book, "library") != EB_SUCCESS) {
+         printf("eb_search_exactword() failed\n");
+         return;
+     }
+
+
+File: eb-ja.info,  Node: Keyword Search,  Next: Multi Search,  Prev: Word Search,  Up: Search
+
+条件検索
+========
+
+   条件検索は、複数個の入力語にすべて一致するエントリを検索します。 た
+とえば、英々辞典の条件検索では、入力語をすべて含んだ例文を検索するよう
+になっているかも知れません。
+
+   以下は、条件検索で `make', `with' という語の双方と一致するエントリ
+を、選択中の副本の中から探し出すプログラムの断片です。
+
+     /* `book' が `EB_Book' のオブジェクトで、すでに書籍に結び付け
+      * られ、副本を選択中だと仮定しています。*/
+     static const char *keywords[3] = {"make", "with", NULL};
+     
+     if (eb_search_word(&book, keywords) != EB_SUCCESS) {
+         printf("eb_search_word() failed\n");
+         return;
+     }
+
+条件検索を行う関数は、`eb_search_keyword()' です。 前方一致、後方一致、
+完全一致検索の関数と基本的に扱い方は一緒ですが、 複数の入力語を受け付け
+るようになっています。 関数には、入力語の文字列 (へのポインタ) を配列に
+したものを渡します。 配列の最後には `NULL' を置き、配列の終端を明示する
+必要がある点に注意して下さい。
+
+   前方一致、後方一致、完全一致検索と同様に、`eb_search_keyword()' も
+検索のリクエストを行うだけで、一致したエントリの取得は行いません。 エン
+トリの取得には、やはり同様に `eb_hit_list()' 関数を使います。
+
+     EB_Hit hits[MAX_HITS];
+     int hit_count;
+     
+     if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
+         != EB_SUCCESS) {
+         printf("eb_hit_list() failed\n");
+         return;
+     }
+
+
+File: eb-ja.info,  Node: Multi Search,  Next: EB_Hit,  Prev: Keyword Search,  Up: Search
+
+複合検索
+========
+
+   複合検索は、条件検索と同じく、複数個の入力語にすべて一致するエントリ
+を 検索しますが、個々の入力語にあらかじめ題目が付けられています。
+
+   また、前方一致、後方一致、完全一致、条件検索はすべて、各副本につき
+一種類しかありませんが、複合検索だけは一つの副本の中で複数の種類が用意
+されていることがあります。 たとえば、ある世界人名事典には、次のように人
+名検索用と頻出用語の検索用の 2 種類の複合検索が用意されているかも知れ
+ません。
+
+     (複合検索その 1: 人名を検索する)
+         入力語 0: 国・地域
+         入力語 1: 時代
+         入力語 2: 性別
+         入力語 3: キーワード
+         入力語 4: キーワード
+
+     (複合検索その 2: 頻出用語を検索する)
+         入力語 0: 用語
+         入力語 1: キーワード
+         入力語 2: キーワード
+
+この例のように、個々の複合検索は、入力語の題目だけでなく、入力語の数も
+まちまちです。 また、検索する際はすべての入力語を埋める必要はなく、少な
+くとも一個の入力語が空でなければ、検索は成功します。
+
+   副本内の複合検索は、種類毎に "複合検索コード (multi search code)" に
+よって識別されます。 関数 `eb_multi_search_list()' を使うと、選択中の副
+本で利用可能な複合検索の一覧が得られます。
+
+     /* `book' が `EB_Book' のオブジェクトで、すでに書籍に結び付け
+      * られ、副本を選択中だと仮定しています。*/
+     EB_Multi_Search_Code multi_codes[EB_MAX_MULTI_SEARCHES];
+     int multi_count;
+     
+     if (eb_multi_search_list(&book, multi_codes, &multi_count)
+         != EB_SUCCESS) {
+         printf("eb_multi_search_list() failed\n");
+         return;
+     }
+
+この複合検索コードは、複合検索のための関数で必要となります。 たとえば、
+`eb_multi_title()' は、指定した複合検索の題名 (例:「人名検索」「頻出用
+語検索」) を取得する関数ですが、このときの複合検索の指定には、複合検索
+コードを用います。 以下の例では、一覧の先頭に載っている複合検索
+(`multi_codes[0]') を指定しています。
+
+     char title[EB_MAX_MULTI_TITLE_LENGTH + 1];
+     
+     if (eb_multi_title(&book, multi_codes[0], title)
+         != EB_SUCCESS) {
+         printf("eb_multi_title() failed\n");
+         return;
+     }
+
+さらに関数によっては、複合検索コードに加えて、何番目の入力語かも指定し
+てやる必要があります。 たとえば、特定の入力語の題目を得る関数
+`eb_multi_entry_label()' が、これに該当します。 0 番目の入力語 (つまり
+先頭の入力語) の題目を取得するには、次のようにします。
+
+     char label[EB_MAX_MULTI_LABEL_LENGTH + 1];
+     
+     if (eb_multi_entry_label(&book, multi_code[0], 0, label)
+         != EB_SUCCESS) {
+         printf("eb_multi_entry_label() failed\n");
+         return;
+     }
+
+   複合検索を行う関数は、`eb_search_multi()' です。 使い方は条件検索と
+ほぼ同じで、入力語の文字列を配列にしたものを引数として渡し、配列の最後
+には `NULL' を置いて下さい。 埋められていない入力語のところには、空文字
+列を置きます。
+
+   `eb_search_multi()' も検索のリクエストを行うだけで、一致したエント
+リの取得は行いません。 取得するには `eb_hit_list()' を使います。
+
+     EB_Hit hits[MAX_HITS];
+     int hit_count;
+     
+     if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
+         != EB_SUCCESS) {
+         fprintf(stderr, "an error occurs.\n");
+         return;
+     }
+
+   なお、複合検索の入力語によっては "候補一覧 (candidates)" があらじめ
+用意されていることがあります。 これは、入力語として有効な語をあらかじめ
+列挙しておき、
+アプリケーションプログラムのユーザに選択させる仕組みです。 候補一覧につ
+いては、この章ではなく「テキストデータ」の章で説明します (*note 複合検
+索の候補一覧: Multi Candidates.)。
+
+
+File: eb-ja.info,  Node: EB_Hit,  Next: Get Remained Entries,  Prev: Multi Search,  Up: Search
+
+一致エントリの情報
+==================
+
+   `eb_hit_list()' は、リクエストされた検索 (前方一致、後方一致、 完全
+一致、条件、複合)
+に一致したエントリの情報と見つかったエントリの個数を、それぞれ `EB_Hit'
+型の配列領域および `int' 型の領域に書き込みます。
+
+     /* `book' が `EB_Book' のオブジェクトで、すでに書籍に結び付け
+      * られ、副本を選択中だと仮定しています。*/
+     EB_Hit hits[MAX_HITS];
+     int hit_count;
+     
+     if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
+         != EB_SUCCESS) {
+         fprintf(stderr, "an error occurs.\n");
+         return;
+     }
+
+   `EB_Hit' 配列の個々の要素には、一致したエントリの "見出し (heading)"
+と "本文 (text)" の開始位置が書き込まれています。
+
+     　　　　　　　　　　　　　見出し
+     　　　　　　　　　　　　┌────────────┐
+     　ＥＢ＿Ｈｉｔ　　　┏━┿ｌｉｂｒａｒｉａｎ　ｎ．│
+     ┌───────┐　┃　└────────────┘
+     │ｈｅａｄｉｎｇ┿━┛　　本文
+     │　　　　　　　│　　　┌────────────────────┐
+     │　　　ｔｅｘｔ┿━━━┿ｌｉｂｒａｒｉａｎ　　　　　　　　　　　│
+     └───────┘　　　│ｎ．（１）Ａ　ｐｅｒｓｏｎ　ｗｈｏ　ｉｓ│
+     　　　　　　　　　　　　│ａ　ｓｐｅｃｉａｌｉｓｔ　ｉｎ　　　　　│
+     　　　　　　　　　　　　│ｌｉｂｒａｒｙ　ｗｏｒｋ．（２）．．．　│
+     　　　　　　　　　　　　└────────────────────┘
+
+見出しと本文についてのより詳しい解説と取得方法については、 *note テキス
+トデータ: Text Data.。
+
+
+File: eb-ja.info,  Node: Get Remained Entries,  Next: Search Data Types,  Prev: EB_Hit,  Up: Search
+
+残っているエントリの取得
+========================
+
+   前に述べたように、`eb_hit_list()' を呼び出すときは、一致するエント
+リを最大で何個まで探すのかを引数で指定します。 また、`eb_hit_list()' は
+処理が成功すると、実際に見つかったエントリの数をアプリケーションプログ
+ラムに教えます。
+
+     error_code = eb_hit_list(&book, MAX_HITS, hits, &hit_count);
+     if (error_code == EB_SUCCESS)
+         printf("%d entries found\n", hit_count);
+
+指定した最大個数よりも多くの一致エントリが副本に存在している場合は、
+`eb_hit_list()' を繰り返し呼び出すことで、残りのエントリを取得すること
+ができます。
+
+     for (;;) {
+         if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
+             != EB_SUCCESS) {
+             fprintf(stderr, "an error occurs.\n");
+             return;
+         }
+         if (hit_count == 0)
+             break;
+         /* 取得した一致エントリの処理 */
+     }
+
+一致エントリがもう残っていなければ、`eb_hit_list()' は `&hit_count' の
+指す領域に 0 を書き込んで、`EB_SUCCESS' を返します。
+
+   ただし、途中で `eb_hit_list()' が失敗すると (`EB_SUCCESS' 以外の値を
+返すと)、検索リクエストに関する状態記録はリセットされるため、 一致エン
+トリの取得をそれ以上続けることはできません。
+
+
+File: eb-ja.info,  Node: Search Data Types,  Next: Search Functions,  Prev: Get Remained Entries,  Up: Search
+
+データ型の詳細
+==============
+
+   この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+
+     #include <eb/eb.h>
+
+ - Data type: EB_Hit
+     `EB_Hit' は、検索に一致したエントリの情報を格納するためのデータ型
+     です。 内部構造は、次のように定義されています。
+
+          typedef struct EB_Hit_Struct EB_Hit;
+          
+          struct EB_Hit_Struct {
+              EB_Position heading;  /* 見出しの位置 */
+              EB_Position text;     /* 本文の位置   */
+          };
+
+     アプリケーションプログラムは、直接 `EB_Hit' オブジェクトのメンバ
+     を参照したり、セットしたりしても構いません。
+
+ - Data type: EB_Position
+     データ型 `EB_Position' は、副本のデータの位置を表します。 内部構造
+     は、次のように定義されています。
+
+          typedef struct EB_Position_Struct EB_Position;
+          
+          struct EB_Position_Struct {
+              int page;     /* ページ番号 */
+              int offset;   /* ページ内のオフセット */
+          };
+
+     ページ番号は 1 から始まり、ページ内のオフセットは 0 〜 2047 の範囲
+     と なります。 ただし、アプリケーションプログラムを作成する上で、こ
+     のことを覚えておく必要はありません。
+
+     アプリケーションプログラムは、直接 `EB_Position' オブジェクトのメ
+     ンバを参照したり、セットしたりしても構いません。
+
+ - Data type: EB_Muti_Search_Code
+     データ型 `EB_Multi_Search_Code' は複合検索コードを表します。 副本
+     に用意されている複合検索は、それぞれ一意の複合検索コードを持って
+     います。 この型は符合付き整数型の別名として定義されていますので、 2
+     つのコードを 2 項演算子 `==' と `!='
+     で一致比較することができます。
+
+     また、不正な複合検索コード値を表す `EB_MULTI_INVALID'
+     という特別な副本コードが定義されています。 利用可能な複合検索に対
+     して、この複合検索コードが割り当てられることはありません。
+
+
+File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
+
+関数の詳細
+==========
+
+   この節で説明している関数を使うには、次のようにヘッダファイルを読み込
+んで下さい。
+
+     #include <eb/eb.h>
+
+ - 機能: int eb_have_word_search (EB_Book *BOOK)
+ - 機能: int eb_have_endword_search (EB_Book *BOOK)
+ - 機能: int eb_have_exactword_search (EB_Book *BOOK)
+     関数 `eb_have_word_search()' は、BOOK が選択中の副本で前方一致検
+     索メソッドが利用可能どうかを調べます。 同様に
+     `eb_have_endword_search()' は後方一致検索メソッドについて、
+     `eb_have_exactword_search()' は完全一致検索メソッドについて利用可
+     能どうかを調べます。
+
+     利用可能なら 1 を返します。 メソッドを持っていないか、そもそも副本
+     が選択されていない場合は 0 を返します。
+
+ - 機能: int eb_have_keyword_search (EB_Book *BOOK)
+     関数 `eb_have_keyword_search()' は、BOOK が選択中の副本で条件検索
+     メソッドが利用可能どうかを調べます。
+
+     利用可能なら 1 を返します。 メソッドを持っていないか、そもそも副本
+     が選択されていない場合は 0 を返します。
+
+ - 機能: int eb_have_multi_search (EB_Book *BOOK)
+     関数 `eb_have_multi_search()' は、BOOK が選択中の副本で複合検索メ
+     ソッドが利用可能どうかを調べます。
+
+     最低 1 種類でも利用可能なら 1 を返します。 メソッドを持っていない
+     か、そもそも副本が選択されていない場合は 0 を返します。
+
+ - 機能 : EB_Error_Code eb_multi_search_list (EB_Book *BOOK,
+          EB_Multi_Search_Code *MULTI_LIST, int *MULTI_COUNT)
+     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
+     いる複合検索を調べ、複合検索コードの一覧を `EB_Multi_Search_Code'
+     型の配列にして、MULTI_LIST の指す領域に書き込みます。 配列は、最大
+     で `EB_MAX_MULTI_SEARCHES' 個の要素を持ちます。 加えて、複合検索の
+     種類数を MULTI_COUNT の指す領域に書き込みます。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、
+     SUBBOOK_COUNT の指す領域に 0 を書き込み、原因を示すエラーコードを
+     返します。
+
+     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
+     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
+
+ - 機能 : EB_Error_Code eb_multi_entry_count (EB_Book *BOOK,
+          EB_Multi_Search_Code MULTI_ID, int *ENTRY_COUNT)
+     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
+     いる複合検索 MULTI_ID について調べ、入力語の個数を ENTRY_COUNT の
+     指す領域に書き込みます。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 このとき書き込まれる
+     入力語の個数は、1 以上 `EB_MAX_MULTI_ENTRIES' 以下になります。 失
+     敗すると、ENTRY_COUNT の指す領域には 0 を書き込み、原因を示すエラ
+     ーコードを返します。
+
+     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
+     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
+
+ - 機能 : EB_Error_Code eb_multi_entry_label (EB_Book *BOOK,
+          EB_Multi_Search_Code MULTI_ID, int ENTRY_INDEX, char *LABEL)
+     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
+     いる複合検索 MULTI_ID について調べ、ENTRY_INDEX 番目の検索語の題
+     目を LABEL の指す領域に書き込みます。 ENTRY_INDEX は、先頭の検索語
+     を 0 番目と数えます。 題目は最長で `EB_MAX_MULTI_LABEL_LENGTH' バ
+     イトになります。 この長さに、ナル文字は含みません。
+
+     書籍の文字コード (*note [CD-ROM 書籍と `EB_Book' オブジェクト] デ
+     ータ型の詳細: EB_Book Data Types.)  が `EB_CHARCODE_ISO8859_1' な
+     ら、題目を表す文字列は ISO 8859-1 になり、それ以外の文字コードな
+     ら日本語 EUC になります。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、LABEL の
+     指す領域には空文字列を書き込み、原因を示すエラーコードを返します。
+
+     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
+     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
+
+ - 機能 : int eb_multi_entry_have_candidates (EB_Book *BOOK,
+          EB_Multi_Search_Code MULTI_ID, int ENTRY_INDEX)
+     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
+     いる複合検索 MULTI_ID について調べ、ENTRY_INDEX 番目の検索語が候
+     補一覧を持っているかどうか調べます。 ENTRY_INDEX は、先頭の検索語
+     を 0 番目と数えます。
+
+     持っていれば 1 を返します。 持っていないか、そもそも副本が選択され
+     ていない場合、あるいは MULTI_ID, や ENTRY_INDEX が不正な値だった場
+     合は 0 を返します。
+
+ - 機能 : EB_Error_Code eb_multi_entry_candidates (EB_Book *BOOK,
+          EB_Multi_Search_Code MULTI_ID, int ENTRY_INDEX, EB_Position
+          *POSITION)
+     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
+     いる複合検索 MULTI_ID について調べ、ENTRY_INDEX 番目の検索語の候
+     補一覧の位置を POSITION の指す領域に書き込みます。 先頭の検索語が
+     0 番目になります。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、POSITIN
+     の指す領域には `eb_seek_text()'
+     が必ず失敗する位置情報を書き込み、原因を示すエラーコードを返します。
+
+     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
+     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
+
+ - 機能 : EB_Error_Code eb_search_word (EB_Book *BOOK, const char
+          *INPUT_WORD)
+ - 機能 : EB_Error_Code eb_search_endword (EB_Book *BOOK, const char
+          *INPUT_WORD)
+ - 機能 : EB_Error_Code eb_search_exactword (EB_Book *BOOK, const char
+          *INPUT_WORD)
+     関数 `eb_search_word()' は、BOOK が選択中の副本に対する前方一致検
+     索をリクエストします。 同様に `eb_search_endword()' は後方一致検索
+     を、 `eb_search_exactword()' は完全一致検索をリクエストします。
+
+     検索する語は、引数 INPUT_WORD で指定します。 ただし、これらの関数
+     は検索をリクエストするだけで、一致したエントリの情報を返すことは
+     しません。 一致したエントリの取得には `eb_hit_list()' を使います。
+     関数は、成功すると `EB_SUCCESS' を返します。 失敗すると、原因を示
+     すエラーコードを返します。 失敗すると、関数を呼び出す前にリクエス
+     トしていた検索の状態記録はリセットされますので、その状態のまま
+     `eb_hit_list()' を呼び出しても、やはり失敗に終わります。
+
+     書籍の文字コード (*note [CD-ROM 書籍と `EB_Book' オブジェクト] デ
+     ータ型の詳細: EB_Book Data Types.)  が `EB_CHARCODE_ISO8859_1' な
+     ら、関数に渡す検索語は ISO 8859-1
+     で書かれていなければなりません。 それ以外の文字コードの場合は、日
+     本語 EUC で書かれていなければなりません。 不正な文字番号を含んでい
+     た場合、関数は `EB_ERR_BAD_WORD' を返します。
+
+     加えて、検索語は 1 バイト以上、 `EB_MAX_WORD_LENGTH' (= 255)
+     バイト以下でなければなりません。
+     この長さに、ナル文字は含みません。 長すぎる場合は、
+     `EB_ERR_TOO_LONG_WORD' を、 長さが 0 (空文字列) の場合は
+     `EB_ERR_EMPTY_WORD' を返します。
+
+     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
+     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 なお、一致
+     するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
+
+ - 機能 : EB_Error_Code eb_search_keyword (EB_Book *BOOK, const char *
+          const INPUT_WORDS[])
+ - 機能 : EB_Error_Code eb_search_multi (EB_Book *BOOK,
+          EB_Multi_Search_Code MULTI_ID, const char * const
+          INPUT_WORDS[])
+     関数 `eb_search_word()' は、BOOK が選択中の副本に対する条件検索を
+     リクエストします。 同様に `eb_search_multi()' は複合検索をリクエス
+     トします。
+
+     検索する語は、引数 INPUT_WORDS で指定します。 条件検索と複合検索は
+     いずれも複数個の検索語を受け付けますので、検索語を配列にして渡し
+     ます。 このとき、配列の末尾の要素には `NULL' を置き、配列の終端を
+     明示します。
+
+     どちらの関数も検索をリクエストするだけで、一致したエントリの情報を
+     返すことはしません。 一致したエントリの取得には `eb_hit_list()' を
+     使います。 関数は、成功すると `EB_SUCCESS' を返します。
+     失敗すると、原因を示すエラーコードを返します。 失敗すると、関数を
+     呼び出す前にリクエストしていた検索の状態記録はリセットされますの
+     で、その状態のまま `eb_hit_list()' を呼び出しても、やはり失敗に終
+     わります。
+
+     書籍の文字コード (*note [CD-ROM 書籍と `EB_Book' オブジェクト] デ
+     ータ型の詳細: EB_Book Data Types.)  が `EB_CHARCODE_ISO8859_1' な
+     ら、関数に渡す検索語は ISO 8859-1
+     で書かれていなければなりません。 それ以外の文字コードの場合は、日
+     本語 EUC で書かれていなければなりません。 不正な文字番号を含んでい
+     た場合、関数は `EB_ERR_BAD_WORD' を返します。
+
+     加えて、個々の検索語は `EB_MAX_WORD_LENGTH' (= 255) バイト以下で
+     なければなりません。 この長さに、ナル文字は含みません。 長すぎる場
+     合は、`EB_ERR_TOO_LONG_WORD' を返します。 長さが 0 バイトの検索語
+     は無視されますが、少なくとも 1 個の検索語は長さが 1 以上ないとい
+     けません。 長さが 1 以上の検索語が 1 つもないときは、
+     `EB_ERR_NO_WORD' を返します。
+
+     末尾の NULL を除いた配列の要素数は、条件検索では `EB_MAX_KEYWORDS'
+     以下、複合検索では `EB_MAX_MULTI_ENTRIES'
+     以下でなくてはなりません。 個数が多すぎると
+     `EB_ERRO_TOO_MANY_WORDS' を返します。 空文字列の要素を差し引いた個
+     数ではなく、単純に渡された要素数が上限を超えているとエラーになり
+     ますので、注意が必要です。
+
+     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
+     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 なお、一致
+     するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
+
+ - 機能 : EB_Error_Code eb_hit_list (EB_Book *BOOK, int MAX_HIT_COUNT,
+          EB_Hit *HIT_LIST, int *HIT_COUNT)
+     関数 `eb_hit_list()' は、あらかじめ以下のいずれかの関数でリクエス
+     ト された検索を実行し、一致したエントリを取得します。
+
+        * `eb_search_word()'  (前方一致検索)
+
+        * `eb_search_endword()'  (後方一致検索)
+
+        * `eb_search_exactword()'  (完全一致検索)
+
+        * `eb_search_keyword()'  (条件検索)
+
+        * `eb_search_multi()'  (複合検索)
+
+     したがって、この関数を呼ぶ前に、上記のいずれかの関数の呼び出しに成
+     功していなくてはなりません。
+
+     `eb_hit_list()' は最大で HIT_COUNT 個の一致エントリを HIT_LIST に
+     書き込みます。 そして、書き込んだ一致エントリの数を HIT_COUNT が指
+     す領域に書き込みます。
+     それ以上の個数の一致エントリが存在する場合、残ったエントリの情報は、
+     この関数を繰り返し呼び出すことで得ることができます。
+
+     ただし、以下に挙げた関数を呼び出すと、リクエストした検索に関する状
+     態記録がリセットされますので、一致したエントリの取得は継続できな
+     くなります。
+
+        * `eb_set_subbook()'
+
+        * `eb_unset_subbook()'
+
+        * `eb_load_all_subbooks()'
+
+        * `eb_bind()'
+
+        * `eb_finalize_book()'
+
+        * `eb_search_word()'
+
+        * `eb_search_endword()'
+
+        * `eb_search_exactword()'
+
+        * `eb_search_keyword()'
+
+        * `eb_search_multi()'
+
+     繰り返し呼んだ場合も、一致したエントリの情報はその都度 HIT_LIST の
+     先頭から書き込み、 HIT_COUNT が指す領域に書き込む値も、その回の
+     `eb_hit_list()' の呼び出しで書き込んだ一致エントリの数になります。
+
+     成功すると、この関数は `EB_SUCCESS' を返します。 たとえ一致したエ
+     ントリがなくても、処理が正常に終了すれば、関数は `EB_SUCCESS' を返
+     します。
+
+     失敗すると、HIT_COUNT が指す領域に 0 を書き込み、原因を示すエラー
+     コードを返します。 この場合、リクエストしていた検索の状態記録はリ
+     セットされますので、 これ以上 `eb_hit_list()' を呼んで、残った一致
+     エントリを取得することはできなくなります。
+
+     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
+     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 また、先に
+     挙げた検索のリクエストが成功していない状態でこの関数を呼ぶと、
+     `EB_ERR_NO_PREV_SEARCH' を返します。
+

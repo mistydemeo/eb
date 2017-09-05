@@ -1,9 +1,10 @@
 #! @PERL@
+
 eval 'exec @PERL@ -S $0 ${1+"$@"}'
     if 0;
 
 #
-# Copyright (c) 1997, 98, 99, 2000, 01
+# Copyright (c) 1997, 98, 99, 2000, 01, 03
 #    Motoyuki Kasahara
 #
 # This program is free software; you can redistribute it and/or modify
@@ -28,20 +29,12 @@ Options:
   -b BOOK-TYPE  --book-type BOOK-TYPE
                              make an appendix as BOOK-TYPE; eb or epwing
                              (default: depend on \`catalog(s).app\')
-  -c CASE  --case CASE
-                             output files which have filenames with CASE
-                             letters; upper or lower
-                             (default: depend on \`catalog(s).app\')
   -d  --debug  --verbose     debug mode
   -h  --help                 output this help, then exit
   -n  --no-catalog           don't output a catalog file
   -o DIRECTORY  --output-directory DIRECTORY
                              output files to DIRECTORY
                              (default: .)
-  -s SUFFIX  --suffix SUFFIX
-                             output files which have filenames with SUFFIX;
-                             none, dot, version or both
-                             (default: none)
   -t  --test                 only check for input files
   -v  --version              output version number, then exit
 
@@ -70,6 +63,9 @@ GNU General Public License for more details.
 # `try ...' message.
 $tryhelp = "try \`$0 --help\' for more information\n";
 
+# Disc type: `eb' or `epwing'.
+$disc = 'eb';
+
 # Read files on the directory.
 $indir = '.';
 
@@ -93,12 +89,10 @@ $dirmode = umask ^ 0777;
 
 # Command line options.
 @long_options = ('-b --book-type        required-argument',
-		 '-c --case             required-argument',
 		 '-d --debug --verbose  no-argument',
 		 '-h --help             no-argument',
 		 '-n --no-catalog       no-argument',
 		 '-o --output-directory required-argument',
-		 '-s --suffix           required-argument',
 		 '-t --test             no-argument',
 		 '-v --version          no-argument');
 
@@ -113,13 +107,7 @@ while (($optname, $optarg) = &getopt_long) {
 	    warn "$0: unknown book type \`$optarg\'\n";
 	    die $tryhelp;
 	}
-	$disc = "\L$optarg";
-    } elsif ($optname eq '-c') {
-	if ($optarg !~ /^(upper|lower)$/i) {
-	    warn "$0: unknown filename case \`$optarg\'\n";
-	    die $tryhelp;
-	}
-	$case = "\L$optarg";
+	$disc = lc($optarg);
     } elsif ($optname eq '-d') {
 	$debug = 1;
     } elsif ($optname eq '-h') {
@@ -129,12 +117,6 @@ while (($optname, $optarg) = &getopt_long) {
 	$no_catalog = 1;
     } elsif ($optname eq '-o') {
 	$outdir = $optarg;
-    } elsif ($optname eq '-s') {
-	if ($optarg !~ /^(none|dot|version|both)$/i) {
-	    warn "$0: unknown suffix type \`$optarg\'\n";
-	    die $tryhelp;
-	}
-	$suffix = "\L$optarg";
     } elsif ($optname eq '-v') {
 	print "$progname (EB Library) version $version\n";
 	print $copyright;
@@ -161,46 +143,22 @@ $outdir =~ s/\/$//;
 #
 # Compose filenames.
 #
-if (-f "$indir/CATALOG.APP") {
-    $infile = "$indir/CATALOG.APP";
-    $case = 'upper' if (!$case);
-    $disc = 'eb' if (!$disc);
-} elsif (-f "$indir/catalog.app") {
-    $infile = "$indir/catalog.app";
-    $case = 'lower' if (!$case);
-    $disc = 'eb' if (!$disc);
-} elsif (-f "$indir/CATALOGS.APP") {
-    $infile = "$indir/CATALOGS.APP";
-    $case = 'upper' if (!$case);
-    $disc = 'epwing' if (!$disc);
-} elsif (-f "$indir/catalogs.app") {
-    $infile = "$indir/catalogs.app";
-    $case = 'lower' if (!$case);
-    $disc = 'epwing' if (!$disc);
-} else {
+$infile = find_file($indir, 'catalog.app', 'undef');
+if (!defined($infile)) {
+    $infile = find_file($indir, 'catalogs.app', 'undef');
+}
+if (!defined($infile)) {
     die "catalog(s).app: no such file\n";
 }
 
-if ($disc eq 'eb') {
-    if ($case eq 'upper') {
-	$outfile = "$outdir/CATALOG";
-    } else {
-	$outfile = "$outdir/catalog";
-    }
-} else {
-    if ($case eq 'upper') {
-	$outfile = "$outdir/CATALOGS";
-    } else {
-	$outfile = "$outdir/catalogs";
-    }
+if (!defined($disc)) {
+    $disc = ($infile =~ /^catalog\.app/i) ? 'eb' : 'epwing';
 }
 
-if ($suffix eq 'dot') {
-    $outfile .= '.';
-} elsif ($suffix eq 'version') {
-    $outfile .= ';1';
-} elsif ($suffix eq 'both') {
-    $outfile .= '.;1';
+if ($disc eq 'eb') {
+    $outfile = find_file($outdir, 'catalog', 'default');
+} else {
+    $outfile = find_file($outdir, 'catalogs', 'default');
 }
 
 #
@@ -217,7 +175,7 @@ while (<CATALOG_APP>) {
     s/^\s+//;
     s/\s+$//;
     next if (/^$/ || /^\#/);
-    push(@subbooks, $_);
+    push(@subbooks, lc($_));
 }
 
 #
@@ -258,13 +216,13 @@ if (!$check_only && !$no_catalog) {
 	if ($disc eq 'eb') {
 	    print CATALOG pack('C', $i + 1), "\0";
 	    print CATALOG "\0" x 30;
-	    print CATALOG "\U$subbooks[$i]",
-	    "\0" x ($maxlen_subname - length($subbooks[$i]));
+	    print CATALOG uc($subbooks[$i]);
+	    print CATALOG "\0" x ($maxlen_subname - length($subbooks[$i]));
 	} else {
 	    print CATALOG pack('C', $i + 1), "\0";
 	    print CATALOG "\0" x 80;
-	    print CATALOG "\U$subbooks[$i]",
-	    "\0" x ($maxlen_subname - length($subbooks[$i]));
+	    print CATALOG uc($subbooks[$i]);
+	    print CATALOG "\0" x ($maxlen_subname - length($subbooks[$i]));
 	    print CATALOG "\0" x 74;
 	}
     }
@@ -276,64 +234,21 @@ if (!$check_only && !$no_catalog) {
 }
 
 #
-# Create `APPENDIX(or FUROKU)' files.
+# Create `APPENDIX (or FUROKU)' files.
 #
 foreach $sub (@subbooks) {
     #
     # Compose filenames.
     #
-    if ($case eq 'upper') {
-	@findfiles = ("$indir/\U$sub.app", "$indir/\L$sub.app");
-    } else {
-	@findfiles = ("$indir/\L$sub.app", "$indir/\U$sub.app");
-    }
-    $infile = '';
-    foreach (@findfiles) {
-	if (-f $_) {
-	    $infile = $_;
-	    last;
-	}
-    }
-    die "$findfiles[0]: no such file\n" if ($infile eq '');
+    $infile = find_file($indir, "$sub.app");
+    die "$sub.app: no such file\n" if (!defined($infile));
 
     if ($disc eq 'eb') {
-	if ($case eq 'upper') {
-	    $outfile = "$outdir/\U$sub/APPENDIX";
-	    @subdirs = ("$outdir/\U$sub");
-	} else {
-	    $outfile = "$outdir/\L$sub/appendix";
-	    @subdirs = ("$outdir/\L$sub");
-	}
+	$outfile = find_file($outdir, "$sub/appendix", 'default');
     } else {
-	if ($case eq 'upper') {
-	    $outfile = "$outdir/\U$sub/DATA/FUROKU";
-	    @subdirs = ("$outdir/\U$sub", "$outdir/\U$sub/DATA");
-	} else {
-	    $outfile = "$outdir/\L$sub/data/furoku";
-	    @subdirs = ("$outdir/\L$sub", "$outdir/\L$sub/DATA");
-	}
+	$outfile = find_file($outdir, "$sub/data/furoku", 'default');
     }
-    if ($suffix eq 'dot') {
-	$outfile .= '.';
-    } elsif ($suffix eq 'version') {
-	$outfile .= ';1';
-    } elsif ($suffix eq 'both') {
-	$outfile .= '.;1';
-    }
-
-    #
-    # Create sub directories if missing.
-    #
-    foreach (@subdirs) {
-	if (! -d $_) {
-	    if (mkdir($_, $dirmode)) {
-		warn "$_: debug: directory created\n" if ($debug);
-	    } else {
-		warn "$_: cannot create the directory, $!\n";
-		next;
-	    }
-	}
-    }
+    $outfile =~ s|//+|/|g;
 
     #
     # Open the `<SUBBOOK>.APP' file to read.
@@ -478,7 +393,7 @@ foreach $sub (@subbooks) {
 	    die "$infile:$.: \`$key\' redefined\n" if (0 < $code_def++);
 	    die "$infile:$.: invalid character code \`$arg\'\n"
 		if ($arg !~ /^(JISX0208|ISO8859-1)$/i);
-	    $code = "\U$arg";
+	    $code = uc($arg);
 	    warn "$infile:$.: debug: $key $arg\n" if ($debug);
 		    
 	} elsif ($key eq 'stop-code') {
@@ -575,12 +490,11 @@ foreach $sub (@subbooks) {
 	#
 	# Create a subdirectory for the subbook, if missing.
 	#
-	if (!-d $outdir) {
-	    if (mkdir($outdir, $dirmode)) {
-		warn "$outdir: debug: directory cleated\n";
-	    } else {
-		die "$outdir: cannot create the directory, $!\n";
-	    }
+	$outsubdir = dirname($outfile);
+	if (mkinstalldirs($outsubdir, $dirmode)) {
+	    warn "$outdir: debug: directory cleated\n" if ($debug);
+	} else {
+	    die "$outdir: cannot create the directory, $!\n";
 	}
 
 	#
@@ -704,21 +618,96 @@ foreach $sub (@subbooks) {
 exit;
 
 #
+# Find file $target under $dir.
+#
+sub find_file {
+    my ($dir, $target, $mode) = @_;
+    my $result = $dir;
+    my @target_entries = split(/\/+/, $target);
+
+    for (my $i = 0; $i < @target_entries; $i++) {
+	my $found;
+	my $normalized_target_entry = lc($target_entries[$i]);
+	$normalized_target_entry =~ s/;\d$//;
+	$normalized_target_entry =~ s/\.$//;
+
+	if (opendir(DIR, $result)) {
+	    while (my $entry = readdir(DIR)) {
+		if ($i < @target_entries - 1) {
+		    next if (! -d "$result/$entry");
+		} else {
+		    next if (! -f "$result/$entry");
+		}
+		my $normalized_entry = lc($entry);
+		$normalized_entry =~ s/;\d$//;
+		$normalized_entry =~ s/\.$//;
+		if ($normalized_target_entry eq $normalized_entry) {
+		    $found = $entry;
+		    last;
+		}
+	    }
+	    closedir(DIR);
+	}
+
+	if (defined($found)) {
+	    $result = $result . '/' . $found;
+	} elsif ($mode eq 'undef') {
+	    return undef;
+	} else {
+	    $result = $result . '/' . $target_entries[$i];
+	}
+    }
+
+    return $result;
+}
+
+sub dirname {
+    my ($dir) = @_;
+    my $result;
+
+    if ($dir !~ /\//) {
+	$result = '.';
+    } else {
+	$result = $dir;
+	$result =~ s/\/+[^\/]+$//;
+    }
+
+    return $result;
+}
+
+sub mkinstalldirs {
+    my ($dir, $mode) = @_;
+    my $path = '';
+
+    foreach my $d (split(/\/+/, $dir)) {
+	if ($path eq '') {
+	    $path = ($dir =~ /^\//) ? '/' : $d;
+	} else {
+	    $path = "$path/$d";
+	}
+	next if (-d $path);
+	return 0 if (!mkdir($path, $mode));
+    }
+
+    return 1;
+}
+
+#
 # Convert a string to EUC JP.
 #
 sub convert_to_euc {
-    local($_) = $_[$[];
-    while (/\033(\([BJ]|\$[\@B])/) {
-	s/\033\$[\@B]([^\033]*)/&convert_to_euc_tr($1)/eg;
-	s/\033\([BJ]([^\033]*)/$1/eg;
+    my ($s) = @_;
+    while ($s =~ /\033(\([BJ]|\$[\@B])/) {
+	$s =~ s/\033\$[\@B]([^\033]*)/&convert_to_euc_tr($1)/eg;
+	$s =~ s/\033\([BJ]([^\033]*)/$1/eg;
     }
-    return $_;
+    return $s;
 }
 
 sub convert_to_euc_tr {
-    local($_) = $_[$[];
-    tr/\041-\176/\241-\376/;
-    return $_;
+    my ($s) = @_;
+    $s =~ tr/\041-\176/\241-\376/;
+    return $s;
 }
 
 # Local Variables: 

@@ -4,7 +4,7 @@
 @settitle ebinfo
 @c %** end of header
 
-@include ebinfo-ver.texi
+@include version-ebinfo.texi
 
 @dircategory CD-ROM Book Utilities
 @direntry
@@ -72,13 +72,14 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 
 @menu
 * Introduction::                はじめに
-* Invoking ebinfo::             @code{ebinfo} の実行
+* Invoke ebinfo::               @code{ebinfo} の実行
 * Details about Information::   出力される情報の詳細ついて
+* Book list on EBNET server::   EBNET サーバの書籍一覧
 * Options to ebinfo::           @code{ebinfo} のオプション
 @end menu
 
 @c ===================================================================
-@node Introduction, Invoking ebinfo, Top, Top
+@node Introduction, Invoke ebinfo, Top, Top
 @chapter はじめに
 
 @code{ebinfo} コマンドは CD-ROM 書籍に関する様々な情報を出力します。
@@ -95,7 +96,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 詳細については GNU General Public License をお読み下さい。
 
 @c ===================================================================
-@node Invoking ebinfo, Details about Information, Introduction, Top
+@node Invoke ebinfo, Details about Information, Introduction, Top
 @chapter @code{ebinfo} の実行
 
 @code{ebinfo} の一般的な起動方法は次の通りです。
@@ -106,8 +107,10 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 
 @noindent
 @var{書籍へのパス} には、CD-ROM 書籍のトップディレクトリ、つまり 
-@file{CATALOG} または @file{CATALOGS} ファイルが存在するディレクトリを
+@file{catalog} または @file{catalogs} ファイルが存在するディレクトリを
 指定します。
+パスは、ローカルなパス (例: @samp{/mnt/dict}) でも遠隔アクセス識別子
+(例: @samp{ebnet://localhost/dict}) でも構いません。
 複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
 できます。
 
@@ -180,7 +183,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @end example
 
 @c ===================================================================
-@node Details about Information, Options to ebinfo, Invoking ebinfo, Top
+@node Details about Information, Book list on EBNET server, Invoke ebinfo, Top
 @chapter 出力される情報の詳細ついて
 
 この節では、@code{ebinfo} が出力する情報の詳細について説明します。
@@ -253,7 +256,58 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @end table
 
 @c ===================================================================
-@node Options to ebinfo,  , Details about Information, Top
+@node Book list on EBNET server, Options to ebinfo, Details about Information, Top
+@chapter EBNET サーバの書籍一覧
+
+通常の出力の代わりに、@code{ebinfo} は EBNET サーバが公開している
+書籍の一覧を出力することもできます。
+この場合のコマンド行の概要は、次のようになります。
+
+@example
+% ebinfo --book-list @var{遠隔サーバ識別子}
+@end example
+
+@noindent
+ここで、@var{遠隔サーバ識別子} は、書籍名を含まない遠隔アクセス識別子
+になります。
+たとえば、
+
+@example
+@group
+% ebinfo --book-list ebnet://dict.example.com
+Name             Title
+encycl           ブラウンコンサイス百科事典
+encycl.app       ブラウンコンサイス百科事典 (appendix)
+crossword        クロスワードパズル辞典
+travel           ワールドトラベルガイド
+@end group
+@end example
+
+@noindent
+このサーバは 3 つの書籍と 1 つの appendix (付録) を持っています。
+@samp{encycl} という書籍の情報を見るには、次のようにします。
+
+@example
+@group
+% ebinfo ebnet://dict.example.com/cncyclopedia
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 1
+
+@end group
+@group
+副本 1:
+  題名: ブラウンコンサイス百科事典
+  ディレクトリ: brown
+  検索方式: 前方一致 後方一致 条件 複合 メニュー
+  フォントの大きさ: 16 24
+  半角フォントの文字: 0xa121 -- 0xa452
+  全角フォントの文字: 0xa321 -- 0xa452
+@end group
+@end example
+
+@c ===================================================================
+@node Options to ebinfo,  , Book list on EBNET server, Top
 @chapter @code{ebinfo} のオプション
 
 @code{ebinfo} コマンドは、伝統的な一文字オプション名と覚えやすい長い

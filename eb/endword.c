@@ -88,11 +88,13 @@ eb_search_endword(book, input_word)
     eb_reset_search_contexts(book);
     context = book->search_contexts;
     context->code = EB_SEARCH_ENDWORD;
-    context->compare_pre = eb_match_canonicalized_word;
-    if (book->character_code == EB_CHARCODE_ISO8859_1)
-	context->compare_hit = eb_match_word_latin;
-    else
-	context->compare_hit = eb_match_word_jis;
+    if (book->character_code == EB_CHARCODE_ISO8859_1) {
+	context->compare_single = eb_match_word;
+	context->compare_group = eb_match_word;
+    } else {
+	context->compare_single = eb_match_word;
+	context->compare_group = eb_match_word_jis_kana;
+    }
 
     /*
      * Make a fixed word and a canonicalized word to search from

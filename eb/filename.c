@@ -693,7 +693,7 @@ eb_decompose_movie_file_name(argv, composed_file_name)
 	return EB_ERR_BAD_FILE_NAME;
 
     /*
-     * Compose file name.
+     * Decompose file name.
      */
     for (i = 0, arg_p = argv;
 	 i + 1 < EB_MAX_DIRECTORY_NAME_LENGTH; i += 2, arg_p++) {

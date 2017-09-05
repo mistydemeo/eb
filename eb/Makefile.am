@@ -1,14 +1,15 @@
 lib_LTLIBRARIES = libeb.la
 dist_libeb_la_SOURCES = appendix.c appsub.c bcd.c binary.c bitmap.c book.c \
-	copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
-	hook.c jacode.c keyword.c lock.c log.c match.c menu.c memmove.c \
-	multi.c narwalt.c narwfont.c readtext.c search.c setword.c \
+	booklist.c copyright.c eb.c endword.c error.c exactword.c filename.c \
+	font.c hook.c jacode.c keyword.c lock.c log.c match.c menu.c \
+	memmove.c multi.c narwalt.c narwfont.c readtext.c search.c setword.c \
 	stopcode.c strcasecmp.c subbook.c text.c word.c zio.c \
 	ebnet.c multiplex.c linebuf.c urlparts.c getaddrinfo.c dummyin6.c
 nodist_libeb_la_SOURCES = widealt.c widefont.c
 libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
 
-dist_pkginclude_HEADERS = appendix.h binary.h eb.h error.h font.h text.h zio.h
+dist_pkginclude_HEADERS = appendix.h binary.h booklist.h eb.h error.h font.h \
+	text.h zio.h
 nodist_pkginclude_HEADERS = defs.h
 noinst_HEADERS = build-pre.h build-post.h dummyin6.h ebnet.h getaddrinfo.h \
 	linebuf.h urlparts.h

@@ -4,7 +4,7 @@
 @settitle EB Library
 @c %** end of header
 
-@include ebfont-ver.texi
+@include version-ebfont.texi
 
 @dircategory CD-ROM Book Utilities
 @direntry
@@ -73,9 +73,10 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @menu
 * Introduction::                はじめに
 * What is Local Character::     外字とは
-* Invoking ebfont::             @code{ebfont} の実行
+* Invoke ebfont::               @code{ebfont} の実行
 * Summary of Options::          @code{ebfont} のオプション一覧
 
+@detailmenu
  --- The Detailed Node Listing ---
 
 @code{ebfont} の実行
@@ -83,6 +84,8 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 * Image Formats::               画像形式
 * Heights::                     高さ
 * Subbooks::                    副本
+
+@end detailmenu
 @end menu
 
 @c ===================================================================
@@ -104,7 +107,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 詳細については GNU General Public License をお読み下さい。
 
 @c ===================================================================
-@node What is Local Character, Invoking ebfont, Introduction, Top
+@node What is Local Character, Invoke ebfont, Introduction, Top
 @chapter 外字とは
 
 CD-ROM 書籍の多くは、書籍固有の文字、外字 (local characters) を定義し
@@ -144,7 +147,7 @@ CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して 4
 ファイルを生成します。
 
 @c ===================================================================
-@node Invoking ebfont, Summary of Options, What is Local Character, Top
+@node Invoke ebfont, Summary of Options, What is Local Character, Top
 @chapter @code{ebfont} の実行
 
 @code{ebfont} の一般的な起動方法は次の通りです。
@@ -155,8 +158,10 @@ CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して 4
 
 @noindent
 @var{書籍へのパス} には、CD-ROM 書籍のトップディレクトリ、つまり 
-@file{CATALOG} または @file{CATALOGS} ファイルが存在するディレクトリを
+@file{catalog} または @file{catalogs} ファイルが存在するディレクトリを
 指定します。
+パスは、ローカルなパス (例: @samp{/mnt/dict}) でも遠隔アクセス識別子
+(例: @samp{ebnet://localhost/dict}) でも構いません。
 複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
 できます。
 
@@ -209,7 +214,7 @@ ejdict/16/wide/a321.xbm
 @end menu
 
 @c -------------------------------------------------------------------
-@node Image Formats, Heights, Invoking ebfont, Invoking ebfont
+@node Image Formats, Heights, Invoke ebfont, Invoke ebfont
 @section 画像形式
 
 @code{ebfont} は XBM, XPM, GIF89a, BMP 形式の画像ファイルを生成すること
@@ -241,7 +246,7 @@ BMP 形式では、前景色は黒に、背景色は白 (RGB の @samp{#ffffff}) に
 ないため、ファイルのサイズは相当大きくなります。
 
 @c -------------------------------------------------------------------
-@node Heights, Subbooks, Image Formats, Invoking ebfont
+@node Heights, Subbooks, Image Formats, Invoke ebfont
 @section 高さ
 
 特に指定がなければ、@code{ebfont} は、半角と全角それぞれについて、高さ
@@ -267,7 +272,7 @@ BMP 形式では、前景色は黒に、背景色は白 (RGB の @samp{#ffffff}) に
 @end example
 
 @c -------------------------------------------------------------------
-@node Subbooks,  , Heights, Invoking ebfont
+@node Subbooks,  , Heights, Invoke ebfont
 @section 副本
 
 なにも設定しないと、@code{ebzip} はすべての副本 (subbook) を対象にして
@@ -320,7 +325,7 @@ BMP 形式では、前景色は黒に、背景色は白 (RGB の @samp{#ffffff}) に
 
 @noindent
 (@code{ebinfo} コマンドに関しての詳細は、
-@pxref{Invoking ebinfo, , @code{ebinfo} の実行, ebinfo-ja, ebinfo-ja})。
+@pxref{Invoke ebinfo, , @code{ebinfo} の実行, ebinfo-ja, ebinfo-ja})。
 @*
 この例では、3 つの副本が書籍には含まれており、そのディレクトリ名は
 @code{english}, @code{french}, @code{german} だということが分かります。
@@ -341,7 +346,7 @@ BMP 形式では、前景色は黒に、背景色は白 (RGB の @samp{#ffffff}) に
 @end example
 
 @c ===================================================================
-@node Summary of Options,  , Invoking ebfont, Top
+@node Summary of Options,  , Invoke ebfont, Top
 @chapter @code{ebfont} のオプション一覧
 
 @code{ebzip} コマンドは、伝統的な一文字オプション名と覚えやすい長い
@@ -386,7 +391,7 @@ BMP 形式では、前景色は黒に、背景色は白 (RGB の @samp{#ffffff}) に
 画像ファイルを @var{ディレクトリ} 以下に出力します。
 指定しなかったときは、@code{ebfont} はカレントディレクトリ (@code{.})
 の下に画像ファイルを生成します。
-(詳しくは、@pxref{Invoking ebfont, , @code{ebfont} の実行})。
+(詳しくは、@pxref{Invoke ebfont, , @code{ebfont} の実行})。
 
 @item -S @var{副本}
 @itemx --subbook @var{副本}

@@ -6,7 +6,7 @@
  *     word /cdrom 0 apple
  * 説明:
  *     <book-path> で指定した CD-ROM 書籍の特定の副本の中から <word>
- *     という単語を前方一致検索で探し、ヒットしたすべてのエントリの
+ *     という単語を完全一致検索で探し、ヒットしたすべてのエントリの
  *     見出しを表示します。
  *
  *     <subbook-index> には、検索対象の副本のインデックスを指定しま
@@ -80,7 +80,7 @@ main(argc, argv)
     @}
 
     /* 単語検索のリクエストを送出。*/
-    error_code = eb_search_word(&book, argv[3]);
+    error_code = eb_search_exactword(&book, argv[3]);
     if (error_code != EB_SUCCESS) @{
         fprintf(stderr, "%s: failed to search for the word, %s: %s\n",
             argv[0], eb_error_message(error_code), argv[3]);

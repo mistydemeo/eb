@@ -50,8 +50,20 @@
  */
 #define EBNET_MAX_BOOK_NAME_LENGTH	18
 
+/*
+ * Maximum length of book title.
+ * EBNETD defins 80, and EB Library uses the same value.
+ */
+#define EBNET_MAX_BOOK_TITLE_LENGTH	80
+
+/*
+ * Maximum length of an EBNET request or response line.
+ */
 #define EBNET_MAX_LINE_LENGTH		511
 
+/*
+ * Timeout period in seconds.
+ */
 #define EBNET_TIMEOUT_SECONDS		30
 
 /*
@@ -77,6 +89,7 @@ ssize_t ebnet_get_file_size EB_P((int));
 
 /* ebnet.c */
 void ebnet_initialize EB_P((void));
+EB_Error_Code ebnet_get_booklist EB_P((EB_BookList *, const char *));
 EB_Error_Code ebnet_bind EB_P((EB_Book *, const char *));
 EB_Error_Code ebnet_bind_appendix EB_P((EB_Appendix *, const char *));
 void ebnet_finalize_book EB_P((EB_Book *));

@@ -67,9 +67,9 @@ eb_open_narrow_font_file(book, font_code)
 		zio_code = ZIO_REOPEN;
 	} else {
 	    zio_code = zio_mode(&subbook->text_zio);
-	    eb_compose_path_name2(book->path, subbook->directory_name, 
-		subbook->text_file_name, font_path_name);
 	}
+	eb_compose_path_name2(book->path, subbook->directory_name, 
+	    subbook->text_file_name, font_path_name);
 
     } else {
 	if (narrow_font->initialized) {
@@ -101,7 +101,7 @@ eb_open_narrow_font_file(book, font_code)
     }
 
   succeeded:
-    LOG(("out: eb_open_narrow_font_file(file=%d) = %d",
+    LOG(("out: eb_open_narrow_font_file(file=%d) = %s",
 	zio_file(&narrow_font->zio), eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
@@ -109,7 +109,7 @@ eb_open_narrow_font_file(book, font_code)
      * An error occurs...
      */
   failed:
-    LOG(("out: eb_open_narrow_font_file()", eb_error_string(error_code)));
+    LOG(("out: eb_open_narrow_font_file() = %s", eb_error_string(error_code)));
     return error_code;
 }
 

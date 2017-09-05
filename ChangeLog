@@ -1,3 +1,84 @@
+2003-08-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/error.c, eb/error.h: Add EB_ERR_NO_ALT and EB_ERR_NO_STOPCODE.
+	* eb/stopcode.c: Set stop_code[0] and stop_code[1] to -1 if an error
+	occurs.
+
+	* samples/Makefile.am (noinst_PROGRAMS): Add `appendix'.
+	* samples/appendix.c: New file.
+
+2003-08-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/multiplex.c (ebnet_connect_socket): Fix a bug in duplication
+	of socket entry.
+
+	* eb/narwfont.c (eb_open_narrow_font_file): Fix bugs in LOG() calls.
+
+2003-08-15  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.ac (AC_INIT): Set version to "4.0beta1".
+
+2003-08-14  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/Makefile.am (dist_libeb_la_SOURCES): Add `booklist.c'.
+	* eb/Makefile.am (dist_pkginclude_HEADERS): Add `booklist.h'.
+	* eb/booklist.c: New file.
+	* eb/defs.h.in (EB_BookList_Entry, EB_BookList): New structured types.
+	* eb/ebnet.h (EBNET_MAX_BOOK_TITLE_LENGTH): Defined.
+	* eb/ebnet.c (ebnet_get_booklist): New function.
+	* ebinfo/ebinf.c (output_booklist): New function.
+	* ebinfo/ebinf.c (main): Add `--booklist' and `-l' options.
+	* ebinfo/ebinfo.c (output_information, output_multi_information):
+	Return `EB_Error_Code' instead of `int'.
+
+2003-08-09  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/appendix.in: delete `--case' and `--suffix' options.
+	Now ebappendix checks all existing directories and files.
+
+2003-07-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.ac, ebstopchk/ebstopchk.c, ebstopchk/Makefile.am:
+	Rename `ebstopchk' to `ebstopcode'.
+
+	* Makefile.am (EXTRA_DIST): Add `misc/ebdump', `misc/ebfixlog' and
+	`misc/eb-index-info'.
+
+2003-07-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/bitmap.c (eb_wide_font_xbm_size, eb_wide_font_xpm_size,
+	eb_wide_font_gif_size, eb_wide_font_bmp_size): Fix bugs that they
+	returned size of narrow font.
+
+	* eb/defs.h.in (EB_Search_Context_Struct): Rename `compare_pre' and
+	`compare_hit' to `compare_single' and `compare_group'.
+
+	* eb/match.c: Revise string comparison functions.
+	* eb/word.c (eb_search_word), eb/endword.c (eb_search_endword),
+	eb/exactword.c (eb_search_exactword), eb/keyword.c (eb_search_keyword),
+	eb/multi.c (eb_search_multi): Likewise.
+	eb/search.c (eb_hit_list_word, eb_hit_list_keyword,
+	eb_hit_list_multi): Likewise.
+
+2003-07-19  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/narwfont.c (eb_open_narrow_font_file): Fix a bug that it
+	cannot open a font file in EB/EBG/EBXA/S-EBXA/EBXA-C.
+
+	* eb/subbook.c (eb_load_subbook_indexes): Fix a bug in word search
+	that EB Library sometimes cannot have found words.
+	* eb/match.c (eb_match_word_latin, eb_match_word_jis, 
+	eb_exact_match_word_latin, eb_exact_match_word_jis): Ditto. 
+	
+2003-07-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/ebnet.c (ebnet_read): Output a log message upon return.
+
+2003-07-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/book.c (misleaded_book_table):
+	Add "Japanese-English-Spanish Jiten (YRRS-060)".
+
 2003-06-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.0beta0.

@@ -1,0 +1,1340 @@
+これは eb-ja.info、 eb-ja.texi より makeinfo バージョン 4.5
+によって作成されました。
+
+INFO-DIR-SECTION CD-ROM Book Utilities
+START-INFO-DIR-ENTRY
+* eb-ja: (eb-ja).               C library for accessing CD-ROM book.
+END-INFO-DIR-ENTRY
+
+   EB Library: CD-ROM 書籍にアクセスするための C ライブラリ, 笠原基之
+
+   Copyright (C) 1998, 99  Motoyuki Kasahara
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by Free Software Foundation, Inc.
+
+
+File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
+
+   この文書は第 4.0beta1 版です。
+
+* Menu:
+
+* Introduction::                はじめに
+* Features::                    EB ライブラリの特徴
+* Compilation::                 プログラムのコンパイル方法
+* Init and Exit::               ライブラリの初期化と後始末
+* EB_Book::                     CD-ROM 書籍と `EB_Book' オブジェクト
+* Error Handling::              エラー処理
+* Subbook::                     副本
+* Search::                      検索
+* Text Data::                   テキストデータ
+* Local Character::             外字
+* Binary Data::                 バイナリデータ
+* Appendix Data::               appendix データ
+* Index::                       索引
+
+ --- The Detailed Node Listing ---
+
+はじめに
+
+* Electronic Book and EPWING::  電子ブックと EPWING について
+* Construction of This Book::   本書の構成について
+
+EB ライブラリの特徴
+
+* Header Files::                ヘッダファイル
+* Character Code::              文字コード
+* Compressed Book::             圧縮された書籍
+* Remote Access::               遠隔ホスト上の書籍
+* Traditional System::          古いシステムへの対応
+
+プログラムのコンパイル方法
+
+* Compilation Simple Way::      てっとり早いコンパイル方法
+* Compilation with Autoconf::   Autoconf を併用したコンパイル方法
+* Debug EB Library::            EB ライブラリ本体のデバッグ
+
+ライブラリの初期化と後始末
+
+* Init and Exit Sample::        サンプルプログラム
+* Init and Exit Functions::     関数の詳細
+
+CD-ROM 書籍と `EB_Book' オブジェクト
+
+* EB_Book Explanation::         `EB_Book' オブジェクト
+* eb_bind to Remote Host::      遠隔ホストへの `eb_bind()'
+* EB_Book Sample::              サンプルプログラム
+* EB_Book Data Types::          データ型の詳細
+* EB_Book Functions::           関数の詳細
+
+エラー処理
+
+* Error Code and Message::      エラーコードとエラーメッセージ
+* Tolerance to Error::          エラーに対する寛容さ
+* Error Data Types::            データ型の詳細
+* Error Code List::             エラーコードの一覧
+* Error Functions::             関数の詳細
+
+副本
+
+* Subbook Code::                副本コード
+* Current Subbook::             選択中の副本
+* Subbook Sample::              サンプルプログラム
+* Subbook Data Types::          データ型の詳細
+* Subbook Functions::           関数の詳細
+
+検索
+
+* Word Search::                 前方一致、後方一致、完全一致検索
+* Keyword Search::              条件検索
+* Multi Search::                複合検索
+* EB_Hit::                      一致エントリの情報
+* Get Remained Entries::        残っているエントリの取得
+* Search Data Types::           データ型の詳細
+* Search Functions::            関数の詳細
+
+テキストデータ
+
+* Seek and Read Text Data::     テキストデータのシークと読み込み
+* Text Data Format::            テキストデータの内部形式
+* Hook::                        フック
+* Hook and Character Code::     フックと文字コードの関係
+* Copyright Notice::            著作権表示
+* Menu::                        メニュー
+* Multi Candidates::            複合検索の候補一覧
+* Stop Code Issue::             区切りコードの問題
+* Text Data Sample::            サンプルプログラム
+* Text Data Types::             データ型の詳細
+* Hook Function Details::       フック関数の詳細
+* Hook Code List::              フックコードの一覧
+* Hookset Access Functions::    フックセット操作関数の詳細
+* Builtin Hook Functions::      組み込みフック関数の詳細
+* Text Data Functions::         テキストデータ操作関数の詳細
+
+外字
+
+* Narrow & Wide Font::          半角外字と全角外字
+* Font Size and Font Code::     外字の大きさと外字コード
+* Current Font Height::         選択中の外字フォントの高さ
+* Get Font::                    外字フォントの取り出し
+* Convert Font::                外字フォントの変換
+* Local Character in Text::     テキスト中の外字
+* Font Data Types::             データ型の詳細
+* Font Constants::              定数の詳細
+* Font Functions::              関数の詳細
+* Font Sample::                 サンプルプログラム
+
+バイナリデータ
+
+* Monochrome Image::            モノクロ図版
+* Color Image::                 カラー図版
+* WAVE Sound::                  WAVE 音声
+* MPEG Movie::                  MPEG1 動画
+* Binary Data Functions::       関数の詳細
+
+appendix データ
+
+* EB_Appendix::                 `EB_Appendix' オブジェクト
+* Appendix Subbook::            副本
+* Appendix Stop Code::          本文の区切りコード
+* Appendix Alternation Text::   外字の代替文字列
+* Appendix Functions::          関数の詳細
+* Appendix Sample::             サンプルプログラム
+
+索引
+
+* Data Type Index::             データ型の索引
+* Function Index::              関数の索引
+* Variable Index::              変数と定数の索引
+
+
+File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
+
+はじめに
+********
+
+   EB ライブラリは、CD-ROM 書籍にアクセスするための C 言語のライブラリ
+です。 主に UNIX 系 OS のシステム上で動作させることができます。 EB ライ
+ブラリは、電子ブック (EB, EBG, EBXA, EBXA-C, S-EBXA) および EPWING 形式
+の CD-ROM 書籍に対応しています。
+
+このライブラリは、書籍内部のデータ形式についての理解はなるべく必要とせ
+ずに、アプリケーションプログラムを開発できることを目標に開発されていま
+す。
+
+   本書は、EB ライブラリを使ってアプリケーションプログラムを作成する開
+発者向けに、ライブラリの仕様を解説した文書です。 そして、ライブラリの公
+式な参照マニュアルでもあります。 読み進めるにあたって、読者は EB ライブ
+ラリおよび CD-ROM 書籍の内部構造について知っている必要はありませんが、
+電子ブックか EPWING を利用して、 実際に CD-ROM 書籍がどのようなものかを
+理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
+ては、十分に理解していることを前提とします。
+
+   この文書は、EB ライブラリバージョン 4.0beta1 に対応しています。 本書
+の内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成す
+るには、お使用いのシステムに EB ライブラリバージョン 4.0beta1 と C コン
+パイラをインストールしておいて下さい。
+
+   EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
+Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
+バージョン 2 あるいはそれ以降の各バージョンの中からいずれかを選択し、
+そのバージョンが定める条項に従って本プログラムを再頒布または変更するこ
+とができます。
+
+   EB ライブラリは有用とは思いますが、頒布にあたっては、市場性及び特定
+目的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。 詳
+細については GNU General Public License をお読み下さい。
+
+* Menu:
+
+* Electronic Book and EPWING::  電子ブックと EPWING について
+* Construction of This Book::   本書の構成について
+
+
+File: eb-ja.info,  Node: Electronic Book and EPWING,  Next: Construction of This Book,  Prev: Introduction,  Up: Introduction
+
+電子ブックと EPWING について
+============================
+
+   電子ブックと EPWING は、いずれも主に日本で使われている電子書籍のデ
+ータ形式の名称で、 CD-ROM に収めた形で数々の書籍が市販されています。
+CD-ROM は ISO 9660 形式なので、 CD-ROM
+ドライブが扱えるシステムであれば、 容易にアクセスすることができます。
+電子書籍のデータ形式とはいっても、実際は辞書向けに特化した構造となって
+おり、市販されている書籍も辞書の類が圧倒的に多いようです。
+
+   電子ブック、EPWING ともに、データ形式に関する規格の全容は一般公開さ
+れていませんが、EPWING ついては規格の一部が日本工業規格 JIS X 4081 「
+電子出版検索データ構造」として公開されています。 さらに、EPWING と電子
+ブックのデータ形式は、酷似していることが知られています。
+
+   EB ライブラリの開発者も、電子ブック、 EPWING 規格の全容は知りません。
+EB ライブラリでは JIS X 4081 の記述をもとに、電子ブック、EPWING を読め
+る ようにしてあります。 しかしながら、規格の全容が分からない状態で開発
+しているため、残念ながら一部に正しく読めない書籍が存在します。
+
+
+File: eb-ja.info,  Node: Construction of This Book,  Prev: Electronic Book and EPWING,  Up: Introduction
+
+本書の構成について
+==================
+
+   次章「EB ライブラリの特徴」では、EB ライブラリが対応している機能、対
+応 していない機能について、簡単に説明します。 また、ライブラリの概略に
+関して、最初に知っておいたほうが良いと思われる事柄をいくつか説明してい
+ます。
+
+   さらに次の章「プログラムのコンパイル方法」では、EB ライブラリを利用
+したプログラムのコンパイル方法を説明します。 本書のサンプルプログラム
+をコンパイルするために必要な情報も、この章に記してあります。
+
+   そして、その次の章「ライブラリの初期化と後始末」からが、実際の EB ラ
+イブラリのプログラミングの解説となります。 それぞれの章は、次のような節
+から構成されています。
+ただし、章によっては一部の節がない場合もあります。
+
+解説
+     その章で解説する機能や概念についての基礎知識、EB ライブラリの仕様
+     の 概要について解説しています。
+
+サンプルプログラム
+     「解説」ではプログラムの断片だけを示すことが多いので、動作可能な
+     プログラムのサンプルをここで示します。
+
+データ型の詳細
+関数の詳細
+定数値の一覧
+     データ型や関数、定数値などについての参照マニュアルです。
+
+
+File: eb-ja.info,  Node: Features,  Next: Compilation,  Prev: Introduction,  Up: Top
+
+EB ライブラリの特徴
+*******************
+
+   前に述べたように、 EB ライブラリは、電子ブック (EB, EBG, EBXA,
+EBXA-C, S-EBXA) と EPWING 形式の CD-ROM 書籍に対応しています。
+
+   EB ライブラリは、これらの CD-ROM 書籍に対して、次の処理を行うことが
+できます。
+
+   * 前方一致検索
+
+   * 後方一致検索
+
+   * 完全一致検索
+
+   * 条件検索
+
+   * 複合検索
+
+   * 見出しデータの取得
+
+   * 本文データの取得
+
+   * メニューの取得
+
+   * 著作権表示の取得
+
+   * カラー図版データの取得 (ただし EPWING のみ)
+
+   * モノクロ図版データの取得
+
+   * 外字データの取得
+
+   * 動画データの取得
+
+   この章では、EB ライブラリの概要に関して、あらかじめ知っておいて頂い
+た ほうが良いと思われるその他の事柄について、何点か説明します。
+
+* Menu:
+
+* Header Files::                ヘッダファイル
+* Character Code::              文字コード
+* Compressed Book::             圧縮された書籍
+* Remote Access::               遠隔ホスト上の書籍
+* Traditional System::          古いシステムへの対応
+
+
+File: eb-ja.info,  Node: Header Files,  Next: Character Code,  Prev: Features,  Up: Features
+
+ヘッダファイル
+==============
+
+   EB ライブラリには、いくつかのヘッダファイルが用意されています。
+
+`appendix.h'
+     appendix (付録) に関連した宣言、定義を行う。
+
+`binary.h'
+     バイナリデータに関連した宣言、定義を行う。
+
+`eb.h'
+     EB ライブラリの基本ヘッダファイル。
+
+`error.h'
+     エラーコードに関連した宣言、定義を行う。
+
+`font.h'
+     外字に関連した宣言、定義を行う。
+
+`text.h'
+     テキストデータ (本文、見出しなど) に関連した宣言、定義を行う。
+
+これ以外にもいくつかのファイルがインストールされますが、上に挙げたヘッ
+ダファイルから読み込まれるもので、アプリケーションプログラムが直接読み
+込む必要はありません。
+
+   アプリケーションプログラムは、EB ライブラリを使う際にこのヘッダファ
+イルをファイルの先頭付近で読み込みます。
+
+     #include <eb/eb.h>
+     #include <eb/error.h>
+
+`eb.h' ではなく、`eb/eb.h' を読み込むようにして下さい。
+
+
+File: eb-ja.info,  Node: Character Code,  Next: Compressed Book,  Prev: Header Files,  Up: Features
+
+文字コード
+==========
+
+   EB ライブラリでは、CD-ROM 書籍内のデータを文字列にしてアプリケーショ
+ン に渡す際の文字コードを規定しています。
+
+   EBG (海外の電子ブック) については、データが ISO 8859-1 (ラテン文字 1、
+ ただし制御文字を除く) で書かれているため、データのやり取りも ISO
+8859-1 で行います。 ただし、外字だけは 2 バイトで表現し、 0x0101 〜
+0x1efe の領域を使用します。 (外字領域の下位 16 ビットは 0x01 〜 0xfe の
+範囲を使用します。)
+
+   EBG, EBXA-C を除いた電子ブック、および EPWING については、データが
+JIS X 0208 (日本語のかな漢字) で書かれており、 JIS X 0208 を 0x2121 〜
+0x7e7e にマッピングし、0xa121 〜 0xfe7e を外字領域にしています (下図)。
+
+     　　　　　　　　　　　　　　　　上位８ビット
+     
+     　　　　　　　　　００　２１　　　　７ｅ　ａ１　　　　ｆｅ
+     　　　　　　　００┌──┬─────┬──┬─────┬┐
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　２１├──┼─────┼──┼─────┼┤
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　　　│　　│ＪＩＳ　Ｘ│　　│　外字　　││
+     　　　　　　　　　│　　│０２０８　│　　│　　　　　││
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　７ｅ├──┼─────┼──┼─────┼┤
+     下位８ビット　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　ａ１├──┼─────┼──┼─────┼┤
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　ｆｅ├──┼─────┼──┼─────┼┤
+     　　　　　　　　　└──┴─────┴──┴─────┴┘
+
+EB ライブラリでは JIS X 0208 部分を日本語 EUC (EUC-JP) にエンコードし
+て、アプリケーションとのやり取りも日本語 EUC で行います。 したがって、
+JIS X 0208 部分は 0xa1a1 〜 0xfefe にマッピングされます。
+
+   EBXA-C (中日・日中辞書の電子ブック) については、データが JIS X 0208
+(日本語のかな漢字) と GB 2312 (中国語の簡体字) で書かれており、 JIS X
+0208 を 0x2121 〜 0x7e7e にマッピング、 GB 2312 を 0x21a1 〜 0x7efe に
+マッピングし、 0xa121 〜 0xfe7e を外字領域にしています (下図)。
+
+     　　　　　　　　　　　　　　　　上位８ビット
+     
+     　　　　　　　　　００　２１　　　　７ｅ　ａ１　　　　ｆｅ
+     　　　　　　　００┌──┬─────┬──┬─────┬┐
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　２１├──┼─────┼──┼─────┼┤
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　　　│　　│ＪＩＳ　Ｘ│　　│　外字　　││
+     　　　　　　　　　│　　│０２０８　│　　│　　　　　││
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　７ｅ├──┼─────┼──┼─────┼┤
+     下位８ビット　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　ａ１├──┼─────┼──┼─────┼┤
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　　　│　　│ＧＢ　　　│　　│　　　　　││
+     　　　　　　　　　│　　│２３１２　│　　│　　　　　││
+     　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+     　　　　　　　ｆｅ├──┼─────┼──┼─────┼┤
+     　　　　　　　　　└──┴─────┴──┴─────┴┘
+
+EB ライブラリでは、アプリケーションとのやり取りに使う文字コードは、 日
+本語 EUC および中国語 EUC (EUC-ZH) です。 したがって、そのままでは JIS
+X 0208 と GB 2312 が 0xa1a1 〜 0xfefe にマッピングされ、衝突してしまい
+ます。 この問題をどう回避するのかは、アプリケーション側で決める必要があ
+ります (詳しくは、*note フックと文字コードの関係 : Hook and Character
+Code.)。
+
+   電子ブック、EPWING ともに、外字については、アプリケーション側でどう
+扱うかを決める必要があります。 外字について詳しくは *note 外字 : Local
+Character.。
+
+
+File: eb-ja.info,  Node: Compressed Book,  Next: Remote Access,  Prev: Character Code,  Up: Features
+
+圧縮された書籍について
+======================
+
+   EB ライブラは、データを圧縮して収録した書籍を扱うことができます。 今
+のところ、次の 4 種類の圧縮方法に対応しています。
+
+`ebzip' 圧縮形式
+     EB ライブラリ独自の圧縮形式です。 付属の `ebzip'
+     コマンドを使うと、この形式で圧縮した書籍を作れます。
+
+EPWING V4, V5 形式
+     市販の EPWING V4, V5 の書籍の一部に、この形式で圧縮したものがあり
+     ます。
+
+EPWING V6 形式
+     市販の EPWING V6
+     の書籍の一部に、この形式で圧縮したものがあります。 EPWING V4, V5
+     形式の改良型です。
+
+S-EBXA 形式
+     市販の S-EBXA の書籍の一部に、この形式で圧縮したものがあります。
+
+   データの伸長は EB ライブラリ側で自動的に行われるため、 アプリケーシ
+ョンプログラムからは、アクセスしている書籍が圧縮されているかどうか分か
+りません。 アプリケーションプログラムは、書籍が圧縮されているかどうかで
+処理を変える必要はありません。
+
+
+File: eb-ja.info,  Node: Remote Access,  Next: Traditional System,  Prev: Compressed Book,  Up: Features
+
+遠隔ホスト上の書籍について
+==========================
+
+   バージョン 4.0 から、 EB
+ライブラリは他のホストの書籍にアクセスできるようになりました。
+
+   遠隔アクセスの処理はすべて EB ライブラリ側で行われますので、 アプリ
+ケーションプログラムは、書籍が自分のホスト上にあるかどうかで、 EB ライ
+ブラリの呼び出し手順を変える必要はありません。
+
+   ただし、他のホストからアクセスすると、処理速度は非常に遅くなります。
+そのため、効率良く処理できるよう、アプリケーションの処理方法を工夫すべ
+き 状況が生じることはあるかも知れません。
+
+
+File: eb-ja.info,  Node: Traditional System,  Prev: Remote Access,  Up: Features
+
+古いシステムへの対応
+====================
+
+   アプリケーションプログラムのコンパイルに用いるコンパイラには、 ANSI
+(ANSI X3.159-1989, ISO/IEC 9899-1990) 対応のものを対象としています。 ま
+た、システムには POSIX.1 (IEEE Std. 1003.2-1990, ISO/IEC 9945-1:1990)
+準拠ないし互換のものを対象としています。
+
+   ただし、古いコンパイラや UNIX
+系システムへの対応もそれなりに行われています。 ここでは、古いコンパイラ
+や UNIX 系システムでアプリケーションプログラムをコンパイルする際の注意
+点を挙げておきます。
+
+`const'
+     `const' 修飾子が使えないコンパイラでは、本書の中の `const' と書か
+     れた部分はすべて無視して下さい。
+
+`void *'
+     EB ライブラリには、`void *' を引数にとる関数がありますが、 CPP マ
+     クロ `__STDC__' が定義されていないコンパイラでは、 `void *' の代わ
+     りに `char *' を使います。
+
+本書の以降の節ではこれらのことを明記しませんので、`const' や `void *'
+と書かれている箇所は、適宜読み替えて下さい。
+
+
+File: eb-ja.info,  Node: Compilation,  Next: Init and Exit,  Prev: Features,  Up: Top
+
+プログラムのコンパイル方法
+**************************
+
+   本章では、EB ライブラリを利用したプログラムのコンパイル方法を説明し
+ます。
+
+   EB ライブラリを `/usr/local' にインストールし、個々のファイルのイン
+ストール先を変更していなければ、ヘッダファイルは
+`/usr/local/include/eb' にインストールされ、ライブラリファイルは
+`/usr/local/lib' にインストールされます。 EB ライブラリを利用したアプリ
+ケーションプログラムを作成する際は、 これらのファイルを使用することにな
+ります。
+
+   EB ライブラリのヘッダファイルの一部には、GNU Autoconf の使用を前提
+とした記述が含まれており、Autoconf を併用しないとプログラムが正しくコ
+ンパイルできません。
+
+   しかし、 EB ライブラリの概要を理解するためのプログラムに、わざわざ
+Autoconf を使用するのは大変です。 そこでまず、Autoconf を使わずにてっと
+り早くコンパイルする方法を紹介します。
+
+   その後で、Autoconf を併用する方法についても説明します。 フリーソフト
+ウェアとしてアプリケーションを公開するなら、こちらの方法をとることをお
+薦めします。 Autoconf を単体で使用してもヘッダファイルの問題は解決でき
+ますが、 本書では GNU Automake, および GNU Libtool も一緒に併用した方法
+について説明しています。
+
+* Menu:
+
+* Compilation Simple Way::      てっとり早いコンパイル方法
+* Compilation with Autoconf::   Autoconf を併用したコンパイル方法
+* Debug EB Library::            EB ライブラリ本体のデバッグ
+
+
+File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autoconf,  Prev: Compilation,  Up: Compilation
+
+てっとり早いコンパイル方法
+==========================
+
+   アプリケーションプログラムをコンパイルする際は、ヘッダファイルのデ
+ィレクトリ位置を C コンパイラに教えてやる必要があるかも知れません。 一
+般に UNIX の C コンパイラでは、`-I' オプションで位置を指定します。
+
+     cc -I/usr/local/include -c sample.c
+
+`/usr/local/include/eb' ではなく、その一つ上を指定します (*note ヘッダ
+ファイル: Header Files.)。
+
+   ただし、 EB ライブラリは Autoconf
+を併用することを前提としているため、 そのままではコンパイルエラーが発生
+してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
+順で回避します。
+
+  1. EB ライブラリ 4.0beta1 のソースードを展開します。
+
+  2. ソースコードに付属している `configure' スクリプトを実行します。
+     `configure' のコマンド行引数は、インストール時と同じものを指定し
+     ます。
+
+  3. `config.h' というファイルが生成されるので、アプリケーションプログ
+     ラムのディレクトリにコピーします。
+
+アプリケーションプログラムのソースファイルでは、この `config.h' を読み
+込むようにします。 必ずファイルの一番先頭で読み込んで下さい。
+
+     #include "config.h"
+
+またこれに伴い、`config.h' のディレクトリ位置を指定するために、 C コン
+パイラのオプションをさらに追加する必要があるかも知れません。
+
+     cc -I. -I/usr/local/include -c sample.c
+
+   次に、リンクして実行バイナリを生成する工程ですが、 以下に記したライ
+ブラリの一部、もしくは全部をリンクします。 括弧内は、ライブラリのファイ
+ル名です (ただし、`.a' や `.so' といった接尾子は省略)。
+
+EB ライブラリ (libeb)
+     EB ライブラリの本体です。このライブラリは必須です。
+
+zlib (libz)
+     圧縮と伸長を行うライブラリです (詳しくは
+     <http://www.gzip.org/zlib/>)。 `ebzip' コマンドで圧縮した辞書を扱
+     うために使います。 このライブラリは必須です。 EB ライブラリのソー
+     スコードには zlib も収録されています。 システムに zlib がインスト
+     ールされていなければ、EB ライブラリをインストールする際に、zlib
+     も自動的にインストールされます。
+
+gettext ライブラリ (libintl)
+     メッセージの国際化機能 (NLS) を提供するライブラリですメッセージの
+     国際化機能を有効にして EB ライブラリをコンパイルしている場合は、
+     必要になるかも知れません。 gettext の実装は何種類かありますが、EB
+     ライブラリで使用できるのはメッセージカタログの形式が GNU gettext
+     互換のものだけです。
+
+     メッセージの国際化機能を有効にしている場合でも、OS の標準 C ライブ
+     ラリとして glibc を採用しているシステムでは、指定する必要はありま
+     せん。
+
+iconv ライブラリ
+     文字コード変換のライブラリです。 gettext ライブラリをリンクする場
+     合、一緒に必要となるかも知れません。 iconv の実装も何種類かあり、
+     OS によっては最初から添付されています。
+
+必要なライブラリファイルの名称を、C コンパイラに指定してやります。 加え
+て、ファイルの置かれているディレクトリ位置を、C コンパイラに教える必要
+があるかも知れません。 一般に UNIX の C コンパイラでは、`-L' オプション
+でディレクトリ位置を指定し、`-l' オプションでライブラリのファイル名を
+指定します。
+
+     cc sample.o -L/usr/local/lib -leb -lz -lintl -liconv
+
+ただし、共有ライブラリをリンクする場合は、実行時におけるライブラリの検
+索パスも合わせて指定する必要があるかも知れません。
+
+     cc sample.o -R/usr/local/lib -L/usr/local/lib -leb -lz -lintl -liconv
+
+   C コンパイラの使い方に関しての詳細は、 C
+コンパイラのマニュアルを参照して下さい。
+
+
+File: eb-ja.info,  Node: Compilation with Autoconf,  Next: Debug EB Library,  Prev: Compilation Simple Way,  Up: Compilation
+
+Autoconf を併用したコンパイル方法
+=================================
+
+   作業の前に、Autoconf, Automake, Libtool は、あらかじめインストールし
+て おいて下さい。 Autoconf はバージョン 2.50 以降が必要です。
+
+   まず、アプリケーションプログラムの `configure.ac' (もしくは
+`configure.in') に、次の行を加えます。
+
+     eb_LIB_EB3
+
+マクロ `eb_LIB_EB3' は、EB ライブラリの使用に必要な一切のチェックを行
+い、さらに `configure' に次のオプションを追加します。
+
+       --with-eb-conf=FILE     eb.conf file is FILE [SYSCONFDIR/eb.conf]
+
+`eb.conf' は、EB ライブラリをインストールしたときの情報を記録したファ
+イルで、ライブラリと一緒にインストールされます。 `eb_LIB_EB3' はこのフ
+ァイルを読み込んで、C コンパイラに渡さなければいけないオプションなどの
+情報を得ます。 `--eb-conf-file' は、`eb.conf' のファイル名を明示的に指
+定するオプションです。
+
+   マクロ `eb_LIB_EB3' は、 `eb3.m4' というファイルで提供されています。
+EB ライブラリを `/usr/local' にインストールし、個々のファイルのインス
+トール先を変更していなければ、`/usr/local/share/aclocal' にインストー
+ルされます。 この `eb3.m4' をソースコードの適当なディレクトリの下 (たと
+えば `m4') にコピーして下さい。
+
+   `aclocal' コマンドで `aclocal.m4' を再生成する際は、 `-I' オプション
+でマクロファイルのディレクトリを指定します。
+
+     aclocal -I m4
+
+加えて、トップディレクトリの `Makefile.am' の中にも `aclocal' へ渡すオ
+プションを書いておきます。
+
+     ACLOCAL_AMFLAGS = -I m4
+
+   また、ソースコードのディレクトリに Libtool パッケージがまだ用意され
+て いなければ、用意します。 `libtoolize' コマンドを実行して下さい。
+Libtool パッケージが、ソースコードのディレクトリにコピーされます。
+
+     libtoolize
+
+   最後に、コンパイルを行うディレクトリの `Makefile.am' ファイルの
+`_LDFLAGS' と `INCLUDES' に、次のような値を追加します。
+
+     program_LDFLAGS = $(EBCONF_EBLIBS) $(EBCONF_ZLIBLIBS) $(EBCONF_INTLLIBS)
+     INCLUDES = $(EBCONF_EBINCS)
+
+(`program_LDFLAGS' の `program' のところは、 アプリケーションプログラム
+の実際のコマンド名にします。)
+
+
+File: eb-ja.info,  Node: Debug EB Library,  Prev: Compilation with Autoconf,  Up: Compilation
+
+EB ライブラリ本体のデバッグ
+===========================
+
+   「自分が作ったアプリケーションが正しく動かないのは、ひょっとすると
+EB ライブラリのバグが原因ではないか?」という疑問を抱き、EB ライブラリ
+の挙動を確認したいと思うことがあるかも知れません。
+
+   そのような場合は、環境変数 `EB_DEBUG' をセットした状態でアプリケー
+ションを実行してみて下さい。 EB ライブラリは標準エラー出力に、次のよう
+なログを (かなり大量ですが) 出力するようになります。
+
+     [EB] in: eb_set_font(book=0, font_code=0)
+     [EB] in: eb_load_narrow_font(book=0)
+     [EB] out: eb_load_narrow_font()
+     [EB] in: eb_load_wide_font(book=0)
+     [EB] out: eb_load_wide_font()
+     [EB] out: eb_set_font() = EB_SUCCESS
+
+   これらのログは、関数の呼び出し時の引数列、および関数からの戻り値を
+示しています。 `ebfixlog' という Perl5 スクリプトを使うと、ログを整形す
+ることができます。 このスクリプトは、 EB ライブラリのソースコードの
+`misc' ディレクトリに収められています。
+
+   `ebfixlog' は、コマンド行の引数として与えられたファイル (引数が指定
+されなければ標準入力) からメッセージデータを読み込み、次のように字下げ
+して出力します。
+
+     [EB] in: eb_set_font(book=0, font_code=0)
+     [EB]   in: eb_load_narrow_font(book=0)
+     [EB]   out: eb_load_narrow_font()
+     [EB]   in: eb_load_wide_font(book=0)
+     [EB]   out: eb_load_wide_font()
+     [EB] out: eb_set_font() = EB_SUCCESS
+
+   通常 `ebfixlog' スクリプトは、zio および ebnet と呼ばれる、 EB ライ
+ブラリでファイル入出力を受け持つ処理部のログは読み捨てるようになってい
+ます。 これにより、ログの量がかなり減ります。
+
+   zio は EB
+ライブラリの低レベル入出力の処理部で、頻繁に呼び出されます。 問題の原因
+を調べる際も、まずは読み捨てた方がライブラリの内部動作を追跡しやすいで
+しょう。
+
+   `ebfixlog' の `-z' オプションを使うと、zio のメッセージを読み捨てず
+に出力するようになります。
+
+   ebnet は遠隔アクセスの入出力を処理する部分で、zio よりもさらに下位
+レベルに位置します。 遠隔アクセスの挙動を追跡するとき以外は、読み捨てた
+方が良いと思います。
+
+   `ebfixlog' の `-n' オプションを使うと、ebnet, zio 両方のメッセージ
+を読み捨てずに出力するようになります。
+
+
+File: eb-ja.info,  Node: Init and Exit,  Next: EB_Book,  Prev: Compilation,  Up: Top
+
+ライブラリの初期化と後始末
+**************************
+
+   この章からは、 EB
+ライブラリのプログラミングについての解説になります。
+
+   まず、アプリケーションプログラムから EB ライブラリを利用するには、
+最初にライブラリを初期化する必要があります。
+
+   ライブラリの初期化を行うには、`eb_initialize_library()' という関数
+を呼び出します。
+
+     if (eb_initialize_library() != EB_SUCCESS) {
+         printf("eb_initialize_library() failed\n");
+         exit(1);
+     }
+
+   同様に、ライブラリを使い終わったら、`eb_finalize_library()' という
+関数を呼び出して後始末をします。
+
+     eb_finalize_library();
+
+* Menu:
+
+* Init and Exit Sample::        サンプルプログラム
+* Init and Exit Functions::     関数の詳細
+
+
+File: eb-ja.info,  Node: Init and Exit Sample,  Next: Init and Exit Functions,  Prev: Init and Exit,  Up: Init and Exit
+
+サンプルプログラム
+==================
+
+     /*
+      * 使用方法:
+      *     initexit
+      * 例:
+      *     initexit
+      * 説明:
+      *     EB ライブラリの初期化、後始末をしてみます。
+      *     プログラムの外側から見れば、これは何の意味もない動作です。
+      */
+     #include "config.h"
+     
+     #include <stdio.h>
+     #include <stdlib.h>
+     
+     #include <eb/eb.h>
+     #include <eb/error.h>
+     
+     int
+     main(argc, argv)
+         int argc;
+         char *argv[];
+     {
+         EB_Error_Code error_code;
+     
+         /* EB ライブラリを初期化。*/
+         error_code = eb_initialize_library();
+         if (error_code != EB_SUCCESS) {
+     	fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+     	    argv[0], eb_error_message(error_code), argv[1]);
+     	exit(1);
+         }
+     
+         /* EB ライブラリの利用を終了。*/
+         eb_finalize_library();
+         exit(0);
+     }
+
+
+File: eb-ja.info,  Node: Init and Exit Functions,  Prev: Init and Exit Sample,  Up: Init and Exit
+
+関数の詳細
+==========
+
+   この項で説明している関数を使うには、`eb/eb.h' を読み込んで下さい。
+
+     #include <eb/eb.h>
+
+ - 機能: EB_Error_Code eb_initialize_library ()
+     関数 `eb_initialize_library()' は、EB ライブラリを初期化します。
+     アプリケーションプログラムは、EB ライブラリの他の関数を呼ぶ前に、
+     必ず一回だけこの関数を呼ぶ必要があります。
+
+     メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイ
+     ル した場合、`eb_initialize_library()' は `bindtextdomain()' を呼
+     び出します。 したがって、アプリケーションプログラムが
+     `setlocale()' を呼び出すのは、この関数を呼び出す前である必要があ
+     ります。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、原因を示
+     すエラーコードを返します。
+
+     ライブラリを初期化せずに、EB ライブラリの他の関数を呼んだ場合の動
+     作は未定義です。 また、すでに初期化を済ませた状態で、再度
+     `eb_initialize_library()' を呼んでもいけません。 呼んだ場合の動作
+     は未定義です。
+
+ - 機能: void eb_finalize_library ()
+     関数 `eb_finalize_library()' は、EB ライブラリを使い終わった際の
+     後始末を行います。 ただし、アプリケーションプログラム側で使用した
+     `EB_Book'、`EB_Hookset'、`EB_Appendix' オブジェクトの後始末は行い
+     ません。 オブジェクトを後始末するには、それぞれ専用の関数
+     `eb_finalize_book()'、 `eb_finalize_hookset()'、
+     `eb_finalize_appendix()' を各オブジェクトに対して別途呼んでやる必
+     要があります。
+
+     ライブラリの後始末をした後は、EB ライブラリのいかなる関数も呼んで
+     は いけません。 呼んだ場合の動作は未定義です。
+
+
+File: eb-ja.info,  Node: EB_Book,  Next: Error Handling,  Prev: Init and Exit,  Up: Top
+
+CD-ROM 書籍と `EB_Book' オブジェクト
+************************************
+
+   EB ライブラリでは、CD-ROM 書籍へのアクセスは、すべて `EB_Book' 型の
+オブジェクトを介して行います。 したがって、ほとんどのアプリケーションプ
+ログラムは、本章で記述している処理を必要とするはずです。
+
+   本章では `EB_Book' オブジェクトの初期化、後始末といった基本的な取り
+扱い方について説明します。
+
+* Menu:
+
+* EB_Book Explanation::         `EB_Book' オブジェクト
+* eb_bind to Remote Host::      遠隔ホストへの `eb_bind()'
+* EB_Book Sample::              サンプルプログラム
+* EB_Book Data Types::          データ型の詳細
+* EB_Book Functions::           関数の詳細
+
+
+File: eb-ja.info,  Node: EB_Book Explanation,  Next: eb_bind to Remote Host,  Prev: EB_Book,  Up: EB_Book
+
+`EB_Book' オブジェクト
+======================
+
+   CD-ROM 書籍へアクセスするには、まず `EB_Book' 型のオブジェクトを用
+意します。 同時に複数の CD-ROM 書籍にアクセスするなら、書籍一冊毎にオブ
+ジェクトを作る必要があります。
+
+     EB_Book book;
+
+もちろん、オブジェクトの領域は、`malloc()' で確保しても構いません。
+
+     EB_Book *book_pointer;
+     
+     book_pointer = (EB_Book *) malloc(sizeof(EB_Book));
+
+   `EB_Book' オブジェクトの中身 (変数 `book' の中身および
+`book_pointer' の指す領域) はまだ初期化されていませんので、次の要領で
+オブジェクトを初期化します。
+
+     eb_initialize_book(&book);
+     eb_initialize_book(book_pointer);
+
+`eb_initialize()' へ渡す引数は `EB_Book' オブジェクトへのポインタであ
+って、 `EB_Book' オブジェクトそのものではないことに注意して下さい。 (EB
+ライブラリの他の関数も、すべてオブジェクトをポインタで渡します。)
+
+   CD-ROM 書籍を使うには、続いて `EB_Book' オブジェクトを CD-ROM 書籍
+の実体に結び付けます。 これは、関数 `eb_bind()' によって行います。
+
+     ＥＢ＿Ｂｏｏｋ　　　　　　　　　　　　ＣＤ−ＲＯＭ書籍
+     オブジェクト　　　　　　　　　　┌────────────┐
+     ┌───┐　　　　　　　　　　　│　　　　　　　　　　　　│
+     │　　　┝━━━━━━━━━━━┥　／ｍｎｔ／ｃｄｒｏｍ　│
+     └───┘　ｅｂ＿ｂｉｎｄ（）　│　　　　　　　　　　　　│
+     　　　　　　　　　　　　　　　　└────────────┘
+
+実際のプログラムでは、次のようにします。
+
+     if (eb_bind(&book, "/mnt/cdrom") != EB_SUCCESS) {
+         printf("eb_bind() failed\n");
+         return;
+     }
+
+`eb_bind()' に渡す書籍のパス (この例では `/mnt/cdrom') は書籍のトップ
+ディレクトリ、つまり `catalog' または `catalogs' ファイルのあるディレク
+トリを指定します。
+
+   `EB_Book' オブジェクトを使い終わったら、 `eb_finalize_book()' を呼ん
+で後始末をします。 オブジェクトは書籍との結び付きを解かれた状態に戻り、
+内部で割り当てられたメモリは解放され、開いていたファイルもすべて閉じら
+れます。
+
+     eb_finalize_book(&book);
+     eb_finalize_book(book_pointer);
+
+オブジェクトの領域を `malloc()' で確保した場合は、 `eb_finalize_book()'
+を呼んだ後ならば、オブジェクトの領域を安全に解放することができます。
+
+     free(book_pointer);
+
+
+File: eb-ja.info,  Node: eb_bind to Remote Host,  Next: EB_Book Sample,  Prev: EB_Book Explanation,  Up: EB_Book
+
+遠隔ホストへの `eb_bind()'
+==========================
+
+   前節で説明した `eb_bind()' を用いて、`EB_Book' オブジェクトを遠隔ホ
+ストの書籍に結びつけることができます。 これには、書籍のパスの代わりに、
+遠隔アクセス用の識別子を指定します。
+識別子は、次のような形式をとります。
+
+     ebnet://ホスト:ポート/書籍名
+
+ホストは遠隔ホストの IP アドレスもしくはホスト名です。 ただし、IPv6 ア
+ドレスを指定する場合は、アドレスを `[' と `]' で囲む必要があります。 ポ
+ートは、そのホストが待ち受けているポートの番号です。 ホストが待ち受け
+ているポートが標準の 22010 番であれば、:ポートの部分は省略可能です。
+
+   以下に `eb_bind()' のコード例を記します。
+
+     if (eb_bind(&book, "ebnet://localhost/cdrom") != EB_SUCCESS) {
+         printf("eb_bind() failed\n");
+         return;
+     }
+
+
+File: eb-ja.info,  Node: EB_Book Sample,  Next: EB_Book Data Types,  Prev: eb_bind to Remote Host,  Up: EB_Book
+
+サンプルプログラム
+==================
+
+   このサンプルプログラムでは、 CD-ROM 書籍の種類を調べるために、
+`eb_disc_code()' という関数を使用しています。 この関数については、 *note
+関数の詳細: EB_Book Functions.。
+
+     /*
+      * 使用方法:
+      *     disctype <book-path>
+      * 例:
+      *     disctype /cdrom
+      * 説明:
+      *     <book-path> で指定された CD-ROM 書籍の種類が、EB か EPWING か
+      *     を調べて表示します。
+      */
+     #include "config.h"
+     
+     #include <stdio.h>
+     #include <stdlib.h>
+     
+     #include <eb/eb.h>
+     #include <eb/error.h>
+     
+     int
+     main(argc, argv)
+         int argc;
+         char *argv[];
+     {
+         EB_Error_Code error_code;
+         EB_Book book;
+         EB_Disc_Code disc_code;
+     
+         /* コマンド行引数をチェック。*/
+         if (argc != 2) {
+     	fprintf(stderr, "Usage: %s book-path\n", argv[0]);
+     	exit(1);
+         }
+     
+         /* EB ライブラリと `book' を初期化。*/
+         error_code = eb_initialize_library();
+         if (error_code != EB_SUCCESS) {
+     	fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+     	    argv[0], eb_error_message(error_code), argv[1]);
+     	goto die;
+         }
+         eb_initialize_book(&book);
+     
+         /* `book' を書籍に結び付ける。失敗したら終了。*/
+         error_code = eb_bind(&book, argv[1]);
+         if (error_code != EB_SUCCESS) {
+     	fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+     	    argv[0], eb_error_message(error_code), argv[1]);
+     	goto die;
+         }
+     
+         /* 書籍の種類を調べて表示。*/
+         error_code = eb_disc_type(&book, &disc_code);
+         if (error_code != EB_SUCCESS) {
+     	fprintf(stderr, "%s: failed to get disc type, %s: %s\n",
+     	    argv[0], eb_error_message(error_code), argv[1]);
+     	goto die;
+         }
+     
+         if (disc_code == EB_DISC_EB) {
+     	fputs("EB\n", stdout);
+         } else if (disc_code == EB_DISC_EPWING) {
+     	fputs("EPWING\n", stdout);
+         } else {
+     	fputs("unknown\n", stdout);
+         }
+     
+         /* 書籍と EB ライブラリの利用を終了。*/
+         eb_finalize_book(&book);
+         eb_finalize_library();
+         exit(0);
+     
+         /* エラー発生で終了するときの処理。*/
+       die:
+         eb_finalize_book(&book);
+         eb_finalize_library();
+         exit(1);
+     }
+
+
+File: eb-ja.info,  Node: EB_Book Data Types,  Next: EB_Book Functions,  Prev: EB_Book Sample,  Up: EB_Book
+
+データ型の詳細
+==============
+
+   この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+
+     #include <eb/eb.h>
+
+ - Data type: EB_Book
+     `EB_Book' 型は、一冊の CD-ROM 書籍を表します。 CD-ROM 書籍へのアク
+     セスは、すべてこの型のオブジェクトを介して行います。 同時に複数の
+     CD-ROM 書籍にアクセスする際は、書籍一冊毎にオブジェクトを作る必要
+     があります。
+
+     `EB_Book' オブジェクトの操作は、すべて EB
+     ライブラリが用意している関数で行います。 アプリケーションプログラ
+     ムは、直接 `EB_Book' オブジェクトのメンバを参照したり、セットした
+     りすべきではありません。
+
+     `EB_Book' オブジェクトを使用する際は、まずそのオブジェクトに対して
+     `eb_initialize_book()' を呼んで初期化しなくてはなりません。
+
+ - Data type: EB_Disc_Code
+     データ型 `EB_Disc_Code' は、CD-ROM 書籍の形式コードを表します。 現
+     在のところ、次の値が定義されています。
+
+    `EB_DISC_EB'
+          電子ブック (EB, EBG, EBXA, EBXA-C, S-EBXA) であることを表しま
+          す。
+
+    `EB_DISC_EPWING'
+          EPWING であることを表します。
+
+    `EB_DISC_INVALID'
+          不正な形式コード値を表します。
+
+     この型は符合付き整数型の別名として定義されていますので、2 つのコー
+     ドを 2 項演算子 `==' と `!=' で一致比較することができます。
+
+ - Data type: EB_Character_Code
+     データ型 `EB_Character_Code' は、 CD-ROM
+     書籍で使用される文字コードを表します。 現在のところ、次の値が定義
+     されています。
+
+    `EB_CHARCODE_ISO8859_1'
+          ISO 8859-1 (ラテン文字 1) を使用していることを表します。 電子
+          ブックの EBG はこれです。
+
+    `EB_CHARCODE_JISX0208'
+          JIS X 0208 (日本語のかな漢字) を使用していることを表します。
+          EBG, EBXA-C 以外の電子ブック、および EPWING
+          はすべてこれです。
+
+    `EB_CHARCODE_JISX0208_GB2312'
+          JIS X 0208 (日本語のかな漢字) と GB 2312 (中国語の簡体字) を
+          併用していることを表します。 電子ブックの EBXA-C
+          はこれです。
+
+    `EB_CHARCODE_INVALID'
+          不正な文字コード値を表します。
+
+     この型は符合付き整数型の別名として定義されていますので、2 つのコー
+     ドを 2 項演算子 `==' と `!=' で一致比較することができます。
+
+
+File: eb-ja.info,  Node: EB_Book Functions,  Prev: EB_Book Data Types,  Up: EB_Book
+
+関数の詳細
+==========
+
+   この節で説明している関数を使うには、次のようにヘッダファイルを読み込
+んで下さい。
+
+     #include <eb/eb.h>
+
+ - 機能: void eb_initialize_book (EB_Book *BOOK)
+     関数 `eb_initialize_book()' は、BOOK の指す `EB_Book' オブジェクト
+     を初期化します。 `EB_Book' オブジェクトに対して EB ライブラリの他
+     の関数を呼ぶ前に、 必ずそのオブジェクトを初期化しなくてはなりませ
+     ん。 初期化していないオブジェクトに対して、EB ライブラリの他の関数
+     を呼んだ場合の動作は未定義です。 また、すでに初期化したオブジェク
+     トに対して、再度 `eb_initialize_book()' を呼んではいけません。 呼
+     んだ場合の動作は未定義です。
+
+ - 機能: EB_Error_Code eb_bind (EB_Book *BOOK, const char *PATH)
+     関数 `eb_bind()' は、 BOOK の指す `EB_Book' オブジェクトを、パス
+     PATH にある CD-ROM 書籍に結び付けます。 パスには、書籍のトップディ
+     レクトリか遠隔アクセス識別子を指定します。 書籍のトップディレクト
+     リとは、`catalog' あるいは `catalogs' ファイルの存在するディレクト
+     リを指します。
+
+     オブジェクトがすでに書籍に結び付いていた場合、その書籍との結び付き
+     を 解いてから、PATH にある書籍に結び付けます。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 このとき、副本は未選
+     択の状態になります。 失敗すると、オブジェクトを書籍との結び付きを
+     解かれた状態にして、原因を示すエラーコードを返します。
+
+     PATH は、 `EB_MAX_PATH_LENGTH'
+     バイトに収まていなくてはなりません。 さらに、PATH が相対パスのとき
+     は、絶対パスに変換した結果がこの長さに収まっていなくてはなりませ
+     ん。 これを超えると、`EB_ERR_TOO_LONG_FILE_NAME' を返します。
+
+ - 機能: void eb_finalize_book (EB_Book *BOOK)
+     関数 `eb_finalize_book()' は、BOOK が指す `EB_Book' オブジェクトの
+     後始末を行います。
+
+     オブジェクトが割り当てて管理していたメモリはすべて解放され、 ファ
+     イルディスクリプタもすべて閉じられます。 オブジェクトが書籍と結び
+     付いていた場合は、結び付きが解かれます。
+
+     後始末をしたオブジェクトに対して `eb_bind()' を呼ぶことで、 オブジ
+     ェクトを再利用することができます。
+
+ - 機能: int eb_is_bound (EB_Book *BOOK)
+     関数 `eb_is_bound()' は、BOOK が書籍に結び付いているかどうかを調
+     べます。 結び付いていれば 1 を返し、そうでなければ 0 を返します。
+
+ - 機能: EB_Error_Code eb_path (EB_Book *BOOK const char *PATH)
+     関数 `eb_path()' は、BOOK に結び付いている書籍のパスもしくは遠隔
+     アクセス識別子を、PATH の指す領域に書き込みます。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、PATH の指
+     す領域に空文字列を書き込み、原因を示すエラーコードを返します。
+
+     BOOK は、あらかじめ書籍に結び付いている必要があります。 結びついて
+     いない場合は、`EB_ERR_UNBOUND_BOOK' を返します。
+
+     PATH に書き込むパス名のバイト数は、最長で `EB_MAX_PATH_LENGTH' に
+     なります。 この長さは、末尾のナル文字を含みません。 関数が返すパス
+     は正規化された形になっているので、`eb_bind()' に渡したときのもの
+     と同じとは限りません。 たとえば、相対パスだった場合は、絶対パスに
+     変換されます。
+
+ - 機能 : EB_Error_Code eb_disc_type (EB_Book *BOOK, EB_Disc_Code
+          *DISC_CODE)
+     関数 `eb_disc_type()' は、BOOK のディスクの形式を DISC_CODE の指す
+     領域に書き込みます。 書き込むディスクの形式の値は、`EB_Disc_Code'
+     型 (*note [CD-ROM 書籍と `EB_Book' オブジェクト] データ型の詳細 :
+     EB_Book Data Types.)  のいずれかの定数値です。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、 DISC_CODE
+     の指す領域に `EB_DISC_INVALID' を書き込み、原因を示すエラーコード
+     を返します。
+
+     BOOK は、あらかじめ書籍に結び付いていなければなりません。 結びつい
+     ていない場合は、`EB_ERR_UNBOUND_BOOK' を返します。
+
+ - 機能 : EB_Error_Code eb_character_code (EB_Book *BOOK,
+          EB_Character_Code *CHARACTER_CODE)
+     関数 `eb_character_code()' は、 BOOK が書かれている文字コードを
+     CHARACTER_CODE の指す領域に書き込みます。
+     書き込む文字コードの値は、`EB_Character_Code' 型 (*note [CD-ROM 書
+     籍と `EB_Book' オブジェクト] データ型の詳細 : EB_Book Data Types.)
+     のいずれかの定数値です。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、
+     CHARACTER_CODE の指す領域に `EB_CHARCODE_INVALID' を書き込み、原因
+     を示すエラーコードを返します。
+
+     BOOK は、あらかじめ書籍に結び付いていなければなりません。 結びつい
+     ていない場合は、`EB_ERR_UNBOUND_BOOK' を返します。
+
+
+File: eb-ja.info,  Node: Error Handling,  Next: Subbook,  Prev: EB_Book,  Up: Top
+
+エラー処理
+**********
+
+   EB ライブラリの関数の呼び出しは、常に成功するとは限りません。 たとえ
+ば、`EB_Book' オブジェクトを書籍に結びつける関数 `eb_bind()' には、引数
+として書籍のトップディレクトリを渡しますが、 存在しないディレクトリを指
+定した場合、処理は失敗に終わります。
+
+一般にこうした事象は、ユーザが誤ったパスを指定したときに起こりますが、
+メモリ不足のように、ユーザのミスが原因ではない失敗も起こりえます。
+
+   本章では、関数の呼び出しが失敗した場合の処理について説明します。
+
+* Menu:
+
+* Error Code and Message::      エラーコードとエラーメッセージ
+* Tolerance to Error::          エラーに対する寛容さ
+* Error Data Types::            データ型の詳細
+* Error Code List::             エラーコードの一覧
+* Error Functions::             関数の詳細
+
+
+File: eb-ja.info,  Node: Error Code and Message,  Next: Tolerance to Error,  Prev: Error Handling,  Up: Error Handling
+
+エラーコードとエラーメッセージ
+==============================
+
+   EB ライブラリの関数の多くは、戻り値として `EB_Error_Code' 型の値を返
+します。 処理が成功したときに返す値は `EB_SUCCESS' ですが、失敗したとき
+は エラーの原因に応じて様々な値を返します。 このため、EB ライブラリでは
+次のような `EB_SUCCESS' との比較処理がよく行われます。
+
+     EB_Error_Code error_code;
+     
+     error_code = eb_bind(&book, "/mnt/cdrom");
+     if (error_code != EB_SUCCESS) {
+         printf("eb_bind() failed\n");
+         return;
+     }
+
+   エラーコードの値は、関数 `eb_error_message()' によってエラーメッセ
+ージに変換することもできます。 こうすることで、エラーの原因をアプリケー
+ションプログラムのユーザにもう少し分かりやすく伝えることができます。
+
+     error_code = eb_bind(&book, "/mnt/cdrom");
+     if (error_code != EB_SUCCESS) {
+         printf("eb_bind() failed, %s\n",
+             eb_error_message(error_code));
+         return;
+     }
+
+   `error_code' が `EB_ERR_TOO_LONG_FILENAME' にセットされていれば、次
+のようなエラーメッセージが出力されます。
+
+     too long filename
+
+あるいは、次のように日本語のメッセージかも知れません。
+
+     ファイル名が長すぎます
+
+メッセージの国際化機能 (NLS) を無効にして EB ライブラリをコンパイルし
+た場合は、常に英語のメッセージが返ります。 有効にした場合は、ロケールの
+設定によってどちらの言語のメッセージが返るかが決まります。
+
+   本書ではプログラムを簡潔にするために、エラー処理は最低限しか行って
+いません。 けれども一般のアプリケーションプログラムでは、関数の呼び出し
+が成功したかどうかを常にチェックし、処理が失敗した際はエラーメッセージ
+を出力して、ユーザにエラーの原因を伝えるのが望ましいといえます。
+
+
+File: eb-ja.info,  Node: Tolerance to Error,  Next: Error Data Types,  Prev: Error Code and Message,  Up: Error Handling
+
+エラーに対する寛容さ
+====================
+
+   `EB_Book' オブジェクトは、状態に関するパラメタをいくつか持っていま
+す。 オブジェクトが CD-ROM 書籍に結び付いているかどうかも、こうしたパラ
+メタのうちの一つです。
+
+   引数に `EB_Book' オブジェクトへのポインタを取る関数には、あらかじめ
+オブジェクトの特定のパラメタがセットされていることを前提としているもの
+もあります。 たとえば、`eb_path()' は、オブジェクトが書籍に結び付いてい
+ることを前提としています。 では、もしも書籍に結び付いていないオブジェ
+クトを `eb_path()' に渡したらどうなるでしょうか。
+
+     EB_Book book;
+     EB_Error_Code error_code;
+     char path[EB_MAX_PATH_LENGTH + 1];
+     
+     eb_initialize_library();
+     eb_initialize(&book);
+     error_code = eb_path(&book, path);    /* どうなる? */
+
+この場合、`eb_path()' は `EB_ERR_UNBOUND_BOOK' を返します。 EB ライブラ
+リの関数は、必要なパラメタがセットされていないオブジェクトを検知して拒
+絶します。
+
+   しかしながら、参照マニュアルで明示されている場合を除いて、EB ライブ
+ラリの関数は、与えられたポインタが `NULL' かどうかまでは調べません。
+次のようなことをすると、プログラムを異常終了させてしまいます。
+
+     eb_bind(NULL, "/mnt/cdrom");    /* 異常終了! */
+     eb_bind(&book, NULL);           /* これも異常終了! */
+
+
+File: eb-ja.info,  Node: Error Data Types,  Next: Error Code List,  Prev: Tolerance to Error,  Up: Error Handling
+
+データ型の詳細
+==============
+
+   この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+
+     #include <eb/error.h>
+
+ - Data type: EB_Error_Code
+     データ型 `EB_Error_Code' は、 EB
+     ライブラリのエラーコードを表します。 この型は符合付き整数型の別名
+     として定義されていますので、 2 つのコードを 2 項演算子 `==' と `!='
+     で一致比較することができます。
+
+     EB ライブラリでは、全部で `EB_NUMBER_OF_ERRORS'
+     個のフックコードを定義しています。 エラーコードの一覧については、
+     次の節 (*note エラーコードの一覧: Error Code List.)  を参照して下
+     さい。
+

@@ -4,7 +4,7 @@
 @settitle EB Library
 @c %** end of header
 
-@include ebrefile-ver.texi
+@include version-ebrefile.texi
 
 @dircategory CD-ROM Book Utilities
 @direntry
@@ -72,7 +72,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 
 @menu
 * Introduction::                はじめに
-* Invoking ebrefile::           @code{ebrefile} の実行
+* Invoke ebrefile::           @code{ebrefile} の実行
 * Summary of Options::          @code{ebrefile} のオプション一覧
 
 @detailmenu
@@ -87,7 +87,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @end menu
 
 @c ===================================================================
-@node Introduction, Invoking ebrefile, Top, Top
+@node Introduction, Invoke ebrefile, Top, Top
 @chapter はじめに
 
 一冊の CD-ROM 書籍は、大抵複数の @dfn{副本} (@dfn{subbook}) を持ってい
@@ -107,8 +107,8 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @end group
 @end example
 
-EB/EBG/EBXA/EBXA-C/S-EBXA 形式の CD-ROM 書籍は @file{CATALOG} という
-ファイルを、EPWING 形式の CD-ROM 書籍は @file{CATALOGS} というファイル
+EB/EBG/EBXA/EBXA-C/S-EBXA 形式の CD-ROM 書籍は @file{catalog} という
+ファイルを、EPWING 形式の CD-ROM 書籍は @file{catalogs} というファイル
 を持っています。
 これらのファイルは、その CD-ROM 書籍にはどんな副本が収められているのか
 を定義しています。
@@ -145,7 +145,7 @@ CD-ROM 書籍が 3 つの副本を持っている場合、@code{ebrefile} はそのうちの
 EB ライブラリバージョン @value{VERSION} に対応しています。
 
 @c ===================================================================
-@node Invoking ebrefile, Summary of Options, Introduction, Top
+@node Invoke ebrefile, Summary of Options, Introduction, Top
 @chapter @code{ebrefile} の実行
 
 @code{ebrefile} の一般的な起動方法は次の通りです。
@@ -156,7 +156,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 
 @noindent
 @var{書籍へのパス} には、CD-ROM 書籍のトップディレクトリ、つまり 
-@file{CATALOG} または @file{CATALOGS} ファイルが存在するディレクトリを
+@file{catalog} または @file{catalogs} ファイルが存在するディレクトリを
 指定します。
 複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
 できます。
@@ -184,7 +184,7 @@ ebrefile: ebnet には対応していません。
 @end menu
 
 @c -------------------------------------------------------------------
-@node Select Subbooks, Combination with ebzip, Invoking ebrefile, Invoking ebrefile
+@node Select Subbooks, Combination with ebzip, Invoke ebrefile, Invoke ebrefile
 @section 副本の選択
 
 特に指定がないと、@code{ebrefile} は、元のカタログファイルで定義されてい
@@ -241,7 +241,7 @@ ebrefile: ebnet には対応していません。
 
 @noindent
 (@code{ebinfo} コマンドに関しての詳細は、
-@pxref{Invoking ebinfo, , @code{ebinfo} の実行, ebinfo-ja, ebinfo-ja})。
+@pxref{Invoke ebinfo, , @code{ebinfo} の実行, ebinfo-ja, ebinfo-ja})。
 @*
 この例では、3 つの副本が書籍には含まれており、その名前は @code{english}
 @code{french}, @code{german} だということが分かります。
@@ -265,7 +265,7 @@ ebrefile: ebnet には対応していません。
 @code{ebrefile} は副本の定義順序を変えることはできませんので、
 @samp{--subbook} に与える引数の順序は、任意です。
 
-@code{ebrefile} は新たなカタログを @file{CATALOGS(S).new} として生成
+@code{ebrefile} は新たなカタログを @file{catalogs(s).new} として生成
 します。
 元のカタログファイルを新しいものに置き換えるには、次のコマンドを実行
 します。
@@ -322,7 +322,7 @@ ebrefile: ebnet には対応していません。
 @end example
 
 @c -------------------------------------------------------------------
-@node Combination with ebzip,  , Select Subbooks, Invoking ebrefile
+@node Combination with ebzip,  , Select Subbooks, Invoke ebrefile
 @section @code{ebzip} との連携
 
 @code{ebrefile} は、@code{ebzip} という CD-ROM 書籍を圧縮するコマンド
@@ -353,7 +353,7 @@ CD-ROM 書籍が @code{/cdrom} にマウントされ、この書籍には @code{english}、
 @end example
 
 @c ===================================================================
-@node Summary of Options,  , Invoking ebrefile, Top
+@node Summary of Options,  , Invoke ebrefile, Top
 @chapter @code{ebrefile} のオプション一覧
 
 @code{ebrefile} コマンドは、伝統的な一文字オプション名と覚えやすい長い
@@ -371,7 +371,7 @@ CD-ROM 書籍が @code{/cdrom} にマウントされ、この書籍には @code{english}、
 @itemx --output-directory @var{directory}
 新しいカタログファイルを置くディレクトリを指定します。
 指定しなかったときは、カレントディレクトリ (@samp{.}) になります。
-(詳しくは @pxref{Invoking ebrefile, , @code{ebrefile} の実行})。
+(詳しくは @pxref{Invoke ebrefile, , @code{ebrefile} の実行})。
 
 @item -S @var{subbooks}
 @itemx --subbook @var{subbooks}

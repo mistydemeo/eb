@@ -1,5 +1,5 @@
-This is ebinfo-ja.info, produced by makeinfo version 4.0 from
-ebinfo-ja.texi.
+これは ebinfo-ja.info、 ebinfo-ja.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,18 +27,19 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta0 版です。 EB ライブラリバージョン 4.0beta0 に対
+   この文書は第 4.0beta1 版です。 EB ライブラリバージョン 4.0beta1 に対
 応しています。
 
 * Menu:
 
 * Introduction::                はじめに
-* Invoking ebinfo::             `ebinfo' の実行
+* Invoke ebinfo::               `ebinfo' の実行
 * Details about Information::   出力される情報の詳細ついて
+* Book list on EBNET server::   EBNET サーバの書籍一覧
 * Options to ebinfo::           `ebinfo' のオプション
 
 
-File: ebinfo-ja.info,  Node: Introduction,  Next: Invoking ebinfo,  Prev: Top,  Up: Top
+File: ebinfo-ja.info,  Node: Introduction,  Next: Invoke ebinfo,  Prev: Top,  Up: Top
 
 はじめに
 ********
@@ -57,7 +58,7 @@ File: ebinfo-ja.info,  Node: Introduction,  Next: Invoking ebinfo,  Prev: Top,  
 ついては GNU General Public License をお読み下さい。
 
 
-File: ebinfo-ja.info,  Node: Invoking ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
+File: ebinfo-ja.info,  Node: Invoke ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
 
 `ebinfo' の実行
 ***************
@@ -66,10 +67,11 @@ File: ebinfo-ja.info,  Node: Invoking ebinfo,  Next: Details about Information, 
 
      % ebinfo 書籍へのパス
 
-書籍へのパスには、CD-ROM 書籍のトップディレクトリ、つまり `CATALOG' ま
-たは `CATALOGS' ファイルが存在するディレクトリを指定します。 複数のパ
-スを書くことはできませんが、以下のように、パスの指定を省くことはできま
-す。
+書籍へのパスには、CD-ROM 書籍のトップディレクトリ、つまり `catalog' ま
+たは `catalogs' ファイルが存在するディレクトリを指定します。 パスは、
+ローカルなパス (例: `/mnt/dict') でも遠隔アクセス識別子 (例 :
+`ebnet://localhost/dict') でも構いません。 複数のパスを書くことはできま
+せんが、以下のように、パスの指定を省くことはできます。
 
      % ebinfo
 
@@ -121,7 +123,7 @@ File: ebinfo-ja.info,  Node: Invoking ebinfo,  Next: Details about Information, 
            候補: 無
 
 
-File: ebinfo-ja.info,  Node: Details about Information,  Next: Options to ebinfo,  Prev: Invoking ebinfo,  Up: Top
+File: ebinfo-ja.info,  Node: Details about Information,  Next: Book list on EBNET server,  Prev: Invoke ebinfo,  Up: Top
 
 出力される情報の詳細ついて
 **************************
@@ -175,6 +177,7 @@ search methods:
     graphic
           グラフィック検索 (Graphic search).
 
+
 font sizes:
      副本が持つ、フォントのサイズの一覧。 この一覧には、16, 24, 30, 48
      という 4 つのサイズの一部、もしくは全部から構成されます。
@@ -185,8 +188,46 @@ narrow font characters:
 wide font characters:
      副本が定義している全角文字の文字番号の範囲。
 
+
 
-File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Details about Information,  Up: Top
+File: ebinfo-ja.info,  Node: Book list on EBNET server,  Next: Options to ebinfo,  Prev: Details about Information,  Up: Top
+
+EBNET サーバの書籍一覧
+**********************
+
+   通常の出力の代わりに、`ebinfo' は EBNET サーバが公開している書籍の
+一覧を出力することもできます。 この場合のコマンド行の概要は、次のように
+なります。
+
+     % ebinfo --book-list 遠隔サーバ識別子
+
+ここで、遠隔サーバ識別子は、書籍名を含まない遠隔アクセス識別子になり
+ます。 たとえば、
+
+     % ebinfo --book-list ebnet://dict.example.com
+     Name             Title
+     encycl           ブラウンコンサイス百科事典
+     encycl.app       ブラウンコンサイス百科事典 (appendix)
+     crossword        クロスワードパズル辞典
+     travel           ワールドトラベルガイド
+
+このサーバは 3 つの書籍と 1 つの appendix (付録) を持っています。
+`encycl' という書籍の情報を見るには、次のようにします。
+
+     % ebinfo ebnet://dict.example.com/cncyclopedia
+     ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+     文字コード: JIS X 0208
+     副本の数: 1
+     副本 1:
+       題名: ブラウンコンサイス百科事典
+       ディレクトリ: brown
+       検索方式: 前方一致後方一致条件複合メニュー
+       フォントの大きさ: 16 24
+       半角フォントの文字: 0xa121 -- 0xa452
+       全角フォントの文字: 0xa321 -- 0xa452
+
+
+File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Book list on EBNET server,  Up: Top
 
 `ebinfo' のオプション
 *********************
@@ -211,10 +252,11 @@ File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Details about Information
 
 
 Tag Table:
-Node: Top1013
-Node: Introduction1396
-Node: Invoking ebinfo2141
-Node: Details about Information3982
-Node: Options to ebinfo5703
+Node: Top1028
+Node: Introduction1466
+Node: Invoke ebinfo2209
+Node: Details about Information4161
+Node: Book list on EBNET server5890
+Node: Options to ebinfo7147
 
 End Tag Table

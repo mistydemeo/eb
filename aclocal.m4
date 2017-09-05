@@ -1,4 +1,4 @@
-# generated automatically by aclocal 1.7.5 -*- Autoconf -*-
+# generated automatically by aclocal 1.7.6 -*- Autoconf -*-
 
 # Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2002
 # Free Software Foundation, Inc.
@@ -163,7 +163,7 @@ AC_DEFUN([AM_AUTOMAKE_VERSION],[am__api_version="1.7"])
 # Call AM_AUTOMAKE_VERSION so it can be traced.
 # This function is AC_REQUIREd by AC_INIT_AUTOMAKE.
 AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
-	 [AM_AUTOMAKE_VERSION([1.7.5])])
+	 [AM_AUTOMAKE_VERSION([1.7.6])])
 
 # Helper functions for option handling.                    -*- Autoconf -*-
 
@@ -545,18 +545,32 @@ AC_CACHE_CHECK([dependency style of $depcc],
   # using a relative directory.
   cp "$am_depcomp" conftest.dir
   cd conftest.dir
+  # We will build objects and dependencies in a subdirectory because
+  # it helps to detect inapplicable dependency modes.  For instance
+  # both Tru64's cc and ICC support -MD to output dependencies as a
+  # side effect of compilation, but ICC will put the dependencies in
+  # the current directory while Tru64 will put them in the object
+  # directory.
+  mkdir sub
 
   am_cv_$1_dependencies_compiler_type=none
   if test "$am_compiler_list" = ""; then
      am_compiler_list=`sed -n ['s/^#*\([a-zA-Z0-9]*\))$/\1/p'] < ./depcomp`
   fi
   for depmode in $am_compiler_list; do
+    # Setup a source with many dependencies, because some compilers
+    # like to wrap large dependency lists on column 80 (with \), and
+    # we should not choose a depcomp mode which is confused by this.
+    #
     # We need to recreate these files for each test, as the compiler may
     # overwrite some of them when testing with obscure command lines.
     # This happens at least with the AIX C compiler.
-    echo '#include "conftest.h"' > conftest.c
-    echo 'int i;' > conftest.h
-    echo "${am__include} ${am__quote}conftest.Po${am__quote}" > confmf
+    : > sub/conftest.c
+    for i in 1 2 3 4 5 6; do
+      echo '#include "conftst'$i'.h"' >> sub/conftest.c
+      : > sub/conftst$i.h
+    done
+    echo "${am__include} ${am__quote}sub/conftest.Po${am__quote}" > confmf
 
     case $depmode in
     nosideeffect)
@@ -574,11 +588,12 @@ AC_CACHE_CHECK([dependency style of $depcc],
     # mode.  It turns out that the SunPro C++ compiler does not properly
     # handle `-M -o', and we need to detect this.
     if depmode=$depmode \
-       source=conftest.c object=conftest.o \
-       depfile=conftest.Po tmpdepfile=conftest.TPo \
-       $SHELL ./depcomp $depcc -c -o conftest.o conftest.c \
+       source=sub/conftest.c object=sub/conftest.${OBJEXT-o} \
+       depfile=sub/conftest.Po tmpdepfile=sub/conftest.TPo \
+       $SHELL ./depcomp $depcc -c -o sub/conftest.${OBJEXT-o} sub/conftest.c \
          >/dev/null 2>conftest.err &&
-       grep conftest.h conftest.Po > /dev/null 2>&1 &&
+       grep sub/conftst6.h sub/conftest.Po > /dev/null 2>&1 &&
+       grep sub/conftest.${OBJEXT-o} sub/conftest.Po > /dev/null 2>&1 &&
        ${MAKE-make} -s -f confmf > /dev/null 2>&1; then
       # icc doesn't choke on unknown options, it will just issue warnings
       # (even with -Werror).  So we grep stderr for any message
@@ -4754,7 +4769,7 @@ AC_DEFUN(AM_LC_MESSAGES,
        am_cv_val_LC_MESSAGES=yes, am_cv_val_LC_MESSAGES=no)])
     if test $am_cv_val_LC_MESSAGES = yes; then
       AC_DEFINE(HAVE_LC_MESSAGES, 1,
-	[Define if you have the \`LC_MESSAGES' locale category])
+	[Define to 1 if you have the `LC_MESSAGES' locale category])
     fi
   fi])
 
@@ -4781,7 +4796,7 @@ AC_CACHE_CHECK(for struct utimbuf, ac_cv_have_struct_utimbuf,
 ], [ac_cv_have_struct_utimbuf=yes], [ac_cv_have_struct_utimbuf=no])])
 if test $ac_cv_have_struct_utimbuf = yes; then
    AC_DEFINE(HAVE_STRUCT_UTIMBUF, 1,
-[Define if \`struct utimbuf' is declared -- usually in <utime.h>.])
+[Define to 1 if `struct utimbuf' is declared -- usually in <utime.h>.])
 fi
 ])
 
@@ -4820,12 +4835,12 @@ AC_DEFUN([AC_TYPE_SOCKLEN_T],
 [AC_CACHE_CHECK([for socklen_t], ac_cv_type_socklen_t,
 [AC_TRY_COMPILE([
 #include <sys/types.h>
-#include <sys/socket.h>],[
+#include <sys/socket.h>], [
 socklen_t socklen;
 ], [ac_cv_type_socklen_t=yes], [ac_cv_type_socklen_t=no])])
 if test "$ac_cv_type_socklen_t" != yes; then
     AC_DEFINE(socklen_t, int,
-[Define to \`int' if <sys/types.h> or <sys/socket.h> does not define.])
+[Define to `int' if <sys/types.h> or <sys/socket.h> does not define.])
 fi])
 
 dnl * 
@@ -4835,12 +4850,56 @@ AC_DEFUN([AC_TYPE_IN_PORT_T],
 [AC_CACHE_CHECK([for in_port_t], ac_cv_type_in_port_t,
 [AC_TRY_COMPILE([
 #include <sys/types.h>
-#include <sys/socket.h>],[
+#include <sys/socket.h>
+#include <netinet/in.h>], [
 in_port_t in_port;
 ], [ac_cv_type_in_port_t=yes], [ac_cv_type_in_port_t=no])])
 if test "$ac_cv_type_in_port_t" != yes; then
-    AC_DEFINE(in_port_t, int,
-[Define to \`int' if <sys/types.h> or <sys/socket.h> does not define.])
+    ac_cv_sin_port_size=unknown
+    AC_TRY_RUN([
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    int main() {
+	struct sockaddr_in addr;
+	return (sizeof(addr.sin_port) == sizeof(long)) ? 0 : 1;
+    }
+    ], [ac_cv_sin_port_size=long])
+    AC_TRY_RUN([
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    int main() {
+	struct sockaddr_in addr;
+	return (sizeof(addr.sin_port) == sizeof(int)) ? 0 : 1;
+    }
+    ], [ac_cv_sin_port_size=int])
+    AC_TRY_RUN([
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    int main() {
+	struct sockaddr_in addr;
+	return (sizeof(addr.sin_port) == sizeof(short)) ? 0 : 1;
+    }
+    ], [ac_cv_sin_port_size=short])
+    AC_TRY_RUN([
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    int main() {
+	struct sockaddr_in addr;
+	return (sizeof(addr.sin_port) == sizeof(char)) ? 0 : 1;
+    }
+    ], [ac_cv_sin_port_size=char])
+    if test "$ac_cv_sin_port_size" = unknown; then
+	AC_MSG_ERROR([Failed to get size of sin_port in struct sockaddr_in.])
+    fi
+    AC_DEFINE_UNQUOTED(in_port_t, unsigned $ac_cv_sin_port_size,
+[Define to `unsigned char', `unsigned short', `unsigned int' or
+`unsigned long' according with size of `sin_port' in `struct sockaddr_in',
+if <sys/types.h>, <sys/socket.h> or <netinet/in.h> does not define
+`in_port_t'.])
 fi])
 
 dnl * 
@@ -4850,12 +4909,50 @@ AC_DEFUN([AC_TYPE_SA_FAMILY_T],
 [AC_CACHE_CHECK([for sa_family_t], ac_cv_type_sa_family_t,
 [AC_TRY_COMPILE([
 #include <sys/types.h>
-#include <sys/socket.h>],[
+#include <sys/socket.h>], [
 sa_family_t sa_family;
 ], [ac_cv_type_sa_family_t=yes], [ac_cv_type_sa_family_t=no])])
 if test "$ac_cv_type_sa_family_t" != yes; then
-    AC_DEFINE(sa_family_t, int,
-[Define to \`int' if <sys/types.h> or <sys/socket.h> does not define.])
+    ac_cv_sa_family_size=unknown
+    AC_TRY_RUN([
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    int main() {
+	struct sockaddr addr;
+	return (sizeof(addr.sa_family) == sizeof(long)) ? 0 : 1;
+    }
+    ], [ac_cv_sa_family_size=long])
+    AC_TRY_RUN([
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    int main() {
+	struct sockaddr addr;
+	return (sizeof(addr.sa_family) == sizeof(int)) ? 0 : 1;
+    }
+    ], [ac_cv_sa_family_size=int])
+    AC_TRY_RUN([
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    int main() {
+	struct sockaddr addr;
+	return (sizeof(addr.sa_family) == sizeof(short)) ? 0 : 1;
+    }
+    ], [ac_cv_sa_family_size=short])
+    AC_TRY_RUN([
+    #include <sys/types.h>
+    #include <sys/socket.h>
+    int main() {
+	struct sockaddr addr;
+	return (sizeof(addr.sa_family) == sizeof(char)) ? 0 : 1;
+    }
+    ], [ac_cv_sa_family_size=char])
+    if test "$ac_cv_sa_family_size" = unknown; then
+	AC_MSG_ERROR([Failed to get size of sa_family in struct sockaddr.])
+    fi
+    AC_DEFINE_UNQUOTED(sa_family_t, unsigned $ac_cv_sa_family_size,
+[Define to `unsigned char', `unsigned short', `unsigned int' or
+`unsigned long' according with size of `sa_family' in `struct sockaddr',
+if <sys/types.h> or <sys/socket.h> does not define `sa_family_t'.])
 fi])
 
 dnl *
@@ -4899,7 +4996,7 @@ struct in6_addr address;
 ], [ac_cv_struct_in6_addr=yes], [ac_cv_struct_in6_addr=no])])
 if test "$ac_cv_struct_in6_addr" = yes; then
     AC_DEFINE(HAVE_STRUCT_IN6_ADDR, 1,
-[Define if <netinet/in.h> defines \`struct in6_addr'])
+[Define to 1 if <netinet/in.h> defines `struct in6_addr'])
 fi])
 
 dnl * 
@@ -4921,7 +5018,7 @@ address = (char *)&in6addr_any;
 ], [ac_cv_decl_in6addr_any=yes], [ac_cv_decl_in6addr_any=no])])
     if test "$ac_cv_decl_in6addr_any" = yes; then
         AC_DEFINE(IN6ADDR_ANY_DECLARED, 1,
-[Define if \`in6addr_any' is declared by <netinet/in.h>])
+[Define to 1 if `in6addr_any' is declared by <netinet/in.h>])
     fi
 fi])
 
@@ -4944,7 +5041,7 @@ address = (char *)&in6addr_loopback;
 ], [ac_cv_decl_in6addr_loopback=yes], [ac_cv_decl_in6addr_loopback=no])])
     if test "$ac_cv_decl_in6addr_loopback" = yes; then
         AC_DEFINE(IN6ADDR_LOOPBACK_DECLARED, 1,
-[Define if \`in6addr_loopback' is declared by <netinet/in.h>])
+[Define to 1 if `in6addr_loopback' is declared by <netinet/in.h>])
     fi
 fi])
 
@@ -4989,7 +5086,7 @@ struct sockaddr_in6 address;
 ], [ac_cv_struct_sockaddr_in6=yes], [ac_cv_struct_sockaddr_in6=no])])
 if test "$ac_cv_struct_sockaddr_in6" = yes; then
     AC_DEFINE(HAVE_STRUCT_SOCKADDR_IN6, 1,
-[Define if <netinet/in.h> defines \`struct sockaddr_in6'])
+[Define to 1 if <netinet/in.h> defines `struct sockaddr_in6'])
 fi])
 
 dnl * 
@@ -5005,7 +5102,7 @@ struct sockaddr_storage address;
 ], [ac_cv_struct_sockaddr_storage=yes], [ac_cv_struct_sockaddr_storage=no])])
 if test "$ac_cv_struct_sockaddr_storage" = yes; then
     AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE, 1,
-[Define if <netinet/in.h> defines \`struct sockaddr_storage'])
+[Define to 1 if <netinet/in.h> defines `struct sockaddr_storage'])
 fi])
 
 

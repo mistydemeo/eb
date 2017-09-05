@@ -36,6 +36,7 @@
 #include "eb/eb.h"
 #include "eb/error.h"
 #include "eb/font.h"
+#include "eb/booklist.h"
 
 #include "getopt.h"
 #include "ebutils.h"
@@ -82,9 +83,10 @@
  * Unexported functions.
  */
 static void output_error_message EB_P((EB_Error_Code));
-static int output_information EB_P((const char *, int));
+static EB_Error_Code output_booklist EB_P((const char *));
+static EB_Error_Code output_information EB_P((const char *, int));
+static EB_Error_Code output_multi_information EB_P((EB_Book *));
 static void output_help EB_P((void));
-static void output_multi_information EB_P((EB_Book *));
 
 /*
  * Program name and version.
@@ -96,9 +98,10 @@ static const char *invoked_name;
 /*
  * Command line options.
  */
-static const char *short_options = "hmv";
+static const char *short_options = "hlmv";
 static struct option long_options[] = {
   {"help",         no_argument, NULL, 'h'},
+  {"book-list",    no_argument, NULL, 'l'},
   {"multi-search", no_argument, NULL, 'm'},
   {"version",      no_argument, NULL, 'v'},
   {NULL, 0, NULL, 0}
@@ -114,8 +117,10 @@ main(argc, argv)
     int argc;
     char *argv[];
 {
+    EB_Error_Code error_code;
     int ch;
     char *book_path;
+    int booklist_flag;
     int multi_flag;
 
     invoked_name = argv[0];
@@ -135,6 +140,8 @@ main(argc, argv)
      * Parse command line options.
      */
     multi_flag = 0;
+    booklist_flag = 0;
+
     for (;;) {
 	ch = getopt_long(argc, argv, short_options, long_options, NULL);
 	if (ch == -1)
@@ -146,6 +153,13 @@ main(argc, argv)
 	     */
 	    output_help();
 	    exit(0);
+
+	case 'l':
+	    /*
+	     * Option `-l'.  Display book list on an EBNET server. 
+	     */
+	    booklist_flag = 1;
+	    break;
 
 	case 'm':
 	    /*
@@ -184,7 +198,11 @@ main(argc, argv)
     else
 	book_path = argv[optind];
 
-    if (output_information(book_path, multi_flag) < 0)
+    if (booklist_flag)
+	error_code = output_booklist(book_path);
+    else
+	error_code = output_information(book_path, multi_flag);
+    if (error_code != EB_SUCCESS)
 	exit(1);
 
     return 0;
@@ -204,15 +222,58 @@ output_error_message(error_code)
 
 
 /*
+ * Output a list of books that an EBNET server provides.
+ */
+static EB_Error_Code
+output_booklist(url)
+    const char *url;
+{
+    EB_BookList booklist;
+    EB_Error_Code error_code;
+    int book_count;
+    const char *name;
+    const char *title;
+    size_t name_length;
+    int i;
+
+    eb_initialize_booklist(&booklist);
+
+    error_code = eb_get_booklist(&booklist, url);
+    if (error_code != EB_SUCCESS) {
+	output_error_message(error_code);
+	return error_code;
+    }
+
+    printf("%-20s  %s\n", _("Name"), _("Title"));
+
+    book_count = eb_booklist_book_count(&booklist);
+    for (i = 0; i < book_count; i++) {
+	name = eb_booklist_book_name(&booklist, i);
+	title = eb_booklist_book_title(&booklist, i);
+	name_length = strlen(name);
+	if (4 < name_length && strcmp(name + name_length - 4, ".app") == 0)
+	    printf("%-20s  %s (appendix)\n", name, title);
+	else
+	    printf("%-20s  %s\n", name, title);
+    }
+
+    eb_finalize_booklist(&booklist);
+
+    return EB_SUCCESS;
+}
+
+
+/*
  * Output information about the book at `path'.
  * If `multi_flag' is enabled, multi-search information are also output.
  */
-static int
+static EB_Error_Code
 output_information(book_path, multi_flag)
     const char *book_path;
     int multi_flag;
 {
     EB_Book book;
+    EB_Error_Code return_code = EB_SUCCESS;
     EB_Error_Code error_code;
     EB_Disc_Code disc_code;
     EB_Character_Code character_code;
@@ -229,19 +290,28 @@ output_information(book_path, multi_flag)
      * Start to use a book.
      */
     error_code = eb_initialize_library();
-    if (error_code != EB_SUCCESS)
+    if (error_code != EB_SUCCESS) {
+	output_error_message(error_code);
+	return_code = error_code;
 	goto failed;
+    }
     eb_initialize_book(&book);
     error_code = eb_bind(&book, book_path);
-    if (error_code != EB_SUCCESS)
+    if (error_code != EB_SUCCESS) {
+	output_error_message(error_code);
+	return_code = error_code;
 	goto failed;
+    }
 
     /*
      * Output disc type.
      */
     error_code = eb_disc_type(&book, &disc_code);
-    if (error_code != EB_SUCCESS)
+    if (error_code != EB_SUCCESS) {
+	output_error_message(error_code);
+	return_code = error_code;
 	goto failed;
+    }
     printf(_("disc type: "));
     if (disc_code == EB_DISC_EB)
 	printf("EB/EBG/EBXA/EBXA-C/S-EBXA\n");
@@ -252,8 +322,11 @@ output_information(book_path, multi_flag)
      * Output character code.
      */
     error_code = eb_character_code(&book, &character_code);
-    if (error_code != EB_SUCCESS)
+    if (error_code != EB_SUCCESS) {
+	output_error_message(error_code);
+	return_code = error_code;
 	goto failed;
+    }
     printf(_("character code: "));
     switch (character_code) {
     case EB_CHARCODE_ISO8859_1:
@@ -274,8 +347,11 @@ output_information(book_path, multi_flag)
      * Output the number of subbooks in the book.
      */
     error_code = eb_subbook_list(&book, subbook_list, &subbook_count);
-    if (error_code != EB_SUCCESS)
+    if (error_code != EB_SUCCESS) {
+	output_error_message(error_code);
+	return_code = error_code;
 	goto failed;
+    }
     printf(_("the number of subbooks: %d\n\n"), subbook_count);
 
     /*
@@ -288,16 +364,20 @@ output_information(book_path, multi_flag)
 	 * Output a title of the subbook.
 	 */
 	error_code = eb_subbook_title2(&book, subbook_list[i], title);
-	if (error_code != EB_SUCCESS)
+	if (error_code != EB_SUCCESS) {
+	    return_code = error_code;
 	    continue;
+	}
 	printf(_("  title: %s\n"), title);
 
 	/*
 	 * Output a directory name of the subbook.
 	 */
 	error_code = eb_subbook_directory2(&book, subbook_list[i], directory);
-	if (error_code != EB_SUCCESS)
+	if (error_code != EB_SUCCESS) {
+	    return_code = error_code;
 	    continue;
+	}
 	printf(_("  directory: %s\n"), directory);
 
 	/*
@@ -306,6 +386,7 @@ output_information(book_path, multi_flag)
 	error_code = eb_set_subbook(&book, subbook_list[i]);
 	if (error_code != EB_SUCCESS) {
 	    output_error_message(error_code);
+	    return_code = error_code;
 	    continue;
 	}
 
@@ -335,11 +416,16 @@ output_information(book_path, multi_flag)
 	if (error_code != EB_SUCCESS) {
 	    fputc('\n', stdout);
 	    output_error_message(error_code);
+	    return_code = error_code;
 	} else {
 	    for (j = 0; j < font_count; j++) {
 		error_code = eb_font_height2(font_list[j], &font_height);
 		if (error_code == EB_SUCCESS)
 		    printf("%d ", font_height);
+		else {
+		    output_error_message(error_code);
+		    return_code = error_code;
+		}
 	    }
 	    fputc('\n', stdout);
 	}
@@ -366,6 +452,7 @@ output_information(book_path, multi_flag)
 	    else {
 		fputc('\n', stdout);
 		output_error_message(error_code);
+		return_code = error_code;
 	    }
 	} else {
 	    fputc('\n', stdout);
@@ -393,13 +480,17 @@ output_information(book_path, multi_flag)
 	    else {
 		fputc('\n', stdout);
 		output_error_message(error_code);
+		return_code = error_code;
 	    }
 	} else {
 	    fputc('\n', stdout);
 	}
 
-	if (multi_flag)
-	    output_multi_information(&book);
+	if (multi_flag) {
+	    error_code = output_multi_information(&book);
+	    if (error_code != EB_SUCCESS)
+		return_code = error_code;
+	}
 	fputc('\n', stdout);
     }
     fflush(stdout);
@@ -410,7 +501,7 @@ output_information(book_path, multi_flag)
     eb_finalize_book(&book);
     eb_finalize_library();
 
-    return 0;
+    return return_code;
 
     /*
      * An error occurs...
@@ -418,20 +509,20 @@ output_information(book_path, multi_flag)
   failed:
     fflush(stdout);
     fflush(stderr);
-    output_error_message(error_code);
     eb_finalize_book(&book);
     eb_finalize_library();
 
-    return -1;
+    return return_code;
 }
 
 /*
  * Output information about multi searches.
  */
-static void
+static EB_Error_Code
 output_multi_information(book)
     EB_Book *book;
 {
+    EB_Error_Code return_code = EB_SUCCESS;
     EB_Error_Code error_code;
     EB_Multi_Search_Code multi_list[EB_MAX_MULTI_SEARCHES];
     int multi_count;
@@ -440,22 +531,32 @@ output_multi_information(book)
     char entry_label[EB_MAX_MULTI_LABEL_LENGTH + 1];
     int i, j;
 
+    /*
+     * Get a list of mutli search codes.
+     */
     error_code = eb_multi_search_list(book, multi_list, &multi_count);
     if (error_code != EB_SUCCESS) {
 	output_error_message(error_code);
-	return;
+	return_code = error_code;
+	multi_count = 0;
     }
+
+    /*
+     * Output information.
+     */
     for (i = 0; i < multi_count; i++) {
 	printf(_("  multi search %d:\n"), i + 1);
 	error_code = eb_multi_entry_count(book, multi_list[i], &entry_count);
 	if (error_code != EB_SUCCESS) {
 	    output_error_message(error_code);
+	    return_code = error_code;
 	    continue;
 	}
 
 	error_code = eb_multi_title(book, multi_list[i], search_title);
 	if (error_code != EB_SUCCESS) {
 	    output_error_message(error_code);
+	    return_code = error_code;
 	    continue;
 	}
 	printf(_("    title: %s\n"), search_title);
@@ -465,6 +566,7 @@ output_multi_information(book)
 		entry_label);
 	    if (error_code != EB_SUCCESS) {
 		output_error_message(error_code);
+		return_code = error_code;
 		continue;
 	    }
 
@@ -476,7 +578,10 @@ output_multi_information(book)
 		fputs(_("not-exist\n"), stdout);
 	}
     }
+
     fflush(stdout);
+
+    return return_code;
 }
 
 
@@ -490,6 +595,7 @@ output_help()
 	program_name);
     printf(_("Options:\n"));
     printf(_("  -h  --help                 display this help, then exit\n"));
+    printf(_("  -l  --book-list            output a list of books on an EBENT server\n"));
     printf(_("  -m  --multi-search         also output multi-search information\n"));
     printf(_("  -v  --version              display version number, then exit\n"));
     printf(_("\nArgument:\n"));

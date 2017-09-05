@@ -4,7 +4,7 @@
 @settitle ebfont
 @c %** end of header
 
-@include ebfont-ver.texi
+@include version-ebfont.texi
 
 @dircategory CD-ROM Book Utilities
 @direntry
@@ -72,12 +72,12 @@ This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 @menu
 * Introduction::                Introduction.
 * What is Local Character::     What is Local Character?
-* Invoking ebfont::             Invoking @code{ebfont}.
+* Invoke ebfont::               Invoke @code{ebfont}.
 * Summary of Options::          Summary of Options to @code{ebfont}.
 
  --- The Detailed Node Listing ---
 
-Invoking @code{ebfont}
+Invoke @code{ebfont}
 
 * Image Formats::               Image Formats.
 * Heights::                     Heights.
@@ -106,7 +106,7 @@ GNU General Public License for more details.
 This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 
 @c ===================================================================
-@node What is Local Character, Invoking ebfont, Introduction, Top
+@node What is Local Character, Invoke ebfont, Introduction, Top
 @chapter What is Local Character?
 
 Many CD-ROM books define their local characters.
@@ -145,8 +145,8 @@ By deafult, @code{ebfont} generates image files for fonts with the
 height of 16 pixels.
 
 @c ===================================================================
-@node Invoking ebfont, Summary of Options, What is Local Character, Top
-@chapter Invoking @code{ebfont}
+@node Invoke ebfont, Summary of Options, What is Local Character, Top
+@chapter Invoke @code{ebfont}
 
 Its usual way to invoke @code{ebfont} is as follows:
 
@@ -156,7 +156,9 @@ Its usual way to invoke @code{ebfont} is as follows:
 
 @noindent
 @var{book-path} points to the top directory of a CD-ROM book where
-the file @file{CATALOG} or @file{CATALOGS} resides.
+the file @file{catalog} or @file{catalogs} resides.
+It may be a local path (e.g. @samp{/mnt/dict}) or a remote access
+identifier (e.g. @samp{ebnet://localhost/dict}).
 Though you cannot specify two or more book-paths, 
 you can omit book-path like as follows:
 
@@ -209,7 +211,7 @@ The top directory must have been created before invoking @code{ebfont}.
 @end menu
 
 @c -------------------------------------------------------------------
-@node Image Formats, Heights, Invoking ebfont, Invoking ebfont
+@node Image Formats, Heights, Invoke ebfont, Invoke ebfont
 @section Image Formats
 
 @code{ebfont} can generates image files of XBM, XPM, GIF89a and BMP
@@ -242,7 +244,7 @@ white (@samp{#ffffff} in RGB).
 so that the their sizes are too fat.
 
 @c -------------------------------------------------------------------
-@node Heights, Subbooks, Image Formats, Invoking ebfont
+@node Heights, Subbooks, Image Formats, Invoke ebfont
 @section Heights
 
 By deafult, @code{ebfont} generates image files for narrow and wide
@@ -267,7 +269,7 @@ An argument to @samp{--font-height} can be splitted like as follows:
 @end example
 
 @c -------------------------------------------------------------------
-@node Subbooks,  , Heights, Invoking ebfont
+@node Subbooks,  , Heights, Invoke ebfont
 @section Subbooks
 
 @code{ebfont} generates image files for all subbooks by default,
@@ -320,7 +322,7 @@ subbook 3:
 @end example
 
 @noindent
-(@xref{Invoking ebinfo, , Invoking @code{ebinfo}, ebinfo, ebinfo},
+(@xref{Invoke ebinfo, , Invoke @code{ebinfo}, ebinfo, ebinfo},
 for more details about the @code{ebinfo} command).
 @*
 In this example, there are three subbooks in the book, and their
@@ -342,7 +344,7 @@ An argument to @samp{--subbook} can be splitted like as follows:
 @end example
 
 @c ===================================================================
-@node Summary of Options,  , Invoking ebfont, Top
+@node Summary of Options,  , Invoke ebfont, Top
 @chapter Summary of @code{ebfont} Options
 
 The @code{ebfont} command supports both traditional single-letter
@@ -383,7 +385,7 @@ By default, @samp{ebfont} generates image files as XBM format.
 Output image files under @var{directory}.
 By default, @code{ebfont} generates image files under the current working
 directory (@code{.}).
-(@xref{Invoking ebfont}, for more details).
+(@xref{Invoke ebfont}, for more details).
 
 @item -S @var{subbooks}
 @itemx --subbook @var{subbooks}

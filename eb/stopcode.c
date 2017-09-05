@@ -75,10 +75,16 @@ eb_stop_code(appendix, stop_code)
 	goto failed;
     }
 
-    *stop_code = (appendix->subbook_current->stop_code0 << 16)
-	+ appendix->subbook_current->stop_code1;
+    if (appendix->subbook_current->stop_code0 == 0) {
+	error_code = EB_ERR_NO_STOPCODE;
+	goto failed;
+    }
 
-    LOG(("out: eb_stop_code() = %s", eb_error_string(EB_SUCCESS)));
+    stop_code[0] = appendix->subbook_current->stop_code0;
+    stop_code[1] = appendix->subbook_current->stop_code1;
+
+    LOG(("out: eb_stop_code(stop_code=%d,%d) = %s",
+	stop_code[0], stop_code[1], eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -87,7 +93,8 @@ eb_stop_code(appendix, stop_code)
      * An error occurs...
      */
   failed:
-    *stop_code = -1;
+    stop_code[0] = -1;
+    stop_code[1] = -1;
     LOG(("out: eb_stop_code() = %s", eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;

@@ -82,8 +82,8 @@ eb_initialize_search_contexts(book)
     for (i = 0, context = book->search_contexts;
 	 i < EB_NUMBER_OF_SEARCH_CONTEXTS; i++, context++) {
 	context->code = EB_SEARCH_NONE;
-	context->compare_pre = NULL;
-	context->compare_hit = NULL;
+	context->compare_single = NULL;
+	context->compare_group = NULL;
 	context->comparison_result = -1;
 	context->word[0] = '\0';
 	context->canonicalized_word[0] = '\0';
@@ -306,7 +306,7 @@ entry_arrangement=%d, entry_count=%d)",
 		error_code = EB_ERR_UNEXP_TEXT;
 		goto failed;
 	    }
-	    if (context->compare_pre(context->canonicalized_word, cache_p,
+	    if (context->compare_single(context->canonicalized_word, cache_p,
 		(size_t)context->entry_length) <= 0) {
 		next_page = eb_uint4(cache_p + context->entry_length);
 		break;
@@ -631,7 +631,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 * If matched, add it to a hit list.
 		 */
 		context->comparison_result
-		    = context->compare_hit(context->word, cache_p,
+		    = context->compare_single(context->word, cache_p,
 			(size_t)context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
@@ -678,7 +678,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 * If matched, add it to a hit list.
 		 */
 		context->comparison_result
-		    = context->compare_hit(context->word, cache_p + 1,
+		    = context->compare_single(context->word, cache_p + 1,
 			(size_t)context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
@@ -729,10 +729,10 @@ entry_arrangement=%d, entry_count=%d)",
 		     * If matched, add it to a hit list.
 		     */
 		    context->comparison_result
-			= context->compare_hit(context->canonicalized_word,
+			= context->compare_single(context->canonicalized_word,
 			    cache_p + 2, (size_t)context->entry_length);
 		    if (context->comparison_result == 0
-			&& context->compare_hit(context->word, cache_p + 2,
+			&& context->compare_single(context->word, cache_p + 2,
 			    (size_t)context->entry_length) == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
@@ -760,7 +760,7 @@ entry_arrangement=%d, entry_count=%d)",
 			goto failed;
 		    }
 		    context->comparison_result
-			= context->compare_hit(context->canonicalized_word,
+			= context->compare_single(context->canonicalized_word,
 			    cache_p + 4, (size_t)context->entry_length);
 		    context->in_group_entry = 1;
 		    cache_p += context->entry_length + 4;
@@ -782,7 +782,7 @@ entry_arrangement=%d, entry_count=%d)",
 		     */
 		    if (context->comparison_result == 0
 			&& context->in_group_entry
-			&& context->compare_hit(context->word, cache_p + 2,
+			&& context->compare_group(context->word, cache_p + 2,
 			    (size_t)context->entry_length) == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
@@ -963,7 +963,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 * If matched, add it to a hit list.
 		 */
 		context->comparison_result
-		    = context->compare_hit(context->word, cache_p,
+		    = context->compare_single(context->word, cache_p,
 			(size_t)context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
@@ -1009,7 +1009,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 * If matched, add it to a hit list.
 		 */
 		context->comparison_result
-		    = context->compare_hit(context->word, cache_p + 1,
+		    = context->compare_single(context->word, cache_p + 1,
 			(size_t)context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
@@ -1060,10 +1060,10 @@ entry_arrangement=%d, entry_count=%d)",
 		     * If matched, add it to a hit list.
 		     */
 		    context->comparison_result
-			= context->compare_hit(context->canonicalized_word,
+			= context->compare_single(context->canonicalized_word,
 			    cache_p + 2, (size_t)context->entry_length);
 		    if (context->comparison_result == 0
-			&& context->compare_hit(context->word, cache_p + 2,
+			&& context->compare_single(context->word, cache_p + 2,
 			    (size_t)context->entry_length) == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
@@ -1091,7 +1091,7 @@ entry_arrangement=%d, entry_count=%d)",
 			goto failed;
 		    }
 		    context->comparison_result
-			= context->compare_hit(context->word, cache_p + 6,
+			= context->compare_single(context->word, cache_p + 6,
 			    (size_t)context->entry_length);
 		    context->keyword_heading.page
 			= eb_uint4(cache_p + context->entry_length + 6);
@@ -1122,7 +1122,9 @@ entry_arrangement=%d, entry_count=%d)",
 		     * If matched, add it to a hit list.
 		     */
 		    if (context->in_group_entry
-			&& context->comparison_result == 0) {
+			&& context->comparison_result == 0
+			&& context->compare_group(context->word,
+			    cache_p + 2, (size_t)eb_uint1(cache_p)) == 0) {
 			error_code
 			    = eb_tell_text(book, &context->keyword_heading);
 			if (error_code != EB_SUCCESS)
@@ -1301,7 +1303,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 * If matched, add it to a hit list.
 		 */
 		context->comparison_result
-		    = context->compare_hit(context->word, cache_p,
+		    = context->compare_single(context->word, cache_p,
 			(size_t)context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
@@ -1347,7 +1349,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 * If matched, add it to a hit list.
 		 */
 		context->comparison_result
-		    = context->compare_hit(context->word, cache_p + 1,
+		    = context->compare_single(context->word, cache_p + 1,
 			(size_t)context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
@@ -1398,10 +1400,10 @@ entry_arrangement=%d, entry_count=%d)",
 		     * If matched, add it to a hit list.
 		     */
 		    context->comparison_result
-			= context->compare_hit(context->canonicalized_word,
+			= context->compare_single(context->canonicalized_word,
 			    cache_p + 2, (size_t)context->entry_length);
 		    if (context->comparison_result == 0
-			&& context->compare_hit(context->word, cache_p + 2,
+			&& context->compare_single(context->word, cache_p + 2,
 			    (size_t)context->entry_length) == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
@@ -1429,7 +1431,7 @@ entry_arrangement=%d, entry_count=%d)",
 			goto failed;
 		    }
 		    context->comparison_result
-			= context->compare_hit(context->word,
+			= context->compare_single(context->word,
 			    cache_p + 6, (size_t)context->entry_length);
 		    context->in_group_entry = 1;
 		    cache_p += context->entry_length + 6;
@@ -1449,7 +1451,9 @@ entry_arrangement=%d, entry_count=%d)",
 		     * If matched, add it to a hit list.
 		     */
 		    if (context->in_group_entry
-			&& context->comparison_result == 0) {
+			&& context->comparison_result == 0
+			&& context->compare_group(context->word,
+			    cache_p + 2, (size_t)eb_uint1(cache_p)) == 0) {
 			hit->heading.page   = eb_uint4(cache_p + 7);
 			hit->heading.offset = eb_uint2(cache_p + 11);
 			hit->text.page      = eb_uint4(cache_p + 1);

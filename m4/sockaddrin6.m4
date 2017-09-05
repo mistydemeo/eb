@@ -39,7 +39,7 @@ struct sockaddr_in6 address;
 ], [ac_cv_struct_sockaddr_in6=yes], [ac_cv_struct_sockaddr_in6=no])])
 if test "$ac_cv_struct_sockaddr_in6" = yes; then
     AC_DEFINE(HAVE_STRUCT_SOCKADDR_IN6, 1,
-[Define if <netinet/in.h> defines \`struct sockaddr_in6'])
+[Define to 1 if <netinet/in.h> defines `struct sockaddr_in6'])
 fi])
 
 dnl * 
@@ -55,6 +55,6 @@ struct sockaddr_storage address;
 ], [ac_cv_struct_sockaddr_storage=yes], [ac_cv_struct_sockaddr_storage=no])])
 if test "$ac_cv_struct_sockaddr_storage" = yes; then
     AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE, 1,
-[Define if <netinet/in.h> defines \`struct sockaddr_storage'])
+[Define to 1 if <netinet/in.h> defines `struct sockaddr_storage'])
 fi])
 

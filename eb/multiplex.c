@@ -284,8 +284,10 @@ ebnet_connect_socket(host, port, family)
 	if (new_file < 0)
 	    goto failed;
 
-	memcpy(new_entry, multiplex_entry, sizeof(EBNet_Socket_Entry));
+	strcpy(new_entry->address, multiplex_entry->address);
 	new_entry->file = new_file;
+	new_entry->reference_count = multiplex_entry->reference_count;
+	new_entry->reference_id = multiplex_entry->reference_id;
 
     } else {
 	/*
