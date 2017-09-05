@@ -264,8 +264,8 @@ eb_wide_character_text_jis(appendix, character_number, text)
     char *text;
 {
     EB_Error_Code error_code;
-    int start = appendix->subbook_current->wide_start;
-    int end = appendix->subbook_current->wide_end;
+    int start;
+    int end;
     int location;
     EB_Alternation_Cache *cachep;
 
@@ -349,10 +349,13 @@ eb_wide_character_text_latin(appendix, character_number, text)
     char *text;
 {
     EB_Error_Code error_code;
-    int start = appendix->subbook_current->wide_start;
-    int end = appendix->subbook_current->wide_end;
+    int start;
+    int end;
     int location;
     EB_Alternation_Cache *cache_p;
+
+    start = appendix->subbook_current->wide_start;
+    end = appendix->subbook_current->wide_end;
 
     /*
      * Check for `character_number'.  Is it in a font?
@@ -604,7 +607,9 @@ eb_backward_wide_alt_character(appendix, n, character_number)
 	/*
 	 * Check for `*character_number'. (JIS X 0208)
 	 */
-	if (*character_number < start || end < *character_number || (*character_number & 0xff) < 0x21
+	if (*character_number < start
+	    || end < *character_number
+	    || (*character_number & 0xff) < 0x21
 	    || 0x7e < (*character_number & 0xff)) {
 	    error_code = EB_ERR_NO_SUCH_CHAR_TEXT;
 	    goto failed;

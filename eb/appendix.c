@@ -179,7 +179,7 @@ eb_bind_appendix(appendix, path)
     /*
      * Set path of the appendix.
      * The length of the file name "path/subdir/subsubdir/file.;1" must
-     * not exceed PATH_MAX.
+     * be PATH_MAX maximum.
      */
     if (PATH_MAX < strlen(path)) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;

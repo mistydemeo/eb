@@ -156,7 +156,7 @@ eb_presearch_word(book, context)
 	 */
 	if (eb_zlseek(&book->subbook_current->text_zip, 
 	    book->subbook_current->text_file,
-	    (context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	    (off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	    cache_book_code = EB_BOOK_NONE;
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
@@ -431,10 +431,11 @@ eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
     int *hit_count;
 {
     EB_Error_Code error_code;
-    EB_Hit *hit = hit_list;
+    EB_Hit *hit;
     int group_id;
     char *cache_p;
 
+    hit = hit_list;
     *hit_count = 0;
 
     /*
@@ -451,16 +452,16 @@ eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
 	 * Cache may be missed by the two reasons:
 	 *   1. the search process reaches to the end of an index page,
 	 *      and tries to read the next page.
-	 *   2. Someone else used the cache data.
+	 *   2. Someone else used the cache buffer.
 	 * 
 	 * At the case of 1, the search process reads the page and update
 	 * the search context.  At the case of 2. it reads the page but
-	 * muts not update the context!
+	 * must not update the context!
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
 	    if (eb_zlseek(&book->subbook_current->text_zip,
 		book->subbook_current->text_file,
-		(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+		(off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
@@ -739,10 +740,11 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
 {
     EB_Error_Code error_code;
     EB_Text_Context text_context;
-    EB_Hit *hit = hit_list;
+    EB_Hit *hit;
     int group_id;
     char *cache_p;
 
+    hit = hit_list;
     *hit_count = 0;
 
     /*
@@ -773,16 +775,16 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
 	 * Cache may be missed by the two reasons:
 	 *   1. the search process reaches to the end of an index page,
 	 *      and tries to read the next page.
-	 *   2. Someone else used the cache data.
+	 *   2. Someone else used the cache buffer.
 	 * 
 	 * At the case of 1, the search process reads the page and update
 	 * the search context.  At the case of 2. it reads the page but
-	 * muts not update the context!
+	 * must not update the context!
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
 	    if (eb_zlseek(&book->subbook_current->text_zip,
 		book->subbook_current->text_file,
-		(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+		(off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
@@ -1081,10 +1083,11 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
     int *hit_count;
 {
     EB_Error_Code error_code;
-    EB_Hit *hit = hit_list;
+    EB_Hit *hit;
     int group_id;
     char *cache_p;
 
+    hit = hit_list;
     *hit_count = 0;
 
     /*
@@ -1101,16 +1104,16 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
 	 * Cache may be missed by the two reasons:
 	 *   1. the search process reaches to the end of an index page,
 	 *      and tries to read the next page.
-	 *   2. Someone else used the cache data.
+	 *   2. Someone else used the cache buffer.
 	 * 
 	 * At the case of 1, the search process reads the page and update
 	 * the search context.  At the case of 2. it reads the page but
-	 * muts not update the context!
+	 * must not update the context!
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
 	    if (eb_zlseek(&book->subbook_current->text_zip,
 		book->subbook_current->text_file,
-		(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+		(off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
@@ -1369,7 +1372,8 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
 
 
 /*
- * Do AND operation of `hit_lists'.
+ * Do AND operation of hit lists.
+ * and_list = hit_lists[0] AND hit_lists[1] AND ...
  */
 static void
 eb_and_hit_lists(and_list, and_count, max_and_count, hit_list_count,
@@ -1467,8 +1471,8 @@ eb_and_hit_lists(and_list, and_count, max_and_count, hit_list_count,
 	} else {
 	    /*
 	     * This is not hit element.  Increase indexes of all lists
-	     * except for greatest element(s).  If no index is incremented,
-	     * our job has been completed.
+	     * except for greatest element(s).  If there is no list
+	     * whose index is incremented, our job has been completed.
 	     */
 	    increment_count = 0;
 	    for (i = 0; i < hit_list_count; i++) {

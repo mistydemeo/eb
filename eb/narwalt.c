@@ -264,9 +264,9 @@ eb_narrow_character_text_jis(appendix, character_number, text)
     char *text;
 {
     EB_Error_Code error_code;
-    int start = appendix->subbook_current->narrow_start;
-    int end = appendix->subbook_current->narrow_end;
-    int location;
+    int start;
+    int end;
+    off_t location;
     EB_Alternation_Cache *cachep;
 
     start = appendix->subbook_current->narrow_start;
@@ -289,7 +289,8 @@ eb_narrow_character_text_jis(appendix, character_number, text)
     /*
      * Calculate the location of alternation data.
      */
-    location = (appendix->subbook_current->narrow_page - 1) * EB_SIZE_PAGE
+    location
+	= (off_t)(appendix->subbook_current->narrow_page - 1) * EB_SIZE_PAGE
 	+ (((character_number >> 8) - (start >> 8)) * 0x5e
 	    + (character_number & 0xff) - (start & 0xff))
 	* (EB_MAX_ALTERNATION_TEXT_LENGTH + 1);
@@ -349,10 +350,13 @@ eb_narrow_character_text_latin(appendix, character_number, text)
     char *text;
 {
     EB_Error_Code error_code;
-    int start = appendix->subbook_current->narrow_start;
-    int end = appendix->subbook_current->narrow_end;
-    int location;
+    int start;
+    int end;
+    off_t location;
     EB_Alternation_Cache *cache_p;
+
+    start = appendix->subbook_current->narrow_start;
+    end = appendix->subbook_current->narrow_end;
 
     /*
      * Check for `character_number'.  Is it in a font?
@@ -371,7 +375,8 @@ eb_narrow_character_text_latin(appendix, character_number, text)
     /*
      * Calculate the location of alternation data.
      */
-    location = (appendix->subbook_current->narrow_page - 1) * EB_SIZE_PAGE
+    location
+	= (off_t)(appendix->subbook_current->narrow_page - 1) * EB_SIZE_PAGE
 	+ (((character_number >> 8) - (start >> 8)) * 0xfe
 	    + (character_number & 0xff) - (start & 0xff))
 	* (EB_MAX_ALTERNATION_TEXT_LENGTH + 1);
@@ -604,7 +609,9 @@ eb_backward_narrow_alt_character(appendix, n, character_number)
 	/*
 	 * Check for `*character_number'. (JIS X 0208)
 	 */
-	if (*character_number < start || end < *character_number || (*character_number & 0xff) < 0x21
+	if (*character_number < start
+	    || end < *character_number
+	    || (*character_number & 0xff) < 0x21
 	    || 0x7e < (*character_number & 0xff)) {
 	    error_code = EB_ERR_NO_SUCH_CHAR_TEXT;
 	    goto failed;

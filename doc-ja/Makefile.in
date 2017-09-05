@@ -119,7 +119,7 @@ ebzip_ja_TEXINFOS = ebzip-ver.texi
 samplesdir = $(srcdir)/../samples
 
 CLEANFILES = vti.tmp
-EXTRA_DIST = texinfo-ja.tex stamp-eb stamp-ebfont stamp-ebinfo 	stamp-ebrefile stamp-ebzip
+EXTRA_DIST = texinfo-ja.tex stamp-ebfont stamp-ebinfo 	stamp-ebrefile stamp-ebzip
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
@@ -403,9 +403,6 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 @SET_MAKE@
-
-eb-ver.texi: stamp-eb
-	cp $(srcdir)/stamp-eb $(srcdir)/eb-ver.texi
 
 ebfont-ver.texi: stamp-ebfont
 	cp $(srcdir)/stamp-ebfont $(srcdir)/ebfont-ver.texi

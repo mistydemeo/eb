@@ -90,7 +90,7 @@ eb_initialize_messages(book)
     EB_Zip zip;
     int file = -1;
     ssize_t read_length;
-    off_t offset;
+    off_t location;
     int max_messages;
     char language_path_name[PATH_MAX + 1];
     char buffer[EB_SIZE_PAGE];
@@ -102,10 +102,10 @@ eb_initialize_messages(book)
      */
     if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_NONE, language_path_name) == 0) {
-	file = eb_zopen_none(&zip, language_path_name);
+	file = eb_zopen(&zip, language_path_name, EB_ZIP_NONE);
     } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_EBZ, language_path_name) == 0) {
-	file = eb_zopen_ebzip(&zip, language_path_name);
+	file = eb_zopen(&zip, language_path_name, EB_ZIP_EBZIP1);
     }
     if (file < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
@@ -116,7 +116,7 @@ eb_initialize_messages(book)
      * Get a character code of the book, and get the number of langueages
      * in the file.
      */
-    if (eb_zlseek(&zip, file, (EB_MAX_LANGUAGE_NAME_LENGTH + 1)
+    if (eb_zlseek(&zip, file, (off_t)(EB_MAX_LANGUAGE_NAME_LENGTH + 1)
 	* book->language_count + 16, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_LANG;
 	goto failed;
@@ -139,9 +139,10 @@ eb_initialize_messages(book)
     i = 0;
     language = book->languages;
     buffer_p = buffer + EB_MAX_LANGUAGE_NAME_LENGTH + 1;
-    offset = 16 + (EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count
+    location = (off_t)16
+	+ (EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count
 	+ (EB_MAX_LANGUAGE_NAME_LENGTH + 1);
-    language->offset = offset;
+    language->location = location;
 
     for (;;) {
 	int rest_length;
@@ -175,8 +176,8 @@ eb_initialize_messages(book)
 	    i++;
 	    language++;
 	    buffer_p += EB_MAX_LANGUAGE_NAME_LENGTH + 1;
-	    offset += EB_MAX_LANGUAGE_NAME_LENGTH + 1;
-	    language->offset = offset;
+	    location += EB_MAX_LANGUAGE_NAME_LENGTH + 1;
+	    language->location = location;
 	    language->message_count = 0;
 	} else if (language_code == 0 && *(buffer_p + 1) == '\0') {
 	    /*
@@ -188,13 +189,13 @@ eb_initialize_messages(book)
 	     * A message.
 	     */
 	    buffer_p += EB_MAX_MESSAGE_LENGTH + 1;
-	    offset += EB_MAX_MESSAGE_LENGTH + 1;
+	    location += EB_MAX_MESSAGE_LENGTH + 1;
 	    language->message_count++;
 	}
     }
 
     /*
-     * Truncate the number of messages in a language if exceeded its limit.
+     * Truncate the number of messages in a language if exceeds its limit.
      */
     for (i = 0, language = book->languages; i < book->language_count;
 	 i++, language++) {

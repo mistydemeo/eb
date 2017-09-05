@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2000-06-13 16:02+0900\n"
+"POT-Creation-Date: 2000-09-07 17:24+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,261 +15,261 @@ msgstr ""
 "Content-Transfer-Encoding: ENCODING\n"
 
 #. 0 -- 4
-#: eb/error.c:51
+#: eb/error.c:52
 msgid "no error"
 msgstr ""
 
-#: eb/error.c:52
+#: eb/error.c:53
 msgid "memory exhausted"
 msgstr ""
 
-#: eb/error.c:53
+#: eb/error.c:54
 msgid "an empty file name"
 msgstr ""
 
-#: eb/error.c:54
+#: eb/error.c:55
 msgid "too long file name"
 msgstr ""
 
-#: eb/error.c:55
+#: eb/error.c:56
 msgid "too long word"
 msgstr ""
 
 #. 5 -- 9
-#: eb/error.c:58
+#: eb/error.c:59
 msgid "a word contains bad character"
 msgstr ""
 
-#: eb/error.c:59
+#: eb/error.c:60
 msgid "an empty word"
 msgstr ""
 
-#: eb/error.c:60
+#: eb/error.c:61
 msgid "failed to get the current working directory"
 msgstr ""
 
-#: eb/error.c:61
+#: eb/error.c:62
 msgid "failed to open CATALOG or CATALOGS file"
 msgstr ""
 
-#: eb/error.c:62
+#: eb/error.c:63
 msgid "failed to open CATALOG or CATALOGS file for appendix"
 msgstr ""
 
 #. 10 -- 14
-#: eb/error.c:65
+#: eb/error.c:66
 msgid "failed to open LANGUAGE file"
 msgstr ""
 
-#: eb/error.c:66
+#: eb/error.c:67
 msgid "failed to open START or HONMON file"
 msgstr ""
 
-#: eb/error.c:67
+#: eb/error.c:68
 msgid "failed to open a font file"
 msgstr ""
 
-#: eb/error.c:68
+#: eb/error.c:69
 msgid "failed to open APPENDIX or FUROKU file"
 msgstr ""
 
-#: eb/error.c:69
+#: eb/error.c:70
 msgid "failed to read CATALOG or CATALOGS file"
 msgstr ""
 
 #. 15 -- 19
-#: eb/error.c:72
+#: eb/error.c:73
 msgid "failed to read CATALOG or CATALOGS file for appendix"
 msgstr ""
 
-#: eb/error.c:73
+#: eb/error.c:74
 msgid "failed to read LANGUAGE file"
 msgstr ""
 
-#: eb/error.c:74
+#: eb/error.c:75
 msgid "failed to read START or HONMON file"
 msgstr ""
 
-#: eb/error.c:75
+#: eb/error.c:76
 msgid "failed to read a font file"
 msgstr ""
 
 #. 25 -- 29
-#: eb/error.c:76 eb/error.c:86
+#: eb/error.c:77 eb/error.c:87
 msgid "failed to seek APPENDIX or FUROKU file"
 msgstr ""
 
 #. 20 -- 24
-#: eb/error.c:79
+#: eb/error.c:80
 msgid "failed to seek CATALOG or CATALOGS file"
 msgstr ""
 
-#: eb/error.c:80
+#: eb/error.c:81
 msgid "failed to seek CATALOG or CATALOGS file for appendix"
 msgstr ""
 
-#: eb/error.c:81
+#: eb/error.c:82
 msgid "failed to seek LANGUAGE file"
 msgstr ""
 
-#: eb/error.c:82
+#: eb/error.c:83
 msgid "failed to seek START or HONMON file"
 msgstr ""
 
-#: eb/error.c:83
+#: eb/error.c:84
 msgid "failed to seek a font file"
 msgstr ""
 
-#: eb/error.c:87
+#: eb/error.c:88
 msgid "unexpected format in CATALOG or CATALOGS file"
 msgstr ""
 
-#: eb/error.c:88
+#: eb/error.c:89
 msgid "unexpected format in CATALOG or CATALOGS file for appendix"
 msgstr ""
 
-#: eb/error.c:89
+#: eb/error.c:90
 msgid "unexpected format in LANGUAGE file"
 msgstr ""
 
-#: eb/error.c:90
+#: eb/error.c:91
 msgid "unexpected format in START or HONMON file"
 msgstr ""
 
 #. 30 -- 34
-#: eb/error.c:93
+#: eb/error.c:94
 msgid "unexpected format in a font file"
 msgstr ""
 
-#: eb/error.c:94
+#: eb/error.c:95
 msgid "unexpected format in APPENDIX or FUROKU file"
 msgstr ""
 
-#: eb/error.c:95
+#: eb/error.c:96
 msgid "book not bound"
 msgstr ""
 
-#: eb/error.c:96
+#: eb/error.c:97
 msgid "appendix not bound"
 msgstr ""
 
-#: eb/error.c:97
+#: eb/error.c:98
 msgid "no language"
 msgstr ""
 
 #. 35 -- 39
-#: eb/error.c:100
+#: eb/error.c:101
 msgid "no subbook"
 msgstr ""
 
-#: eb/error.c:101
+#: eb/error.c:102
 msgid "no appendix"
 msgstr ""
 
-#: eb/error.c:102
+#: eb/error.c:103
 msgid "no message"
 msgstr ""
 
-#: eb/error.c:103
+#: eb/error.c:104
 msgid "no font"
 msgstr ""
 
-#: eb/error.c:104
+#: eb/error.c:105
 msgid "no START or HONMON file"
 msgstr ""
 
 #. 40 -- 44
-#: eb/error.c:107
+#: eb/error.c:108
 msgid "no current language"
 msgstr ""
 
-#: eb/error.c:108
+#: eb/error.c:109
 msgid "no current subbook"
 msgstr ""
 
-#: eb/error.c:109
+#: eb/error.c:110
 msgid "no current appendix subbook"
 msgstr ""
 
-#: eb/error.c:110
+#: eb/error.c:111
 msgid "no current font"
 msgstr ""
 
-#: eb/error.c:111
+#: eb/error.c:112
 msgid "no such language"
 msgstr ""
 
 #. 45 -- 49
-#: eb/error.c:114
+#: eb/error.c:115
 msgid "no such subbook"
 msgstr ""
 
-#: eb/error.c:115
+#: eb/error.c:116
 msgid "no such appendix subbook"
 msgstr ""
 
-#: eb/error.c:116
+#: eb/error.c:117
 msgid "no such message"
 msgstr ""
 
-#: eb/error.c:117
+#: eb/error.c:118
 msgid "no such font"
 msgstr ""
 
-#: eb/error.c:118
+#: eb/error.c:119
 msgid "no such character bitmap"
 msgstr ""
 
 #. 50 -- 54
-#: eb/error.c:121
+#: eb/error.c:122
 msgid "no such character text"
 msgstr ""
 
-#: eb/error.c:122
+#: eb/error.c:123
 msgid "no such search method"
 msgstr ""
 
-#: eb/error.c:123
+#: eb/error.c:124
 msgid "no such hook"
 msgstr ""
 
-#: eb/error.c:124
+#: eb/error.c:125
 msgid "invalid hook workspace usage"
 msgstr ""
 
-#: eb/error.c:125
+#: eb/error.c:126
 msgid "different content type"
 msgstr ""
 
 #. 55 -- 59
-#: eb/error.c:128
+#: eb/error.c:129
 msgid "no previous search"
 msgstr ""
 
-#: eb/error.c:129
+#: eb/error.c:130
 msgid "no such multi search"
 msgstr ""
 
-#: eb/error.c:130
+#: eb/error.c:131
 msgid "no such multi search entry"
 msgstr ""
 
-#: eb/error.c:131
+#: eb/error.c:132
 msgid "too many words specified"
 msgstr ""
 
-#: eb/error.c:132
+#: eb/error.c:133
 msgid "no word specified"
 msgstr ""
 
 #. 60 -- 64
-#: eb/error.c:135
+#: eb/error.c:136
 msgid "no candidates"
 msgstr ""
 
 #.
 #. * "Unknown error", the special error message.
 #.
-#: eb/error.c:142
+#: eb/error.c:143
 msgid "unknown error"
 msgstr ""

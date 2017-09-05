@@ -66,10 +66,15 @@
 /*
  * Tricks for gettext.
  */
+#ifdef ENABLE_NLS
 #define _(string) gettext(string)
 #ifdef gettext_noop
 #define N_(string) gettext_noop(string)
 #else
+#define N_(string) (string)
+#endif
+#else
+#define _(string) (string)
 #define N_(string) (string)
 #endif
 

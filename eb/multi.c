@@ -64,7 +64,7 @@ eb_initialize_multi_search(book)
     EB_Book *book;
 {
     EB_Error_Code error_code;
-    EB_Subbook *sub = book->subbook_current;
+    EB_Subbook *subbook;
     EB_Multi_Search *multi;
     EB_Search *entry;
     char buffer[EB_SIZE_PAGE];
@@ -74,17 +74,21 @@ eb_initialize_multi_search(book)
     int page;
     int i, j, k;
 
-    for (i = 0, multi = sub->multis; i < sub->multi_count; i++, multi++) {
+    subbook = book->subbook_current;
+
+    for (i = 0, multi = subbook->multis; i < subbook->multi_count;
+	 i++, multi++) {
 	/*
 	 * Read the index table page of the multi search.
 	 */
-	if (eb_zlseek(&sub->text_zip, sub->text_file,
-	    (multi->search.index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	if (eb_zlseek(&subbook->text_zip, subbook->text_file,
+	    (off_t)(multi->search.index_page - 1) * EB_SIZE_PAGE, SEEK_SET)
+	    < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
 	}
-	if (eb_zread(&sub->text_zip, sub->text_file, buffer, EB_SIZE_PAGE)
-	    != EB_SIZE_PAGE) {
+	if (eb_zread(&subbook->text_zip, subbook->text_file, buffer,
+	    EB_SIZE_PAGE) != EB_SIZE_PAGE) {
 	    error_code = EB_ERR_FAIL_READ_TEXT;
 	    goto failed;
 	}
@@ -199,7 +203,7 @@ eb_multi_search_list(book, search_list, search_count)
     int *search_count;
 {
     EB_Error_Code error_code;
-    EB_Subbook_Code *listp;
+    EB_Subbook_Code *list_p;
     int i;
 
     /*
@@ -224,8 +228,8 @@ eb_multi_search_list(book, search_list, search_count)
     }
 
     *search_count = book->subbook_current->multi_count;
-    for (i = 0, listp = search_list; i < *search_count; i++, listp++)
-	*listp = i;
+    for (i = 0, list_p = search_list; i < *search_count; i++, list_p++)
+	*list_p = i;
 
     /*
      * Unlock the book.
@@ -255,7 +259,7 @@ eb_multi_entry_list(book, multi_id, entry_list, entry_count)
     int *entry_count;
 {
     EB_Error_Code error_code;
-    EB_Subbook_Code *listp;
+    EB_Subbook_Code *list_p;
     int i;
 
     /*
@@ -288,8 +292,8 @@ eb_multi_entry_list(book, multi_id, entry_list, entry_count)
     }
 
     *entry_count = book->subbook_current->multis[multi_id].entry_count;
-    for (i = 0, listp = entry_list; i < *entry_count; i++, listp++)
-	*listp = i;
+    for (i = 0, list_p = entry_list; i < *entry_count; i++, list_p++)
+	*list_p = i;
 
     /*
      * Unlock the book.

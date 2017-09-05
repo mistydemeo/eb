@@ -60,19 +60,25 @@
 #endif /* not MAXPATHLEN */
 #endif /* not PATH_MAX */
 
+/*
+ * Unexported functions.
+ */
+static EB_Error_Code eb_initialize_appendix_subbook EB_P((EB_Appendix *));
 
 /*
  * Initialize all subbooks in `appendix'.
  */
-EB_Error_Code
+static EB_Error_Code
 eb_initialize_appendix_subbook(appendix)
     EB_Appendix *appendix;
 {
     EB_Error_Code error_code;
-    EB_Appendix_Subbook *subbook = appendix->subbook_current;
+    EB_Appendix_Subbook *subbook;
     char buffer[16];
     int stop_code_page;
     int character_count;
+
+    subbook = appendix->subbook_current;
 
     /*
      * Check for the current status.
@@ -158,7 +164,7 @@ eb_initialize_appendix_subbook(appendix)
     }
     stop_code_page = eb_uint4(buffer);
     if (eb_zlseek(&subbook->appendix_zip, subbook->appendix_file,
-	(stop_code_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	(off_t)(stop_code_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
@@ -476,6 +482,7 @@ eb_set_appendix_subbook(appendix, subbook_code)
     EB_Error_Code error_code;
     EB_Appendix_Subbook *subbook;
     char appendix_path_name[PATH_MAX + 1];
+    EB_Zip_Code zip_code;
 
     /*
      * Lock the appendix.
@@ -518,31 +525,30 @@ eb_set_appendix_subbook(appendix, subbook_code)
      * Open an appendix file.
      */
     subbook->appendix_file = -1;
+    zip_code = EB_ZIP_INVALID;
     if (appendix->disc_code == EB_DISC_EB) {
 	if (eb_compose_path_name2(appendix->path, subbook->directory_name, 
 	    EB_FILE_NAME_APPENDIX, EB_SUFFIX_NONE, appendix_path_name) == 0) {
-	    subbook->appendix_file = eb_zopen_none(&subbook->appendix_zip,
-		appendix_path_name);
+	    zip_code = EB_ZIP_NONE;
 	} else if (eb_compose_path_name2(appendix->path,
 	    subbook->directory_name, EB_FILE_NAME_APPENDIX, EB_SUFFIX_EBZ,
 	    appendix_path_name) == 0) {
-	    subbook->appendix_file = eb_zopen_ebzip(&subbook->appendix_zip,
-		appendix_path_name);
+	    zip_code = EB_ZIP_EBZIP1;
 	}
     } else {
 	if (eb_compose_path_name3(appendix->path, subbook->directory_name,
 	    subbook->data_directory_name, EB_FILE_NAME_FUROKU, EB_SUFFIX_NONE,
 	    appendix_path_name) == 0) {
-	    subbook->appendix_file = eb_zopen_none(&subbook->appendix_zip, 
-		appendix_path_name);
+	    zip_code = EB_ZIP_NONE;
 	} else if (eb_compose_path_name3(appendix->path,
 	    subbook->directory_name, subbook->data_directory_name,
 	    EB_FILE_NAME_FUROKU, EB_SUFFIX_EBZ, appendix_path_name) == 0) {
-	    subbook->appendix_file = eb_zopen_ebzip(&subbook->appendix_zip,
-		appendix_path_name);
+	    zip_code = EB_ZIP_EBZIP1;
 	}
     }
 
+    subbook->appendix_file = eb_zopen(&subbook->appendix_zip,
+	appendix_path_name, zip_code);
     if (subbook->appendix_file < 0) {
 	subbook = NULL;
 	error_code = EB_ERR_FAIL_OPEN_APP;

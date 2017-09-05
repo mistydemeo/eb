@@ -337,9 +337,9 @@ struct EB_Zip_Struct {
     EB_Zip_Code code;
 
     /*
-     * Current offset.
+     * Current location.
      */
-    off_t offset;
+    off_t location;
 
     /*
      * Size of an Uncopressed file.
@@ -372,12 +372,12 @@ struct EB_Zip_Struct {
     time_t mtime;
 
     /*
-     * Location of an index table. (EPWING compression only)
+     * Location of an index table. (EPWING and S-EBXA compression only)
      */
     off_t index_location;
 
     /*
-     * Length of an index table. (EPWING compression only)
+     * Length of an index table. (EPWING and S-EBXA compression only)
      */
     size_t index_length;
 
@@ -400,6 +400,17 @@ struct EB_Zip_Struct {
      * Root node of a Huffman tree. (EPWING compression only)
      */
     EB_Huffman_Node *huffman_root;
+
+    /*
+     * Region of compressed pages. (S-EBXA compression only)
+     */
+    off_t zip_start_location;
+    off_t zip_end_location;
+
+    /*
+     * Add this value to offset written in index. (S-EBXA compression only)
+     */
+    off_t index_base;
 };
 
 /*
@@ -582,9 +593,9 @@ struct EB_Language_Struct {
     EB_Language_Code code;
 
     /*
-     * Offset of the messages in the language file.
+     * Location of the messages in the language file.
      */
-    off_t offset;
+    off_t location;
 
     /*
      * The number of messages the language file has.

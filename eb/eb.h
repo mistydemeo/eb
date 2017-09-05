@@ -61,6 +61,9 @@ int eb_have_graphic_search EB_P((EB_Book *));
 int eb_have_keyword_search EB_P((EB_Book *));
 EB_Error_Code eb_search_keyword EB_P((EB_Book *, const char * const []));
 
+/* lock.c */
+int eb_pthread_enabled EB_P((void));
+
 /* menu.c */
 int eb_have_menu EB_P((EB_Book *));
 EB_Error_Code eb_menu EB_P((EB_Book *, EB_Position *));

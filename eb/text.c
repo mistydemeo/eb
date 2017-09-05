@@ -112,7 +112,7 @@ static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
  * Unexported functions.
  */
 static EB_Error_Code eb_read_text_internal EB_P((EB_Book *, EB_Appendix *,
-    const EB_Hookset *, size_t, char *, ssize_t *));
+    EB_Hookset *, size_t, char *, ssize_t *));
 
 /*
  * Initialize text processing status.
@@ -162,7 +162,7 @@ eb_seek_text(book, position)
     /*
      * Initialize text-context variables.
      */
-    book->text_context.location = (position->page - 1) * EB_SIZE_PAGE
+    book->text_context.location = (off_t)(position->page - 1) * EB_SIZE_PAGE
 	+ position->offset;
     book->text_context.code = EB_TEXT_NONE;
     book->text_context.work_length = 0;
@@ -245,7 +245,7 @@ EB_Error_Code
 eb_read_text(book, appendix, hookset, text_max_length, text, text_length)
     EB_Book *book;
     EB_Appendix *appendix;
-    const EB_Hookset *hookset;
+    EB_Hookset *hookset;
     size_t text_max_length;
     char *text;
     ssize_t *text_length;
@@ -290,6 +290,14 @@ eb_read_text(book, appendix, hookset, text_max_length, text, text_length)
 	}
     } else {
 	book->text_context.code = EB_TEXT_TEXT;
+	book->text_context.work_length = 0;
+	book->text_context.work_step = 0;
+	book->text_context.narrow_flag = 0;
+	book->text_context.printable_count = 0;
+	book->text_context.file_end_flag = 0;
+	book->text_context.text_end_flag = 0;
+	book->text_context.skip_code = SKIP_CODE_NONE;
+	book->text_context.auto_stop_code = -1;
 
 	/*
 	 * Call the function bound to `EB_HOOK_INITIALIZE'.
@@ -341,7 +349,7 @@ EB_Error_Code
 eb_read_heading(book, appendix, hookset, text_max_length, text, text_length)
     EB_Book *book;
     EB_Appendix *appendix;
-    const EB_Hookset *hookset;
+    EB_Hookset *hookset;
     size_t text_max_length;
     char *text;
     ssize_t *text_length;
@@ -386,6 +394,14 @@ eb_read_heading(book, appendix, hookset, text_max_length, text, text_length)
 	}
     } else {
 	book->text_context.code = EB_TEXT_HEADING;
+	book->text_context.work_length = 0;
+	book->text_context.work_step = 0;
+	book->text_context.narrow_flag = 0;
+	book->text_context.printable_count = 0;
+	book->text_context.file_end_flag = 0;
+	book->text_context.text_end_flag = 0;
+	book->text_context.skip_code = SKIP_CODE_NONE;
+	book->text_context.auto_stop_code = -1;
 
 	/*
 	 * Call the function bound to `EB_HOOK_INITIALIZE'.
@@ -514,45 +530,28 @@ eb_read_text_internal(book, appendix, hookset, text_max_length, text,
     text_length)
     EB_Book *book;
     EB_Appendix *appendix;
-    const EB_Hookset *hookset;
+    EB_Hookset *hookset;
     size_t text_max_length;
     char *text;
     ssize_t *text_length;
 {
     EB_Error_Code error_code;
-    char *text_p = text;
+    char *text_p;
     unsigned char c;
-    size_t text_rest_length = text_max_length;
+    size_t text_rest_length;
     char *cache_p;
     const EB_Hook *hook;
     size_t cache_rest_length;
     int argv[EB_MAX_ARGV];
     int argc;
 
+    text_p = text;
+    text_rest_length = text_max_length;
+
     /*
      * Lock cache data.
      */
     pthread_mutex_lock(&cache_mutex);
-
-    /*
-     * If unprocessed data are rest in `book->text_context.work_buffer',
-     * copy them to `cache_p'.
-     */
-    if (0 < book->text_context.work_length) {
-	if (text_rest_length < book->text_context.work_length)
-	    goto succeeded;
-	strcpy(text_p, book->text_context.work_buffer);
-
-	cache_p += book->text_context.work_step;
-	cache_rest_length -= book->text_context.work_step;
-	book->text_context.location += book->text_context.work_step;
-
-	text_p += book->text_context.work_length;
-	text_rest_length -= book->text_context.work_length;
-
-	book->text_context.work_length = 0;
-	book->text_context.work_step = 0;
-    }
 
     /*
      * Do nothing if the text-end flag has been set.
@@ -578,6 +577,41 @@ eb_read_text_internal(book, appendix, hookset, text_max_length, text,
 	cache_rest_length = 0;
     }
 
+    /*
+     * If unprocessed string are rest in `book->text_context.work_buffer',
+     * copy them to `text_p'.
+     */
+    if (0 < book->text_context.work_length) {
+	if (text_rest_length < book->text_context.work_length)
+	    goto succeeded;
+
+	/*
+	 * Update cache controll variables.
+	 * We have to discard cache data if text corresponding to
+	 * `book->text_context.work_buffer' is not remained in the cache
+	 * buffer.
+	 */
+	if (book->text_context.work_length <= cache_rest_length) {
+	    cache_p += book->text_context.work_step;
+	    cache_rest_length -= book->text_context.work_step;
+	} else {
+	    cache_book_code = EB_BOOK_NONE;
+	    cache_p = cache_buffer;
+	    cache_length = 0;
+	    cache_rest_length = 0;
+	}
+
+	/*
+	 * Append the unprocessed string to `text'.
+	 */
+	strcpy(text_p, book->text_context.work_buffer);
+	text_p += book->text_context.work_length;
+	text_rest_length -= book->text_context.work_length;
+	book->text_context.location += book->text_context.work_step;
+	book->text_context.work_length = 0;
+	book->text_context.work_step = 0;
+    }
+
     for (;;) {
 	book->text_context.work_step = 0;
 	*book->text_context.work_buffer = '\0';
@@ -586,7 +620,7 @@ eb_read_text_internal(book, appendix, hookset, text_max_length, text,
 	/*
 	 * If it reaches to the near of the end of the cache buffer,
 	 * then moves remaind cache text to the beginning of the cache
-	 * buffer, and reads next from a file.
+	 * buffer, and reads a next chunk from a file.
 	 */
 	if (cache_rest_length < SIZE_FEW_REST
 	    && !book->text_context.file_end_flag) {
@@ -595,7 +629,8 @@ eb_read_text_internal(book, appendix, hookset, text_max_length, text,
 	    if (0 < cache_rest_length)
 		memmove(cache_buffer, cache_p, cache_rest_length);
 	    if (eb_zlseek(&book->subbook_current->text_zip, 
-		book->subbook_current->text_file, book->text_context.location,
+		book->subbook_current->text_file,
+		book->text_context.location + cache_rest_length,
 		SEEK_SET) == -1) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
@@ -752,6 +787,11 @@ eb_read_text_internal(book, appendix, hookset, text_max_length, text,
 		/* end of emphasis */
 		book->text_context.work_step = 2;
 		hook = hookset->hooks + EB_HOOK_END_EMPHASIS;
+		break;
+
+	    case 0x14:
+		book->text_context.work_step = 4;
+		book->text_context.skip_code = 0x15;
 		break;
 
 	    case 0x1a: case 0x1b: case 0x1c: case 0x1d: case 0x1e: case 0x1f:
@@ -1168,7 +1208,7 @@ eb_read_text_internal(book, appendix, hookset, text_max_length, text,
 EB_Error_Code
 eb_forward_text(book, hookset)
     EB_Book *book;
-    const EB_Hookset *hookset;
+    EB_Hookset *hookset;
 {
     EB_Error_Code error_code;
     char text[EB_SIZE_PAGE];
@@ -1248,7 +1288,6 @@ eb_forward_text(book, hookset)
     if (hookset != &eb_default_hookset)
 	eb_unlock(&hookset->lock);
     eb_unlock(&book->lock);
-    pthread_mutex_unlock(&cache_mutex);
     return EB_SUCCESS;
 
     /*
@@ -1322,7 +1361,6 @@ eb_forward_heading(book)
      */
   succeeded:
     eb_unlock(&book->lock);
-    pthread_mutex_unlock(&cache_mutex);
     return EB_SUCCESS;
 
     /*

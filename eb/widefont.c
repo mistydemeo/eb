@@ -66,12 +66,14 @@ eb_initialize_wide_font(book)
     EB_Book *book;
 {
     EB_Error_Code error_code;
-    EB_Subbook *subbook = book->subbook_current;
+    EB_Subbook *subbook;
     char font_path_name[PATH_MAX + 1];
     char buffer[16];
     int character_count;
     EB_Zip *zip;
     int font_file;
+
+    subbook = book->subbook_current;
 
     /*
      * If the book is EBWING, open the wide font file.
@@ -84,14 +86,14 @@ eb_initialize_wide_font(book)
 	    subbook->gaiji_directory_name, subbook->wide_current->file_name,
 	    EB_SUFFIX_NONE, font_path_name) == 0) {
 	    subbook->wide_current->font_file 
-		= eb_zopen_none(&subbook->wide_current->zip,
-		    font_path_name);
+		= eb_zopen(&subbook->wide_current->zip, font_path_name,
+		    EB_ZIP_NONE);
 	} else if (eb_compose_path_name3(book->path, subbook->directory_name,
 	    subbook->gaiji_directory_name, subbook->wide_current->file_name,
 	    EB_SUFFIX_EBZ, font_path_name) == 0) {
 	    subbook->wide_current->font_file
-		= eb_zopen_ebzip(&subbook->wide_current->zip,
-		    font_path_name);
+		= eb_zopen(&subbook->wide_current->zip, font_path_name,
+		    EB_ZIP_EBZIP1);
 	}
 
 	if (subbook->wide_current->font_file < 0) {
@@ -579,8 +581,8 @@ eb_wide_character_bitmap_jis(book, character_number, bitmap)
     char *bitmap;
 {
     EB_Error_Code error_code;
-    int start = book->subbook_current->wide_current->start;
-    int end = book->subbook_current->wide_current->end;
+    int start;
+    int end;
     int character_index;
     off_t location;
     int width;
@@ -588,6 +590,9 @@ eb_wide_character_bitmap_jis(book, character_number, bitmap)
     size_t size;
     EB_Zip *zip;
     int font_file;
+
+    start = book->subbook_current->wide_current->start;
+    end = book->subbook_current->wide_current->end;
 
     /*
      * Check for `character_number'.  Is it in a range of bitmaps?
@@ -661,8 +666,8 @@ eb_wide_character_bitmap_latin(book, character_number, bitmap)
     char *bitmap;
 {
     EB_Error_Code error_code;
-    int start = book->subbook_current->wide_current->start;
-    int end = book->subbook_current->wide_current->end;
+    int start;
+    int end;
     int character_index;
     off_t location;
     int width;
@@ -670,6 +675,9 @@ eb_wide_character_bitmap_latin(book, character_number, bitmap)
     size_t size;
     EB_Zip *zip;
     int font_file;
+
+    start = book->subbook_current->wide_current->start;
+    end = book->subbook_current->wide_current->end;
 
     /*
      * Check for `ch'.  Is it in a range of bitmaps?

@@ -74,20 +74,23 @@ char *memset();
 /*
  * Unexported functions.
  */
+static EB_Error_Code eb_initialize_subbook EB_P((EB_Book *));
 static EB_Error_Code eb_initialize_indexes EB_P((EB_Book *));
 
 
 /*
  * Get information about the current subbook.
  */
-EB_Error_Code
+static EB_Error_Code
 eb_initialize_subbook(book)
     EB_Book *book;
 {
     EB_Error_Code error_code;
-    EB_Subbook *subbook = book->subbook_current;
+    EB_Subbook *subbook;
     int i;
 
+    subbook = book->subbook_current;
+    
     /*
      * Current subbook must have been set.
      */
@@ -151,7 +154,7 @@ eb_initialize_subbook(book)
 	 * Rewind the file descriptor of the start file.
 	 */
 	if (eb_zlseek(&subbook->text_zip, subbook->text_file, 
-	    (subbook->index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	    (off_t)(subbook->index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
 	}
@@ -280,7 +283,7 @@ eb_initialize_indexes(book)
     EB_Book *book;
 {
     EB_Error_Code error_code;
-    EB_Subbook *subbook = book->subbook_current;
+    EB_Subbook *subbook;
     EB_Search search;
     char buffer[EB_SIZE_PAGE];
     char *buffer_p;
@@ -289,6 +292,20 @@ eb_initialize_indexes(book)
     int availability;
     int global_availability; 
     int i;
+
+    subbook = book->subbook_current;
+
+    /*
+     * Initialize zip information (EB* only, for S-EBXA compression).
+     */
+    if (book->disc_code == EB_DISC_EB
+	&& subbook->text_zip.code == EB_ZIP_NONE) {
+	subbook->text_zip.zip_start_location = 0;
+	subbook->text_zip.zip_end_location   = 0;
+	subbook->text_zip.index_base         = 0;
+	subbook->text_zip.index_location     = 0;
+	subbook->text_zip.index_length       = 0;
+    }
 
     /*
      * Read the index table in the subbook.
@@ -369,12 +386,37 @@ eb_initialize_indexes(book)
 	 */
 	id = eb_uint1(buffer_p);
 	switch (id) {
+	case 0x00:
+	    if (book->disc_code == EB_DISC_EB
+		&& subbook->text_zip.code == EB_ZIP_NONE) {
+		subbook->text_zip.zip_start_location
+		    = (off_t)(eb_uint4(buffer_p + 2) - 1) * EB_SIZE_PAGE;
+		subbook->text_zip.zip_end_location
+		    = (off_t)subbook->text_zip.zip_start_location
+		    + eb_uint4(buffer_p + 6) * EB_SIZE_PAGE;
+	    }
+	    break;
 	case 0x01:
 	    memcpy(&subbook->menu, &search, sizeof(EB_Search));
 	    break;
 	case 0x02:
-	case 0x21:
 	    memcpy(&subbook->copyright, &search, sizeof(EB_Search));
+	    break;
+	case 0x21:
+	    if (book->disc_code == EB_DISC_EB
+		&& subbook->text_zip.code == EB_ZIP_NONE) {
+		subbook->text_zip.index_base
+		    = (eb_uint4(buffer_p + 2) - 1) * EB_SIZE_PAGE;
+	    }
+	    break;
+	case 0x22:
+	    if (book->disc_code == EB_DISC_EB
+		&& subbook->text_zip.code == EB_ZIP_NONE) {
+		subbook->text_zip.index_location
+		    = (off_t)(eb_uint4(buffer_p + 2) - 1) * EB_SIZE_PAGE;
+		subbook->text_zip.index_length
+		    = (off_t)eb_uint4(buffer_p + 6) * EB_SIZE_PAGE;
+	    }
 	    break;
 	case 0x70:
 	    memcpy(&subbook->endword_kana, &search, sizeof(EB_Search));
@@ -455,6 +497,17 @@ eb_initialize_indexes(book)
 	}
     }
 
+    /*
+     * Set S-EBXA compression flag.
+     * The text file has been opend with eb_zopen_none(), but we don't
+     * re-open the file with eb_zopen_sebxa().
+     */
+    if (book->disc_code == EB_DISC_EB
+	&& subbook->text_zip.code == EB_ZIP_NONE
+	&& subbook->text_zip.zip_end_location != 0
+	&& subbook->text_zip.index_length != 0)
+	subbook->text_zip.code = EB_ZIP_SEBXA;
+
     return EB_SUCCESS;
 
     /*
@@ -475,7 +528,7 @@ eb_subbook_list(book, subbook_list, subbook_count)
     int *subbook_count;
 {
     EB_Error_Code error_code;
-    EB_Subbook_Code *listp;
+    EB_Subbook_Code *list_p;
     int i;
 
     /*
@@ -491,8 +544,8 @@ eb_subbook_list(book, subbook_list, subbook_count)
 	goto failed;
     }
 
-    for (i = 0, listp = subbook_list; i < book->subbook_count; i++, listp++)
-	*listp = i;
+    for (i = 0, list_p = subbook_list; i < book->subbook_count; i++, list_p++)
+	*list_p = i;
     *subbook_count = book->subbook_count;
 
     /*
@@ -768,6 +821,7 @@ eb_set_subbook(book, subbook_code)
     EB_Error_Code error_code;
     EB_Subbook *subbook;
     char text_path_name[PATH_MAX + 1];
+    EB_Zip_Code zip_code;
 
     /*
      * Lock the book.
@@ -831,46 +885,44 @@ eb_set_subbook(book, subbook_code)
     /*
      * Open a text file if exists.
      */
-    subbook->text_file = -1;
+    zip_code = EB_ZIP_INVALID;
 
     if (book->disc_code == EB_DISC_EB) {
 	if (eb_compose_path_name2(book->path, subbook->directory_name, 
 	    EB_FILE_NAME_START, EB_SUFFIX_NONE, text_path_name) == 0) {
-	    subbook->text_file = eb_zopen_none(&subbook->text_zip, 
-		text_path_name);
+	    zip_code = EB_ZIP_NONE;
 	} else if (eb_compose_path_name2(book->path, subbook->directory_name, 
 	    EB_FILE_NAME_START, EB_SUFFIX_EBZ, text_path_name) == 0) {
-	    subbook->text_file = eb_zopen_ebzip(&subbook->text_zip, 
-		text_path_name);
+	    zip_code = EB_ZIP_EBZIP1;
 	}
     } else {
 	if (eb_compose_path_name3(book->path, subbook->directory_name,
 	    subbook->data_directory_name, EB_FILE_NAME_HONMON2,
 	    EB_SUFFIX_NONE, text_path_name) == 0) {
-	    if (book->version < 6) {
-		subbook->text_file = eb_zopen_epwing(&subbook->text_zip, 
-		    text_path_name);
-	    } else {
-		subbook->text_file = eb_zopen_epwing6(&subbook->text_zip, 
-		    text_path_name);
-	    }
+	    if (book->version < 6)
+		zip_code = EB_ZIP_EPWING;
+	    else
+		zip_code = EB_ZIP_EPWING6;
+
 	} else if (eb_compose_path_name3(book->path, subbook->directory_name,
 	    subbook->data_directory_name, EB_FILE_NAME_HONMON,
 	    EB_SUFFIX_NONE, text_path_name) == 0) {
-	    subbook->text_file = eb_zopen_none(&subbook->text_zip, 
-		text_path_name);
+	    zip_code = EB_ZIP_NONE;
 	} else if (eb_compose_path_name3(book->path, subbook->directory_name,
 	    subbook->data_directory_name, EB_FILE_NAME_HONMON,
 	    EB_SUFFIX_EBZ, text_path_name) == 0) {
-	    subbook->text_file = eb_zopen_ebzip(&subbook->text_zip,
-		text_path_name);
+	    zip_code = EB_ZIP_EBZIP1;
 	}
     }
 
-    if (subbook->text_file < 0) {
-	subbook = NULL;
-	error_code = EB_ERR_FAIL_OPEN_TEXT;
-	goto failed;
+    if (zip_code != EB_ZIP_INVALID) {
+	subbook->text_file = eb_zopen(&subbook->text_zip, text_path_name,
+	    zip_code);
+	if (subbook->text_file < 0) {
+	    subbook = NULL;
+	    error_code = EB_ERR_FAIL_OPEN_TEXT;
+	    goto failed;
+	}
     }
 
     /*
@@ -892,6 +944,7 @@ eb_set_subbook(book, subbook_code)
      */
   failed:
     eb_unset_subbook(book);
+    eb_unlock(&book->lock);
     return error_code;
 }
 

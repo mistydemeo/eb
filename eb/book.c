@@ -158,7 +158,7 @@ eb_bind(book, path)
     /*
      * Set the path of the book.
      * The length of the file name "<path>/subdir/subsubdir/file.ebz;1" must
-     * not exceed PATH_MAX.
+     * be PATH_MAX maximum.
      */
     if (PATH_MAX < strlen(path)) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;

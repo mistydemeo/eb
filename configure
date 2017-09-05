@@ -733,7 +733,7 @@ fi
 
 PACKAGE=eb
 
-VERSION=3.0alpha1
+VERSION=3.0alpha2
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -842,27 +842,27 @@ fi
 # Check whether --with-pthread-cppflags or --without-pthread-cppflags was given.
 if test "${with_pthread_cppflags+set}" = set; then
   withval="$with_pthread_cppflags"
-  pthread_cppflags="${withval}"
+  PTHREAD_CPPFLAGS="${withval}"
 else
-  pthread_cppflags=''
+  PTHREAD_CPPFLAGS=''
 fi
 
 
-# Check whether --with-pthread-clags or --without-pthread-clags was given.
-if test "${with_pthread_clags+set}" = set; then
-  withval="$with_pthread_clags"
-  pthread_cflags="${withval}"
+# Check whether --with-pthread-cflags or --without-pthread-cflags was given.
+if test "${with_pthread_cflags+set}" = set; then
+  withval="$with_pthread_cflags"
+  PTHREAD_CFLAGS="${withval}"
 else
-  pthread_cflags=''
+  PTHREAD_CFLAGS=''
 fi
 
 
 # Check whether --with-pthread-ldflags or --without-pthread-ldflags was given.
 if test "${with_pthread_ldflags+set}" = set; then
   withval="$with_pthread_ldflags"
-  pthread_ldflags="${withval}"
+  PTHREAD_LDFLAGS="${withval}"
 else
-  pthread_ldflags=''
+  PTHREAD_LDFLAGS=''
 fi
 
 

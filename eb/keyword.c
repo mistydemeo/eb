@@ -54,6 +54,11 @@ eb_have_keyword_search(book)
     if (book->subbook_current->keyword.index_page == 0)
 	goto failed;
 
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
     return 1;
 
     /*
@@ -140,7 +145,7 @@ eb_search_keyword(book, input_words)
     if (word_count == 0) {
 	error_code = EB_ERR_NO_WORD;
 	goto failed;
-    } else if (EB_MAX_KEYWORDS <= i) {
+    } else if (EB_MAX_KEYWORDS <= i && input_words[i] != NULL) {
 	error_code =  EB_ERR_TOO_MANY_WORDS;
 	goto failed;
     }

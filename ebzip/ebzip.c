@@ -170,10 +170,15 @@ int strncasecmp();
 /*
  * Tricks for gettext.
  */
+#ifdef ENABLE_NLS
 #define _(string) gettext(string)
 #ifdef gettext_noop
 #define N_(string) gettext_noop(string)
 #else
+#define N_(string) (string)
+#endif
+#else
+#define _(string) (string)       
 #define N_(string) (string)
 #endif
 
@@ -318,12 +323,9 @@ static int unzip_epwing_book EB_P((EB_Book *, const char *, const char *));
 static int zipinfo_book EB_P((EB_Book *, const char *));
 static int zipinfo_eb_book EB_P((EB_Book *, const char *));
 static int zipinfo_epwing_book EB_P((EB_Book *, const char *));
-static int zip_file EB_P((const char *, const char *,
-    int (*) EB_P((EB_Zip *, const char *)) ));
-static int unzip_file EB_P((const char *, const char *,
-    int (*) EB_P((EB_Zip *, const char *)) ));
-static int zipinfo_file EB_P((const char *,
-    int (*) EB_P((EB_Zip *, const char *)) ));
+static int zip_file EB_P((const char *, const char *, EB_Zip_Code));
+static int unzip_file EB_P((const char *, const char *, EB_Zip_Code));
+static int zipinfo_file EB_P((const char *, EB_Zip_Code));
 static int copy_file EB_P((const char *, const char *));
 static RETSIGTYPE trap EB_P((int));
 
@@ -729,10 +731,10 @@ zip_eb_book(book, out_top_path, book_path)
     EB_Subbook *subbook;
     char in_path_name[PATH_MAX + 1];
     char in_file_name[EB_MAX_FILE_NAME_LENGTH];
-    int (*in_open_function) EB_P((EB_Zip *, const char *));
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
     mode_t out_directory_mode;
+    EB_Zip_Code in_zip_code;
     int i;
 
     /*
@@ -772,7 +774,7 @@ zip_eb_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_START);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_open_function = eb_zopen_none;
+		in_zip_code = EB_ZIP_NONE;
 		break;
 	    }
 
@@ -780,24 +782,24 @@ zip_eb_book(book, out_top_path, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_open_function = eb_zopen_ebzip;
+		in_zip_code = EB_ZIP_EBZIP1;
 		break;
 	    }
 
 	    /* No START file exists. */
 	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_open_function = NULL;
+	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
 	sprintf(in_path_name, "%s/%s/%s", book->path, subbook->directory_name,
 	    in_file_name);
 	compose_out_path_name2(out_top_path, subbook->directory_name,
 	    in_file_name, EB_SUFFIX_EBZ, out_path_name);
-	if (in_open_function == NULL) {
+	if (in_zip_code == EB_ZIP_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    zip_file(out_path_name, in_path_name, in_open_function);
+	    zip_file(out_path_name, in_path_name, in_zip_code);
 	}
     }
 
@@ -808,30 +810,30 @@ zip_eb_book(book, out_top_path, book_path)
 	/* Try `START' for input. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_open_function = eb_zopen_none;
+	    in_zip_code = EB_ZIP_NONE;
 	    break;
 	}
 
 	/* Try `START.EBZ' for input. */
 	strcat(in_file_name, EB_SUFFIX_EBZ);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_open_function = eb_zopen_ebzip;
+	    in_zip_code = EB_ZIP_EBZIP1;
 	    break;
 	}
 
 	/* No START file exists. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
-	in_open_function = NULL;
+	in_zip_code = EB_ZIP_INVALID;
     } while (0);
 
     sprintf(in_path_name, "%s/%s", book->path, in_file_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_EBZ,
 	out_path_name);
-    if (in_open_function == NULL) {
+    if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	zip_file(out_path_name, in_path_name, in_open_function);
+	zip_file(out_path_name, in_path_name, in_zip_code);
     }
 
     /*
@@ -839,13 +841,13 @@ zip_eb_book(book, out_top_path, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOG);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_open_function = eb_zopen_none;
+	in_zip_code = EB_ZIP_NONE;
     else
-	in_open_function = NULL;
+	in_zip_code = EB_ZIP_INVALID;
     sprintf(in_path_name, "%s/%s", book->path, in_file_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_open_function == NULL) {
+    if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
@@ -870,10 +872,10 @@ zip_epwing_book(book, out_top_path, book_path)
     EB_Font *font;
     char in_path_name[PATH_MAX + 1];
     char in_file_name[EB_MAX_FILE_NAME_LENGTH];
-    int (*in_open_function) EB_P((EB_Zip *, const char *));
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
     mode_t out_directory_mode;
+    EB_Zip_Code in_zip_code;
     int i, j;
 
     /*
@@ -922,7 +924,10 @@ zip_epwing_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_HONMON2);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_open_function = eb_zopen_epwing;
+		if (book->version < 6)
+		    in_zip_code = EB_ZIP_EPWING;
+		else 
+		    in_zip_code = EB_ZIP_EPWING6;
 		break;
 	    }
 
@@ -930,7 +935,7 @@ zip_epwing_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_HONMON);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_open_function = eb_zopen_none;
+		in_zip_code = EB_ZIP_NONE;
 		break;
 	    }
 
@@ -938,13 +943,13 @@ zip_epwing_book(book, out_top_path, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_open_function = eb_zopen_ebzip;
+		in_zip_code = EB_ZIP_EBZIP1;
 		break;
 	    }
 
 	    /* No HONMON file exists. */
 	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_open_function = NULL;
+	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
 	sprintf(in_path_name, "%s/%s/%s/%s", book->path,
@@ -953,11 +958,11 @@ zip_epwing_book(book, out_top_path, book_path)
 	compose_out_path_name3(out_top_path, subbook->directory_name,
 	    subbook->data_directory_name, in_file_name, EB_SUFFIX_EBZ,
 	    out_path_name);
-	if (in_open_function == NULL) {
+	if (in_zip_code == EB_ZIP_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    zip_file(out_path_name, in_path_name, in_open_function);
+	    zip_file(out_path_name, in_path_name, in_zip_code);
 	}
 
 	/*
@@ -974,13 +979,15 @@ zip_epwing_book(book, out_top_path, book_path)
 	 */
 	for (j = 0; j < EB_MAX_FONTS; j++) {
 	    font = subbook->narrow_fonts + j;
+	    if (font->font_code == EB_FONT_INVALID)
+		continue;
 
 	    do {
 		/* Try original for input. */
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_none;
+		    in_zip_code = EB_ZIP_NONE;
 		    break;
 		}
 
@@ -988,55 +995,13 @@ zip_epwing_book(book, out_top_path, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_ebzip;
+		    in_zip_code = EB_ZIP_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_open_function = NULL;
-	    } while (0);
-
-	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-		subbook->directory_name, subbook->gaiji_directory_name,
-		in_file_name);
-	    compose_out_path_name3(out_top_path, subbook->directory_name,
-		subbook->data_directory_name, in_file_name, EB_SUFFIX_EBZ,
-		out_path_name);
-	    if (in_open_function == NULL) {
-		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
-		    in_path_name);
-	    } else {
-		zip_file(out_path_name, in_path_name, in_open_function);
-	    }
-	}
-
-	/*
-	 * Compress wide font files.
-	 */
-	for (j = 0; j < EB_MAX_FONTS; j++) {
-	    font = subbook->wide_fonts + j;
-
-	    do {
-		/* Try original for input. */
-		strcpy(in_file_name, font->file_name);
-		if (eb_fix_file_name3(book->path, subbook->directory_name, 
-		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_none;
-		    break;
-		}
-
-		/* Try `<original>.ebz' for input. */
-		strcat(in_file_name, EB_SUFFIX_EBZ);
-		if (eb_fix_file_name3(book->path, subbook->directory_name, 
-		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_ebzip;
-		    break;
-		}
-
-		/* No font file exists. */
-		strcpy(in_file_name, font->file_name);
-		in_open_function = NULL;
+		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
 	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
@@ -1045,11 +1010,55 @@ zip_epwing_book(book, out_top_path, book_path)
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_EBZ,
 		out_path_name);
-	    if (in_open_function == NULL) {
+	    if (in_zip_code == EB_ZIP_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		zip_file(out_path_name, in_path_name, in_open_function);
+		zip_file(out_path_name, in_path_name, in_zip_code);
+	    }
+	}
+
+	/*
+	 * Compress wide font files.
+	 */
+	for (j = 0; j < EB_MAX_FONTS; j++) {
+	    font = subbook->wide_fonts + j;
+	    if (font->font_code == EB_FONT_INVALID)
+		continue;
+
+	    do {
+		/* Try original for input. */
+		strcpy(in_file_name, font->file_name);
+		if (eb_fix_file_name3(book->path, subbook->directory_name, 
+		    subbook->gaiji_directory_name, in_file_name) == 0) {
+		    in_zip_code = EB_ZIP_NONE;
+		    break;
+		}
+
+		/* Try `<original>.ebz' for input. */
+		strcat(in_file_name, EB_SUFFIX_EBZ);
+		if (eb_fix_file_name3(book->path, subbook->directory_name, 
+		    subbook->gaiji_directory_name, in_file_name) == 0) {
+		    in_zip_code = EB_ZIP_EBZIP1;
+		    break;
+		}
+
+		/* No font file exists. */
+		strcpy(in_file_name, font->file_name);
+		in_zip_code = EB_ZIP_INVALID;
+	    } while (0);
+
+	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
+		subbook->directory_name, subbook->gaiji_directory_name,
+		in_file_name);
+	    compose_out_path_name3(out_top_path, subbook->directory_name,
+		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_EBZ,
+		out_path_name);
+	    if (in_zip_code == EB_ZIP_INVALID) {
+		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
+		    in_path_name);
+	    } else {
+		zip_file(out_path_name, in_path_name, in_zip_code);
 	    }
 	}
     }
@@ -1059,13 +1068,13 @@ zip_epwing_book(book, out_top_path, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOGS);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_open_function = eb_zopen_none;
+	in_zip_code = EB_ZIP_NONE;
     else
-	in_open_function = NULL;
+	in_zip_code = EB_ZIP_INVALID;
     sprintf(in_path_name, "%s/%s", book->path, in_file_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_open_function == NULL) {
+    if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
@@ -1106,10 +1115,10 @@ unzip_eb_book(book, out_top_path, book_path)
     EB_Subbook *subbook;
     char in_path_name[PATH_MAX + 1];
     char in_file_name[EB_MAX_FILE_NAME_LENGTH];
-    int (*in_open_function) EB_P((EB_Zip *, const char *));
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
     mode_t out_directory_mode;
+    EB_Zip_Code in_zip_code;
     int i;
 
     /*
@@ -1149,7 +1158,7 @@ unzip_eb_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_START);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_open_function = eb_zopen_none;
+		in_zip_code = EB_ZIP_NONE;
 		break;
 	    }
 
@@ -1157,24 +1166,24 @@ unzip_eb_book(book, out_top_path, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_open_function = eb_zopen_ebzip;
+		in_zip_code = EB_ZIP_EBZIP1;
 		break;
 	    }
 
 	    /* No START file exists. */
 	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_open_function = NULL;
+	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
 	sprintf(in_path_name, "%s/%s/%s", book->path, subbook->directory_name,
 	    in_file_name);
 	compose_out_path_name2(out_top_path, subbook->directory_name,
 	    in_file_name, EB_SUFFIX_NONE, out_path_name);
-	if (in_open_function == NULL) {
+	if (in_zip_code == EB_ZIP_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    unzip_file(out_path_name, in_path_name, in_open_function);
+	    unzip_file(out_path_name, in_path_name, in_zip_code);
 	}
     }
 
@@ -1185,28 +1194,28 @@ unzip_eb_book(book, out_top_path, book_path)
 	/* Try `START' for input. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_open_function = eb_zopen_none;
+	    in_zip_code = EB_ZIP_NONE;
 	    break;
 	}
 	/* Try `START.EBZ' for input. */
 	strcat(in_file_name, EB_SUFFIX_EBZ);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_open_function = eb_zopen_ebzip;
+	    in_zip_code = EB_ZIP_EBZIP1;
 	    break;
 	}
 	/* No START file exists. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
-	in_open_function = NULL;
+	in_zip_code = EB_ZIP_INVALID;
     } while (0);
 
     sprintf(in_path_name, "%s/%s", book->path, in_file_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_open_function == NULL) {
+    if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	unzip_file(out_path_name, in_path_name, in_open_function);
+	unzip_file(out_path_name, in_path_name, in_zip_code);
     }
 
     /*
@@ -1214,13 +1223,13 @@ unzip_eb_book(book, out_top_path, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOG);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_open_function = eb_zopen_none;
+	in_zip_code = EB_ZIP_NONE;
     else
-	in_open_function = NULL;
+	in_zip_code = EB_ZIP_INVALID;
     sprintf(in_path_name, "%s/%s", book->path, in_file_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_open_function == NULL) {
+    if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
@@ -1245,10 +1254,10 @@ unzip_epwing_book(book, out_top_path, book_path)
     EB_Font *font;
     char in_path_name[PATH_MAX + 1];
     char in_file_name[EB_MAX_FILE_NAME_LENGTH];
-    int (*in_open_function) EB_P((EB_Zip *, const char *));
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
     mode_t out_directory_mode;
+    EB_Zip_Code in_zip_code;
     int i, j;
 
     /*
@@ -1297,7 +1306,10 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_HONMON2);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_open_function = eb_zopen_epwing;
+		if (book->version < 6)
+		    in_zip_code = EB_ZIP_EPWING;
+		else 
+		    in_zip_code = EB_ZIP_EPWING6;
 		break;
 	    }
 
@@ -1305,7 +1317,7 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_HONMON);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_open_function = eb_zopen_none;
+		in_zip_code = EB_ZIP_NONE;
 		break;
 	    }
 
@@ -1313,13 +1325,13 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_open_function = eb_zopen_ebzip;
+		in_zip_code = EB_ZIP_EBZIP1;
 		break;
 	    }
 
 	    /* No HONMON file exists. */
 	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_open_function = NULL;
+	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
 	sprintf(in_path_name, "%s/%s/%s/%s", book->path,
@@ -1328,11 +1340,11 @@ unzip_epwing_book(book, out_top_path, book_path)
 	compose_out_path_name3(out_top_path, subbook->directory_name,
 	    subbook->data_directory_name, in_file_name, EB_SUFFIX_NONE,
 	    out_path_name);
-	if (in_open_function == NULL) {
+	if (in_zip_code == EB_ZIP_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    unzip_file(out_path_name, in_path_name, in_open_function);
+	    unzip_file(out_path_name, in_path_name, in_zip_code);
 	}
 
 	/*
@@ -1357,7 +1369,7 @@ unzip_epwing_book(book, out_top_path, book_path)
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_none;
+		    in_zip_code = EB_ZIP_NONE;
 		    break;
 		}
 
@@ -1365,13 +1377,13 @@ unzip_epwing_book(book, out_top_path, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_ebzip;
+		    in_zip_code = EB_ZIP_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_open_function = NULL;
+		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
 	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
@@ -1380,11 +1392,11 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_NONE,
 		out_path_name);
-	    if (in_open_function == NULL) {
+	    if (in_zip_code == EB_ZIP_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		unzip_file(out_path_name, in_path_name, in_open_function);
+		unzip_file(out_path_name, in_path_name, in_zip_code);
 	    }
 	}
 
@@ -1401,7 +1413,7 @@ unzip_epwing_book(book, out_top_path, book_path)
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_none;
+		    in_zip_code = EB_ZIP_NONE;
 		    break;
 		}
 
@@ -1409,13 +1421,13 @@ unzip_epwing_book(book, out_top_path, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_ebzip;
+		    in_zip_code = EB_ZIP_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_open_function = NULL;
+		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
 	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
@@ -1424,11 +1436,11 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_NONE,
 		out_path_name);
-	    if (in_open_function == NULL) {
+	    if (in_zip_code == EB_ZIP_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		unzip_file(out_path_name, in_path_name, in_open_function);
+		unzip_file(out_path_name, in_path_name, in_zip_code);
 	    }
 	}
     }
@@ -1438,13 +1450,13 @@ unzip_epwing_book(book, out_top_path, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOGS);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_open_function = eb_zopen_none;
+	in_zip_code = EB_ZIP_NONE;
     else
-	in_open_function = NULL;
+	in_zip_code = EB_ZIP_INVALID;
     sprintf(in_path_name, "%s/%s", book->path, in_file_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_open_function == NULL) {
+    if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
@@ -1483,7 +1495,7 @@ zipinfo_eb_book(book, book_path)
     EB_Subbook *subbook;
     char in_path_name[PATH_MAX + 1];
     char in_file_name[EB_MAX_FILE_NAME_LENGTH];
-    int (*in_open_function) EB_P((EB_Zip *, const char *));
+    EB_Zip_Code in_zip_code;
     int i;
 
     /*
@@ -1512,7 +1524,7 @@ zipinfo_eb_book(book, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_START);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_open_function = eb_zopen_none;
+		in_zip_code = EB_ZIP_NONE;
 		break;
 	    }
 
@@ -1520,22 +1532,22 @@ zipinfo_eb_book(book, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_open_function = eb_zopen_ebzip;
+		in_zip_code = EB_ZIP_EBZIP1;
 		break;
 	    }
 
 	    /* No START file exists. */
 	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_open_function = NULL;
+	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
 	sprintf(in_path_name, "%s/%s/%s", book->path, subbook->directory_name,
 	    in_file_name);
-	if (in_open_function == NULL) {
+	if (in_zip_code == EB_ZIP_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    zipinfo_file(in_path_name, in_open_function);
+	    zipinfo_file(in_path_name, in_zip_code);
 	}
     }
 
@@ -1546,26 +1558,26 @@ zipinfo_eb_book(book, book_path)
 	/* Try `START' for input. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_open_function = eb_zopen_none;
+	    in_zip_code = EB_ZIP_NONE;
 	    break;
 	}
 	/* Try `START.EBZ' for input. */
 	strcat(in_file_name, EB_SUFFIX_EBZ);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_open_function = eb_zopen_ebzip;
+	    in_zip_code = EB_ZIP_EBZIP1;
 	    break;
 	}
 	/* No START file exists. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
-	in_open_function = NULL;
+	in_zip_code = EB_ZIP_INVALID;
     } while (0);
 
     sprintf(in_path_name, "%s/%s", book->path, in_file_name);
-    if (in_open_function == NULL) {
+    if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	zipinfo_file(in_path_name, in_open_function);
+	zipinfo_file(in_path_name, in_zip_code);
     }
 
     /*
@@ -1573,15 +1585,15 @@ zipinfo_eb_book(book, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOG);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_open_function = eb_zopen_none;
+	in_zip_code = EB_ZIP_NONE;
     else
-	in_open_function = NULL;
+	in_zip_code = EB_ZIP_INVALID;
     sprintf(in_path_name, "%s/%s", book->path, in_file_name);
-    if (in_open_function == NULL) {
+    if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	zipinfo_file(in_path_name, in_open_function);
+	zipinfo_file(in_path_name, in_zip_code);
     }
 
     return 0;
@@ -1601,7 +1613,7 @@ zipinfo_epwing_book(book, book_path)
     EB_Font *font;
     char in_path_name[PATH_MAX + 1];
     char in_file_name[EB_MAX_FILE_NAME_LENGTH];
-    int (*in_open_function) EB_P((EB_Zip *, const char *));
+    EB_Zip_Code in_zip_code;
     int i, j;
 
     /*
@@ -1630,7 +1642,10 @@ zipinfo_epwing_book(book, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_HONMON2);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_open_function = eb_zopen_epwing;
+		if (book->version < 6)
+		    in_zip_code = EB_ZIP_EPWING;
+		else 
+		    in_zip_code = EB_ZIP_EPWING6;
 		break;
 	    }
 
@@ -1638,7 +1653,7 @@ zipinfo_epwing_book(book, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_HONMON);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_open_function = eb_zopen_none;
+		in_zip_code = EB_ZIP_NONE;
 		break;
 	    }
 
@@ -1646,23 +1661,23 @@ zipinfo_epwing_book(book, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_open_function = eb_zopen_ebzip;
+		in_zip_code = EB_ZIP_EBZIP1;
 		break;
 	    }
 
 	    /* No HONMON file exists. */
 	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_open_function = NULL;
+	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
 	sprintf(in_path_name, "%s/%s/%s/%s", book->path,
 	    subbook->directory_name, subbook->data_directory_name,
 	    in_file_name);
-	if (in_open_function == NULL) {
+	if (in_zip_code == EB_ZIP_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    zipinfo_file(in_path_name, in_open_function);
+	    zipinfo_file(in_path_name, in_zip_code);
 	}
 
 	/*
@@ -1670,13 +1685,15 @@ zipinfo_epwing_book(book, book_path)
 	 */
 	for (j = 0; j < EB_MAX_FONTS; j++) {
 	    font = subbook->narrow_fonts + j;
+	    if (font->font_code == EB_FONT_INVALID)
+		continue;
 
 	    do {
 		/* Try original for input. */
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_none;
+		    in_zip_code = EB_ZIP_NONE;
 		    break;
 		}
 
@@ -1684,23 +1701,23 @@ zipinfo_epwing_book(book, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_ebzip;
+		    in_zip_code = EB_ZIP_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_open_function = NULL;
+		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
 	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
 		subbook->directory_name, subbook->gaiji_directory_name,
 		in_file_name);
-	    if (in_open_function == NULL) {
+	    if (in_zip_code == EB_ZIP_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		zipinfo_file(in_path_name, in_open_function);
+		zipinfo_file(in_path_name, in_zip_code);
 	    }
 	}
 
@@ -1709,13 +1726,15 @@ zipinfo_epwing_book(book, book_path)
 	 */
 	for (j = 0; j < EB_MAX_FONTS; j++) {
 	    font = subbook->wide_fonts + j;
+	    if (font->font_code == EB_FONT_INVALID)
+		continue;
 
 	    do {
 		/* Try original for input. */
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_none;
+		    in_zip_code = EB_ZIP_NONE;
 		    break;
 		}
 
@@ -1723,23 +1742,23 @@ zipinfo_epwing_book(book, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_open_function = eb_zopen_ebzip;
+		    in_zip_code = EB_ZIP_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_open_function = NULL;
+		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
 	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
 		subbook->directory_name, subbook->gaiji_directory_name,
 		in_file_name);
-	    if (in_open_function == NULL) {
+	    if (in_zip_code == EB_ZIP_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		zipinfo_file(in_path_name, in_open_function);
+		zipinfo_file(in_path_name, in_zip_code);
 	    }
 	}
     }
@@ -1749,15 +1768,15 @@ zipinfo_epwing_book(book, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOGS);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_open_function = eb_zopen_none;
+	in_zip_code = EB_ZIP_NONE;
     else
-	in_open_function = NULL;
+	in_zip_code = EB_ZIP_INVALID;
     sprintf(in_path_name, "%s/%s", book->path, in_file_name);
-    if (in_open_function == NULL) {
+    if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	zipinfo_file(in_path_name, in_open_function);
+	zipinfo_file(in_path_name, in_zip_code);
     }
 
     return 0;
@@ -1770,10 +1789,10 @@ zipinfo_epwing_book(book, book_path)
  * If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 static int
-zip_file(out_file_name, in_file_name, in_open_function)
+zip_file(out_file_name, in_file_name, in_zip_code)
     const char *out_file_name;
     const char *in_file_name;
-    int (*in_open_function) EB_P((EB_Zip *, const char *));
+    EB_Zip_Code in_zip_code;
 {
     EB_Zip in_zip, out_zip;
     unsigned char *in_buffer = NULL, *out_buffer = NULL;
@@ -1867,7 +1886,7 @@ zip_file(out_file_name, in_file_name, in_open_function)
     /*
      * Open files.
      */
-    in_file = in_open_function(&in_zip, in_file_name);
+    in_file = eb_zopen(&in_zip, in_file_name, in_zip_code);
     if (in_file < 0) {
 	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
 	    invoked_name, strerror(errno), in_file_name);
@@ -2265,10 +2284,10 @@ zip_file(out_file_name, in_file_name, in_open_function)
  * list.  If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 static int
-unzip_file(out_file_name, in_file_name, in_open_function)
+unzip_file(out_file_name, in_file_name, in_zip_code)
     const char *out_file_name;
     const char *in_file_name;
-    int (*in_open_function) EB_P((EB_Zip *, const char *));
+    EB_Zip_Code in_zip_code;
 {
     EB_Zip in_zip;
     unsigned char *buffer = NULL;
@@ -2284,7 +2303,7 @@ unzip_file(out_file_name, in_file_name, in_open_function)
     /*
      * Simply copy a file, when an input file is not compressed.
      */
-    if (in_open_function == eb_zopen_none)
+    if (in_zip_code == EB_ZIP_NONE)
 	return copy_file(out_file_name, in_file_name);
 
     /*
@@ -2358,7 +2377,7 @@ unzip_file(out_file_name, in_file_name, in_open_function)
     /*
      * Open files.
      */
-    in_file = in_open_function(&in_zip, in_file_name);
+    in_file = eb_zopen(&in_zip, in_file_name, in_zip_code);
     if (in_file < 0) {
 	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
 	    invoked_name, strerror(errno), in_file_name);
@@ -2567,9 +2586,9 @@ unzip_file(out_file_name, in_file_name, in_open_function)
  * If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 static int
-zipinfo_file(in_file_name, in_open_function)
+zipinfo_file(in_file_name, in_zip_code)
     const char *in_file_name;
-    int (*in_open_function) EB_P((EB_Zip *, const char *));
+    EB_Zip_Code in_zip_code;
 {
     EB_Zip in_zip;
     int in_file = -1;
@@ -2584,7 +2603,9 @@ zipinfo_file(in_file_name, in_open_function)
     /*
      * Open the file.
      */
-    in_file = in_open_function(&in_zip, in_file_name);
+    if (stat(in_file_name, &in_status) == 0 && S_ISREG(in_status.st_mode))
+	in_file = eb_zopen(&in_zip, in_file_name, in_zip_code);
+
     if (in_file < 0) {
 	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
 	    invoked_name, strerror(errno), in_file_name);
@@ -2599,10 +2620,10 @@ zipinfo_file(in_file_name, in_open_function)
     /*
      * Output information.
      */
-    if (in_zip.code == EB_ZIP_NONE)
+    if (in_zip.code == EB_ZIP_NONE) {
 	printf(_("%lu bytes (not compressed)\n"),
 	    (unsigned long)in_status.st_size);
-    else {
+    } else {
 	printf(_("%lu -> %lu bytes "),
 	    (unsigned long)in_zip.file_size, (unsigned long)in_status.st_size);
 	if (in_zip.file_size == 0)

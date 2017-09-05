@@ -100,10 +100,10 @@ eb_initialize_languages(book)
      */
     if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_NONE, language_path_name) == 0) {
-	file = eb_zopen_none(&zip, language_path_name);
+	file = eb_zopen(&zip, language_path_name, EB_ZIP_NONE);
     } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_EBZ, language_path_name) == 0) {
-	file = eb_zopen_ebzip(&zip, language_path_name);
+	file = eb_zopen(&zip, language_path_name, EB_ZIP_EBZIP1);
     }
     if (file < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
@@ -158,7 +158,7 @@ eb_initialize_languages(book)
 	 i < book->language_count;
 	 i++, buffer_p += EB_MAX_LANGUAGE_NAME_LENGTH + 1, language++) {
 	language->code = eb_uint1(buffer_p);
-	language->offset = 0;
+	language->location = 0;
 	language->message_count = 0;
 	memcpy(language->name, buffer_p + 1, EB_MAX_LANGUAGE_NAME_LENGTH);
 	*(language->name + EB_MAX_LANGUAGE_NAME_LENGTH) = '\0';
@@ -501,10 +501,10 @@ eb_set_language(book, language_code)
      */
     if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_NONE, language_path_name) == 0) {
-	file = eb_zopen_none(&zip, language_path_name);
+	file = eb_zopen(&zip, language_path_name, EB_ZIP_NONE);
     } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_EBZ, language_path_name) == 0) {
-	file = eb_zopen_ebzip(&zip, language_path_name);
+	file = eb_zopen(&zip, language_path_name, EB_ZIP_EBZIP1);
     }
     if (file < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
@@ -515,7 +515,7 @@ eb_set_language(book, language_code)
      * Read messages.
      * Appends '\0' to each message.
      */
-    if (eb_zlseek(&zip, file, language->offset, SEEK_SET) < 0) {
+    if (eb_zlseek(&zip, file, language->location, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_LANG;
 	goto failed;
     }

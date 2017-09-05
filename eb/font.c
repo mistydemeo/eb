@@ -67,18 +67,20 @@ eb_initialize_font(book)
     EB_Book *book;
 {
     EB_Error_Code error_code;
-    EB_Subbook *subbook = book->subbook_current;
+    EB_Subbook *subbook;
     char buffer[16];
     int character_count;
     EB_Zip *zip;
     int font_file;
 
+    subbook = book->subbook_current;
+
     if (book->disc_code == EB_DISC_EB) {
 	zip = &book->subbook_current->text_zip;
-	font_file = book->subbook_current->text_file;
+	font_file = subbook->text_file;
     } else {
 	zip = &book->subbook_current->narrow_current->zip;
-	font_file = book->subbook_current->narrow_current->font_file;
+	font_file = subbook->narrow_current->font_file;
     }
 
     /*
@@ -88,8 +90,9 @@ eb_initialize_font(book)
 	/*
 	 * Read information from the text file.
 	 */
-	if (eb_zlseek(zip, font_file, (subbook->narrow_current->page - 1)
-	    * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	if (eb_zlseek(zip, font_file,
+	    (off_t)(subbook->narrow_current->page - 1) * EB_SIZE_PAGE,
+	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_FONT;
 	    goto failed;
 	}
@@ -132,8 +135,9 @@ eb_initialize_font(book)
 	/*
 	 * Read information from the text file.
 	 */
-	if (eb_zlseek(zip, font_file, (subbook->wide_current->page - 1)
-	    * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	if (eb_zlseek(zip, font_file,
+	    (off_t)(subbook->wide_current->page - 1) * EB_SIZE_PAGE, SEEK_SET)
+	    < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_FONT;
 	    goto failed;
 	}
@@ -242,7 +246,7 @@ eb_set_font(book, font_code)
     EB_Font_Code font_code;
 {
     EB_Error_Code error_code;
-    EB_Subbook *subbook = book->subbook_current;
+    EB_Subbook *subbook;
 
     /*
      * Lock the book.
@@ -260,6 +264,7 @@ eb_set_font(book, font_code)
     /*
      * Current subbook must have been set.
      */
+    subbook = book->subbook_current;
     if (subbook == NULL) {
 	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
@@ -383,7 +388,7 @@ eb_font_list(book, font_list, font_count)
     int *font_count;
 {
     EB_Error_Code error_code;
-    EB_Subbook *subbook = book->subbook_current;
+    EB_Subbook *subbook;
     EB_Font_Code *list_p;
     int i;
 
@@ -403,6 +408,7 @@ eb_font_list(book, font_list, font_count)
     /*
      * Scan the font table in the book.
      */
+    subbook = book->subbook_current;
     list_p = font_list;
     *font_count = 0;
     for (i = 0; i < EB_MAX_FONTS; i++) {
@@ -438,7 +444,7 @@ eb_have_font(book, font_code)
     EB_Book *book;
     EB_Font_Code font_code;
 {
-    EB_Subbook *subbook = book->subbook_current;
+    EB_Subbook *subbook;
 
     /*
      * Lock the book.
@@ -454,6 +460,7 @@ eb_have_font(book, font_code)
     /*
      * Current subbook must have been set.
      */
+    subbook = book->subbook_current;
     if (subbook == NULL)
 	goto failed;
 

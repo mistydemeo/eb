@@ -110,12 +110,12 @@ EB_Error_Code eb_hook_empty EB_P((EB_Book *, EB_Appendix *, char *,
 void eb_initialize_text EB_P((EB_Book *));
 EB_Error_Code eb_seek_text EB_P((EB_Book *, const EB_Position *));
 EB_Error_Code eb_tell_text EB_P((EB_Book *, EB_Position *));
-EB_Error_Code eb_read_text EB_P((EB_Book *, EB_Appendix *, const EB_Hookset *,
+EB_Error_Code eb_read_text EB_P((EB_Book *, EB_Appendix *, EB_Hookset *,
     size_t, char *, ssize_t *));
-EB_Error_Code eb_read_heading EB_P((EB_Book *, EB_Appendix *,
-    const EB_Hookset *, size_t, char *, ssize_t *));
+EB_Error_Code eb_read_heading EB_P((EB_Book *, EB_Appendix *, EB_Hookset *,
+    size_t, char *, ssize_t *));
 EB_Error_Code eb_read_rawtext EB_P((EB_Book *, size_t, char *, ssize_t *));
-EB_Error_Code eb_forward_text EB_P((EB_Book *, const EB_Hookset *));
+EB_Error_Code eb_forward_text EB_P((EB_Book *, EB_Hookset *));
 
 /* uint.c */
 #ifdef EB_UINT_FUNCTION

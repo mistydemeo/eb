@@ -9,11 +9,8 @@ ebzip_ja_TEXINFOS = ebzip-ver.texi
 samplesdir = $(srcdir)/../samples
 
 CLEANFILES = vti.tmp
-EXTRA_DIST = texinfo-ja.tex stamp-eb stamp-ebfont stamp-ebinfo \
+EXTRA_DIST = texinfo-ja.tex stamp-ebfont stamp-ebinfo \
 	stamp-ebrefile stamp-ebzip
-
-eb-ver.texi: stamp-eb
-	cp $(srcdir)/stamp-eb $(srcdir)/eb-ver.texi
 
 ebfont-ver.texi: stamp-ebfont
 	cp $(srcdir)/stamp-ebfont $(srcdir)/ebfont-ver.texi

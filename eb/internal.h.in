@@ -36,10 +36,15 @@
 /*
  * Tricks for gettext.
  */
+#ifdef ENABLE_NLS
 #define _(string) gettext(string)
 #ifdef gettext_noop
 #define N_(string) gettext_noop(string)
 #else
+#define N_(string) (string)
+#endif
+#else
+#define _(string) (string)
 #define N_(string) (string)
 #endif
 
@@ -99,6 +104,7 @@
 #define EB_ZIP_EPWING			100
 #define EB_ZIP_EPWING6			101
 #define EB_ZIP_SEBXA			200
+#define EB_ZIP_INVALID        		-1
 
 /*
  * Text content currently read.
@@ -152,13 +158,6 @@
 	+ (*(const unsigned char *)((p) + 2) << 8) \
 	+ (*(const unsigned char *)((p) + 3)))
 
-#ifndef ENABLE_PTHREAD
-#define eb_lock(x)
-#define eb_unlock(x)
-#define eb_initialize_lock(x)
-#define eb_finalize_lock(x)
-#endif
-
 /*
  * External variable declarations.
  */
@@ -198,6 +197,19 @@ void eb_sjis_to_euc EB_P((char *, const char *));
 /* language.c */
 EB_Error_Code eb_initialize_languages EB_P((EB_Book *));
 
+/* lock.c */
+#ifdef ENABLE_PTHREAD
+void eb_initialize_lock EB_P((EB_Lock *));
+void eb_finalize_lock EB_P((EB_Lock *));
+void eb_lock EB_P((EB_Lock *));
+void eb_unlock EB_P((EB_Lock *));
+#else /* not ENABLE_PTHREAD */
+#define eb_lock(x)
+#define eb_unlock(x)
+#define eb_initialize_lock(x)
+#define eb_finalize_lock(x)
+#endif /* not ENABLE_PTHREAD */
+
 /* match.c */
 int eb_match_word EB_P((const char *, const char *, size_t));
 int eb_match_exactword EB_P((const char *, const char *, size_t));
@@ -226,9 +238,6 @@ EB_Error_Code eb_set_keyword EB_P((EB_Book *, const char *, char *, char *,
 EB_Error_Code eb_set_multiword EB_P((EB_Book *, EB_Multi_Search_Code,
     EB_Multi_Entry_Code, const char *, char *, char *, EB_Word_Code *));
 
-/* subbook.c */
-EB_Error_Code eb_initialize_subbook EB_P((EB_Book *));
-
 /* text.c */
 void eb_initialize_text EB_P((EB_Book *));
 EB_Error_Code eb_forward_heading EB_P((EB_Book *));
@@ -246,11 +255,7 @@ int eb_unzip_slice_epwing6 EB_P((char *, int, EB_Huffman_Node *));
 /* zio.c */
 int eb_zinitialize EB_P((void));
 void eb_zfinalize EB_P((void));
-int eb_zopen_none EB_P((EB_Zip *, const char *));
-int eb_zopen_ebzip EB_P((EB_Zip *, const char *));
-int eb_zopen_epwing EB_P((EB_Zip *, const char *));
-int eb_zopen_epwing6 EB_P((EB_Zip *, const char *));
-int eb_zopen_sebxa EB_P((EB_Zip *, const char *));
+int eb_zopen EB_P((EB_Zip *, const char *, EB_Zip_Code));
 int eb_zclose EB_P((EB_Zip *, int));
 off_t eb_zlseek EB_P((EB_Zip *, int, off_t, int));
 ssize_t eb_zread EB_P((EB_Zip *, int, char *, size_t));

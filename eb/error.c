@@ -25,6 +25,7 @@
 
 #ifdef ENABLE_NLS
 #include <libintl.h>
+#include "libintl_r.h"
 #endif
 
 #include "eb.h"
@@ -40,7 +41,7 @@
  * Mutex for gettext function call.
  */
 #if defined(ENABLE_NLS) && defined(ENABLE_PTHREAD)
-static pthread_mutex_t gettext_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t gettext_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
 /*
@@ -157,10 +158,33 @@ eb_error_message(error_code)
         message = unknown;
 
 #ifdef ENABLE_NLS
-    pthread_mutex_lock(&gettext_mutex);
     message = dgettext(EB_TEXT_DOMAIN_NAME, message);
-    pthread_mutex_unlock(&gettext_mutex);
 #endif /* ENABLE_NLS */
 
     return message;
+}
+
+
+/*
+ * Look up the error message corresponding to the error code `error_code',
+ * and copy the message to `buffer'.  The maximum length of `buffer' is
+ * EB_MAX_ERROR_MESSAGE_LENGTH.
+ * This is thread-safe version of `eb_error_messge'.
+ */
+const char *
+eb_error_message_r(error_code, buffer)
+    EB_Error_Code error_code;
+    char *buffer;
+{
+    const char *message;
+
+    if (0 <= error_code && error_code < EB_NUMBER_OF_ERRORS)
+        message = error_messages[error_code];
+    else
+        message = unknown;
+
+    eb_dgettext_r(EB_TEXT_DOMAIN_NAME, message, buffer,
+	EB_MAX_ERROR_MESSAGE_LENGTH + 1);
+
+    return buffer;
 }

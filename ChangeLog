@@ -1,3 +1,171 @@
+2000-10-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.0alpha2.
+
+	* eb/ebzip.c (zip_epwing_book): Fix a bug that it tries to compress
+	non-existant font files.
+
+	* eb/text.c (eb_read_text_internal): Recognize the control
+	sequence `0x1f14'.  Reported by Yamagata san.
+
+	* doc-ja/Makefile.am (EXTRA_DIST): Remove `stamp-eb'.
+	* doc-ja/Makefile.am (stamp-eb): Remove the target.
+
+	* eb/text.c (eb_read_text_internal): Fix a cache controll bug.
+	Reported by Rei.
+
+2000-10-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/ebzip.c (zip_epwing_book): Fix a bug that it tries to compress
+	non-existant font files.
+	* eb/text.c (eb_read_text_internal): Check text-end-flag,
+	cache buffer, and unprocessed data in the text context, in
+	this order.
+
+2000-09-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/zio.c (eb_zopen_epwing): Add missing initialization code for
+	the variable `read_length'.
+
+2000-09-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h (EB_Language_Struct): the member `offset' is renamed to
+	`location'.
+	* eb/defs.h (EB_Zip_Struct): likewise.
+
+	* eb/appsub.c (eb_initialize_appendix_subbook): value passed to
+	eb_zlseek() must be off_t.
+	* eb/font.c (eb_initialize_font): Likewise.
+	* eb/language.c (eb_set_language): Likewise.
+	* eb/multi.c (eb_initialize_multi_search): Likewise.
+	* eb/narwalt.c (eb_narrow_character_text_jis): Likewise.
+	* eb/narwalt.c (eb_narrow_character_text_latin): Likewise.
+	* eb/narwfont.c (eb_initialize_narrow_font): Likewise.
+	* eb/narwfont.c (eb_narrow_character_bitmap_jis): Likewise.
+	* eb/narwfont.c (eb_narrow_character_bitmap_latin): Likewise.
+	* eb/search.c (eb_presearch_word): Likewise.
+	* eb/search.c (eb_hit_list_word): Likewise.
+	* eb/search.c (eb_hit_list_keyword): Likewise.
+	* eb/search.c (eb_hit_list_multi): Likewise.
+	* eb/subbook.c (eb_initialize_subbook): Likewise.
+	* eb/widealt.c (eb_wide_character_text_jis): Likewise.
+	* eb/widealt.c (eb_wide_character_text_latin): Likewise.
+	* eb/widefont.c (eb_initialize_wide_font): Likewise.
+	* eb/widefont.c (eb_wide_character_bitmap_jis): Likewise.
+	* eb/widefont.c (eb_wide_character_bitmap_latin): Likewise.
+	* eb/text.c (eb_initialize_text): `book->text_context.location'
+	must be calculated with `off_t' values.
+
+	* po/POTFILES.in: Add `libebutils/getopt.c'.
+
+	* eb/zio.c (eb_zopen_none): Get file size, reported by Takashi NEMOTO.
+	
+2000-09-09  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h (EB_Subbook_Struct): Add the member `cross'.
+	* eb/subbook.c (eb_initialize_subbook): Also initialize the member
+	`cross'.
+	* eb/subbook.c (eb_initialize_indexes): Recognize index code
+	0x81 as Cross-Index.
+
+2000-09-07  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/setword.c (eb_fix_word_latin): Renamed to `eb_convert_latin'.
+	* eb/setword.c (eb_fix_word_jis): Renamed to `eb_convert_euc_jp'.
+
+	* eb/setword.c (eb_fix_word): New static function.
+	* eb/setword.c (eb_set_word, eb_set_endword, eb_set_keyword): 
+	Call `eb_fix_word' to fix `word' and `canonicalized_word' according
+	with index page style.
+	* eb/setword.c (eb_set_endword): Get index page style from endword
+	search indexes, not from word search.
+	* eb/setword.c (eb_set_keyword): Get index page style from keyword
+	search indexes, not from word search.
+
+	* eb/libintl_r.c: New file.
+	* eb/error.c (gettext_mutex): Moved to `libintl_r.c'.
+	* eb/error.c (eb_error_message): Do not lock.
+	* eb/error.c (eb_error_message_r): New function.
+
+	* eb/lock.c (eb_pthread_enabled): New function.
+	* eb/eb.c (eb_nls_enabled): New function.
+
+	* eb/Makefile.am (pkginclude_HEADERS): Add `libintl_r.h'.
+	* eb/Makefile.am (libintl_la_SOURCES): Add `libintl_r.c'.
+
+	* eb/subbook.c (eb_set_subbook): Don't return an error code when
+	no text file exists.
+
+	* eb/setword.c (eb_convert_euc_jp): Accept local character
+	0xa121 ... 0xfe7e.
+
+	* eb/subbook.c (eb_initialize_subbook): Becomes static function.
+	* eb/appsub.c (eb_initialize_appendix_subbook): Likewise.
+
+	* eb/text.c (eb_read_text, eb_read_heading, eb_forward_text,
+	eb_read_text_internal): Discard `const' of the argument `hookset'.
+
+	* eb/subbook.c (eb_set_subbook): Add missing call of eb_unlock().
+
+	* eb/text.c (eb_fowrard_text): Don't unlock `cache_mutex'.
+	* eb/text.c (eb_fowrard_heading): Likewise.
+
+	* eb/zio.c (eb_zread_ebzip, eb_zread_epwing, eb_zread_sebxa): Don't
+	lock or unkock `cache_mutex'.
+	* eb/zio.c (eb_zread): Lock and unkock `cache_mutex'.
+
+	* eb/internal.h.in (EB_ZIP_INVALID): Defined.
+	* eb/zip.c (eb_zopen_none, eb_zopen_ebzip, eb_zopen_epwing, 
+	eb_zopen_epwing6): Now they are static functions.
+	* eb/zip.c (eb_zopen): New function.
+
+	* eb/appsub.c (eb_set_subbook): Call eb_zopen(), instead of 
+	eb_zopen_ZIPTYPE() functions.
+	* eb/font.c (eb_set_font): Likewise.
+	* eb/language.c (eb_initialize_language): Likewise.
+	* eb/language.c (eb_set_language): Likewise.
+	* eb/subbook.c (eb_set_subbook): Likewise.
+	* ebzip/ebzip.c (zip_eb_book, zip_epwing_book, unzip_eb_book,
+	unzip_epwing_book, zipinfo_eb_book, zipinfo_epwing_book): Likewise.
+	* ebzip/ebzip.c (zip_file, unzip_file, zipinfo_file): The argument
+	`in_open_function' is replaced to `in_zip_code'.
+
+	* ebzip/ebzip.c (zipinfo_file): Call `stat' before open a file.
+
+	* ebzip/ebzip.c (zipinfo_epwing_book): Skip font entires whose
+	code is EB_FONT_INVALID.
+
+2000-09-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/internal.h.in, libebutils/ebutils.c, ebfont/ebfont.c,
+	ebinfo/ebinfo.c, ebzip/ebzip.c: Define `_' and `N_' macros even
+	when ENABLE_NLS is not defined.
+
+2000-08-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebfont/ebfont.c (make_subbook_size_image_fonts): Fixed bugs
+	that use old API.  Reported by Takashi NEMOTO.
+	* eb/book.c (eb_initialize_catalog): Fix a bug that wrong font code
+	is set to EB_Font struct.  Reported by Takashi NEMOTO.
+
+	* eb/internal.h.in (EB_INDEX_STYLE_REVERSED_CONVERT): Defined.
+	Super Tougou Jisho 2000 sets 2 to the katakana index style parameter.
+	* eb/setword.c (eb_convert_hiragana_jis): New function.
+	Convert all hiragana characters in a string to katakana.
+	* eb/setword.c (eb_set_word): If the katakana index style parameter
+	is EB_INDEX_STYLE_REVERSED_CONVERT, call eb_convert_hiragana_jis().
+
+2000-08-04  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/internal.h.in (eb_initialize_lock, eb_finalize_lock, eb_lock,
+	eb_unlock): Add function declarations.
+	* eb/font.c (eb_set_font): Set the variable `subbook' after
+	lock the book.
+	* eb/font.c (eb_set_font, eb_font_list, eb_have_font): Set the
+	variable `subbook' after lock the book.
+
+	* eb/Makefile.am (libeb_la_SOURCES): Add lock.c.
+
 2000-07-21  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.0alpha1.
@@ -261,7 +429,7 @@
 2000-06-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* ebrefile/ebrefile.in: Fix a bug that ebrefile fills the reserved-1
-	with 0x00, reported by Takashi NEMOTO
+	with 0x00, reported by Takashi NEMOTO.
 
 2000-06-13  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 

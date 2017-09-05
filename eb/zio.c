@@ -119,7 +119,7 @@ static int cache_file = -1;
 /*
  * Offset of the beginning of the cached data `cache_buffer'.
  */
-static off_t cache_offset;
+static off_t cache_location;
 
 /*
  * Mutex for cache variables.
@@ -131,6 +131,13 @@ static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
 /*
  * Unexported function.
  */
+static int eb_zopen_none EB_P((EB_Zip *, const char *));
+static int eb_zopen_ebzip EB_P((EB_Zip *, const char *));
+static int eb_zopen_epwing EB_P((EB_Zip *, const char *));
+static int eb_zopen_epwing6 EB_P((EB_Zip *, const char *));
+#if 0
+static int eb_zopen_sebxa EB_P((EB_Zip *, const char *));
+#endif
 static int eb_make_epwing_huffman_tree EB_P((EB_Zip *, int));
 static ssize_t eb_zread_ebzip EB_P((EB_Zip *, int, char *, size_t));
 static ssize_t eb_zread_epwing EB_P((EB_Zip *, int, char *, size_t));
@@ -182,9 +189,35 @@ eb_zfinalize()
 
 
 /*
- * Open an non-compressed file.
+ * Open `file'.
  */
 int
+eb_zopen(zip, file_name, zip_code)
+    EB_Zip *zip;
+    const char *file_name;
+    EB_Zip_Code zip_code;
+{
+    if (zip_code == EB_ZIP_NONE)
+	return eb_zopen_none(zip, file_name);
+    else if (zip_code == EB_ZIP_EBZIP1)
+	return eb_zopen_ebzip(zip, file_name);
+    else if (zip_code == EB_ZIP_EPWING)
+	return eb_zopen_epwing(zip, file_name);
+    else if (zip_code == EB_ZIP_EPWING6)
+	return eb_zopen_epwing6(zip, file_name);
+#if 0
+    else if (zip_code == EB_ZIP_SEBXA)
+	return eb_zopen_sebxa(zip, file_name);
+#endif
+
+    return -1;
+}
+
+
+/*
+ * Open an non-compressed file.
+ */
+static int
 eb_zopen_none(zip, file_name)
     EB_Zip *zip;
     const char *file_name;
@@ -194,6 +227,11 @@ eb_zopen_none(zip, file_name)
     file = open(file_name, O_RDONLY | O_BINARY);
     if (0 <= file) {
 	zip->code = EB_ZIP_NONE;
+        zip->file_size = lseek(file, 0, SEEK_END);
+        if (zip->file_size < 0 || lseek(file, 0, SEEK_SET) < 0) {
+            close(file);
+            return -1;
+        }
 	return file;
     }
 
@@ -204,7 +242,7 @@ eb_zopen_none(zip, file_name)
 /*
  * Open an EBZIP compression file.
  */
-int
+static int
 eb_zopen_ebzip(zip, file_name)
     EB_Zip *zip;
     const char *file_name;
@@ -231,7 +269,7 @@ eb_zopen_ebzip(zip, file_name)
     zip->file_size = eb_uint4(header + 10);
     zip->crc = eb_uint4(header + 14);
     zip->mtime = eb_uint4(header + 18);
-    zip->offset = 0;
+    zip->location = 0;
 
     if (zip->file_size < 1 << 16)
 	zip->index_width = 2;
@@ -268,7 +306,7 @@ eb_zopen_ebzip(zip, file_name)
 /*
  * Open an EPWING compression file.
  */
-int
+static int
 eb_zopen_epwing(zip, file_name)
     EB_Zip *zip;
     const char *file_name;
@@ -299,7 +337,7 @@ eb_zopen_epwing(zip, file_name)
      */
     if (eb_read_all(file, buffer, 32) != 32)
 	goto failed;
-    zip->offset = 0;
+    zip->location = 0;
     zip->slice_size = EB_SIZE_PAGE;
     zip->index_location = eb_uint4(buffer);
     zip->index_length = eb_uint4(buffer + 4);
@@ -322,7 +360,7 @@ eb_zopen_epwing(zip, file_name)
 	goto failed;
     if (eb_read_all(file, buffer, 36) != 36)
 	goto failed;
-    zip->file_size = (zip->index_length / 36) * (EB_SIZE_PAGE * 16);
+    zip->file_size = (size_t)(zip->index_length / 36) * (EB_SIZE_PAGE * 16);
     for (i = 1, buffer_p = buffer + 4 + 2; i < 16; i++, buffer_p += 2) {
 	if (eb_uint2(buffer_p) == 0)
 	    break;
@@ -341,6 +379,7 @@ eb_zopen_epwing(zip, file_name)
     /*
      * Make leafs for 16bit character.
      */
+    read_length = EPWING_BUFFER_SIZE - (EPWING_BUFFER_SIZE % 4);
     if (lseek(file, zip->frequencies_location, SEEK_SET) < 0)
 	goto failed;
     if (eb_read_all(file, buffer, read_length) != read_length)
@@ -415,7 +454,7 @@ eb_zopen_epwing(zip, file_name)
 /*
  * Open an EPWING compression file.
  */
-int
+static int
 eb_zopen_epwing6(zip, file_name)
     EB_Zip *zip;
     const char *file_name;
@@ -447,7 +486,7 @@ eb_zopen_epwing6(zip, file_name)
      */
     if (eb_read_all(file, buffer, 48) != 48)
 	goto failed;
-    zip->offset = 0;
+    zip->location = 0;
     zip->slice_size = EB_SIZE_PAGE;
     zip->index_location = eb_uint4(buffer);
     zip->index_length = eb_uint4(buffer + 4);
@@ -472,7 +511,7 @@ eb_zopen_epwing6(zip, file_name)
 	goto failed;
     if (eb_read_all(file, buffer, 36) != 36)
 	goto failed;
-    zip->file_size = (zip->index_length / 36) * (EB_SIZE_PAGE * 16);
+    zip->file_size = (size_t)(zip->index_length / 36) * (EB_SIZE_PAGE * 16);
     for (i = 1, buffer_p = buffer + 4 + 2; i < 16; i++, buffer_p += 2) {
 	if (eb_uint2(buffer_p) == 0)
 	    break;
@@ -731,30 +770,30 @@ eb_zclose(zip, file)
  * Seek `file'.  (`file' may have been compressed.)
  */
 off_t
-eb_zlseek(zip, file, offset, whence)
+eb_zlseek(zip, file, location, whence)
     EB_Zip *zip;
     int file;
-    off_t offset;
+    off_t location;
     int whence;
 {
-    if (zip->code == EB_ZIP_NONE)
+    if (zip->code == EB_ZIP_NONE) {
 	/*
 	 * If `file' is not compressed, simply call lseek().
 	 */
-	return lseek(file, offset, whence);
-    else {
+	return lseek(file, location, whence);
+    } else {
 	/*
-	 * Calculate new offset according with `whence'.
+	 * Calculate new location according with `whence'.
 	 */
 	switch (whence) {
 	case SEEK_SET:
-	    zip->offset = offset;
+	    zip->location = location;
 	    break;
 	case SEEK_CUR:
-	    zip->offset = zip->offset + offset;
+	    zip->location = zip->location + location;
 	    break;
 	case SEEK_END:
-	    zip->offset = zip->file_size - offset;
+	    zip->location = zip->file_size - location;
 	    break;
 	default:
 #ifdef EINVAL
@@ -764,18 +803,18 @@ eb_zlseek(zip, file, offset, whence)
 	}
 
 	/*
-	 * Adjust offset.
+	 * Adjust location.
 	 */
-	if (zip->offset < 0)
-	    zip->offset = 0;
-	if (zip->file_size < zip->offset)
-	    zip->offset = zip->file_size;
+	if (zip->location < 0)
+	    zip->location = 0;
+	if (zip->file_size < zip->location)
+	    zip->location = zip->file_size;
 
 	/*
-	 * Update `zip->offset'.
+	 * Update `zip->location'.
 	 * (We don't actually seek the file.)
 	 */
-	return zip->offset;
+	return zip->location;
     }
 
     /* never reached */
@@ -798,6 +837,8 @@ eb_zread(zip, file, buffer, length)
     /*
      * If `file' is not compressed, call read() and return.
      */
+    pthread_mutex_lock(&cache_mutex);
+
     if (zip->code == EB_ZIP_NONE)
 	read_length = eb_read_all(file, buffer, length);
     else if (zip->code == EB_ZIP_EBZIP1)
@@ -806,8 +847,14 @@ eb_zread(zip, file, buffer, length)
 	read_length = eb_zread_epwing(zip, file, buffer, length);
     else if (zip->code == EB_ZIP_EPWING6)
 	read_length = eb_zread_epwing(zip, file, buffer, length);
+#if 0
+    else if (zip->code == EB_ZIP_SEBXA)
+	read_length = eb_zread_sebxa(zip, file, buffer, length);
+#endif
     else
 	read_length = -1;
+
+    pthread_mutex_unlock(&cache_mutex);
 
     return read_length;
 }
@@ -830,28 +877,26 @@ eb_zread_ebzip(zip, file, buffer, length)
     off_t next_slice_location;
     int n;
     
-    pthread_mutex_lock(&cache_mutex);
-
     /*
      * Read data.
      */
     while (read_length < length) {
-	if (zip->file_size <= zip->offset)
-	    goto succeeded;
+	if (zip->file_size <= zip->location)
+	    return read_length;
 
 	/*
 	 * If data in `cache_buffer' is out of range, read data from `file'.
 	 */
-	if (cache_file != file || zip->offset < cache_offset 
-	    || cache_offset + zip->slice_size <= zip->offset) {
+	if (cache_file != file || zip->location < cache_location 
+	    || cache_location + zip->slice_size <= zip->location) {
 
 	    cache_file = -1;
-	    cache_offset = zip->offset - (zip->offset % zip->slice_size);
+	    cache_location = zip->location - (zip->location % zip->slice_size);
 
 	    /*
 	     * Get buffer location and size from index table in `file'.
 	     */
-	    if (lseek(file, zip->offset / zip->slice_size * zip->index_width
+	    if (lseek(file, zip->location / zip->slice_size * zip->index_width
 		+ EB_SIZE_EBZIP_HEADER, SEEK_SET) < 0)
 		goto failed;
 	    if (eb_read_all(file, temporary_buffer, zip->index_width * 2)
@@ -902,26 +947,23 @@ eb_zread_ebzip(zip, file, buffer, length)
 	/*
 	 * Copy data from `cache_buffer' to `buffer'.
 	 */
-	n = zip->slice_size - (zip->offset % zip->slice_size);
+	n = zip->slice_size - (zip->location % zip->slice_size);
 	if (length - read_length < n)
 	    n = length - read_length;
-	if (zip->file_size - zip->offset < n)
-	    n = zip->file_size - zip->offset;
+	if (zip->file_size - zip->location < n)
+	    n = zip->file_size - zip->location;
 	memcpy(buffer + read_length,
-	    cache_buffer + (zip->offset - cache_offset), n);
+	    cache_buffer + (zip->location - cache_location), n);
 	read_length += n;
-	zip->offset += n;
+	zip->location += n;
     }
 
-  succeeded:
-    pthread_mutex_unlock(&cache_mutex);
     return read_length;
 
     /*
      * An error occurs...
      */
   failed:
-    pthread_mutex_unlock(&cache_mutex);
     return -1;
 }
 
@@ -942,34 +984,32 @@ eb_zread_epwing(zip, file, buffer, length)
     off_t page_location;
     int n;
     
-    pthread_mutex_lock(&cache_mutex);
-
     /*
      * Read data.
      */
     while (read_length < length) {
-	if (zip->file_size <= zip->offset)
-	    goto succeeded;
+	if (zip->file_size <= zip->location)
+	    return read_length;
 
 	/*
 	 * If data in `cache_buffer' is out of range, read data from `file'.
 	 */
-	if (cache_file != file || zip->offset < cache_offset 
-	    || cache_offset + EB_SIZE_PAGE <= zip->offset) {
+	if (cache_file != file || zip->location < cache_location 
+	    || cache_location + EB_SIZE_PAGE <= zip->location) {
 	    cache_file = -1;
-	    cache_offset = zip->offset - (zip->offset % EB_SIZE_PAGE);
+	    cache_location = zip->location - (zip->location % EB_SIZE_PAGE);
 
 	    /*
 	     * Get page location from index table in `file'.
 	     */
 	    if (lseek(file, zip->index_location
-		+ zip->offset / (EB_SIZE_PAGE * 16) * 36, SEEK_SET) < 0)
+		+ zip->location / (EB_SIZE_PAGE * 16) * 36, SEEK_SET) < 0)
 		goto failed;
 	    if (eb_read_all(file, temporary_buffer, 36) != 36)
 		goto failed;
 	    page_location = eb_uint4(temporary_buffer)
 		+ eb_uint2(temporary_buffer + 4
-		    + (zip->offset / EB_SIZE_PAGE % 16) * 2);
+		    + (zip->location / EB_SIZE_PAGE % 16) * 2);
 
 	    /*
 	     * Read a compressed page from `file' and uncompress it.
@@ -992,29 +1032,121 @@ eb_zread_epwing(zip, file, buffer, length)
 	/*
 	 * Copy data from `cache_buffer' to `buffer'.
 	 */
-	n = EB_SIZE_PAGE - (zip->offset % EB_SIZE_PAGE);
+	n = EB_SIZE_PAGE - (zip->location % EB_SIZE_PAGE);
 	if (length - read_length < n)
 	    n = length - read_length;
-	if (zip->file_size - zip->offset < n)
-	    n = zip->file_size - zip->offset;
+	if (zip->file_size - zip->location < n)
+	    n = zip->file_size - zip->location;
 	memcpy(buffer + read_length,
-	    cache_buffer + (zip->offset - cache_offset), n);
+	    cache_buffer + (zip->location - cache_location), n);
 	read_length += n;
-	zip->offset += n;
+	zip->location += n;
     }
 
-  succeeded:
-    pthread_mutex_unlock(&cache_mutex);
     return read_length;
 
     /*
      * An error occurs...
      */
   failed:
-    pthread_mutex_unlock(&cache_mutex);
     return -1;
 }
 
+
+#if 0
+/*
+ * Read data from `file' compressed with the S-EBXA compression format.
+ */
+static ssize_t
+eb_zread_sebxa(zip, file, buffer, length)
+    EB_Zip *zip;
+    int file;
+    char *buffer;
+    size_t length;
+{
+    char temporary_buffer[EB_SEBXA_ZIP_SLICE_LENGTH];
+    size_t read_length = 0;
+    size_t zipped_slice_size;
+    off_t slice_location;
+    off_t next_slice_location;
+    int n;
+    
+    /*
+     * Read data.
+     */
+    while (read_length < length) {
+	if (zip->file_size <= zip->location)
+	    return read_length;
+
+	/*
+	 * If data in `cache_buffer' is out of range, read data from `file'.
+	 */
+	if (cache_file != file || zip->location < cache_location 
+	    || cache_location + zip->slice_size <= zip->location) {
+
+	    cache_file = -1;
+	    cache_location = zip->location - (zip->location % zip->slice_size);
+
+	    /*
+	     * Get buffer location and size from index table in `file'.
+	     */
+	    if (lseek(file, zip->location / zip->slice_size * zip->index_width
+		+ EB_SIZE_EBZIP_HEADER, SEEK_SET) < 0)
+		goto failed;
+	    if (eb_read_all(file, temporary_buffer, zip->index_width * 2)
+		!= zip->index_width * 2)
+		goto failed;
+
+	    slice_location = eb_uint4(temporary_buffer);
+	    next_slice_location = eb_uint4(temporary_buffer + 4);
+	    zipped_slice_size = next_slice_location - slice_location;
+
+	    if (next_slice_location <= slice_location
+		|| zip->slice_size < zipped_slice_size)
+		goto failed;
+
+	    /*
+	     * Read a compressed slice from `file' and uncompress it.
+	     * The data is not compressed if its size is equals to
+	     * slice size.
+	     */
+	    if (lseek(file, slice_location, SEEK_SET) < 0)
+		goto failed;
+	    if (eb_read_all(file, temporary_buffer, zipped_slice_size)
+		!= zipped_slice_size)
+		goto failed;
+	    if (zip->slice_size == zipped_slice_size)
+		memcpy(cache_buffer, temporary_buffer, zip->slice_size);
+	    else if (eb_unzip_slice_ebzip1(cache_buffer, zip->slice_size,
+		temporary_buffer, zipped_slice_size) < 0)
+		goto failed;
+
+	    cache_file = file;
+	}
+
+	/*
+	 * Copy data from `cache_buffer' to `buffer'.
+	 */
+	n = zip->slice_size - (zip->location % zip->slice_size);
+	if (length - read_length < n)
+	    n = length - read_length;
+	if (zip->file_size - zip->location < n)
+	    n = zip->file_size - zip->location;
+	memcpy(buffer + read_length,
+	    cache_buffer + (zip->location - cache_location), n);
+	read_length += n;
+	zip->location += n;
+    }
+
+    return read_length;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    return -1;
+}
+#endif
 
 /*
  * Read data from a file.
