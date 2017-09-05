@@ -1391,15 +1391,6 @@ eb_and_hit_lists(and_list, and_count, max_and_count, hit_list_count,
     int increment_count;
     int i;
 
-    for (i = 0; i < hit_list_count; i++) {
-	int j;
-	printf("=== list %d ===\n", i);
-	for (j = 0; j < hit_counts[i]; j++) {
-	    printf("%d: %x, %x\n", j, hit_lists[i][j].text.page,
-		hit_lists[i][j].text.offset);
-	}
-    }
-
     /*
      * Initialize indexes for the hit_lists[].
      */
@@ -1420,13 +1411,6 @@ eb_and_hit_lists(and_list, and_count, max_and_count, hit_list_count,
 	current_page = 0;
 	current_offset = 0;
 	equal_count = 0;
-
-	for (i = 0; i < hit_list_count; i++) {
-	    printf("%d={%3d:%06x,%03x} ", i, hit_indexes[i],
-		hit_lists[i][hit_indexes[i]].text.page,
-		hit_lists[i][hit_indexes[i]].text.offset);
-	}
-	fputc('\n', stdout);
 
 	/*
 	 * Compare the current elements of the lists.
