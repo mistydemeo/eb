@@ -8287,7 +8287,7 @@ echo "$as_me: error: invalid argument to --enable-debug" >&2;}
    { (exit 1); exit 1; }; } ;;
 esac
 else
-  ENABLE_DEBUG=yes
+  ENABLE_DEBUG=no
 fi;
 
 if test $ENABLE_DEBUG = yes ; then

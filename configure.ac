@@ -47,7 +47,7 @@ AC_ARG_ENABLE(debug,
    yes) ENABLE_DEBUG=yes  ;;
    no)  ENABLE_DEBUG=no ;;
    *)   AC_MSG_ERROR(invalid argument to --enable-debug) ;;
-esac], ENABLE_DEBUG=yes)
+esac], ENABLE_DEBUG=no)
 
 if test $ENABLE_DEBUG = yes ; then
     AC_DEFINE(ENABLE_DEBUG, 1, [Define if enabling debug codes.])
