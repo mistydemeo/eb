@@ -485,7 +485,7 @@ eb_zopen_epwzipped(zip, filename)
      * doesn't exist.
      *
      */
-    if (lseek(file, zip->index_location + zip->index_length / 36 * 36,
+    if (lseek(file, zip->index_location + (zip->index_length - 36) / 36 * 36,
 	SEEK_SET) < 0)
 	goto failed;
     if (eb_read_all(file, buffer, 36) != 36)
