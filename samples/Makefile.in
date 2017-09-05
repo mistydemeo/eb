@@ -180,7 +180,7 @@ LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 CFLAGS = @CFLAGS@
 DIST_SOURCES = $(disctype_SOURCES) $(initexit_SOURCES) \
 	$(subbook_SOURCES) $(text_SOURCES) $(word_SOURCES)
-DIST_COMMON = README Makefile.am Makefile.in compile
+DIST_COMMON = README Makefile.am Makefile.in
 SOURCES = $(disctype_SOURCES) $(initexit_SOURCES) $(subbook_SOURCES) $(text_SOURCES) $(word_SOURCES)
 
 all: all-am

@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.2beta3 版です。 EB ライブラリバージョン 3.2beta3 に対
-応しています。
+   この文書は第 3.2 版です。 EB ライブラリバージョン 3.2 に対応していま
+す。
 
 * Menu:
 
@@ -212,9 +212,9 @@ File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Details about Information
 
 Tag Table:
 Node: Top1013
-Node: Introduction1396
-Node: Invoking ebinfo2141
-Node: Details about Information3982
-Node: Options to ebinfo5703
+Node: Introduction1386
+Node: Invoking ebinfo2131
+Node: Details about Information3972
+Node: Options to ebinfo5693
 
 End Tag Table

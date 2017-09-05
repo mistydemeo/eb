@@ -1,9 +1,0 @@
-#! /bin/sh
-
-EXE="`echo $1 | sed -e 's/\.c$//'`"
-SRC="`echo $EXE | sed -e 's/$/.c/'`"
-PREFIX=/usr/private
-
-set -x
-cc -I$PREFIX/include -g -o $EXE $SRC \
-    -L$PREFIX/lib -L/usr/private/lib -leb -lintl -liconv -lz

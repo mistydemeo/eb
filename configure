@@ -1431,7 +1431,7 @@ fi
 
 # Define the identity of the package.
 PACKAGE=eb
-VERSION=3.2beta3
+VERSION=3.2
 
 cat >>confdefs.h <<EOF
 #define PACKAGE "$PACKAGE"
