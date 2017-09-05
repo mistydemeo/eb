@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ebutils 3.0\n"
-"POT-Creation-Date: 2002-06-09 12:25+0900\n"
+"POT-Creation-Date: 2002-08-21 17:57+0900\n"
 "PO-Revision-Date: 2001-03-18 23:28+0900\n"
 "Last-Translator: Motoyuki Kasahara <m-kasahr@sra.co.jp>\n"
 "Language-Team: \n"
@@ -101,13 +101,13 @@ msgstr "%s: `%s...' は未知の画像形式名です\n"
 msgid "%s: unknown image format name `%s'\n"
 msgstr "%s: `%s' は未知の画像形式名です\n"
 
-#: ../ebfont/ebfont.c:640 ../ebinfo/ebinfo.c:480 ../ebrefile/ebrefile.c:368
+#: ../ebfont/ebfont.c:640 ../ebinfo/ebinfo.c:489 ../ebrefile/ebrefile.c:368
 #: ../ebzip/ebzip.c:460
 #, c-format
 msgid "Usage: %s [option...] [book-directory]\n"
 msgstr "使用法: %s [オプション...] [書籍のディレクトリ]\n"
 
-#: ../ebfont/ebfont.c:641 ../ebinfo/ebinfo.c:482 ../ebrefile/ebrefile.c:369
+#: ../ebfont/ebfont.c:641 ../ebinfo/ebinfo.c:491 ../ebrefile/ebrefile.c:369
 #: ../ebzip/ebzip.c:461
 msgid "Options:\n"
 msgstr "オプション:\n"
@@ -128,13 +128,13 @@ msgstr ""
 "                             高さは 16, 24, 30, 48 のいずれか\n"
 
 #: ../ebfont/ebfont.c:645 ../ebfont/ebfont.c:650 ../ebfont/ebfont.c:654
-#: ../ebfont/ebfont.c:662 ../ebinfo/ebinfo.c:488 ../ebrefile/ebrefile.c:373
+#: ../ebfont/ebfont.c:662 ../ebinfo/ebinfo.c:497 ../ebrefile/ebrefile.c:373
 #: ../ebrefile/ebrefile.c:381 ../ebzip/ebzip.c:474 ../ebzip/ebzip.c:489
 #, c-format
 msgid "                             (default: %s)\n"
 msgstr "                             (省略時: %s)\n"
 
-#: ../ebfont/ebfont.c:647 ../ebinfo/ebinfo.c:483 ../ebrefile/ebrefile.c:370
+#: ../ebfont/ebfont.c:647 ../ebinfo/ebinfo.c:492 ../ebrefile/ebrefile.c:370
 #: ../ebzip/ebzip.c:463
 msgid "  -h  --help                 display this help, then exit\n"
 msgstr "  -h  --help                 このヘルプを表示して終了\n"
@@ -170,12 +170,12 @@ msgstr "                             処理対象の副本\n"
 msgid "                             (default: all subbooks)\n"
 msgstr "                             (省略時: すべての副本)\n"
 
-#: ../ebfont/ebfont.c:659 ../ebinfo/ebinfo.c:485 ../ebrefile/ebrefile.c:378
+#: ../ebfont/ebfont.c:659 ../ebinfo/ebinfo.c:494 ../ebrefile/ebrefile.c:378
 #: ../ebzip/ebzip.c:485
 msgid "  -v  --version              display version number, then exit\n"
 msgstr "  -v  --version              バージョン番号を表示して終了\n"
 
-#: ../ebfont/ebfont.c:660 ../ebinfo/ebinfo.c:486 ../ebrefile/ebrefile.c:379
+#: ../ebfont/ebfont.c:660 ../ebinfo/ebinfo.c:495 ../ebrefile/ebrefile.c:379
 #: ../ebzip/ebzip.c:487
 msgid ""
 "\n"
@@ -184,12 +184,12 @@ msgstr ""
 "\n"
 "引数:\n"
 
-#: ../ebfont/ebfont.c:661 ../ebinfo/ebinfo.c:487 ../ebrefile/ebrefile.c:380
+#: ../ebfont/ebfont.c:661 ../ebinfo/ebinfo.c:496 ../ebrefile/ebrefile.c:380
 #: ../ebzip/ebzip.c:488
 msgid "  book-directory             top directory of a CD-ROM book\n"
 msgstr "  書籍のディレクトリ         CD-ROM 書籍のトップディレクトリ\n"
 
-#: ../ebfont/ebfont.c:664 ../ebinfo/ebinfo.c:490 ../ebrefile/ebrefile.c:384
+#: ../ebfont/ebfont.c:664 ../ebinfo/ebinfo.c:499 ../ebrefile/ebrefile.c:384
 #: ../ebzip/ebzip.c:501
 #, c-format
 msgid ""
@@ -199,8 +199,8 @@ msgstr ""
 "\n"
 "バグは %s に報告して下さい\n"
 
-#: ../ebfont/ebfont.c:1083 ../ebrefile/ebrefile.c:475
-#: ../ebrefile/ebrefile.c:491 ../ebzip/copyfile.c:122 ../ebzip/copyfile.c:146
+#: ../ebfont/ebfont.c:1083 ../ebrefile/ebrefile.c:471
+#: ../ebrefile/ebrefile.c:487 ../ebzip/copyfile.c:122 ../ebzip/copyfile.c:146
 #: ../ebzip/sebxa.c:58 ../ebzip/sebxa.c:191 ../ebzip/unzipfile.c:195
 #: ../ebzip/unzipfile.c:233 ../ebzip/zipfile.c:173 ../ebzip/zipfile.c:211
 #: ../ebzip/zipinfofile.c:107
@@ -307,29 +307,34 @@ msgstr "  半角フォントの文字: "
 msgid "  wide font characters: "
 msgstr "  全角フォントの文字: "
 
-#: ../ebinfo/ebinfo.c:448
+#: ../ebinfo/ebinfo.c:449
 #, c-format
 msgid "  multi search %d:\n"
 msgstr "  複合検索 %d:\n"
 
-#: ../ebinfo/ebinfo.c:462
+#: ../ebinfo/ebinfo.c:461
+#, c-format
+msgid "    title: %s\n"
+msgstr "    題名: %s\n"
+
+#: ../ebinfo/ebinfo.c:471
 #, c-format
 msgid "    label %d: %s\n"
 msgstr "    ラベル %d: %s\n"
 
-#: ../ebinfo/ebinfo.c:463
+#: ../ebinfo/ebinfo.c:472
 msgid "      candidates: "
 msgstr "      候補: "
 
-#: ../ebinfo/ebinfo.c:465
+#: ../ebinfo/ebinfo.c:474
 msgid "exist\n"
 msgstr "有\n"
 
-#: ../ebinfo/ebinfo.c:467
+#: ../ebinfo/ebinfo.c:476
 msgid "not-exist\n"
 msgstr "無\n"
 
-#: ../ebinfo/ebinfo.c:484
+#: ../ebinfo/ebinfo.c:493
 msgid "  -m  --multi-search         also output multi-search information\n"
 msgstr "  -m  --multi-search         複合検索の情報も出力\n"
 
@@ -347,25 +352,26 @@ msgstr "                             ファイルを「ディレクトリ」に出力する\n"
 msgid "%s: no catalog file: %s\n"
 msgstr "%s: カタログファイルが見つかりません: %s\n"
 
-#: ../ebrefile/ebrefile.c:503 ../ebrefile/ebrefile.c:529
-#: ../ebrefile/ebrefile.c:583 ../ebzip/sebxa.c:80 ../ebzip/sebxa.c:213
+#: ../ebrefile/ebrefile.c:499 ../ebrefile/ebrefile.c:520
+#: ../ebrefile/ebrefile.c:568 ../ebrefile/ebrefile.c:608 ../ebzip/sebxa.c:80
+#: ../ebzip/sebxa.c:213
 #, c-format
 msgid "%s: failed to read the file, %s: %s\n"
 msgstr "%s: ファイルを読み込めませんでした, %s: %s\n"
 
-#: ../ebrefile/ebrefile.c:513 ../ebrefile/ebrefile.c:554
-#: ../ebrefile/ebrefile.c:588 ../ebrefile/ebrefile.c:603
-#: ../ebrefile/ebrefile.c:620 ../ebzip/sebxa.c:133
+#: ../ebrefile/ebrefile.c:506 ../ebrefile/ebrefile.c:554
+#: ../ebrefile/ebrefile.c:575 ../ebrefile/ebrefile.c:613
+#: ../ebrefile/ebrefile.c:629 ../ebrefile/ebrefile.c:651 ../ebzip/sebxa.c:133
 #, c-format
 msgid "%s: failed to write the file, %s: %s\n"
 msgstr "%s: ファイルへ書き込めませんでした, %s: %s\n"
 
-#: ../ebrefile/ebrefile.c:568
+#: ../ebrefile/ebrefile.c:593
 #, c-format
 msgid "%s: warning: no such subbook: %s\n"
 msgstr "%s: 警告: そのような副本はありません: %s\n"
 
-#: ../ebrefile/ebrefile.c:615 ../ebzip/sebxa.c:67 ../ebzip/sebxa.c:120
+#: ../ebrefile/ebrefile.c:646 ../ebzip/sebxa.c:67 ../ebzip/sebxa.c:120
 #: ../ebzip/sebxa.c:200 ../ebzip/unzipfile.c:254 ../ebzip/zipfile.c:293
 #: ../ebzip/zipfile.c:350 ../ebzip/zipfile.c:396 ../ebzip/zipfile.c:455
 #, c-format

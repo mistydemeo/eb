@@ -438,24 +438,20 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
     char buffer[EB_SIZE_PAGE];
     char directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
     int in_subbook_count;
-    int out_subbook_count;
     int in_file = -1;
     int out_file = -1;
-    int subbook_name_index;
-    int subbook_name_found_flags[EB_MAX_SUBBOOKS];
+    int subbbook_map_table[EB_MAX_SUBBOOKS];
     off_t out_file_offset;
     size_t catalog_size;
-    size_t title_size;
-    size_t page_fragment;
-    int i;
+    int i, j;
 
-    if (disc_code == EB_DISC_EB) {
+    for (i = 0; i < EB_MAX_SUBBOOKS; i++)
+	subbbook_map_table[i] = EB_SUBBOOK_INVALID;
+
+    if (disc_code == EB_DISC_EB)
 	catalog_size = EB_SIZE_EB_CATALOG;
-	title_size = EB_MAX_EB_TITLE_LENGTH;
-    } else {
+    else
 	catalog_size = EB_SIZE_EPWING_CATALOG;
-	title_size = EB_MAX_EPWING_TITLE_LENGTH;
-    }
 
     /*
      * Open input file.
@@ -497,7 +493,7 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
     trap_file = out_file;
 
     /*
-     * Read header.
+     * Copy header.
      */
     if (read(in_file, buffer, 16) != 16) {
 	fprintf(stderr, _("%s: failed to read the file, %s: %s\n"),
@@ -506,9 +502,6 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
     }
     in_subbook_count = eb_uint2(buffer);
 
-    /*
-     * Write header.
-     */
     if (write(out_file, buffer, 16) != 16) {
 	fprintf(stderr, _("%s: failed to write the file, %s: %s\n"),
 	    invoked_name, strerror(errno), out_catalog_name);
@@ -516,11 +509,9 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
     }
     out_file_offset += 16;
 
-    for (i = 0; i < subbook_name_count; i++)
-	subbook_name_found_flags[i] = 0;
-
-    out_subbook_count = 0;
-
+    /*
+     * Copy basic information of subbooks.
+     */
     for (i = 0; i < in_subbook_count; i++) {
 	/*
 	 * Read subbook entry.
@@ -533,18 +524,27 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
 
 	/*
 	 * Check whether `subbook_name_list' has a directory name of
-	 * this subbook.
+	 * this subbook.  If not, we ignore this subbook.
 	 */
-        strncpy(directory_name, buffer + 2 + title_size,
-	    EB_MAX_DIRECTORY_NAME_LENGTH);
-        directory_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+	if (disc_code == EB_DISC_EB) {
+	    strncpy(directory_name, buffer + 2 + EB_MAX_EB_TITLE_LENGTH,
+		EB_MAX_DIRECTORY_NAME_LENGTH);
+	} else {
+	    strncpy(directory_name, buffer + 2 + EB_MAX_EPWING_TITLE_LENGTH,
+		EB_MAX_DIRECTORY_NAME_LENGTH);
+	}
+	directory_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
 
-	if (0 < subbook_name_count) {
-	    subbook_name_index = find_subbook_name(subbook_name_list,
+	if (subbook_name_count == 0)
+	    subbbook_map_table[i] = i;
+	else {
+	    int subbook_index;
+
+	    subbook_index = find_subbook_name(subbook_name_list,
 		subbook_name_count, directory_name);
-	    if (subbook_name_index < 0)
+	    if (subbook_index < 0)
 		continue;
-	    subbook_name_found_flags[subbook_name_index] = 1;
+	    subbbook_map_table[i] = subbook_index;
 	}
 
 	/*
@@ -557,21 +557,46 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
 	}
 
 	out_file_offset += catalog_size;
-	out_subbook_count++;
+    }
+
+    /*
+     * Copy extended information of subbooks.
+     */
+    if (disc_code == EB_DISC_EPWING) {
+	for (i = 0; i < in_subbook_count; i++) {
+	    if (read(in_file, buffer, catalog_size) != catalog_size) {
+		fprintf(stderr, _("%s: failed to read the file, %s: %s\n"),
+		    invoked_name, strerror(errno), in_catalog_name);
+		goto failed;
+	    }
+	    if (subbbook_map_table[i] == EB_SUBBOOK_INVALID)
+		continue;
+	    if (write(out_file, buffer, catalog_size) != catalog_size) {
+		fprintf(stderr, _("%s: failed to write the file, %s: %s\n"),
+		    invoked_name, strerror(errno), out_catalog_name);
+		goto failed;
+	    }
+
+	    out_file_offset += catalog_size;
+	}
     }
 
     /*
      * Check whether all subbooks in `subbook_name_list' are found.
      */
     for (i = 0; i < subbook_name_count; i++) {
-	if (!subbook_name_found_flags[i]) {
+	for (j = 0; j < in_subbook_count; j++) {
+	    if (subbbook_map_table[j] == i)
+		break;
+	}
+	if (in_subbook_count <= j) {
 	    fprintf(stderr, _("%s: warning: no such subbook: %s\n"),
 		invoked_name, subbook_name_list[i]);
 	}
     }
 
     /*
-     * Copy rest of the file.
+     * Copy rest of the catalog file.
      */
     for (;;) {
 	ssize_t read_length;
@@ -595,11 +620,12 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
     /*
      * Fill the current page with 0.
      */
-    page_fragment = out_file_offset % EB_SIZE_PAGE;
-    if (0 < page_fragment) {
+    if (0 < out_file_offset % EB_SIZE_PAGE) {
+	size_t pad_length;
+
+	pad_length = EB_SIZE_PAGE - (out_file_offset % EB_SIZE_PAGE);
 	memset(buffer, 0, EB_SIZE_PAGE);
-	if (write(out_file, buffer, EB_SIZE_PAGE - page_fragment)
-	    != EB_SIZE_PAGE - page_fragment) {
+	if (write(out_file, buffer, pad_length) != pad_length) {
 	    fprintf(stderr, _("%s: failed to write the file, %s: %s\n"),
 		invoked_name, strerror(errno), out_catalog_name);
 	    goto failed;
@@ -609,8 +635,13 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
     /*
      * Fix the number of subbook.
      */
-    buffer[0] = (out_subbook_count >> 8) & 0xff;
-    buffer[1] =  out_subbook_count       & 0xff;
+    if (subbook_name_count == 0) {
+	buffer[0] = (in_subbook_count >> 8) & 0xff;
+	buffer[1] =  in_subbook_count       & 0xff;
+    } else {
+	buffer[0] = (subbook_name_count >> 8) & 0xff;
+	buffer[1] =  subbook_name_count       & 0xff;
+    }
     if (lseek(out_file, (off_t)0, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), out_catalog_name);

@@ -1,6 +1,16 @@
+Major changes in release 3.3beta0.
+
+* Revise file name and compression type detection codes for EPWING.
+* The eb_multi_title() function is added, which gets a title of the
+  specified multi search.
+  Using this function, the `ebinfo' command also outputs multi search
+  titles when `--multi-search' (or `-m') option is specified.
+* Fix a bug of `ebrefile'.
+* Add two text hooks for inline image support.
+
 Major changes in release 3.2.3.
 
-* Fix bug in handling of PCM sound data.
+* Fix a bug in handling of PCM sound data.
 * Add two text hooks.
 
 Major changes in release 3.2.2.

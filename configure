@@ -1639,7 +1639,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=eb
- VERSION=3.2.3
+ VERSION=3.3beta0
 
 
 cat >>confdefs.h <<_ACEOF
@@ -1766,11 +1766,11 @@ INSTALL_STRIP_PROGRAM="\${SHELL} \$(install_sh) -c -s"
 
 
 
-LIBEB_VERSION_INFO=6:3:0
+LIBEB_VERSION_INFO=7:0:1
 
 
 EB_VERSION_MAJOR=3
-EB_VERSION_MINOR=2
+EB_VERSION_MINOR=3
 
 
 

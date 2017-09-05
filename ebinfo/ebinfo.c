@@ -436,6 +436,7 @@ output_multi_information(book)
     EB_Multi_Search_Code multi_list[EB_MAX_MULTI_SEARCHES];
     int multi_count;
     int entry_count;
+    char search_title[EB_MAX_MULTI_TITLE_LENGTH + 1];
     char entry_label[EB_MAX_MULTI_LABEL_LENGTH + 1];
     int i, j;
 
@@ -451,6 +452,14 @@ output_multi_information(book)
 	    output_error_message(error_code);
 	    continue;
 	}
+
+	error_code = eb_multi_title(book, multi_list[i], search_title);
+	if (error_code != EB_SUCCESS) {
+	    output_error_message(error_code);
+	    continue;
+	}
+	printf(_("    title: %s\n"), search_title);
+
 	for (j = 0; j < entry_count; j++) {
 	    error_code = eb_multi_entry_label(book, multi_list[i], j,
 		entry_label);

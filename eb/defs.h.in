@@ -79,21 +79,6 @@ extern "C" {
 #define EB_SIZE_PAGE			2048
 
 /*
- * Data size of a book entry in a catalog file.
- */
-#define EB_SIZE_EB_CATALOG		40
-
-/*
- * Header size of the ebzip compression file.
- */
-#define EB_SIZE_EPWING_CATALOG		164
-
-/*
- * Header size of the ebzip compression file.
- */
-#define EB_SIZE_EBZIP_HEADER		22
-
-/*
  * Maximum length of a word to be searched.
  */
 #define EB_MAX_WORD_LENGTH             255
@@ -148,6 +133,11 @@ extern "C" {
 #define EB_MAX_ALTERNATION_TEXT_LENGTH	31
 
 /*
+ * Maximum length of title for multi search.
+ */
+#define EB_MAX_MULTI_TITLE_LENGTH	32
+
+/*
  * Maximum number of font heights in a subbok.
  */
 #define EB_MAX_FONTS			4
@@ -160,7 +150,7 @@ extern "C" {
 /*
  * Maximum number of multi-search types in a subbook.
  */
-#define EB_MAX_MULTI_SEARCHES		8
+#define EB_MAX_MULTI_SEARCHES		10
 
 /*
  * Maximum number of entries in a multi-search.
@@ -180,7 +170,7 @@ extern "C" {
 /*
  * The number of text hooks.
  */
-#define EB_NUMBER_OF_HOOKS		43
+#define EB_NUMBER_OF_HOOKS		45
 
 /*
  * The number of search contexts required by a book.
@@ -494,6 +484,11 @@ struct EB_Multi_Search_Struct {
     EB_Search search;
 
     /*
+     * Search title. (EPWING only)
+     */
+    char title[EB_MAX_MULTI_TITLE_LENGTH + 1];
+
+    /*
      * The number of entries the multi search has.
      */
     int entry_count;
@@ -568,6 +563,20 @@ struct EB_Subbook_Struct {
     char text_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char graphic_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char sound_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+
+    /*
+     * Compression hints of Text, graphic and sound files.
+     * (temporary need, EPWING only).
+     */
+    Zio_Code text_hint_zio_code;
+    Zio_Code graphic_hint_zio_code;
+    Zio_Code sound_hint_zio_code;
+
+    /*
+     * Page number where search method titles are stored.
+     * (temporary need, EPWING only).
+     */
+    int search_title_page;
 
     /*
      * The top page of search methods.
@@ -839,11 +848,6 @@ struct EB_Book_Struct {
      * Disc type.  EB* or EPWING.
      */
     EB_Disc_Code disc_code;
-
-    /*
-     * Format version. (EPWING only)
-     */
-    int version;
 
     /*
      * Character code of the book.

@@ -26,7 +26,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.2.3 版です。
+   この文書は第 3.3beta0 版です。
 
 * Menu:
 
@@ -40,6 +40,7 @@ File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 * Search::                      検索
 * Text Data::                   テキストデータ
 * Local Character::             外字
+* Binary Data::
 * Index::                       索引
 
  --- The Detailed Node Listing ---
@@ -127,7 +128,16 @@ CD-ROM 書籍と `EB_Book' オブジェクト
 * Local Character in Text::     テキスト中の外字
 * Font Data Types::             データ型の詳細
 * Font Constants::              定数の詳細
-* Font Data Functions::         関数の詳細
+* Font Functions::              関数の詳細
+* Font Sample::
+
+バイナリデータ
+
+* Monochrome Image::            モノクロ図版
+* Color Image::                 カラー図版
+* WAVE Sound::                  WAVE 音声
+* MPEG Movie::                  MPEG 動画
+* Binary Data Functions::       関数の詳細
 
 索引
 
@@ -158,10 +168,10 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 3.2.3 に対応しています。 本書の
-内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成する
-には、お使用いのシステムに EB ライブラリバージョン 3.2.3 と C コンパイ
-ラをインストールしておいて下さい。
+   この文書は、EB ライブラリバージョン 3.3beta0 に対応しています。 本書
+の内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成す
+るには、お使用いのシステムに EB ライブラリバージョン 3.3beta0 と C コン
+パイラをインストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
 Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
@@ -191,16 +201,15 @@ CD-ROM は ISO 9660 形式なので、 CD-ROM
 電子書籍のデータ形式とはいっても、実際は辞書向けに特化した構造となって
 おり、市販されている書籍も辞書の類が圧倒的に多いようです。
 
-   EPWING、電子ブックともに、データ形式に関する規格の全容は一般公開され
-ていませんが、EPWING ついては規格の一部が日本工業規格 JIS X 4081 「電
-子出版検索データ構造」として公開されています。 さらに、EPWING と電子ブ
-ックのデータ形式は、酷似していることが知られています。
+   電子ブック、EPWING ともに、データ形式に関する規格の全容は一般公開さ
+れていませんが、EPWING ついては規格の一部が日本工業規格 JIS X 4081 「
+電子出版検索データ構造」として公開されています。 さらに、EPWING と電子
+ブックのデータ形式は、酷似していることが知られています。
 
-   EB ライブラリの開発者も、 EPWING、電子ブック規格の全容は知りません。
-EB ライブラリでは JIS X 4081 の記述をもとに、
-EPWING、電子ブックを読めるようにしてあります。 しかしながら、規格の全容
-が分からない状態で開発しているため、残念ながら一部に正しく読めない書籍
-が存在します。
+   EB ライブラリの開発者も、電子ブック、 EPWING 規格の全容は知りません。
+EB ライブラリでは JIS X 4081 の記述をもとに、電子ブック、EPWING を読め
+るようにしてあります。 しかしながら、規格の全容が分からない状態で開発
+しているため、残念ながら一部に正しく読めない書籍が存在します。
 
 
 File: eb-ja.info,  Node: Construction of This Book,  Prev: Electronic Book and EPWING,  Up: Introduction
@@ -265,9 +274,9 @@ EBXA-C, S-EBXA) と EPWING 形式の CD-ROM 書籍に対応しています。
 
    * 著作権表示の取得
 
-   * カラー画像データの取得 (ただし EPWING のみ)
+   * カラー図版データの取得 (ただし EPWING のみ)
 
-   * モノクロ画像データの取得
+   * モノクロ図版データの取得
 
    * 外字データの取得
 
@@ -513,7 +522,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 3.2.3 のソースードを展開します。
+  1. EB ライブラリ 3.3beta0 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -3463,9 +3472,9 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      Functions.。
 
  - EB_HOOK_INITIALIZE:
-     フック `EB_HOOK_INITIALIZE' は、`eb_seek_text()' を呼び出した直後
-     の最初の `eb_read_text()', `eb_read_heading()' の呼び出し時に処理
-     されます。 何か初期化処理をしたいときに、使うと良いでしょう。
+     `EB_HOOK_INITIALIZE' は、`eb_seek_text()' を呼び出した直後の最初
+     の `eb_read_text()', `eb_read_heading()' の呼び出し時に処理されま
+     す。 何か初期化処理をしたいときに、使うと良いでしょう。
 
      このフックが、フック関数に渡す `argc' は 0 です。 フック関数を登録
      していない状態では、このフックはテキストデータに何も書き込みませ
@@ -3473,8 +3482,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
  - EB_HOOK_BEGIN_NARROW:
  - EB_HOOK_END_NARROW:
-     フック `EB_HOOK_BEGIN_NARROW' および `EB_HOOK_END_NARROW' は、 半
-     角表示の開始と終了を表すエスケープシーケンスに対するフックです。
+     `EB_HOOK_BEGIN_NARROW' および `EB_HOOK_END_NARROW' は、 半角表示の
+     開始と終了を表すエスケープシーケンスに対するフックです。
 
      どちらのフックも、フック関数に渡す `argc' は 1 です。 `argv[0]' は
      エスケープシーケンスのコードそのもので、 `EB_HOOK_BEGIN_NARROW' な
@@ -3485,9 +3494,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
  - EB_HOOK_BEGIN_SUBSCRIPT:
  - EB_HOOK_END_SUBSCRIPT:
-     フック `EB_HOOK_BEGIN_SUBSCRIPT' および `EB_HOOK_END_SUBSCRIPT'
-     は、下付き表示の開始と終了を表すエスケープシーケンスに対するフック
-     です。
+     `EB_HOOK_BEGIN_SUBSCRIPT' および `EB_HOOK_END_SUBSCRIPT' は、 下付
+     き表示の開始と終了を表すエスケープシーケンスに対するフックです。
 
      どちらのフックも、フック関数に渡す `argc' は 1 です。 `argv[0]' の
      値はエスケープシーケンスのコードそのもので、
@@ -3498,9 +3506,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      に何も書き込みません。
 
  - EB_HOOK_SET_INDENT:
-     フック `EB_HOOK_SET_INDENT'
-     は、テキストデータの行頭の字下げ指定を表すエスケープシーケンスに対
-     するフックです。
+     `EB_HOOK_SET_INDENT' は、テキストデータの行頭の字下げ指定を表すエ
+     スケープシーケンスに対するフックです。
 
      このフックが、フック関数に渡す `argc' は 2 です。 `argv[0]' はエス
      ケープシーケンスのコードそのもので、 `0x1f09' になります。
@@ -3514,8 +3521,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      も書き込みません。
 
  - EB_HOOK_NEWLINE:
-     フック `EB_HOOK_SET_NEWLINE' は、改行を表すエスケープシーケンスに
-     対するフックです。
+     `EB_HOOK_SET_NEWLINE' は、改行を表すエスケープシーケンスに対する
+     フックです。
 
      ただし、`eb_read_heading()' (見出しの読み込み) による処理では、 改
      行を表すエスケープシーケンスは区切りコードとしても扱われます。 そ
@@ -3532,9 +3539,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
  - EB_HOOK_BEGIN_SUPERSCRIPT:
  - EB_HOOK_END_SUPERSCRIPT:
-     フック `EB_HOOK_BEGIN_SUPERSCRIPT' および
-     `EB_HOOK_END_SUPERSCRIPT' は、上付き表示の開始と終了を表すエスケ
-     ープシーケンスに対するフックです。
+     `EB_HOOK_BEGIN_SUPERSCRIPT' および `EB_HOOK_END_SUPERSCRIPT' は、
+     上付き表示の開始と終了を表すエスケープシーケンスに対するフックです。
 
      どちらのフックも、フック関数に渡す `argc' は 1 です。 `argv[0]' は
      エスケープシーケンスのコードそのもので、
@@ -3546,9 +3552,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
  - EB_HOOK_BEGIN_NO_NEWLINE:
  - EB_HOOK_END_NO_NEWLINE:
-     フック `EB_HOOK_BEGIN_NO_NEWLINE' および `EB_HOOK_END_NO_NEWLINE'
-     は、改行禁止の開始と終了を表すエスケープシーケンスに対するフックで
-     す。
+     `EB_HOOK_BEGIN_NO_NEWLINE' および `EB_HOOK_END_NO_NEWLINE' は、 改
+     行禁止の開始と終了を表すエスケープシーケンスに対するフックです。
 
      どちらのフックも、フック関数に渡す `argc' は 1 です。 `argv[0]' は
      エスケープシーケンスのコードそのもので、
@@ -3560,8 +3565,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
  - EB_HOOK_BEGIN_EMPHASIS:
  - EB_HOOK_END_EMPHASIS:
-     フック `EB_HOOK_BEGIN_EMPHASIS' および `EB_HOOK_END_EMPHASIS' は、
-     強調表示の開始と終了を表すエスケープシーケンスに対するフックです。
+     `EB_HOOK_BEGIN_EMPHASIS' および `EB_HOOK_END_EMPHASIS' は、 強調表
+     示の開始と終了を表すエスケープシーケンスに対するフックです。
 
      どちらのフックも、フック関数に渡す `argc' は 1 です。 `argv[0]' は
      エスケープシーケンスのコードそのもので、 `EB_HOOK_BEGIN_EMPHASIS'
@@ -3573,8 +3578,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_CANDIDATE:
  - EB_HOOK_END_CANDIDATE_LEAF:
  - EB_HOOK_END_CANDIDATE_GROUP:
-     フック `EB_HOOK_BEGIN_CANDIDATE' は、複合検索の候補となる語の開始
-     を表すエスケープシーケンスに対するフックです。
+     `EB_HOOK_BEGIN_CANDIDATE' は、複合検索の候補となる語の開始を表す
+     エスケープシーケンスに対するフックです。
 
      それに対して、終了を表すエスケープシーケンスに対するフックは 2 種
      類あります。 一つは `EB_HOOK_END_CANDIDATE_LEAF' で、候補となる語
@@ -3603,9 +3608,9 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
  - EB_HOOK_BEGIN_REFERENCE:
  - EB_HOOK_END_REFERENCE:
-     フック `EB_HOOK_BEGIN_REFERENCE' および `EB_HOOK_END_REFERENCE'
-     は、別位置のテキストデータの参照開始と終了を表すエスケープシーケン
-     スに対するフックです。
+     `EB_HOOK_BEGIN_REFERENCE' および `EB_HOOK_END_REFERENCE' は、 別位
+     置のテキストデータの参照開始と終了を表すエスケープシーケンスに対
+     するフックです。
 
      フック `EB_HOOK_BEGIN_REFERENCE' が、フック関数に渡す `argc' は 2
      です。 `argv[0]' はエスケープシーケンスのコードそのもので、 `0x1f42'
@@ -3623,8 +3628,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
  - EB_HOOK_BEGIN_KEYWORD:
  - EB_HOOK_END_KEYWORD:
-     フック `EB_HOOK_BEGIN_KEYWORD' および `EB_HOOK_END_KEYWORD' は、検
-     索キーの開始と終了を表すエスケープシーケンスに対するフックです。
+     `EB_HOOK_BEGIN_KEYWORD' および `EB_HOOK_END_KEYWORD' は、 検索キー
+     の開始と終了を表すエスケープシーケンスに対するフックです。
 
      フック `EB_HOOK_BEGIN_KEYWORD' が、フック関数に渡す `argc' は 2 で
      す。 `argv[0]' はエスケープシーケンスのコードそのもので、`0x1f41'
@@ -3637,10 +3642,26 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      フック関数を登録していない状態では、これらのフックはテキストデータ
      に何も書き込みません。
 
+ - EB_HOOK_BEGIN_DECORATION:
+ - EB_HOOK_END_DECORATION:
+     `EB_HOOK_BEGIN_DECORATION' および `EB_HOOK_END_DECORATION' は、文
+     字修飾の開始と終了を表すエスケープシーケンスに対するフックです。
+
+     フック `EB_HOOK_BEGIN_DECORATION' が、フック関数に渡す `argc' は 2
+     です。 `argv[0]' はエスケープシーケンスのコードそのもので、 `0x1fe0'
+     になります。 `argv[1]' の意味は不明です。
+
+     `EB_HOOK_END_KEYWORD' は、フック関数に 1 個の引数を渡します。
+     `argv[0]' はエスケープシーケンスのコードそのもので、`0x1fe1' にな
+     ります。
+
+     フック関数を登録していない状態では、これらのフックはテキストデータ
+     に何も書き込みません。
+
  - EB_HOOK_NARROW_FONT:
  - EB_HOOK_WIDE_FONT:
-     フック `EB_HOOK_NARROW_FONT' および `EB_HOOK_WIDE_FONT' は、 それ
-     ぞれ半角外字と全角外字に対するフックです。
+     `EB_HOOK_NARROW_FONT' および `EB_HOOK_WIDE_FONT' は、それぞれ半角
+     外字と全角外字に対するフックです。
 
      どちらのフックも、フック関数に渡す `argc' は 1 です。 `argv[0]'
      は、外字の文字番号を表します。
@@ -3652,8 +3673,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      `eb_hook_wide_character_text()' が自動的に登録されます。
 
  - EB_HOOK_ISO8859_1:
-     フック `EB_HOOK_ISO8859_1' は、ISO 8859-1 (ラテン文字 1) 文字に対
-     するフックです。
+     `EB_HOOK_ISO8859_1' は、ISO 8859-1 (ラテン文字 1) 文字に対するフ
+     ックです。
 
      このフックが、フック関数に渡す `argc' は 1 です。 `argv[0]' は、
      ISO 8859-1 の文字番号を表します。
@@ -3667,9 +3688,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
  - EB_HOOK_NARROW_JISX0208:
  - EB_HOOK_WIDE_JISX0208:
-     フック `EB_HOOK_NARROW_JISX0208' と `EB_HOOK_WIDE_JISX0208' は、半
-     角および全角の JIS X 0208 (日本語のかな漢字) 文字に対するフックで
-     す。
+     `EB_HOOK_NARROW_JISX0208' と `EB_HOOK_WIDE_JISX0208' は、 半角およ
+     び全角の JIS X 0208 (日本語のかな漢字) 文字に対するフックです。
 
      どちらのフックも、フック関数に渡す `argc' は 1 です。 `argv[0]'
      は、JIS X 0208 の文字を日本語 EUC で表現したときの文字番号を表し
@@ -3684,8 +3704,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      です。
 
  - EB_HOOK_GB2312:
-     フック `EB_HOOK_GB2312' は、GB 2312 (中国語の簡体字) 文字に対する
-     フックです。
+     `EB_HOOK_GB2312' は、GB 2312 (中国語の簡体字) 文字に対するフック
+     です。
 
      このフックが、フック関数に渡す `argc' は 1 です。 `argv[0]' は、 GB
      2312 の文字を中国語 EUC で表現したときの文字番号を表します。
@@ -3699,9 +3719,9 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
  - EB_HOOK_BEGIN_MONO_GRAPHIC:
  - EB_HOOK_END_MONO_GRAPHIC:
-     フック `EB_HOOK_BEGIN_MONO_GRAPHIC' および
-     `EB_HOOK_END_MONO_GRAPIHC' は、モノクロ図版の参照開始と終了を表す
-     エスケープシーケンスに対するフックです。
+     `EB_HOOK_BEGIN_MONO_GRAPHIC' および `EB_HOOK_END_MONO_GRAPIHC'
+     は、モノクロ図版の参照開始と終了を表すエスケープシーケンスに対する
+     フックです。
 
      フック `EB_HOOK_BEGIN_MONO_GRAPHIC' が、フック関数に渡す `argc' は
      4 です。 `argv[0]' はエスケープシーケンスのコードそのもので、
@@ -3720,7 +3740,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      ジェクト (*note [検索] データ型の詳細 : Search Data Types.)  の
      `page' および `offset' メンバの値に相当します。
 
-     図版データの取り出し方については、....。
+     図版データの取り出し方については、*note モノクロ図版 : Monochrome
+     Image.  を参照してください。
 
      フック関数を登録していない状態では、これらのフックはテキストデータ
      に何も書き込みません。
@@ -3728,15 +3749,15 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_GRAY_GRAPHIC:
  - EB_HOOK_END_GRAY_GRAPHIC:
      これらのフック名称は、グレースケール図版のために予約されていますが、
-     EB ライブラリ 3.2.3 ではまだ対応していません。
+     EB ライブラリ 3.3beta0 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_COLOR_BMP:
  - EB_HOOK_BEGIN_COLOR_JPEG:
  - EB_HOOK_END_COLOR_GRAPHIC:
-     フック `EB_HOOK_BEGIN_COLOR_BMP' と `EB_HOOK_COLOR_JPEG' は、 それ
-     ぞれ BMP 形式と JPEG 形式のカラー図版の参照開始を表すエスケープシ
-     ーケンスに対するフックです。 参照開始のフックは BMP と JPEG とでフ
-     ックが分かれていますが、終了のフックは共通で、
+     `EB_HOOK_BEGIN_COLOR_BMP' と `EB_HOOK_COLOR_JPEG' は、 それぞれ
+     BMP 形式と JPEG 形式のカラー図版の参照開始を表すエスケープシーケ
+     ンスに対するフックです。 参照開始のフックは BMP と JPEG とでフック
+     が分かれていますが、終了のフックは共通で、
      `EB_HOOK_END_COLOR_GRAPIHC' になります。
 
      フック `EB_HOOK_BEGIN_COLOR_BMP' と `EB_HOOK_COLOR_JPEG' が、 フッ
@@ -3752,7 +3773,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      データ型の詳細: Search Data Types.)  の `page' および `offset' メ
      ンバの値に相当します。
 
-     図版データの取り出し方については、....。
+     図版データの取り出し方については、*note カラー図版: Color Image.
+     を参照してください。
 
      フック関数を登録していない状態では、これらのフックはテキストデータ
      に何も書き込みません。
@@ -3761,17 +3783,17 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_IN_COLOR_JPEG:
  - EB_HOOK_END_IN_COLOR_GRAPHIC:
      これらのフック名称は、インラインカラー図版のために予約されています
-     が、 EB ライブラリ 3.2.3 ではまだ対応していません。
+     が、 EB ライブラリ 3.3beta0 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_WAVE:
  - EB_HOOK_END_WAVE:
-     フック `EB_HOOK_BEGIN_WAVE' および `EB_HOOK_END_WAVE' は、 WAVE 形
+     `EB_HOOK_BEGIN_WAVE' および `EB_HOOK_END_WAVE' は、 WAVE (PCM) 形
      式の音声データの参照開始と終了を表すエスケープシーケンスに対する
      フックです。
 
      フック `EB_HOOK_BEGIN_WAVE' が、フック関数に渡す `argc' は 6
      です。 `argv[0]' はエスケープシーケンスのコードそのもので、 `0x1f4a'
-     になります。 `argv[2]' と `argv[3]' は図版データの開始位置のページ
+     になります。 `argv[2]' と `argv[3]' は音声データの開始位置のページ
      番号とオフセット、 `argv[4]' と `argv[5]'
      は終了位置のページ番号とオフセットをそれぞれ表します。 `argv[1]'
      の意味は不明です。
@@ -3780,16 +3802,17 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      `argv[0]' はエスケープシーケンスのコードそのもので、`0x1f6a' にな
      ります。
 
-     音声データの取り出し方については、....。
+     音声データの取り出し方については、*note WAVE 音声: WAVE Sound. を
+     参照して下さい。
 
      フック関数を登録していない状態では、これらのフックはテキストデータ
      に何も書き込みません。
 
  - EB_HOOK_BEGIN_MPEG:
  - EB_HOOK_END_MPEG:
-     フック `EB_HOOK_BEGIN_MPEG' および `EB_HOOK_END_MPEG' は、 MPEG 形
-     式の動画データの参照開始と終了を表すエスケープシーケンスに対する
-     フックです。
+     `EB_HOOK_BEGIN_MPEG' および `EB_HOOK_END_MPEG' は、MPEG 形式の動
+     画データの参照開始と終了を表すエスケープシーケンスに対するフック
+     です。
 
      フック `EB_HOOK_BEGIN_MPEG' が、フック関数に渡す `argc' は 6
      です。 `argv[0]' はエスケープシーケンスのコードそのもので、 `0x1f39'
@@ -3800,7 +3823,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      `argv[0]' はエスケープシーケンスのコードそのもので、`0x1f59' にな
      ります。
 
-     動画データの取り出し方については、....。
+     動画データの取り出し方については、*note MPEG 動画: MPEG Movie. を
+     参照して下さい。
 
      フック関数を登録していない状態では、これらのフックはテキストデータ
      に何も書き込みません。
@@ -4098,15 +4122,15 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      は、直接この引数の値を参照することはありません。
 
      引数 APPENDIX, CONTAINER は、そのままフック関数に渡されます。 これ
-     らの引数は `NULL' でも構いません。 (ただし、呼び出されるフック関数
-     で支障がなければ。)
+     らの引数は `NULL' でも構いません。 (呼び出されるフック関数で支障が
+     なければ。)
 
      なお、フック関数や `eb_read_text()', `eb_read_heading()' 自身が文
-     字ないしエスケープシーケンス一個に対するデータを書き込もうとした
-     ときに、TEXT に十分な空き領域がないということが起こり得ます。 その
-     場合、関数は途中まで TEXT に書き込むことはせずに、いったん処理を
-     終えて戻ります。 したがって、マルチバイト文字のデータが途中で切れ
-     たりすることはありません。
+     字ないしエスケープシーケンス一個分に対するデータを書き込もうとし
+     たときに、TEXT に十分な空き領域がないということが起こり得ます。 そ
+     の場合、関数は途中まで TEXT に書き込むことはせずに、いったん処理
+     を終えて戻ります。 したがって、マルチバイト文字のデータが途中で切
+     れたりすることはありません。
 
      書き込めなかった分は、当然ながら TEXT_LENGTH
      の勘定には入りません。 書き込めなかったデータは BOOK 内部に保存さ
@@ -4115,9 +4139,11 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      頭に書き込まれます。 書き込んだデータは TEXT_LENGTH の勘定に入りま
      す。
 
-     ただし、書き込めなかったデータの長さが MAX_TEXT_LENGTH を超えてい
-     ると、何も書き込まずに関数は終了します。 このとき、書き込めなかっ
-     たデータは引き続き保存されます。
+     ただし、`book' が保存しているデータの長さが MAX_TEXT_LENGTH を超
+     えていると、何も書き込まずに関数は終了します。 このとき、書き込め
+     なかったデータは引き続き保存されます。 つまり、`text_max_length'
+     があまりに小さく、かつ保持しているデータのほうが長いと、何度呼び
+     出しても `text' への書き込みが進みませんので、 注意が必要です。
 
      `eb_seek_text()' を呼び出すか、`eb_set_subbook()' で副本を選択し
      直すと、保存していたデータは破棄されます。
@@ -4181,6 +4207,12 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      んだ後であっても、テキストデータの読み込みに関する状態記録をリセ
      ットする関数 (eb_read_text() の項を参照) を呼んでしまうと、 読み込
      んでいないと見なされますので、注意して下さい。
+
+     通常はこの関数を使わなくても、 `eb_read_text()' や
+     `eb_read_heading()' が 0 を返したら、テキストデータの末尾に達した
+     とみなして差し支えないでしょう。 ただしその際は、引数
+     `text_max_length' の値を十分大きく取って下さい。
+
 
  - Function: EB_Error_Code eb_write_text_byte1 (EB_Book *BOOK, int
           BYTE1)
@@ -4294,7 +4326,7 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      は移動できません。 複合検索の候補一覧も同様です。)
 
 
-File: eb-ja.info,  Node: Local Character,  Next: Index,  Prev: Text Data,  Up: Top
+File: eb-ja.info,  Node: Local Character,  Next: Binary Data,  Prev: Text Data,  Up: Top
 
 外字
 ****
@@ -4332,7 +4364,8 @@ Code.。)
 * Local Character in Text::     テキスト中の外字
 * Font Data Types::             データ型の詳細
 * Font Constants::              定数の詳細
-* Font Data Functions::         関数の詳細
+* Font Functions::              関数の詳細
+* Font Sample::
 
 
 File: eb-ja.info,  Node: Narrow & Wide Font,  Next: Font Size and Font Code,  Prev: Local Character,  Up: Local Character
@@ -4519,9 +4552,9 @@ File: eb-ja.info,  Node: Get Font,  Next: Convert Font,  Prev: Current Font Heig
 たら一つ下の段に降りて、また右方向にピクセルを拾います。 以下、一番下の
 段までこれを繰り返します。
 
-   ただし、バイト内では、1, 2, 4, ... 128 の桁の順にビット値を格納して
-います。 つまり、1 の桁は一番左のピクセル、128 の桁は一番右のピクセルに
-対応します。
+   ただし、バイト内では、 128, 64, 32, ...1
+の桁の順にビット値を格納しています。 つまり、 128
+の桁は一番左のピクセル、1 の桁は一番右のピクセルに対応します。
 
    以下に、 16x16
 の全角外字のビットマップの例と、そのバイト列を記します。 背景色が□、前
@@ -4529,18 +4562,18 @@ File: eb-ja.info,  Node: Get Font,  Next: Convert Font,  Prev: Current Font Heig
 
      □□□□□□□□□□□□□□□□　　0x00, 0x00,
      □□□□□□□□□□□□□□□□　　0x00, 0x00,
-     □□□■■■■■■□□□■□□□　　0xf8, 0x11,
-     □□□□□□□□■□■□■□□□　　0x00, 0x13,
-     □□□□■□□■□□■□■□□□　　0x90, 0x14,
-     □□□□■□□■■■■■■□□□　　0x90, 0x1f,
-     □□■■■■■□□□■□■□□□　　0x7c, 0x14,
-     □□□□□□□□□□■□■□□□　　0x00, 0x14,
-     □□□■□□□□□□□□■□□□　　0x08, 0x10,
-     □□□■□□□□□□□□■□□□　　0x08, 0x10,
-     □□□■■■■■■■■■■□□□　　0xf8, 0x1f,
-     □□□■□□□□□□□□■□□□　　0x08, 0x10,
-     □□□■□□□□□□□□■□□□　　0x08, 0x10,
-     □□□■■■■■■■■■■□□□　　0xf8, 0x1f,
+     □□□■■■■■■□□□■□□□　　0x1f, 0x88,
+     □□□□□□□□■□■□■□□□　　0x00, 0xc8,
+     □□□□■□□■□□■□■□□□　　0x09, 0x28,
+     □□□□■□□■■■■■■□□□　　0x09, 0xf8,
+     □□■■■■■□□□■□■□□□　　0x3e, 0x28,
+     □□□□□□□□□□■□■□□□　　0x00, 0x28,
+     □□□■□□□□□□□□■□□□　　0x10, 0x08,
+     □□□■□□□□□□□□■□□□　　0x10, 0x08,
+     □□□■■■■■■■■■■□□□　　0x1f, 0xf8,
+     □□□■□□□□□□□□■□□□　　0x18, 0x08,
+     □□□■□□□□□□□□■□□□　　0x18, 0x08,
+     □□□■■■■■■■■■■□□□　　0x1f, 0xf8,
      □□□□□□□□□□□□□□□□　　0x00, 0x00,
      □□□□□□□□□□□□□□□□　　0x00, 0x00,
 
@@ -4574,7 +4607,7 @@ eb_bitmap_to_bmp()                          BMP への変換
      }
 
    XPM, GIF への変換では、前景色は黒、背景色は透明になります。 BMP への
-変換では、前景色は黒、背景色は白になります。 XBM はモノクロ画像用のデー
+変換では、前景色は黒、背景色は白になります。 XBM はモノクロ図版用のデー
 タ形式なので、色の設定はありません。
 
 
@@ -4627,7 +4660,7 @@ File: eb-ja.info,  Node: Font Data Types,  Next: Font Constants,  Prev: Local Ch
      ために用います。
 
 
-File: eb-ja.info,  Node: Font Constants,  Next: Font Data Functions,  Prev: Font Data Types,  Up: Local Character
+File: eb-ja.info,  Node: Font Constants,  Next: Font Functions,  Prev: Font Data Types,  Up: Local Character
 
 定数の詳細
 ==========
@@ -4732,7 +4765,7 @@ File: eb-ja.info,  Node: Font Constants,  Next: Font Data Functions,  Prev: Font
      です。
 
 
-File: eb-ja.info,  Node: Font Data Functions,  Prev: Font Constants,  Up: Local Character
+File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constants,  Up: Local Character
 
 関数の詳細
 ==========
@@ -5043,11 +5076,430 @@ File: eb-ja.info,  Node: Font Data Functions,  Prev: Font Constants,  Up: Local 
      れます。
 
      XPM, GIF への変換では、前景色は黒、背景色は透明になります。 BMP へ
-     の変換では、前景色は黒、背景色は白になります。 XBM はモノクロ画像
+     の変換では、前景色は黒、背景色は白になります。 XBM はモノクロ図版
      用のデータ形式なので、色の設定はありません。
 
 
-File: eb-ja.info,  Node: Index,  Prev: Local Character,  Up: Top
+File: eb-ja.info,  Node: Font Sample,  Prev: Font Functions,  Up: Local Character
+
+サンプルプログラム
+==================
+
+     /*
+      * 使用方法:
+      *     font <book-path> <subbook-index>
+      * 例:
+      *     font /cdrom 0
+      * 説明:
+      *     <book-path> で指定した CD-ROM 書籍から特定の副本を選び、その
+      *     副本が定義している半角外字 (高さ 16 ピクセル) をすべてアスキー
+      *     アートで表示します。
+      *
+      *     その副本が、高さ 16 ピクセルの半角外字を定義していないと、エ
+      *     ラーになります。
+      *
+      *     <subbook-index> には、検索対象の副本のインデックスを指定しま
+      *     す。インデックスは、書籍の最初の副本から順に 0、1、2 ... に
+      *     なります。
+      */
+     #include "config.h"
+     
+     #include <stdio.h>
+     #include <stdlib.h>
+     
+     #include <eb/eb.h>
+     #include <eb/error.h>
+     #include <eb/font.h>
+     
+     int
+     main(argc, argv)
+         int argc;
+         char *argv[];
+     {
+         EB_Error_Code error_code;
+         EB_Book book;
+         EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
+         int subbook_count;
+         int subbook_index;
+         int font_start;
+         unsigned char bitmap[EB_SIZE_NARROW_FONT_16];
+         int i, j;
+     
+         /* コマンド行引数をチェック。*/
+         if (argc != 3) {
+             fprintf(stderr, "Usage: %s book-path subbook-index\n",
+                 argv[0]);
+             exit(1);
+         }
+     
+         /* EB ライブラリと `book' を初期化。*/
+         eb_initialize_library();
+         eb_initialize_book(&book);
+     
+         /* 書籍を `book' に結び付ける。*/
+         error_code = eb_bind(&book, argv[1]);
+         if (error_code != EB_SUCCESS) {
+             fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+                 argv[0], eb_error_message(error_code), argv[1]);
+             goto die;
+         }
+     
+         /* 副本の一覧を取得。*/
+         error_code = eb_subbook_list(&book, subbook_list, &subbook_count);
+         if (error_code != EB_SUCCESS) {
+             fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
+                 argv[0], eb_error_message(error_code));
+             goto die;
+         }
+     
+         /* 副本のインデックスを取得。*/
+         subbook_index = atoi(argv[2]);
+     
+         /*「現在の副本 (current subbook)」を設定。*/
+         if (eb_set_subbook(&book, subbook_list[subbook_index]) < 0) {
+             fprintf(stderr, "%s: failed to set the current subbook, %s\n",
+                 argv[0], eb_error_message(error_code));
+             goto die;
+         }
+     
+         /*「現在の外字の大きさ」を設定。*/
+         if (eb_set_font(&book, EB_FONT_16) < 0) {
+             fprintf(stderr, "%s: failed to set the font size, %s\n",
+                 argv[0], eb_error_message(error_code));
+             goto die;
+         }
+     
+         /* 外字の開始位置を取得。*/
+         error_code = eb_narrow_font_start(&book, &font_start);
+         if (error_code != EB_SUCCESS) {
+             fprintf(stderr, "%s: failed to get font information, %s\n",
+                 argv[0], eb_error_message(error_code));
+             goto die;
+         }
+     
+         i = font_start;
+         for (;;) {
+             /* 外字のビットマップデータを取得。*/
+     	error_code = eb_narrow_font_character_bitmap(&book, i,
+     	    (char *)bitmap);
+     	if (error_code != EB_SUCCESS) {
+                 fprintf(stderr, "%s: failed to get font data, %s\n",
+                     argv[0], eb_error_message(error_code));
+                 goto die;
+             }
+     
+     	/* ビットマップをアスキーアートにして出力。*/
+     	printf("code point=%04x\n", i);
+     	for (j = 0; j < 16; j++) {
+     	    fputc((bitmap[j] & 0x80) ? '*' : ' ', stdout);
+     	    fputc((bitmap[j] & 0x40) ? '*' : ' ', stdout);
+     	    fputc((bitmap[j] & 0x20) ? '*' : ' ', stdout);
+     	    fputc((bitmap[j] & 0x10) ? '*' : ' ', stdout);
+     	    fputc((bitmap[j] & 0x08) ? '*' : ' ', stdout);
+     	    fputc((bitmap[j] & 0x04) ? '*' : ' ', stdout);
+     	    fputc((bitmap[j] & 0x02) ? '*' : ' ', stdout);
+     	    fputc((bitmap[j] & 0x01) ? '*' : ' ', stdout);
+     	    fputc('\n', stdout);
+     	}
+     	fputs("--------\n", stdout);
+     
+             /* 外字の文字番号を一つ進める。*/
+     	error_code = eb_forward_narrow_font_character(&book, 1, &i);
+     	if (error_code != EB_SUCCESS)
+     	    break;
+         }
+     
+         /* 書籍と EB ライブラリの利用を終了。*/
+         eb_finalize_book(&book);
+         eb_finalize_library();
+         exit(0);
+     
+         /* エラー発生で終了するときの処理。*/
+       die:
+         eb_finalize_book(&book);
+         eb_finalize_library();
+         exit(1);
+     }
+
+
+File: eb-ja.info,  Node: Binary Data,  Next: Index,  Prev: Local Character,  Up: Top
+
+バイナリデータ
+**************
+
+   "バイナリデータ (binary data)" とは、テキストデータ (*note テキスト
+データ: Text Data.) から参照される、図版や動画、音声といったマルチメデ
+ィアデータのことを指します。
+
+   今のところ EB
+ライブラリでは、全種類のバイナリデータを取り扱うことができるわけではあ
+りません。 電子ブックで扱えるのは、 2 階調のモノクロ図版と、カラー図版
+(JPEG) だけです。 EPWING では、モノクロ図版、カラー図版 (BMP および
+JPEG) に加えて、 WAVE (PCM) 音声、MPEG 動画を扱うことができます。
+
+   ただし、 EB ライブラリが提供しているのは、こうしたバイナリデータを
+CD-ROM 書籍から取得する機能だけです。 表示したり再生したりする機能は用
+意していませんので、注意して下さい。
+
+   アプリケーションは、英和辞書や国語辞書といった辞書だけを対象にするな
+ら、 バイナリデータの表示や再生には対応しなくても支障はありません。 し
+かし一方では、図鑑や数式の表現にモノクロ図版を使っている数学辞典のよう
+に、対応しないと不便なものもあります。 バイナリデータの表示や再生の機能
+を実装するかどうかは、アプリケーションの対象辞書をどの範囲までにするの
+かによって決めると良いでしょう。
+
+   以下、この章では種類別にバイナリデータの扱い方について説明します。
+
+   データの種類毎にデータの取り出し方は微妙に異なりますが
+(これはデータの収録方法が微妙に異なっているからに他なりません)、大体の
+手順はデータの種類によらず、次のようなものになります。
+
+  1. テキストデータのフックを用いて、バイナリデータの参照情報を取得す
+     る
+
+  2. `eb_binary_set_...()' 関数を呼び出して、指定した位置のバイナリデ
+     ータを読み込む旨を EB ライブラリに伝える。
+
+  3. `eb_read_binary()' で実際にデータを読み込む。
+
+   なお、テキストデータと同様に、バイナリデータも副本に属するデータで
+すので、副本を選択していないと取得することはできません。
+
+* Menu:
+
+* Monochrome Image::            モノクロ図版
+* Color Image::                 カラー図版
+* WAVE Sound::                  WAVE 音声
+* MPEG Movie::                  MPEG 動画
+* Binary Data Functions::       関数の詳細
+
+
+File: eb-ja.info,  Node: Monochrome Image,  Next: Color Image,  Prev: Binary Data,  Up: Binary Data
+
+モノクロ図版
+============
+
+   2 階調のモノクロ図版は、電子ブック、EPWING 双方に存在し、EB ライブラ
+リではどちらのモノクロ図版も扱うことができます。 (電子ブックに存在する
+16 階調のモノクロ図版は、今のところ EB
+ライブラリでは対応していません。)
+
+   モノクロ図版データの内部形式は外字と同じですが、 EB ライブラリでは、
+1 ピクセルに 1bit を割り当てた BMP 形式に変換してアプリケーションに渡
+すようにしています。 したがって、アプリケーションからは、あたかも BMP
+の図版データが収録されているようにみえます。
+
+   モノクロ図版の取り出し方ですが、これにはまずモノクロ図版の参照開始と
+終了を表すエスケープシーケンスへのフック `EB_HOOK_BEGIN_MONO_GRAPHIC'
+と `EB_HOOK_END_MONO_GRAPHIC' を使います。
+
+   フック `EB_HOOK_BEGIN_MONO_GRAPHIC' がフック関数に渡す引数 (`argv')
+は 4 つあり、このうちの `argv[2]' と `argv[3]' が図版の幅と高さ (ピクセ
+ル数) を意味します。
+
+   また、フック `EB_HOOK_END_MONO_GRAPHIC' がフック関数に渡す引数は 3
+つで、`argv[1]' と `argv[2]' が、図版データのページ番号とオフセットに
+なります。
+
+   モノクロ図版を取得するには、上記のフックから得た図版のページ番号と
+オフセット、および幅と高さを記憶しておきます。
+
+   次に、`eb_set_binary_mono_graphic()' を呼び出して、これからモノクロ
+図版のデータを取得することを EB ライブラリに伝えます。
+`eb_set_binary_mono_graphic()' への引数には、 `EB_Book'
+オブジェクトと、先ほど得た図版へのページ番号、オフセット、 幅、高さを渡
+します。 `EB_Book' オブジェクトは、これから取り出そうとしている図版を収
+録している副本をあらかじめ選択しておく必要があります。
+
+     /* `eb_set_binary_mono_graphic()' の関数プロトタイプ */
+     EB_Error_Code
+     eb_set_binary_mono_graphic(EB_Book *book, EB_Position *position,
+         int width, int height);
+
+   電子ブックでは、フック関数に渡される幅と高さの値は 0 になっています
+が、 そのまま `eb_set_binary_mono_graphic()' に渡します。 (EPWING では
+0 を渡してはいけません。)
+
+   以上で図版データの取得準備ができたので、データを読み込みます。 これ
+には、`eb_read_binary()' を使います。
+
+     #define MAX_LENGTH 1000
+     char bitmap[MAX_LENGTH];
+     ssize_t bitmap_length;
+     
+     if (eb_read_binary(&book, MAX_LENGTH, bitmap, &bitmap_length)
+         != EB_SUCCESS) {
+         fprintf(stderr, "an error occurs.\n");
+         return;
+     }
+
+成功すると、読み込んだ図版データが `bitmap' に書き込まれ、何バイト書き
+込んだのかが `bitmap_length' に書き込まれます。
+書き込まれるバイト数は、最大で `MAX_LENGTH' バイトです。
+
+   必ずしも一回の `eb_read_binary()' の呼び出しで図版データを終端まで
+読み込む必要はなく、関数を繰り返し呼び出せば、前回の続きを読み込むこと
+ができます。 `eb_read_binary()' は、図版データの終端まで来るとそれ以上
+データは読み込みませんので、`eb_read_binary()' が 0 を返した時点で図
+版データが終端したことを認識できます。
+
+
+File: eb-ja.info,  Node: Color Image,  Next: WAVE Sound,  Prev: Monochrome Image,  Up: Binary Data
+
+カラー図版
+==========
+
+   カラー図版は、電子ブックでは JPEG 形式、 EPWING では JPEG と BMP (DIB)
+形式のものが使用されています。 EB ライブラリではいずれのカラー図版も扱
+うことができますが、電子ブックへの対応は限定的なものになっています。(
+詳しくは後述します。)
+
+   カラー図版のデータを取り出すには、まず
+`eb_set_binary_color_graphic()' を呼び出して、これからアプリケーション
+がカラー図版のデータを取得しようとしていることを EB ライブラリに伝えま
+す。 `eb_set_binary_color_graphic()' への引数には、 `EB_Book' オブジェ
+クトに加えて、カラー図版のページ番号とオフセットを渡します。
+
+     /* `eb_set_binary_color_graphic()' の関数プロトタイプ */
+     EB_Error_Code
+     eb_set_binary_color_graphic(EB_Book *book, EB_Position *position);
+
+   `EB_Book' オブジェクトは、これから取り出そうとしている図版を収録し
+ている副本をあらかじめ選択しておきます。 カラー図版のページ番号とオフセ
+ットの情報は、カラー図版の参照開始と終了を表すエスケープシーケンスへの
+フックから得ます。 フックは、インライン表示用と非インライン用の 2 種類
+があり、さらにそれぞれ開始フックが JPEG 用と BMP 用に分かれています。
+
+`EB_HOOK_BEGIN_COLOR_BMP'
+`EB_HOOK_BEGIN_COLOR_JPEG'
+     非インライン用 BMP, JPEG の開始フック
+
+`EB_HOOK_END_COLOR_GRAPHIC'
+     非インライン用カラー図版 (BMP, JPEG 共通) の終了フック
+
+`EB_HOOK_BEGIN_IN_COLOR_BMP'
+`EB_HOOK_BEGIN_IN_COLOR_JPEG'
+     インライン用 BMP, JPEG の開始フック
+
+`EB_HOOK_END_IN_COLOR_GRAPHIC'
+     非インライン用カラー図版 (BMP, JPEG 共通) の終了フック
+
+   非インライン用の終了フック `EB_HOOK_END_GRAPHIC' では、フック関数に
+渡す引数の `argv[1]' と `argv[2]' が、図版データのページ番号とオフセッ
+トになりますので、これを `eb_set_binary_color_graphic()' に渡してやりま
+す。 同様に、インライン用の終了フック `EB_HOOK_END_IN_GRAPHIC' では、
+`argv[2]' と `argv[3]' がページ番号とオフセットですので、 これを渡しま
+す。
+
+   後は、実際にカラー図版のデータを取り出します。 これには、モノクロ図
+版と同様に `eb_read_binary()' を用います。
+使い方はまったく一緒ですので、詳しくは *note モノクロ図版 : Monochrome
+Image. を参照してください。
+
+   ただし、電子ブックのカラー図版については、データの終了位置が来ても
+EB ライブラリは読み込みを止めないという制限事項があります。 これは、デ
+ータの大きさに関する情報が記されていないためで、データの終端位置は、ア
+プリケーションが JPEG のデータをデコードして割り出すしかありません。
+
+
+File: eb-ja.info,  Node: WAVE Sound,  Next: MPEG Movie,  Prev: Color Image,  Up: Binary Data
+
+WAVE (PCM) 音声
+===============
+
+   WAVE (PCM) 形式の音声データは EPWING にだけ存在します。 (代わりに電
+子ブックには CD-DA 形式の音声データがありますが、EB ライブラリでは対応
+していません。)
+
+   WAVE 形式の音声データを取り出すには、まず WAVE 音声の参照開始と終了
+を表すエスケープシーケンスへのフック `EB_HOOK_BEGIN_WAVE' と
+`EB_HOOK_END_WAVE' を使います。
+
+   フック `EB_HOOK_BEGIN_WAVE' がフック関数に渡す引数のうち、 `argv[2]'
+と `argv[3]' が音声データの開始位置のページ番号とオフセット、 `argv[4]'
+と `argv[5]' が終了位置のページ番号とオフセットとなります。
+
+   この開始位置と終了位置を関数 `eb_set_binary_wave()' に渡して、その
+位置にある音声データをこれから取り出すことを EB ライブラリに伝えます。
+
+     /* `eb_set_binary_wave()' の関数プロトタイプ */
+     EB_Error_Code
+     eb_set_binary_wave(EB_Book *book, EB_Position *start_position,
+     EB_Position *end_position);
+
+   そして後は、実際に音声データを取り出します。 これには、他のバイナリ
+データと同様に `eb_read_binary()' を用います。 `eb_read_binary()' の使
+い方は、 *note モノクロ図版: Monochrome Image. を参照してください。
+
+
+File: eb-ja.info,  Node: MPEG Movie,  Next: Binary Data Functions,  Prev: WAVE Sound,  Up: Binary Data
+
+MPEG 動画
+=========
+
+   MPEG 形式の動画データは EPWING にだけ存在します。 動画データは
+EPWING の CD-ROM の movie というディレクトリの下に、 動画毎に一個のファ
+イルにした形で収められています。
+
+   MPEG データの参照開始と終了を表すエスケープシーケンスへのフック
+`EB_HOOK_BEGIN_MPEG' と `EB_HOOK_END_MPEG' を使用すると、 参照先の MPEG
+のファイル名を取得できます。 具体的には、フック `EB_HOOK_BEGIN_MPEG' が
+フック関数に渡す引数のうち、`argv[2]' 〜 `argv[5]' が合わせて一つのフ
+ァイル名を表すようになっています。
+
+   MPEG 動画のデータを得るには、このファイル名を `eb_set_binary_mpeg()'
+に渡して、そのファイルの動画データを取り出す旨を EB ライブラリに伝えま
+す。 ファイル名は、次のようにして `argv + 2' (`&argv[2]' でも同じ) を渡
+します。
+
+     if (eb_set_binary_mpeg(&book, argv + 2) != EB_SUCCESS) {
+         fprintf(stderr, "an error occurs.\n");
+         return;
+     }
+
+   後は、実際に動画データを取り出します。 これには、やはり他のバイナリ
+データと同様に `eb_read_binary()' を用います。 `eb_read_binary()' の使
+い方については、 *note モノクロ図版: Monochrome Image. を参照してくださ
+い。
+
+
+File: eb-ja.info,  Node: Binary Data Functions,  Prev: MPEG Movie,  Up: Binary Data
+
+関数の詳細
+==========
+
+   この節で説明している関数を使うには、次のようにヘッダファイルを読み込
+んで下さい。
+
+     #include <eb/binary.h>
+
+ - Function: EB_Error_Code eb_set_binary_mono_graphic (EB_Book *BOOK,
+          const EB_Position *POSITION, int WIDTH, HEIGHT)
+
+ - Function: EB_Error_Code eb_set_binary_color_graphic (EB_Book *BOOK,
+          const EB_Position *POSITION)
+
+ - Function: EB_Error_Code eb_set_binary_wave (EB_Book *BOOK, const
+          EB_Position *START_POSITION, EB_Position *START_POSITION)
+
+ - Function: EB_Error_Code eb_set_binary_mpeg (EB_Book *BOOK, const
+          unsigned int *ARGV)
+
+ - Function: EB_Error_Code eb_read_binary (EB_Book *BOOK, size_t
+          `binary_max_length', char *BINARY, ssize_t *BINARY_LENGTH)
+
+ - Function: EB_Error_Code eb_compose_movie_file_name (const unsigned
+          int *ARGV, char *COMPOSED_FILE_NAME)
+
+ - Function: EB_Error_Code eb_compose_movie_file_name (const unsigned
+          int *ARGV, char *COMPOSED_FILE_NAME)
+ - Function: EB_Error_Code eb_decompose_movie_file_name (unsigned int
+          *ARGV, const char *COMPOSED_FILE_NAME)
+
+ - Function: EB_Error_Code eb_unset_binary (EB_Book *BOOK)
+
+
+File: eb-ja.info,  Node: Index,  Prev: Binary Data,  Up: Top
 
 索引
 ****
@@ -5087,39 +5539,41 @@ File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type
 
 * Menu:
 
-* backward_narrow_font_character:        Font Data Functions.
+* backward_narrow_font_character:        Font Functions.
 * backward_text:                         Text Data Functions.
-* backward_wide_font_character:          Font Data Functions.
+* backward_wide_font_character:          Font Functions.
 * bind:                                  EB_Book Functions.
-* bitmap_to_bmp:                         Font Data Functions.
-* bitmap_to_gif:                         Font Data Functions.
-* bitmap_to_xbm:                         Font Data Functions.
-* bitmap_to_xpm:                         Font Data Functions.
+* bitmap_to_bmp:                         Font Functions.
+* bitmap_to_gif:                         Font Functions.
+* bitmap_to_xbm:                         Font Functions.
+* bitmap_to_xpm:                         Font Functions.
 * character_code:                        EB_Book Functions.
+* compose_movie_file_name:               Binary Data Functions.
 * copyright:                             Text Data Functions.
 * current_candidate:                     Text Data Functions.
+* decompose_movie_file_name:             Binary Data Functions.
 * disc_type:                             EB_Book Functions.
 * error_message:                         Error Functions.
 * error_string:                          Error Functions.
 * finalize_book:                         EB_Book Functions.
 * finalize_hookset:                      Hookset Access Functions.
 * finalize_library:                      Init and Exit Functions.
-* font:                                  Font Data Functions.
-* font_height:                           Font Data Functions.
-* font_height2:                          Font Data Functions.
-* font_list:                             Font Data Functions.
-* forward_narrow_font_character:         Font Data Functions.
+* font:                                  Font Functions.
+* font_height:                           Font Functions.
+* font_height2:                          Font Functions.
+* font_list:                             Font Functions.
+* forward_narrow_font_character:         Font Functions.
 * forward_text:                          Text Data Functions.
-* forward_wide_font_character:           Font Data Functions.
+* forward_wide_font_character:           Font Functions.
 * have_copyright:                        Text Data Functions.
 * have_endword_search:                   Search Functions.
 * have_exactword_search:                 Search Functions.
-* have_font:                             Font Data Functions.
+* have_font:                             Font Functions.
 * have_menu:                             Text Data Functions.
 * have_multi_search:                     Search Functions.
-* have_narrow_font:                      Font Data Functions.
+* have_narrow_font:                      Font Functions.
 * have_text:                             Text Data Functions.
-* have_wide_font:                        Font Data Functions.
+* have_wide_font:                        Font Functions.
 * have_word_search:                      Search Functions.
 * hit_list:                              Search Functions.
 * hook_empty:                            Builtin Hook Functions.
@@ -5138,18 +5592,19 @@ File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type
 * multi_entry_have_candidates:           Search Functions.
 * multi_entry_label:                     Search Functions.
 * multi_search_list:                     Search Functions.
-* narrow_font_bmp_size:                  Font Data Functions.
-* narrow_font_character_bitmap:          Font Data Functions.
-* narrow_font_end:                       Font Data Functions.
-* narrow_font_gif_size:                  Font Data Functions.
-* narrow_font_size:                      Font Data Functions.
-* narrow_font_size2:                     Font Data Functions.
-* narrow_font_start:                     Font Data Functions.
-* narrow_font_width:                     Font Data Functions.
-* narrow_font_width2:                    Font Data Functions.
-* narrow_font_xbm_size:                  Font Data Functions.
-* narrow_font_xpm_size:                  Font Data Functions.
+* narrow_font_bmp_size:                  Font Functions.
+* narrow_font_character_bitmap:          Font Functions.
+* narrow_font_end:                       Font Functions.
+* narrow_font_gif_size:                  Font Functions.
+* narrow_font_size:                      Font Functions.
+* narrow_font_size2:                     Font Functions.
+* narrow_font_start:                     Font Functions.
+* narrow_font_width:                     Font Functions.
+* narrow_font_width2:                    Font Functions.
+* narrow_font_xbm_size:                  Font Functions.
+* narrow_font_xpm_size:                  Font Functions.
 * path:                                  EB_Book Functions.
+* read_binary:                           Binary Data Functions.
 * read_heading:                          Text Data Functions.
 * read_rawtext:                          Text Data Functions.
 * read_text:                             Text Data Functions.
@@ -5158,7 +5613,11 @@ File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type
 * search_multi:                          Search Functions.
 * search_word:                           Search Functions.
 * seek_text:                             Text Data Functions.
-* set_font:                              Font Data Functions.
+* set_binary_color_graphic:              Binary Data Functions.
+* set_binary_mono_graphic:               Binary Data Functions.
+* set_binary_mpeg:                       Binary Data Functions.
+* set_binary_wave:                       Binary Data Functions.
+* set_font:                              Font Functions.
 * set_hook:                              Hookset Access Functions.
 * set_hooks:                             Hookset Access Functions.
 * set_subbook:                           Subbook Functions.
@@ -5169,19 +5628,19 @@ File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type
 * subbook_title2:                        Subbook Functions.
 * tell_text:                             Text Data Functions.
 * text:                                  Text Data Functions.
-* unset_font:                            Font Data Functions.
+* unset_font:                            Font Functions.
 * unset_subbook:                         Subbook Functions.
-* wide_font_bmp_size:                    Font Data Functions.
-* wide_font_character_bitmap:            Font Data Functions.
-* wide_font_end:                         Font Data Functions.
-* wide_font_gif_size:                    Font Data Functions.
-* wide_font_size:                        Font Data Functions.
-* wide_font_size2:                       Font Data Functions.
-* wide_font_start:                       Font Data Functions.
-* wide_font_width:                       Font Data Functions.
-* wide_font_width2:                      Font Data Functions.
-* wide_font_xbm_size:                    Font Data Functions.
-* wide_font_xpm_size:                    Font Data Functions.
+* wide_font_bmp_size:                    Font Functions.
+* wide_font_character_bitmap:            Font Functions.
+* wide_font_end:                         Font Functions.
+* wide_font_gif_size:                    Font Functions.
+* wide_font_size:                        Font Functions.
+* wide_font_size2:                       Font Functions.
+* wide_font_start:                       Font Functions.
+* wide_font_width:                       Font Functions.
+* wide_font_width2:                      Font Functions.
+* wide_font_xbm_size:                    Font Functions.
+* wide_font_xpm_size:                    Font Functions.
 * write_text:                            Text Data Functions.
 * write_text_byte1:                      Text Data Functions.
 * write_text_byte2:                      Text Data Functions.
@@ -5277,6 +5736,7 @@ File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Index
 * HOOK_BEGIN_CANDIDATE:                  Hook Code List.
 * HOOK_BEGIN_COLOR_BMP:                  Hook Code List.
 * HOOK_BEGIN_COLOR_JPEG:                 Hook Code List.
+* HOOK_BEGIN_DECORATION:                 Hook Code List.
 * HOOK_BEGIN_EMPHASIS:                   Hook Code List.
 * HOOK_BEGIN_GRAY_GRAPHIC:               Hook Code List.
 * HOOK_BEGIN_IN_COLOR_BMP:               Hook Code List.
@@ -5293,6 +5753,7 @@ File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Index
 * HOOK_END_CANDIDATE_GROUP:              Hook Code List.
 * HOOK_END_CANDIDATE_LEAF:               Hook Code List.
 * HOOK_END_COLOR_GRAPHIC:                Hook Code List.
+* HOOK_END_DECORATION:                   Hook Code List.
 * HOOK_END_EMPHASIS:                     Hook Code List.
 * HOOK_END_GRAY_GRAPHIC:                 Hook Code List.
 * HOOK_END_IN_COLOR_GRAPHIC:             Hook Code List.
@@ -5316,7 +5777,7 @@ File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Index
 * HOOK_WIDE_FONT:                        Hook Code List.
 * HOOK_WIDE_JISX0208:                    Hook Code List.
 * MAX_DIRECTORY_NAME_LENGTH:             Subbook Functions.
-* MAX_FONTS:                             Font Data Functions.
+* MAX_FONTS:                             Font Functions.
 * MAX_KEYWORDS:                          Search Functions.
 * MAX_MULTI_ENTRIES:                     Search Functions.
 * MAX_MULTI_ENTRY_LABEL_LENGTH:          Search Functions.
@@ -5383,74 +5844,81 @@ File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Index
 
 Tag Table:
 Node: Top1012
-Node: Introduction4796
-Node: Electronic Book and EPWING6637
-Node: Construction of This Book7750
-Node: Features8889
-Node: Header Files9872
-Node: Character Code10811
-Node: Compressed Book14852
-Node: Traditional System15825
-Node: Compilation16845
-Node: Compilation Simple Way18198
-Node: Compilation with Autoconf21582
-Node: Init and Exit23654
-Node: Init and Exit Sample24442
-Node: Init and Exit Functions25486
-Node: EB_Book27148
-Node: EB_Book Explanation27820
-Node: EB_Book Sample30075
-Node: EB_Book Data Types32542
-Node: EB_Book Functions34807
-Node: Error Handling39163
-Node: Error Code and Message40000
-Node: Tolerance to Error41753
-Node: Error Data Types43106
-Node: Error Code List43827
-Node: Error Functions51814
-Node: Subbook53471
-Node: Subbook Code54742
-Node: Current Subbook56352
-Node: Subbook Sample58387
-Node: Subbook Data Types60957
-Node: Subbook Functions61696
-Node: Search67485
-Node: Word Search68577
-Node: Keyword Search71457
-Node: Multi Search72913
-Node: EB_Hit76380
-Node: Get Remained Entries77966
-Node: Search Data Types79260
-Node: Search Functions81192
-Node: Text Data92686
-Node: Seek and Read Text Data94143
-Node: Text Data Format98008
-Node: Hook100695
-Node: Hook and Character Code104852
-Node: Copyright Notice106946
-Node: Menu108091
-Node: Multi Candidates112000
-Node: Stop Code Issue115937
-Node: Text Data Sample118361
-Node: Text Data Types122792
-Node: Hook Function Details124645
-Node: Hook Code List127019
-Node: Hookset Access Functions141963
-Node: Builtin Hook Functions145039
-Node: Text Data Functions148215
-Node: Local Character164598
-Node: Narrow & Wide Font166329
-Node: Font Size and Font Code168466
-Node: Current Font Height170027
-Node: Get Font172599
-Node: Convert Font175227
-Node: Local Character in Text176390
-Node: Font Data Types177046
-Node: Font Constants177789
-Node: Font Data Functions181852
-Node: Index195923
-Node: Data Type Index196151
-Node: Function Index197000
-Node: Variable Index203239
+Node: Introduction5063
+Node: Electronic Book and EPWING6910
+Node: Construction of This Book8025
+Node: Features9164
+Node: Header Files10147
+Node: Character Code11086
+Node: Compressed Book15127
+Node: Traditional System16100
+Node: Compilation17120
+Node: Compilation Simple Way18473
+Node: Compilation with Autoconf21860
+Node: Init and Exit23932
+Node: Init and Exit Sample24720
+Node: Init and Exit Functions25764
+Node: EB_Book27426
+Node: EB_Book Explanation28098
+Node: EB_Book Sample30353
+Node: EB_Book Data Types32820
+Node: EB_Book Functions35085
+Node: Error Handling39441
+Node: Error Code and Message40278
+Node: Tolerance to Error42031
+Node: Error Data Types43384
+Node: Error Code List44105
+Node: Error Functions52092
+Node: Subbook53749
+Node: Subbook Code55020
+Node: Current Subbook56630
+Node: Subbook Sample58665
+Node: Subbook Data Types61235
+Node: Subbook Functions61974
+Node: Search67763
+Node: Word Search68855
+Node: Keyword Search71735
+Node: Multi Search73191
+Node: EB_Hit76658
+Node: Get Remained Entries78244
+Node: Search Data Types79538
+Node: Search Functions81470
+Node: Text Data92964
+Node: Seek and Read Text Data94421
+Node: Text Data Format98286
+Node: Hook100973
+Node: Hook and Character Code105130
+Node: Copyright Notice107224
+Node: Menu108369
+Node: Multi Candidates112278
+Node: Stop Code Issue116215
+Node: Text Data Sample118639
+Node: Text Data Types123070
+Node: Hook Function Details124923
+Node: Hook Code List127297
+Node: Hookset Access Functions142947
+Node: Builtin Hook Functions146023
+Node: Text Data Functions149199
+Node: Local Character165988
+Node: Narrow & Wide Font167741
+Node: Font Size and Font Code169878
+Node: Current Font Height171439
+Node: Get Font174011
+Node: Convert Font176640
+Node: Local Character in Text177803
+Node: Font Data Types178459
+Node: Font Constants179202
+Node: Font Functions183260
+Node: Font Sample197346
+Node: Binary Data202039
+Node: Monochrome Image204053
+Node: Color Image206881
+Node: WAVE Sound209306
+Node: MPEG Movie210491
+Node: Binary Data Functions211687
+Node: Index212938
+Node: Data Type Index213162
+Node: Function Index214011
+Node: Variable Index220503
 
 End Tag Table

@@ -1,3 +1,63 @@
+2002-08-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.3beta0.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to `3.3beta0'.
+	* configure.ac (EB_VERSION_MINOR): Set to 3.
+	* configure.ac (LIBEB_VERSION_INFO): Set to 7:0:1.
+	
+	* samples/font.c: New sample program.
+	* samples/Makefile.am (noinst_PROGRAMS): Add `font'.
+	* doc-ja/Makefile.am (eb_ja_TEXINFOS): add `font-c.texi'.
+
+2002-08-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* decomp, install-sh, mkinstalldirs, missing: Imported from 
+	Automake-1.6.3.
+
+	* eb/text.h: add EB_HOOK_BEGIN_IN_COLOR_BMP and
+	EB_HOOK_BEGIN_IN_COLOR_JPEG.
+	* eb/text.c: support those hooks for handling of inline color graphic.
+
+2002-08-21  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/refile.c (refile_catalog): Fix a bug that extended information
+	blocks of eliminated subbooks are copied to `catalogs.new'.
+
+2002-08-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+	* eb/binary.c (eb_set_binary_mono_graphic, eb_set_binary_gray_graphic):
+	Don't read data from `honmong', but `honmon' or `honmon2' when
+	the book is EPWING.
+
+	* eb/defs.h.in (EB_SIZE_EBZIP_HEADER): Removed.
+
+2002-08-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h.in (EB_Book_Struct): Delete `version'.
+	* eb/defs.h.in (EB_Subook_Struct): Add `text_hint_zio_code',
+	`graphic_hint_zio_code' and `sound_hint_zio_code'.
+
+	* eb/book.c (eb_load_catalog): Revised.
+	Get text, graphic and sound file names from the `catalogs' file,
+	if the book is EPWING.
+	* eb/subbook.c (eb_set_subbook_epwing): Likewise.
+	* eb/filename.c (eb_find_file_name): `target_file_name' can be
+	equal to `found_file_name'.
+
+	* eb/build-post.h.in (EB_FILE_NAME_START, EB_FILE_NAME_HONMON, 
+	EB_FILE_NAME_APPENDIX, EB_FILE_NAME_FUROKU): Defined.
+	* eb/defs.h.in (EB_SIZE_EB_CATALOG, EB_SIZE_EPWING_CATALOG):
+	Moved to `eb/built-post.h.in'.
+
+	* eb/build-post.h.in (EB_MAX_SEARCH_TITLES): Defined.
+	* eb/defs.h.in (EB_MAX_MULTI_SEARCHES): Change the value from 8 
+	to 10.
+	* eb/defs.h.in (EB_MAX_MULTI_TITLE_LENGTH): Defined.
+	* eb/defs.h.in (EB_Subbook_Struct): Add `search_title_page'.
+	* eb/defs.h.in (EB_Multi_Search_Struct): Add `title'.
+	* eb/multi.c (eb_load_multi_titles, eb_multi_title): New functions.
+	* eb/ebinfo.c (output_multi_information): Also output search titles.
+
 2002-08-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.2.3.

@@ -81,6 +81,8 @@ EB_Error_Code eb_menu EB_P((EB_Book *, EB_Position *));
 
 /* multi.c */
 int eb_have_multi_search EB_P((EB_Book *));
+EB_Error_Code eb_multi_title EB_P((EB_Book *, EB_Multi_Search_Code,
+    char *label));
 EB_Error_Code eb_multi_search_list EB_P((EB_Book *, EB_Multi_Search_Code *,
     int *));
 EB_Error_Code eb_multi_entry_count EB_P((EB_Book *, EB_Multi_Search_Code,

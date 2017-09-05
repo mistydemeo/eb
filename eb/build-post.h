@@ -29,6 +29,25 @@
 #define LOCALEDIR		"/usr/private/share/locale"
 
 /*
+ * Data size of a book entry in a catalog file.
+ */
+#define EB_SIZE_EB_CATALOG		40
+#define EB_SIZE_EPWING_CATALOG		164
+
+/*
+ * Maximum number of search titles.
+ */
+#define EB_MAX_SEARCH_TITLES		14
+
+/*
+ * File names.
+ */
+#define EB_FILE_NAME_START		"start"
+#define EB_FILE_NAME_HONMON		"honmon"
+#define EB_FILE_NAME_FUROKU		"furoku"
+#define EB_FILE_NAME_APPENDIX		"appendix"
+
+/*
  * Directory names.
  */
 #define EB_DIRECTORY_NAME_DATA		"data"
@@ -215,6 +234,7 @@ EB_Error_Code eb_initialize_messages EB_P((EB_Book *));
 void eb_initialize_multi_searches EB_P((EB_Book *));
 void eb_finalize_multi_searches EB_P((EB_Book *));
 EB_Error_Code eb_load_multi_searches EB_P((EB_Book *));
+EB_Error_Code eb_load_multi_titles EB_P((EB_Book *));
 
 /* narwfont.c */
 EB_Error_Code eb_load_narrow_font EB_P((EB_Book *));

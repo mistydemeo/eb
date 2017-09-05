@@ -87,6 +87,7 @@ by Free Software Foundation, Inc.
 * Search::                      検索
 * Text Data::                   テキストデータ
 * Local Character::             外字
+* Binary Data::                 
 * Index::                       索引
 
 @detailmenu
@@ -175,7 +176,16 @@ CD-ROM 書籍と @code{EB_Book} オブジェクト
 * Local Character in Text::     テキスト中の外字
 * Font Data Types::             データ型の詳細
 * Font Constants::              定数の詳細
-* Font Data Functions::         関数の詳細
+* Font Functions::              関数の詳細
+* Font Sample::                 
+
+バイナリデータ
+
+* Monochrome Image::            モノクロ図版
+* Color Image::                 カラー図版
+* WAVE Sound::                  WAVE 音声
+* MPEG Movie::                  MPEG 動画
+* Binary Data Functions::       関数の詳細
 
 索引
 
@@ -239,14 +249,14 @@ CD-ROM は ISO 9660 形式 なので、CD-ROM ドライブが扱えるシステムであれば、
 電子書籍のデータ形式とはいっても、実際は辞書向けに特化した構造となって
 おり、市販されている書籍も辞書の類が圧倒的に多いようです。
 
-EPWING、電子ブックともに、データ形式に関する規格の全容は一般公開されて
+電子ブック、EPWING ともに、データ形式に関する規格の全容は一般公開されて
 いませんが、EPWING ついては規格の一部が日本工業規格 JIS X 4081 
 「電子出版検索データ構造」として公開されています。
 さらに、EPWING と電子ブックのデータ形式は、酷似していることが知られて
 います。
 
-EB ライブラリの開発者も、EPWING、電子ブック規格の全容は知りません。
-EB ライブラリでは JIS X 4081 の記述をもとに、EPWING、電子ブックを読める
+EB ライブラリの開発者も、電子ブック、EPWING 規格の全容は知りません。
+EB ライブラリでは JIS X 4081 の記述をもとに、電子ブック、EPWING を読める
 ようにしてあります。
 しかしながら、規格の全容が分からない状態で開発しているため、残念ながら
 一部に正しく読めない書籍が存在します。
@@ -305,8 +315,8 @@ EB ライブラリは、これらの CD-ROM 書籍に対して、次の処理を行うことが
 @item 本文データの取得
 @item メニューの取得
 @item 著作権表示の取得
-@item カラー画像データの取得 (ただし EPWING のみ)
-@item モノクロ画像データの取得
+@item カラー図版データの取得 (ただし EPWING のみ)
+@item モノクロ図版データの取得
 @item 外字データの取得
 @item 動画データの取得
 @end itemize
@@ -3968,9 +3978,9 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @defvr EB_HOOK_INITIALIZE
 @xvindex HOOK_INITIALIZE
 
-フック @code{EB_HOOK_INITIALIZE} は、@code{eb_seek_text()} を呼び出した
-直後の最初の @code{eb_read_text()}, @code{eb_read_heading()} の呼び出し
-時に処理されます。
+@code{EB_HOOK_INITIALIZE} は、@code{eb_seek_text()} を呼び出した直後の
+最初の @code{eb_read_text()}, @code{eb_read_heading()} の呼び出し時に
+処理されます。
 何か初期化処理をしたいときに、使うと良いでしょう。
 
 このフックが、フック関数に渡す @code{argc} は 0 です。
@@ -3984,7 +3994,7 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_END_NARROW
 @xvindex HOOK_BEGIN_NARROW
 
-フック @code{EB_HOOK_BEGIN_NARROW} および @code{EB_HOOK_END_NARROW} は、
+@code{EB_HOOK_BEGIN_NARROW} および @code{EB_HOOK_END_NARROW} は、
 半角表示の開始と終了を表すエスケープシーケンスに対するフックです。
 
 どちらのフックも、フック関数に渡す @code{argc} は 1 です。
@@ -4002,8 +4012,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_BEGIN_SUBSCRIPT
 @xvindex HOOK_END_SUBSCRIPT
 
-フック @code{EB_HOOK_BEGIN_SUBSCRIPT} および @code{EB_HOOK_END_SUBSCRIPT}
-は、下付き表示の開始と終了を表すエスケープシーケンスに対するフックです。
+@code{EB_HOOK_BEGIN_SUBSCRIPT} および @code{EB_HOOK_END_SUBSCRIPT} は、
+下付き表示の開始と終了を表すエスケープシーケンスに対するフックです。
 
 どちらのフックも、フック関数に渡す @code{argc} は 1 です。
 @code{argv[0]} の値はエスケープシーケンスのコードそのもので、
@@ -4018,8 +4028,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @defvr EB_HOOK_SET_INDENT
 @xvindex HOOK_SET_INDENT
 
-フック @code{EB_HOOK_SET_INDENT} は、テキストデータの行頭の字下げ指定を
-表すエスケープシーケンスに対するフックです。
+@code{EB_HOOK_SET_INDENT} は、テキストデータの行頭の字下げ指定を表す
+エスケープシーケンスに対するフックです。
 
 このフックが、フック関数に渡す @code{argc} は 2 です。
 @code{argv[0]} はエスケープシーケンスのコードそのもので、@samp{0x1f09} 
@@ -4038,8 +4048,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @defvr EB_HOOK_NEWLINE
 @xvindex HOOK_NEWLINE
 
-フック @code{EB_HOOK_SET_NEWLINE} は、改行を表すエスケープシーケンスに
-対するフックです。
+@code{EB_HOOK_SET_NEWLINE} は、改行を表すエスケープシーケンスに対する
+フックです。
 
 ただし、@code{eb_read_heading()} (見出しの読み込み) による処理では、
 改行を表すエスケープシーケンスは区切りコードとしても扱われます。
@@ -4062,9 +4072,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_BEGIN_SUPERSCRIPT
 @xvindex HOOK_END_SUPERSCRIPT
 
-フック @code{EB_HOOK_BEGIN_SUPERSCRIPT} および
-@code{EB_HOOK_END_SUPERSCRIPT} は、上付き表示の開始と終了を表す
-エスケープシーケンスに対するフックです。
+@code{EB_HOOK_BEGIN_SUPERSCRIPT} および @code{EB_HOOK_END_SUPERSCRIPT}
+は、上付き表示の開始と終了を表すエスケープシーケンスに対するフックです。
 
 どちらのフックも、フック関数に渡す @code{argc} は 1 です。
 @code{argv[0]} はエスケープシーケンスのコードそのもので、
@@ -4081,8 +4090,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_BEGIN_NO_NEWLINE
 @xvindex HOOK_END_NO_NEWLINE
 
-フック @code{EB_HOOK_BEGIN_NO_NEWLINE} および @code{EB_HOOK_END_NO_NEWLINE}
-は、改行禁止の開始と終了を表すエスケープシーケンスに対するフックです。
+@code{EB_HOOK_BEGIN_NO_NEWLINE} および @code{EB_HOOK_END_NO_NEWLINE} は、
+改行禁止の開始と終了を表すエスケープシーケンスに対するフックです。
 
 どちらのフックも、フック関数に渡す @code{argc} は 1 です。
 @code{argv[0]} はエスケープシーケンスのコードそのもので、
@@ -4099,8 +4108,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_BEGIN_EMPHASIS
 @xvindex HOOK_END_EMPHASIS
 
-フック @code{EB_HOOK_BEGIN_EMPHASIS} および @code{EB_HOOK_END_EMPHASIS}
-は、強調表示の開始と終了を表すエスケープシーケンスに対するフックです。
+@code{EB_HOOK_BEGIN_EMPHASIS} および @code{EB_HOOK_END_EMPHASIS} は、
+強調表示の開始と終了を表すエスケープシーケンスに対するフックです。
 
 どちらのフックも、フック関数に渡す @code{argc} は 1 です。
 @code{argv[0]} はエスケープシーケンスのコードそのもので、
@@ -4119,8 +4128,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_END_CANDIDATE_LEAF
 @xvindex HOOK_END_CANDIDATE_GROUP
 
-フック @code{EB_HOOK_BEGIN_CANDIDATE} は、複合検索の候補となる語の開始
-を表すエスケープシーケンスに対するフックです。
+@code{EB_HOOK_BEGIN_CANDIDATE} は、複合検索の候補となる語の開始を表す
+エスケープシーケンスに対するフックです。
 
 それに対して、終了を表すエスケープシーケンスに対するフックは 2 種類あり
 ます。
@@ -4159,8 +4168,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_BEGIN_REFERENCE
 @xvindex HOOK_END_REFERENCE
 
-フック @code{EB_HOOK_BEGIN_REFERENCE} および @code{EB_HOOK_END_REFERENCE}
-は、別位置のテキストデータの参照開始と終了を表すエスケープシーケンスに
+@code{EB_HOOK_BEGIN_REFERENCE} および @code{EB_HOOK_END_REFERENCE} は、
+別位置のテキストデータの参照開始と終了を表すエスケープシーケンスに
 対するフックです。
 
 フック @code{EB_HOOK_BEGIN_REFERENCE} が、フック関数に渡す @code{argc}
@@ -4187,8 +4196,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_BEGIN_KEYWORD
 @xvindex HOOK_END_KEYWORD
 
-フック @code{EB_HOOK_BEGIN_KEYWORD} および @code{EB_HOOK_END_KEYWORD}
-は、検索キーの開始と終了を表すエスケープシーケンスに対するフックです。
+@code{EB_HOOK_BEGIN_KEYWORD} および @code{EB_HOOK_END_KEYWORD} は、
+検索キーの開始と終了を表すエスケープシーケンスに対するフックです。
 
 フック @code{EB_HOOK_BEGIN_KEYWORD} が、フック関数に渡す @code{argc} は
 2 です。
@@ -4205,13 +4214,36 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @end defvr
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr EB_HOOK_BEGIN_DECORATION
+@defvrx EB_HOOK_END_DECORATION
+@xvindex HOOK_BEGIN_DECORATION
+@xvindex HOOK_END_DECORATION
+
+@code{EB_HOOK_BEGIN_DECORATION} および @code{EB_HOOK_END_DECORATION}
+は、文字修飾の開始と終了を表すエスケープシーケンスに対するフックです。
+
+フック @code{EB_HOOK_BEGIN_DECORATION} が、フック関数に渡す @code{argc}
+は 2 です。
+@code{argv[0]} はエスケープシーケンスのコードそのもので、@samp{0x1fe0}
+になります。
+@code{argv[1]} の意味は不明です。
+
+@code{EB_HOOK_END_KEYWORD} は、フック関数に 1 個の引数を渡します。
+@code{argv[0]} はエスケープシーケンスのコードそのもので、@samp{0x1fe1}
+になります。
+
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 @defvr EB_HOOK_NARROW_FONT
 @defvrx EB_HOOK_WIDE_FONT
 @xvindex HOOK_NARROW_FONT
 @xvindex HOOK_WIDE_FONT
 
-フック @code{EB_HOOK_NARROW_FONT} および @code{EB_HOOK_WIDE_FONT} は、
-それぞれ半角外字と全角外字に対するフックです。
+@code{EB_HOOK_NARROW_FONT} および @code{EB_HOOK_WIDE_FONT} は、それぞれ
+半角外字と全角外字に対するフックです。
 
 どちらのフックも、フック関数に渡す @code{argc} は 1 です。
 @code{argv[0]} は、外字の文字番号を表します。
@@ -4227,8 +4259,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @defvr EB_HOOK_ISO8859_1
 @xvindex HOOK_ISO8859_1
 
-フック @code{EB_HOOK_ISO8859_1} は、ISO 8859-1 (ラテン文字 1) 文字に
-対するフックです。
+@code{EB_HOOK_ISO8859_1} は、ISO 8859-1 (ラテン文字 1) 文字に対する
+フックです。
 
 このフックが、フック関数に渡す @code{argc} は 1 です。
 @code{argv[0]} は、ISO 8859-1 の文字番号を表します。
@@ -4247,9 +4279,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_NARROW_JISX0208
 @xvindex HOOK_WIDE_JISX0208
 
-フック @code{EB_HOOK_NARROW_JISX0208} と @code{EB_HOOK_WIDE_JISX0208}
-は、半角および全角の JIS X 0208 (日本語のかな漢字) 文字に対するフック
-です。
+@code{EB_HOOK_NARROW_JISX0208} と @code{EB_HOOK_WIDE_JISX0208} は、
+半角および全角の JIS X 0208 (日本語のかな漢字) 文字に対するフックです。
 
 どちらのフックも、フック関数に渡す @code{argc} は 1 です。
 @code{argv[0]} は、JIS X 0208 の文字を日本語 EUC で表現したときの文字番号
@@ -4268,8 +4299,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @defvr EB_HOOK_GB2312
 @xvindex HOOK_GB2312
 
-フック @code{EB_HOOK_GB2312} は、GB 2312 (中国語の簡体字) 文字に対する
-フックです。
+@code{EB_HOOK_GB2312} は、GB 2312 (中国語の簡体字) 文字に対するフック
+です。
 
 このフックが、フック関数に渡す @code{argc} は 1 です。
 @code{argv[0]} は、GB 2312 の文字を中国語 EUC で表現したときの文字番号
@@ -4289,9 +4320,9 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 @xvindex HOOK_BEGIN_MONO_GRAPHIC
 @xvindex HOOK_END_MONO_GRAPHIC
 
-フック @code{EB_HOOK_BEGIN_MONO_GRAPHIC} および
-@code{EB_HOOK_END_MONO_GRAPIHC} は、モノクロ図版の参照開始と終了を表す
-エスケープシーケンスに対するフックです。
+@code{EB_HOOK_BEGIN_MONO_GRAPHIC} および @code{EB_HOOK_END_MONO_GRAPIHC}
+は、モノクロ図版の参照開始と終了を表すエスケープシーケンスに対する
+フックです。
 
 フック @code{EB_HOOK_BEGIN_MONO_GRAPHIC} が、フック関数に渡す @code{argc}
 は 4 です。
@@ -4315,7 +4346,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 (@pxref{Search Data Types, , [検索] データ型の詳細})
 の @code{page} および @code{offset} メンバの値に相当します。
 
-図版データの取り出し方については、....。
+図版データの取り出し方については、@pxref{Monochrome Image, , モノクロ図版}
+を参照してください。
 
 フック関数を登録していない状態では、これらのフックはテキストデータに何も
 書き込みません。
@@ -4339,7 +4371,7 @@ EB ライブラリ @value{VERSION} ではまだ対応していません。
 @xvindex HOOK_BEGIN_COLOR_JPEG
 @xvindex HOOK_END_COLOR_GRAPHIC
 
-フック @code{EB_HOOK_BEGIN_COLOR_BMP} と @code{EB_HOOK_COLOR_JPEG} は、
+@code{EB_HOOK_BEGIN_COLOR_BMP} と @code{EB_HOOK_COLOR_JPEG} は、
 それぞれ BMP 形式と JPEG 形式のカラー図版の参照開始を表す
 エスケープシーケンスに対するフックです。
 参照開始のフックは BMP と JPEG とでフックが分かれていますが、終了の
@@ -4362,7 +4394,8 @@ EB ライブラリ @value{VERSION} ではまだ対応していません。
 (@pxref{Search Data Types, , [検索] データ型の詳細})
 の @code{page} および @code{offset} メンバの値に相当します。
 
-図版データの取り出し方については、....。
+図版データの取り出し方については、@pxref{Color Image, , カラー図版}
+を参照してください。
 
 フック関数を登録していない状態では、これらのフックはテキストデータに何も
 書き込みません。
@@ -4386,15 +4419,15 @@ EB ライブラリ @value{VERSION} ではまだ対応していません。
 @xvindex HOOK_BEGIN_WAVE
 @xvindex HOOK_END_WAVE
 
-フック @code{EB_HOOK_BEGIN_WAVE} および @code{EB_HOOK_END_WAVE} は、
-WAVE 形式の音声データの参照開始と終了を表すエスケープシーケンスに対する
-フックです。
+@code{EB_HOOK_BEGIN_WAVE} および @code{EB_HOOK_END_WAVE} は、
+WAVE (PCM) 形式の音声データの参照開始と終了を表すエスケープシーケンス
+に対するフックです。
 
 フック @code{EB_HOOK_BEGIN_WAVE} が、フック関数に渡す @code{argc} は 6
 です。
 @code{argv[0]} はエスケープシーケンスのコードそのもので、@samp{0x1f4a}
 になります。
-@code{argv[2]} と @code{argv[3]} は図版データの開始位置のページ番号と
+@code{argv[2]} と @code{argv[3]} は音声データの開始位置のページ番号と
 オフセット、@code{argv[4]} と @code{argv[5]} は終了位置のページ番号と
 オフセットをそれぞれ表します。
 @code{argv[1]} の意味は不明です。
@@ -4403,7 +4436,8 @@ WAVE 形式の音声データの参照開始と終了を表すエスケープシーケンスに対する
 @code{argv[0]} はエスケープシーケンスのコードそのもので、@samp{0x1f6a}
 になります。
 
-音声データの取り出し方については、....。
+音声データの取り出し方については、@pxref{WAVE Sound, , WAVE 音声} を
+参照して下さい。
 
 フック関数を登録していない状態では、これらのフックはテキストデータに何も
 書き込みません。
@@ -4415,9 +4449,9 @@ WAVE 形式の音声データの参照開始と終了を表すエスケープシーケンスに対する
 @xvindex HOOK_BEGIN_MPEG
 @xvindex HOOK_END_MPEG
 
-フック @code{EB_HOOK_BEGIN_MPEG} および @code{EB_HOOK_END_MPEG} は、
-MPEG 形式の動画データの参照開始と終了を表すエスケープシーケンスに対する
-フックです。
+@code{EB_HOOK_BEGIN_MPEG} および @code{EB_HOOK_END_MPEG} は、MPEG 形式
+の動画データの参照開始と終了を表すエスケープシーケンスに対するフック
+です。
 
 フック @code{EB_HOOK_BEGIN_MPEG} が、フック関数に渡す @code{argc} は 6
 です。
@@ -4431,7 +4465,8 @@ MPEG 形式の動画データの参照開始と終了を表すエスケープシーケンスに対する
 @code{argv[0]} はエスケープシーケンスのコードそのもので、@samp{0x1f59}
 になります。
 
-動画データの取り出し方については、....。
+動画データの取り出し方については、@pxref{MPEG Movie, , MPEG 動画} を
+参照して下さい。
 
 フック関数を登録していない状態では、これらのフックはテキストデータに何も
 書き込みません。
@@ -4779,11 +4814,11 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 
 引数 @var{appendix}, @var{container} は、そのままフック関数に渡されます。
 これらの引数は @code{NULL} でも構いません。
-(ただし、呼び出されるフック関数で支障がなければ。)
+(呼び出されるフック関数で支障がなければ。)
 
 なお、フック関数や @code{eb_read_text()}, @code{eb_read_heading()} 
-自身が文字ないしエスケープシーケンス一個に対するデータを書き込もうとした
-ときに、@var{text} に十分な空き領域がないということが起こり得ます。
+自身が文字ないしエスケープシーケンス一個分に対するデータを書き込もうと
+したときに、@var{text} に十分な空き領域がないということが起こり得ます。
 その場合、関数は途中まで @var{text} に書き込むことはせずに、いったん
 処理を終えて戻ります。
 したがって、マルチバイト文字のデータが途中で切れたりすることはありません。
@@ -4794,9 +4829,12 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 呼び出しで書き込めなかったデータがまず @var{text} の先頭に書き込まれます。
 書き込んだデータは @var{text_length} の勘定に入ります。
 
-ただし、書き込めなかったデータの長さが @var{max_text_length} を超えている
-と、何も書き込まずに関数は終了します。
+ただし、@code{book} が保存しているデータの長さが @var{max_text_length} を
+超えていると、何も書き込まずに関数は終了します。
 このとき、書き込めなかったデータは引き続き保存されます。
+つまり、@code{text_max_length} があまりに小さく、かつ保持しているデータ
+のほうが長いと、何度呼び出しても @code{text} への書き込みが進みませんので、
+注意が必要です。
 
 @code{eb_seek_text()} を呼び出すか、@code{eb_set_subbook()} で副本を選択
 し直すと、保存していたデータは破棄されます。
@@ -4868,6 +4906,12 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 テキストデータを読み込んだ後であっても、テキストデータの読み込みに関する
 状態記録をリセットする関数 (eb_read_text() の項を参照) を呼んでしまうと、
 読み込んでいないと見なされますので、注意して下さい。
+
+通常はこの関数を使わなくても、@code{eb_read_text()} や
+@code{eb_read_heading()} が 0 を返したら、テキストデータの末尾に達した
+とみなして差し支えないでしょう。
+ただしその際は、引数 @code{text_max_length} の値を十分大きく取って下さい。
+
 @end deftypefun
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -4997,7 +5041,7 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 @end deftypefun
 
 @c ===================================================================
-@node Local Character, Index, Text Data, Top
+@node Local Character, Binary Data, Text Data, Top
 @chapter 外字
 
 文字コードに収録されていない、私的に定義した文字のことを、俗に「外字」
@@ -5034,7 +5078,8 @@ CD-ROM 書籍では、定義した外字の字形データ (つまりフォント) を用意して
 * Local Character in Text::     テキスト中の外字
 * Font Data Types::             データ型の詳細
 * Font Constants::              定数の詳細
-* Font Data Functions::         関数の詳細
+* Font Functions::              関数の詳細
+* Font Sample::                 
 @end menu
 
 @c -------------------------------------------------------------------
@@ -5257,9 +5302,9 @@ if (eb_wide_font_character_bitmap(book, 0xa121, bitmap)
 来たら一つ下の段に降りて、また右方向にピクセルを拾います。
 以下、一番下の段までこれを繰り返します。
 
-ただし、バイト内では、1, 2, 4, ... 128 の桁の順にビット値を格納して
+ただし、バイト内では、128, 64, 32, ...1 の桁の順にビット値を格納して
 います。
-つまり、1 の桁は一番左のピクセル、128 の桁は一番右のピクセルに対応
+つまり、128 の桁は一番左のピクセル、1 の桁は一番右のピクセルに対応
 します。
 
 以下に、16x16 の全角外字のビットマップの例と、そのバイト列を記します。
@@ -5269,18 +5314,18 @@ if (eb_wide_font_character_bitmap(book, 0xa121, bitmap)
 @group
 □□□□□□□□□□□□□□□□　　0x00, 0x00,
 □□□□□□□□□□□□□□□□　　0x00, 0x00,
-□□□■■■■■■□□□■□□□　　0xf8, 0x11,
-□□□□□□□□■□■□■□□□　　0x00, 0x13,
-□□□□■□□■□□■□■□□□　　0x90, 0x14,
-□□□□■□□■■■■■■□□□　　0x90, 0x1f,
-□□■■■■■□□□■□■□□□　　0x7c, 0x14,
-□□□□□□□□□□■□■□□□　　0x00, 0x14,
-□□□■□□□□□□□□■□□□　　0x08, 0x10,
-□□□■□□□□□□□□■□□□　　0x08, 0x10,
-□□□■■■■■■■■■■□□□　　0xf8, 0x1f,
-□□□■□□□□□□□□■□□□　　0x08, 0x10,
-□□□■□□□□□□□□■□□□　　0x08, 0x10,
-□□□■■■■■■■■■■□□□　　0xf8, 0x1f,
+□□□■■■■■■□□□■□□□　　0x1f, 0x88,
+□□□□□□□□■□■□■□□□　　0x00, 0xc8,
+□□□□■□□■□□■□■□□□　　0x09, 0x28,
+□□□□■□□■■■■■■□□□　　0x09, 0xf8,
+□□■■■■■□□□■□■□□□　　0x3e, 0x28,
+□□□□□□□□□□■□■□□□　　0x00, 0x28,
+□□□■□□□□□□□□■□□□　　0x10, 0x08,
+□□□■□□□□□□□□■□□□　　0x10, 0x08,
+□□□■■■■■■■■■■□□□　　0x1f, 0xf8,
+□□□■□□□□□□□□■□□□　　0x18, 0x08,
+□□□■□□□□□□□□■□□□　　0x18, 0x08,
+□□□■■■■■■■■■■□□□　　0x1f, 0xf8,
 □□□□□□□□□□□□□□□□　　0x00, 0x00,
 □□□□□□□□□□□□□□□□　　0x00, 0x00,
 @end group
@@ -5322,7 +5367,7 @@ if (eb_wide_font_character_bitmap(bitmap, EB_WIDTH_WIDE_FONT_16,
 
 XPM, GIF への変換では、前景色は黒、背景色は透明になります。
 BMP への変換では、前景色は黒、背景色は白になります。
-XBM はモノクロ画像用のデータ形式なので、色の設定はありません。
+XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
 
 @c -------------------------------------------------------------------
 @node Local Character in Text, Font Data Types, Convert Font, Local Character
@@ -5380,7 +5425,7 @@ XBM はモノクロ画像用のデータ形式なので、色の設定はありません。
 @end deftp
 
 @c -------------------------------------------------------------------
-@node Font Constants, Font Data Functions, Font Data Types, Local Character
+@node Font Constants, Font Functions, Font Data Types, Local Character
 @section 定数の詳細
 
 この節で説明している定数を使うには、次のようにヘッダファイルを
@@ -5559,7 +5604,7 @@ XBM はモノクロ画像用のデータ形式なので、色の設定はありません。
 @end defvr
 
 @c -------------------------------------------------------------------
-@node Font Data Functions,  , Font Constants, Local Character
+@node Font Functions, Font Sample, Font Constants, Local Character
 @section 関数の詳細
 
 この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
@@ -5952,11 +5997,348 @@ XPM, GIF, BMP 形式にそれぞれ変換します。
 
 XPM, GIF への変換では、前景色は黒、背景色は透明になります。
 BMP への変換では、前景色は黒、背景色は白になります。
-XBM はモノクロ画像用のデータ形式なので、色の設定はありません。
+XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
+@end deftypefun
+
+@c -------------------------------------------------------------------
+@node Font Sample,  , Font Functions, Local Character
+@section サンプルプログラム
+
+@pindex font.c
+@include font-c.texi
+
+@c ===================================================================
+@node Binary Data, Index, Local Character, Top
+@chapter バイナリデータ
+
+@dfn{バイナリデータ (binary data)} とは、テキストデータ
+(@pxref{Text Data, , テキストデータ}) から参照される、図版や動画、音声
+といったマルチメディアデータのことを指します。
+
+今のところ EB ライブラリでは、全種類のバイナリデータを取り扱うことが
+できるわけではありません。
+電子ブックで扱えるのは、2 階調のモノクロ図版と、カラー図版 (JPEG) だけ
+です。
+EPWING では、モノクロ図版、カラー図版 (BMP および JPEG) に加えて、
+WAVE (PCM) 音声、MPEG 動画を扱うことができます。
+
+ただし、EB ライブラリが提供しているのは、こうしたバイナリデータを
+CD-ROM 書籍から取得する機能だけです。
+表示したり再生したりする機能は用意していませんので、注意して下さい。
+
+アプリケーションは、英和辞書や国語辞書といった辞書だけを対象にするなら、
+バイナリデータの表示や再生には対応しなくても支障はありません。
+しかし一方では、図鑑や数式の表現にモノクロ図版を使っている数学辞典の
+ように、対応しないと不便なものもあります。
+バイナリデータの表示や再生の機能を実装するかどうかは、アプリケーション
+の対象辞書をどの範囲までにするのかによって決めると良いでしょう。
+
+以下、この章では種類別にバイナリデータの扱い方について説明します。
+
+データの種類毎にデータの取り出し方は微妙に異なりますが (これはデータ
+の収録方法が微妙に異なっているからに他なりません)、大体の手順はデータ
+の種類によらず、次のようなものになります。
+
+@enumerate
+@item テキストデータのフックを用いて、バイナリデータの参照情報を
+取得する
+
+@item @code{eb_binary_set_...()} 関数を呼び出して、指定した位置の
+バイナリデータを読み込む旨を EB ライブラリに伝える。
+
+@item @code{eb_read_binary()} で実際にデータを読み込む。
+@end enumerate
+
+なお、テキストデータと同様に、バイナリデータも副本に属するデータ
+ですので、副本を選択していないと取得することはできません。
+
+@menu
+* Monochrome Image::            モノクロ図版
+* Color Image::                 カラー図版
+* WAVE Sound::                  WAVE 音声
+* MPEG Movie::                  MPEG 動画
+* Binary Data Functions::       関数の詳細
+@end menu
+
+@c -------------------------------------------------------------------
+@node Monochrome Image, Color Image, Binary Data, Binary Data
+@section モノクロ図版
+
+2 階調のモノクロ図版は、電子ブック、EPWING 双方に存在し、EB ライブラリ
+ではどちらのモノクロ図版も扱うことができます。
+(電子ブックに存在する 16 階調のモノクロ図版は、今のところ EB ライブラリ
+では対応していません。)
+
+モノクロ図版データの内部形式は外字と同じですが、EB ライブラリでは、
+1 ピクセルに 1bit を割り当てた BMP 形式に変換してアプリケーションに
+渡すようにしています。
+したがって、アプリケーションからは、あたかも BMP の図版データが収録
+されているようにみえます。
+
+モノクロ図版の取り出し方ですが、これにはまずモノクロ図版の参照開始と終了
+を表すエスケープシーケンスへのフック @code{EB_HOOK_BEGIN_MONO_GRAPHIC}
+と @code{EB_HOOK_END_MONO_GRAPHIC} を使います。
+
+フック @code{EB_HOOK_BEGIN_MONO_GRAPHIC} がフック関数に渡す引数
+(@code{argv}) は 4 つあり、このうちの @code{argv[2]} と @code{argv[3]} 
+が図版の幅と高さ (ピクセル数) を意味します。
+
+また、フック @code{EB_HOOK_END_MONO_GRAPHIC} がフック関数に渡す引数
+は 3 つで、@code{argv[1]} と @code{argv[2]} が、図版データのページ番号
+とオフセットになります。
+
+モノクロ図版を取得するには、上記のフックから得た図版のページ番号と
+オフセット、および幅と高さを記憶しておきます。
+
+次に、@code{eb_set_binary_mono_graphic()} を呼び出して、これから
+モノクロ図版のデータを取得することを EB ライブラリに伝えます。
+@code{eb_set_binary_mono_graphic()} への引数には、
+@code{EB_Book} オブジェクトと、先ほど得た図版へのページ番号、オフセット、
+幅、高さを渡します。
+@code{EB_Book} オブジェクトは、これから取り出そうとしている図版を収録
+している副本をあらかじめ選択しておく必要があります。
+
+@example
+@group
+/* @code{eb_set_binary_mono_graphic()} の関数プロトタイプ */
+EB_Error_Code
+eb_set_binary_mono_graphic(EB_Book *book, EB_Position *position,
+    int width, int height);
+@end group
+@end example
+
+電子ブックでは、フック関数に渡される幅と高さの値は 0 になっていますが、
+そのまま @code{eb_set_binary_mono_graphic()} に渡します。
+(EPWING では 0 を渡してはいけません。)
+
+以上で図版データの取得準備ができたので、データを読み込みます。
+これには、@code{eb_read_binary()} を使います。
+
+@example
+@group
+#define MAX_LENGTH 1000
+char bitmap[MAX_LENGTH];
+ssize_t bitmap_length;
+
+if (eb_read_binary(&book, MAX_LENGTH, bitmap, &bitmap_length)
+    != EB_SUCCESS) @{
+    fprintf(stderr, "an error occurs.\n");
+    return;
+@}
+@end group
+@end example
+
+@noindent
+成功すると、読み込んだ図版データが @code{bitmap} に書き込まれ、何バイト
+書き込んだのかが @code{bitmap_length} に書き込まれます。
+書き込まれるバイト数は、最大で @code{MAX_LENGTH} バイトです。
+
+必ずしも一回の @code{eb_read_binary()} の呼び出しで図版データを終端まで
+読み込む必要はなく、関数を繰り返し呼び出せば、前回の続きを読み込むこと
+ができます。
+@code{eb_read_binary()} は、図版データの終端まで来るとそれ以上データ
+は読み込みませんので、@code{eb_read_binary()} が 0 を返した時点で
+図版データが終端したことを認識できます。
+
+@c -------------------------------------------------------------------
+@node Color Image, WAVE Sound, Monochrome Image, Binary Data
+@section カラー図版
+
+カラー図版は、電子ブックでは JPEG 形式、EPWING では JPEG と BMP (DIB)
+形式のものが使用されています。
+EB ライブラリではいずれのカラー図版も扱うことができますが、電子ブック
+への対応は限定的なものになっています。(詳しくは後述します。)
+
+カラー図版のデータを取り出すには、まず @code{eb_set_binary_color_graphic()}
+を呼び出して、これからアプリケーションがカラー図版のデータを取得しよう
+としていることを EB ライブラリに伝えます。
+@code{eb_set_binary_color_graphic()} への引数には、
+@code{EB_Book} オブジェクトに加えて、カラー図版のページ番号とオフセット
+を渡します。
+
+@example
+@group
+/* @code{eb_set_binary_color_graphic()} の関数プロトタイプ */
+EB_Error_Code
+eb_set_binary_color_graphic(EB_Book *book, EB_Position *position);
+@end group
+@end example
+
+@code{EB_Book} オブジェクトは、これから取り出そうとしている図版を収録
+している副本をあらかじめ選択しておきます。
+カラー図版のページ番号とオフセットの情報は、カラー図版の参照開始と終了
+を表すエスケープシーケンスへのフックから得ます。
+フックは、インライン表示用と非インライン用の 2 種類があり、さらに
+それぞれ開始フックが JPEG 用と BMP 用に分かれています。
+
+@table @code
+@item EB_HOOK_BEGIN_COLOR_BMP
+@itemx EB_HOOK_BEGIN_COLOR_JPEG
+非インライン用 BMP, JPEG の開始フック
+
+@item EB_HOOK_END_COLOR_GRAPHIC
+非インライン用カラー図版 (BMP, JPEG 共通) の終了フック
+
+@item EB_HOOK_BEGIN_IN_COLOR_BMP
+@itemx EB_HOOK_BEGIN_IN_COLOR_JPEG
+インライン用 BMP, JPEG の開始フック
+
+@item EB_HOOK_END_IN_COLOR_GRAPHIC
+非インライン用カラー図版 (BMP, JPEG 共通) の終了フック
+@end table
+
+非インライン用の終了フック @code{EB_HOOK_END_GRAPHIC} では、フック関数
+に渡す引数の @code{argv[1]} と @code{argv[2]} が、図版データのページ
+番号とオフセットになりますので、これを @code{eb_set_binary_color_graphic()}
+に渡してやります。 
+同様に、インライン用の終了フック @code{EB_HOOK_END_IN_GRAPHIC} では、
+@code{argv[2]} と @code{argv[3]} がページ番号とオフセットですので、
+これを渡します。
+
+後は、実際にカラー図版のデータを取り出します。
+これには、モノクロ図版と同様に @code{eb_read_binary()} を用います。
+使い方はまったく一緒ですので、詳しくは
+@pxref{Monochrome Image, , モノクロ図版} を参照してください。
+
+ただし、電子ブックのカラー図版については、データの終了位置が来ても
+EB ライブラリは読み込みを止めないという制限事項があります。
+これは、データの大きさに関する情報が記されていないためで、データの
+終端位置は、アプリケーションが JPEG のデータをデコードして割り出すしか
+ありません。
+
+@c -------------------------------------------------------------------
+@node WAVE Sound, MPEG Movie, Color Image, Binary Data
+@section WAVE (PCM) 音声
+
+WAVE (PCM) 形式の音声データは EPWING にだけ存在します。
+(代わりに電子ブックには CD-DA 形式の音声データがありますが、EB ライブラリ
+では対応していません。)
+
+WAVE 形式の音声データを取り出すには、まず WAVE 音声の参照開始と終了を
+表すエスケープシーケンスへのフック @code{EB_HOOK_BEGIN_WAVE} と
+@code{EB_HOOK_END_WAVE} を使います。
+
+フック @code{EB_HOOK_BEGIN_WAVE} がフック関数に渡す引数のうち、
+@code{argv[2]} と @code{argv[3]} が音声データの開始位置のページ番号と
+オフセット、@code{argv[4]} と @code{argv[5]} が終了位置のページ番号と
+オフセットとなります。
+
+この開始位置と終了位置を関数 @code{eb_set_binary_wave()} に渡して、その
+位置にある音声データをこれから取り出すことを EB ライブラリに伝えます。
+
+@example
+@group
+/* @code{eb_set_binary_wave()} の関数プロトタイプ */
+EB_Error_Code
+eb_set_binary_wave(EB_Book *book, EB_Position *start_position,
+EB_Position *end_position);
+@end group
+@end example
+
+そして後は、実際に音声データを取り出します。
+これには、他のバイナリデータと同様に @code{eb_read_binary()} を用います。
+@code{eb_read_binary()} の使い方は、
+@pxref{Monochrome Image, , モノクロ図版} を参照してください。
+
+@c -------------------------------------------------------------------
+@node MPEG Movie, Binary Data Functions, WAVE Sound, Binary Data
+@section MPEG 動画
+
+MPEG 形式の動画データは EPWING にだけ存在します。
+動画データは EPWING の CD-ROM の movie というディレクトリの下に、
+動画毎に一個のファイルにした形で収められています。
+
+MPEG データの参照開始と終了を表すエスケープシーケンスへのフック
+@code{EB_HOOK_BEGIN_MPEG} と @code{EB_HOOK_END_MPEG} を使用すると、
+参照先の MPEG のファイル名を取得できます。
+具体的には、フック @code{EB_HOOK_BEGIN_MPEG} がフック関数に渡す引数の
+うち、@code{argv[2]} 〜 @code{argv[5]} が合わせて一つのファイル名を
+表すようになっています。
+
+MPEG 動画のデータを得るには、このファイル名を @code{eb_set_binary_mpeg()}
+に渡して、そのファイルの動画データを取り出す旨を EB ライブラリに
+伝えます。
+ファイル名は、次のようにして @code{argv + 2} (@code{&argv[2]} でも同じ)
+を渡します。
+
+@example
+@group
+if (eb_set_binary_mpeg(&book, argv + 2) != EB_SUCCESS) @{
+    fprintf(stderr, "an error occurs.\n");
+    return;
+@}
+@end group
+@end example
+
+後は、実際に動画データを取り出します。
+これには、やはり他のバイナリデータと同様に @code{eb_read_binary()} を
+用います。
+@code{eb_read_binary()} の使い方については、
+@pxref{Monochrome Image, , モノクロ図版} を参照してください。
+
+@c -------------------------------------------------------------------
+@node Binary Data Functions,  , MPEG Movie, Binary Data
+@section 関数の詳細
+
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+
+@example
+#include <eb/binary.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_set_binary_mono_graphic (EB_Book *@var{book}, const EB_Position *@var{position}, int @var{width}, @var{height})
+@xfindex set_binary_mono_graphic
+
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_set_binary_color_graphic (EB_Book *@var{book}, const EB_Position *@var{position})
+@xfindex set_binary_color_graphic
+
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_set_binary_wave (EB_Book *@var{book}, const EB_Position *@var{start_position}, EB_Position *@var{start_position})
+@xfindex set_binary_wave
+
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_set_binary_mpeg (EB_Book *@var{book}, const unsigned int *@var{argv})
+@xfindex set_binary_mpeg
+
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_read_binary (EB_Book *@var{book}, size_t @code{binary_max_length}, char *@var{binary}, ssize_t *@var{binary_length})
+@xfindex read_binary
+
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_compose_movie_file_name (const unsigned int *@var{argv}, char *@var{composed_file_name})
+@xfindex read_binary
+
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_compose_movie_file_name (const unsigned int *@var{argv}, char *@var{composed_file_name})
+@deftypefunx EB_Error_Code eb_decompose_movie_file_name (unsigned int *@var{argv}, const char *@var{composed_file_name})
+@xfindex compose_movie_file_name
+@xfindex decompose_movie_file_name
+
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_unset_binary (EB_Book *@var{book})
+@xfindex read_binary
+
 @end deftypefun
 
 @c ===================================================================
-@node Index,  , Local Character, Top
+@node Index,  , Binary Data, Top
 @appendix 索引
 
 @menu

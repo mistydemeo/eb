@@ -36,7 +36,10 @@ static pthread_mutex_t book_counter_mutex = PTHREAD_MUTEX_INITIALIZER;
  */
 static void eb_fix_misleaded_book EB_P((EB_Book *));
 static EB_Error_Code eb_load_catalog EB_P((EB_Book *));
+static EB_Error_Code eb_load_catalog_eb EB_P((EB_Book *, const char *));
+static EB_Error_Code eb_load_catalog_epwing EB_P((EB_Book *, const char *));
 static void eb_load_language EB_P((EB_Book *));
+static Zio_Code eb_get_hint_zio_code EB_P((int));
 
 /*
  * Initialize `book'.
@@ -49,7 +52,6 @@ eb_initialize_book(book)
 
     book->code = EB_BOOK_NONE;
     book->disc_code = EB_DISC_INVALID;
-    book->version = 0;
     book->character_code = EB_CHARCODE_INVALID;
     book->path = NULL;
     book->path_length = 0;
@@ -168,7 +170,6 @@ eb_finalize_book(book)
 
     book->code = EB_BOOK_NONE;
     book->disc_code = EB_DISC_INVALID;
-    book->version = 0;
     book->character_code = EB_CHARCODE_INVALID;
     book->path = NULL;
     book->path_length = 0;
@@ -248,20 +249,10 @@ eb_load_catalog(book)
     EB_Book *book;
 {
     EB_Error_Code error_code;
-    char buffer[EB_SIZE_PAGE];
     char catalog_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char catalog_path_name[EB_MAX_PATH_LENGTH + 1];
-    char *space;
-    EB_Subbook *subbook;
-    size_t catalog_size;
-    size_t title_size;
-    Zio zio;
-    Zio_Code zio_code;
-    int i;
 
     LOG(("in: eb_load_catalog(book=%d)", (int)book->code));
-
-    zio_initialize(&zio);
 
     /*
      * Find a catalog file.
@@ -269,25 +260,73 @@ eb_load_catalog(book)
     if (eb_find_file_name(book->path, "catalog", catalog_file_name)
 	== EB_SUCCESS) {
 	book->disc_code = EB_DISC_EB;
-	catalog_size = EB_SIZE_EB_CATALOG;
-	title_size = EB_MAX_EB_TITLE_LENGTH;
     } else if (eb_find_file_name(book->path, "catalogs", catalog_file_name)
 	== EB_SUCCESS) {
 	book->disc_code = EB_DISC_EPWING;
-	catalog_size = EB_SIZE_EPWING_CATALOG;
-	title_size = EB_MAX_EPWING_TITLE_LENGTH;
     } else {
 	error_code = EB_ERR_FAIL_OPEN_CAT;
 	goto failed;
     }
 
     eb_compose_path_name(book->path, catalog_file_name, catalog_path_name);
-    eb_path_name_zio_code(catalog_path_name, ZIO_PLAIN, &zio_code);
+
+    /*
+     * Load the catalog file.
+     */
+    if (book->disc_code == EB_DISC_EB)
+	error_code = eb_load_catalog_eb(book, catalog_path_name);
+    else
+	error_code = eb_load_catalog_epwing(book, catalog_path_name);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+
+    /*
+     * Fix chachacter-code of the book.
+     */
+    eb_fix_misleaded_book(book);
+    LOG(("out: eb_load_catalog() = %s", eb_error_string(EB_SUCCESS)));
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    if (book->subbooks != NULL) {
+	free(book->subbooks);
+	book->subbooks = NULL;
+    }
+    LOG(("out: eb_load_catalog() = %s", eb_error_string(error_code)));
+    return error_code;
+}
+
+
+/*
+ * Read information from the `CATALOG' file in 'book'. (EB)
+ */
+static EB_Error_Code
+eb_load_catalog_eb(book, catalog_path)
+    EB_Book *book;
+    const char *catalog_path;
+{
+    EB_Error_Code error_code;
+    char buffer[EB_SIZE_PAGE];
+    char *space;
+    EB_Subbook *subbook;
+    Zio zio;
+    Zio_Code zio_code;
+    int i;
+
+    LOG(("in: eb_load_catalog_eb(book=%d, catalog=%s)",
+	(int)book->code, catalog_path));
+
+    zio_initialize(&zio);
 
     /*
      * Open a catalog file.
      */
-    if (zio_open(&zio, catalog_path_name, zio_code) < 0) {
+    eb_path_name_zio_code(catalog_path, ZIO_PLAIN, &zio_code);
+    if (zio_open(&zio, catalog_path, zio_code) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_CAT;
 	goto failed;
     }
@@ -301,19 +340,14 @@ eb_load_catalog(book)
     }
 
     book->subbook_count = eb_uint2(buffer);
-    LOG(("aux: eb_load_catalog: subbook_count=%d", book->subbook_count));
+    LOG(("aux: eb_load_catalog_eb(): subbook_count=%d",
+	book->subbook_count));
     if (EB_MAX_SUBBOOKS < book->subbook_count)
 	book->subbook_count = EB_MAX_SUBBOOKS;
     if (book->subbook_count == 0) {
 	error_code = EB_ERR_UNEXP_CAT;
 	goto failed;
     }
-
-    /*
-     * Get EPWING format version.
-     */
-    if (book->disc_code == EB_DISC_EPWING)
-	book->version = eb_uint1(buffer + 3);
 
     /*
      * Allocate memories for subbook entries.
@@ -334,7 +368,8 @@ eb_load_catalog(book)
 	/*
 	 * Read data from the catalog file.
 	 */
-	if (zio_read(&zio, buffer, catalog_size) != catalog_size) {
+	if (zio_read(&zio, buffer, EB_SIZE_EB_CATALOG)
+	    != EB_SIZE_EB_CATALOG) {
 	    error_code = EB_ERR_FAIL_READ_CAT;
 	    goto failed;
 	}
@@ -342,7 +377,8 @@ eb_load_catalog(book)
 	/*
 	 * Set a directory name.
 	 */
-	strncpy(subbook->directory_name, buffer + 2 + title_size,
+	strncpy(subbook->directory_name,
+	    buffer + 2 + EB_MAX_EB_TITLE_LENGTH,
 	    EB_MAX_DIRECTORY_NAME_LENGTH);
 	subbook->directory_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
 	space = strchr(subbook->directory_name, ' ');
@@ -353,76 +389,15 @@ eb_load_catalog(book)
 	/*
 	 * Set an index page.
 	 */
-	if (book->disc_code == EB_DISC_EB)
-	    subbook->index_page = 1;
-	else {
-	    subbook->index_page = eb_uint2(buffer + 2
-		+ EB_MAX_EPWING_TITLE_LENGTH + EB_MAX_DIRECTORY_NAME_LENGTH
-		+ 4);
-	}
+	subbook->index_page = 1;
 
 	/*
 	 * Set a title.  (Convert from JISX0208 to EUC JP)
 	 */
-	strncpy(subbook->title, buffer + 2, title_size);
-	subbook->title[title_size] = '\0';
+	strncpy(subbook->title, buffer + 2, EB_MAX_EB_TITLE_LENGTH);
+	subbook->title[EB_MAX_EB_TITLE_LENGTH] = '\0';
 	if (book->character_code != EB_CHARCODE_ISO8859_1)
 	    eb_jisx0208_to_euc(subbook->title, subbook->title);
-
-	/*
-	 * If the book is EPWING, get font file names.
-	 */
-	if (book->disc_code == EB_DISC_EPWING) {
-	    EB_Font *font;
-	    char *buffer_p;
-	    int j;
-
-	    /*
-	     * Narrow font file names.
-	     */
-	    buffer_p = buffer + 2 + title_size + 50;
-	    for (font = subbook->narrow_fonts, j = 0; j < EB_MAX_FONTS;
-		 j++, font++) {
-		/*
-		 * Skip this entry if the first character of the file name
-		 * is not valid.
-		 */
-		if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p))
-		    continue;
-		strncpy(font->file_name, buffer_p,
-		    EB_MAX_DIRECTORY_NAME_LENGTH);
-		font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
-		font->font_code = j;
-		font->page = 1;
-		space = strchr(font->file_name, ' ');
-		if (space != NULL)
-		    *space = '\0';
-		buffer_p += EB_MAX_DIRECTORY_NAME_LENGTH;
-	    }
-
-	    /*
-	     * Wide font file names.
-	     */
-	    buffer_p = buffer + 2 + title_size + 18;
-	    for (font = subbook->wide_fonts, j = 0; j < EB_MAX_FONTS;
-		 j++, font++) {
-		/*
-		 * Skip this entry if the first character of the file name
-		 * is not valid.
-		 */
-		if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p))
-		    continue;
-		strncpy(font->file_name, buffer_p,
-		    EB_MAX_DIRECTORY_NAME_LENGTH);
-		font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
-		font->font_code = j;
-		font->page = 1;
-		space = strchr(font->file_name, ' ');
-		if (space != NULL)
-		    *space = '\0';
-		buffer_p += EB_MAX_DIRECTORY_NAME_LENGTH;
-	    }
-	}
 
 	subbook->initialized = 0;
 	subbook->code = i;
@@ -438,7 +413,7 @@ eb_load_catalog(book)
      * Fix chachacter-code of the book.
      */
     eb_fix_misleaded_book(book);
-    LOG(("out: eb_load_catalog() = %s", eb_error_string(EB_SUCCESS)));
+    LOG(("out: eb_load_catalog_eb() = %s", eb_error_string(EB_SUCCESS)));
 
     return EB_SUCCESS;
 
@@ -447,13 +422,302 @@ eb_load_catalog(book)
      */
   failed:
     zio_close(&zio);
-    zio_finalize(&zio);
-    if (book->subbooks != NULL) {
-	free(book->subbooks);
-	book->subbooks = NULL;
-    }
+    zio_initialize(&zio);
     LOG(("out: eb_load_catalog() = %s", eb_error_string(error_code)));
     return error_code;
+}
+
+
+/*
+ * Read information from the `CATALOGS' file in 'book'. (EPWING)
+ */
+static EB_Error_Code
+eb_load_catalog_epwing(book, catalog_path)
+    EB_Book *book;
+    const char *catalog_path;
+{
+    EB_Error_Code error_code;
+    char buffer[EB_SIZE_PAGE];
+    char *buffer_p;
+    char *space;
+    EB_Subbook *subbook;
+    EB_Font *font;
+    Zio zio;
+    Zio_Code zio_code;
+    int data_types;
+    int i, j;
+
+    LOG(("in: eb_load_catalog_epwing(book=%d, catalog=%s)",
+	(int)book->code, catalog_path));
+
+    zio_initialize(&zio);
+
+    /*
+     * Open a catalog file.
+     */
+    eb_path_name_zio_code(catalog_path, ZIO_PLAIN, &zio_code);
+    if (zio_open(&zio, catalog_path, zio_code) < 0) {
+	error_code = EB_ERR_FAIL_OPEN_CAT;
+	goto failed;
+    }
+
+    /*
+     * Get the number of subbooks in this book.
+     */
+    if (zio_read(&zio, buffer, 16) != 16) {
+	error_code = EB_ERR_FAIL_READ_CAT;
+	goto failed;
+    }
+
+    book->subbook_count = eb_uint2(buffer);
+    LOG(("aux: eb_load_catalog_epwing(): subbook_count=%d",
+	book->subbook_count));
+    if (EB_MAX_SUBBOOKS < book->subbook_count)
+	book->subbook_count = EB_MAX_SUBBOOKS;
+    if (book->subbook_count == 0) {
+	error_code = EB_ERR_UNEXP_CAT;
+	goto failed;
+    }
+
+    /*
+     * Allocate memories for subbook entries.
+     */
+    book->subbooks = (EB_Subbook *) malloc(sizeof(EB_Subbook)
+	* book->subbook_count);
+    if (book->subbooks == NULL) {
+	error_code = EB_ERR_MEMORY_EXHAUSTED;
+	goto failed;
+    }
+    eb_initialize_subbooks(book);
+
+    /*
+     * Read information about subbook.
+     */
+    for (i = 0, subbook = book->subbooks; i < book->subbook_count;
+	 i++, subbook++) {
+	/*
+	 * Read data from the catalog file.
+	 */
+	if (zio_read(&zio, buffer, EB_SIZE_EPWING_CATALOG)
+	    != EB_SIZE_EPWING_CATALOG) {
+	    error_code = EB_ERR_FAIL_READ_CAT;
+	    goto failed;
+	}
+
+	/*
+	 * Set a directory name.
+	 */
+	strncpy(subbook->directory_name,
+	    buffer + 2 + EB_MAX_EPWING_TITLE_LENGTH,
+	    EB_MAX_DIRECTORY_NAME_LENGTH);
+	subbook->directory_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+	space = strchr(subbook->directory_name, ' ');
+	if (space != NULL)
+	    *space = '\0';
+	eb_fix_directory_name(book->path, subbook->directory_name);
+
+	/*
+	 * Set an index page.
+	 */
+	subbook->index_page = eb_uint2(buffer + 2 + EB_MAX_EPWING_TITLE_LENGTH
+	    + EB_MAX_DIRECTORY_NAME_LENGTH + 4);
+
+	/*
+	 * Set a title.  (Convert from JISX0208 to EUC JP)
+	 */
+	strncpy(subbook->title, buffer + 2, EB_MAX_EPWING_TITLE_LENGTH);
+	subbook->title[EB_MAX_EPWING_TITLE_LENGTH] = '\0';
+	if (book->character_code != EB_CHARCODE_ISO8859_1)
+	    eb_jisx0208_to_euc(subbook->title, subbook->title);
+
+	/*
+	 * Narrow font file names.
+	 */
+	buffer_p = buffer + 2 + EB_MAX_EPWING_TITLE_LENGTH + 50;
+	for (font = subbook->narrow_fonts, j = 0; j < EB_MAX_FONTS;
+	     j++, font++) {
+	    /*
+	     * Skip this entry if the first character of the file name
+	     * is not valid.
+	     */
+	    if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p))
+		continue;
+	    strncpy(font->file_name, buffer_p, EB_MAX_DIRECTORY_NAME_LENGTH);
+	    font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+	    font->font_code = j;
+	    font->page = 1;
+	    space = strchr(font->file_name, ' ');
+	    if (space != NULL)
+		*space = '\0';
+	    buffer_p += EB_MAX_DIRECTORY_NAME_LENGTH;
+	}
+
+	/*
+	 * Wide font file names.
+	 */
+	buffer_p = buffer + 2 + EB_MAX_EPWING_TITLE_LENGTH + 18;
+	for (font = subbook->wide_fonts, j = 0; j < EB_MAX_FONTS;
+	     j++, font++) {
+	    /*
+	     * Skip this entry if the first character of the file name
+	     * is not valid.
+	     */
+	    if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p))
+		continue;
+	    strncpy(font->file_name, buffer_p, EB_MAX_DIRECTORY_NAME_LENGTH);
+	    font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+	    font->font_code = j;
+	    font->page = 1;
+	    space = strchr(font->file_name, ' ');
+	    if (space != NULL)
+		*space = '\0';
+	    buffer_p += EB_MAX_DIRECTORY_NAME_LENGTH;
+	}
+
+	subbook->initialized = 0;
+	subbook->code = i;
+    }
+
+    /*
+     * Read extended information about subbook.
+     */
+    for (i = 0, subbook = book->subbooks; i < book->subbook_count;
+	 i++, subbook++) {
+	/*
+	 * Read data from the catalog file.
+	 */
+	if (zio_read(&zio, buffer, EB_SIZE_EPWING_CATALOG)
+	    != EB_SIZE_EPWING_CATALOG) {
+	    error_code = EB_ERR_FAIL_READ_CAT;
+	    goto failed;
+	}
+
+	/*
+	 * Set a text file name and its compression hint.
+	 */
+	strncpy(subbook->text_file_name,
+	    buffer + 4, EB_MAX_DIRECTORY_NAME_LENGTH);
+	subbook->text_file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+	space = strchr(subbook->text_file_name, ' ');
+	if (space != NULL)
+	    *space = '\0';
+	subbook->text_hint_zio_code
+	    = eb_get_hint_zio_code(eb_uint1(buffer + 55));
+	if (subbook->text_hint_zio_code == ZIO_INVALID) {
+	    error_code = EB_ERR_UNEXP_CAT;
+	    goto failed;
+	}
+
+	if (*(subbook->text_file_name) == '\0') {
+	    strcpy(subbook->text_file_name, EB_FILE_NAME_HONMON);
+	    strcpy(subbook->graphic_file_name, EB_FILE_NAME_HONMON);
+	    strcpy(subbook->sound_file_name, EB_FILE_NAME_HONMON);
+	    subbook->text_hint_zio_code = ZIO_PLAIN;
+	    subbook->graphic_hint_zio_code = ZIO_PLAIN;
+	    subbook->sound_hint_zio_code = ZIO_PLAIN;
+	    continue;
+	}
+
+	data_types = eb_uint2(buffer + 41);
+
+	/*
+	 * Set a graphic file name and its compression hint.
+	 */
+	if ((data_types & 0x03) == 0x02) {
+	    strncpy(subbook->graphic_file_name, buffer + 44,
+		EB_MAX_DIRECTORY_NAME_LENGTH);
+	    subbook->graphic_hint_zio_code
+		= eb_get_hint_zio_code(eb_uint1(buffer + 54));
+	} else if (((data_types >> 8) & 0x03) == 0x02) {
+	    strncpy(subbook->graphic_file_name, buffer + 56,
+		EB_MAX_DIRECTORY_NAME_LENGTH);
+	    subbook->graphic_hint_zio_code
+		= eb_get_hint_zio_code(eb_uint1(buffer + 53));
+	}
+	subbook->graphic_file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+	space = strchr(subbook->graphic_file_name, ' ');
+	if (space != NULL)
+	    *space = '\0';
+	if (*(subbook->graphic_file_name) == '\0') {
+	    strcpy(subbook->graphic_file_name, subbook->text_file_name);
+	    subbook->graphic_hint_zio_code = subbook->text_hint_zio_code;
+	}
+
+	if (subbook->graphic_hint_zio_code == ZIO_INVALID) {
+	    error_code = EB_ERR_UNEXP_CAT;
+	    goto failed;
+	}
+
+	/*
+	 * Set a sound file name and its compression hint.
+	 */
+	if ((data_types & 0x03) == 0x01) {
+	    strncpy(subbook->sound_file_name, buffer + 44,
+		EB_MAX_DIRECTORY_NAME_LENGTH);
+	    subbook->sound_hint_zio_code
+		= eb_get_hint_zio_code(eb_uint1(buffer + 54));
+	} else if (((data_types >> 8) & 0x03) == 0x01) {
+	    strncpy(subbook->sound_file_name, buffer + 56,
+		EB_MAX_DIRECTORY_NAME_LENGTH);
+	    subbook->sound_hint_zio_code
+		= eb_get_hint_zio_code(eb_uint1(buffer + 53));
+	}
+	subbook->sound_file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+	space = strchr(subbook->sound_file_name, ' ');
+	if (space != NULL)
+	    *space = '\0';
+	if (*(subbook->sound_file_name) == '\0') {
+	    strcpy(subbook->sound_file_name, subbook->text_file_name);
+	    subbook->sound_hint_zio_code = subbook->text_hint_zio_code;
+	}
+
+	if (subbook->sound_hint_zio_code == ZIO_INVALID) {
+	    error_code = EB_ERR_UNEXP_CAT;
+	    goto failed;
+	}
+    }
+
+    /*
+     * Close the catalog file.
+     */
+    zio_close(&zio);
+    zio_finalize(&zio);
+
+    /*
+     * Fix chachacter-code of the book.
+     */
+    eb_fix_misleaded_book(book);
+    LOG(("out: eb_load_catalog_epwing() = %s", eb_error_string(EB_SUCCESS)));
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    zio_close(&zio);
+    zio_initialize(&zio);
+    LOG(("out: eb_load_catalog_epwing() = %s", eb_error_string(error_code)));
+    return error_code;
+}
+
+static Zio_Code
+eb_get_hint_zio_code(catalog_hint_value)
+    int catalog_hint_value;
+{
+    switch (catalog_hint_value) {
+    case 0x00:
+	return ZIO_PLAIN;
+	break;
+    case 0x11:
+	return ZIO_EPWING;
+	break;
+    case 0x12:
+	return ZIO_EPWING6;
+	break;
+    }
+
+    return ZIO_INVALID;
 }
 
 

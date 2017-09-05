@@ -633,7 +633,7 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
      * Open an appendix file.
      */
     if (eb_find_file_name2(appendix->path, subbook->directory_name,
-	"appendix", subbook->file_name) != EB_SUCCESS) {
+	EB_FILE_NAME_APPENDIX, subbook->file_name) != EB_SUCCESS) {
 	error_code = EB_ERR_FAIL_OPEN_APP;
 	goto failed;
     }
@@ -697,7 +697,7 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
      * Open an appendix file.
      */
     if (eb_find_file_name3(appendix->path, subbook->directory_name,
-	subbook->data_directory_name, "furoku", subbook->file_name)
+	subbook->data_directory_name, EB_FILE_NAME_FUROKU, subbook->file_name)
 	!= EB_SUCCESS) {
 	error_code = EB_ERR_FAIL_OPEN_APP;
 	goto failed;

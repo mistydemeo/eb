@@ -844,8 +844,25 @@ text_max_length=%ld, forward=%d)",
 		hook = hookset->hooks + EB_HOOK_BEGIN_MPEG;
 		break;
 
+	    case 0x3c:
+		/* beginning of inline color graphic */
+		in_step = 10;
+		if (cache_rest_length < in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		argc = 4;
+		argv[1] = eb_uint2(cache_p + 2);
+		argv[2] = eb_bcd4(cache_p + 4);
+		argv[3] = eb_bcd2(cache_p + 8);
+		if (argv[1] >> 8 == 0x00)
+		    hook = hookset->hooks + EB_HOOK_BEGIN_IN_COLOR_BMP;
+		else
+		    hook = hookset->hooks + EB_HOOK_BEGIN_IN_COLOR_JPEG;
+		break;
+
 	    case 0x35: case 0x36: case 0x37: case 0x38: case 0x3a:
-	    case 0x3b: case 0x3c: case 0x3d: case 0x3e: case 0x3f:
+	    case 0x3b: case 0x3d: case 0x3e: case 0x3f:
 		in_step = 2;
 		context->skip_code = eb_uint1(cache_p + 1) + 0x20;
 		break;
@@ -1013,6 +1030,16 @@ text_max_length=%ld, forward=%d)",
 		    goto failed;
 		}
 		hook = hookset->hooks + EB_HOOK_END_MPEG;
+		break;
+
+	    case 0x5c:
+		/* end of inline color graphic */
+		in_step = 2;
+		if (cache_rest_length < in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		hook = hookset->hooks + EB_HOOK_END_IN_COLOR_GRAPHIC;
 		break;
 
 	    case 0x61:

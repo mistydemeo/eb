@@ -168,7 +168,7 @@ width=%d, height=%d)",
     /*
      * Current subbook must have a graphic file.
      */
-    if (zio_file(&book->subbook_current->graphic_zio) < 0) {
+    if (zio_file(&book->subbook_current->text_zio) < 0) {
 	error_code = EB_ERR_NO_SUCH_BINARY;
 	goto failed;
     }
@@ -180,14 +180,14 @@ width=%d, height=%d)",
     if (width == 0 && height == 0) {
 	char buffer[22];
 
-	if (zio_lseek(&book->subbook_current->graphic_zio,
+	if (zio_lseek(&book->subbook_current->text_zio,
 	    (off_t)(position->page - 1) * EB_SIZE_PAGE + position->offset,
 	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
 	}
 
-	if (zio_read(&book->subbook_current->graphic_zio, buffer, 22) != 22) {
+	if (zio_read(&book->subbook_current->text_zio, buffer, 22) != 22) {
 	    error_code = EB_ERR_FAIL_READ_BINARY;
 	    goto failed;
 	}
@@ -244,7 +244,7 @@ width=%d, height=%d)",
      */
     context = &book->binary_context;
     context->code = EB_BINARY_MONO_GRAPHIC;
-    context->zio = &book->subbook_current->graphic_zio;
+    context->zio = &book->subbook_current->text_zio;
     context->location = (off_t)(position->page - 1) * EB_SIZE_PAGE
 	+ position->offset + (width + 7) / 8 * (height - 1);
     context->size = (width + 7) / 8 * height;
@@ -299,7 +299,7 @@ width=%d, height=%d)",
      * An error occurs...
      */
   failed:
-    eb_unset_binary(book);
+    eb_reset_binary_context(book);
     LOG(("out: eb_set_binary_mono_graphic() = %s",
 	eb_error_string(error_code)));
     eb_unlock(&book->lock);
@@ -419,7 +419,7 @@ width=%d, height=%d)",
     /*
      * Current subbook must have a graphic file.
      */
-    if (zio_file(&book->subbook_current->graphic_zio) < 0) {
+    if (zio_file(&book->subbook_current->text_zio) < 0) {
 	error_code = EB_ERR_NO_SUCH_BINARY;
 	goto failed;
     }
@@ -431,14 +431,14 @@ width=%d, height=%d)",
     if (width == 0 && height == 0) {
 	char buffer[22];
 
-	if (zio_lseek(&book->subbook_current->graphic_zio,
+	if (zio_lseek(&book->subbook_current->text_zio,
 	    (off_t)(position->page - 1) * EB_SIZE_PAGE + position->offset,
 	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
 	}
 
-	if (zio_read(&book->subbook_current->graphic_zio, buffer, 22) != 22) {
+	if (zio_read(&book->subbook_current->text_zio, buffer, 22) != 22) {
 	    error_code = EB_ERR_FAIL_READ_BINARY;
 	    goto failed;
 	}
@@ -490,7 +490,7 @@ width=%d, height=%d)",
     context = &book->binary_context;
 
     context->code = EB_BINARY_GRAY_GRAPHIC;
-    context->zio = &book->subbook_current->graphic_zio;
+    context->zio = &book->subbook_current->text_zio;
     context->location = (off_t)(position->page - 1) * EB_SIZE_PAGE
 	+ position->offset + (width + 1) / 2 * (height - 1);
     context->size = (width + 1) / 2 * height;
@@ -546,7 +546,7 @@ width=%d, height=%d)",
      * An error occurs...
      */
   failed:
-    eb_unset_binary(book);
+    eb_reset_binary_context(book);
     LOG(("out: eb_set_binary_gray_graphic() = %s",
 	eb_error_string(error_code)));
     eb_unlock(&book->lock);
@@ -700,7 +700,7 @@ end_position={%d,%d})",
      * An error occurs...
      */
   failed:
-    eb_unset_binary(book);
+    eb_reset_binary_context(book);
     LOG(("out: eb_set_binary_wave() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
@@ -798,7 +798,7 @@ eb_set_binary_color_graphic(book, position)
      * An error occurs...
      */
   failed:
-    eb_unset_binary(book);
+    eb_reset_binary_context(book);
     LOG(("out: eb_set_binary_color_graphic() = %s",
 	eb_error_string(error_code)));
     eb_unlock(&book->lock);
@@ -880,7 +880,7 @@ eb_set_binary_mpeg(book, argv)
      * An error occurs...
      */
   failed:
-    eb_unset_binary(book);
+    eb_reset_binary_context(book);
     LOG(("out: eb_set_binary_mpeg() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
@@ -953,7 +953,7 @@ eb_read_binary(book, binary_max_length, binary, binary_length)
      */
   failed:
     *binary_length = -1;
-    eb_unset_binary(book);
+    eb_reset_binary_context(book);
     LOG(("out: eb_read_binary() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
     return error_code;

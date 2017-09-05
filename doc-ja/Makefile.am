@@ -1,6 +1,6 @@
 info_TEXINFOS = eb-ja.texi ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi ebzip-ja.texi
 eb_ja_TEXINFOS = eb-ver.texi initexit-c.texi disctype-c.texi subbook-c.texi \
-	word-c.texi text-c.texi
+	word-c.texi text-c.texi font-c.texi
 ebfont_ja_TEXINFOS = ebfont-ver.texi
 ebinfo_ja_TEXINFOS = ebinfo-ver.texi
 ebrefile_ja_TEXINFOS = ebrefile-ver.texi
@@ -85,3 +85,7 @@ word-c.texi: $(C2TEXI) $(samplesdir)/word.c
 text-c.texi: $(C2TEXI) $(samplesdir)/text.c
 	-@rm -f $@
 	$(SHELL) $(C2TEXI) $(samplesdir)/text.c > $@
+
+font-c.texi: $(C2TEXI) $(samplesdir)/font.c
+	-@rm -f $@
+	$(SHELL) $(C2TEXI) $(samplesdir)/font.c > $@

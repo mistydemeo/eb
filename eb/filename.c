@@ -181,7 +181,7 @@ eb_canonicalize_path_name(path_name)
  *    - Letters are converted to upper case.
  *
  * We minght fail to load a file after we fix the file name.
- * If loading of the file is tried again, we need the original file name,
+ * If loading the file is tried again, we need the original file name,
  * not fixed file name.  Therefore, we get orignal file name from fixed
  * file name using this function.
  */
@@ -357,6 +357,7 @@ eb_find_file_name(path_name, target_file_name, found_file_name)
 {
     char ebz_target_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char org_target_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+    char candidate_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     DIR *dir;
     struct dirent *entry;
     size_t d_namlen;
@@ -366,6 +367,7 @@ eb_find_file_name(path_name, target_file_name, found_file_name)
     strcat(ebz_target_file_name, ".ebz");
     strcpy(org_target_file_name, target_file_name);
     strcat(org_target_file_name, ".org");
+    candidate_file_name[0] = '\0';
 
     /*
      * Open the directory `path_name'.
@@ -411,19 +413,19 @@ eb_find_file_name(path_name, target_file_name, found_file_name)
 	if (strcasecmp(entry->d_name, ebz_target_file_name) == 0
 	    && *(ebz_target_file_name + d_namlen) == '\0'
 	    && found < FOUND_EBZ) {
-	    strcpy(found_file_name, entry->d_name);
+	    strcpy(candidate_file_name, entry->d_name);
 	    found = FOUND_EBZ;
 	}
 	if (strncasecmp(entry->d_name, target_file_name, d_namlen) == 0
 	    && *(target_file_name + d_namlen) == '\0'
 	    && found < FOUND_BASENAME) {
-	    strcpy(found_file_name, entry->d_name);
+	    strcpy(candidate_file_name, entry->d_name);
 	    found = FOUND_BASENAME;
 	}
 	if (strcasecmp(entry->d_name, org_target_file_name) == 0
 	    && *(org_target_file_name + d_namlen) == '\0'
 	    && found < FOUND_ORG) {
-	    strcpy(found_file_name, entry->d_name);
+	    strcpy(candidate_file_name, entry->d_name);
 	    found = FOUND_ORG;
 	    break;
 	}
@@ -433,6 +435,7 @@ eb_find_file_name(path_name, target_file_name, found_file_name)
 	goto failed;
 
     closedir(dir);
+    strcpy(found_file_name, candidate_file_name);
 
     return EB_SUCCESS;
 

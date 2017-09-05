@@ -37,8 +37,6 @@ EB_Error_Code eb_set_binary_mono_graphic EB_P((EB_Book *, const EB_Position *,
    int, int));
 EB_Error_Code eb_set_binary_gray_graphic EB_P((EB_Book *, const EB_Position *,
     int, int));
-EB_Error_Code eb_set_binary_bitmap EB_P((EB_Book *, const EB_Position *,
-    int, int));
 EB_Error_Code eb_set_binary_wave EB_P((EB_Book *, const EB_Position *,
     const EB_Position *));
 EB_Error_Code eb_set_binary_color_graphic EB_P((EB_Book *,
