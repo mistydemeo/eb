@@ -162,7 +162,7 @@ eb_catalog_filename_internal(path, pathlen, disccode, casecode, suffixcode)
 
     /*
      * Open a catalog file, and check for disc type.
-     * At first, it is assumed that this book is EB/EBG/EBXA.
+     * At first, it is assumed that this book is EB*.
      */
     sprintf(catalog, "%s/%s", path, EB_FILENAME_CATALOG);
     eb_canonicalize_filename(catalog);

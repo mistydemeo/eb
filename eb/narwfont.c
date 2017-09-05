@@ -203,7 +203,7 @@ eb_narrow_font_filename(book)
     }
 
     /*
-     * For EB/EBG/EBXA books, NULL is always returned because they
+     * For EB* books, NULL is always returned because they
      * have font data in the `START' file.
      */
     if (book->disc_code == EB_DISC_EB)

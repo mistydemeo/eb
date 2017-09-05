@@ -102,6 +102,7 @@ int eb_zclose EB_P((EB_Zip *, int));
 off_t eb_zlseek EB_P((EB_Zip *, int, off_t, int));
 ssize_t eb_zread EB_P((EB_Zip *, int, char *, size_t));
 ssize_t eb_read_all EB_P((int, void *, size_t nbyte));
+
 #ifdef __cplusplus
 }
 #endif

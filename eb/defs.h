@@ -67,7 +67,7 @@ extern "C" {
 #define EB_CHARCODE_JISX0208_GB2312	3
 
 /*
- * Word types to search.
+ * Search word types.
  */
 #define EB_WORD_ALPHA			0
 #define EB_WORD_KANA			1
@@ -82,7 +82,7 @@ extern "C" {
 #define EB_INDEX_STYLE_DELETE		2
 
 /*
- * Zip codes.
+ * Compression type codes.
  */
 #define EB_ZIP_EPWING			-1
 #define EB_ZIP_NONE			0
@@ -156,7 +156,7 @@ typedef int EB_Multi_Entry_Code;
 typedef int EB_Zip_Code;
 
 /*
- * EB_Huffman_Node -- Node of static Huffman tree.
+ * EB_Huffman_Node -- A node of static Huffman tree.
  */
 typedef struct eb_huffman_node {
     int type;
@@ -167,7 +167,7 @@ typedef struct eb_huffman_node {
 } EB_Huffman_Node;
 
 /*
- * EB_Zip -- Compression information.
+ * EB_Zip -- Compression information of a book.
  */
 typedef struct {
     EB_Zip_Code code;
@@ -195,7 +195,7 @@ typedef struct {
 } EB_Zip;
 
 /*
- * EB_Alternation_Cache -- An Aternation cache entry.
+ * EB_Alternation_Cache -- Chace of aternation text.
  */
 typedef struct {
     int charno;
@@ -232,13 +232,13 @@ typedef struct {
     EB_Character_Code char_code;
 
     /*
-     * Start number of the character code in the narrow/wide font.
+     * Start character number of the narrow/wide font.
      */
     int narw_start;
     int wide_start;
 
     /*
-     * End number of the character code in the narrow/wide font.
+     * End character number of the narrow/wide font.
      */
     int narw_end;
     int wide_end;
@@ -250,7 +250,7 @@ typedef struct {
     int wide_page;
 
     /*
-     * Stop code.
+     * Stop code (first and second characters).
      */
     int stop0;
     int stop1;
@@ -276,7 +276,7 @@ typedef struct {
     size_t path_length;
 
     /*
-     * Disc type.  EB(EB/EBG/EBXA) or EPWING.
+     * Disc type.  EB*(EB/EBG/EBXA/EBXA-C/S-EBXA) or EPWING.
      */
     EB_Disc_Code disc_code;
 
@@ -330,7 +330,7 @@ typedef struct {
 
     /*
      * Page number of the start page of the font data.
-     * (EB/EBG/EBXA only.  In EPWING, it is alyways 1).
+     * EB* only.  In EPWING, it is alyways 1).
      */
     int page;
 
@@ -351,7 +351,7 @@ typedef struct {
 } EB_Font;
 
 /*
- * EB_Language -- A language in a book. (EB/EBG/EBXA only)
+ * EB_Language -- A language in a book. (EB* only)
  */
 typedef struct {
     /*
@@ -427,7 +427,7 @@ typedef struct {
 } EB_Search;
 
 /*
- * EB_Subbook -- A subbook in the book.
+ * EB_Subbook -- A subbook in a book.
  */
 typedef struct {
     /*
@@ -513,7 +513,7 @@ typedef struct {
     EB_Book_Code code;
 
     /*
-     * Disc type.  EB(EB/EBG/EBXA) or EPWING.
+     * Disc type.  EB*(EB/EBG/EBXA/EBXA-C/S-EBXA) or EPWING.
      */
     EB_Disc_Code disc_code;
 
@@ -538,7 +538,7 @@ typedef struct {
     EB_Case_Code case_code;
 
     /*
-     * Suffix to be added to filenames. (None, ".", or ".;1")
+     * Suffix to be added to filenames. (None, ".", ";1" or ".;1")
      */
     EB_Suffix_Code suffix_code;
 

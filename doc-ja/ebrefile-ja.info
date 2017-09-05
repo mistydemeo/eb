@@ -1,4 +1,4 @@
-This is Info file ebrefile-ja.info, produced by Makeinfo version 1.67
+This is Info file ebrefile-ja.info, produced by Makeinfo version 1.68
 from the input file ebrefile-ja.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.5 版です。EB ライブラリバージョン 2.3.5 に対応して
-います。
+   この文書は第 2.3.6 版です。 EB ライブラリバージョン 2.3.6
+に対応しています。
 
 * Menu:
 
@@ -50,9 +50,9 @@ File: ebrefile-ja.info,  Node: Introduction,  Next: Invoking ebrefile,  Prev: To
 はじめに
 ********
 
-   一冊の CD-ROM 書籍は、大抵複数の "副本" ("subbook") を持っています。
+   一冊の CD-ROM 書籍は、大抵複数の "副本" ("subbook") を持ってい ます。
 たとえばある CD-ROM 書籍は国語辞典、英和辞典、和英辞典の 3 つの副本を
-収めています。個々の副本は、それ自体が独立した「書籍」になっています。
+収めています。 個々の副本は、それ自体が独立した「書籍」になっています。
 
           (CD-ROM 書籍)
      +-----------------------+
@@ -61,38 +61,39 @@ File: ebrefile-ja.info,  Node: Introduction,  Next: Invoking ebrefile,  Prev: To
      |   [和英辞典] (副本)   |
      +-----------------------+
 
-   EB/EBG/EBXA/EBXA-C/S-EBXA 形式の CD-ROM 書籍は `CATALOG' というファ
-イルを、EPWING 形式の CD-ROM 書籍は `CATALOGS' というファイルを持って
-います。これらのファイルは、その CD-ROM 書籍にはどんな副本が収められて
-いるのかを定義しています。これらのファイルは、CD-ROM 書籍のトップディ
-レクトリに置かれています。
+   EB/EBG/EBXA/EBXA-C/S-EBXA 形式の CD-ROM 書籍は `CATALOG' という
+ファイルを、EPWING 形式の CD-ROM 書籍は `CATALOGS' というファイル
+を持っています。 これらのファイルは、その CD-ROM
+書籍にはどんな副本が収められているのか を定義しています。
+これらのファイルは、CD-ROM 書籍のトップディレクトリに置かれています。
 
-   `ebrefile' は元のカタログファイルを読み、ユーザから指定された副本だ
-けを取り込んだ新しいカタログファイルを生成します。言い換えれば、
-`ebrefile' は特定の副本の定義を、カタログファイルから削除します。
-CD-ROM 書籍が 3 つの副本を持っている場合、`ebrefile' はそのうちの任意
-の 1 つまたは 2 つの副本を、新しいカタログファイルに取り込むことができ
-ます。ハードディスクに CD-ROM 書籍の一部だけをコピーしたいときに、
-`ebrefile' は便利です。`ebrefile' は EB ライブラリと一緒に配布されてい
-ます。
+   `ebrefile' は元のカタログファイルを読み、ユーザから指定された副本
+だけを取り込んだ新しいカタログファイルを生成します。
+言い換えれば、`ebrefile' は特定の副本の定義を、カタログファイルか
+ら削除します。 CD-ROM 書籍が 3 つの副本を持っている場合、`ebrefile'
+はそのうちの 任意の 1 つまたは 2
+つの副本を、新しいカタログファイルに取り込むことが できます。
+ハードディスクに CD-ROM 書籍の一部だけをコピーしたいときに、 `ebrefile'
+は便利です。 `ebrefile' は EB ライブラリと一緒に配布されています。
 
    `ebrefile' はフリーソフトウェアです。あなたは、Free Software
 Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
-バージョン2 あるいはそれ以降の各バージョンの中からいずれかを選択し、そ
-のバージョンが定める条項に従って本プログラムを再頒布または変更すること
-ができます。
+バージョン 2
+あるいはそれ以降の各バージョンの中からいずれかを選択し、そのバージョ
+ンが定める条項に従って本プログラムを再頒布または変更することができます。
 
    `ebrefile' は有用とは思いますが、頒布にあたっては、市場性及び特定目的
-適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細に
-ついては GNU General Public License をお読み下さい。
+適合性についての暗黙の保証を含めて、いかなる保証も行ないません。
+詳細については GNU General Public License をお読み下さい。
 
-   加えて、あなたは自分の所有する CD-ROM 書籍の使用許諾も守らなくてはい
-けません。`ebrefile' はフリーソフトウェアですが、あなたの書籍が自由に
-使えるものであるとは限りません。`ebrefile' は、CD-ROM 書籍のあるファ
-イルの内容に変更を加えます。ご注意下さい。
+   加えて、あなたは自分の所有する CD-ROM
+書籍の使用許諾も守らなくてはいけ ません。 `ebrefile'
+はフリーソフトウェアですが、あなたの書籍が自由に使えるも
+のであるとは限りません。 `ebrefile' は、CD-ROM
+書籍のあるファイルの内容に変更を加えます。 ご注意下さい。
 
-   この文書は第 2.3.5 版です。EB ライブラリバージョン 2.3.5 に対応して
-います。
+   この文書は第 2.3.6 版です。 EB ライブラリバージョン 2.3.6
+に対応しています。
 
 
 File: ebrefile-ja.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -104,15 +105,15 @@ File: ebrefile-ja.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Pr
 
      % ebrefile 書籍へのパス
 
-書籍へのパス には、CD-ROM 書籍のトップディレクトリ、つまり`CATALOG' ま
-たは `CATALOGS' ファイルが存在するディレクトリを指定します。複数のパ
-スを書くことはできませんが、以下のように、パスの指定を省くことはできま
-す。
+書籍へのパス には、CD-ROM 書籍のトップディレクトリ、つまり `CATALOG'
+または `CATALOGS' ファイルが存在するディレクトリを 指定します。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
 
      % ebinfo
 
-この場合、`ebrefile' はカレントディレクトリ (`.') が指定されたものと判
-断します。
+この場合、`ebrefile' はカレントディレクトリ (`.') が指定され
+たものと判断します。
 
 * Menu:
 
@@ -126,16 +127,17 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
 副本の選択
 ==========
 
-   デフォルトでは、`ebrefile' は、元のカタログファイルで定義されている
-すべての副本を新しい副本に取り込みます。つまり、新しいカタログファイル
-は、単に元のファイルのコピーになります。このデフォルトの振る舞いは、役
-に立ちません。`ebrefile' は、通常 `--subbook' (`-S') オプションを指定
-して起動します。
+   デフォルトでは、`ebrefile' は、元のカタログファイルで定義されてい
+るすべての副本を新しい副本に取り込みます。
+つまり、新しいカタログファイルは、単に元のファイルのコピーになります。
+このデフォルトの振る舞いは、役に立ちません。 `ebrefile' は、通常
+`--subbook' (`-S') オプションを指定 して起動します。
 
-   `--subbook' (`-S') オプションは引数を一つ取り、そこにカンマ(`,') で
-区切って、新しいカタログファイルに取り込みたい副本のディレクトリ名を並
-べて書きます。`ebinfo' コマンドを用いると、あなたの所有している書籍に
-どのような副本が含まれているのかを知ることができます。
+   `--subbook' (`-S') オプションは引数を一つ取り、そこにカンマ (`,')
+で区切って、新しいカタログファイルに取り込みたい副本のディ
+レクトリ名を並べて書きます。 `ebinfo'
+コマンドを用いると、あなたの所有している書籍にどのような
+副本が含まれているのかを知ることができます。
 
      % ebinfo
      disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
@@ -164,7 +166,7 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
        narrow font characters:
        wide font characters: 0xa321 -- 0xa27e
 
-(`ebinfo' コマンドに関しての詳細は、*note `ebinfo' の実行:
+(`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行:
 (ebinfo-ja)Invoking ebinfo.)。
 この例では、3 つの副本が書籍には含まれており、その名前は `ENGLISH'
 `FRENCH', `GERMAN' だということが分かります。
@@ -174,25 +176,27 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
 
      % ebrefile --subbook english,french
 
-ディレクトリ名の大文字・小文字の違いは、区別されません。`--subbook' の
-引数は、次のように分けて書くこともできます。
+ディレクトリ名の大文字・小文字の違いは、区別されません。 `--subbook'
+の引数は、次のように分けて書くこともできます。
 
      % ebrefile --subbook english --subbook french
 
-`ebrefile' は副本の定義順序を変えることはできませんので、`--subbook' に
-与える引数の順序は、任意です。
+`ebrefile' は副本の定義順序を変えることはできませんので、 `--subbook'
+に与える引数の順序は、任意です。
 
-   元の `CATALOG(S)' ファイルは `CATALOG(S).bak' に移され、新しいファイ
-ルは `CATALOG(S)' に移動されます。これは、CD-ROM 書籍のトップディレク
-トリが書き込み可能でなければならないことを意味しています。言い換えれ
-ば、少なくとも `CATALOG(S)' ファイルだけは、あらかじめ `ebrefile' 起動
-前にハードディスクにコピーしておかなければならならいということになりま
-す。(ただし、`--output-directory' オプションを使用している場合、この
-規則は当てはまりません。`--output-directory' オプションについての詳細
-は *note `--output-directory': Summary of Options.)。
+   元の `CATALOG(S)' ファイルは `CATALOG(S).bak' に移され、
+新しいファイルは `CATALOG(S)' に移動されます。 これは、CD-ROM
+書籍のトップディレクトリが書き込み可能でなければなら
+ないことを意味しています。 言い換えれば、少なくとも `CATALOG(S)'
+ファイルだけは、あらかじ め `ebrefile'
+起動前にハードディスクにコピーしておかなければな
+らならいということになります。 (ただし、`--output-directory'
+オプションを使用している場合、こ の規則は当てはまりません。
+`--output-directory' オプションについての詳細 は *note
+`--output-directory': Summary of Options.)。
 
-   もういちど `ebinfo' を起動してみましょう。副本 `GERMAN' が消えていま
-す。
+   もういちど `ebinfo' を起動してみましょう。 副本 `GERMAN'
+が消えています。
 
      % ebinfo
      disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
@@ -214,9 +218,9 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
        narrow font characters:
        wide font characters: 0xa321 -- 0xa27e
 
-   もし、CD-ROM 書籍全体をすでにハードディスクにコピーしているなら、副
-本 `GERMAN' のファイルは削除しても構いません。ディレクトリ名が大文字で
-構成されているなら、次のようにします。
+   もし、CD-ROM 書籍全体をすでにハードディスクにコピーしているなら、
+副本 `GERMAN' のファイルは削除しても構いません。
+ディレクトリ名が大文字で構成されているなら、次のようにします。
 
      % rm -r GERMAN
 
@@ -230,14 +234,15 @@ File: ebrefile-ja.info,  Node: Adjust Filename,  Next: Combination with ebzip,  
 ファイル名の調整
 ================
 
-   `ebrefile' は、大文字・小文字の違い ("case") と拡張子("suffix") につ
-いて、元のカタログファイルと同じになるようにします。カタログファイルの
-ファイル名が `catalogs;1' (小文字、拡張は `;1') であれば、`ebrefile' は
-新しいカタログファイルを `catalogs;1' というファイル名で置き、元のカタ
-ログファイルは `catalogs.bak;1' というファイル名で保存します。
+   `ebrefile' は、大文字・小文字の違い ("case") と拡張子 ("suffix")
+について、元のカタログファイルと同じになるようにします。
+カタログファイルのファイル名が `catalogs;1' (小文字、拡張は `;1')
+であれば、`ebrefile' は新しいカタログファイルを `catalogs;1'
+というファイル名で置き、元のカタログファイルは `catalogs.bak;1'
+というファイル名で保存します。
 
-   以下の表は、`CATALOG(S)' ファイルのファイル名がどのように変化するの
-かを示したものです。
+   以下の表は、`CATALOG(S)' ファイルのファイル名がどのように変化
+するのかを示したものです。
 
 大文字・小文字/拡張子         元のファイル           バックアップファイル   
 小文字/なし                   catalog                catalog.bak            
@@ -249,15 +254,17 @@ File: ebrefile-ja.info,  Node: Adjust Filename,  Next: Combination with ebzip,  
 大文字/バージョン             CATALOG;1              CATALOG.BAK;1          
 大文字/点とバージョン         CATALOG.;1             CATALOG.BAK;1          
 
-   `--case' と `--suffix' オプションによって、新しいカタログファイルと
-バックアップファイルにおけるファイル名の大文字・小文字の違いと拡張子を
-変えることができます。`--case' オプションは引数を一つ取り、それは
-`upper' か`lower' でなくてはいけません。このオプションは、ファイル名
-`CATALOG(S)' および `CATALOG(S).BAK' が大文字あるいは小文字になるように
-します。同様に `--suffix' オプションも引数を一つとり、それは`none'、
-`dot'、`version'、`both' のいずれかでなくてはいけません。このオプショ
-ンはファイル名 `CATALOG(S)' および `CATALOG(S).BAK' の拡張子を、「なし」
-「点」「バージョン」「両方」(点 + バージョン) になるようにします。
+   `--case' と `--suffix' オプションによって、新しいカタログファ
+イルとバックアップファイルにおけるファイル名の大文字・小文字の違いと
+拡張子を変えることができます。 `--case'
+オプションは引数を一つ取り、それは `upper' か `lower'
+でなくてはいけません。 このオプションは、ファイル名 `CATALOG(S)' および
+`CATALOG(S).BAK' が大文字あるいは小文字になるようにします。 同様に
+`--suffix' オプションも引数を一つとり、それは
+`none'、`dot'、`version'、`both' のいずれかでなく てはいけません。
+このオプションはファイル名 `CATALOG(S)' および `CATALOG(S).BAK'
+の拡張子を、「なし」「点」「バージョン」「両方」(点 + バージョン) にな
+るようにします。
 
 
 File: ebrefile-ja.info,  Node: Combination with ebzip,  Prev: Adjust Filename,  Up: Invoking ebrefile
@@ -265,25 +272,27 @@ File: ebrefile-ja.info,  Node: Combination with ebzip,  Prev: Adjust Filename,  
 `ebzip' との連携
 ================
 
-   `ebrefile' は、`ebzip' という CD-ROM 書籍を圧縮するコマンドと併用す
-ることができます(`ebzip' コマンドに関しての詳細は*note はじめに:
-(ebzip-ja)Introduction.)。通常、 `ebzip' と `ebrefile' にはコマンド行で
-同じ引数を与えます。
+   `ebrefile' は、`ebzip' という CD-ROM 書籍を圧縮するコマンド
+と併用することができます (`ebzip' コマンドに関しての詳細は *note
+はじめに: (ebzip-ja)Introduction.)。 通常、 `ebzip' と `ebrefile'
+にはコマンド行で同じ引数を与 えます。
 
    CD-ROM 書籍が `/cdrom' にマウントされ、この書籍には `ENGLISH'、
-`FRENCH'、`GERMAN' という 3 つの副本が収められているとします。以下に記
-した操作によって、副本 `ENGLISH'、`FRENCH' は圧縮されてカレントディレ
-クトリの下に置かれ、副本 `GERMAN' は副本のリストから削除されます。
+`FRENCH'、`GERMAN' という 3 つの副本が収められているとします。
+以下に記した操作によって、副本 `ENGLISH'、`FRENCH' は圧縮
+されてカレントディレクトリの下に置かれ、副本 `GERMAN' は副本の
+リストから削除されます。
 
      % ebzip --subbook english,french /cdrom
      % ebrefile --subbook english,french /cdrom
 
-圧縮したファイルをカレントディレクトリ以外に置くには、次のようにします。
+圧縮したファイルをカレントディレクトリ以外に置くには、次のようにし
+ます。
 
      % ebzip --output-directory /dict --subbook english,french /cdrom
      % ebrefile --output-directory /dict --subbook english,french /cdrom
 
-ファイル名の大文字と小文字、拡張子のスタイルを変更するには、`--case'
+ファイル名の大文字と小文字、拡張子のスタイルを変更するには、 `--case'
 と `--suffix' オプションを使用します。
 
      % ebzip --case lower --suffix none --subbook english,french /cdrom
@@ -295,19 +304,23 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 `ebrefile' のオプション一覧
 ***************************
 
-   `ebrefile' コマンドは、伝統的な一文字オプション名と覚えやすい長いオ
-プション名の両方を扱うことができます。長いオプション名を表すには、`-'
-ではなく `--' を用います。オプション名が一意に決まる範囲内で、名前の後
-方部分を省略することができます。
+   `ebrefile' コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、`-' ではなく `--' を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
 
 `-c CASE'
 `--case CASE'
-     新しいカタログファイルのファイル名に大文字・小文字のどちらを使用す
-     るのかを指定します。CASE は、`upper' or `lower' でなくてはいけま
-     せん。このオプションを指定しなければ、新しいカタログファイルにお
-     けるファイル名の大文字・小文字の使用は、元のカタログファイルのフ
-     ァイル名と同じになります(詳しくは *note ファイル名の調整:
-     Adjust Filename.)。
+
+     新しいカタログファイルのファイル名に大文字・小文字のどちらを使用する
+     のかを指定します。 CASE は、`upper' or `lower'
+     でなくてはいけません。
+
+     このオプションを指定しなければ、新しいカタログファイルにおけるファイ
+
+     ル名の大文字・小文字の使用は、元のカタログファイルのファイル名と同じ
+     になります (詳しくは *note ファイル名の調整: Adjust Filename.)。
 
 `-h'
 `--help'
@@ -315,28 +328,40 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 
 `-o DIRECTORY'
 `--output-directory DIRECTORY'
-     新しいカタログファイルを置くディレクトリを指定します。デフォルトで
-     は、カレントディレクトリ (`.') になります。(詳しくは *note
-     `ebrefile' の実行: Invoking ebrefile.)。
+     新しいカタログファイルを置くディレクトリを指定します。
+     デフォルトでは、カレントディレクトリ (`.') になります。 (詳しくは
+     *note `ebrefile' の実行: Invoking ebrefile.)。
 
 `-s SUFFIX'
 `--suffix SUFFIX'
-     新しいカタログファイルにおける、ファイル名の拡張子のスタイルを指定
-     します。拡張子 は、`none'、`dot'、`version'、`both' のいずれかで
-     なくてはいけません。拡張子 が `none' の場合、拡張子は付加されませ
-     ん。拡張子 が `dot' のときは、点 (`.') が付加されます。拡張子
-     が `version' のときは、バージョン番号 (`;1') が付加されます。拡張
-     子 が `both' のときは、点とバージョン番号 (`.;1') が付加されます。
-     このオプションを指定しなければ、新しいカタログファイルにおけるファ
-     イル名の拡張子は、元のカタログファイルのファイル名と同じになりま
-     す(詳しくは、*note ファイル名の調整: Adjust Filename.)。
+
+
+
+
+
+
+
+     新しいカタログファイルにおける、ファイル名の拡張子のスタイルを指定します。
+     拡張子 は、`none'、`dot'、`version'、`both'
+     のいずれかでなくてはいけません。 拡張子 が `none'
+     の場合、拡張子は付加されません。 拡張子 が `dot' のときは、点
+     (`.') が付加されます。 拡張子 が `version'
+     のときは、バージョン番号 (`;1') が付加されます。 拡張子 が `both'
+     のときは、点とバージョン番号 (`.;1') が付加されます。
+
+
+
+     このオプションを指定しなければ、新しいカタログファイルにおけるファイル
+     名の拡張子は、元のカタログファイルのファイル名と同じになります
+     (詳しくは、*note ファイル名の調整: Adjust Filename.)。
 
 `-S SUBBOOKS'
 `--subbook SUBBOOKS'
      `ebrefile' が新しいカタログファイルに取り込むべき副本を指定します。
-     副本 は、副本のディレクトリ名をカンマ (`,') で区切って並べたもの
-     でなくてはいけません。デフォルトでは、すべての副本が対象になりま
-     す(詳しくは *note 副本の選択: Select Subbooks.)。
+     副本 は、副本のディレクトリ名をカンマ (`,') で区切って
+     並べたものでなくてはいけません。
+     デフォルトでは、すべての副本が対象になります (詳しくは *note
+     副本の選択: Select Subbooks.)。
 
 `-v'
 `--version'
@@ -347,10 +372,10 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 Tag Table:
 Node: Top1052
 Node: Introduction1574
-Node: Invoking ebrefile3707
-Node: Select Subbooks4400
-Node: Adjust Filename8230
-Node: Combination with ebzip10160
-Node: Summary of Options11375
+Node: Invoking ebrefile3714
+Node: Select Subbooks4408
+Node: Adjust Filename8244
+Node: Combination with ebzip10176
+Node: Summary of Options11397
 
 End Tag Table

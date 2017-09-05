@@ -714,7 +714,7 @@ fi
 
 PACKAGE=eb
 
-VERSION=2.3.5
+VERSION=2.3.6
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { echo "configure: error: source directory already configured; run "make distclean" there first" 1>&2; exit 1; }
@@ -797,7 +797,7 @@ fi
 
 
 
-LIBEB_VERSION_INFO=3:2:2
+LIBEB_VERSION_INFO=3:3:2
 
 
 MAILING_ADDRESS='m-kasahr@sra.co.jp'

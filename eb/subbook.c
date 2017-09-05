@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -267,7 +267,7 @@ eb_initialize_indexes(book)
 	 * Set index style.
 	 */
 	avail = eb_uint1(bufp + 10);
-	if ((global_avail == 0x00 && avail == 0x01) || global_avail == 0x02) {
+	if ((global_avail == 0x00 && avail == 0x02) || global_avail == 0x02) {
 	    unsigned int flags;
 
 	    flags = eb_uint3(bufp + 11);

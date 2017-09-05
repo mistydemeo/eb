@@ -32,6 +32,21 @@
 #include <unistd.h>
 #endif
 
+#ifndef HAVE_MEMCPY
+#define memcpy(d, s, n) bcopy((s), (d), (n))
+#ifdef __STDC__
+void *memchr(const void *, int, size_t);
+int memcmp(const void *, const void *, size_t);
+void *memmove(void *, const void *, size_t);
+void *memset(void *, int, size_t);
+#else /* not __STDC__ */
+char *memchr();
+int memcmp();
+char *memmove();
+char *memset();
+#endif /* not __STDC__ */
+#endif
+
 #include "eb.h"
 #include "error.h"
 #include "font.h"
@@ -83,7 +98,7 @@ eb_initialize_fonts(book)
 
 
 /*
- * For EB/EBG/EBXA, get font information in the current subbook.
+ * For EB*, get font information in the current subbook.
  *
  * If succeeded, 0 is returned.
  * Otherwise, -1 is returned and `eb_error' is set.
@@ -97,8 +112,9 @@ eb_initialize_eb_fonts(book)
     int len;
     int i;
 
-    for (i = 0, fnt = book->sub_current->fonts;
-	 i < book->sub_current->font_count; i++, fnt++) {
+    fnt = book->sub_current->fonts;
+    i = 0;
+    while (i < book->sub_current->font_count) {
 	/*
 	 * Read information from the `START' file.
 	 */
@@ -116,8 +132,17 @@ eb_initialize_eb_fonts(book)
 
 	/*
 	 * Set the information.
+	 * (If the length parameter is 0, the font is unavailable).
 	 */
 	len = eb_uint2(buf + 12);
+	if (len == 0) {
+	    book->sub_current->font_count--;
+	    if (i < book->sub_current->font_count) {
+		memcpy(fnt, fnt + 1,
+		    sizeof(EB_Font) * (book->sub_current->font_count - i));
+	    }
+	    continue;
+	}
 	fnt->width = eb_uint1(buf + 8);
 	fnt->height = eb_uint1(buf + 9);
 	fnt->start = eb_uint2(buf + 10);
@@ -130,6 +155,8 @@ eb_initialize_eb_fonts(book)
 	    if (0x7e < (fnt->end & 0xff))
 		fnt->end += 0xa3;
 	}
+	fnt++;
+	i++;
     }
 
     return 0;
@@ -154,8 +181,9 @@ eb_initialize_epwing_fonts(book)
     int len;
     int i;
     
-    for (i = 0, fnt = book->sub_current->fonts;
-	 i < book->sub_current->font_count; i++, fnt++) {
+    fnt = book->sub_current->fonts;
+    i = 0;
+    while (i < book->sub_current->font_count) {
 	/*
 	 * Open a font file.
 	 */
@@ -178,8 +206,17 @@ eb_initialize_epwing_fonts(book)
 
 	/*
 	 * Set the information.
+	 * (If the length parameter is 0, the font is unavailable).
 	 */
 	len = eb_uint2(buf + 12);
+	if (len == 0) {
+	    book->sub_current->font_count--;
+	    if (i < book->sub_current->font_count) {
+		memcpy(fnt, fnt + 1,
+		    sizeof(EB_Font) * (book->sub_current->font_count - i));
+	    }
+	    continue;
+	}
 	fnt->page = 1;
 	fnt->width = eb_uint1(buf + 8);
 	fnt->height = eb_uint1(buf + 9);
@@ -198,6 +235,9 @@ eb_initialize_epwing_fonts(book)
 	 * Close the font file.
 	 */
 	eb_zclose(&zip, file);
+
+	fnt++;
+	i++;
     }
 
     return 0;

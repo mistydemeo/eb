@@ -1,6 +1,11 @@
-Major changes in release 2.3.5:
+Major changes in release 2.3.6:
 
 * Fix a bug for "Nihongo Goi Taikei" (EPWING, Iwanami Shoten).
+* Fix a bug for "EDICT" (JIS X 4081, free distribution).
+
+Major changes in release 2.3.5:
+
+* No major change.
 
 Major changes in release 2.3.4:
 

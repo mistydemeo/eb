@@ -112,7 +112,7 @@ extern "C" {
 typedef int EB_Error_Code;
 
 /*
- * Store the current error code.
+ * The current error code.
  */
 extern EB_Error_Code eb_error;
 

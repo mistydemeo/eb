@@ -80,13 +80,13 @@ extern "C" {
 #define EB_NUM_HOOKS		42
 
 /*
- * The maximum length of a string in the text work buffer.
+ * The maximum length of a text work buffer.
  */
 #define EB_MAXLEN_TEXT_WORK	255
 
 /*
  * CPP macro version of get_uint1(), get_uint2(), get_uint4().
- * If EB_UINT_FUNC is defined, use function version, instead.
+ * If EB_UINT_FUNC is defined, function version is used, instead.
  */
 #if !defined(EB_UINT_FUNC) && !defined(EB_BUILD_LIBRARY)
 #define eb_uint1(p) (*(const unsigned char *)(p))
@@ -112,7 +112,7 @@ extern "C" {
 #endif /* EB_P */
 
 /*
- * Type for hook code.
+ * Hook code type.
  */
 typedef int EB_Hook_Code;
 
