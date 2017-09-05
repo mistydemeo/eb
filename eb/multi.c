@@ -34,13 +34,13 @@ eb_initialize_multi_searches(book)
 
     subbook = book->subbook_current;
 
-    for (i = 0, multi = subbook->multis; i < EB_MAX_KEYWORDS;
+    for (i = 0, multi = subbook->multis; i < EB_MAX_MULTI_SEARCHES;
 	 i++, multi++) {
 	eb_initialize_search(&multi->search);
 	multi->title[0] = '\0';
 	multi->entry_count = 0;
 	for (j = 0, entry = multi->entries;
-	     j < multi->entry_count; j++, entry++) {
+	     j < EB_MAX_MULTI_ENTRIES; j++, entry++) {
 	    eb_initialize_search(entry);
 	}
     }
