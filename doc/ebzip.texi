@@ -402,7 +402,8 @@ The intermediate directories, @file{/dict/german}, @file{/dict/french}
 and @file{/dict/italian}, are created by @code{ebzip} if missing.
 @file{CATALOG} and @file{CATALOGS} are simply copied to the output
 directory.
-@code{ebzip} ignores files and directories not supported by EB Library.
+@code{ebzip} ignores files and directories not supported by EB Library
+(i.e. not compressed or copied to the output directory).
 
 @c -------------------------------------------------------------------
 @node Compression Level, Test, Compression Example 2, Compression

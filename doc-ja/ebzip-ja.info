@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3beta3 版です。 EB ライブラリバージョン 3.3beta3 に対
-応しています。
+   この文書は第 3.3 版です。 EB ライブラリバージョン 3.3 に対応していま
+す。
 
 * Menu:
 
@@ -124,8 +124,8 @@ File: ebzip-ja.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Pre
 
 
 `ebzip' は起動時に、起動時に使用されたコマンド名とコマンドラインオプシ
-ョンから動作を決定します。 `ebzip' の一回の実行の間で、動作が変わること
-はありません。
+ョンから動作モードを決定します。 `ebzip' の一回の実行の間で、動作モード
+が変わることはありません。
 
    `ebzip' は `ebzip'、`ebunzip', `ebzipinfo' という異なる 3 つのコマ
 ンド名でインストールされます。 (DOS および Windows システム環境では、
@@ -137,16 +137,15 @@ File: ebzip-ja.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Pre
      38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzip
      38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzipinfo
 
-`ebunzip' という名前で起動された場合、動作を指定しないときは、 伸長を行
-います。 `ebzipinfo'
-という名前で起動された場合、動作を指定しないときは、
-情報出力を行います。 それ以外の場合、動作を指定しないと圧縮を行います。
+`ebunzip' という名前で起動された場合、オプションで動作モードを指定しな
+ければ伸長を行います。 `ebzipinfo' という名前で起動された場合、オプショ
+ンで動作モードを指定しなければ情報出力を行います。 それ以外の場合は、
+オプションで動作モードを指定しないと圧縮を行います。
 
-   加えて、コマンドラインオプションでも動作を決定することができます。
-そのオプションとは `--compress'(`-z') および `--uncompress'(`-u') と
-`--information'(`-i') です。
-オプションは、起動時の名前より優先します。 次の例では、いずれの行も動作
-モードは「伸長」になります。
+   コマンドラインオプションでも、動作モードを決定することができます。
+オプションは `--compress'(`-z') および `--uncompress'(`-u') と
+`--information'(`-i') です。 オプションは、起動時のコマンド名より優先し
+ます。 次の例では、いずれも動作モードが「伸長」になります。
 
      ebunzip
      ebzip --uncompress
@@ -291,7 +290,8 @@ File: ebzip-ja.info,  Node: Compression Example 2,  Next: Compression Level,  Pr
 中間のディレクトリ `/dict/german'、 `/dict/french'、 `/dict/italian'
 は、もし無ければ `ebzip' によって作成されます。 `CATALOG' と `CATALOGS'
 は、出力側のディレクトリにコピーされます。 EB ライブラリが対応していな
-いファイル、ディレクトリについては、 `ebzip' は無視します。
+いファイル、ディレクトリについては、 `ebzip' は無視します (圧縮もコピー
+もしません)。
 
 
 File: ebzip-ja.info,  Node: Compression Level,  Next: Test,  Prev: Compression Example 2,  Up: Compression
@@ -300,8 +300,8 @@ File: ebzip-ja.info,  Node: Compression Level,  Next: Test,  Prev: Compression E
 ==========
 
    `ebzip' は、0 〜 5 という 6 つの圧縮レベルを持っています。 圧縮レベ
-ル 0 は、圧縮・伸長が最も速いですが、圧縮率が最悪です。 圧縮レベル 5
-は、圧縮率が最良ですが、圧縮・伸長が最も遅くなります。 圧縮レベルは、
+ル 0 は、圧縮・伸長が最も速いですが、圧縮率は最悪です。 圧縮レベル 5
+は、圧縮率が最良ですが、圧縮・伸長は最も遅くなります。 圧縮レベルは、
 `--level' (`-l') オプションで設定します。
 
      % ebzip --level 2 --output-directory /dict /dict
@@ -382,7 +382,7 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
 `CATALOG(S)' ファイルの副本登録リストから削除しなくてはなりません (詳
 しくは *note `ebzip' との連携: (ebrefile-ja)Combination with ebzip.)。
 
-   副本同士で、異なる圧縮レベルを設定することは可能です (たとえば、
+   副本同士で、異なる圧縮レベルを設定することも可能です (たとえば、
 `english' と `french' はレベル 0 で圧縮し、 `german' はレベル 2 で圧縮
 する)。
 
@@ -392,8 +392,19 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
      % ebzip --skip-content sound,movie --subbook french /dict
 
 この例では、`ebzip' は音声と動画ファイルを飛ばします。 現在のところ、
-`ebzip' によって認識されるデータ型は、 `font'、`graphic'、`sound'、
-`movie' です。
+`ebzip' によって認識されるデータ型は、次の通りです。
+
+   * `font'
+     外字のフォント
+
+   * `graphic'
+     画像データ
+
+   * `sound'
+     音声データ
+
+   * `movie'
+     動画データ
 
 
 File: ebzip-ja.info,  Node: Overwrite Old Files,  Next: Compress Compressed Book,  Prev: Partial Compression,  Up: Compression
@@ -424,9 +435,9 @@ File: ebzip-ja.info,  Node: Compress Compressed Book,  Prev: Overwrite Old Files
 圧縮された書籍の圧縮
 ====================
 
-   S-EBXA および EPWING においても圧縮形式を定義しており、CD-ROM 書籍に
-はこれらの圧縮形式を実際に採用しているものがあります。 これらの圧縮形
-式は、ebzip の圧縮形式とは異なるものです。
+   S-EBXA および EPWING 規格においても圧縮形式を定義しており、CD-ROM 書
+籍にはこれらの圧縮形式を実際に採用しているものがあります。 これらの圧
+縮形式は、ebzip の圧縮形式とは異なるものです。
 
    `ebzip' は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
 することができますが、圧縮することはできません。
@@ -543,10 +554,9 @@ File: ebzip-ja.info,  Node: Uncompress Compressed Book,  Prev: Options for Uncom
 圧縮された書籍の伸長
 ====================
 
-   S-EBXA および EPWING では ebzip のものとは異なる圧縮形式を定義してお
-り、 CD-ROM
-書籍にはこれらの圧縮形式を実際に採用しているものがあります。 これらの圧
-縮形式は、ebzip の圧縮形式とは異なるものです。
+   S-EBXA および EPWING 規格では ebzip のものとは異なる圧縮形式を定義し
+ており、CD-ROM 書籍にはこれらの圧縮形式を実際に採用しているものがあり
+ます。 これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
 
    `ebzip' は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
 することができますが、圧縮することはできません。
@@ -690,9 +700,10 @@ File: ebzip-ja.info,  Node: Summary of Options,  Next: Comparision Result,  Prev
 `--skip-content 型'
      無視するファイルのデータ型を指定します。 型は、データ型の名前をカ
      ンマ (`,') で区切って並べたものでなくてはいけません。 `ebzip' が
-     現在のところ認識するデータ型の名前は、`font'、 `graphic'、
-     `sound'、`movie' です。 指定しなかったときは、どのファイルも無視さ
-     れません。
+     現在のところ認識するデータ型の名前は、 `font' (外字のフォント)、
+     `graphic' (画像データ)、 `sound' (音声データ)、 `movie'
+     (動画データ) です。 指定しなかったときは、どのファイルも無視されま
+     せん。
 
 `-S 副本'
 `--subbook 副本'
@@ -960,8 +971,8 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 3.3beta3 では、 1 (2
-     進数で 0001) だけが規定されています。
+     圧縮モードを表します。 EB ライブラリバージョン 3.3 では、1 (2 進数
+     で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
      圧縮レベルを表します。
@@ -999,31 +1010,31 @@ significant bit) を含んでいます。 `zip モード' が 1 で、 `圧縮レベル' が
 
 Tag Table:
 Node: Top1018
-Node: Introduction2532
-Node: Action and Command Name3884
-Node: Invoking ebzip5625
-Node: Compression6258
-Node: Compression Example 16806
-Node: Compression Example 28390
-Node: Compression Level9954
-Node: Test10449
-Node: Partial Compression10799
-Node: Overwrite Old Files13552
-Node: Compress Compressed Book14346
-Node: Uncompression15037
-Node: Uncompression Example15418
-Node: Options for Uncompression16943
-Node: Uncompress Compressed Book18117
-Node: Information18596
-Node: Information Example18935
-Node: Options for Information19624
-Node: Delete a Book20123
-Node: Summary of Options20419
-Node: Comparision Result23997
-Node: Compressed File Format26315
-Node: Format Overview26719
-Node: Data Part27573
-Node: Index Part30248
-Node: Header Part32915
+Node: Introduction2522
+Node: Action and Command Name3874
+Node: Invoking ebzip5671
+Node: Compression6304
+Node: Compression Example 16852
+Node: Compression Example 28436
+Node: Compression Level10026
+Node: Test10521
+Node: Partial Compression10871
+Node: Overwrite Old Files13719
+Node: Compress Compressed Book14513
+Node: Uncompression15208
+Node: Uncompression Example15589
+Node: Options for Uncompression17114
+Node: Uncompress Compressed Book18288
+Node: Information18770
+Node: Information Example19109
+Node: Options for Information19798
+Node: Delete a Book20297
+Node: Summary of Options20593
+Node: Comparision Result24234
+Node: Compressed File Format26552
+Node: Format Overview26956
+Node: Data Part27810
+Node: Index Part30485
+Node: Header Part33152
 
 End Tag Table

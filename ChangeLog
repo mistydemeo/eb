@@ -1,3 +1,14 @@
+2003-02-07  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.3.
+
+	* configure.ac (AC_INIT): Set VERSION to 3.3.
+
+2003-02-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/binary.c (eb_read_binary_generic): Fix a bug that it cannot
+	read an MPEG file correctly.
+
 2003-01-12  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.3beta3.

@@ -976,6 +976,7 @@ eb_read_binary_generic(book, binary_max_length, binary, binary_length)
     EB_Binary_Context *context;
     char *binary_p = binary;
     size_t read_length = 0;
+    ssize_t read_result;
 
     LOG(("in: eb_read_binary_generic(book=%d, binary_max_length=%ld)",
 	(int)book->code, (long)binary_max_length));
@@ -1004,13 +1005,14 @@ eb_read_binary_generic(book, binary_max_length, binary, binary_length)
     else
 	read_length = context->size - context->offset;
 
-    if (zio_read(context->zio, binary_p, read_length) != read_length) {
+    read_result = zio_read(context->zio, binary_p, read_length);
+    if ((0 < context->size && read_result != read_length) || read_result < 0) {
 	error_code = EB_ERR_FAIL_READ_BINARY;
 	goto failed;
     }
 
-    *binary_length += read_length;
-    context->offset += read_length;
+    *binary_length += read_result;
+    context->offset += read_result;
 
   succeeded:
     LOG(("out: eb_read_binary_generic(binary_length=%ld) = %s",

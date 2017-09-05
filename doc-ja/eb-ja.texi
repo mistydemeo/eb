@@ -109,6 +109,7 @@ EB ライブラリの特徴
 
 * Compilation Simple Way::      てっとり早いコンパイル方法
 * Compilation with Autoconf::   Autoconf を併用したコンパイル方法
+* Debug EB Library::            EB ライブラリ本体のデバッグ
 
 ライブラリの初期化と後始末
 
@@ -546,6 +547,7 @@ Autoconf を単体で使用してもヘッダファイルの問題は解決できますが、
 @menu
 * Compilation Simple Way::      てっとり早いコンパイル方法
 * Compilation with Autoconf::   Autoconf を併用したコンパイル方法
+* Debug EB Library::            EB ライブラリ本体のデバッグ
 @end menu
 
 @c -------------------------------------------------------------------
@@ -651,7 +653,7 @@ C コンパイラの使い方に関しての詳細は、C コンパイラのマニュアルを参照
 して下さい。
 
 @c -------------------------------------------------------------------
-@node Compilation with Autoconf,  , Compilation Simple Way, Compilation
+@node Compilation with Autoconf, Debug EB Library, Compilation Simple Way, Compilation
 @section Autoconf を併用したコンパイル方法
 
 作業の前に、Autoconf, Automake, Libtool は、あらかじめインストールして
@@ -726,6 +728,77 @@ INCLUDES = $(EBCONF_EBINCS)
 @noindent
 (@code{program_LDFLAGS} の @code{program} のところは、
 アプリケーションプログラムの実際のコマンド名にします。)
+
+@c -------------------------------------------------------------------
+@node Debug EB Library,  , Compilation with Autoconf, Compilation
+@section EB ライブラリ本体のデバッグ
+
+「自分が作ったアプリケーションが正しく動かないのは、ひょっとすると
+EB ライブラリのバグが原因ではないか?」という疑問を抱き、EB ライブラリ
+の挙動を確認したいと思うことがあるかも知れません。
+
+そのような場合は、環境変数 @code{EB_DEBUG} をセットした状態で
+アプリケーションを実行してみて下さい。
+EB ライブラリは標準エラー出力に、次のようなログを (かなり大量ですが)
+出力するようになります。
+
+@example
+[EB] in: eb_set_font(book=0, font_code=0)
+[EB] in: eb_load_narrow_font(book=0)
+[EB] out: eb_load_narrow_font()
+[EB] in: eb_load_wide_font(book=0)
+[EB] out: eb_load_wide_font()
+[EB] out: eb_set_font() = EB_SUCCESS
+@end example
+
+これらのログは、関数の呼び出し時の引数列、および関数からの戻り値を
+示しています。
+次に示す @code{ebfixlog} という Perl5 スクリプトを使うと、ログを整形
+することができます。
+
+@example
+#! /usr/bin/perl
+
+use Getopt::Std;
+getopts('z') or die "Usage: $0 [-z] [file...]\n";
+
+$indent = 0;
+while (<>) @{
+    chomp;
+    if (/^\[EB\] (.*)$/) @{
+        $message = $1;
+        next if (!$opt_z && $message =~ /^\S+: zio_/);
+        $indent-- if ($message =~ /^out: /);
+        $_ = '[EB] ' . (' ' x ($indent * 2)) . $message;
+        $indent++ if ($message =~ /^in: /);
+    @}
+    print $_, "\n";
+@}
+@end example
+
+@code{ebfixlog} は、コマンド行の引数として与えられたファイル (引数が
+指定されなければ標準入力) からメッセージデータを読み込み、次のように
+字下げして出力します。
+
+@example
+[EB] in: eb_set_font(book=0, font_code=0)
+[EB]   in: eb_load_narrow_font(book=0)
+[EB]   out: eb_load_narrow_font()
+[EB]   in: eb_load_wide_font(book=0)
+[EB]   out: eb_load_wide_font()
+[EB] out: eb_set_font() = EB_SUCCESS
+@end example
+
+通常 @code{ebfixlog} スクリプトは、zio と呼ばれる、EB ライブラリで
+ファイル入出力を受け持つ処理部のログは読み捨てるようになっています。
+これにより、ログの量がかなり減ります。
+
+zio は、EB ライブラリでもっとも低レベルの処理部で、頻繁に呼び出されます。
+問題の原因を調べる際も、まずは読み捨てた方がライブラリの内部動作を追跡
+しやすいでしょう。
+
+@code{ebfixlog} の @samp{-z} オプションを使うと、zio のメッセージを
+読み捨てずに出力するようになります。
 
 @c ===================================================================
 @node Init and Exit, EB_Book, Compilation, Top
@@ -4340,10 +4413,10 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 は 4 です。
 @code{argv[0]} はエスケープシーケンスのコードそのもので、@samp{0x1f32}
 か @samp{0x1f44} のいずれかになります。
-@code{argv[2]} と @code{argv[3]} は、図版の幅と高さ (ピクセル数) を意味
+@code{argv[2]} と @code{argv[3]} は、図版の高さと幅 (ピクセル数) を意味
 します。
 ただし、電子ブックのモノクロ図版 (最初の引数が @samp{0x1f32} の場合) 
-には、図版の幅と高さの情報が欠けているので、値はどちらも 0 になります。
+には、図版の高さと幅の情報が欠けているので、値はどちらも 0 になります。
 @code{argv[1]} の意味は不明です。
 
 @code{EB_HOOK_END_MONO_GRAPHIC} が、フック関数に渡す @code{argc} は 3

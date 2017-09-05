@@ -170,8 +170,8 @@ CD-ROM 書籍の出版社がハードディスク (および他の補助記憶装置) に書籍を
 
 @noindent
 @code{ebzip} は起動時に、起動時に使用されたコマンド名とコマンドライン
-オプションから動作を決定します。
-@code{ebzip} の一回の実行の間で、動作が変わることはありません。
+オプションから動作モードを決定します。
+@code{ebzip} の一回の実行の間で、動作モードが変わることはありません。
 
 @code{ebzip} は @code{ebzip}、@code{ebunzip}, @code{ebzipinfo} という
 異なる 3 つのコマンド名でインストールされます。
@@ -189,18 +189,17 @@ CD-ROM 書籍の出版社がハードディスク (および他の補助記憶装置) に書籍を
 @end example
 
 @noindent
-@code{ebunzip} という名前で起動された場合、動作を指定しないときは、
-伸長を行います。
-@code{ebzipinfo} という名前で起動された場合、動作を指定しないときは、
-情報出力を行います。
-それ以外の場合、動作を指定しないと圧縮を行います。
+@code{ebunzip} という名前で起動された場合、オプションで動作モードを
+指定しなければ伸長を行います。
+@code{ebzipinfo} という名前で起動された場合、オプションで動作モード
+を指定しなければ情報出力を行います。
+それ以外の場合は、オプションで動作モードを指定しないと圧縮を行います。
 
-加えて、コマンドラインオプションでも動作を決定することができます。
-そのオプションとは @samp{--compress}(@samp{-z}) および
-@samp{--uncompress}(@samp{-u}) と @samp{--information}(@samp{-i}) で
-す。
-オプションは、起動時の名前より優先します。
-次の例では、いずれの行も動作モードは「伸長」になります。
+コマンドラインオプションでも、動作モードを決定することができます。
+オプションは @samp{--compress}(@samp{-z}) および
+@samp{--uncompress}(@samp{-u}) と @samp{--information}(@samp{-i}) です。
+オプションは、起動時のコマンド名より優先します。
+次の例では、いずれも動作モードが「伸長」になります。
 
 @example
 @group
@@ -402,15 +401,15 @@ CD-ROM 書籍がすでに @file{/dict} にコピーされているものの、まだ圧縮
 @file{CATALOG} と @file{CATALOGS} は、出力側のディレクトリにコピー
 されます。
 EB ライブラリが対応していないファイル、ディレクトリについては、
-@code{ebzip} は無視します。
+@code{ebzip} は無視します (圧縮もコピーもしません)。
 
 @c -------------------------------------------------------------------
 @node Compression Level, Test, Compression Example 2, Compression
 @section 圧縮レベル
 
 @code{ebzip} は、0 〜 5 という 6 つの圧縮レベルを持っています。
-圧縮レベル 0 は、圧縮・伸長が最も速いですが、圧縮率が最悪です。
-圧縮レベル 5 は、圧縮率が最良ですが、圧縮・伸長が最も遅くなります。
+圧縮レベル 0 は、圧縮・伸長が最も速いですが、圧縮率は最悪です。
+圧縮レベル 5 は、圧縮率が最良ですが、圧縮・伸長は最も遅くなります。
 圧縮レベルは、@samp{--level} (@samp{-l}) オプションで設定します。
 
 @example
@@ -514,7 +513,7 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 の副本登録リストから削除しなくてはなりません (詳しくは
 @pxref{Combination with ebzip, , @code{ebzip} との連携, ebrefile-ja, ebrefile-ja})。
 
-副本同士で、異なる圧縮レベルを設定することは可能です
+副本同士で、異なる圧縮レベルを設定することも可能です
 (たとえば、@code{english} と @code{french} はレベル 0 で圧縮し、
 @code{german} はレベル 2 で圧縮する)。
 
@@ -528,8 +527,22 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 
 @noindent
 この例では、@code{ebzip} は音声と動画ファイルを飛ばします。
-現在のところ、@code{ebzip} によって認識されるデータ型は、
-@code{font}、@code{graphic}、@code{sound}、@code{movie} です。
+現在のところ、@code{ebzip} によって認識されるデータ型は、次の通りです。
+
+@itemize @bullet
+@item @code{font}
+@*
+外字のフォント
+@item @code{graphic}
+@*
+画像データ
+@item @code{sound}
+@*
+音声データ
+@item @code{movie}
+@*
+動画データ
+@end itemize
 
 @c -------------------------------------------------------------------
 @node Overwrite Old Files, Compress Compressed Book, Partial Compression, Compression
@@ -561,8 +574,8 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @node Compress Compressed Book,  , Overwrite Old Files, Compression
 @section 圧縮された書籍の圧縮
 
-S-EBXA および EPWING においても圧縮形式を定義しており、CD-ROM 書籍には
-これらの圧縮形式を実際に採用しているものがあります。
+S-EBXA および EPWING 規格においても圧縮形式を定義しており、CD-ROM 書籍
+にはこれらの圧縮形式を実際に採用しているものがあります。
 これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
 
 @code{ebzip} は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
@@ -702,8 +715,8 @@ S-EBXA および EPWING においても圧縮形式を定義しており、CD-ROM 書籍には
 @node Uncompress Compressed Book,  , Options for Uncompression, Uncompression
 @section 圧縮された書籍の伸長
 
-S-EBXA および EPWING では ebzip のものとは異なる圧縮形式を定義しており、
-CD-ROM 書籍にはこれらの圧縮形式を実際に採用しているものがあります。
+S-EBXA および EPWING 規格では ebzip のものとは異なる圧縮形式を定義して
+おり、CD-ROM 書籍にはこれらの圧縮形式を実際に採用しているものがあります。
 これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
 
 @code{ebzip} は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
@@ -865,8 +878,9 @@ compressed: 12288 -> 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 無視するファイルのデータ型を指定します。
 @var{型} は、データ型の名前をカンマ (@samp{,}) で区切って並べたものでな
 くてはいけません。
-@code{ebzip} が現在のところ認識するデータ型の名前は、@code{font}、
-@code{graphic}、@code{sound}、@code{movie} です。
+@code{ebzip} が現在のところ認識するデータ型の名前は、
+@code{font} (外字のフォント)、@code{graphic} (画像データ)、
+@code{sound} (音声データ)、@code{movie} (動画データ) です。
 指定しなかったときは、どのファイルも無視されません。
 
 @item -S @var{副本}

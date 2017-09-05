@@ -1,3 +1,7 @@
+Major changes in release 3.3.
+
+* Fix a bug of eb_read_binary_mpeg().
+
 Major changes in release 3.3beta3.
 
 * Fix multi search.

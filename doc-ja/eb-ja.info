@@ -26,7 +26,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3beta3 版です。
+   この文書は第 3.3 版です。
 
 * Menu:
 
@@ -61,6 +61,7 @@ EB ライブラリの特徴
 
 * Compilation Simple Way::      てっとり早いコンパイル方法
 * Compilation with Autoconf::   Autoconf を併用したコンパイル方法
+* Debug EB Library::            EB ライブラリ本体のデバッグ
 
 ライブラリの初期化と後始末
 
@@ -168,10 +169,10 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 3.3beta3 に対応しています。 本書
-の内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成す
-るには、お使用いのシステムに EB ライブラリバージョン 3.3beta3 と C コン
-パイラをインストールしておいて下さい。
+   この文書は、EB ライブラリバージョン 3.3 に対応しています。 本書の内
+容に沿って EB ライブラリを使ったアプリケーションプログラムを作成するに
+は、お使用いのシステムに EB ライブラリバージョン 3.3 と C コンパイラを
+インストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
 Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
@@ -501,6 +502,7 @@ Autoconf を使用するのは大変です。 そこでまず、Autoconf を使わずにてっと
 
 * Compilation Simple Way::      てっとり早いコンパイル方法
 * Compilation with Autoconf::   Autoconf を併用したコンパイル方法
+* Debug EB Library::            EB ライブラリ本体のデバッグ
 
 
 File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autoconf,  Prev: Compilation,  Up: Compilation
@@ -522,7 +524,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 3.3beta3 のソースードを展開します。
+  1. EB ライブラリ 3.3 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -589,7 +591,7 @@ iconv ライブラリ
 コンパイラのマニュアルを参照して下さい。
 
 
-File: eb-ja.info,  Node: Compilation with Autoconf,  Prev: Compilation Simple Way,  Up: Compilation
+File: eb-ja.info,  Node: Compilation with Autoconf,  Next: Debug EB Library,  Prev: Compilation Simple Way,  Up: Compilation
 
 Autoconf を併用したコンパイル方法
 =================================
@@ -643,6 +645,71 @@ Libtool パッケージが、ソースコードのディレクトリにコピーされます。
 
 (`program_LDFLAGS' の `program' のところは、 アプリケーションプログラム
 の実際のコマンド名にします。)
+
+
+File: eb-ja.info,  Node: Debug EB Library,  Prev: Compilation with Autoconf,  Up: Compilation
+
+EB ライブラリ本体のデバッグ
+===========================
+
+   「自分が作ったアプリケーションが正しく動かないのは、ひょっとすると
+EB ライブラリのバグが原因ではないか?」という疑問を抱き、EB ライブラリ
+の挙動を確認したいと思うことがあるかも知れません。
+
+   そのような場合は、環境変数 `EB_DEBUG' をセットした状態でアプリケー
+ションを実行してみて下さい。 EB ライブラリは標準エラー出力に、次のよう
+なログを (かなり大量ですが) 出力するようになります。
+
+     [EB] in: eb_set_font(book=0, font_code=0)
+     [EB] in: eb_load_narrow_font(book=0)
+     [EB] out: eb_load_narrow_font()
+     [EB] in: eb_load_wide_font(book=0)
+     [EB] out: eb_load_wide_font()
+     [EB] out: eb_set_font() = EB_SUCCESS
+
+   これらのログは、関数の呼び出し時の引数列、および関数からの戻り値を
+示しています。 次に示す `ebfixlog' という Perl5 スクリプトを使うと、ロ
+グを整形することができます。
+
+     #! /usr/bin/perl
+     
+     use Getopt::Std;
+     getopts('z') or die "Usage: $0 [-z] [file...]\n";
+     
+     $indent = 0;
+     while (<>) {
+         chomp;
+         if (/^\[EB\] (.*)$/) {
+             $message = $1;
+             next if (!$opt_z && $message =~ /^\S+: zio_/);
+             $indent-- if ($message =~ /^out: /);
+             $_ = '[EB] ' . (' ' x ($indent * 2)) . $message;
+             $indent++ if ($message =~ /^in: /);
+         }
+         print $_, "\n";
+     }
+
+   `ebfixlog' は、コマンド行の引数として与えられたファイル (引数が指定
+されなければ標準入力) からメッセージデータを読み込み、次のように字下げ
+して出力します。
+
+     [EB] in: eb_set_font(book=0, font_code=0)
+     [EB]   in: eb_load_narrow_font(book=0)
+     [EB]   out: eb_load_narrow_font()
+     [EB]   in: eb_load_wide_font(book=0)
+     [EB]   out: eb_load_wide_font()
+     [EB] out: eb_set_font() = EB_SUCCESS
+
+   通常 `ebfixlog' スクリプトは、zio と呼ばれる、EB ライブラリでファイ
+ル入出力を受け持つ処理部のログは読み捨てるようになっています。 これによ
+り、ログの量がかなり減ります。
+
+   zio は、EB ライブラリでもっとも低レベルの処理部で、頻繁に呼び出され
+ます。 問題の原因を調べる際も、まずは読み捨てた方がライブラリの内部動作
+を追跡しやすいでしょう。
+
+   `ebfixlog' の `-z' オプションを使うと、zio のメッセージを読み捨てず
+に出力するようになります。
 
 
 File: eb-ja.info,  Node: Init and Exit,  Next: EB_Book,  Prev: Compilation,  Up: Top
@@ -3735,8 +3802,8 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      フック `EB_HOOK_BEGIN_MONO_GRAPHIC' が、フック関数に渡す `argc' は
      4 です。 `argv[0]' はエスケープシーケンスのコードそのもので、
      `0x1f32' か `0x1f44' のいずれかになります。 `argv[2]' と `argv[3]'
-     は、図版の幅と高さ (ピクセル数) を意味します。 ただし、電子ブック
-     のモノクロ図版 (最初の引数が `0x1f32' の場合) には、図版の幅と高さ
+     は、図版の高さと幅 (ピクセル数) を意味します。 ただし、電子ブック
+     のモノクロ図版 (最初の引数が `0x1f32' の場合) には、図版の高さと幅
      の情報が欠けているので、値はどちらも 0 になります。 `argv[1]' の意
      味は不明です。
 
@@ -3758,7 +3825,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_GRAY_GRAPHIC:
  - EB_HOOK_END_GRAY_GRAPHIC:
      これらのフック名称は、グレースケール図版のために予約されていますが、
-     EB ライブラリ 3.3beta3 ではまだ対応していません。
+     EB ライブラリ 3.3 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_COLOR_BMP:
  - EB_HOOK_BEGIN_COLOR_JPEG:
@@ -5874,81 +5941,82 @@ File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Index
 
 Tag Table:
 Node: Top1012
-Node: Introduction5063
-Node: Electronic Book and EPWING6910
-Node: Construction of This Book8025
-Node: Features9164
-Node: Header Files10147
-Node: Character Code11086
-Node: Compressed Book15127
-Node: Traditional System16100
-Node: Compilation17120
-Node: Compilation Simple Way18473
-Node: Compilation with Autoconf21860
-Node: Init and Exit23932
-Node: Init and Exit Sample24720
-Node: Init and Exit Functions25764
-Node: EB_Book27426
-Node: EB_Book Explanation28098
-Node: EB_Book Sample30353
-Node: EB_Book Data Types32820
-Node: EB_Book Functions35085
-Node: Error Handling39441
-Node: Error Code and Message40278
-Node: Tolerance to Error42031
-Node: Error Data Types43384
-Node: Error Code List44105
-Node: Error Functions52092
-Node: Subbook53749
-Node: Subbook Code55020
-Node: Current Subbook56630
-Node: Subbook Sample58665
-Node: Subbook Data Types61235
-Node: Subbook Functions61974
-Node: Search67763
-Node: Word Search68855
-Node: Keyword Search71735
-Node: Multi Search73191
-Node: EB_Hit76658
-Node: Get Remained Entries78244
-Node: Search Data Types79538
-Node: Search Functions81470
-Node: Text Data92964
-Node: Seek and Read Text Data94421
-Node: Text Data Format98544
-Node: Hook101231
-Node: Hook and Character Code105388
-Node: Copyright Notice107482
-Node: Menu108627
-Node: Multi Candidates112536
-Node: Stop Code Issue116473
-Node: Text Data Sample118897
-Node: Text Data Types123328
-Node: Hook Function Details125181
-Node: Hook Code List127555
-Node: Hookset Access Functions144286
-Node: Builtin Hook Functions147362
-Node: Text Data Functions150538
-Node: Local Character167327
-Node: Narrow & Wide Font169080
-Node: Font Size and Font Code171217
-Node: Current Font Height172778
-Node: Get Font175350
-Node: Convert Font177979
-Node: Local Character in Text179142
-Node: Font Data Types179798
-Node: Font Constants180541
-Node: Font Functions184599
-Node: Font Sample198685
-Node: Binary Data203378
-Node: Monochrome Image205383
-Node: Color Image208198
-Node: WAVE Sound210615
-Node: MPEG Movie211800
-Node: Binary Data Functions212996
-Node: Index214247
-Node: Data Type Index214471
-Node: Function Index215320
-Node: Variable Index221812
+Node: Introduction5118
+Node: Electronic Book and EPWING6955
+Node: Construction of This Book8070
+Node: Features9209
+Node: Header Files10192
+Node: Character Code11131
+Node: Compressed Book15172
+Node: Traditional System16145
+Node: Compilation17165
+Node: Compilation Simple Way18578
+Node: Compilation with Autoconf21960
+Node: Debug EB Library24057
+Node: Init and Exit26356
+Node: Init and Exit Sample27144
+Node: Init and Exit Functions28188
+Node: EB_Book29850
+Node: EB_Book Explanation30522
+Node: EB_Book Sample32777
+Node: EB_Book Data Types35244
+Node: EB_Book Functions37509
+Node: Error Handling41865
+Node: Error Code and Message42702
+Node: Tolerance to Error44455
+Node: Error Data Types45808
+Node: Error Code List46529
+Node: Error Functions54516
+Node: Subbook56173
+Node: Subbook Code57444
+Node: Current Subbook59054
+Node: Subbook Sample61089
+Node: Subbook Data Types63659
+Node: Subbook Functions64398
+Node: Search70187
+Node: Word Search71279
+Node: Keyword Search74159
+Node: Multi Search75615
+Node: EB_Hit79082
+Node: Get Remained Entries80668
+Node: Search Data Types81962
+Node: Search Functions83894
+Node: Text Data95388
+Node: Seek and Read Text Data96845
+Node: Text Data Format100968
+Node: Hook103655
+Node: Hook and Character Code107812
+Node: Copyright Notice109906
+Node: Menu111051
+Node: Multi Candidates114960
+Node: Stop Code Issue118897
+Node: Text Data Sample121321
+Node: Text Data Types125752
+Node: Hook Function Details127605
+Node: Hook Code List129979
+Node: Hookset Access Functions146705
+Node: Builtin Hook Functions149781
+Node: Text Data Functions152957
+Node: Local Character169746
+Node: Narrow & Wide Font171499
+Node: Font Size and Font Code173636
+Node: Current Font Height175197
+Node: Get Font177769
+Node: Convert Font180398
+Node: Local Character in Text181561
+Node: Font Data Types182217
+Node: Font Constants182960
+Node: Font Functions187018
+Node: Font Sample201104
+Node: Binary Data205797
+Node: Monochrome Image207802
+Node: Color Image210617
+Node: WAVE Sound213034
+Node: MPEG Movie214219
+Node: Binary Data Functions215415
+Node: Index216666
+Node: Data Type Index216890
+Node: Function Index217739
+Node: Variable Index224231
 
 End Tag Table
