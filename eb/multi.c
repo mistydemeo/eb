@@ -578,11 +578,14 @@ eb_search_multi(book, multi_id, input_words)
     eb_lock(&book->lock);
     LOG(("in: eb_search_multi(book=%d, multi_id=%d, input_words=[below])",
 	(int)book->code, (int)multi_id));
-#ifdef ENABLE_DEBUG
-    for (i = 0; i < EB_MAX_KEYWORDS && input_words[i] != NULL; i++)
-	LOG(("    input_words[%d]=%s", i, eb_quoted_string(input_words[i])));
-    LOG(("    input_words[%d]=NULL", i));
-#endif
+
+    if (eb_log_flag) {
+	for (i = 0; i < EB_MAX_KEYWORDS && input_words[i] != NULL; i++) {
+	    LOG(("    input_words[%d]=%s", i,
+		eb_quoted_string(input_words[i])));
+	}
+	LOG(("    input_words[%d]=NULL", i));
+    }
 
     /*
      * Current subbook must have been set.

@@ -69,6 +69,8 @@ EBCONF_INTLINCS = @EBCONF_INTLINCS@
 EBCONF_INTLLIBS = @EBCONF_INTLLIBS@
 EBCONF_ZLIBINCS = @EBCONF_ZLIBINCS@
 EBCONF_ZLIBLIBS = @EBCONF_ZLIBLIBS@
+EB_VERSION_MAJOR = @EB_VERSION_MAJOR@
+EB_VERSION_MINOR = @EB_VERSION_MINOR@
 ECHO = @ECHO@
 ENABLE_NLS = @ENABLE_NLS@
 ENABLE_PTHREAD = @ENABLE_PTHREAD@
@@ -102,15 +104,17 @@ install_sh = @install_sh@
 localedir = @localedir@
 
 noinst_LIBRARIES = libebutils.a
-libebutils_a_SOURCES = ebutils.c getopt.c getopt1.c getumask.c makedir.c \
+libebutils_a_SOURCES = ebutils.c getopt.c getumask.c makedir.c \
 	samefile.c yesno.c
 
 libebutils_a_LIBADD = @LIBOBJS@
 
+dist_noinst_HEADERS = getopt.h getumask.h makedir.h samefile.h yesno.h
+nodist_noinst_HEADERS = ebutils.h
+
 EXTRA_DIST = getopt_long.pl ebutils.h.in
 CLEANFILES = stamp-ebutils-h ebutils.h
 BUILT_SOURCES = ebutils.h
-noinst_HEADERS = getopt.h getumask.h makedir.h samefile.h yesno.h
 
 INCLUDES = -I$(top_srcdir) @INTLINCS@
 subdir = libebutils
@@ -122,8 +126,8 @@ LIBRARIES = $(noinst_LIBRARIES)
 libebutils_a_AR = $(AR) cru
 libebutils_a_DEPENDENCIES = @LIBOBJS@
 am_libebutils_a_OBJECTS = ebutils.$(OBJEXT) getopt.$(OBJEXT) \
-	getopt1.$(OBJEXT) getumask.$(OBJEXT) makedir.$(OBJEXT) \
-	samefile.$(OBJEXT) yesno.$(OBJEXT)
+	getumask.$(OBJEXT) makedir.$(OBJEXT) samefile.$(OBJEXT) \
+	yesno.$(OBJEXT)
 libebutils_a_OBJECTS = $(am_libebutils_a_OBJECTS)
 
 DEFS = @DEFS@
@@ -133,10 +137,10 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 @AMDEP_TRUE@DEP_FILES = $(DEPDIR)/ebutils.Po $(DEPDIR)/getopt.Po \
-@AMDEP_TRUE@	$(DEPDIR)/getopt1.Po $(DEPDIR)/getumask.Po \
-@AMDEP_TRUE@	$(DEPDIR)/makedir.Po $(DEPDIR)/memset.Po \
-@AMDEP_TRUE@	$(DEPDIR)/samefile.Po $(DEPDIR)/strcasecmp.Po \
-@AMDEP_TRUE@	$(DEPDIR)/strerror.Po $(DEPDIR)/yesno.Po
+@AMDEP_TRUE@	$(DEPDIR)/getumask.Po $(DEPDIR)/makedir.Po \
+@AMDEP_TRUE@	$(DEPDIR)/memset.Po $(DEPDIR)/samefile.Po \
+@AMDEP_TRUE@	$(DEPDIR)/strcasecmp.Po $(DEPDIR)/strerror.Po \
+@AMDEP_TRUE@	$(DEPDIR)/yesno.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -146,9 +150,9 @@ LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
 CFLAGS = @CFLAGS@
 DIST_SOURCES = $(libebutils_a_SOURCES)
-HEADERS = $(noinst_HEADERS)
+HEADERS = $(dist_noinst_HEADERS) $(nodist_noinst_HEADERS)
 
-DIST_COMMON = $(noinst_HEADERS) Makefile.am Makefile.in memset.c \
+DIST_COMMON = $(dist_noinst_HEADERS) Makefile.am Makefile.in memset.c \
 	strcasecmp.c strerror.c
 SOURCES = $(libebutils_a_SOURCES)
 
@@ -191,7 +195,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/ebutils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/getopt.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/getopt1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/getumask.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/makedir.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/memset.Po@am__quote@
@@ -222,6 +225,40 @@ distclean-depend:
 	$(LTCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
 CCDEPMODE = @CCDEPMODE@
 uninstall-info-am:
+install-dist_noinstHEADERS: $(dist_noinst_HEADERS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(noinstdir)
+	@list='$(dist_noinst_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_HEADER) $$d$$p $(DESTDIR)$(noinstdir)/$$f"; \
+	  $(INSTALL_HEADER) $$d$$p $(DESTDIR)$(noinstdir)/$$f; \
+	done
+
+uninstall-dist_noinstHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(dist_noinst_HEADERS)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(noinstdir)/$$f"; \
+	  rm -f $(DESTDIR)$(noinstdir)/$$f; \
+	done
+install-nodist_noinstHEADERS: $(nodist_noinst_HEADERS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(noinstdir)
+	@list='$(nodist_noinst_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_HEADER) $$d$$p $(DESTDIR)$(noinstdir)/$$f"; \
+	  $(INSTALL_HEADER) $$d$$p $(DESTDIR)$(noinstdir)/$$f; \
+	done
+
+uninstall-nodist_noinstHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(nodist_noinst_HEADERS)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(noinstdir)/$$f"; \
+	  rm -f $(DESTDIR)$(noinstdir)/$$f; \
+	done
 
 tags: TAGS
 
@@ -281,6 +318,7 @@ check: check-am
 all-am: Makefile $(LIBRARIES) $(HEADERS)
 
 installdirs:
+	$(mkinstalldirs) $(DESTDIR)$(noinstdir) $(DESTDIR)$(noinstdir)
 
 install: install-am
 install-exec: install-exec-am
@@ -325,7 +363,7 @@ info: info-am
 
 info-am:
 
-install-data-am:
+install-data-am: install-dist_noinstHEADERS install-nodist_noinstHEADERS
 
 install-exec-am:
 
@@ -344,18 +382,22 @@ mostlyclean: mostlyclean-am
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-dist_noinstHEADERS uninstall-info-am \
+	uninstall-nodist_noinstHEADERS
 
 .PHONY: GTAGS all all-am check check-am clean clean-generic \
 	clean-libtool clean-noinstLIBRARIES distclean distclean-compile \
 	distclean-depend distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am info info-am install \
-	install-am install-data install-data-am install-exec \
-	install-exec-am install-info install-info-am install-man \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	tags uninstall uninstall-am uninstall-info-am
+	install-am install-data install-data-am \
+	install-dist_noinstHEADERS install-exec install-exec-am \
+	install-info install-info-am install-man \
+	install-nodist_noinstHEADERS install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool tags uninstall \
+	uninstall-am uninstall-dist_noinstHEADERS uninstall-info-am \
+	uninstall-nodist_noinstHEADERS
 
 
 ebutils.h: stamp-ebutils-h

@@ -11,9 +11,6 @@
 /* Define if EB Library is built with pthread support. */
 #undef EBCONF_ENABLE_PTHREAD
 
-/* Define if enabling debug codes. */
-#undef ENABLE_DEBUG
-
 /* Define if NLS is requested */
 #undef ENABLE_NLS
 

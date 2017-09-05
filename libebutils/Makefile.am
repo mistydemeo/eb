@@ -1,12 +1,14 @@
 noinst_LIBRARIES = libebutils.a
-libebutils_a_SOURCES = ebutils.c getopt.c getopt1.c getumask.c makedir.c \
+libebutils_a_SOURCES = ebutils.c getopt.c getumask.c makedir.c \
 	samefile.c yesno.c
 libebutils_a_LIBADD = @LIBOBJS@
+
+dist_noinst_HEADERS = getopt.h getumask.h makedir.h samefile.h yesno.h
+nodist_noinst_HEADERS = ebutils.h
 
 EXTRA_DIST = getopt_long.pl ebutils.h.in
 CLEANFILES = stamp-ebutils-h ebutils.h
 BUILT_SOURCES = ebutils.h
-noinst_HEADERS = getopt.h getumask.h makedir.h samefile.h yesno.h
 
 INCLUDES = -I$(top_srcdir) @INTLINCS@
 

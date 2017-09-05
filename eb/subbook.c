@@ -285,7 +285,7 @@ eb_load_subbook_indexes(book)
     /*
      * Read the index table in the subbook.
      */
-    if (zio_lseek(&subbook->text_zio, 0, SEEK_SET) < 0) {
+    if (zio_lseek(&subbook->text_zio, (off_t)0, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_TEXT;
 	goto failed;
     }
@@ -472,10 +472,10 @@ eb_load_subbook_indexes(book)
 	&& sebxa_zip_index.start_page != 0
 	&& sebxa_zip_text.start_page != 0) {
 	zio_set_sebxa_mode(&subbook->text_zio,
-	    (sebxa_zip_index.start_page - 1) * EB_SIZE_PAGE,
-	    (sebxa_zip_text.start_page - 1) * EB_SIZE_PAGE,
-	    (subbook->text.start_page - 1) * EB_SIZE_PAGE,
-	    subbook->text.end_page * EB_SIZE_PAGE - 1);
+	    (off_t)(sebxa_zip_index.start_page - 1) * EB_SIZE_PAGE,
+	    (off_t)(sebxa_zip_text.start_page - 1) * EB_SIZE_PAGE,
+	    (off_t)(subbook->text.start_page - 1) * EB_SIZE_PAGE,
+	    (off_t)subbook->text.end_page * EB_SIZE_PAGE - 1);
     }
 
     eb_finalize_search(&sebxa_zip_index);

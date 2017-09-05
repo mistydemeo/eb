@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2001
+ * Copyright (c) 2001, 02
  *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,9 +19,9 @@
 
 #if defined(__STDC__) || defined(WIN32)
 #include <stdarg.h>
-#else /* not (__STDC__ || defined(WIN32)) */
+#else
 #include <varargs.h>
-#endif /* not (__STDC__ || defined(WIN32)) */
+#endif
 
 
 /*
@@ -30,6 +30,11 @@
 #ifdef ENABLE_PTHREAD
 static pthread_mutex_t log_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
+
+/*
+ * Debug Log flag.
+ */
+int eb_log_flag = 0;
 
 /*
  * Pointer to log function.
@@ -44,6 +49,27 @@ eb_set_log_function(function)
     void (*function) EB_P((const char *, va_list));
 {
     eb_log_function = function;
+    zio_set_log_function(function);
+}
+
+/*
+ * Enable logging.
+ */
+void
+eb_enable_log()
+{
+    eb_log_flag = 1;
+    zio_enable_log();
+}
+
+/*
+ * Disable logging.
+ */
+void
+eb_disable_log()
+{
+    eb_log_flag = 0;
+    zio_disable_log();
 }
 
 /*
@@ -67,11 +93,8 @@ eb_log(message, va_alist)
     va_start(ap);
 #endif /* not __STDC__ */
 
-    if (eb_log_function != NULL) {
-	pthread_mutex_lock(&log_mutex);
+    if (eb_log_flag && eb_log_function != NULL)
 	eb_log_function(message, ap);
-	pthread_mutex_unlock(&log_mutex);
-    }
 
     va_end(ap);
 }
@@ -92,6 +115,8 @@ eb_log_stderr(message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
     char *a0, *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9;
 #endif /* not defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT) */
 {
+    pthread_mutex_lock(&log_mutex);
+
     fputs("[EB] ", stderr);
 
 #if defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)
@@ -101,6 +126,8 @@ eb_log_stderr(message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
 #endif /* not defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT) */
     fputc('\n', stderr);
     fflush(stderr);
+
+    pthread_mutex_unlock(&log_mutex);
 }
 
 #define MAX_QUOTED_STREAM_LENGTH	100

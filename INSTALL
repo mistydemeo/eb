@@ -270,11 +270,6 @@ Optional Feature List
 `--disable-libtool-lock'
      Avoid locking (might break parallel builds).
 
-`--enable-debug'
-     Enable debug codes (might be useful for developpers).  EB Library
-     will output enormous debug messages to standard error.  The
-     default value is `no'.
-
 `--enable-samples'
      Also build some sample programs.  The default value is `no'.
      The sample programs are not installed in anywhere even if enabled.

@@ -250,7 +250,7 @@ ebzip_unzip_file_internal(out_file_name, in_file_name, in_zio_code, index_page)
 	/*
 	 * Read a slice.
 	 */
-	if (zio_lseek(&in_zio, total_length, SEEK_SET) < 0) {
+	if (zio_lseek(&in_zio, (off_t)total_length, SEEK_SET) < 0) {
 	    fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		invoked_name, strerror(errno), in_file_name);
 	    goto failed;
@@ -281,7 +281,7 @@ ebzip_unzip_file_internal(out_file_name, in_file_name, in_zio_code, index_page)
 	 * Write the slice to `out_file'.
 	 */
 	if (!ebzip_test_flag) {
-	    if (write(out_file, buffer, length) != length) {
+	    if (write(out_file, buffer, (size_t)length) != length) {
 		fprintf(stderr, _("%s: failed to write to the file, %s: %s\n"),
 		    invoked_name, strerror(errno), out_file_name);
 		goto failed;

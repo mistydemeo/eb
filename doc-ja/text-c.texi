@@ -3,7 +3,7 @@
  * 使用方法:
  *     text <book-path> <subbook-index> <number>
  * 例:
- *     text /cdrom apple 0 10
+ *     text /cdrom 0 10
  * 説明:
  *     <book-path> で指定した CD-ROM 書籍から特定の副本を選び、本文
  *     の先頭から <number> 個分の単語の説明を出力します。
@@ -110,6 +110,7 @@ main(argc, argv)
 
 	fputs("\n----------------------------------------\n", stdout);
 
+        /* 次の単語の説明へ移動。*/
 	error_code = eb_forward_text(&book, NULL);
 	if (error_code == EB_ERR_END_OF_CONTENT)
 	    fputs("\n[END]\n", stdout);

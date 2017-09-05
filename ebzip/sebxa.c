@@ -63,7 +63,7 @@ fix_sebxa_start(file_name, index_page)
     /*
      * Read index page.
      */
-    if (lseek(file, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (lseek(file, (off_t)(index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), file_name);
 	goto failed;
@@ -72,7 +72,8 @@ fix_sebxa_start(file_name, index_page)
     done_length = 0;
     while (done_length < EB_SIZE_PAGE) {
 	errno = 0;
-	n =  read(file, buffer + done_length, EB_SIZE_PAGE - done_length);
+	n =  read(file, buffer + done_length,
+	    (size_t)EB_SIZE_PAGE - done_length);
 	if (n < 0) {
             if (errno == EINTR)
                 continue;
@@ -115,7 +116,7 @@ fix_sebxa_start(file_name, index_page)
     /*
      * Write back the index page.
      */
-    if (lseek(file, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (lseek(file, (off_t)(index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), file_name);
 	goto failed;
@@ -124,7 +125,8 @@ fix_sebxa_start(file_name, index_page)
     done_length = 0;
     while (done_length < EB_SIZE_PAGE) {
 	errno = 0;
-	n =  write(file, buffer + done_length, EB_SIZE_PAGE - done_length);
+	n =  write(file, buffer + done_length,
+	    (size_t)EB_SIZE_PAGE - done_length);
 	if (n < 0) {
             if (errno == EINTR)
                 continue;
@@ -194,7 +196,7 @@ get_sebxa_indexes(file_name, index_page, index_location, index_base,
     /*
      * Read index page.
      */
-    if (lseek(file, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (lseek(file, (off_t)(index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), file_name);
 	goto failed;
@@ -203,7 +205,8 @@ get_sebxa_indexes(file_name, index_page, index_location, index_base,
     done_length = 0;
     while (done_length < EB_SIZE_PAGE) {
 	errno = 0;
-	n =  read(file, buffer + done_length, EB_SIZE_PAGE - done_length);
+	n =  read(file, buffer + done_length,
+	    (size_t)EB_SIZE_PAGE - done_length);
 	if (n < 0) {
             if (errno == EINTR)
                 continue;

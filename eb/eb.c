@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2000, 01  
+ * Copyright (c) 2000, 01, 02
  *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,11 @@ EB_Error_Code
 eb_initialize_library()
 {
     EB_Error_Code error_code;
+
+    if (getenv(EB_DEBUG_ENVIRONMENT_VARIABLE) != NULL) {
+	eb_enable_log();
+	eb_set_log_function(eb_log_stderr);
+    }
 
     LOG(("in: eb_initialize_library()"));
 

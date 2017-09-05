@@ -1,3 +1,68 @@
+2002-01-19  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.2beta2.
+
+	* ebfont/ebfont.c (main): Stop parsing command line options when
+	getopt_long() returns -1 not EOF.
+	* ebinfo/ebinfo.c (main): Ditto.
+	* ebrefile/ebrefile.c (main): Ditto.
+	* ebzip/ebzip.c (main): Ditto.
+	* libebutils/getopt.c, libebutils/getopt.h, libebutils/getopt1.c:
+	Use getopt_long() taken from NetBSD, not from GLIBC.
+	* libebutils/Makefile.am (libebutils_a_SOURCES): Delete getopt1.c.
+
+	* eb/hook.c, eb/search.c, eb/subbook.c, eb/zio.c, ebrefile/ebrefile.c,
+	ebzip/sebxa.c, ebzip/unzipfile.c, ebzip/zipfile.c,
+	libebutils/getumask.c: Supress warnings by "gcc -Wconversion".
+	
+2002-01-18  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to "3.2beta2".
+
+	* eb/zio.c (zio_unzip_slice_ebzip1): Fix a decompression bug.
+
+	* eb/defs.h (EB_MULTI_ENTRY_INVALID): Deleted.
+
+	* configure.ac (EB_VERSION_MAJOR, EB_VERSION_MINOR): AC_SUBST
+	variables.
+	* eb/Makefile.am (nodist_pkginclude_HEADERS): Add defs.h.
+	* eb/Makefile.am (pkginclude_HEADERS): use dist_pkginclude_HEADERS
+	instead.
+	* eb/defs.h: Now this file is generated from eb/defs.h.in by Makefile.
+	* eb/defs.h.in: New file.
+	* eb/Makefile.am (BUILT_SOURCES): Add defs.h.
+	* eb/Makefile.am (EXTRA_DIST): Add defs.h.in.
+	* eb/Makefile.am (CLEANFILES): Add stamp-defs-h and defs.h.
+	* eb/Makefile.am (defs.h, stamp-defs-h): New targets.
+
+	* eb/Makefile.am (nodist_libeb_la_SOURCES): Add widealt.c and
+	widefont.c.
+	* eb/Makefile.am (libeb_la_SOURCES): use dist_libeb_la_SOURCES instead.
+
+	* eb/Makefile.am (dist_noinst_HEADERS): Add ebutils.h.
+	* eb/Makefile.am (noinst_HEADERS): use nodist_noinst_HEADERS instead.
+
+	* configure.ac (AC_ARG_ENABLE): Delete --enable-debug option.
+	* eb/build-post.h.in (LOG): Revised.
+	* eb/build-post.h.in (eb_log_flag): New global variable.
+	* eb/log.c (eb_enable_log, eb_disable_log): New functions.
+	* eb/log.c (eb_set_log_function): Also set zio log function.
+	* eb/log.c (eb_log, eb_log_stderr): Mutx lock with `log_mutex' is
+	done by eb_log_stderr(), not eb_log().
+	* eb/zio.c (zio_log_function, zio_log_flag): New variables.
+	* eb/zio.c (zio_enable_log, zio_disable_log, zio_set_log_function,
+	* eb/zio.c (LOG): Revised.
+	zio_log): New functions.
+
+	* eb/hook.c (eb_set_hooks): Log debug messages if `eb_log_flag'
+	is not 0.
+	* eb/keyword.c (eb_search_keyword): Ditto.
+	* eb/multi.c (eb_search_multi): Ditto.
+
+	* eb/eb.c (eb_initialize_library): Enable debug mode if the
+	EB_DEBUG environment variable is defined.
+
 2002-01-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.2beta1.
@@ -48,6 +113,11 @@
 2001-11-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* eb/binary.c (eb_unset_binary): Fix typo in a log message.
+	* eb/subbook.c (eb_unset_subbook): Ditto.
+
+	* eb/subbook.c (eb_set_subbook): Fix a bug that the library 
+	opens a directory with open() if there isn't "honmons" but "honmon2".
+	This problem is reported by Yamagata san.
 
 2001-11-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 

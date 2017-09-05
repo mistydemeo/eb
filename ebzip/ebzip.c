@@ -178,7 +178,7 @@ main(argc, argv)
      */
     for (;;) {
         ch = getopt_long(argc, argv, short_options, long_options, NULL);
-        if (ch == EOF)
+        if (ch == -1)
             break;
         switch (ch) {
         case 'f':

@@ -69,9 +69,9 @@ EB_Error_Code eb_search_keyword EB_P((EB_Book *, const char * const []));
 int eb_pthread_enabled EB_P((void));
 
 /* log.c */
-void eb_set_log_function EB_P((void (*functoin)(const char *, va_list)));
-void eb_log EB_P((const char *message, ...));
-void eb_log_stderr EB_P((const char *message, va_list));
+void eb_set_log_function EB_P((void (*)(const char *, va_list)));
+void eb_log EB_P((const char *, ...));
+void eb_log_stderr EB_P((const char *, va_list));
 
 /* menu.c */
 int eb_have_menu EB_P((EB_Book *));

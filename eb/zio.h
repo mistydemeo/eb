@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 2001  
+ * Copyright (c) 2001, 02
  *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,12 @@ extern "C" {
 #endif
 
 #include <sys/types.h>
+
+#if defined(__STDC__) || defined(WIN32)
+#include <stdarg.h>
+#else
+#include <varargs.h>
+#endif
 
 #if TIME_WITH_SYS_TIME
 # include <sys/time.h>
@@ -214,6 +220,10 @@ struct Zio_Struct {
  */
 #if defined(__STDC__) || defined(__cplusplus) || defined(WIN32)
 /* zio.c */
+void zio_set_log_function(void (*)(const char *, va_list));
+void eb_log(const char *, ...);
+void zio_enable_log(void);
+void zio_disable_log(void);
 int zio_initialize_library(void);
 void zio_finalize_library(void);
 void zio_initialize(Zio *);
@@ -229,6 +239,10 @@ ssize_t zio_read(Zio *, char *, size_t);
 #else /* !defined(__STDC__) && !defined(__cplusplus) && ... */
 
 /* zio.c */
+void zio_set_log_function();
+void eb_log();
+void zio_enable_log();
+void zio_disable_log();
 int zio_initialize_library();
 void zio_finalize_library();
 void zio_initialize();

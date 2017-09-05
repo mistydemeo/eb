@@ -270,7 +270,7 @@ ebzip_zip_file_internal(out_file_name, in_file_name, in_zio_code, index_page)
 	    }
 	}
 	if (0 < i) {
-	    if (write(out_zio.file, out_buffer, i) != i) {
+	    if (write(out_zio.file, out_buffer, (size_t)i) != i) {
 		fprintf(stderr, _("%s: failed to write to the file: %s\n"),
 		    invoked_name, out_file_name);
 		goto failed;
@@ -289,7 +289,7 @@ ebzip_zip_file_internal(out_file_name, in_file_name, in_zio_code, index_page)
 	/*
 	 * Read a slice from the original file.
 	 */
-	if (zio_lseek(&in_zio, in_total_length, SEEK_SET) < 0) {
+	if (zio_lseek(&in_zio, (off_t)in_total_length, SEEK_SET) < 0) {
 	    fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		invoked_name, strerror(errno), in_file_name);
 	    goto failed;
@@ -345,7 +345,7 @@ ebzip_zip_file_internal(out_file_name, in_file_name, in_zio_code, index_page)
 	 * original, write orignal slice.
 	 */
 	if (!ebzip_test_flag) {
-	    slice_location = lseek(out_zio.file, 0, SEEK_END);
+	    slice_location = lseek(out_zio.file, (off_t)0, SEEK_END);
 	    if (slice_location < 0) {
 		fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		    invoked_name, strerror(errno), out_file_name);
@@ -391,14 +391,14 @@ ebzip_zip_file_internal(out_file_name, in_file_name, in_zio_code, index_page)
 
 	if (!ebzip_test_flag) {
 	    if (lseek(out_zio.file,
-		ZIO_SIZE_EBZIP_HEADER + i * out_zio.index_width, SEEK_SET)
-		< 0) {
+		(off_t)ZIO_SIZE_EBZIP_HEADER + i * out_zio.index_width,
+		SEEK_SET) < 0) {
 		fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		    invoked_name, strerror(errno), out_file_name);
 		goto failed;
 	    }
-	    if (write(out_zio.file, out_buffer, out_zio.index_width * 2)
-		!= out_zio.index_width * 2) {
+	    if (write(out_zio.file, out_buffer,
+		(size_t)out_zio.index_width * 2) != out_zio.index_width * 2) {
 		fprintf(stderr, _("%s: failed to write to the file, %s: %s\n"),
 		    invoked_name, strerror(errno), out_file_name);
 		goto failed;
@@ -451,7 +451,7 @@ ebzip_zip_file_internal(out_file_name, in_file_name, in_zio_code, index_page)
     out_buffer[21] = out_zio.mtime & 0xff;
 
     if (!ebzip_test_flag) {
-	if (lseek(out_zio.file, 0, SEEK_SET) < 0) {
+	if (lseek(out_zio.file, (off_t)0, SEEK_SET) < 0) {
 	    fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		invoked_name, strerror(errno), out_file_name);
 	    goto failed;

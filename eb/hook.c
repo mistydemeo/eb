@@ -141,10 +141,11 @@ eb_set_hooks(hookset, hook)
 
     eb_lock(&hookset->lock);
     LOG(("in: eb_set_hooks(hooks=[below])"));
-#ifdef ENABLE_DEBUG
-    for (h = hook; h->code != EB_HOOK_NULL; h++)
-	LOG(("    hook=%d", h->code));
-#endif
+
+    if (eb_log_flag) {
+	for (h = hook; h->code != EB_HOOK_NULL; h++)
+	    LOG(("    hook=%d", h->code));
+    }
 
     /*
      * Set hooks.
@@ -263,7 +264,7 @@ eb_hook_narrow_character_text(book, appendix, container, hook_code, argc, argv)
     char alt_text[EB_MAX_ALTERNATION_TEXT_LENGTH + 1];
 
     if (appendix == NULL
-	|| eb_narrow_alt_character_text(appendix, argv[0], alt_text)
+	|| eb_narrow_alt_character_text(appendix, (int)argv[0], alt_text)
 	!= EB_SUCCESS) {
 	eb_write_text_string(book, "<?>");
     } else {
@@ -289,7 +290,7 @@ eb_hook_wide_character_text(book, appendix, container, hook_code, argc, argv)
     char alt_text[EB_MAX_ALTERNATION_TEXT_LENGTH + 1];
 
     if (appendix == NULL
-	|| eb_wide_alt_character_text(appendix, argv[0], alt_text)
+	|| eb_wide_alt_character_text(appendix, (int)argv[0], alt_text)
 	!= EB_SUCCESS) {
 	eb_write_text_string(book, "<?>");
     } else {

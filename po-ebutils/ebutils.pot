@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2001-11-25 17:29+0900\n"
+"POT-Creation-Date: 2002-01-19 23:27+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,63 +29,39 @@ msgstr ""
 msgid "%s: invalid subbook name `%s...'\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:678
-#, c-format
-msgid "%s: option `%s' is ambiguous\n"
-msgstr ""
-
-#: ../libebutils/getopt.c:702
-#, c-format
-msgid "%s: option `--%s' doesn't allow an argument\n"
-msgstr ""
-
-#: ../libebutils/getopt.c:707
-#, c-format
-msgid "%s: option `%c%s' doesn't allow an argument\n"
-msgstr ""
-
-#: ../libebutils/getopt.c:724 ../libebutils/getopt.c:897
-#, c-format
-msgid "%s: option `%s' requires an argument\n"
-msgstr ""
-
-#. --option
-#: ../libebutils/getopt.c:753
-#, c-format
-msgid "%s: unrecognized option `--%s'\n"
-msgstr ""
-
-#. +option or -option
-#: ../libebutils/getopt.c:757
-#, c-format
-msgid "%s: unrecognized option `%c%s'\n"
-msgstr ""
-
-#. 1003.2 specifies the format of this message.
-#: ../libebutils/getopt.c:783
-#, c-format
-msgid "%s: illegal option -- %c\n"
-msgstr ""
-
-#: ../libebutils/getopt.c:786
-#, c-format
-msgid "%s: invalid option -- %c\n"
-msgstr ""
-
-#. 1003.2 specifies the format of this message.
-#: ../libebutils/getopt.c:816 ../libebutils/getopt.c:946
+#: ../libebutils/getopt.c:131
 #, c-format
 msgid "%s: option requires an argument -- %c\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:863
+#: ../libebutils/getopt.c:133
 #, c-format
-msgid "%s: option `-W %s' is ambiguous\n"
+msgid "%s: option `%.*s' requires an argument\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:881
+#: ../libebutils/getopt.c:135
 #, c-format
-msgid "%s: option `-W %s' doesn't allow an argument\n"
+msgid "%s: option `--%.*s' is ambiguous\n"
+msgstr ""
+
+#: ../libebutils/getopt.c:137
+#, c-format
+msgid "%s: option `--%.*s' doesn't allow an argument\n"
+msgstr ""
+
+#: ../libebutils/getopt.c:139
+#, c-format
+msgid "%s: illegal option -- %c\n"
+msgstr ""
+
+#: ../libebutils/getopt.c:141
+#, c-format
+msgid "%s: invalid option -- %c\n"
+msgstr ""
+
+#: ../libebutils/getopt.c:143
+#, c-format
+msgid "%s: unrecognized option `--%.*s'\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:354 ../ebfont/ebfont.c:363 ../ebrefile/ebrefile.c:283
@@ -218,7 +194,7 @@ msgstr ""
 
 #: ../ebfont/ebfont.c:1083 ../ebrefile/ebrefile.c:475
 #: ../ebrefile/ebrefile.c:491 ../ebzip/copyfile.c:122 ../ebzip/copyfile.c:146
-#: ../ebzip/sebxa.c:58 ../ebzip/sebxa.c:189 ../ebzip/unzipfile.c:195
+#: ../ebzip/sebxa.c:58 ../ebzip/sebxa.c:191 ../ebzip/unzipfile.c:195
 #: ../ebzip/unzipfile.c:233 ../ebzip/zipfile.c:173 ../ebzip/zipfile.c:211
 #: ../ebzip/zipinfofile.c:107
 #, c-format
@@ -363,14 +339,14 @@ msgid "%s: no catalog file: %s\n"
 msgstr ""
 
 #: ../ebrefile/ebrefile.c:503 ../ebrefile/ebrefile.c:529
-#: ../ebrefile/ebrefile.c:583 ../ebzip/sebxa.c:79 ../ebzip/sebxa.c:210
+#: ../ebrefile/ebrefile.c:583 ../ebzip/sebxa.c:80 ../ebzip/sebxa.c:213
 #, c-format
 msgid "%s: failed to read the file, %s: %s\n"
 msgstr ""
 
 #: ../ebrefile/ebrefile.c:513 ../ebrefile/ebrefile.c:554
 #: ../ebrefile/ebrefile.c:588 ../ebrefile/ebrefile.c:603
-#: ../ebrefile/ebrefile.c:620 ../ebzip/sebxa.c:131
+#: ../ebrefile/ebrefile.c:620 ../ebzip/sebxa.c:133
 #, c-format
 msgid "%s: failed to write the file, %s: %s\n"
 msgstr ""
@@ -380,8 +356,8 @@ msgstr ""
 msgid "%s: warning: no such subbook: %s\n"
 msgstr ""
 
-#: ../ebrefile/ebrefile.c:615 ../ebzip/sebxa.c:67 ../ebzip/sebxa.c:119
-#: ../ebzip/sebxa.c:198 ../ebzip/unzipfile.c:254 ../ebzip/zipfile.c:293
+#: ../ebrefile/ebrefile.c:615 ../ebzip/sebxa.c:67 ../ebzip/sebxa.c:120
+#: ../ebzip/sebxa.c:200 ../ebzip/unzipfile.c:254 ../ebzip/zipfile.c:293
 #: ../ebzip/zipfile.c:350 ../ebzip/zipfile.c:396 ../ebzip/zipfile.c:455
 #, c-format
 msgid "%s: failed to seek the file, %s: %s\n"
@@ -436,8 +412,8 @@ msgstr ""
 msgid "%s: failed to read from the file, %s: %s\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:169 ../ebzip/copyfile.c:174 ../ebzip/sebxa.c:83
-#: ../ebzip/sebxa.c:214 ../ebzip/unzipfile.c:264 ../ebzip/unzipfile.c:269
+#: ../ebzip/copyfile.c:169 ../ebzip/copyfile.c:174 ../ebzip/sebxa.c:84
+#: ../ebzip/sebxa.c:217 ../ebzip/unzipfile.c:264 ../ebzip/unzipfile.c:269
 #: ../ebzip/zipfile.c:303 ../ebzip/zipfile.c:308
 #, c-format
 msgid "%s: unexpected EOF: %s\n"
@@ -561,7 +537,7 @@ msgstr ""
 msgid "==> fix %s <==\n"
 msgstr ""
 
-#: ../ebzip/sebxa.c:139
+#: ../ebzip/sebxa.c:141
 msgid ""
 "completed\n"
 "\n"

@@ -38,7 +38,7 @@ get_umask()
 {
     mode_t current_umask;
 
-    current_umask = umask(022);
+    current_umask = umask((mode_t)022);
     umask(current_umask);
 
     return current_umask;

@@ -262,7 +262,7 @@ main(argc, argv)
      */
     for (;;) {
         ch = getopt_long(argc, argv, short_options, long_options, NULL);
-        if (ch == EOF)
+        if (ch == -1)
             break;
         switch (ch) {
         case 'h':
@@ -584,7 +584,7 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
 		invoked_name, strerror(errno), in_catalog_name);
 	    goto failed;
 	}
-	if (write(out_file, buffer, read_length) != read_length) {
+	if (write(out_file, buffer, (size_t)read_length) != read_length) {
 	    fprintf(stderr, _("%s: failed to write the file, %s: %s\n"),
 		invoked_name, strerror(errno), out_catalog_name);
 	    goto failed;
@@ -611,7 +611,7 @@ refile_catalog(out_catalog_name, in_catalog_name, disc_code,
      */
     buffer[0] = (out_subbook_count >> 8) & 0xff;
     buffer[1] =  out_subbook_count       & 0xff;
-    if (lseek(out_file, 0, SEEK_SET) < 0) {
+    if (lseek(out_file, (off_t)0, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), out_catalog_name);
 	goto failed;

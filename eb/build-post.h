@@ -26,7 +26,7 @@
 /*
  * Locale directory.
  */
-#define LOCALEDIR		"@localedir@"
+#define LOCALEDIR		"/usr/private/share/locale"
 
 /*
  * Directory names.

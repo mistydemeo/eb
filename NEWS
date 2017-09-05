@@ -1,3 +1,10 @@
+Major changes in release 3.2beta2.
+
+* If the EB_DEBUG environment variable is defined, EB Library outputs
+  messages for debugging.
+  `--enable-debug' option of configure is removed.
+* Fix a critical bug in decompression of EBZIP compression format.
+
 Major changes in release 3.2beta1.
 
 * The maximum compression level of ebzip is changed from 3 to 5.
