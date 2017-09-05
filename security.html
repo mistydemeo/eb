@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rel="icon" type="image/png" href="eb_i.png">
+<title>EB Library (security advisory)</title>
+</head>
+<body>
+
+<p class="header">
+<img src="eb_s.png" alt="logo">
+</p>
+
+<!-- ############################################################# -->
+<h2>セキュリティについての注意</h2>
+
+<p>
+<a href="http://www.gzip.org/zlib/">zlib</a> 1.1.3 およびそれ以前のもの
+には、セキュリティに関する不具合が発見されています。
+EB ライブラリは zlib を使用していますので、この不具合は EB ライブラリ
+にも影響します。
+また、EB ライブラリ 3.2 およびそれ以前のバージョンの配布ソースコード
+には、この不具合を持った zlib のソースコードを同梱しています。
+</p>
+
+<p>
+EB ライブラリ 3.2.1 からは、配布ソースコードに修正した zlib のソース
+コードを同梱しています。
+</p>
+
+<p>
+EB ライブラリ 3.2 およびそれ以前のものを (お薦めはしませんが) コンパ
+イルしてインストールしたいときは、 <code>configure</code> に必ず
+<code>--with-included-zlib=no</code> オプションを指定して、同梱の zlib
+は使わないようにして下さい。
+</p>
+
+<p>
+zlib の不具合に関して詳しくは、次を参照して下さい。
+</p>
+
+<ul>
+<li><a href="http://www.gzip.org/zlib/advisory-2002-03-11.txt">Zlib Advisory 2002-03-11</a>
+<li><a href="http://www.cert.org/advisories/CA-2002-07.html">CERT Advisory CA-2002-07 Double Free Bug in zlib Compression Library</a>
+</ul>
+
+<!-- ############################################################# -->
+<hr>
+<p class="footer">
+<a href="index.html"><img class="banner" src="eb_b.png" alt="banner"></a>
+<a href="index.html">ホームページ (日本語版)</a>に戻る。
+</p>
+</body>
+</html>

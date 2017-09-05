@@ -1,0 +1,625 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: EB_Book</TITLE>
+
+<META NAME="description" CONTENT="EB Library: EB_Book">
+<META NAME="keywords" CONTENT="EB Library: EB_Book">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC17"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC16"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC18"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. CD-ROM 書籍と <CODE>EB_Book</CODE> オブジェクト </H1>
+<!--docid::SEC17::-->
+<P>
+
+EB ライブラリでは、CD-ROM 書籍へのアクセスは、すべて <CODE>EB_Book</CODE> 型
+のオブジェクトを介して行います。
+したがって、ほとんどのアプリケーションプログラムは、本章で記述している
+処理を必要とするはずです。
+</P><P>
+
+本章では <CODE>EB_Book</CODE> オブジェクトの初期化、後始末といった基本的な
+取り扱い方について説明します。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_5.html#SEC18">5.1 <CODE>EB_Book</CODE> オブジェクト</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_5.html#SEC19">5.2 遠隔ホストへの <CODE>eb_bind()</CODE></A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_5.html#SEC20">5.3 サンプルプログラム</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_5.html#SEC21">5.4 データ型の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_5.html#SEC22">5.5 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="EB_Book Explanation"></A>
+<HR SIZE="6">
+<A NAME="SEC18"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC19"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.1 <CODE>EB_Book</CODE> オブジェクト </H2>
+<!--docid::SEC18::-->
+<P>
+
+CD-ROM 書籍へアクセスするには、まず <CODE>EB_Book</CODE> 型のオブジェクトを
+用意します。
+同時に複数の CD-ROM 書籍にアクセスするなら、書籍一冊毎にオブジェクトを
+作る必要があります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Book book;
+</pre></td></tr></table></P><P>
+
+もちろん、オブジェクトの領域は、<CODE>malloc()</CODE> で確保しても構いません。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Book *book_pointer;
+
+book_pointer = (EB_Book *) malloc(sizeof(EB_Book));
+</pre></td></tr></table></P><P>
+
+<CODE>EB_Book</CODE> オブジェクトの中身 (変数 <CODE>book</CODE> の中身および
+<CODE>book_pointer</CODE> の指す領域) はまだ初期化されていませんので、次の
+要領でオブジェクトを初期化します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_initialize_book(&#38;book);
+eb_initialize_book(book_pointer);
+</pre></td></tr></table></P><P>
+
+<CODE>eb_initialize()</CODE> へ渡す引数は <CODE>EB_Book</CODE> オブジェクトへの
+ポインタであって、<CODE>EB_Book</CODE> オブジェクトそのものではないことに注意
+して下さい。
+(EB ライブラリの他の関数も、すべてオブジェクトをポインタで渡します。)
+</P><P>
+
+CD-ROM 書籍を使うには、続いて <CODE>EB_Book</CODE> オブジェクトを CD-ROM 書籍
+の実体に結び付けます。
+これは、関数 <CODE>eb_bind()</CODE> によって行います。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ＥＢ＿Ｂｏｏｋ　　　　　　　　　　　　ＣＤ−ＲＯＭ書籍
+オブジェクト　　　　　　　　　　┌────────────┐
+┌───┐　　　　　　　　　　　│　　　　　　　　　　　　│
+│　　　┝━━━━━━━━━━━┥　／ｍｎｔ／ｃｄｒｏｍ　│
+└───┘　ｅｂ＿ｂｉｎｄ（）　│　　　　　　　　　　　　│
+　　　　　　　　　　　　　　　　└────────────┘
+</pre></td></tr></table></P><P>
+
+実際のプログラムでは、次のようにします。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_bind(&#38;book, "/mnt/cdrom") != EB_SUCCESS) {
+    printf("eb_bind() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+<CODE>eb_bind()</CODE> に渡す書籍のパス (この例では <TT>`/mnt/cdrom'</TT>) は
+書籍のトップディレクトリ、つまり <TT>`catalog'</TT> または <TT>`catalogs'</TT>
+ファイルのあるディレクトリを指定します。
+</P><P>
+
+<CODE>EB_Book</CODE> オブジェクトを使い終わったら、
+<CODE>eb_finalize_book()</CODE> を呼んで後始末をします。
+オブジェクトは書籍との結び付きを解かれた状態に戻り、
+内部で割り当てられたメモリは解放され、開いていたファイルもすべて
+閉じられます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_finalize_book(&#38;book);
+eb_finalize_book(book_pointer);
+</pre></td></tr></table></P><P>
+
+オブジェクトの領域を <CODE>malloc()</CODE> で確保した場合は、
+<CODE>eb_finalize_book()</CODE> を呼んだ後ならば、オブジェクトの領域を安全に
+解放することができます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>free(book_pointer);
+</pre></td></tr></table></P><P>
+
+<A NAME="eb_bind to Remote Host"></A>
+<HR SIZE="6">
+<A NAME="SEC19"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC18"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC20"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.2 遠隔ホストへの <CODE>eb_bind()</CODE> </H2>
+<!--docid::SEC19::-->
+<P>
+
+前節で説明した <CODE>eb_bind()</CODE> を用いて、<CODE>EB_Book</CODE> オブジェクト
+を遠隔ホストの書籍に結びつけることができます。
+これには、書籍のパスの代わりに、遠隔アクセス用の識別子を指定します。
+識別子は、次のような形式をとります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ebnet://<VAR>ホスト</VAR>:<VAR>ポート</VAR>/<VAR>書籍名</VAR>
+</pre></td></tr></table></P><P>
+
+<VAR>ホスト</VAR> は遠隔ホストの IP アドレスもしくはホスト名です。
+ただし、IPv6 アドレスを指定する場合は、アドレスを <CODE>[</CODE> と <CODE>]</CODE>
+で囲む必要があります。
+<VAR>ポート</VAR> は、そのホストが待ち受けているポートの番号です。
+ホストが待ち受けているポートが標準の 22010 番であれば、<VAR>:ポート</VAR>
+の部分は省略可能です。
+</P><P>
+
+以下に <CODE>eb_bind()</CODE> のコード例を記します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_bind(&#38;book, "ebnet://localhost/cdrom") != EB_SUCCESS) {
+    printf("eb_bind() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="EB_Book Sample"></A>
+<HR SIZE="6">
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.3 サンプルプログラム </H2>
+<!--docid::SEC20::-->
+<P>
+
+このサンプルプログラムでは、CD-ROM 書籍の種類を調べるために、
+<CODE>eb_disc_code()</CODE> という関数を使用しています。
+この関数については、「<A HREF="eb-ja_5.html#SEC22">関数の詳細</A>」節を参照。
+</P><P>
+
+<A NAME="IDX6"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/*
+ * 使用方法:
+ *     disctype &#60;book-path&#62;
+ * 例:
+ *     disctype /cdrom
+ * 説明:
+ *     &#60;book-path&#62; で指定された CD-ROM 書籍の種類が、EB か EPWING か
+ *     を調べて表示します。
+ */
+#include "config.h"
+
+#include &#60;stdio.h&#62;
+#include &#60;stdlib.h&#62;
+
+#include &#60;eb/eb.h&#62;
+#include &#60;eb/error.h&#62;
+
+int
+main(argc, argv)
+    int argc;
+    char *argv[];
+{
+    EB_Error_Code error_code;
+    EB_Book book;
+    EB_Disc_Code disc_code;
+
+    /* コマンド行引数をチェック。*/
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s book-path\n", argv[0]);
+        exit(1);
+    }
+
+    /* EB ライブラリと `book' を初期化。*/
+    error_code = eb_initialize_library();
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+    eb_initialize_book(&#38;book);
+
+    /* `book' を書籍に結び付ける。失敗したら終了。*/
+    error_code = eb_bind(&#38;book, argv[1]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+
+    /* 書籍の種類を調べて表示。*/
+    error_code = eb_disc_type(&#38;book, &#38;disc_code);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get disc type, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+
+    if (disc_code == EB_DISC_EB) {
+        fputs("EB\n", stdout);
+    } else if (disc_code == EB_DISC_EPWING) {
+        fputs("EPWING\n", stdout);
+    } else {
+        fputs("unknown\n", stdout);
+    }
+
+    /* 書籍と EB ライブラリの利用を終了。*/
+    eb_finalize_book(&#38;book);
+    eb_finalize_library();
+    exit(0);
+
+    /* エラー発生で終了するときの処理。*/
+  die:
+    eb_finalize_book(&#38;book);
+    eb_finalize_library();
+    exit(1);
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="EB_Book Data Types"></A>
+<HR SIZE="6">
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.4 データ型の詳細 </H2>
+<!--docid::SEC21::-->
+<P>
+
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX7"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Book</B>
+<DD><A NAME="IDX8"></A>
+</P><P>
+
+<CODE>EB_Book</CODE> 型は、一冊の CD-ROM 書籍を表します。
+CD-ROM 書籍へのアクセスは、すべてこの型のオブジェクトを介して行います。
+同時に複数の CD-ROM 書籍にアクセスする際は、書籍一冊毎にオブジェクトを
+作る必要があります。
+</P><P>
+
+<CODE>EB_Book</CODE> オブジェクトの操作は、すべて EB ライブラリが用意している
+関数で行います。
+アプリケーションプログラムは、直接 <CODE>EB_Book</CODE> オブジェクトのメンバ
+を参照したり、セットしたりすべきではありません。
+</P><P>
+
+<CODE>EB_Book</CODE> オブジェクトを使用する際は、まずそのオブジェクトに対して
+<CODE>eb_initialize_book()</CODE> を呼んで初期化しなくてはなりません。
+</DL>
+</P><P>
+
+<A NAME="IDX9"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Disc_Code</B>
+<DD><A NAME="IDX10"></A>
+<A NAME="IDX11"></A>
+<A NAME="IDX12"></A>
+<A NAME="IDX13"></A>
+</P><P>
+
+データ型 <CODE>EB_Disc_Code</CODE> は、CD-ROM 書籍の形式コードを表します。
+現在のところ、次の値が定義されています。
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>EB_DISC_EB</CODE>
+<DD>電子ブック (EB, EBG, EBXA, EBXA-C, S-EBXA) であることを表します。
+<P>
+
+<DT><CODE>EB_DISC_EPWING</CODE>
+<DD>EPWING であることを表します。
+<P>
+
+<DT><CODE>EB_DISC_INVALID</CODE>
+<DD>不正な形式コード値を表します。
+</DL>
+<P>
+
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <CODE>==</CODE> と <CODE>!=</CODE> で一致比較することができます。
+</DL>
+</P><P>
+
+<A NAME="IDX14"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Character_Code</B>
+<DD><A NAME="IDX15"></A>
+<A NAME="IDX16"></A>
+<A NAME="IDX17"></A>
+<A NAME="IDX18"></A>
+<A NAME="IDX19"></A>
+</P><P>
+
+データ型 <CODE>EB_Character_Code</CODE> は、CD-ROM 書籍で使用される文字コード
+を表します。
+現在のところ、次の値が定義されています。
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>EB_CHARCODE_ISO8859_1</CODE>
+<DD>ISO 8859-1 (ラテン文字 1) を使用していることを表します。
+電子ブックの EBG はこれです。
+<P>
+
+<DT><CODE>EB_CHARCODE_JISX0208</CODE>
+<DD>JIS X 0208 (日本語のかな漢字) を使用していることを表します。
+EBG, EBXA-C 以外の電子ブック、および EPWING はすべてこれです。
+<P>
+
+<DT><CODE>EB_CHARCODE_JISX0208_GB2312</CODE>
+<DD>JIS X 0208 (日本語のかな漢字) と GB 2312 (中国語の簡体字) を併用している
+ことを表します。
+電子ブックの EBXA-C はこれです。
+<P>
+
+<DT><CODE>EB_CHARCODE_INVALID</CODE>
+<DD>不正な文字コード値を表します。
+</DL>
+<P>
+
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <CODE>==</CODE> と <CODE>!=</CODE> で一致比較することができます。
+</DL>
+</P><P>
+
+<A NAME="EB_Book Functions"></A>
+<HR SIZE="6">
+<A NAME="SEC22"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC21"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.5 関数の詳細 </H2>
+<!--docid::SEC22::-->
+<P>
+
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX20"></A>
+<DL>
+<DT><U>Function:</U> void <B>eb_initialize_book</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX21"></A>
+</P><P>
+
+関数 <CODE>eb_initialize_book()</CODE> は、<VAR>book</VAR> の指す <CODE>EB_Book</CODE>
+オブジェクトを初期化します。
+<CODE>EB_Book</CODE> オブジェクトに対して EB ライブラリの他の関数を呼ぶ前に、
+必ずそのオブジェクトを初期化しなくてはなりません。
+初期化していないオブジェクトに対して、EB ライブラリの他の関数を呼んだ
+場合の動作は未定義です。
+また、すでに初期化したオブジェクトに対して、再度 <CODE>eb_initialize_book()</CODE>
+を呼んではいけません。
+呼んだ場合の動作は未定義です。
+</DL>
+</P><P>
+
+<A NAME="IDX22"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_bind</B> <I>(EB_Book *<VAR>book</VAR>, const char *<VAR>path</VAR>)</I>
+<DD><A NAME="IDX23"></A>
+<A NAME="IDX24"></A>
+</P><P>
+
+関数 <CODE>eb_bind()</CODE> は、<VAR>book</VAR> の指す <CODE>EB_Book</CODE> オブジェクト
+を、パス <VAR>path</VAR> にある CD-ROM 書籍に結び付けます。
+パスには、書籍のトップディレクトリか遠隔アクセス識別子を指定します。
+書籍のトップディレクトリとは、<TT>`catalog'</TT> あるいは <TT>`catalogs'</TT>
+ファイルの存在するディレクトリを指します。
+</P><P>
+
+オブジェクトがすでに書籍に結び付いていた場合、その書籍との結び付きを
+解いてから、<VAR>path</VAR> にある書籍に結び付けます。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+このとき、副本は未選択の状態になります。
+失敗すると、オブジェクトを書籍との結び付きを解かれた状態にして、原因
+を示すエラーコードを返します。
+</P><P>
+
+<VAR>path</VAR> は、<CODE>EB_MAX_PATH_LENGTH</CODE> バイトに収まていなくては
+なりません。
+さらに、<VAR>path</VAR> が相対パスのときは、絶対パスに変換した結果がこの長さ
+に収まっていなくてはなりません。
+これを超えると、<CODE>EB_ERR_TOO_LONG_FILE_NAME</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX25"></A>
+<DL>
+<DT><U>Function:</U> void <B>eb_finalize_book</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX26"></A>
+</P><P>
+
+関数 <CODE>eb_finalize_book()</CODE> は、<VAR>book</VAR> が指す <CODE>EB_Book</CODE>
+オブジェクトの後始末を行います。
+</P><P>
+
+オブジェクトが割り当てて管理していたメモリはすべて解放され、
+ファイルディスクリプタもすべて閉じられます。
+オブジェクトが書籍と結び付いていた場合は、結び付きが解かれます。
+</P><P>
+
+後始末をしたオブジェクトに対して <CODE>eb_bind()</CODE> を呼ぶことで、
+オブジェクトを再利用することができます。
+</DL>
+</P><P>
+
+<A NAME="IDX27"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_is_bound</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX28"></A>
+</P><P>
+
+関数 <CODE>eb_is_bound()</CODE> は、<VAR>book</VAR> が書籍に結び付いているかどうか
+を調べます。
+結び付いていれば 1 を返し、そうでなければ 0 を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX29"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_path</B> <I>(EB_Book *<VAR>book</VAR> const char *<VAR>path</VAR>)</I>
+<DD><A NAME="IDX30"></A>
+<A NAME="IDX31"></A>
+</P><P>
+
+関数 <CODE>eb_path()</CODE> は、<VAR>book</VAR> に結び付いている書籍のパス
+もしくは遠隔アクセス識別子を、<VAR>path</VAR> の指す領域に書き込みます。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>path</VAR> の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
+</P><P>
+
+<VAR>book</VAR> は、あらかじめ書籍に結び付いている必要があります。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
+</P><P>
+
+<VAR>path</VAR> に書き込むパス名のバイト数は、最長で <CODE>EB_MAX_PATH_LENGTH</CODE>
+になります。
+この長さは、末尾のナル文字を含みません。
+関数が返すパスは正規化された形になっているので、<CODE>eb_bind()</CODE> に
+渡したときのものと同じとは限りません。
+たとえば、相対パスだった場合は、絶対パスに変換されます。
+</DL>
+</P><P>
+
+<A NAME="IDX32"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_disc_type</B> <I>(EB_Book *<VAR>book</VAR>, EB_Disc_Code *<VAR>disc_code</VAR>)</I>
+<DD><A NAME="IDX33"></A>
+</P><P>
+
+関数 <CODE>eb_disc_type()</CODE> は、<VAR>book</VAR> のディスクの形式を
+<VAR>disc_code</VAR> の指す領域に書き込みます。
+書き込むディスクの形式の値は、<CODE>EB_Disc_Code</CODE> 型
+(「<A HREF="eb-ja_5.html#SEC21">[CD-ROM 書籍と <CODE>EB_Book</CODE> オブジェクト] データ型の詳細</A>」節を参照)
+のいずれかの定数値です。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>disc_code</VAR> の指す領域に <CODE>EB_DISC_INVALID</CODE> を
+書き込み、原因を示すエラーコードを返します。
+</P><P>
+
+<VAR>book</VAR> は、あらかじめ書籍に結び付いていなければなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX34"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_character_code</B> <I>(EB_Book *<VAR>book</VAR>, EB_Character_Code *<VAR>character_code</VAR>)</I>
+<DD><A NAME="IDX35"></A>
+</P><P>
+
+関数 <CODE>eb_character_code()</CODE> は、<VAR>book</VAR> が書かれている文字コード
+を <VAR>character_code</VAR> の指す領域に書き込みます。
+書き込む文字コードの値は、<CODE>EB_Character_Code</CODE> 型
+(「<A HREF="eb-ja_5.html#SEC21">[CD-ROM 書籍と <CODE>EB_Book</CODE> オブジェクト] データ型の詳細</A>」節を参照)
+のいずれかの定数値です。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>character_code</VAR> の指す領域に <CODE>EB_CHARCODE_INVALID</CODE>
+を書き込み、原因を示すエラーコードを返します。
+</P><P>
+
+<VAR>book</VAR> は、あらかじめ書籍に結び付いていなければなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="Error Handling"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

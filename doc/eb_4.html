@@ -1,0 +1,914 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 7  2000 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Error Handling</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Error Handling">
+<META NAME="keywords" CONTENT="EB Library: Error Handling">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC11"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_3.html#SEC10"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC12"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_3.html#SEC6"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. Error Handling </H1>
+<!--docid::SEC11::-->
+<P>
+
+The functions in EB Library set the global variable <CODE>eb_error</CODE>,
+when they fail to accomplish a job.
+The variable <CODE>eb_error</CODE> stores an error code of the last error
+raised in EB Library functions.
+</P><P>
+
+EB Library has error messages for all error codes.
+<CODE>eb_error_message()</CODE> returns the error messages according to
+the current value of <CODE>eb_error</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>fprintf(stderr, "failed to bind a book, %s\n", eb_error_message());
+</pre></td></tr></table></P><P>
+
+If <CODE>eb_error</CODE> has been set to <CODE>EB_ERR_TOO_LONG_FILENAME</CODE>, it
+outputs the following error message.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>failed to bind a book, too long filename.
+</pre></td></tr></table></P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_4.html#SEC12">4.1 Tolerance to Error</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_4.html#SEC13">4.2 Data Types</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_4.html#SEC14">4.3 Global Variables</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_4.html#SEC15">4.4 Functions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_4.html#SEC16">4.5 Error Codes</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Tolerance to Error"></A>
+<HR SIZE="6">
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.1 Tolerance to Error </H2>
+<!--docid::SEC12::-->
+<P>
+
+An <CODE>EB_Book</CODE> object has some state parameters.
+Also whether the object is <EM>bound</EM> to a CD-ROM book or not is 
+one of the paramters.
+Some of the functions which take a pointer to an <CODE>EB_Book</CODE> object
+as an argument expect that a certain parameter of the referred object
+has been set beforehand.
+For example, <CODE>eb_path()</CODE> expects that the object is <EM>bound</EM>.
+</P><P>
+
+What's happen if do you give the unbound object to <CODE>eb_path()</CODE>?
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Book book;
+
+eb_initialize(&#38;book);
+eb_path(&#38;book);        /* What's happen? */
+</pre></td></tr></table></P><P>
+
+In this case, <CODE>eb_path()</CODE> returns <CODE>NULL</CODE> and sets
+<CODE>eb_error</CODE> to <CODE>EB_ERR_UNBOUND_BOOK</CODE>.
+Thus, EB library functions precisely reject objects whose required
+parameter  is not set.
+</P><P>
+
+However, the follwoing action makes your program abort.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_path(NULL);    /* abort! */
+</pre></td></tr></table></P><P>
+
+EB Library functions doesn't inspect whether a pointer given as an
+argument is <CODE>NULL</CODE>, unless the function description says that it
+accepts <CODE>NULL</CODE>.
+</P><P>
+
+<A NAME="Error Data Types"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.2 Data Types </H2>
+<!--docid::SEC13::-->
+<P>
+
+Please include <TT>`eb/error.h'</TT> to use the data types described in this
+section:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX17"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Error_Code</B>
+<DD><A NAME="IDX18"></A>
+</P><P>
+
+The <CODE>EB_Error_Code</CODE> type represents an error code defined in EB
+Library.
+EB Library defines <CODE>EB_NUM_ERRORS</CODE> error types.
+This type is defined from a signed integral type, so that you can compare
+two codes by the <CODE>==</CODE> and <CODE>!=</CODE> binomial operators.
+</DL>
+</P><P>
+
+<A NAME="Error Variables"></A>
+<HR SIZE="6">
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.3 Global Variables </H2>
+<!--docid::SEC14::-->
+<P>
+
+Please include <TT>`eb/error.h'</TT> to set and/or refer the variables
+described in this section:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX19"></A>
+<DL>
+<DT><U>Variable:</U> EB_Error_Code <B>eb_error</B>
+<DD></P><P>
+
+The functions in EB Library set the global variable <CODE>eb_error</CODE>,
+when the function fails to accomplish a job.
+The variable <CODE>eb_error</CODE> stores an error code of the last error
+raised in EB Library functions.
+</P><P>
+
+The library functions never clears this variable, even when a job is
+accomplished without an error.
+<CODE>eb_error</CODE> stores the latest error only.
+When another error occurs, the library functions ovewrite this variable.
+Also you may overwrite the variable in your program.
+</DL>
+</P><P>
+
+<A NAME="Error Functions"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.4 Functions </H2>
+<!--docid::SEC15::-->
+<P>
+
+Please include <TT>`eb/error.h'</TT> to use the functions described in this
+section:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX20"></A>
+<DL>
+<DT><U>Function:</U> const char * <B>eb_error_message</B> <I>(void)</I>
+<DD><A NAME="IDX21"></A>
+</P><P>
+
+The function <CODE>eb_error_message()</CODE> returns the error message
+according to the current value of <CODE>eb_error</CODE>.
+If <CODE>eb_error</CODE> is set to a valid error-code, it returns the
+corresponding error message.
+Otherwise, it returns the string "unknown error".
+The maximum length of the message is <CODE>EB_MAXLEN_ERROR_MESSAGE</CODE>.
+This function never changes the value of <CODE>eb_error</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX22"></A>
+<DL>
+<DT><U>Function:</U> const char * <B>eb_error_message2</B> <I>(EB_Error_Code <VAR>code</VAR>)</I>
+<DD><A NAME="IDX23"></A>
+</P><P>
+
+The function <CODE>eb_error_message2()</CODE> returns the error message
+according to the error code <VAR>code</VAR>.
+If <VAR>code</VAR> represents a valid error-code, it returns the corresponding
+error message.
+Otherwise, it returns the string "unknown error".
+The maximum length of the message is <CODE>EB_MAXLEN_ERROR_MESSAGE</CODE>.
+This function never changes the value of <CODE>eb_error</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Error Codes"></A>
+<HR SIZE="6">
+<A NAME="SEC16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.5 Error Codes </H2>
+<!--docid::SEC16::-->
+<P>
+
+EB Library defines the following error codes.
+Please include <TT>`eb/error.h'</TT> to use the error codes.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX24"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_NO_ERR</B>
+<DD></P><P>
+
+No error occured.
+</DL>
+</P><P>
+
+<A NAME="IDX25"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_MEMORY_EXHAUSTED</B>
+<DD></P><P>
+
+EB Library invoked <CODE>malloc()</CODE>, but <CODE>NULL</CODE> was returned.
+</DL>
+</P><P>
+
+<A NAME="IDX26"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_EMPTY_FILENAME</B>
+<DD></P><P>
+
+This error code is obsoleted.
+</DL>
+</P><P>
+
+<A NAME="IDX27"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_TOO_LONG_FILENAME</B>
+<DD></P><P>
+
+<CODE>eb_bind()</CODE> or <CODE>eb_bind_appendix()</CODE> failed because the given
+filename was too long.
+</DL>
+</P><P>
+
+<A NAME="IDX28"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_TOO_LONG_WORD</B>
+<DD></P><P>
+
+<CODE>eb_search_word()</CODE>, <CODE>eb_search_endword()</CODE> or 
+<CODE>eb_search_exactword()</CODE> failed because the given word was too long.
+</DL>
+</P><P>
+
+<A NAME="IDX29"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_BAD_WORD</B>
+<DD></P><P>
+
+<CODE>eb_search_word()</CODE>, <CODE>eb_search_endword()</CODE> or 
+<CODE>eb_search_exactword()</CODE> failed because the given word had an
+invalid character.
+</DL>
+</P><P>
+
+<A NAME="IDX30"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_EMPTY_WORD</B>
+<DD></P><P>
+
+<CODE>eb_search_word()</CODE>, <CODE>eb_search_endword()</CODE> or 
+<CODE>eb_search_exactword()</CODE> failed because the given word was empty.
+</DL>
+</P><P>
+
+<A NAME="IDX31"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_GETCWD</B>
+<DD></P><P>
+
+<CODE>getcwd()</CODE> or <CODE>getwd()</CODE> failed.
+</DL>
+</P><P>
+
+<A NAME="IDX32"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_CAT</B>
+<DD></P><P>
+
+EB Library failed to open a <TT>`CATALOG'</TT> or <TT>`CATALOGS'</TT> file in
+a book.
+</DL>
+</P><P>
+
+<A NAME="IDX33"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_CATAPP</B>
+<DD></P><P>
+
+EB Library failed to open a <TT>`CATALOG'</TT> or <TT>`CATALOGS'</TT> file in
+an appendix.
+</DL>
+</P><P>
+
+<A NAME="IDX34"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_LANG</B>
+<DD></P><P>
+
+EB Library failed to open a <TT>`LANGUAGE'</TT> file in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX35"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_START</B>
+<DD></P><P>
+
+EB Library failed to open a <TT>`START'</TT> or <TT>`HONMON'</TT> file in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX36"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_FONT</B>
+<DD></P><P>
+
+EB Library failed to open a font file (files at <TT>`GAIJI'</TT> directory)
+in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX37"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_APP</B>
+<DD></P><P>
+
+EB Library failed to open an <TT>`APPENDIX'</TT> or <TT>`FUROKU'</TT> file in
+an appendix.
+</DL>
+</P><P>
+
+<A NAME="IDX38"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_CAT</B>
+<DD></P><P>
+
+EB Library failed to read a <TT>`CATALOG'</TT> or <TT>`CATALOGS'</TT> file in
+an book.
+</DL>
+</P><P>
+
+<A NAME="IDX39"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_CATAPP</B>
+<DD></P><P>
+
+EB Library failed to read a <TT>`CATALOG'</TT> or <TT>`CATALOGS'</TT> file in
+an appendix.
+</DL>
+</P><P>
+
+<A NAME="IDX40"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_LANG</B>
+<DD></P><P>
+
+EB Library failed to read a <TT>`LANGUAGE'</TT> file in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX41"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_START</B>
+<DD></P><P>
+
+EB Library failed to read a <TT>`START'</TT> or <TT>`HONMON'</TT> file in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX42"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_FONT</B>
+<DD></P><P>
+
+EB Library failed to read a font file (files at <TT>`GAIJI'</TT> directory)
+in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX43"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_APP</B>
+<DD></P><P>
+
+EB Library failed to read an <TT>`APPENDIX'</TT> or <TT>`FUROKU'</TT> file in
+an appendix.
+</DL>
+</P><P>
+
+<A NAME="IDX44"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_CAT</B>
+<DD></P><P>
+
+EB Library failed to seek a <TT>`CATALOG'</TT> or <TT>`CATALOGS'</TT> file in
+an book.
+</DL>
+</P><P>
+
+<A NAME="IDX45"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_CATAPP</B>
+<DD></P><P>
+
+EB Library failed to seek a <TT>`CATALOG'</TT> or <TT>`CATALOGS'</TT> file in
+an appendix.
+</DL>
+</P><P>
+
+<A NAME="IDX46"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_LANG</B>
+<DD></P><P>
+
+EB Library failed to seek a <TT>`LANGUAGE'</TT> file in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX47"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_START</B>
+<DD></P><P>
+
+EB Library failed to seek a <TT>`START'</TT> or <TT>`HONMON'</TT> file in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX48"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_FONT</B>
+<DD></P><P>
+
+EB Library failed to seek a font file (files at <TT>`GAIJI'</TT> directory)
+in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX49"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_APP</B>
+<DD></P><P>
+
+EB Library failed to seek an <TT>`APPENDIX'</TT> or <TT>`FUROKU'</TT> file in
+an appendix.
+</DL>
+</P><P>
+
+<A NAME="IDX50"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_CAT</B>
+<DD></P><P>
+
+EB Library happened to meet an unexpected data in a <TT>`CATALOG'</TT> or
+<TT>`CATALOGS'</TT> file in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX51"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_CATAPP</B>
+<DD></P><P>
+
+EB Library happened to meet an unexpected data in a <TT>`CATALOG'</TT> or
+<TT>`CATALOGS'</TT> file in an appendix.
+</DL>
+</P><P>
+
+<A NAME="IDX52"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_LANG</B>
+<DD></P><P>
+
+EB Library happened to meet an unexpected data in a <TT>`LANGUAGE'</TT>
+file in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX53"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_START</B>
+<DD></P><P>
+
+EB Library happened to meet an unexpected data in a <TT>`START'</TT> or
+<TT>`HONMON'</TT> file in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX54"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_FONT</B>
+<DD></P><P>
+
+EB Library happened to meet an unexpected data in a font file
+(files at <TT>`GAIJI'</TT> directory) in a book.
+</DL>
+</P><P>
+
+<A NAME="IDX55"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_APP</B>
+<DD></P><P>
+
+EB Library happened to meet an unexpected data in an <TT>`APPENDIX'</TT> or
+<TT>`FUROKU'</TT> file in an appendix.
+</DL>
+</P><P>
+
+<A NAME="IDX56"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNBOUND_BOOK</B>
+<DD></P><P>
+
+The invoked EB Library function requires a bound <CODE>EB_Book</CODE> object
+as an argument, but the given object was not bound.
+</DL>
+</P><P>
+
+<A NAME="IDX57"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNBOUND_APP</B>
+<DD></P><P>
+
+The invoked EB Library function requires a bound <CODE>EB_Appendix</CODE>
+object as an argument,but the given object was not bound.
+</DL>
+</P><P>
+
+<A NAME="IDX58"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_LANG</B>
+<DD></P><P>
+
+The book had no language data.
+</DL>
+</P><P>
+
+<A NAME="IDX59"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUB</B>
+<DD></P><P>
+
+The book had no subbook.
+</DL>
+</P><P>
+
+<A NAME="IDX60"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_APPSUB</B>
+<DD></P><P>
+
+The appendix had no subbook.
+</DL>
+</P><P>
+
+<A NAME="IDX61"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_MSG</B>
+<DD></P><P>
+
+The current language in a book had no message.
+</DL>
+</P><P>
+
+<A NAME="IDX62"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_FONT</B>
+<DD></P><P>
+
+The current subbook in a book had no font.
+</DL>
+</P><P>
+
+<A NAME="IDX63"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_START</B>
+<DD></P><P>
+
+The current subbook in a book didn't have a <TT>`START'</TT> nor <TT>`HONMON'</TT>
+file.
+</DL>
+</P><P>
+
+<A NAME="IDX64"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_CUR_LANG</B>
+<DD></P><P>
+
+The invoked function requires that an <CODE>EB_Book</CODE> object given as an
+argument had set the current language, but the given book didn't not set
+it.
+</DL>
+</P><P>
+
+<A NAME="IDX65"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_CUR_SUB</B>
+<DD></P><P>
+
+The invoked function requires that an <CODE>EB_Book</CODE> object given as an
+argument had set the current subbook, but the given book didn't set it.
+</DL>
+</P><P>
+
+<A NAME="IDX66"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_CUR_APPSUB</B>
+<DD></P><P>
+
+The invoked function requires that an appendix given as an argument had
+set the current subbook, but the given appendix didn't set it.
+</DL>
+</P><P>
+
+<A NAME="IDX67"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_CUR_FONT</B>
+<DD></P><P>
+
+The invoked function requires that an <CODE>EB_Book</CODE> object given as an
+argument had set the current font height, but the given book didn't set
+it.
+</DL>
+</P><P>
+
+<A NAME="IDX68"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_LANG</B>
+<DD></P><P>
+
+An <CODE>EB_Book</CODE> object and a language code were given to a function,
+but the bound book didn't have the language with the code.
+</DL>
+</P><P>
+
+<A NAME="IDX69"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_SUB</B>
+<DD></P><P>
+
+An <CODE>EB_Book</CODE> object and a subbook code were given to a function,
+but the bound book didn't have the subbook with the code.
+</DL>
+</P><P>
+
+<A NAME="IDX70"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_APPSUB</B>
+<DD></P><P>
+
+An <CODE>EB_Appendix</CODE> object and a subbook code were given to a function,
+but the bound appendix didn't have the subbook with the code.
+</DL>
+</P><P>
+
+<A NAME="IDX71"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_MSG</B>
+<DD></P><P>
+
+An <CODE>EB_Book</CODE> object and a message code were given to a function,
+but the currnet language of the bound book the object didn't have
+the message with the code.
+</DL>
+</P><P>
+
+<A NAME="IDX72"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_FONT</B>
+<DD></P><P>
+
+An <CODE>EB_Book</CODE> object and a font ehgiht were given to a function,
+but the currnet subbook of the bound book didn't have the font with the
+height.
+</DL>
+</P><P>
+
+<A NAME="IDX73"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_CHAR_BMP</B>
+<DD></P><P>
+
+An <CODE>EB_Book</CODE> object and a character number was given to a function,
+but the current subbook of the bound book didn't have bitmap data of the
+character number.
+</DL>
+</P><P>
+
+<A NAME="IDX74"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_CHAR_TEXT</B>
+<DD></P><P>
+
+An <CODE>EB_Appendix</CODE> object and a character number was given to a
+function, but the current subbook of the bound appendix didn't have
+an alternation string of the character number.
+</DL>
+</P><P>
+
+<A NAME="IDX75"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_SEARCH</B>
+<DD></P><P>
+
+<CODE>eb_search_word()</CODE>, <CODE>eb_search_endword()</CODE> or 
+<CODE>eb_search_exactword()</CODE> failed because the book didn't support
+the search method.
+</DL>
+</P><P>
+
+<A NAME="IDX76"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_HOOK</B>
+<DD></P><P>
+
+An invalid hook code was given to a function.
+</DL>
+</P><P>
+
+<A NAME="IDX77"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_HOOK_WORKSPACE</B>
+<DD></P><P>
+
+An hook function returned -1.
+</DL>
+</P><P>
+
+<A NAME="IDX78"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_DIFF_CONTENT</B>
+<DD></P><P>
+
+A continuation of getting text contetns was requested, but the content
+type was different from that given at the previous call.
+</DL>
+</P><P>
+
+<A NAME="IDX79"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_DIFF_SUBBOOK</B>
+<DD></P><P>
+
+The <CODE>EB_Book</CODE> object was given to <CODE>eb_hit_list()</CODE>,
+<CODE>eb_heading()</CODE>, <CODE>eb_rawtext()</CODE> or <CODE>eb_text()</CODE>, but the
+current subbook was different from that given at the previous call.
+</DL>
+</P><P>
+
+<A NAME="IDX80"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_DIFF_BOOK</B>
+<DD></P><P>
+
+The <CODE>EB_Book</CODE> object was given to <CODE>eb_hit_list()</CODE>,
+<CODE>eb_heading()</CODE>, <CODE>eb_rawtext()</CODE> or <CODE>eb_text()</CODE>, but the
+object was different from that given at the previous call.
+</DL>
+</P><P>
+
+<A NAME="IDX81"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_PREV_SEARCH</B>
+<DD></P><P>
+
+You invoked <CODE>eb_hit_list()</CODE>, but you had not invoked
+<CODE>eb_search_word()</CODE>, <CODE>eb_search_endword()</CODE> nor 
+<CODE>eb_search_exactword()</CODE> beforehand.
+</DL>
+</P><P>
+
+<A NAME="IDX82"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_PREV_CONTENT</B>
+<DD></P><P>
+
+You invoked <CODE>eb_text()</CODE>, <CODE>eb_heading()</CODE> or <CODE>eb_rawtext()</CODE>
+but you had not invoked <CODE>eb_seek()</CODE> beforehand.
+</DL>
+</P><P>
+
+<A NAME="IDX83"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_MULTI_ID</B>
+<DD></P><P>
+
+An <CODE>EB_Book</CODE> object and a multi search code was given to a function,
+but the current subbook of the bound book didn't have a multi search
+with the code.
+</DL>
+</P><P>
+
+<A NAME="IDX84"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_ENTRY_ID</B>
+<DD></P><P>
+
+An <CODE>EB_Book</CODE> object and a mulit search entry code was given to a
+function, but the current subbook of the bound book didn't have a multi
+search entry with the code.
+</DL>
+</P><P>
+
+<A NAME="Subbook"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>July, 7  2000</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

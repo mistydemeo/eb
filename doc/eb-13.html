@@ -1,0 +1,474 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-12.html">前へ</a>] [<a href="eb-14.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="book-list-on-server">サーバ上の書籍一覧</a></h2>
+
+<p>
+EBNET サーバから遠隔アクセスを行う際、サーバがそのクライアントに対して
+アクセスを許可している書籍や appendix データの一覧を取得することが
+できます。
+</p>
+
+<p>
+このとき、EBNET サーバを指定する遠隔アクセス記述子には、特定の書籍や
+appendix データに対するアクセスとは異なり、書籍名は指定しません。
+すなわち、一般形は次のようになります。
+</p>
+
+<blockquote>
+<pre>
+ebnet://<var>ホスト</var>:<var>ポート</var>/
+</pre>
+</blockquote>
+
+<p>
+末尾の `/' はなくても構いません。
+<samp>:</samp> とそれに続くポート番号は省略可能で、その場合は
+22010 番ポートを利用することを意味します。
+</p>
+
+<p>
+ebinfo コマンドの --book-list オプション指定時の挙動は、EB ライブラリ
+のこの機能によって実装されています。
+(ebinfo についての詳細は、
+@pxref{Book list on EBNET server, , EBNET サーバの書籍一覧, ebinfo-ja, ebinfo-ja}。)
+</p>
+
+<blockquote>
+<pre>
+% ebinfo --book-list ebnet://localhost
+名前             題名
+encycl           ブラウンコンサイス百科事典
+encycl.app       ブラウンコンサイス百科事典 (appendix)
+crossword        クロスワードパズル辞典
+travel           ワールドトラベルガイド
+</pre>
+</blockquote>
+
+<p>
+名前の末尾が <samp>.app</samp> になっているものは appendix データで、
+その他は書籍本体です。
+この例の書籍 <samp>encycl</samp> に対してアクセスするなら、
+遠隔アクセス識別子は <code>ebnet://localhost/encycl</code> になります。
+</p>
+
+<p>
+なお、クライアントに対してアクセスを許可していない書籍や appendix データ
+は、サーが側で一覧から除外されます。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="eb_booklist-object"><code>EB_BookList</code> オブジェクト</a></h3>
+
+<p>
+EBNET サーバの提供する書籍および appendix データの一覧を取得するには、
+まず <code>EB_BookList</code> 型のオブジェクトを用意する必要があります。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_BookList bl;
+</pre>
+</blockquote>
+
+<p>
+オブジェクトの領域は、<code>malloc()</code> で確保しても構いません。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_BookList *bl_pointer;
+
+bl_pointer = (EB_BookList *) malloc(sizeof(EB_BookList));
+</pre>
+</blockquote>
+
+<p>
+<code>EB_Book</code> オブジェクトと同様に、<code>EB_BookList</code>
+オブジェクトも使う前に中身を初期化する必要があります。
+これは、<code>eb_initialize_booklist()</code> という関数で行います。
+</p>
+
+<blockquote class="program">
+<pre>
+eb_initialize_booklist(&amp;bl);
+eb_initialize_booklist(bl_pointer);
+</pre>
+</blockquote>
+
+<p>
+初期化が完了したら、特定のサーバとオブジェクトを結びつけます。
+たとえば、<code>ebnet://localhost</code> で表されるサーバに対して、
+オブジェクトを結びつけるには次のようにします。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_bind_booklist(&amp;bl, "ebnet://localhost") != EB_SUCCESS) {
+    printf("eb_bind_booklist() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+これはちょうど、<code>EB_Book</code> オブジェクトに対して
+<code>eb_bind()</code> を呼ぶのと同じです。
+</p>
+
+<p>
+こうして、ようやく書籍一覧の情報を取り出すことができます。
+これには <code>eb_booklist_book_count()</code>, 
+<code>eb_booklist_book_name()</code>, <code>eb_booklist_book_title()</code>
+という 3 つの関数を使用します。
+これらの関数はそれぞれ、クライアントがアクセス可能な書籍の数、各書籍
+および appendix データの名称 (アクセス識別子として指定する名前)、各書籍
+と appendix データの題名を得ることができます。
+</p>
+
+<blockquote class="program">
+<pre>
+char *name, *title;
+int count, i;
+
+count = eb_booklist_book_count(&amp;bl);
+for (i = 0; i &lt; count; i++) {
+    if (eb_booklist_book_name(&amp;bl, i, &amp;name) != EB_SUCCESS) {
+        printf("eb_booklist_book_name(%d) failed\n", i);
+        return;
+    }
+    if (eb_booklist_book_title(&amp;bl, i, &amp;title) != EB_SUCCESS) {
+        printf("eb_booklist_book_title(%d) failed\n", i);
+        return;
+    }
+    printf("name = %s, title = %s\n", name, title);
+}
+</pre>
+</blockquote>
+
+<p>
+<code>EB_BookList</code> オブジェクトを使い終わったら、必ず後始末を
+行います。
+</p>
+
+<blockquote class="program">
+<pre>
+eb_finalize_booklist(&amp;bl);
+eb_finalize_booklist(bl_pointer);
+</pre>
+</blockquote>
+
+<p>
+オブジェクトの領域を <code>malloc()</code> で確保した場合は、
+<code>eb_finalize_booklist()</code> を呼んだ後ならば、オブジェクトの領域
+を安全に解放することができます。
+</p>
+
+<blockquote class="program">
+<pre>
+free(bl_pointer);
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="booklist-data">データ型の詳細</a></h3>
+
+<p>
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/booklist.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:BookList"><code>EB_BookList</code> 型</a></h4>
+
+<p>
+<code>EB_BookList</code> 型は、EBNET サーバ上が使っている書籍および
+appendix の一覧を取得する際に用いるオクジェクトの型です。
+</p>
+
+<p>
+<code>EB_BookList</code> オブジェクトを使用する際は、まずそのオブジェクト
+に対して <code>eb_initialize_booklist()</code> を呼んで初期化する必要が
+あります。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="booklist-functions">関数の詳細</a></h3>
+
+<p>
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/booklist.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:initialize_booklist"><code>void eb_initialize_booklist (EB_BookList *<var>bl</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_initialize_booklist()</code> は、<var>bl</var> の指す
+<code>EB_BookList</code> オブジェクトを初期化します。
+<code>EB_BookList</code> オブジェクトに対して EB ライブラリの他の関数を
+呼ぶ前に、必ずそのオブジェクトを初期化しなくてはなりません。
+初期化していないオブジェクトに対して、EB ライブラリの他の関数を呼んだ
+場合の動作は未定義です。
+また、すでに初期化したオブジェクトに対して、
+再度 <code>eb_initialize_booklist()</code> を呼んではいけません。
+呼んだ場合の動作は未定義です。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:bind_booklist"><code>EB_Error_Code eb_bind_booklist (EB_BookList *<var>bl</var>, const char *<var>path</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_bind_booklist()</code> は、<var>app</var> の指す
+<code>EB_BookList</code> オブジェクトを、遠隔アクセス記述子 <var>path</var>
+で指定された EBNET サーバに結び付けます。
+</p>
+
+<p>
+オブジェクトがすでにサーバに結び付いていた場合、そのサーバとの結び付き
+を解いてから、<var>path</var> にあるサーバに結び付けます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、オブジェクトをサーバとの結び付きを解かれた状態にして、原因
+を示すエラーコードを返します。
+</p>
+
+<p>
+<var>path</var> は、<code>EB_MAX_PATH_LENGTH</code> バイトに収まて
+いなくてはなりません。
+これを超えると、<code>EB_ERR_TOO_LONG_FILE_NAME</code> を返します。
+また、書籍名を指定していない遠隔アクセス記述子でなければなりません。
+それ以外の形式だと、<code>EB_ERR_BAD_FILE_NAME</code> を返します。
+</p>
+
+<p>
+使用している EB ライブラリのバイナリが、遠隔アクセスに非対応のもので
+ある場合、<code>EB_ERR_EBNET_UNSUPPORTED</code> が返ります。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:finalize_booklist"><code>void eb_finalize_booklist (EB_BookList *<var>bl</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_finalize_booklist()</code> は、<var>bl</var> が指す
+<code>EB_BookList</code> オブジェクトの後始末を行います。
+</p>
+
+<p>
+オブジェクトが割り当てて管理していたメモリはすべて解放され、
+ファイルディスクリプタもすべて閉じられます。
+オブジェクトが EBNET サーバと結び付いていた場合は、結び付きが解かれます。
+</p>
+
+<p>
+後始末をしたオブジェクトに対して <code>eb_bind_booklist()</code> を呼ぶ
+ことで、オブジェクトを再利用することができます。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:booklist_book_count"><code>int eb_booklist_book_count (EB_BookList *<var>bl</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_booklist_book_count()</code> は、EBNET サーバがこの
+クライアントに対してアクセスを許可している書籍および appendix データの数
+を取得します。
+</p>
+
+<p>
+オブジェクト <var>bl</var> の指す <code>EB_BookList</code> オブジェクトは、
+あらかじめ EBNET サーバに結びついている必要があります。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOKLIST</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:booklist_book_name"><code>EB_Error_Code eb_booklist_book_name (EB_BookList *<var>bl</var>, int <var>i</var>, char **<var>name</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:booklist_book_title"><code>EB_Error_Code eb_booklist_book_title (EB_BookList *<var>bl</var>, int <var>i</var>, char **<var>title</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_booklist_book_name()</code> は、EBNET サーバの書籍や
+appendix データの名称を取得します。
+ここで言う「名称」とは、遠隔アクセス識別子で指定する書籍名のことです。
+つまり、<samp>ebnet://localhost/dict</samp> の <samp>dict</samp> の部分
+を指します。
+同様に、関数 <code>eb_booklist_book_title()</code> は、書籍や appendix 
+の題名を取得します。
+</p>
+
+<p>
+いずれの関数も、EBNET サーバ上の何番目の書籍もしくは appendix の情報を
+取得するのかを、引数 <var>i</var> で指定します。
+先頭は 1 番目ではなく 0 番目になります。
+</p>
+
+<p>
+成功すると、関数は書籍の名称、題名へのポインタを *<var>name</var>,
+*<var>title</var> に書き込み、<code>EB_SUCCESS</code> を返します。
+なお、このポインタ値は オブジェクト <code>bl</code> が保持している
+文字列を指すようになっています。
+<code>bl</code> に対して <code>eb_finalize_booklist()</code> を呼んで
+しまうと、この文字列も参照不可能になってしまいますので、注意して下さい。
+</p>
+
+<p>
+オブジェクト <var>bl</var> の指す <code>EB_BookList</code> オブジェクト
+は、あらかじめ EBNET サーバに結びついている必要があります。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOKLIST</code> を返します。
+また、<var>i</var> は 0 以上かつサーバが提供している書籍および appendix
+の総数未満でなければなりません。
+これ以外の値のときは、<code>EB_ERR_NO_SUCH_BOOK</code> が返ります。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="booklist-sample">サンプルプログラム</a></h3>
+
+<blockquote>
+<pre>
+/*                                                            -*- C -*-
+ * Copyright (c) 2003-2006  Motoyuki Kasahara
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * 使用方法:
+ *     booklist &lt;remote-access-ideintifier&gt;
+ * 例:
+ *     booklist ebnet://localhost
+ * 説明:
+ *     &lt;remote-access-ideintifier&gt; で指定した EBNET サーバに接続し
+ *     て、サーバの提供する書籍、appendix の一覧を表示します。
+ */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#include &lt;eb/eb.h&gt;
+#include &lt;eb/error.h&gt;
+#include &lt;eb/booklist.h&gt;
+
+int
+main(int argc, char *argv[])
+{
+    EB_Error_Code error_code;
+    EB_BookList bl;
+    int book_count;
+    char *name, *title;
+    int i;
+
+    /* コマンド行引数をチェック。*/
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s book-path remote-access-identifier\n",
+            argv[0]);
+        exit(1);
+    }
+
+    /* EB ライブラリと `bl' を初期化。*/
+    eb_initialize_library();
+    eb_initialize_booklist(&amp;bl);
+
+    /* EBNET サーバを `bl' に結び付ける。*/
+    error_code = eb_bind_booklist(&amp;bl, argv[1]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to bind the EBNET server, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+
+    /* サーバ上の書籍、appendix の個数を取得。*/
+    error_code = eb_booklist_book_count(&amp;bl, &amp;book_count);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get the number of books, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    for (i = 0; i &lt; book_count; i++) {
+        /* 書籍、appendix の名称を取得。*/
+        error_code = eb_booklist_book_name(&amp;bl, i, &amp;name);
+        if (error_code != EB_SUCCESS) {
+            fprintf(stderr, "%s: failed to get book name #%d, %s\n",
+                argv[0], i, eb_error_message(error_code));
+            goto die;
+        }
+
+        /* 書籍、appendix の題名を取得。*/
+        error_code = eb_booklist_book_name(&amp;bl, i, &amp;title);
+        if (error_code != EB_SUCCESS) {
+            fprintf(stderr, "%s: failed to get book title #%d, %s\n",
+                argv[0], i, eb_error_message(error_code));
+            goto die;
+        }
+
+        printf("%-20s  %s\n", name, title);
+    }
+        
+    /* `bl' と EB ライブラリの利用を終了。*/
+    eb_finalize_booklist(&amp;bl);
+    eb_finalize_library();
+    exit(0);
+
+    /* エラー発生で終了するときの処理。*/
+  die:
+    eb_finalize_booklist(&amp;bl);
+    eb_finalize_library();
+    exit(1);
+}
+</pre>
+</blockquote>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-12.html">前へ</a>] [<a href="eb-14.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

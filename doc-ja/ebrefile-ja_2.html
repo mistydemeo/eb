@@ -1,0 +1,275 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Invoke ebrefile</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Invoke ebrefile">
+<META NAME="keywords" CONTENT="EB Library: Invoke ebrefile">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_2.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_3.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. <CODE>ebrefile</CODE> の実行 </H1>
+<!--docid::SEC2::-->
+<P>
+
+<CODE>ebrefile</CODE> の一般的な起動方法は次の通りです。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebrefile <VAR>書籍へのパス</VAR>
+</pre></td></tr></table></P><P>
+
+<VAR>書籍へのパス</VAR> には、CD-ROM 書籍のトップディレクトリ、つまり 
+<TT>`catalog'</TT> または <TT>`catalogs'</TT> ファイルが存在するディレクトリを
+指定します。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo
+</pre></td></tr></table></P><P>
+
+この場合、<CODE>ebrefile</CODE> はカレントディレクトリ (<TT>`.'</TT>) が指定され
+たものと判断します。
+</P><P>
+
+遠隔アクセスには対応していませんので、遠隔アクセス識別子は使用できません。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebrefile ebnet://localhost/cdrom
+ebrefile: ebnet には対応していません。
+</pre></td></tr></table></P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebrefile-ja_2.html#SEC3">2.1 副本の選択</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebrefile-ja_2.html#SEC4">2.2 <CODE>ebzip</CODE> との連携</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Select Subbooks"></A>
+<HR SIZE="6">
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_2.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_2.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_3.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.1 副本の選択 </H2>
+<!--docid::SEC3::-->
+<P>
+
+特に指定がないと、<CODE>ebrefile</CODE> は、元のカタログファイルで定義されてい
+るすべての副本を新しい副本に取り込みます。
+つまり、新しいカタログファイルは、単に元のファイルのコピーになります。
+この振る舞いは、役に立ちません。
+<CODE>ebrefile</CODE> は、通常 <SAMP>`--subbook'</SAMP> (<SAMP>`-S'</SAMP>) オプションを指定
+して起動します。
+</P><P>
+
+<SAMP>`--subbook'</SAMP> (<SAMP>`-S'</SAMP>) オプションは引数を一つ取り、そこにカンマ
+(<SAMP>`,'</SAMP>) で区切って、新しいカタログファイルに取り込みたい副本のディ
+レクトリ名を並べて書きます。
+<CODE>ebinfo</CODE> コマンドを用いると、あなたの所有している書籍にどのような
+副本が含まれているのかを知ることができます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo /mnt/cdrom
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 3
+
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: english
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: french
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 3:
+  題名: ポケット独和辞典（第三版）
+  ディレクトリ: german
+  検索方式: メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+</pre></td></tr></table></P><P>
+
+(<CODE>ebinfo</CODE> コマンドに関しての詳細は、
+<CITE>ebinfo-ja</CITE> の「<CODE>ebinfo</CODE> の実行」節を参照)。
+<BR>
+この例では、3 つの副本が書籍には含まれており、その名前は <CODE>english</CODE>
+<CODE>french</CODE>, <CODE>german</CODE> だということが分かります。
+</P><P>
+
+次のコマンドを実行すると、<CODE>ebrefile</CODE> は副本として <CODE>english</CODE>
+と <CODE>french</CODE> だけを定義した新しいカタログを生成します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebrefile --subbook english,french
+</pre></td></tr></table></P><P>
+
+ディレクトリ名の大文字・小文字の違いは、区別されません。
+<SAMP>`--subbook'</SAMP> の引数は、次のように分けて書くこともできます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebrefile --subbook english --subbook french
+</pre></td></tr></table></P><P>
+
+<CODE>ebrefile</CODE> は副本の定義順序を変えることはできませんので、
+<SAMP>`--subbook'</SAMP> に与える引数の順序は、任意です。
+</P><P>
+
+<CODE>ebrefile</CODE> は新たなカタログを <TT>`catalogs(s).new'</TT> として生成
+します。
+元のカタログファイルを新しいものに置き換えるには、次のコマンドを実行
+します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% mv catalogs catalogs.bak
+% mv catalogs.new catalogs
+</pre></td></tr></table></P><P>
+
+元のカタログファイルを取っておく必要がないのであれば、二番目のコマン
+ドだけを実行して下さい。
+</P><P>
+
+これで再構成が完了しました。
+もういちど <CODE>ebinfo</CODE> を起動してみましょう。
+副本 <CODE>german</CODE> が消えています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo /mnt/cdrom
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 2
+
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: english
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: french
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+</pre></td></tr></table></P><P>
+
+もし、CD-ROM 書籍全体をすでにハードディスクにコピーしているなら、
+副本 <CODE>german</CODE> のファイルは削除しても構いません。
+ディレクトリ名が小文字で構成されているなら、次のようにします。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% rm -r german
+</pre></td></tr></table></P><P>
+
+<A NAME="Combination with ebzip"></A>
+<HR SIZE="6">
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_2.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_3.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_3.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.2 <CODE>ebzip</CODE> との連携 </H2>
+<!--docid::SEC4::-->
+<P>
+
+<CODE>ebrefile</CODE> は、<CODE>ebzip</CODE> という CD-ROM 書籍を圧縮するコマンド
+と併用することができます
+(<CODE>ebzip</CODE> コマンドに関しての詳細は
+<CITE>ebzip-ja</CITE> の「はじめに」節を参照)。
+通常、 <CODE>ebzip</CODE> と <CODE>ebrefile</CODE> にはコマンド行で同じ引数を与
+えます。
+</P><P>
+
+CD-ROM 書籍が <CODE>/cdrom</CODE> にマウントされ、この書籍には <CODE>english</CODE>、
+<CODE>french</CODE>、<CODE>german</CODE> という 3 つの副本が収められているとします。
+以下に記した操作によって、副本 <CODE>english</CODE>、<CODE>french</CODE> は圧縮
+されてカレントディレクトリの下に置かれ、副本 <CODE>german</CODE> は副本の
+リストから削除されます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --subbook english,french /cdrom
+% ebrefile --subbook english,french /cdrom
+</pre></td></tr></table></P><P>
+
+圧縮したファイルをカレントディレクトリ以外に置くには、次のようにし
+ます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --output-directory /dict --subbook english,french /cdrom
+% ebrefile --output-directory /dict --subbook english,french /cdrom
+</pre></td></tr></table></P><P>
+
+<A NAME="Summary of Options"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_3.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,131 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebinfo: Invoke ebinfo</TITLE>
+
+<META NAME="description" CONTENT="ebinfo: Invoke ebinfo">
+<META NAME="keywords" CONTENT="ebinfo: Invoke ebinfo">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_3.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. <CODE>ebinfo</CODE> の実行 </H1>
+<!--docid::SEC2::-->
+<P>
+
+<CODE>ebinfo</CODE> の一般的な起動方法は次の通りです。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo <VAR>書籍へのパス</VAR>
+</pre></td></tr></table></P><P>
+
+<VAR>書籍へのパス</VAR> には、CD-ROM 書籍のトップディレクトリ、つまり 
+<TT>`catalog'</TT> または <TT>`catalogs'</TT> ファイルが存在するディレクトリを
+指定します。
+パスは、ローカルなパス (例: <SAMP>`/mnt/dict'</SAMP>) でも遠隔アクセス識別子
+(例: <SAMP>`ebnet://localhost/dict'</SAMP>) でも構いません。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo
+</pre></td></tr></table></P><P>
+
+この場合、<CODE>ebinfo</CODE> はカレントディレクトリ (<TT>`.'</TT>) が指定されたも
+のと判断します。
+<CODE>ebinfo</CODE> は指定された書籍に関する情報を、次のような感じで出力します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo /mnt/cdrom
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 2
+
+副本  1:
+  題名: 新英和辞典（第三版）
+  ディレクトリ: ejdict
+  検索方式: 前方一致 後方一致 条件 メニュー 
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本  2:
+  題名: この書籍の使い方
+  ディレクトリ: howto
+  検索方式: 前方一致 後方一致 条件 メニュー 
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+</pre></td></tr></table></P><P>
+
+副本 (subbook) が複合検索 (multi-search) に対応している場合、
+<SAMP>`--multi-search'</SAMP> (または <SAMP>`-m'</SAMP>) オプションを指定すると、
+<CODE>ebinfo</CODE> は複合検索に関する詳細な情報も合わせて出力します。
+複合検索に関する情報は、次のような感じになります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  複合検索 1:
+    ラベル 1: 国または地域
+      候補: 有
+    ラベル 2: 時期
+      候補: 無
+    ラベル 3: カテゴリ
+      候補: 有
+    ラベル 4: 出典
+      候補: 無
+  multi search 2:
+    ラベル 1: 著者
+      候補: 無
+    ラベル 2: 題名
+      候補: 無
+    ラベル 3: 日付
+      候補: 無
+    ラベル 4: 出版社
+      候補: 無
+</pre></td></tr></table></P><P>
+
+<A NAME="Details about Information"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

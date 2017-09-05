@@ -1,0 +1,105 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebinfo: Book list on EBNET server</TITLE>
+
+<META NAME="description" CONTENT="ebinfo: Book list on EBNET server">
+<META NAME="keywords" CONTENT="ebinfo: Book list on EBNET server">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_3.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_5.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_5.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. EBNET サーバの書籍一覧 </H1>
+<!--docid::SEC4::-->
+<P>
+
+通常の出力の代わりに、<CODE>ebinfo</CODE> は EBNET サーバが公開している
+書籍の一覧を出力することもできます。
+この場合のコマンド行の概要は、次のようになります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo --book-list <VAR>遠隔サーバ識別子</VAR>
+</pre></td></tr></table></P><P>
+
+ここで、<VAR>遠隔サーバ識別子</VAR> は、書籍名を含まない遠隔アクセス識別子
+になります。
+たとえば、
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo --book-list ebnet://dict.example.com
+名前             題名
+encycl           ブラウンコンサイス百科事典
+encycl.app       ブラウンコンサイス百科事典 (appendix)
+crossword        クロスワードパズル辞典
+travel           ワールドトラベルガイド
+</pre></td></tr></table></P><P>
+
+「名前」の末尾に <SAMP>`.app'</SAMP> が付いているものは appendix (付録)、
+それ以外は書籍本体です。
+ただし、そのクライアントに対してアクセスを許可しない書籍や appendix は
+出力されません。
+</P><P>
+
+続けて、この中の <SAMP>`encycl'</SAMP> という書籍の情報を見るには、次のように
+します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo ebnet://dict.example.com/cncyclopedia
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 1
+
+副本 1:
+  題名: ブラウンコンサイス百科事典
+  ディレクトリ: brown
+  検索方式: 前方一致 後方一致 条件 複合 メニュー
+  フォントの大きさ: 16 24
+  半角フォントの文字: 0xa121 -- 0xa452
+  全角フォントの文字: 0xa321 -- 0xa452
+</pre></td></tr></table></P><P>
+
+<A NAME="Options to ebinfo"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_5.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

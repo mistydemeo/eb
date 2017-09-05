@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-03.html">前へ</a>] [<a href="eb-05.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="init-and-exit">ライブラリの初期化と後始末</a></h2>
+
+<p>
+この章からは、EB ライブラリのプログラミングについての解説になります。
+</p>
+
+<p>
+まず、アプリケーションプログラムから EB ライブラリを利用するには、
+最初にライブラリを初期化する必要があります。
+</p>
+
+<p>
+ライブラリの初期化を行うには、<code>eb_initialize_library()</code>
+という関数を呼び出します。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_initialize_library() != EB_SUCCESS) {
+    printf("eb_initialize_library() failed\n");
+    exit(1);
+}
+</pre>
+</blockquote>
+
+<p>
+同様に、ライブラリを使い終わったら、<code>eb_finalize_library()</code>
+という関数を呼び出して後始末をします。
+</p>
+
+<blockquote class="program">
+<pre>
+eb_finalize_library();
+</pre>
+</blockquote>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="init-and-exit-sample">サンプルプログラム</a></h3>
+
+<blockquote>
+<pre>
+/*                                                            -*- C -*-
+ * Copyright (c) 2001-2006  Motoyuki Kasahara
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * 使用方法:
+ *     initexit
+ * 例:
+ *     initexit
+ * 説明:
+ *     EB ライブラリの初期化、後始末をしてみます。
+ *     プログラムの外側から見れば、これは何の意味もない動作です。
+ */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#include &lt;eb/eb.h&gt;
+#include &lt;eb/error.h&gt;
+
+int
+main(int argc, char *argv[])
+{
+    EB_Error_Code error_code;
+
+    /* EB ライブラリを初期化。*/
+    error_code = eb_initialize_library();
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        exit(1);
+    }
+
+    /* EB ライブラリの利用を終了。*/
+    eb_finalize_library();
+    exit(0);
+}
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="init-and-exit-functions">関数の詳細</a></h3>
+
+<p>
+この項で説明している関数を使うには、<code>eb/eb.h</code> を読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/eb.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:initialize_library"><code>EB_Error_Code eb_initialize_library ()</code></a></h4>
+
+<p>
+関数 <code>eb_initialize_library()</code> は、EB ライブラリを初期化します。
+アプリケーションプログラムは、EB ライブラリの他の関数を呼ぶ前に、必ず
+一回だけこの関数を呼ぶ必要があります。
+</p>
+
+<p>
+メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイル
+した場合、<code>eb_initialize_library()</code> は <code>bindtextdomain()</code> を
+呼び出します。
+したがって、アプリケーションプログラムが <code>setlocale()</code> を
+呼び出すのは、この関数を呼び出す前である必要があります。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</p>
+
+<p>
+ライブラリを初期化せずに、EB ライブラリの他の関数を呼んだ場合の動作は
+未定義です。
+また、すでに初期化を済ませた状態で、再度 <code>eb_initialize_library()</code>
+を呼んでもいけません。
+呼んだ場合の動作は未定義です。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:finalize_library"><code>void eb_finalize_library ()</code></a></h4>
+
+<p>
+関数 <code>eb_finalize_library()</code> は、EB ライブラリを使い終わった
+際の後始末を行います。
+ただし、アプリケーションプログラム側で使用した
+<code>EB_Book</code>、<code>EB_Hookset</code>、<code>EB_Appendix</code> オブジェクトの後始末は行いません。
+オブジェクトを後始末するには、それぞれ専用の関数
+<code>eb_finalize_book()</code>、<code>eb_finalize_hookset()</code>、
+<code>eb_finalize_appendix()</code> を各オブジェクトに対して別途
+呼んでやる必要があります。
+</p>
+
+<p>
+ライブラリの後始末をした後は、EB ライブラリのいかなる関数も呼んでは
+いけません。
+呼んだ場合の動作は未定義です。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-03.html">前へ</a>] [<a href="eb-05.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

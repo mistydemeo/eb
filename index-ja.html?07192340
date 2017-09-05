@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rel="icon" type="image/png" href="eb_i.png">
+<title>EB Library</title>
+</head>
+<body>
+
+<p class="header">
+<img src="eb.png" alt="ロゴ">
+</p>
+
+<!-- ############################################################# -->
+<h1>EB ライブラリ</h1>
+
+<p>
+(<a href="./">English version of this page</a> is available.)
+</p>
+
+<p>
+これは EB ライブラリの公式ホームページ (日本語版) です。<br>
+最新の開発バージョンは 4.0beta0 です。<br>
+最新の安定バージョンは 3.3.4 です。<br>
+</p>
+
+<p>
+お知らせ:
+<a href="./security-ja.html">zlib 1.1.3 およびそれ以前のものにはセキュリティに関する不具合</a>
+が見つかっています。
+</p>
+
+<!-- ############################################################# -->
+<h2>目次</h2>
+
+<ul>
+<li><a href="security-ja.html">セキュリティについての注意</a>
+<li>EB ライブラリについて
+  <ul>
+  <li><a href="#what-is">EB ライブラリとは</a>
+  <li><a href="ftp://ftp.sra.co.jp/pub/misc/eb/">ソースコードのダウンロード</a>
+  </ul>
+<li><a name="supported">CD-ROM 書籍一覧</a>
+  <ul>
+  <li><a href="supported-ja.html">対応 CD-ROM 書籍一覧</a>
+  <li><a href="unsupported-ja.html">非対応 CD-ROM 書籍一覧</a>
+  <li><a href="report-ja.html">対応状況の報告のお願い</a>
+  <li><a href="appendix-ja.html">appendix (付録) パッケージ一覧</a>
+  </ul>
+<li>ドキュメント
+  <ul>
+  <li><a href="doc-ja/eb-ja_toc.html">EB ライブラリのドキュメント</a>
+  <li><a href="doc-ja/ebfont-ja_toc.html">ebfont のドキュメント</a>
+  <li><a href="doc-ja/ebinfo-ja_toc.html">ebinfo のドキュメント</a>
+  <li><a href="doc-ja/ebrefile-ja_toc.html">ebrefile のドキュメント</a>
+  <li><a href="doc-ja/ebzip-ja_toc.html">ebzip のドキュメント</a>
+  <li><a href="eb-3.0-diff.txt">技術メモ「EB Library 3.0 の変更点について」</a>
+  </ul>
+<li>履歴
+  <ul>
+  <li><a href="NEWS-ja.html">NEWS (英語)</a>
+  <li><a href="ChangeLog-ja.html">ChangeLog (英語)</a>
+  <li><a href="ChangeLog1-ja.html">ChangeLog.1 (英語)</a>
+  <li><a href="ChangeLog0-ja.html">ChangeLog.0 (英語)</a>
+  </ul>
+<li>メーリングリスト
+  <ul>
+  <li><a href="ml-ja.html">情報</a>
+  <li><a href="ml-help-ja.txt">ヘルプ</a>
+  <li><a href="../ndtpd/ml-archives/">アーカイブ</a>
+  </ul>
+<li>その他
+  <ul>
+  <li><a href="related-ja.html">関連するソフトウェア</a>
+  </ul>
+</ul>
+
+<!-- ############################################################# -->
+<h2><a name="what-is">EB ライブラリとは</a></h2>
+
+<p>
+EB ライブラリは、CD-ROM 書籍にアクセスするための関数を集めた、C 言語の
+ライブラリです。
+EB ライブラリは UNIX 系 OS のシステム上で動作させることができます。
+EB, EBG, EBXA, EBXA-C, S-EBXA および EPWING 形式の CD-ROM 書籍に対応
+しています。
+これらの形式の CD-ROM 書籍は、日本で一般的に使われています。
+CD-ROM 書籍自体は ISO 9660 形式になっていますので、他の ISO 9660 形式
+と同じ要領でマウントすることができます。
+</p>
+
+<p>
+また、EB ライブラリは幾つかのユーテリティコマンドも提供しています。
+</p>
+
+<blockquote>
+<dl>
+<dt>ebappendix
+<dd>appendix (付録) データを整形する
+<dt><a href="doc-ja/ebfont-ja_toc.html">ebfont</a>
+<dd>CD-ROM 書籍内の外字のフォントデータを取り出す
+<dt><a href="doc-ja/ebinfo-ja_toc.html">ebinfo</a>
+<dd>CD-ROM 書籍に関する情報を出力する
+<dt><a href="doc-ja/ebrefile-ja_toc.html">ebrefile</a>
+<dd>CD-ROM 書籍のカタログファイルを構成し直す
+<dt><a href="doc-ja/ebzip-ja_toc.html">ebunzip</a>
+<dd>CD-ROM 書籍を伸長する
+<dt><a href="doc-ja/ebzip-ja_toc.html">ebzip</a>
+<dd>CD-ROM 書籍を圧縮する
+<dt><a href="doc-ja/ebzip-ja_toc.html">ebzipinfo</a>
+<dd>CD-ROM 書籍の圧縮情報を出力する
+</dl>
+</blockquote>
+
+<p>
+EB ライブラリはフリーソフトウェアです。あなたは、Free Software Foundation が
+公表した
+<a href="GPL.txt">GNU General Public License (GNU 一般公有使用許諾)</a>
+バージョン 2 或いはそれ以降の各バージョンの中からいずれかを選択し、
+そのバージョンが定める条項に従って本プログラムを再頒布または変更するこ
+とができます。
+</p>
+
+<p>
+EB ライブラリは有用とは思いますが、頒布にあたっては、市場性及び特定目
+的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細
+については
+<a href="GPL.txt">GNU General Public License</a>
+をお読みください。
+</p>
+
+<p>
+最新の EB ライブラリは
+<a href="ftp://ftp.sra.co.jp/pub/misc/eb/">ftp://ftp.sra.co.jp/pub/misc/eb/</a>
+から入手可能です。
+</p>
+
+<p>
+EB ライブラリに関する情報は
+<a href="./">http://www.sra.co.jp/people/m-kasahr/eb/</a>
+から得ることができます。
+</p>
+
+<p>
+ご意見やバグのご報告に関するメールは、日本語か英語で
+m-kasahr@sra.co.jp 宛にお送り下さい。
+</p>
+
+<!-- ############################################################# -->
+<hr>
+<p class="footer">
+<a href="./index-ja.html"><img class="banner" src="eb_b.png" alt="バナー"></a>
+Text by Motoyuki Kasahara<br>
+Logo &amp; Banner by Sumiya Sakoda<br>
+</p>
+</body>
+</html>

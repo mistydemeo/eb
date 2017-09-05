@@ -1,0 +1,3001 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-08.html">前へ</a>] [<a href="eb-10.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="text-data">テキストデータ</a></h2>
+
+<p>
+テキストデータの取得は、検索と並ぶ重要な機能です。
+</p>
+
+<p>
+ここで言う <dfn>テキストデータ (text data)</dfn> は、
+<dfn>本文 (text body)</dfn> という意味ではありません。
+CD-ROM 書籍には確かに本文も存在しますが、本文と同じデータ形式を用いて
+書かれたデータが数種類あります。
+本書では、これらのデータをまとめてテキストデータと呼んでいます。
+EB ライブラリが扱えるテキストデータの種類には、次のものがあります。
+</p>
+
+<ul>
+<li>見出し
+<li>本文
+<li>メニュー
+<li>著作権表示
+<li>複合検索の入力語の候補一覧
+</ul>
+
+<p>
+本章では、これらのテキストデータの取得と加工方法について説明します。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="seek-and-read-text-data">テキストデータのシークと読み込み</a></h3>
+
+<p>
+UNIX でプログラムを組んだ経験のある方には、ファイルからデータを読み込む
+際に用いる <code>lseek()</code>, <code>read()</code> というシステムコール
+をご存じの方も多いでしょう。
+</p>
+
+<p>
+EB ライブラリでも、テキストデータの取得には、<dfn>シーク (seek)</dfn> と
+<dfn>読み込み (read)</dfn> という 2 つの操作で行います。
+ただし、EB ライブラリではファイルポインタやディスクリプタはなく、
+<code>EB_Book</code> オブジェクトを通じてシークや読み込みの操作を行います。
+</p>
+
+<p>
+また、シーク時に指定する位置も <code>off_t</code> 型ではなく、
+<code>EB_Position</code> 型 (<a href="eb-08.html#search-data-types">「[検索] データ型の詳細」</a> を参照のこと)
+のオブジェクトを用います。
+たとえば、本文の先頭位置は、<code>eb_text()</code> という関数を使って
+次のように取得できますが、このときも位置データは <code>EB_Position</code>
+型オブジェクトに書き込まれます。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Position position;
+
+/* 関数の処理が成功すると、<code>position</code> に本文の開始位置が
+ * 書き込まれます。 */
+if (eb_text(&amp;book, &amp;position) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+参考までに、<code>EB_Position</code> 型の内部構造は、次のようになっています。
+</p>
+
+<blockquote class="program">
+<pre>
+typedef struct EB_Position_Struct EB_Position;
+
+struct EB_Position_Struct {
+    int page;     /* ページ番号 */
+    int offset;   /* ページ内のオフセット */
+};
+</pre>
+</blockquote>
+
+<p>
+検索して見つかった一致エントリの見出しや本文を読み込む際にも、位置情報
+の指定には <code>EB_Position</code> 型が使われます。
+一致したエントリの情報は、関数 <code>eb_hit_list()</code> によって
+<code>EB_Hit</code> という型のオブジェクトに書き込まれますが、
+<code>EB_Hit</code> 型は次のように定義されています。
+(詳しくは <a href="eb-08.html#search-data-types">「[検索] データ型の詳細」</a> を参照のこと。)
+</p>
+
+<blockquote class="program">
+<pre>
+typedef struct {
+    EB_Position heading;   /* 見出しの位置 */
+    EB_Position text;      /* 本文の位置   */
+} EB_Hit;
+</pre>
+</blockquote>
+
+<p>
+つまり、このときの見出しと本文の位置も、<code>EB_Position</code> 型で
+表現されているのです。
+</p>
+
+<p>
+では、実際のプログラムを例にして、シークと読み込みを行ってみます。
+まずは、シークからです。
+これには関数 <code>eb_seek_text()</code> を用います。
+ここでもやはり、位置は <code>EB_Position</code> 型で渡します。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_seek_text(&amp;book, &amp;position) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+データの種類 (見出し、本文 ...) によらず、テキストデータのシークは
+すべて <code>eb_seek_text()</code> で行います。
+</p>
+
+<p>
+ただし、<code>EB_Book</code> オブジェクトは、テキストデータの種類別に
+読み込み位置を覚えているわけではなく、全種類のテキストデータで共有する
+位置情報を一つ覚えているだけです。
+たとえば、本文を読み込んだ後で、別の位置にシークして見出しを読み込むと、
+<code>EB_Book</code> は本文の読み込み位置のことは忘れてしまいます。
+</p>
+
+<p>
+さて、シークが終わったら、データを読み込みます。
+読み込もうとするテキストデータの種類によって、使用する関数が異なります。
+見出しだけは <code>eb_read_heading()</code> を使いますが、それ以外では
+<code>eb_read_text()</code> を使います。
+</p>
+
+<p>
+以下は、<code>eb_read_text()</code> の使用例です。
+</p>
+
+<blockquote class="program">
+<pre>
+#define MAX_LENGTH 1000
+char buffer[MAX_LENGTH + 1];
+ssize_t text_length;
+
+if (eb_read_text(&amp;book, NULL, NULL, NULL, MAX_LENGTH,
+    text, &amp;text_length) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+成功すると、<code>text</code> にはテキストデータが、
+<code>text_length</code> には実際に読み込んだバイト数が書き込まれます。
+テキストは最大で <code>MAX_LENGTH</code> バイト書き込まれます。
+テキストデータはさらにナル文字で終端されますので、<code>buffer</code> には
+もう 1 バイト分の領域が必要になります。
+</p>
+
+<p>
+<code>eb_read_heading()</code> の呼び出し方も、<code>eb_read_text()</code>
+とまったく変わりません。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_read_heading(&amp;book, NULL, NULL, NULL, MAX_LENGTH,
+    text, &amp;text_length) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+<code>eb_read_text()</code> や <code>eb_read_heading()</code> で読み込んだ
+テキストデータは平文のテキストになっていて、ナル文字で終端されています。
+</p>
+
+<blockquote class="program">
+<pre>
+printf("%s\n", text);   /* 出力してみる */
+</pre>
+</blockquote>
+
+<p>
+読み込みたいテキストデータが長すぎて、<code>eb_read_text()</code> 
+あるいは <code>eb_read_heading()</code> を一回呼び出しただけでは全部
+読み込めなかった場合は、再度呼び出すことで続きのデータを読み込むことが
+できます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="text-data-format">テキストデータの内部形式</a></h3>
+
+<p>
+前節の例では、読み込んだテキストデータは、平文テキストになっていました。
+けれども、CD-ROM 書籍内に平文テキストのデータが、そのまま収録されている
+わけではありません。
+</p>
+
+<p>
+実際のテキストデータの例を、以下に示します。
+左側のブロックは 16 進数でダンプした様子で、右側はそれを基に JIS X 0208
+(日本語のかな漢字) の文字を表している部分を <samp>[　]</samp> という形に
+直したものです。
+</p>
+
+<blockquote>
+<pre>
+     (16進数によるダンプ)            (可能な部分をかな漢字に変換)
+1f0900011f41010026321f611f042121   1f0900011f410100[Σ]1f611f04[　]
+212721211f053e704a734a541f0a1f04   [：][　]1f05[情][報][編]1f0a1f04
+214e1f0525372530255e1f04214f2121   [［]1f05[シ][グ][マ]1f04[］][　]
+214a237323692367236d236121212370   [（][ｓ][ｉ][ｇ][ｍ][ａ][　][ｐ]
+2372236f236a236523632374214b1f05   [ｒ][ｏ][ｊ][ｅ][ｃ][ｔ][）]1f05
+</pre>
+</blockquote>
+
+<p>
+右側のブロックを見ると、おおよそ平文に近い形でテキストデータが収められて
+いることが分かりますが、ところどころに「文字」ではないデータも含まれて
+います。
+</p>
+
+<p>
+文字ではない部分は、すべて「エスケープシーケンス」と呼ばれるものです。
+エスケープシーケンスとは、テキストデータを出力する際に、改行の禁止や
+強調修飾といった制御情報を伝えるための仕組みです。
+16 進数の <samp>1f</samp> が、エスケープシーケンスの開始を意味します。
+</p>
+
+<p>
+参考までに、上のテキストデータで使われているエスケープシーケンスを
+すべて列挙すると、次のようになります。
+</p>
+
+<dl>
+<dt><samp>1f09 0001</samp></dt>
+<dd>
+字下げ (インデント) の量を指定。
+(引数が 0001 なので、字下げ量は 1。)
+<dt><samp>1f41 0100</samp></dt>
+<dd>
+検索キーの開始。
+(引数 0100 の意味については、JIS X 4081 に記述がないため不明。)
+<dt><samp>1f61</samp></dt>
+<dd>
+検索キーの終了。
+<dt><samp>1f04</samp></dt>
+<dd>
+半角表示の開始。
+<dt><samp>1f05</samp></dt>
+<dd>
+半角表示の終了。
+<dt><samp>1f0a</samp></dt>
+<dd>
+改行
+</dl>
+
+<p>
+前節のプログラムで、読み込んだデータが平文テキストになっていたのは、
+実は EB ライブラリが加工処理をしたからです。
+つまり、「改行」のように平文テキストでも表現可能なエスケープシーケンス
+については処理し、「検索キーの開始」のように表現できないものについては
+無視するようにして、平文テキストになるように加工していたのです。
+</p>
+
+<p>
+しかし、平文テキストは表現力が乏しいので、元のデータには含まれている
+エスケープシーケンスの多くを無視することになってしまいます。
+HTML のように、もっと表現力のある形式で出力するなら、無視せずに済む
+シーケンスを増やせそうです。
+では、HTML 形式でテキストデータを取得する関数が EB ライブラリに用意されて
+いるかというと、残念ながらありません。
+</p>
+
+<p>
+その代わりに、かなり手間はかかりますが、自由にテキストデータを加工できる
+ための仕組みが用意されています。
+それが、次の節で説明する <dfn>フック (hook)</dfn> です。
+フックを使うことで、テキストデータを柔軟に加工することができます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="hook">フック</a></h3>
+
+<p>
+特に何も指定しなければ、<code>eb_read_text()</code>, 
+<code>eb_read_heading()</code> が返すテキストデータの加工は、あらかじめ
+決められた通りの方法で行われます。
+たとえば、「改行」のエスケープシーケンスに対しては、<samp>\n</samp> を
+書き込むようになっています。
+</p>
+
+<p>
+<dfn>フック (hook)</dfn> を使うと、こうした加工方法を変えることができます。
+フックは、あらかじめ決められたフック設定位置に対して、フック関数を登録
+することで有効になります。
+フック関数が登録されていると、<code>eb_read_text()</code> や
+<code>eb_read_heading()</code> は、あらかじめ決まったやり方でデータを
+書き込む代わりに、フック関数を呼び出します。
+呼び出されたフック関数がデータの書き込み処理を行うことで、
+<code>eb_read_text()</code> や <code>eb_read_heading()</code> から返る
+テキストデータが変化するというわけです。
+</p>
+
+<p>
+EB ライブラリには、多数のフック設定位置が用意されています。
+各エスケープシーケンスには、それぞれ専用にフックが用意されており、
+それ以外にも文字のためのフックが存在します。
+(どのようなフック設定位置があるか、詳しくは 
+<a href="eb-09.html#hook-code-list">「フックコードの一覧」</a> を参照のこと。)
+</p>
+
+<p>
+それぞれのフック設定位置は、<dfn>フックコード (hook code)</dfn> と
+呼ばれるコード値で識別されます。
+たとえば、前述の「改行」のエスケープシーケンスに対応するフックコード
+は <code>EB_HOOK_NEWLINE</code> になります。
+</p>
+
+<p>
+アプリケーションプログラムがフックを扱うには、フックの集合である
+<dfn>フックセット (hook set)</dfn> を用意します。
+これは、EB ライブラリで利用可能なすべてのフック設定位置に対して、どの
+フック関数を使うのかを記録するためのオブジェクトです。
+</p>
+
+<p>
+では、実際にどうやってフックセットを扱うのか、説明していきましょう。
+フックセットは <code>EB_Hookset</code> 型のオブジェクトで表しますので、
+まず <code>EB_Hookset</code> オブジェクトを用意します。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Hookset hookset;
+</pre>
+</blockquote>
+
+<p>
+<code>EB_Hookset</code> オブジェクトは、<code>EB_Book</code> オブジェクト
+と同様に、使用前に必ず初期化する必要があります。
+</p>
+
+<blockquote class="program">
+<pre>
+eb_initialize_hookset(&amp;hookset);
+</pre>
+</blockquote>
+
+<p>
+実際のフック関数は、次のようなものになります。
+この例では、フック関数の中で <code>eb_write_text_string()</code> という
+関数を呼び出して、<samp>&lt;br&gt;</samp> という文字列をテキストデータ
+として書き込んでいます。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Error_Code
+hook_newline(EB_Book *book, EB_Appendix *appendix, void *container,
+    EB_Hook_Code code, int argc, const unsigned int *argv) {
+    eb_write_text_string(book, "&lt;br&gt;");
+    return 0;
+}
+</pre>
+</blockquote>
+
+<p>
+関数 <code>eb_set_hook()</code> を用いることで、このフック関数を
+フックセットに登録することができます。
+ただし、まず <code>EB_Hook</code> という型のオブジェクトにいったん
+フックコードとフック関数を設定し、それを <code>eb_set_hook()</code> を
+渡してやる必要があります。
+ここでは、「改行」を表すエスケープシーケンスに対して、上記のフック関数
+を登録してみます。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Hook hook;
+
+hook.code = EB_HOOK_NEWLINE;   # フックコードをセット
+hook.function = hook_newline;  # フック関数をセット
+eb_set_hook(&amp;hookset, &amp;hook);
+</pre>
+</blockquote>
+
+<p>
+なお、同じフック設定位置 (フックコード) に複数回フック関数を登録しても、
+有効になるのは最後に登録したものだけですので、注意して下さい。
+フック関数として <code>NULL</code> を指定すると、登録されているフックが
+解除されます。
+</p>
+
+<p>
+関数 <code>eb_set_hooks()</code> (最後に <code>s</code> が付く) を使えば、
+複数のフック関数を一度に登録できます。
+</p>
+
+<blockquote class="program">
+<pre>
+static const EB_Hook hooks[] = {
+    {EB_HOOK_NEWLINE,        hook_newline},
+    {EB_HOOK_SET_INDENT,     hook_set_indent},
+    {EB_HOOK_WIDE_JISX0208,  hook_set_jisx0208},
+    {EB_HOOK_NULL,           NULL}
+};
+
+eb_set_hooks(&amp;hookset, &amp;hooks);
+</pre>
+</blockquote>
+
+<p>
+配列の末尾を明示するために、<code>EB_HOOK_NULL</code> という特殊な
+フックコードを置きます。
+この点も注意して下さい。
+</p>
+
+<p>
+こうしてフック関数を登録したフックセットを、<code>eb_raed_text()</code>,
+<code>eb_raed_heading()</code> への引数として渡します。
+前節までの例では、<code>NULL</code> を渡していましたが、代わりに
+<code>&amp;hookset</code> を渡してみます。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_read_text(&amp;book, NULL, &amp;hookset, NULL, MAX_LENGTH,
+    text, &amp;text_length) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+これによって、テキストデータ中に改行を表すエスケープシーケンスがあると、
+<samp>\n</samp> の代わりに <samp>&lt;br&gt;</samp> という文字列が
+書き込まれるようになります。
+</p>
+
+<p>
+<code>EB_Hookset</code> オブジェクトを使い終わったら、
+<code>eb_finalize_hookset()</code> を呼んで後始末をします。
+</p>
+
+<blockquote class="program">
+<pre>
+eb_finalize_hookset(&amp;hookset);
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="hook-and-character-code">フックと文字コードの関係</a></h3>
+
+<p>
+前節では、エスケープシーケンスに対するフックを例にとりましたが、この他
+にも、EB ライブラリには文字に対するフックが用意されています。
+</p>
+
+<dl>
+<dt><code>EB_HOOK_ISO8859_1</code></dt>
+<dd>
+ISO 8859-1 (ラテン文字 1) 文字へのフック。ただし制御文字を除きます。
+引数として、ISO 8859-1 の文字番号がフック関数に渡されます。
+
+<dt><code>EB_HOOK_NARROW_JISX0208</code></dt>
+<dd>
+半角の JIS X 0208 (日本語のかな漢字) 文字へのフック。
+引数として、日本語 EUC で表現した場合の文字番号が、フック関数に渡されます。
+
+<dt><code>EB_HOOK_WIDE_JISX0208</code></dt>
+<dd>
+全角の JIS X 0208 (日本語のかな漢字) 文字へのフック。
+引数として、日本語 EUC で表現した場合の文字番号が、フック関数に渡されます。
+
+<dt><code>EB_HOOK_GB2312</code></dt>
+<dd>
+GB 2312 (中国語の簡体字) 文字へのフック。
+引数として、中国語 EUC で表現した場合の文字番号が、フック関数に渡されます。
+
+<dt><code>EB_HOOK_NARROW_FONT</code></dt>
+<dd>
+半角の外字へのフック。
+引数として、外字の文字番号が、フック関数に渡されます。
+
+<dt><code>EB_HOOK_WIDE_FONT</code></dt>
+<dd>
+半角の外字へのフック。
+引数として、外字の文字番号が、フック関数に渡されます。
+</dl>
+
+<p>
+いずれも、その文字がテキストデータ中に現れる度に、フック関数が呼び出され
+ます。
+</p>
+
+<p>
+上の記述を見ても分かるように、フック関数に渡される文字番号は、書籍の文字
+コードに応じて、ISO 8859-1, 日本語 EUC、中国語 EUC のいずれかの文字コード
+で表現されたものになります。
+</p>
+
+<p>
+フック関数を登録しなければ、その文字番号がテキストデータとしてそのまま
+書き込まれます。
+</p>
+
+<p>
+もし、アプリケーションプログラムが、EB ライブラリの内部コードとは異なる
+文字コードを使用したい場合は、これらのフックのフック関数を登録して、
+コード変換処理をするのも手です。
+ただし、一文字毎にフック関数が呼び出されるので、相応の負荷がかかります。
+</p>
+
+<p>
+また、EBXA-C を扱うには、特別な処理が必要です。
+EBXA-C では、文字コードとして GB 2312 と JIS X 0208 が使われますが
+(<a href="eb-02.html#character-code">「文字コード」</a> を参照のこと)、EB ライブラリによる標準の処理
+では、どちらも 0xa1a1 〜 0xfefe にマッピングされて衝突するため、最低
+でもどちらか一方をフックして文字の表現方法を変えないと、正しく出力
+できません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="cross-search-result">クロス検索の検索結果</a></h3>
+
+<p>
+すでに <a href="eb-08.html#search">「検索」</a> の章で述べたように、CD-ROM 書籍
+には前方一致検索、後方一致検索といった複数の検索メソッドがあります。
+EB ライブラリで検索を行うと、どの検索メソッドでも、一致したエントリの
+情報は、以下のような <code>EB_Hit</code> 型のオブジェクトとして
+受け取ります。
+</p>
+
+<blockquote class="program">
+<pre>
+typedef struct {
+    EB_Position heading;   /* 見出しの位置 */
+    EB_Position text;      /* 本文の位置   */
+} EB_Hit;
+</pre>
+</blockquote>
+
+<p>
+しかしクロス検索では、<code>EB_Hit</code> の見出しと本文の位置は
+まったく同じになります。
+したがって、見出しと本文のテキストデータを読み込むには、他の検索メソッド
+のようにそれぞれの位置にシークして読み込むというやり方ではうまく
+いきません。
+</p>
+
+<p>
+以下に、クロス検索の見出しと本文を読み込むプログラム例を示します。
+</p>
+
+<blockquote class="program">
+<pre>
+/* 見出し位置へのシークを行う */
+if (eb_seek_text(&amp;book, &amp;hits[0].heading) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+/* 見出しの読み込みを行う */
+if (eb_read_heading(&amp;book, NULL, NULL, NULL, MAX_LENGTH,
+    heading, &amp;heading_length) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+/* 先ほど読み込んだ見出しの、次の部分へ飛ぶ */
+if (eb_forward_heading(&amp;book) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+/* 本文の読み込みを行う */
+if (eb_read_heading(&amp;book, NULL, NULL, NULL, MAX_LENGTH,
+    text, &amp;text_length) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote class="program">
+
+<p>
+クロス検索でも、見出しの内容を読み込む方法は他の検索メソッドと変わり
+はなく、<code>eb_read_heading()</code> を使います。
+変わっているのは、本文の読み込みです。
+<code>eb_read_text()</code> ではなく、<code>eb_read_heading()</code>
+を使います。
+見出しを読み込むための関数 <code>eb_read_heading()</code> を、本文を
+読み込むために呼ぶというのは奇妙な話ですが、これはクロス検索の本文が
+見出しと同じ形式になっているためです。
+通常、見出しは一行程度しか書かれていませんが、実際のところクロス検索
+の本文も一行程度しかありません。
+</p>
+
+<p>
+また、本文は見出しのすぐ後に書かれているため、上記のように見出しを
+読み込んだ後で <code>eb_forward_heading()</code> という関数を呼び、
+その後で本文を読み込むためにもう一度 <code>eb_read_heading()</code> を
+呼ぶという変わった手順を踏みます。
+</p>
+
+<p>
+本文だけが必要で見出しが要らなければ、シーク直後に
+<code>eb_forward_heading()</code> を呼ぶようにします。
+その後で <code>eb_read_heading()</code> を呼ぶと、本文を読み込みます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="copyright-notice">著作権表示</a></h3>
+
+<p>
+先に記したように、テキストデータには何種類かあり、その中に
+<dfn>著作権表示 (copyright notice)</dfn> というものがあります。
+名前の通り、著作権表示に関するテキストデータを収めたものです。
+</p>
+
+<p>
+一般に、著作権表示は本文とはまったく独立したデータとして用意されます。
+したがって、本文を先頭から末尾まで読んでみても、著作権表示はどこにも
+見つかりません。
+</p>
+
+<p>
+選択中の副本について、著作権表示の開始位置を知るには
+<code>eb_copyright()</code> を使います。
+この関数は、副本が著作権表示を持っていなければ
+<code>EB_ERR_NO_SUCH_SEARCH</code> を返しますので、著作権表示の有無も
+同時に分かります。
+(開始位置は取得せずに、有無だけを調べたいときは、
+<code>eb_have_copyright()</code> という関数が使えます。)
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Position position;
+EB_Error_Code err;
+
+err = eb_copyright(&amp;book, &amp;position);
+if (err == EB_ERR_NO_SUCH_SEARCH) {
+    /* 著作権表示はない */
+} else if (err != EB_SUCCESS) {
+    /* それ以外のエラー */
+   return;
+}
+</pre>
+</blockquote>
+
+<p>
+後は、得られた位置 (<code>position</code>) にシークして、
+<code>eb_read_text()</code> でテキストデータを読み込みます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="menu">メニュー</a></h3>
+
+<p>
+本文とは独立したテキストデータとしては、著作権表示の他に
+<dfn>メニュー (menu)</dfn> というものがあります。
+メニューは、主に本文の補助となるデータを収録しています。
+代表的なものでは、「前書き (序)」「凡例」といったものが挙げられます。
+</p>
+
+<p>
+メニューでは「別項目参照」というエスケープシーケンスを多用して、階層的
+な構造になっているのが一般的です。
+このエスケープシーケンスには、参照先のテキストの位置が記録されています。
+</p>
+
+<p>
+たとえば、ある CD-ROM 書籍のメニューが次のようになっていたとします。
+この例では、メニューには 3 つの項目があります。
+</p>
+
+<blockquote>
+<pre>
+ * 序文
+ * 表記について
+ * 奥付
+</pre>
+</blockquote>
+
+<p>
+メニューのそれぞれの項目には、参照先があります。
+テキストデータの内部表現では、「序文」「表記について」「奥付」の
+それぞれの文字列の前後に別項目参照開始および終了エスケープシーケンスが
+付いた形になっています。
+視覚的に分かるように記すと、次のような形になっています。
+</p>
+
+<blockquote>
+<pre>
+ * &lt;別項目参照開始シーケンス&gt; "序文" &lt;別項目参照終了シーケンス&gt;
+ * &lt;別項目参照開始シーケンス&gt; "表記" &lt;別項目参照終了シーケンス&gt;
+ * &lt;別項目参照開始シーケンス&gt; "奥付" &lt;別項目参照終了シーケンス&gt;
+</pre>
+</blockquote>
+
+<p>
+HTML の書き方を知っているなら、<samp>a</samp> タグと言えば分かるのでは
+ないかと思います。
+</p>
+
+<blockquote class="program">
+<pre>
+&lt;a href="./index.html"&gt;EB ライブラリのホームページ&lt;/a&gt;
+</pre>
+</blockquote>
+
+<p>
+ただし、参照先の位置情報は終了シーケンス側に記載されますので、この点は
+HTML とは逆になります。
+蛇足ですが、別位置参照はメニューだけでなく、本文でも一般的に使用されます。
+</p>
+
+<p>
+別項目参照開始および終了シーケンスに対して、それぞれフック
+<code>EB_HOOK_BEGIN_REFERENCE</code> と <code>EB_HOOK_END_REFERENCE</code>
+が用意されています。
+参照先の位置情報は、終了シーケンスへのフック関数に対して、引数として
+渡されます。
+たとえば、<code>EB_HOOK_END_REFERENCE</code> へのフック関数の冒頭では、
+次のようにすると良いかも知れません。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Error_Code
+hook_end_ref(EB_Book *book, EB_Appendix *appendix, void *container,
+    EB_Hook_Code code, int argc, const unsigned int *argv)
+{
+    EB_Position position;
+
+    position.page = argv[1];    # 参照先のページ番号
+    position.offset = argv[2];  # 参照先のオフセット
+</pre>
+</blockquote>
+
+<p>
+参照先は、メニューの第 2 層となります。
+この書籍の「奥付」の参照先を辿ったら、次のような表記になっていました。
+</p>
+
+<blockquote>
+<pre>
+○○堂出版社 新国語辞典 第 2 版 (EPWING 版)
+第 1 版 発行 1988年 2月
+第 2 版 発行 1999年 11月
+第 2 版 (EPWING 版) 発行 2000年 2月
+</pre>
+</blockquote>
+
+<p>
+同様に「序文」「表記に付いて」の参照先についても、こうした文章データ
+が用意されていました。
+図示すると、メニューの階層は次のようになります。
+</p>
+
+<blockquote>
+<pre>
+　　　　　　　　　　　　┌─────┐
+第１層　　　　　　　　　│メニュー　│
+　　　　　　　　　　　　└──┰──┘
+　　　　　　　　　　　　　　　┃
+　　　　　　　┏━━━━━━━╋━━━━━━━┓
+　　　　　　　┃　　　　　　　┃　　　　　　　┃
+　　　　┌──┸──┐　┌──┸──┐　┌──┸──┐
+第２層　│メニュー　│　│メニュー　│　│メニュー　│
+　　　　└─────┘　└─────┘　└─────┘
+</pre>
+</blockquote>
+
+<p>
+この辞書の例では、メニューはここで終わりになっていますが、書籍によっては
+さらに第 3 層、第 4 層と続く場合もあります。
+また、メニュー全体が均一の階層数になっているとは限りません。
+メニューの参照先が本文や著作権表示になっていることもあります。
+</p>
+
+<p>
+選択中の副本について、(第 1 層の) メニューの開始位置 を知るには
+<code>eb_menu()</code> を使います。
+この関数は、副本がメニューを持っていなければ
+<code>EB_ERR_NO_SUCH_SEARCH</code> を返しますので、メニューの有無も同時に
+分かります。
+(開始位置は取得せずに、有無だけを調べたいときは、
+<code>eb_have_menu()</code> という関数が使えます。)
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Position position;
+EB_Error_Code err;
+
+err = eb_menu(&amp;book, &amp;position);
+if (err == EB_ERR_NO_SUCH_SEARCH) {
+    /* メニューはない */
+} else if (err != EB_SUCCESS) {
+    /* それ以外のエラー */
+   return;
+}
+</pre>
+</blockquote>
+
+<p>
+後は、得られた位置 (<code>position</code>) にシークして、
+<code>eb_read_text()</code> でテキストデータを読み込みます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="multi-candidates">複合検索の候補一覧</a></h3>
+
+<p>
+「複合検索」(<a href="eb-08.html#multi-search">「複合検索」</a> を参照のこと) のところで述べたように、
+複合検索では、入力語に <dfn>候補一覧 (candidates)</dfn> が用意されている
+ことがあります。
+これは、入力語として有効な語をあらかじめ列挙しておき、
+アプリケーションプログラムのユーザに選択させる仕組みです。
+</p>
+
+<p>
+たとえば、人名を検索するのために、次のような複合検索があったとします。
+</p>
+
+<blockquote>
+<pre>
+入力語 0: 国・地域
+入力語 1: 時代
+入力語 2: 性別
+入力語 3: キーワード
+入力語 4: キーワード
+</pre>
+</blockquote>
+
+<p>
+このうち、入力語 3 の「性別」には、入力語として有効な語は「男」と「女」
+の 2 つしかないでしょう。
+このように、入力語として有効な語が限られている場合に、候補一覧が用意
+されていることがあります。
+</p>
+
+<p>
+候補一覧は検索のためのデータではありますが、内部構造はテキストデータ
+そのものです。
+ユーザに対して候補を列記した示したテキストを示し、その中の一つを選択
+してもらうようになっています。
+</p>
+
+<p>
+しかも、候補一覧のデータ構造はメニューと非常に似ており、メニューの
+ような階層構造を持っています
+(<a href="eb-09.html#menu">「メニュー」</a> を参照のこと)。
+たとえば、上の複合検索の入力語 2 「国・地域」にも候補の一覧を設けると
+したら、最初の階層は次のようになるかも知れません。
+</p>
+
+<blockquote>
+<pre>
+* 日本 (→選択)
+* 日本以外のアジア (→詳細)
+* ヨーロッパ (→詳細)
+* 北アメリカ (→詳細)
+* その他 (→詳細)
+</pre>
+</blockquote>
+
+<p>
+「日本」を選ぶと、そこで入力語が決定されたことになります。しかし、
+それ以外の項目についてはさらに細かく分類された選択肢が用意されて
+います。
+ここでは、「北アメリカ」を選んでみましょう。
+すると、さらに次のような候補一覧のデータが提示されます。
+</p>
+
+<blockquote>
+<pre>
+* アメリカ (→選択)
+* カナダ (→選択)
+</pre>
+</blockquote>
+
+<p>
+ここで、「アメリカ」「カナダ」を選ぶと、入力語が決定されます。
+</p>
+
+<p>
+次に実際に、EB ライブラリを使ってこうした候補一覧を扱う方法について
+説明します。
+まず、アプリケーションプログラムは、複合検索の入力語が候補一覧を持って
+いるかどうかを、確認する必要があるでしょう。
+<code>eb_multi_entry_candidates()</code> を使うと、候補一覧データの開始位置
+を取得することができます。
+この関数は、候補一覧を持っていなければ <code>EB_ERR_NO_CANDIDATES</code> を
+返しますので、候補一覧の有無も分かります。
+(開始位置は取得せずに、有無だけを調べたいときは、
+<code>eb_multi_entry_have_candidates()</code> という関数が使えます。)
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Position position;
+EB_Error_Code err;
+
+/* <code>mulit_id</code>, <code>entry_id</code> で、どの複合検索の
+ * 何番目の入力語について確認するのかを指定します。*/
+err = eb_multi_entry_candidates(&amp;book, multi_id, entry_id, &amp;position);
+if (err == EB_ERR_NO_CANDIDATES) {
+    /* この入力語には、候補一覧が用意されていない */
+   return;
+} else if (err != EB_SUCCESS) {
+    /* それ以外のエラー */
+   return;
+}
+</pre>
+</blockquote>
+
+<p>
+後は、得られた位置 (<code>position</code>) にシークして、
+<code>eb_read_text()</code> でテキストデータを読み込みます。
+読み込んだテキストでは、候補となる語のそれぞれが候補開始と終了を表す
+エスケープシーケンスに挟まれた形になっています。
+</p>
+
+<blockquote>
+<pre>
+* &lt;候補開始シーケンス&gt; "日本" &lt;候補終了シーケンス&gt;
+* &lt;候補開始シーケンス&gt; "日本以外のアジア" &lt;候補終了シーケンス&gt;
+* &lt;候補開始シーケンス&gt; "ヨーロッパ" &lt;候補終了シーケンス&gt;
+* &lt;候補開始シーケンス&gt; "北アメリカ" &lt;候補終了シーケンス&gt;
+* &lt;候補開始シーケンス&gt; "その他" &lt;候補終了シーケンス&gt;
+</pre>
+</blockquote>
+
+<p>
+候補開始シーケンスに対しては、フックとして
+<code>EB_HOOK_BEGIN_CANDIDATE</code> が用意されています。
+終了シーケンスに対するフックは 2 種類あって、さらに次の階層へ続く場合
+に呼ばれる <code>EB_HOOK_END_CANDIDATE_GROUP</code> と、その語がそのまま
+入力語の候補となる場合に呼ばれる <code>EB_HOOK_END_GROUP_LEAF</code> に
+分かれています。
+</p>
+
+<p>
+次の階層のデータの開始位置は、終了シーケンスのフック関数に、引数として
+渡ってきます。
+(この点もメニューと同様なので、メニューの解説を参考にして下さい。)
+</p>
+
+<p>
+終了シーケンスに対するフック関数の中では、<code>eb_current_candidate()</code>
+という関数が使えます。
+この関数は、開始シーケンスと終了シーケンスの間に挟まれた「候補」の文字列
+(ポインタ) を返します。
+</p>
+
+<blockquote class="program">
+<pre>
+const char *candidate;
+
+candidate = eb_current_candidate(book);
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="stop-code-issue">区切りコードの問題</a></h3>
+
+<p>
+本文は、先頭から末尾まで一本の繋がったデータ列になっています。
+英語辞典なら、最初の単語 `A' から最後の `zzz' までの説明が、すべて一つの
+「本文」の中に書かれることになります。
+</p>
+
+<p>
+一般に、アプリケーションプログラムがある単語を検索した際は、本文の中から
+その単語を説明した部分だけを抜き出して出力することになるでしょう。
+たとえば、`dictionary' という単語を引いた場合、次のような文章が出力される
+事が期待されます。
+その次や、次の次の単語の説明まで延々と表示されることを、おそらく大半の
+ユーザは望まない筈です。
+</p>
+
+<blockquote>
+<pre>
+dictionary [名] (複: dictionaries)
+辞典、事典
+[類義] lexicon, glossary (用語辞典), encyclopedia (百科事典)
+</pre>
+</blockquote>
+
+<p>
+しかし、困ったことに CD-ROM 書籍には、単語の説明の終わりを示す印
+(エスケープシーケンス) が定義されていません。
+つまり、ある語の説明部分を正確に抜き出すことは、電子ブックや EPWING では
+不可能なのです。
+</p>
+
+<p>
+しかしながら、幸いにも市販の書籍の多くには、単語の説明の終了位置にだけ
+出現する、特有のエスケープシーケンスが存在します。
+もちろん、このエスケープシーケンスは本来「単語の説明の終了」を示すもの
+ではなく別の用途として用いるのですが、「終了位置」として代用できる
+という意味です。
+</p>
+
+<p>
+EB ライブラリでは、この「終了位置」の印に使えるエスケープシーケンスの
+ことを、<dfn>区切りコード (stop code)</dfn> と呼んでいます。
+EB ライブラリは区切りコードを自動判定する機能を持っていますが、判定は
+完璧ではないので外れることもあります。
+外れると本文が途中で途切れたり、本文の続きが延々と出力されたりします。
+</p>
+
+<p>
+その場合は、明示的に appendix
+(詳しくは <a href="ebappendix.html">ebappendix コマンドのマニュアル</a> 
+の「appendix (付録) とは」を参照のこと)
+で区切りコードを指定することによって回避できる書籍もありますが、
+残念ながら区切りコードがまったく存在しない書籍も少数ながら存在します。
+区切りコードを持たない書籍に対して、有効な対処方法は今のところありません。
+</p>
+
+<p>
+<code>eb_read_text()</code> による本文の取得では、区切りコードが検出された
+時点で読み込みを止めます。
+さらに繰り返し <code>eb_read_text()</code> を呼んでも、区切りコードより先の
+本文は読み込めません。
+</p>
+
+<p>
+区切りコードを検出したかどうかの判定には、<code>eb_is_text_stopped()</code>
+を使います。
+この関数は、最後に読み込みを行ったテキストデータの中に、区切りコードを
+検出していれば 1 を返します。
+</p>
+
+<p>
+本文以外のテキストデータにも区切りコードの概念は存在しますので、
+<code>eb_is_text_stopped()</code> を使って区切りコードを検出できます。
+しかし、本文以外では EB ライブラリが確実に区切りを判別できますので、
+誤判定の問題は起きません。
+</p>
+
+<p>
+見出しにおける区切りは、それぞれの単語の見出しの終了位置となります。
+メニューおよび複合検索の候補一覧では、階層化された個々のメニューデータ
+の終了位置で区切りと判定されます。
+(同一階層に複数個のメニューデータがあっても、個々のメニューデータで
+区切られます。)
+著作権表示では、全文の終了位置で区切りと判定されます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="text-data-sample">サンプルプログラム</a></h3>
+
+<blockquote>
+<pre>
+/*                                                            -*- C -*-
+ * Copyright (c) 1999-2006  Motoyuki Kasahara
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * 使用方法:
+ *     text &lt;book-path&gt; &lt;subbook-index&gt; &lt;number&gt;
+ * 例:
+ *     text /cdrom 0 10
+ * 説明:
+ *     &lt;book-path&gt; で指定した CD-ROM 書籍から特定の副本を選び、本文
+ *     の先頭から &lt;number&gt; 個分の単語の説明を出力します。
+ *
+ *     &lt;subbook-index&gt; には、検索対象の副本のインデックスを指定しま
+ *     す。インデックスは、書籍の最初の副本から順に 0、1、2 ... に
+ *     なります。
+ */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#include &lt;eb/eb.h&gt;
+#include &lt;eb/error.h&gt;
+#include &lt;eb/text.h&gt;
+
+#define MAXLEN_TEXT 1023
+
+int
+main(int argc, char *argv[])
+{
+    EB_Error_Code error_code;
+    EB_Book book;
+    EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
+    int subbook_count;
+    int subbook_index;
+    EB_Position text_position;
+    char text[MAXLEN_TEXT + 1];
+    ssize_t text_length;
+    int text_count;
+    int i;
+
+    /* コマンド行引数をチェック。*/
+    if (argc != 4) {
+        fprintf(stderr, "Usage: %s book-path subbook-index number\n",
+            argv[0]);
+        exit(1);
+    }
+    text_count = atoi(argv[3]);
+
+    /* EB ライブラリと `book' を初期化。*/
+    eb_initialize_library();
+    eb_initialize_book(&amp;book);
+
+    /* 書籍を `book' に結び付ける。*/
+    error_code = eb_bind(&amp;book, argv[1]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+
+    /* 副本の一覧を取得。*/
+    error_code = eb_subbook_list(&amp;book, subbook_list, &amp;subbook_count);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* 副本のインデックスを取得。*/
+    subbook_index = atoi(argv[2]);
+
+    /*「現在の副本 (current subbook)」を設定。*/
+    error_code = eb_set_subbook(&amp;book, subbook_list[subbook_index]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to set the current subbook, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* テキストの開始位置を取得。*/
+    error_code = eb_text(&amp;book, &amp;text_position);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get text information, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* テキストをシーク。*/
+    error_code = eb_seek_text(&amp;book, &amp;text_position);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to seek text, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    i = 0;
+    while (i &lt; text_count) {
+        /* テキストを取得。*/
+        error_code = eb_read_text(&amp;book, NULL, NULL, NULL, MAXLEN_TEXT,
+            text, &amp;text_length);
+        if (error_code != EB_SUCCESS) {
+            fprintf(stderr, "%s: failed to read text, %s\n",
+                argv[0], eb_error_message(error_code));
+            goto die;
+        }
+        fputs(text, stdout);
+
+        if (!eb_is_text_stopped(&amp;book))
+            continue;
+
+        fputs("\n----------------------------------------\n", stdout);
+
+        /* 次の単語の説明へ移動。*/
+        error_code = eb_forward_text(&amp;book, NULL);
+        if (error_code == EB_ERR_END_OF_CONTENT)
+            fputs("\n[END]\n", stdout);
+        else if (error_code != EB_SUCCESS) {
+            fprintf(stderr, "%s: failed to read text, %s\n",
+                argv[0], eb_error_message(error_code));
+            goto die;
+        }
+        i++;
+    }
+        
+    /* 書籍と EB ライブラリの利用を終了。*/
+    eb_finalize_book(&amp;book);
+    eb_finalize_library();
+    exit(0);
+
+    /* エラー発生で終了するときの処理。*/
+  die:
+    eb_finalize_book(&amp;book);
+    eb_finalize_library();
+    exit(1);
+}
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="text-data-types">データ型の詳細</a></h3>
+
+<p>
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/eb.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:Hook_Code"><code>EB_Hook_Code</code> 型</a></h4>
+
+<p>
+データ型 <code>EB_Hook_Hook</code> は、フックの設定位置コードを表します。
+</p>
+
+<p>
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <code>==</code> と <code>!=</code> で一致比較することができます。
+</p>
+
+<p>
+EB ライブラリでは、全部で <code>EB_NUMBER_OF_HOOKS</code> 個のフックコード
+を定義しています。
+定義されている設定位置コードの一覧については、
+次の節 (<a href="eb-09.html#hook-code-list">「フックコードの一覧」</a> を参照のこと)
+を参照して下さい。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:Hook"><code>EB_Hook</code> 型</a></h4>
+
+<p>
+データ型 <code>EB_Hook</code> は、フックコードとそれに対応するフック関数
+の組を表します。
+内部構造は、次のように定義されています。
+</p>
+
+<blockquote class="program">
+<pre>
+typedef struct EB_Hook_Struct EB_Hook;
+
+struct EB_Hook_Struct {
+    EB_Hook_Code code;
+    EB_Error_Code (*FUNC)(EB_Book *, EB_Appendix *, void *,
+        EB_Hook_Code, int, const unsigned int *);
+};
+</pre>
+</blockquote>
+
+<p>
+アプリケーションプログラムは、直接 <code>EB_Hook</code> オブジェクトの
+メンバを参照したり、セットしたりしても構いません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:Hookset"><code>EB_Hookset</code> 型</a></h4>
+
+<p>
+データ型 <code>EB_Hookset</code> は、フック一式を表します。
+EB ライブラリで利用可能なすべてのフック設定位置に対して、どのような
+フック関数を指定するのかを記録するための型です。
+</p>
+
+<p>
+<code>EB_Hookiset</code> オブジェクトの操作は、すべて EB ライブラリが用意
+している関数で行います。
+アプリケーションプログラムは、直接 <code>EB_Hookset</code> オブジェクトの
+メンバを参照したり、セットしたりすべきではありません。
+</p>
+
+<p>
+<code>EB_Hookset</code> オブジェクトを使用する際は、まずそのオブジェクトに
+対して <code>eb_initialize_hookset()</code> を呼んで初期化しなくては
+なりません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="hook-function-details">フック関数の詳細</a></h3>
+
+<p>
+この節では、フック関数の仕様について記します。
+</p>
+
+<p>
+まず、フック関数を呼び出す <code>eb_read_text()</code> および
+<code>eb_read_heading()</code> のプロトタイプは次のようになっています。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Error_Code
+eb_read_text(EB_Book *book, EB_Appendix *appendix,
+    EB_Hookset *hookset, void *container, size_t text_max_length,
+    char *text, ssize_t *text_length)
+</pre>
+</blockquote>
+
+<p>
+一方、フック関数のプロトタイプは、次のようになっています。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Error_Code
+hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
+    EB_Hook_Code code, int argc, const unsigned int *argv);
+</pre>
+</blockquote>
+
+<p>
+引数 <var>book</var>, <var>appendix</var>, <var>container</var> は、
+<code>eb_read_text()</code> あるいは <code>eb_read_heading()</code> に
+渡された値がそのままフック関数にも渡ってきます。
+</p>
+
+<p>
+<var>appendix</var> というのは、書籍に対する補助データを提供するオブジェクト
+です
+(appendix (付録) について詳しくは
+<a href="ebappendix.html">ebappendix コマンドのマニュアル</a> 
+の「appendix (付録) とは」を参照のこと)。
+
+<p>
+引数 <var>container</var> は、アプリケーションプログラムからフック関数に
+何かデータを渡したいときに使います。
+</p>
+
+<p>
+最後の <var>argc</var> と <var>argv</var> には、加工前のテキストデータが
+渡されます。
+文字に対するフックでは、文字コード番号が渡ってきます。
+エスケープシーケンスに対するフックでは、そのシーケンス自体のコード
+(<samp>1f</samp> で始まるコード) と、もしあればエスケープシーケンスへの
+引数をが渡ってきます。
+個々のフックにおいて、<var>argc</var> と <var>argv</var> にどうような値が
+渡ってくるのか、詳しくは <a href="eb-09.html#hook-code-list">「フックコードの一覧」</a> を参照のこと。
+</p>
+
+<p>
+フック関数の中から次に挙げる関数を呼び出すことで、テキストデータへの
+書き込みを行うことができます。
+</p>
+
+<ul>
+<li><code>eb_write_text()</code>
+<li><code>eb_write_text_string()</code>
+<li><code>eb_write_text_byte1()</code>
+<li><code>eb_write_text_byte2()</code>
+</ul>
+
+<p>
+これらの関数の仕様に関して詳しくは
+<a href="eb-09.html#text-data-functions">「[テキストデータ] 関数の詳細」</a> を参照のこと。
+</p>
+
+<p>
+フック関数が <code>EB_SUCCESS</code> 以外の値を返すと、フック関数を
+呼び出した <code>eb_read_text()</code>, <code>eb_read_heading()</code> 
+はエラーが発生したものと見なし、そのエラーコードをそのまま
+アプリケーションプログラムに返します。
+</p>
+
+<p>
+フック関数の中では、<var>book</var> に対して以下の関数を呼び出しては
+いけません。
+呼び出したときの動作は、未定義です。
+</p>
+
+<ul>
+<li><code>eb_seek_text()</code>
+<li><code>eb_read_text()</code>
+<li><code>eb_read_heading()</code>
+<li><code>eb_read_rawtext()</code>
+<li><code>eb_forward_text()</code>
+<li><code>eb_backward_text()</code>
+<li><code>eb_set_subbook()</code>
+<li><code>eb_unset_subbook()</code>
+<li><code>eb_load_all_subbook()</code>
+<li><code>eb_bind()</code>
+<li><code>eb_finalize_book()</code>
+<li><code>eb_finalize_library()</code>
+</ul>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="hook-code-list">フックコードの一覧</a></h3>
+
+<p>
+この節で説明しているフックコードを使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/text.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_NULL">定数 <code>EB_HOOK_NULL</code></a></h4>
+
+<p>
+<code>EB_HOOK_NULL</code> は厳密にはフックではなく、
+<code>eb_set_hooks()</code> で複数のフック関数を登録する際に、
+<code>EB_Hook</code> 配列の末尾の要素を示すために用います。
+このフックコードに対して、フック関数は登録できません。
+</p>
+
+<p>
+詳しくは、<a href="eb-09.html#text-data-functions">「[テキストデータ] フック関数の詳細」</a> を参照のこと。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_INITIALIZE">定数 <code>EB_HOOK_INITIALIZE</code></a></h4>
+
+<p>
+<code>EB_HOOK_INITIALIZE</code> は、<code>eb_seek_text()</code> を
+呼び出した直後の最初の <code>eb_read_text()</code>, 
+<code>eb_read_heading()</code> の呼び出し時に処理されます。
+何か初期化処理をしたいときに、使うと良いでしょう。
+</p>
+
+<p>
+このフックが、フック関数に渡す <code>argc</code> は 0 です。
+フック関数を登録していない状態では、このフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_NARROW">定数 <code>EB_HOOK_BEGIN_NARROW</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_NARROW">定数 <code>EB_HOOK_END_NARROW</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_NARROW</code> および <code>EB_HOOK_END_NARROW</code>
+は、半角表示の開始と終了を表すエスケープシーケンスに対するフックです。
+</p>
+
+<p>
+どちらのフックも、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<code>EB_HOOK_BEGIN_NARROW</code> なら <samp>0x1f04</samp>、
+<code>EB_HOOK_END_NARROW</code> なら <samp>0x1f05</samp> になります。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_SUBSCRIPT">定数 <code>EB_HOOK_BEGIN_SUBSCRIPT</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_SUBSCRIPT">定数 <code>EB_HOOK_END_SUBSCRIPT</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_SUBSCRIPT</code> および
+<code>EB_HOOK_END_SUBSCRIPT</code> は、下付き表示の開始と終了を表す
+エスケープシーケンスに対するフックです。
+</p>
+
+<p>
+どちらのフックも、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> の値はエスケープシーケンスのコードそのもので、
+<code>EB_HOOK_BEGIN_SUBSCRIPT</code> なら <samp>0x1f06</samp>、
+<code>EB_HOOK_END_SUBSCRIPT</code> なら <samp>0x1f07</samp> になります。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに
+何も書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_SET_INDENT">定数 <code>EB_HOOK_SET_INDENT</code></a></h4>
+
+<p>
+<code>EB_HOOK_SET_INDENT</code> は、テキストデータの行頭の字下げ指定を
+表すエスケープシーケンスに対するフックです。
+</p>
+
+<p>
+このフックが、フック関数に渡す <code>argc</code> は 2 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f09</samp> になります。
+<code>argv[1]</code> が、字下げの量を表します。
+</p>
+
+<p>
+字下げの量の単位が、何であるのかは不明です。
+また、字下げ量の最小値は、0 の場合と 1 の場合の二通りがあります。
+いずれにしろ、字下げは 1 ずつ増えたり減ったりします。
+</p>
+
+<p>
+フック関数を登録していない状態では、このフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_NEWLINE">定数 <code>EB_HOOK_NEWLINE</code></a></h4>
+
+<p>
+<code>EB_HOOK_SET_NEWLINE</code> は、改行を表すエスケープシーケンスに
+対するフックです。
+</p>
+
+<p>
+ただし、<code>eb_read_heading()</code> (見出しの読み込み) による処理では、
+改行を表すエスケープシーケンスは区切りコードとしても扱われます。
+そのため、エスケープシーケンスが見つかってもこのフックの処理は行われず、
+ただちに読み込み処理は終了します。
+</p>
+
+<p>
+このフックが、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f0a</samp> になります。
+</p>
+
+<p>
+フック関数を登録していない状態では、このフックはテキストデータに何も
+書き込みませんが、<code>eb_initialize_hookset()</code> で
+<code>EB_Hook</code> オブジェクトを初期化すると、フック関数として
+<code>eb_hook_newline()</code> が自動的に登録されます。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_SUPERSCRIPT">定数 <code>EB_HOOK_BEGIN_SUPERSCRIPT</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_SUPERSCRIPT">定数 <code>EB_HOOK_END_SUPERSCRIPT</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_SUPERSCRIPT</code> および
+<code>EB_HOOK_END_SUPERSCRIPT</code> は、上付き表示の開始と終了を表す
+エスケープシーケンスに対するフックです。
+</p>
+
+<p>
+どちらのフックも、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<code>EB_HOOK_BEGIN_SUPERSCRIPT</code> なら <samp>0x1f0e</samp>、
+<code>EB_HOOK_END_SUPERSCRIPT</code> なら <samp>0x1f0f</samp> になります。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_NO_NEWLINE">定数 <code>EB_HOOK_BEGIN_NO_NEWLINE</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_NO_NEWLINE">定数 <code>EB_HOOK_END_NO_NEWLINE</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_NO_NEWLINE</code> および
+<code>EB_HOOK_END_NO_NEWLINE</code> は、改行禁止の開始と終了を表す
+エスケープシーケンスに対するフックです。
+</p>
+
+<p>
+どちらのフックも、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<code>EB_HOOK_BEGIN_NO_NEWLINE</code> なら <samp>0x1f10</samp>、
+<code>EB_HOOK_END_NO_NEWLINE</code> なら <samp>0x1f11</samp> になります。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_EMPHASIS">定数 <code>EB_HOOK_BEGIN_EMPHASIS</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_EMPHASIS">定数 <code>EB_HOOK_END_EMPHASIS</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_EMPHASIS</code> および <code>EB_HOOK_END_EMPHASIS</code>
+は、強調表示の開始と終了を表すエスケープシーケンスに対するフックです。
+</p>
+
+<p>
+どちらのフックも、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<code>EB_HOOK_BEGIN_EMPHASIS</code> なら <samp>0x1f12</samp>、
+<code>EB_HOOK_END_EMPHASIS</code> なら <samp>0x1f13</samp> になります。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_CANDIDATE">定数 <code>EB_HOOK_BEGIN_CANDIDATE</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_CANDIDATE_LEAF">定数 <code>EB_HOOK_END_CANDIDATE_LEAF</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_CANDIDATE_GROUP">定数 <code>EB_HOOK_END_CANDIDATE_GROUP</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_CANDIDATE</code> は、複合検索の候補となる語の開始を
+表すエスケープシーケンスに対するフックです。
+</p>
+
+<p>
+それに対して、終了を表すエスケープシーケンスに対するフックは 2 種類
+あります。
+一つは <code>EB_HOOK_END_CANDIDATE_LEAF</code> で、候補となる語が実際に
+検索の入力語として使えるものであることを示します。
+もう一つは <code>EB_HOOK_END_CANDIDATE_GROUP</code> で、候補となる語は
+さらに細かい選択肢に分かれていることを示します。
+(したがって、候補となる語を検索の入力語として使うことはできません。)
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_CANDIDATES</code> が、フック関数に渡す
+<code>argc</code> は 1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f43</samp> になります。
+</p>
+
+<p>
+フック <code>EB_HOOK_END_CANDIDATE_LEAF</code> および
+<code>EB_HOOK_END_CANDIDATE_GROUP</code> が、フック関数に渡す
+<code>argc</code> は 3 です。
+どちらのフックも、<code>argv[0]</code> はエスケープシーケンスのコード
+そのもので、<samp>0x1f63</samp> になります。
+フック <code>EB_HOOK_END_CANDIDATE_GROUP</code> の <code>argv[1]</code>
+と <code>argv[2]</code> は、次の階層の候補一覧データの開始ページ番号と
+オフセットです。
+これは、<code>EB_Position</code> オブジェクト
+(<a href="eb-08.html#search-data-types">「[検索] データ型の詳細」</a> を参照のこと)
+の <code>page</code> および <code>offset</code> メンバの値に相当します。
+フック <code>EB_HOOK_END_CANDIDATE_LEAF</code> では、<code>argv[1]</code>,
+<code>argv[2]</code> は 2 つとも 0 になっています。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_REFERENCE">定数 <code>EB_HOOK_BEGIN_REFERENCE</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_REFERENCE">定数 <code>EB_HOOK_END_REFERENCE</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_REFERENCE</code> および
+<code>EB_HOOK_END_REFERENCE</code> は、別位置のテキストデータの参照開始と
+終了を表すエスケープシーケンスに対するフックです。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_REFERENCE</code> が、フック関数に渡す
+<code>argc</code> は 2 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f42</samp> になります。
+<code>argv[1]</code> の意味は不明です。
+</p>
+
+<p>
+<code>EB_HOOK_END_REFERENCE</code> が、フック関数に渡す <code>argc</code>
+は 3 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f62</samp> になります。
+<code>argv[1]</code> と <code>argv[2]</code> は、参照先のページ番号と
+オフセットです。
+これは、<code>EB_Position</code> オブジェクト
+(<a href="eb-08.html#search-data-types">「[検索] データ型の詳細」</a> を参照のこと)
+の <code>page</code> および <code>offset</code> メンバの値に相当します。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_KEYWORD">定数 <code>EB_HOOK_BEGIN_KEYWORD</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_KEYWORD">定数 <code>EB_HOOK_END_KEYWORD</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_KEYWORD</code> および <code>EB_HOOK_END_KEYWORD</code> は、
+検索キーの開始と終了を表すエスケープシーケンスに対するフックです。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_KEYWORD</code> が、フック関数に渡す
+<code>argc</code> は 2 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f41</samp> になります。
+<code>argv[1]</code> の意味は不明です。
+</p>
+
+<p>
+<code>EB_HOOK_END_KEYWORD</code> は、フック関数に 1 個の引数を渡します。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f61</samp> になります。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_DECORATION">定数 <code>EB_HOOK_BEGIN_DECORATION</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_DECORATION">定数 <code>EB_HOOK_END_DECORATION</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_DECORATION</code> および
+<code>EB_HOOK_END_DECORATION</code> は、文字修飾の開始と終了を表す
+エスケープシーケンスに対するフックです。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_DECORATION</code> が、フック関数に渡す
+<code>argc</code> は 2 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1fe0</samp> になります。
+<code>argv[1]</code> の意味は不明です。
+</p>
+
+<p>
+<code>EB_HOOK_END_KEYWORD</code> は、フック関数に 1 個の引数を渡します。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1fe1</samp> になります。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_NARROW_FONT">定数 <code>EB_HOOK_NARROW_FONT</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_WIDE_FONT">定数 <code>EB_HOOK_WIDE_FONT</code></a></h4>
+
+<p>
+<code>EB_HOOK_NARROW_FONT</code> および <code>EB_HOOK_WIDE_FONT</code> は、
+それぞれ半角外字と全角外字に対するフックです。
+</p>
+
+<p>
+どちらのフックも、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> は、外字の文字番号を表します。
+</p>
+
+<p>
+フック関数を登録していない状態では、このフックはテキストデータに何も
+書き込みませんが、<code>eb_initialize_hookset()</code> で
+<code>EB_Hook</code> オブジェクトを初期化すると、フック関数として
+<code>eb_hook_narrow_character_text()</code> および
+<code>eb_hook_wide_character_text()</code> が自動的に登録されます。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_ISO8859_1">定数 <code>EB_HOOK_ISO8859_1</code></a></h4>
+
+<p>
+<code>EB_HOOK_ISO8859_1</code> は、ISO 8859-1 (ラテン文字 1) 文字に対する
+フックです。
+</p>
+
+<p>
+このフックが、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> は、ISO 8859-1 の文字番号を表します。
+</p>
+
+<p>
+フック関数を登録していない状態では、<code>argv[0]</code> の値をそのまま
+テキストデータに書き込みます。
+つまり、文字はそのまま ISO 8859-1 として、1 バイト書き込まれます。
+</p>
+
+<p>
+このフックが利用されるのは、処理中の書籍の文字コードが
+<code>EB_CHARCODE_ISO8859_1</code> の場合だけです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_NARROW_JISX0208">定数 <code>EB_HOOK_NARROW_JISX0208</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_WIDE_JISX0208">定数 <code>EB_HOOK_WIDE_JISX0208</code></a></h4>
+
+<p>
+<code>EB_HOOK_NARROW_JISX0208</code> と <code>EB_HOOK_WIDE_JISX0208</code>
+は、半角および全角の JIS X 0208 (日本語のかな漢字) 文字に対するフックです。
+</p>
+
+<p>
+どちらのフックも、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> は、JIS X 0208 の文字を日本語 EUC で表現したときの
+文字番号を表します。
+</p>
+
+<p>
+フック関数を登録していない状態では、<code>argv[0]</code> の値をそのまま
+テキストデータに書き込みます。
+つまり、文字はそのまま日本語 EUC として、2 バイト書き込まれます。
+</p>
+
+<p>
+このフックが利用されるのは、
+処理中の書籍の文字コードが <code>EB_CHARCODE_JISX0208</code> か
+<code>EB_CHARCODE_JISX0208_GB2312</code> の場合だけです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_GB2312">定数 <code>EB_HOOK_GB2312</code></a></h4>
+
+<p>
+<code>EB_HOOK_GB2312</code> は、GB 2312 (中国語の簡体字) 文字に対する
+フックです。
+</p>
+
+<p>
+このフックが、フック関数に渡す <code>argc</code> は 1 です。
+<code>argv[0]</code> は、GB 2312 の文字を中国語 EUC で表現したときの
+文字番号を表します。
+</p>
+
+<p>
+フック関数を登録していない状態では、<code>argv[0]</code> の値をそのまま
+テキストデータに書き込みます。
+つまり、文字はそのまま中国語 EUC として、2 バイト書き込まれます。
+</p>
+
+<p>
+このフックが利用されるのは、処理中の書籍の文字コードが
+<code>EB_CHARCODE_JISX0208_GB2312</code> の場合だけです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_MONO_GRAPHIC">定数 <code>EB_HOOK_BEGIN_MONO_GRAPHIC</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_MONO_GRAPHIC">定数 <code>EB_HOOK_END_MONO_GRAPHIC</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_MONO_GRAPHIC</code> および
+<code>EB_HOOK_END_MONO_GRAPIHC</code> は、モノクロ図版の開始と終了を
+表すエスケープシーケンスに対するフックです。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_MONO_GRAPHIC</code> が、フック関数に渡す
+<code>argc</code> は 4 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f32</samp> か <samp>0x1f44</samp> のいずれかになります。
+<code>argv[2]</code> と <code>argv[3]</code> は、図版の高さと幅
+(ピクセル数) を意味します。
+ただし、電子ブックのモノクロ図版 (最初の引数が <samp>0x1f32</samp> の
+場合)  には、図版の高さと幅の情報が欠けているので、値はどちらも 0 に
+なります。
+<code>argv[1]</code> の意味は不明です。
+</p>
+
+<p>
+<code>EB_HOOK_END_MONO_GRAPHIC</code> が、フック関数に渡す
+<code>argc</code> は 3 です。
+<code>argv[0]</code> は、エスケープシーケンスのコードそのものです。
+<code>EB_HOOK_BEGIN_MONO_GRAPHIC</code> の <code>argv[0]</code> が
+<samp>0x1f32</samp> なら、<code>EB_HOOK_END_MONO_GRAPHIC</code> の
+<code>argv[0]</code> は <samp>0x1f52</samp> になり、<samp>0x1f44</samp>
+なら <samp>0x1f64</samp> になります。
+<code>argv[1]</code> と <code>argv[2]</code> は、図版データのページ番号
+とオフセットです。
+これは、<code>EB_Position</code> オブジェクト
+(<a href="eb-08.html#search-data-types">「[検索] データ型の詳細」</a> を参照のこと)
+の <code>page</code> および <code>offset</code> メンバの値に相当します。
+</p>
+
+<p>
+図版データの取り出し方については、<a href="eb-11.html#monochrome-image">「モノクロ図版」</a>
+を参照してください。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_GRAY_GRAPHIC">定数 <code>EB_HOOK_BEGIN_GRAY_GRAPHIC</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_GRAY_GRAPHIC">定数 <code>EB_HOOK_END_GRAY_GRAPHIC</code></a></h4>
+
+<p>
+これらのフック名称は、グレースケール図版のために予約されていますが、
+本バージョンの EB ライブラリではまだ対応していません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_COLOR_BMP">定数 <code>EB_HOOK_BEGIN_COLOR_BMP</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_COLOR_JPEG">定数 <code>EB_HOOK_BEGIN_COLOR_JPEG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_COLOR_GRAPHIC">定数 <code>EB_HOOK_END_COLOR_GRAPHIC</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_COLOR_BMP</code> と <code>EB_HOOK_COLOR_JPEG</code>
+は、それぞれ BMP 形式と JPEG 形式のカラー図版の開始を表す
+エスケープシーケンスに対するフックです。
+開始のフックは BMP と JPEG とでフックが分かれていますが、終了の
+フックは共通で、<code>EB_HOOK_END_COLOR_GRAPIHC</code> になります。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_COLOR_BMP</code> と
+<code>EB_HOOK_COLOR_JPEG</code> が、フック関数に渡す <code>argc</code> は
+4 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f4d</samp> になります。
+<code>argv[2]</code> と <code>argv[3]</code> は、図版の幅と高さ
+(ピクセル数) を意味します。
+<code>argv[1]</code> の意味は不明です。
+</p>
+
+<p>
+フック <code>EB_HOOK_END_COLOR_BMP</code> が、フック関数に渡す
+<code>argc</code> は 3 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f6d</samp> になります。
+<code>argv[1]</code> と <code>argv[2]</code> は、図版データのページ番号
+とオフセットです。
+これは、<code>EB_Position</code> オブジェクト
+(<a href="eb-08.html#search-data-types">「[検索] データ型の詳細」</a> を参照のこと)
+の <code>page</code> および <code>offset</code> メンバの値に相当します。
+</p>
+
+<p>
+図版データの取り出し方については、<a href="eb-11.html#color-image">「カラー図版」</a>
+を参照してください。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_IN_COLOR_BMP">定数 <code>EB_HOOK_BEGIN_IN_COLOR_BMP</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_IN_COLOR_JPEG">定数 <code>EB_HOOK_BEGIN_IN_COLOR_JPEG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_IN_COLOR_GRAPHIC">定数 <code>EB_HOOK_END_IN_COLOR_GRAPHIC</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_IN_COLOR_BMP</code> と <code>EB_HOOK_IN_COLOR_JPEG</code> は、
+それぞれ BMP 形式と JPEG 形式のインラインカラー図版の開始を表す
+エスケープシーケンスに対するフックです。
+開始のフックは BMP と JPEG とでフックが分かれていますが、終了の
+フックは共通で、<code>EB_HOOK_END_IN_COLOR_GRAPIHC</code> になります。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_IN_COLOR_BMP</code> と
+<code>EB_HOOK_IN_COLOR_JPEG</code> が、フック関数に渡す <code>argc</code>
+は 4 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f3c</samp> になります。
+<code>argv[2]</code> と <code>argv[3]</code> は、図版の幅と高さ
+(ピクセル数) を意味します。
+<code>argv[1]</code> の意味は不明です。
+</p>
+
+<p>
+フック <code>EB_HOOK_END_IN_COLOR_BMP</code> が、フック関数に渡す
+<code>argc</code> は 3 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f5c</samp> になります。
+<code>argv[1]</code> と <code>argv[2]</code> は、図版データのページ番号と
+オフセットです。
+これは、<code>EB_Position</code> オブジェクト
+(<a href="eb-08.html#search-data-types">「[検索] データ型の詳細」</a> を参照のこと)
+の <code>page</code> および <code>offset</code> メンバの値に相当します。
+</p>
+
+<p>
+図版データの取り出し方については、<a href="eb-11.html#color-image">「カラー図版」</a>
+を参照してください。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_CLICKABLE_AREA">定数 <code>EB_HOOK_BEGIN_CLICKABLE_AREA</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_CLICKABLE_AREA">定数 <code>EB_HOOK_END_CLICKABLE_AREA</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_CLICKABLE_AREA</code> は、カラー図版およびインラインカラー図版内の特定矩形領域に対して、参照先情報を表現した開始エスケープシーケンスに対するフックです。
+同様に、<code>EB_HOOK_END_CLICKABLE_AREA</code> は終了エスケープシーケンスに対するフックです。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_CLICKABLE_AREA</code> が、フック関数に渡す
+<code>argc</code> は 7 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f4f</samp> になります。
+<code>argv[1]</code> と <code>argv[2]</code> は、それぞれ矩形領域の開始
+x, y 座標を表します。
+それぞれ矩形領域の開始 x, y 座標を表します。
+カラー図版の左上の座標が (0, 0) です。
+同様に、<code>argv[3]</code> と <code>argv[4]</code> が図版の右方向への
+幅と、下方向への高さを表します。
+最後の <code>argv[5]</code> と <code>argv[6]</code> が参照先のページ番号
+とオフセットとなります。
+</p>
+
+<blockquote>
+<pre>
+　　　　　　　　　参照先付きカラー図版
+（０，０）
+　　┌─────────────────────┐
+　　│　　　　　　　　　　　　　　　　　　　　　│
+　　│（ｘ，ｙ）　　　　　　　　　　　　　　　　│
+　　│　　┌　─　─　─　─　─　─　┐　　　　│
+　　│　　│　　　　　　　　　高さ↑　│　　　　│
+　　│　　　　　　　　　　　　　　│　　　　　　│
+　　│　　│　　矩形領域　　　　　│　│　　　　│
+　　│　　　　　　　　　　　　　　│　　　　　　│
+　　│　　│　　　　　　　　　　　│　│　　　　│
+　　│　　　　　　　幅　　　　　　│　　　　　　│
+　　│　　│←──────────┼→│　　　　│
+　　│　　　　　　　　　　　　　　↓　　　　　　│
+　　│　　└　─　─　─　─　─　─　┘　　　　│
+　　│　　　　　　　　　　　　　　　　　　　　　│
+　　└─────────────────────┘
+</pre>
+</blockquote>
+
+<p>
+<code>EB_HOOK_END_CLICKABLE_AREA</code> が、フック関数に渡す
+<code>argc</code> は 1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f6f</samp> になります。
+</p>
+
+<p>
+参照先情報の取り出し方については、
+<a href="eb-11.html#clickable-color-image">「参照先付きカラー図版」</a>
+を参照して下さい。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_WAVE">定数 <code>EB_HOOK_BEGIN_WAVE</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_WAVE">定数 <code>EB_HOOK_END_WAVE</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_WAVE</code> および <code>EB_HOOK_END_WAVE</code> は、
+WAVE (PCM) 形式の音声データの開始と終了を表すエスケープシーケンスに対する
+フックです。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_WAVE</code> が、フック関数に渡す
+<code>argc</code> は 6 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f4a</samp> になります。
+<code>argv[2]</code> と <code>argv[3]</code> は音声データの開始位置の
+ページ番号とオフセット、<code>argv[4]</code> と <code>argv[5]</code> は
+終了位置のページ番号とオフセットをそれぞれ表します。
+<code>argv[1]</code> の意味は不明です。
+</p>
+
+<p>
+<code>EB_HOOK_END_WAVE</code> が、フック関数に渡す <code>argc</code> は
+1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f6a</samp> になります。
+</p>
+
+<p>
+音声データの取り出し方については、<a href="eb-11.html#wave-sound">「WAVE 音声」</a>
+を参照して下さい。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_MPEG">定数 <code>EB_HOOK_BEGIN_MPEG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_MPEG">定数 <code>EB_HOOK_END_MPEG</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_MPEG</code> および <code>EB_HOOK_END_MPEG</code> は、
+MPEG 形式の動画データの開始と終了を表すエスケープシーケンスに対するフック
+です。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_MPEG</code> が、フック関数に渡す
+<code>argc</code> は 6 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f39</samp> になります。
+<code>argv[2]</code> 〜 <code>argv[5]</code> は、動画データのファイル名を
+エンコードした数値列になります。
+<code>argv[1]</code> の意味は不明です。
+</p>
+
+<p>
+<code>EB_HOOK_END_MPEG</code> が、フック関数に渡す <code>argc</code> は
+1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f59</samp> になります。
+</p>
+
+<p>
+動画データの取り出し方については、<a href="eb-11.html#mpeg-movie">「MPEG 動画」</a>
+を参照して下さい。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="hookset-access-functions">フックセット操作関数の詳細</a></h3>
+
+<p>
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/text.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:initialize_hookset"><code>void eb_initialize_hookset (EB_Hookset *<var>hookset</var>)</code></a></h4>
+
+<p>
+関数 <code>initialize_hookset()</code> は、<var>hookset</var> の指す
+<code>EB_Hookset</code> オブジェクトを初期化します。
+<code>EB_Hookiset</code> オブジェクトに対して EB ライブラリの他の関数を
+呼ぶ前に、
+必ずそのオブジェクトを初期化しなくてはなりません。
+初期化していないオブジェクトに対して、EB ライブラリの他の関数を呼んだ
+場合の動作は未定義です。
+また、すでに初期化したオブジェクトに対して、再度
+<code>eb_initialize_hookset()</code> を呼んではいけません。
+呼んだ場合の動作は未定義です。
+</p>
+
+<p>
+この関数は、各フックの初期値を次のようにセットします。
+</p>
+
+<table summary="各フックの初期値">
+<tr>
+    <td>フック
+    <td>フック関数
+</tr>
+<tr>
+    <td><code>EB_HOOK_NARROW_JISX0208</code>
+    <td><code>eb_hook_euc_to_ascii()</code>
+</tr>
+<tr>
+    <td><code>EB_HOOK_NARROW_FONT</code>
+    <td><code>eb_hook_narrow_character_text()</code>
+</tr>
+<tr>
+    <td><code>EB_HOOK_WIDE_FONT</code>
+    <td><code>eb_hook_wide_character_text()</code>
+</tr>
+<tr>
+    <td><code>EB_HOOK_NEWLINE</code>
+    <td><code>eb_hook_newline()</code>
+</tr>
+<tr>
+    <td>上記以外のフック
+    <td> <code>NULL</code> (フック関数なし)
+</tr>
+</table>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:finalize_hookset"><code>EB_Error_Code eb_finalize_hookset (EB_Hookset *<var>hookset</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_finalize_hookset()</code> は、<var>hookset</var> が指す
+<code>EB_Hooksest</code> オブジェクトの後始末を行います。
+</p>
+
+<p>
+オブジェクトが割り当てて管理していたメモリは、すべて解放されます。
+すべてのフックには、フック関数として <code>NULL</code> がセットされます。
+</p>
+
+<p>
+後始末をしたオブジェクトに対して <code>eb_set_hook()</code>, <code>eb_set_hooks()</code>
+を呼ぶことで、オブジェクトを再利用することができます。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:set_hook"><code>EB_Error_Code eb_set_hook (EB_Hookset *<var>hookset</var>, const EB_Hook *<var>hook</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_set_hook()</code> は、<var>hookset</var> が指す <code>EB_Hooksest</code>
+オブジェクトに、フック関数を一つ登録します。
+登録するフックの種類とフック関数は、<var>hook</var> で指定します。
+</p>
+
+<p>
+同じフックコードに複数回フック関数を登録しても、有効になるのは最後に
+登録したものだけですので、注意して下さい。
+フック関数として <code>NULL</code> を指定すると、登録されているフックが
+解除されます。
+</p>
+
+<p>
+成功すると、この関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:set_hooks"><code>EB_Error_Code eb_set_hooks (EB_Hookset *<var>hookset</var>, const EB_Hook *<var>hooks</var>)</code></a></h4>
+
+<p>
+この関数は <code>eb_set_hook()</code> に似ていますが、任意の個数の
+フック関数を一度に登録できる点が異なります。
+</p>
+
+<p>
+登録するフックの種類とフック関数は、<var>hooks</var> で指定します。
+<var>hooks</var> は <code>EB_Hook</code> オブジェクトの配列 (の先頭) を
+指していなければなりません。
+また、この配列の末尾には、フックコード <code>EB_HOOK_NULL</code> をセット
+した <code>EB_Hook</code> オブジェクトを配列要素として置く必要があります。
+</p>
+
+<p>
+<code>eb_set_hooks()</code> は、配列の先頭から順番に、指定されたフックコード
+に対してフック関数を登録していきます。
+エラーが発生すると、残りのフックの登録はせずに、原因を示すエラーコード
+をただちに返します。
+すべてのフック関数の登録に成功すると、<code>EB_SUCCESS</code> を返します。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="builtin-hook-functions">組み込みフック関数の詳細</a></h3>
+
+<p>
+EB ライブラリは、基本的なフック関数をいくつか用意しています。
+本節では、これらのフック関数についての仕様を解説します。
+</p>
+
+<p>
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/text.h&gt;
+</pre>
+</blockquote>
+
+<p>
+いずれのフック関数も、引数 <var>appendix</var> と <var>container</var> に
+<code>NULL</code> を渡されても、動作に支障はないようになっています。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:hook_euc_to_ascii"><code>EB_Error_Code eb_hook_euc_to_ascii (EB_Book *<var>book</var>, EB_Appendix *<var>appendix</var>, void *<var>container</var>, EB_Hook_Code <var>code</var>, int <var>argc</var>, const unsigned int *<var>argv</var>)</code></a></h4>
+
+<p>
+<code>eb_hook_euc_to_ascii()</code> は、フックコード
+<code>EB_HOOK_NARROW_JISX0208</code> (半角 JIS X 0208 文字) のための
+フック関数です。
+</p>
+
+<p>
+<code>EB_Hookset</code> オブジェクトを関数
+<code>eb_initialiez_hookset()</code> で初期化すると、この関数が自動的に
+登録されます。
+</p>
+
+<p>
+このフック関数は、<code>argv[0]</code> として渡された JIS X 0208 の文字
+(エンコーディングは日本語 EUC) を調べ、対応する ASCII 文字が存在すれば
+その ASCII 文字をテキストデータとして書き込み、なければ JIS X 0208 の
+文字をそのまま書き込みます。
+</p>
+
+<p>
+常に <code>EB_SUCCESS</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:hook_narrow_character_text"><code>EB_Error_Code eb_hook_narrow_character_text (EB_Book *<var>book</var>, EB_Appendix *<var>appendix</var>, void *<var>container</var>, EB_Hook_Code <var>code</var>, int <var>argc</var>, const unsigned int *<var>argv</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:hook_wide_character_text"><code>EB_Error_Code eb_hook_wide_character_text (EB_Book *<var>book</var>, EB_Appendix *<var>appendix</var>, void *<var>container</var>, EB_Hook_Code <var>code</var>, int <var>argc</var>, const unsigned int *<var>argv</var>)</code></a></h4>
+
+<p>
+<code>eb_hook_narrow_character_text()</code> は、フックコード
+<code>EB_HOOK_NARROW_FONT</code> (半角外字) のためのフック関数です。
+同様に <code>eb_hook_wide_character_text()</code> は、フックコード
+<code>EB_HOOK_WIDE_FONT</code> (全角外字) のためのフック関数です。
+</p>
+
+<p>
+<code>EB_Hookset</code> オブジェクトを関数
+<code>eb_initialiez_hookset()</code> で初期化すると、これらの関数が自動的
+に登録されます。
+</p>
+
+<p>
+この関数は、<var>appendix</var> の選択中している副本が、
+<code>argv[0]</code> として渡された外字の代替文字列を持っているかどうか
+調べます。
+持っていればその文字列をテキストデータとして書き込み、持っていなければ
+<samp>&lt;?&gt;</samp> という文字列を書き込みます。
+</p>
+
+<p>
+<var>appendix</var> が <code>NULL</code> の場合や、付録が副本を選択中で
+ない場合も、代替文字列を持っていないものとして扱います。
+</p>
+
+<p>
+この関数は、常に <code>EB_SUCCESS</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:hook_newline"><code>EB_Error_Code eb_hook_newline (EB_Book *<var>book</var>, EB_Appendix *<var>appendix</var>, void *<var>container</var>, EB_Hook_Code <var>code</var>, int <var>argc</var>, const unsigned int *<var>argv</var>)</code></a></h4>
+
+<p>
+<code>eb_hook_narrow_newline()</code> は、フックコード
+<code>EB_HOOK_NEWLINE</code> (改行) のためのフック関数です。
+</p>
+
+<p>
+<code>EB_Hookset</code> オブジェクトを関数
+<code>eb_initialiez_hookset()</code> で初期化すると、これらの関数が自動的
+に登録されます。
+</p>
+
+<p>
+この関数は、テキストデータに <samp>\n</samp> を書き込みます。
+常に <code>EB_SUCCESS</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:hook_empty"><code>EB_Error_Code eb_hook_empty (EB_Book *<var>book</var>, EB_Appendix *<var>appendix</var>, void *<var>container</var>, EB_Hook_Code <var>code</var>, int <var>argc</var>, const unsigned int *<var>argv</var>)</code></a></h4>
+
+<p>
+<code>eb_hook_empty()</code> は、何もしないフック関数です。
+常に <code>EB_SUCCESS</code> を返します。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="text-data-functions">テキストデータ操作関数の詳細</a></h3>
+
+<p>
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/text.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_text"><code>int eb_have_text (EB_Book *<var>book</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_menu"><code>int eb_have_menu (EB_Book *<var>book</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_copyright"><code>int eb_have_copyright (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_have_text()</code> は、<var>book</var> の選択している副本が、
+本文を持っているかどうかを調べます。
+同様に、<code>eb_have_menu()</code> はメニューを持っているかどうか、
+<code>eb_have_copyright()</code> は著作権表示を持っているかどうか調べます。
+</p>
+
+<p>
+いずれの関数も、持っていれば 1 を返し、持っていなければ 0 を返します。
+<var>book</var> が副本を選択していない場合も 0 を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:text"><code>EB_Error_Code eb_text (EB_Book *<var>book</var>, EB_Position *<var>position</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:menu"><code>EB_Error_Code eb_menu (EB_Book *<var>book</var>, EB_Position *<var>position</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:copyright"><code>EB_Error_Code eb_copyright (EB_Book *<var>book</var>, EB_Position *<var>position</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_text()</code> は、<var>book</var> が選択している副本の本文
+の開始位置を <var>position</var> の指す領域に書き込みます。
+同様に、<code>eb_menu()</code> はメニューの開始位置を、
+<code>eb_have_copyright()</code> は著作権表示の開始位置を書き込みます。
+</p>
+
+<p>
+成功すると、これらの関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>position</var> に必ずシークが失敗する位置を書き込んで、
+原因を示すエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+選択中の副本が、対象となるテキストデータを持っていなければ、
+<code>EB_ERR_NO_SUCH_SEARCH</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:seek_text"><code>EB_Error_Code eb_seek_text (EB_Book *<var>book</var>, const EB_Position *<var>position</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_seek_text()</code> は、<var>book</var> が選択している副本の
+テキストデータファイルをシークします。
+シーク位置は <var>position</var> で指定します。
+このとき、<var>position</var> は常にファイルの先頭からの位置として解釈
+されます。
+(相対位置へのシーク機能は、EB ライブラリにはありません。)
+</p>
+
+<p>
+シークを行うと、それまでに行った読み込みの状態記録がリセットされます。
+<code>eb_read_text()</code>, <code>eb_read_heading()</code>,
+<code>eb_read_rawtext()</code> を用いてテキストデータを読み込むには、
+前もってこの関数を呼び出しておく必要があります。
+</p>
+
+<p>
+成功すると、この関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+選択中の副本にテキストデータが存在しないときは、<code>EB_ERR_NO_TEXT</code>
+を返します。
+</p>
+
+<p>
+なお、書籍によっては、テキストデータを収めたファイルには他のデータも
+一緒に格納されていることがありますが、テキスト以外のデータにアクセス
+しても、テキストデータの現在位置、読み込みに関する状態記録は変化しません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:tell_text"><code>EB_Error_Code eb_tell_text (EB_Book *<var>book</var>, EB_Position *<var>position</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_seek_text()</code> は、<var>book</var> が選択している副本の
+テキストデータファイルの現在のアクセス位置を返します。
+</p>
+
+<p>
+成功すると、<var>position</var> の指す領域に現在のアクセス位置を書き込み、
+<code>EB_SUCCESS</code> を返します。
+失敗すると、シークが必ず失敗する位置を書き込み、原因を示すエラーコード
+を返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+選択中の副本にテキストデータが存在しないときは、<code>EB_ERR_NO_TEXT</code>
+を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:read_text"><code>EB_Error_Code eb_read_text (EB_Book *<var>book</var>, EB_Appendix *<var>appendix</var>, EB_Hookset *<var>hookset</var>, void *<var>container</var>, size_t <var>text_max_length</var>, char *<var>text</var>, ssize_t *<var>text_length</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:read_heading"><code>EB_Error_Code eb_read_heading (EB_Book *<var>book</var>, EB_Appendix *<var>appendix</var>, EB_Hookset *<var>hookset</var>, void *<var>container</var>, size_t <var>text_max_length</var>, char *<var>text</var>, ssize_t *<var>text_length</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_read_text()</code> と <code>eb_read_heading()</code> は、
+<var>book</var>
+が選択している副本のテキストデータファイルの現在のアクセス位置からデータ
+を読み込みます。
+<code>eb_read_heading()</code> は見出しの読み込みに用い、
+<code>eb_read_text()</code> はそれ以外のテキストデータの読み込みに用います。
+</p>
+
+<p>
+読み込まれたテキストデータは、必要に応じて文字コードの変換
+(<a href="eb-02.html#character-code">「文字コード」</a> を参照のこと) が行われた後に、<var>hookset</var>
+の指すフックセットにしたがって加工されます。
+<var>hookset</var> が <code>NULL</code> のときは、代わりに EB ライブラリ側
+で用意している <dfn>標準のフックセット (default hookset)</dfn> が
+用いられます。
+このフックセットは、<code>eb_initialize_hookset()</code> によって
+初期化しただけのフックセットと等価です。
+</p>
+
+<p>
+フックセットによって加工された後に、テキストデータは <var>text</var> の
+指す領域に書き込まれ、書き込んだバイト数が <var>text_length</var> の指す
+領域に書き込まれます。
+<var>text</var> はナル文字で終端されますが、<var>text_length</var> には
+ナル文字の分は勘定に入れません。
+テキストデータは、<var>text_max_length</var> で指定されたバイト数を超えて
+書き込むことはありません。
+ただし、<var>text_max_length</var> にもナル文字の分は勘定に入っていません
+ので、<var>text</var> は <var>text_max_length</var> + 1 バイト分のデータ
+を格納できる大きさが必要です。
+</p>
+
+<p>
+どちらの関数も、成功すれば <code>EB_SUCCESS</code> を返し、失敗すれば
+<var>text_length</var> の指す領域に 0 を書き込んで原因を示すエラーコード
+を返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+</p>
+
+<p>
+また、<code>eb_read_text()</code> と <code>eb_read_heading()</code> を
+呼び出すには、
+あらかじめ <code>eb_seek_text()</code> の呼び出しを成功させ、テキストデータ
+のアクセス位置がセットされた状態にしておかなくてはなりません。
+シークをせずに呼び出すと、<code>EB_ERR_NO_PREV_SEEK</code> を返します。
+</p>
+
+<p>
+逆に一度シークすれば、区切りコードが検出されるまでの間なら、関数を
+繰り返し呼ぶことでテキストデータの続きを読み込むことができます。
+区切りコードが検出されると、関数を呼び出しても読み込みは行われません。
+その場合でも、他にエラーが発生しなければ <code>EB_SUCCESS</code> が返り、
+<var>text</var> には空文字列が書き込まれます。
+</p>
+
+<p>
+ただし、一度 <code>eb_read_text()</code> を呼び出してテキストデータを
+読み込み始めたら、繰り返し呼び出す際も、<code>eb_read_text()</code> を
+使わなければなりません。
+途中から <code>eb_read_heading()</code> および後述の
+<code>eb_read_rawtext()</code> に切り替えて呼び出すと
+<code>EB_ERR_DIFF_CONTENT</code> エラーが返ります。
+関数 <code>eb_read_heading()</code> についても同様です。
+この制限は、再度 <code>eb_seek_text()</code> を呼び出すか、
+<code>eb_set_subbook()</code> で副本を選択し直すまで続きます。
+</p>
+
+<p>
+渡された <var>appendix</var> が区切りコードの情報を持った副本を選択中
+であれば、本文の区切りコードとしてその値を使用します。
+それ以外の場合は、<code>eb_read_text()</code> が区切りコードを自動判別を
+試みます。
+ただし、この判定は完璧なものではないので、書籍によっては変な位置で本文
+が切れてしまうかも知れません。
+(本文以外のテキストデータに関しては、このような問題は起きません。)
+</p>
+
+<p>
+引数 <var>container</var> は、アプリケーションプログラムからフック関数に
+データを渡すためのものです。
+<code>eb_read_text()</code>, <code>eb_read_heading()</code> では、直接
+この引数の値を参照することはありません。
+</p>
+
+<p>
+引数 <var>appendix</var>, <var>container</var> は、そのままフック関数に
+渡されます。
+これらの引数は <code>NULL</code> でも構いません。
+(呼び出されるフック関数で支障がなければ。)
+</p>
+
+<p>
+なお、フック関数や <code>eb_read_text()</code>, <code>eb_read_heading()</code> 
+自身が文字ないしエスケープシーケンス一個分に対するデータを書き込もうと
+したときに、<var>text</var> に十分な空き領域がないということが起こり
+得ます。
+その場合、関数は途中まで <var>text</var> に書き込むことはせずに、
+いったん処理を終えて戻ります。
+したがって、マルチバイト文字のデータが途中で切れたりすることはありません。
+</p>
+
+<p>
+書き込めなかった分は、当然ながら <var>text_length</var> の勘定には
+入りません。
+書き込めなかったデータは <var>book</var> 内部に保存されているので、
+もう一度 <code>eb_read_text()</code>, <code>eb_read_heading()</code> を
+呼び出すと、前回の呼び出しで書き込めなかったデータがまず <var>text</var>
+の先頭に書き込まれます。
+書き込んだデータは <var>text_length</var> の勘定に入ります。
+</p>
+
+<p>
+ただし、<code>book</code> が保存しているデータの長さが
+<var>text_max_length</var> を超えていると、何も書き込まずに関数は終了
+します。
+このとき、書き込めなかったデータは引き続き保存されます。
+つまり、<code>text_max_length</code> があまりに小さく、かつ保持している
+データのほうが長いと、何度呼び出しても <code>text</code> への書き込みが
+進みませんので、注意が必要です。
+</p>
+
+<p>
+<code>eb_seek_text()</code> を呼び出すか、<code>eb_set_subbook()</code>
+で副本を選択し直すと、保存していたデータは破棄されます。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:read_rawtext"><code>EB_Error_Code eb_read_rawtext (EB_Book *<var>book</var>, size_t <var>text_max_length</var>, char *<var>text</var>, ssize_t *<var>text_length</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_read_rawtext()</code> は、<var>book</var> が選択している
+副本のテキストデータファイルの現在のアクセス位置からデータを読み込みます。
+</p>
+
+<p>
+<code>eb_read_text()</code> と似ていますが、この関数はフックセットによる
+データの加工や文字コードの変換を一切行わず、データを内部表現のまま返します。
+読み込むテキストデータの種類は、何であっても構いません。
+</p>
+
+<p>
+読み込んだテキストデータは <var>text</var> の指す領域に書き込まれ、
+書き込んだバイト数が <var>text_length</var> の指す領域に書き込まれます。
+テキストデータは、<var>text_max_length</var> で指定されたバイト数を超えて
+書き込むことはありません。
+ただし、<code>eb_read_text()</code> と異なり、<var>text</var> はナル文字
+で終端されません。
+マルチバイト文字やエスケープシーケンスの途中で <var>text</var> の残り領域
+が足りなくなった場合も、途中までは書き込みます。
+</p>
+
+<p>
+処理が成功すれば <code>EB_SUCCESS</code> を返し、失敗すれば
+<var>text_length</var> の指す領域に 0 を書き込んで原因を示すエラーコード
+を返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+</p>
+
+<p>
+また、この関数を呼び出すには、あらかじめ <code>eb_seek_text()</code> の
+呼び出しを成功させ、テキストデータのアクセス位置がセットされた状態にして
+おかなくてはなりません。
+シークをせずに呼び出すと、<code>EB_ERR_NO_PREV_SEEK</code> を返します。
+</p>
+
+<p>
+この関数は、繰り返し呼び出すことで、前回読み込んだテキストデータの続き
+を読み込むことができます。
+ただし、区切りコードの検出を行いませんので、ひたすら呼び出しを続けると、
+テキストデータファイルの末尾まで行ってしまいます。
+</p>
+
+<p>
+一度 <code>eb_read_rawtext()</code> を呼び出してテキストデータを読み込み
+始めたら、繰り返し呼び出す際も、<code>eb_read_rawtext()</code> を
+使わなければなりません。
+途中から、<code>eb_read_text()</code> や <code>eb_read_heading()</code> に
+切り替えると、
+<code>EB_ERR_DIFF_CONTENT</code> エラーが返ります。
+この制限は、再度 <code>eb_seek_text()</code> を呼び出すか、
+<code>eb_set_subbook()</code> で副本を選択し直すまで続きます。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:is_text_stopped"><code>int eb_is_text_stopped (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_is_text_stopped()</code> は、最後に読み込んだテキストデータ
+が末尾に達したかどうかを判定します。
+</p>
+
+<p>
+<var>book</var> が選択中の副本で、最後に <code>eb_read_text()</code>
+または <code>eb_read_heading()</code> でテキストデータを読み込んだ際に、
+区切りコードを検出したか、テキストデータ全体の一番後ろの位置に達して
+読み込みを終えていれば、この関数は 1 を返します。
+それ以外のときは、0 を返します。
+</p>
+
+<p>
+<var>book</var> が副本を選択していない場合や、選択中の副本にテキストデータ
+が存在しない場合も 0 が返ります。
+</p>
+
+<p>
+<code>eb_read_text()</code> または <code>eb_read_heading()</code> で
+テキストデータを読み込んでいない場合も、同様に 0 が返ります。
+テキストデータを読み込んだ後であっても、テキストデータの読み込みに関する
+状態記録をリセットする関数 (eb_read_text() の項を参照) を呼んでしまうと、
+読み込んでいないと見なされますので、注意して下さい。
+</p>
+
+<p>
+通常はこの関数を使わなくても、<code>eb_read_text()</code> や
+<code>eb_read_heading()</code> が 0 を返したら、テキストデータの末尾に
+達したとみなして差し支えないでしょう。
+ただしその際は、引数 <code>text_max_length</code> の値を十分大きく取って
+下さい。
+</p>
+
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:write_text_byte1"><code>EB_Error_Code eb_write_text_byte1 (EB_Book *<var>book</var>, int <var>byte1</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:write_text_byte2"><code>EB_Error_Code eb_write_text_byte2 (EB_Book *<var>book</var>, int <var>byte1</var>, int <var>byte2</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:write_text_string"><code>EB_Error_Code eb_write_text_string (EB_Book *<var>book</var>, const char *<var>string</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:write_text"><code>EB_Error_Code eb_write_text (EB_Book *<var>book</var>, const char *<var>stream</var>, size_t <var>stream_length</var>)</code></a></h4>
+
+<p>
+これらの関数は、いずれもフック関数の中から、テキストデータを書き込む
+ために用います。
+書き込むデータの種類によって、使い分けて下さい。
+</p>
+
+<p>
+<code>eb_write_text_byte1()</code> は、<var>byte1</var> で指定した
+1 バイトの値を書き込みます。
+<code>eb_write_text_byte2()</code> は、<var>byte1</var>, <var>byte2</var>
+で指定した 2 バイトを書き込みます。
+<code>eb_write_text_string()</code> は、<var>string</var> で指定した
+文字列を書き込みます。
+<code>eb_write_text()</code> は、<var>stream</var> から始まる長さ
+<var>stream_length</var> バイトのバイト列を書き込みます。
+</p>
+
+<p>
+どの関数も、成功すると <code>EB_SUCCESS</code> を返し、失敗すると原因を
+示すエラーコードを返します。
+</p>
+
+<p>
+最終的に、書き込んだテキストデータは、フック関数の呼び出し元である
+<code>eb_read_text()</code>, <code>eb_read_heading()</code> から
+アプリケーションプログラムに渡されます。
+</p>
+
+<p>
+フック関数として呼び出されていないときに、これらの関数を呼び出した場合
+の動作は未定義です。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:current_candidate"><code>const char *eb_current_candidate (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_current_candidate()</code> は、アクセス中のテキストデータの
+現在位置に書かれている、複合検索の候補となる語を返します。
+</p>
+
+<p>
+返す文字列の長さは、最長で <code>EB_MAX_WORD_LENGTH</code> バイトになります。
+ただし、この長さにナル文字は含みません。
+</p>
+
+<p>
+この関数は非常に特殊で、複合検索の候補となる語の終了を意味する
+エスケープシーケンスへのフックである <code>EB_HOOK_END_CANDIDATE_LEAF</code>
+および <code>EB_HOOK_END_CANDIDATE_GROUP</code> に対するフック関数の中で
+のみ呼び出すことができます。
+それ以外の場所で呼び出したときの動作は、未定義です。
+</p>
+
+<p>
+この関数の呼び出し方ですが、フック関数に渡ってきた <code>EB_Book</code> 
+オブジェクト (へのポインタ) を、そのままこの関数に引数として渡して
+やります。
+</p>
+
+<p>
+<var>book</var> の文字コード
+(<a href="eb-05.html#eb_book-data-types">「[CD-ROM 書籍と <code>EB_Book</code> オブジェクト] データ型の詳細」</a> を参照のこと)
+が <code>EB_CHARCODE_ISO8859_1</code> なら、関数の返す文字列は ISO 8859-1 
+になり、それ以外の文字コードの場合は日本語 EUC になります。
+関数の返す文字列は、他のフックによる加工処理の影響を受けません。
+文字コードの変換を行う以外は、内部データをそのまま返します。
+</p>
+
+<p>
+なお、この関数が返した文字列を参照できるのは、フック関数から戻るまでの
+間だけですので、注意して下さい。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:forward_text"><code>EB_Error_Code eb_forward_text (EB_Book *<var>book</var>, EB_Appendix *<var>appendix</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:backward_text"><code>EB_Error_Code eb_backward_text (EB_Book *<var>book</var>, EB_Appendix *<var>appendix</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_forward_text()</code> と <code>eb_backward_text()</code> は、
+<var>book</var> が選択している副本の本文のアクセス位置を前後に移動させ、
+本文の区切りコードを単位とした頭出しを行います。
+ちょうど、音楽 CD の曲の頭出しと同じです。
+</p>
+
+<p>
+<code>eb_forward_text()</code> は本文の末尾方向に向かってアクセス位置を
+進め、<code>eb_backward_text()</code> は先頭方向に向かってアクセス位置を
+戻します。
+</p>
+
+<p>
+<code>eb_forward_text()</code> の呼び出しでは、アクセス位置は必ず次の語の
+説明の開始位置まで移動します。
+それに対して <code>eb_backward_text()</code> の呼び出しでは、移動先が状態
+によって異なります。
+もし、現在のアクセス位置がその単語の説明の先頭にあるときは、
+<code>eb_backward_text()</code> の呼び出しによって、一つ前の単語の説明の
+先頭にアクセス位置が移動します。
+アクセス位置が単語の説明の途中や末尾にあるときは、その単語の説明の
+先頭に移動します。
+</p>
+
+<p>
+この関数は、成功すると <code>EB_SUCCESS</code> を返し、失敗すると原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+</p>
+
+<p>
+加えて、これらの関数を呼び出すには、あらかじめ <code>eb_seek_text()</code>
+か <code>eb_read_text()</code> を呼び出しが成功していないといけません。
+(<code>eb_read_text()</code> の呼び出しを成功させるには、さらに前もって 
+<code>eb_seek_text()</code> の呼び出しを成功させることが条件となります。)
+</p>
+
+<p>
+<code>eb_read_text()</code> ではなく、<code>eb_read_heading()</code> や
+<code>eb_read_rawtext()</code> の呼び出しに成功した後でこの関数を
+呼び出すと、<code>EB_ERR_DIFF_CONTENT</code> を返します。
+また、前もって <code>eb_seek_text()</code> でシークせずにこの関数を
+呼び出すと、<code>EB_ERR_NO_PREV_SEEK</code> を返します。
+</p>
+
+<p>
+本文データの末尾や先頭に達してしまって、その方向にもう本文がないときは、
+<code>EB_ERR_END_OF_CONTENT</code> を返します。
+</p>
+
+<p>
+<var>appendix</var> が <code>NULL</code> ではなく、区切りコードの情報を
+持った副本を選択中であれば、本文の区切りコードとしてその値を使用します。
+それ以外の場合は、<code>eb_read_text()</code> と同じ方法で区切りコードの
+自動判別を試みます。
+</p>
+
+<p>
+アクセス位置上にあるのがメニューや著作権表示のように、本文以外の
+テキストデータであっても構いません。
+ただし、本文以外のテキストデータの内部には、頭出し位置がデータの
+先頭位置にしかありませんので、この関数が役に立つ状況はほとんど
+ありません。
+</p>
+
+<p>
+(メニューでは、個々の階層のメニューデータが、それぞれ独立した
+テキストデータになっているため、頭出しを行っても前後のメニューデータへは
+移動できません。
+複合検索の候補一覧も同様です。)
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:forward_heading"><code>EB_Error_Code eb_forward_heading (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_forward_heading()</code> は、<var>book</var> が選択している
+副本の見出しのアクセス位置を後に移動させ、見出しの区切りを単位とした頭出し
+を行います。
+</p>
+
+<p>
+本文の頭出しを行う関数 <code>eb_forward_text()</code> の見出し版です。
+ただし、見出しで頭出しを行う機会は、クロス検索の本文取得に限られるため、
+<code>eb_backward_heading()</code> という関数は用意していません。
+</p>
+
+<p>
+この関数を呼ぶと、アクセス位置が次の見出しの開始位置まで移動します。
+(クロス検索では、見出し領域の中に「見出し」と「本文」が交互に書かれて
+いますが、データ構造上「本文」と「見出し」は区別が付きません。
+アクセス位置がクロス検索の見出し領域内の場合、この関数を呼ぶと最も近い
+「見出し」もしくは「本文」の開始位置まで移動します。)
+</p>
+
+<p>
+<code>eb_read_heading()</code> ではなく、<code>eb_read_text()</code> や
+<code>eb_read_rawtext()</code> の呼び出しに成功した後でこの関数を
+呼び出すと、<code>EB_ERR_DIFF_CONTENT</code> を返します。
+また、前もって <code>eb_seek_text()</code> でシークせずにこの関数を
+呼び出すと、<code>EB_ERR_NO_PREV_SEEK</code> を返します。
+</p>
+
+<p>
+この関数は、成功すると <code>EB_SUCCESS</code> を返し、失敗すると原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+クロス検索以外の検索メソッドの見出しの格納位置に対して、この関数を
+呼ぶことも可能ですが、そのような必要に迫られる機会はないでしょう。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-08.html">前へ</a>] [<a href="eb-10.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebzip: Summary of Options</TITLE>
+
+<META NAME="description" CONTENT="ebzip: Summary of Options">
+<META NAME="keywords" CONTENT="ebzip: Summary of Options">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_7.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_9.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_7.html#SEC19"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_9.html#SEC21"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 8. Summary of <CODE>ebzip</CODE> Options </H1>
+<!--docid::SEC20::-->
+<P>
+
+The <CODE>ebzip</CODE> command supports both traditional single-letter
+options and mnemonic long option names.
+Long option names are indicated with <SAMP>`--'</SAMP> instead of <SAMP>`-'</SAMP>.
+Abbreviations for option names are allowed as long as they are unique.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-f</CODE>
+<DD><DT><CODE>--force-overwrite</CODE>
+<DD>Overwrite existed files without confirmation.
+This option is ignored when the action is information, or when you
+specify the <SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>) option.
+<P>
+
+(See section <A HREF="ebzip_4.html#SEC10">4.6 Overwrite Old Files</A>, for more details).
+</P><P>
+
+<DT><CODE>-h</CODE>
+<DD><DT><CODE>--help</CODE>
+<DD>Output help message to standard out, then exit.
+<P>
+
+<DT><CODE>-i</CODE>
+<DD><DT><CODE>--information</CODE>
+<DD>Output compression status of the specified CD-ROM book.
+<P>
+
+(See section <A HREF="ebzip_6.html#SEC16">6. Information</A>, for more details).
+</P><P>
+
+<DT><CODE>-k</CODE>
+<DD><DT><CODE>--keep</CODE>
+<DD>Don't delete an input file when the corresponding output file has
+been written.
+This option is ignored when the action is information, or when you
+specify the <SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>) option.
+<P>
+
+(See section <A HREF="ebzip_4.html#SEC6">4.2 Example of Compression (2)</A>, for more details).
+</P><P>
+
+<DT><CODE>-l <VAR>integer</VAR></CODE>
+<DD><DT><CODE>--level <VAR>integer</VAR></CODE>
+<DD>Specify compression level.
+<VAR>integer</VAR> must be <SAMP>`0'</SAMP>, <SAMP>`1'</SAMP>, <SAMP>`2'</SAMP>, <SAMP>`3'</SAMP>,
+<SAMP>`4'</SAMP> or <SAMP>`5'</SAMP>.
+The level 0 is fastest but least compression method.
+The level 5 is slowest but best compression method.
+The defalt level is 0.
+This option is ignored when the action is uncompression or information.
+<P>
+
+(See section <A HREF="ebzip_4.html#SEC7">4.3 Compression Level</A>, for more details).
+</P><P>
+
+<DT><CODE>-n</CODE>
+<DD><DT><CODE>--no-overwrite</CODE>
+<DD>Skip existed files without confirmation for overwriting.
+This option is ignored when the action is information, or when you
+specify the <SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>) option.
+<P>
+
+(See section <A HREF="ebzip_4.html#SEC10">4.6 Overwrite Old Files</A>, for more details).
+</P><P>
+
+<DT><CODE>-o <VAR>directory</VAR></CODE>
+<DD><DT><CODE>--output-directory <VAR>directory</VAR></CODE>
+<DD>Specify a directory of output files.
+The default is the current directory (<SAMP>`.'</SAMP>).
+This option is ignored when the action is information, or when you
+specify the <SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>) option.
+<P>
+
+<DT><CODE>-q</CODE>
+<DD><DT><CODE>--quiet</CODE>
+<DD><DT><CODE>--silence</CODE>
+<DD>Supress all information and warning messages.
+However, when an output file has already exists, during
+compression/uncompresion, <CODE>ebzip</CODE> still asks you whether the output
+file may be overwritten or not.
+To supress this question, specify the <SAMP>`--force-overwrite'</SAMP> (<SAMP>`-f'</SAMP>)
+or <SAMP>`--no-overwrite'</SAMP> (<SAMP>`-n'</SAMP>) option.
+This option is ignored when the action is uncompression or information.
+<P>
+
+<DT><CODE>-s <VAR>types</VAR></CODE>
+<DD><DT><CODE>--skip-content <VAR>types</VAR></CODE>
+<DD>Specify data types of files to be ignored.
+<VAR>types</VAR> must be a list of data type names separated by a comma
+(<SAMP>`,'</SAMP>).
+The data type names <CODE>ebzip</CODE> currently recognizes are: <CODE>font</CODE>,
+<CODE>graphic</CODE>, <CODE>sound</CODE> and <CODE>movie</CODE>.
+By default, none is skipped.
+<P>
+
+<DT><CODE>-S <VAR>subbooks</VAR></CODE>
+<DD><DT><CODE>--subbook <VAR>subbooks</VAR></CODE>
+<DD>Specify target subbooks to compress, uncompress or output information.
+<VAR>subbooks</VAR> must be a list of directory names of subbooks separeted
+by a comma (<SAMP>`,'</SAMP>).
+By default, all subbooks are specified as target.
+<P>
+
+(See section <A HREF="ebzip_4.html#SEC9">4.5 Partial Compression</A>, for more details).
+</P><P>
+
+<DT><CODE>-t</CODE>
+<DD><DT><CODE>--test</CODE>
+<DD>Don't write compression/uncompression data to the actual files.
+This option is ignored when the action is information.
+<P>
+
+(See section <A HREF="ebzip_4.html#SEC8">4.4 Test</A>, for more details).
+</P><P>
+
+<DT><CODE>-u</CODE>
+<DD><DT><CODE>--uncompress</CODE>
+<DD>Uncompress a CD-ROM book.
+<P>
+
+(see section <A HREF="ebzip_5.html#SEC12">5. Uncompression</A>, for more details).
+</P><P>
+
+<DT><CODE>-v</CODE>
+<DD><DT><CODE>--version</CODE>
+<DD>Output version number to standard out, then exit.
+<P>
+
+<DT><CODE>-z</CODE>
+<DD><DT><CODE>--compress</CODE>
+<DD>Compress a CD-ROM book.
+<P>
+
+(See section <A HREF="ebzip_4.html#SEC4">4. Compression</A>, for more details).
+</P><P>
+
+</DL>
+<P>
+
+<A NAME="Comparision Result"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_7.html#SEC19"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_9.html#SEC21"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

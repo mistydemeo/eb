@@ -1,0 +1,391 @@
+
+		   EB Library 3.0 の変更点について
+			       笠原基之
+			   2000年 11月 28日
+
+注: この文書に書かれている仕様は開発途中のものですので、3.0 正式公開時
+    と異なる点があるかも知れません。
+
+----------------------------------------------------------------------
+1. eb_initialize_library(), eb_finalize_library() の新設
+
+EB ライブラリを使用する際にはまずあらかじめ eb_initialize_library() を、
+使い終わったら eb_finalize_library() を呼ばなくてはならなくなった。
+
+また、これと関連して、EB_Book の初期化を行う関数 eb_initialize() は
+eb_initialize_book() に改名され、同様に後始末を行う関数 eb_clear() は
+eb_finalize_book() に改名された。
+
+
+2. ほとんどの関数の戻り値は EB_Error_Code に変更
+
+いくつかの例外を除き、ほとんどの関数は EB_Error_Code 型を返すようになっ
+た。これらの関数は、成功すれば EB_SUCCESS を、失敗すれば EB_ERR_* とい
+う値を返す。
+
+例:
+   旧: int eb_bind(EB_Book *book, const char *path);
+   新: EB_Error_Code eb_bind(EB_Book *book, const char *path);
+
+本規則の例外となる関数を分類すると、次のようになる。
+
+   * 名前に _is_、_have_ を含む関数
+     これらの関数は false、true の意味で、0 か 非 0 を返す。
+
+   * 戻り値を返さない関数
+
+   * eb_error_message()
+     (const char *) 型を返す特殊な関数。
+
+
+3. 引数の増加
+
+2. の変更の影響で、「成功」「失敗」以外のことを意味する戻り値 (例: 副
+本の個数、選択中の外字の高さなど) を返していた関数は、すべて引数が一つ
+増えた。増えた分の引数は参照渡しをして、これまでは戻り値だった「値」が
+そこに書き込まれるようになった。
+
+例:
+   旧: EB_Disc_Code eb_disc_type(EB_Book *book);
+   新: EB_Error_Code eb_disc_type(EB_Book *book, EB_Disc_Code *disc_code);
+
+   関数を呼び出すと、disc_code に値が書き込まれて戻ってくる。
+
+該当する関数:
+   eb_character_code()
+   eb_disc_type()
+   eb_hit_list()
+   eb_multi_entry_label()
+   eb_multi_entry_list()
+   eb_multi_search_list()
+   eb_path()
+   eb_subbook()
+   eb_subbook_directory()
+   eb_subbook_directory2()
+   eb_subbook_list()
+   eb_subbook_title()
+   eb_subbook_title2()
+   eb_appendix_path()
+   eb_appendix_subbook()
+   eb_appendix_subbook_directory()
+   eb_appendix_subbook_directory2()
+   eb_appendix_subbook_list()
+   eb_backward_narrow_alt_character()
+   eb_backward_wide_alt_character()
+   eb_forward_narrow_alt_character()
+   eb_forward_wide_alt_character()
+   eb_narrow_alt_end()
+   eb_narrow_alt_start()
+   eb_stop_code()
+   eb_wide_alt_end()
+   eb_wide_alt_start()
+   eb_narrow_font_xbm_size()
+   eb_narrow_font_xpm_size()
+   eb_narrow_font_gif_size()
+   eb_wide_font_xbm_size()
+   eb_wide_font_xpm_size()
+   eb_wide_font_gif_size()
+   eb_bitmap_to_xbm()
+   eb_bitmap_to_xpm()
+   eb_bitmap_to_gif()
+   eb_font()
+   eb_font_list()
+   eb_narrow_font_width()
+   eb_narrow_font_width2()
+   eb_narrow_font_size()
+   eb_narrow_font_size2()
+   eb_narrow_font_file_name()
+   eb_narrow_font_file_name2()
+   eb_narrow_font_start()
+   eb_narrow_font_end()
+   eb_forward_narrow_font_character()
+   eb_backward_narrow_font_character()
+   eb_wide_font_width()
+   eb_wide_font_width2()
+   eb_wide_font_size()
+   eb_wide_font_size2()
+   eb_wide_font_file_name()
+   eb_wide_font_file_name2()
+   eb_wide_font_start()
+   eb_wide_font_end()
+   eb_forward_wide_font_character()
+   eb_backward_wide_font_character()
+   eb_language_list()
+   eb_language()
+   eb_language_name()
+   eb_language_name2()
+   eb_message_list()
+   eb_message()
+
+
+4. (const char *) を返さないように変更
+
+これまで、書籍の題名などは (const char *) で返していたが、3.0 からは引
+数として (char *) 型を取るようにし、そこで指定された領域に書き込まれる
+ようになった。ただし、eb_error_message() は例外として、(const char *)
+を返す。
+
+該当する関数は、以下の関数。
+
+   旧: const char *eb_subbook_title(EB_Book *book);
+   新: EB_Error_Code eb_subbook_title(EB_Book *book, char *title);
+
+   旧: const char *eb_appendix_path(EB_Book *book);
+   新: EB_Error_Code eb_appendix_path(EB_Book *book, char *path);
+
+   旧: const char *eb_appendix_subbook_directory(EB_Book *book);
+   新: EB_Error_Code eb_appendix_subbook_directory(EB_Book *book,
+           char *directory);
+
+   旧: const char *eb_appendix_subbook_directory2(EB_Book *book);
+   新: EB_Error_Code eb_appendix_subbook_directory2(EB_Book *book,
+           char *directory);
+
+   旧: const char *eb_path(EB_Book *book);
+   新: EB_Error_Code eb_path(EB_Book *book, char *path);
+
+   旧: const char *eb_multi_entry_label(EB_Book *book);
+   新: EB_Error_Code eb_multi_entry_label(EB_Book *book, char *label);
+
+   旧: const char *eb_subbook_title(EB_Book *book);
+   新: EB_Error_Code eb_subbook_title(EB_Book *book, char *title);
+
+   旧: const char *eb_subbook_title2(EB_Book *book);
+   新: EB_Error_Code eb_subbook_title2(EB_Book *book, char *title);
+
+   旧: const char *eb_subbook_directory(EB_Book *book);
+   新: EB_Error_Code eb_subbook_directory(EB_Book *book, char *directory);
+
+   旧: const char *eb_subbook_directory2(EB_Book *book);
+   新: EB_Error_Code eb_subbook_directory2(EB_Book *book, char *directory);
+
+   旧: const char *eb_error_message(EB_Book *book);
+   新: EB_Error_Code eb_error_message(EB_Book *book, char *message);
+
+   旧: const char *eb_error_message2(EB_Book *book);
+   新: EB_Error_Code eb_error_message2(EB_Book *book, char *message);
+
+   旧: const char *eb_narrow_font_filename(EB_Book *book);
+   新: EB_Error_Code eb_narrow_font_filename(EB_Book *book, char *file_name);
+
+   旧: const char *eb_narrow_font_filename(EB_Book *book);
+   新: EB_Error_Code eb_narrow_font_filename(EB_Book *book, char *file_name);
+
+   旧: const char *eb_wide_font_filename(EB_Book *book);
+   新: EB_Error_Code eb_wide_font_filename(EB_Book *book, char *file_name);
+
+   旧: const char *eb_wide_font_filename2(EB_Book *book);
+   新: EB_Error_Code eb_wide_font_filename2(EB_Book *book, char *file_name);
+
+   旧: const char *eb_language_name(EB_Book *book);
+   新: EB_Error_Code eb_language_name(EB_Book *book, char *language_name);
+
+   旧: const char *eb_language_name2(EB_Book *book);
+   新: EB_Error_Code eb_language_name2(EB_Book *book, char *language_name);
+
+   旧: const char *eb_message(EB_Book *book);
+   新: EB_Error_Code eb_message(EB_Book *book, char *message);
+
+
+5. 一部の関数の引数順序を変更
+
+引数を参照渡しにして、関数内部でその内容を変更しているものは、引数列の
+最後尾に置かれるようになった。
+
+該当する関数は、eb_hit_list(), eb_text(), eb_heading() の 3 つである。
+(加えて eb_text()、eb_heading() は eb_read_text()、eb_raed_heading()
+に改名され、さらに container という引数が追加されている。8. と 9. も参
+照のこと)
+
+   旧: int eb_hit_list(EB_Book *book, EB_Hit *hitlist, int maxhits);
+   新: EB_Error_Code eb_hit_list(EB_Book *book,
+           int max_hit_count, EB_Hit *hit_list, int *hit_count);
+
+   旧: int eb_text(EB_Book *book, EB_Appendix *appendix,
+       const EB_Hookset *hookset, char *text, size_t textsize);
+   新: EB_Error_Code eb_read_text(EB_Book *book, EB_Appendix *appendix,
+       EB_Hookset *hookset, void *container, size_t text_max_length,
+       char *text, ssize_t *text_length);
+
+   旧: int eb_heading(EB_Book *book, EB_Appendix *appendix,
+       const EB_Hookset *hookset, char *text, size_t textsize);
+   新: EB_Error_Code eb_read_heading(EB_Book *book, EB_Appendix *appendix,
+       EB_Hookset *hookset, void *container, size_t text_max_length,
+       char *text, ssize_t *text_length);
+
+6. _count() という名称の関数の削除
+
+_list() という名称の関数がある場合には、_count() という名称の関数を削
+除した。対象となったのは以下の関数。
+
+   eb_appendix_subbook_count()
+   eb_multi_search_count()
+   eb_multi_entry_count()
+   eb_subbook_count()
+   eb_font_count()
+   eb_language_count()
+   eb_message_count();
+
+
+7. 大域変数 eb_error の廃止
+
+エラーコードは関数の戻り値によって表現されることになったため、エラーコー
+ドを保持する大域変数 eb_error を廃止した。
+
+
+8. 関数の改名
+
+以下の関数を改名した。
+
+   古い名前                             新しい名前
+   eb_initialize()                      eb_initialize_book()
+   eb_clear()                           eb_finalize_book()
+   eb_clear_appendix()                  eb_finalize_appendix()
+   eb_have_stopcode                     eb_have_stop_code()
+   eb_error_message2()                  eb_error_message()
+   eb_seek()                            eb_seek_text()
+   eb_text()                            eb_read_text()
+   eb_heading()                         eb_read_heading()
+
+
+9. eb_text()、eb_heading() への汎用引数の追加
+
+eb_read(), eb_heading() に汎用のデータ受け渡し用引数 container が追加
+された。この container は、任意のデータ (へのポインタ) をフック関数に
+渡すための仕掛けである。eb_text()、eb__heading() 内部では container の
+指す先の領域書き換えることは決してなく、フック関数を呼び出す際に一緒に
+引数の一つとして渡すだけである (加えて eb_text()、eb_heading() は引数
+の順序が変更され、さらに eb_read_text()、eb_raed_heading() に改名され
+た。5. と 9. も参照のこと)
+
+   旧: int eb_text(EB_Book *book, EB_Appendix *appendix,
+       const EB_Hookset *hookset, char *text, size_t textsize);
+   新: EB_Error_Code eb_read_text(EB_Book *book, EB_Appendix *appendix,
+       EB_Hookset *hookset, void *container, size_t text_max_length,
+       char *text, ssize_t *text_length);
+
+   旧: int eb_heading(EB_Book *book, EB_Appendix *appendix,
+       const EB_Hookset *hookset, char *text, size_t textsize);
+   新: EB_Error_Code eb_read_heading(EB_Book *book, EB_Appendix *appendix,
+       EB_Hookset *hookset, void *container, size_t text_max_length,
+       char *text, ssize_t *text_length);
+
+
+10. フック関数の仕様に関する改訂
+
+本文の加工に用いるフック関数の仕様が改められた。まず、新旧でプロトタイ
+プ宣言は次のように異なる。
+
+   旧: int hook_function(EB_Book *book, EB_Appendix *appendix, char *workbuf,
+           EB_Hook_Code code, int argc, const int *argv);
+   新: EB_Error_Code hook_function(EB_Book *book, EB_Appendix *appendix,
+           void *container, EB_Hook_Code hook_code, int argc,
+           const unsigned int *argv);
+
+フック関数も戻り値が EB_Error_Code に変更された。他に workbuf が廃止さ
+れている点、container が追加された点、argv が const unsigned int への
+ポインタになっている点が変更点として挙げられる。
+
+container は 9. で説明した通り、汎用のデータ受け渡し用に使われる。
+eb_read_text()、eb_read_heading() で渡した値が、そのままフック関数に渡っ
+てくる。
+
+最後の argv の型の変更に関しては「修正」と言っても良く、より適正な型に
+なっただけである。
+
+workbuf が廃止された点は、フック関数の仕様における最大の変更と言える。
+これまでは、この workbuf に対してテキストをセットすることで、本文の文
+字列や制御記述子を任意の文字列に置き換える仕組みだったが、3.0 からは
+eb_write_text*() という新設の関数を使って書き込む。
+
+   eb_write_text_byte1()       1 バイト書き込み
+   eb_write_text_byte2()       2 バイト書き込み
+   eb_write_text_string()      文字列の書き込み
+   eb_write_text()             任意のバイト列の書き込み
+
+それぞれの正確なプロトタイプ宣言は次の通り。
+
+   EB_Error_Code eb_write_text_byte1(EB_Book *book, int byte1);
+   EB_Error_Code eb_write_text_byte2(EB_Book *book, int byte1, int byte2);
+   EB_Error_Code eb_write_text_string(EB_Book *book, const char *string);
+   EB_Error_Code eb_write_text(EB_Book *book, const char *stream,
+       size_t stream_length);
+
+これらの関数は、フック関数の中からしか呼び出せない。外部から呼び出そう
+とすると異常動作を起こす可能性がある。
+
+なお、旧来 workbuf を使って書き込んでいたときは、本文の書き込める長さ
+が EB_MAXLEN_TEXT_WORK バイトまでだったが、この制限はなくなった。
+
+
+11. eb_finalize_hookset() の新設
+
+フックセットの後始末を行うための関数、eb_finalize_hookset() が新設され
+た。
+
+   void eb_finalize_hookset(EB_Hookset *hookset);
+
+
+12. その他の関数の削除
+
+   eb_hook_stopcode_dummy()
+   eb_hook_stopcode_mixed()
+   eb_multi_entry_have_exactword_search()
+   eb_multi_entry_have_word_search()
+   eb_multi_entry_have_endword_search()
+   eb_multi_entry_have_keyword_search()
+   eb_error_message()
+   ※ eb_error_message2() が eb_error_message() に改名され、従来の
+      eb_error_message() に相当する関数はなくなった。
+
+
+13. CPP マクロの改名
+
+   古い名前                             新しい名前
+   EB_WORD_ALPHA                        EB_WORD_ALPHABET
+   EB_MAXLEN_WORD                       EB_MAX_WORD_LENGTH
+   EB_MAXLEN_EB_TITLE                   EB_MAX_EB_TITLE_LENGTH
+   EB_MAXLEN_EPWING_TITLE               EB_MAX_EPWING_TITLE_LENGTH
+   EB_MAXLEN_TITLE                      EB_MAX_TITLE_LENGTH
+   EB_MAXLEN_BASENAME                   EB_MAX_BASE_NAME_LENGTH
+   EB_MAXLEN_LANGNAME                   EB_MAX_LANGUAGE_NAME_LENGTH
+   EB_MAXLEN_MESSAGE                    EB_MAX_MESSAGE_LENGTH
+   EB_MAXLEN_MULTI_LABEL                EB_MAX_MULTI_LABEL_LENGTH
+   EB_MAXLEN_ALTERNATION_TEXT           EB_MAX_ALTERNATION_TEXT_LENGTH
+   EB_MAXLEN_TEXT_WORK                  EB_MAX_TEXT_WORK_LENGTH
+
+
+14. CPP マクロの削除
+
+次のマクロを削除した。
+
+   EB_MAX_SEARCHES
+
+
+15. エラーコードの再編成
+
+エラーコードのうち、使用していなかったものを削除し、条件検索、複合検索
+のために必要なエラーコードを追加した。エラーコードの一覧は eb/error.h
+を参照のこと。
+
+
+16. テキストフックの再編成
+
+フックも再編成を行った。フックの一覧は eb/text.h を参照のこと。
+
+
+17. EB_FONT_ の値の変更
+
+外字フォントの大きさの指定は、これまでは整数の 16, 24, 30, 48 を指定し
+てもうまくいったが、今後は必ず以下の CPP マクロを使わなければならなく
+なった。
+
+        EB_FONT_16,  EB_FONT_24,  EB_FONT_30,  EB_FONT_48
+
+マクロの値は次のようになっている。
+
+			(従来の値)	(新しい値)
+	EB_FONT_16	16		0
+	EB_FONT_24	24		1
+	EB_FONT_30	30		2
+	EB_FONT_48	48		3

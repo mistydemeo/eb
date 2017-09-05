@@ -1,0 +1,550 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-06.html">前へ</a>] [<a href="eb-08.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="subbook">副本</a></h2>
+
+<p>
+紙に印刷された本では別々の書籍になっているものでも、電子ブックや EPWING
+では 1 枚の CD-ROM にまとめることができます。
+</p>
+
+<p>
+たとえば、ある CD-ROM 書籍は、国語辞書、英々辞典、百科事典という 3 つ
+の (印刷された本で言うところの) 「書籍」を持っていることもあり得ます。
+紛らわしさを避けるために、EB ライブラリではここで言う「書籍」のことを
+<dfn>副本 (subbook)</dfn> と呼んでいます。
+</p>
+
+<blockquote>
+<pre>
+　　　ＣＤ−ＲＯＭ書籍
+┌─────────────┐
+│　副本０：　［国語辞典］　│
+│　副本１：　［英々辞典］　│
+│　副本２：　［百科事典］　│
+└─────────────┘
+</pre>
+</blockquote>
+
+<p>
+CD-ROM 書籍では、それぞれの副本はそれ自体が独立した書籍になっています。
+また、副本のデータも、副本毎に別々のファイルに収められています。
+したがって、EB ライブラリでも、アプリケーションプログラムの主要な処理
+である単語の検索や本文データの取得などは、すべて副本単位で行うように
+なっています。
+</p>
+
+<p>
+本章では、EB ライブラリでの副本の扱い方について説明します。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="subbook-code">副本コード</a></h3>
+
+<p>
+EB ライブラリでは、それぞれの副本に対して <dfn>副本コード (subbook code)</dfn>
+を割り当てます。
+このコードは EB ライブラリが副本を識別するために用いますので、個々の
+副本コードは、書籍内で同じものがないようになっています。
+</p>
+
+<p>
+以下のソースコードは、<code>eb_subbook_list()</code> という関数の
+使用例です。
+この関数は、書籍内のすべての副本の副本コードを取得することができます。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
+ * 書籍に結び付けられていると仮定しています。*/
+EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
+int sub_count;
+
+if (eb_subbook_list(&amp;book, sub_codes, &amp;sub_count)
+    != EB_SUCCESS) {
+    printf("eb_subbook_list() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+<code>eb_subbook_list()</code> が成功すると、書籍内のすべての副本コードが
+配列 <code>sub_codes[]</code> に格納されます。
+配列の先頭の副本コードは <code>sub_codes[0]</code> と表され、次の
+コードは <code>sub_codes[1]</code>、という具合になります。
+副本の個数は、<code>sub_count</code> に格納されます。
+</p>
+
+<p>
+個々の副本には、必ず題名が付けられています。
+先頭の副本 (<code>sub_codes[0]</code>) の題名は、次のようにして
+得ることができます。
+</p>
+
+<blockquote class="program">
+<pre>
+char title[EB_MAX_TITLE_LENGTH + 1];
+
+if (eb_subbook_title2(&amp;book, sub_codes[0], title)
+    != EB_SUCCESS) {
+    printf("eb_subbook_title2() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+<code>eb_subbook_title2()</code> の呼び出しが成功すると、
+<code>title</code> に題名を表す文字列が格納されます。
+</p>
+
+<p>
+蛇足ですが、(副本ではなく) CD-ROM の題名を取得する関数はありません。
+なぜなら、題名を示すデータが CD-ROM の中には何処にもないからです。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="current-subbook">選択中の副本</a></h3>
+
+<p>
+<code>EB_Book</code> オブジェクトは、結びつけられた CD-ROM 書籍の中の
+任意の副本から一つ選んで、<dfn>選択中の副本 (current subbook)</dfn> 
+として指定することができます。
+複数の副本を、同時に選択することはできません。
+単語の検索や、本文データの取得など、ほとんどの操作は、選択中の副本に
+対してだけ行えます。
+</p>
+
+<p>
+<code>eb_bind()</code> で <code>EB_Book</code> オブジェクトを書籍に
+結び付けた直後は、いずれの副本も選択されていない状態になっています。
+</p>
+
+<blockquote>
+<pre>
+ＥＢ＿Ｂｏｏｋ　　　　　　　　　ＣＤ−ＲＯＭ書籍
+オブジェクト
+┌────┐　　　　　　　┌─────────────┐
+│選択中　│　　　　　　　│　副本０：　［国語辞典］　│
+│の副本　│　　　　　　　│　副本１：　［英々辞典］　│
+│＜なし＞│　　　　　　　│　副本２：　［百科事典］　│
+└────┘　　　　　　　└─────────────┘
+</pre>
+</blockquote>
+
+<p>
+副本の選択を行うには、関数 <code>eb_set_subbook()</code> を使用します。
+<code>eb_set_subbook()</code> は、引数として渡された副本コードに
+したがって副本を選択します。
+以下は、先頭の副本 (<code>sub_codes[0]</code>) を選択する場合の例です。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
+ * 書籍に結び付けられていると仮定しています。*/
+EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
+int sub_count;
+
+if (eb_subbook_list(&amp;book, sub_codes, &amp;sub_count)
+    != EB_SUCCESS) {
+    printf("eb_subbook_list() failed\n");
+    return;
+}
+if (eb_set_subbook(&amp;book, sub_codes[0]) != EB_SUCCESS) {
+    printf("eb_subbook_list() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+成功すると、次のように副本が選択された状態になります。
+</p>
+
+<blockquote>
+<pre>
+ＥＢ＿Ｂｏｏｋ　　　　　　　　　ＣＤ−ＲＯＭ書籍
+オブジェクト
+┌────┐　　　　　　　┌─────────────┐
+│選択中　│　　┏━━━━┿━副本０：　［国語辞典］　│
+│の副本　│　　┃　　　　│　副本１：　［英々辞典］　│
+│　＊━━┿━━┛　　　　│　副本２：　［百科事典］　│
+└────┘　　　　　　　└─────────────┘
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="subbook-sample">サンプルプログラム</a></h3>
+
+<blockquote>
+<pre>
+/*                                                            -*- C -*-
+ * Copyright (c) 1999-2006  Motoyuki Kasahara
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * 使用方法:
+ *     subbook &lt;book-path&gt;
+ * 例:
+ *     subbook /cdrom
+ * 説明:
+ *     &lt;boook-path&gt; で指定され CD-ROM 書籍に含まれているすべての副本の
+ *     題名を表示します。
+ */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#include &lt;eb/eb.h&gt;
+#include &lt;eb/error.h&gt;
+
+int
+main(int argc, char *argv[])
+{
+    EB_Error_Code error_code;
+    EB_Book book;
+    EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
+    int subbook_count;
+    char title[EB_MAX_TITLE_LENGTH + 1];
+    int i;
+
+    /* コマンド行引数をチェック。*/
+    if (argc != 2) {
+        fprintf(stderr, "Usage: %s book-path\n", argv[0]);
+        exit(1);
+    }
+
+    /* EB ライブラリと `book' を初期化。*/
+    error_code = eb_initialize_library();
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+    eb_initialize_book(&amp;book);
+
+    /* 書籍を `book' に結び付ける。*/
+    error_code = eb_bind(&amp;book, argv[1]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+
+    /* 副本の一覧を取得。*/
+    error_code = eb_subbook_list(&amp;book, subbook_list, &amp;subbook_count);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* 書籍に含まれている副本の題名を出力。*/
+    for (i = 0; i &lt; subbook_count; i++) {
+        error_code = eb_subbook_title2(&amp;book, subbook_list[i], title);
+        if (error_code != EB_SUCCESS) {
+            fprintf(stderr, "%s: failed to get the title, %s\n",
+                argv[0], eb_error_message(error_code));
+            continue;
+        }
+        printf("%d: %s\n", i, title);
+    }
+
+    /* 書籍と EB ライブラリの利用を終了。*/
+    eb_finalize_book(&amp;book);
+    eb_finalize_library();
+    exit(0);
+
+    /* エラー発生で終了するときの処理。*/
+  die:
+    eb_finalize_book(&amp;book);
+    eb_finalize_library();
+    exit(1);
+}
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="subbook-data-types">データ型の詳細</a></h3>
+
+<p>
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/eb.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:Subbook_Code"><code>EB_Subbook_Code</code> 型</a></h4>
+
+<p>
+データ型 <code>EB_Subbook_Code</code> は副本コードを表します。
+一冊の書籍の中の副本は、それぞれ一意の副本コードを持っています。
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <code>==</code> と <code>!=</code> で一致比較することが
+できます。
+</p>
+
+<p>
+また、不正な副本コード値を表す <code>EB_SUBBOOK_INVALID</code> という
+特別な副本コードが定義されています。
+利用可能な副本に対して、この副本コードが割り当てられることはありません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="subbook-functions">関数の詳細</a></h3>
+
+<p>
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/eb.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:load_all_subbooks"><code>EB_Error_Code eb_load_all_subbooks (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_load_all_subbooks()</code> は、<var>book</var> 内のすべての
+副本を初期化します。
+通常、副本の初期化は、その副本が初めて選択されたときに自動的に行われますが、
+この関数は初期化を前倒しで行います。
+初期化の対象となるのは、この関数を呼び出した時点でまだ初期化していない
+すべての副本です。
+この関数は、スタンドアロンで動作するサーバアプリケーションなどで有効です。
+クライアントからの接続を受ける前にこの関数を呼ぶことで、副本の初期化の
+ためにクライアントを待たせなくて済みます。
+</p>
+
+<p>
+初期化の対象となったすべての副本の初期化に成功すれば、関数は
+<code>EB_SUCCESS</code> を返します。
+一冊でも初期化に失敗した場合は、残りの副本の初期化を諦め、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+<var>book</var> は、あらかじめ書籍に結び付けられていなくてはなりません。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOK</code> を返します。
+</p>
+
+<p>
+この関数を呼び出すと、<var>book</var> は、副本を選択していない状態になります。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:subbook_list"><code>EB_Error_Code eb_subbook_list (EB_Book *<var>book</var>, EB_Subbook_Code *<var>subbook_list</var>, int *<var>subbook_count</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_subbook_list()</code> は、<var>book</var> 内のすべて副本の
+副本コードを <code>EB_Subbook_Code</code> 型の配列にして、
+<var>subbook_list</var> の指す領域に書き込みます。
+配列は、最大で <code>EB_MAX_SUBBOOKS</code> 個の要素を持ちます。
+加えて、書籍が収録している副本の個数を <var>subbook_count</var> の指す
+領域に書き込みます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>subbook_count</var> の指す領域に 0 を書き込み、原因を
+示すエラーコードを返します。
+</p>
+
+<p>
+<var>book</var> は、あらかじめ書籍に結び付けられていなくてはなりません。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOK</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:subbook"><code>EB_Error_Code eb_subbook (EB_Book *<var>book</var>, EB_Subbook_Code *<var>subbook_code</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_subbook()</code> は、<var>book</var> が選択中の副本の
+副本コードを <var>subbook_code</var> の指す領域に書き込みます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>subbook_code</var> の指す領域に
+<code>EB_SUBBOOK_INVALID</code> を書き込み、原因を示すエラーコードを
+返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:subbook_title"><code>EB_Error_Code eb_subbook_title (EB_Book *<var>book</var>, char *<var>title</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_subbook_title()</code> は、<var>book</var> が選択中の副本の
+題名を <var>title</var> の指す領域に文字列として書き込みます。
+題名の文字列の長さは、最長で <code>EB_MAX_TITLE_LENGTH</code> バイトです。
+この長さは、末尾のナル文字を含みません。
+</p>
+
+<p>
+書籍の文字コード
+(<a href="eb-05.html#eb_book-data-types">「[CD-ROM 書籍と <code>EB_Book</code> オブジェクト] データ型の詳細」</a> を参照のこと)
+が <code>EB_CHARCODE_ISO8859_1</code> なら、題名を表す文字列は ISO 8859-1
+になり、それ以外の文字コードなら日本語 EUC になります。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>title</var> の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:subbook_title2"><code>EB_Error_Code eb_subbook_title2 (EB_Book *<var>book</var>, EB_Subbook_Code <var>subbook_code</var>, char *<var>title</var>)</code></a></h4>
+
+<p>
+<code>eb_subbook_title()</code> と似ていますが、選択中の副本ではなく、
+引数 <var>subbook_code</var> で指定された副本の題名を書き込む点が
+異なります。
+</p>
+
+<p>
+<var>book</var> は副本を選択していなくても構いませんが、あらかじめ書籍
+に結び付けられていなければなりません。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOK</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:subbook_directory"><code>EB_Error_Code eb_subbook_directory (EB_Book *<var>book</var>, char *<var>directory</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_subbook_directory()</code> は、<var>book</var> 内で現在
+選択中の副本のデータファイルを収めたディレクトリ名を、<var>directory</var>
+の指す領域に書き込みます。
+</p>
+
+<p>
+ディレクトリ名の文字列の長さは、最長で
+<code>EB_MAX_DIRECTORY_NAME_LENGTH</code> バイトです。
+この長さに、末尾のナル文字は含みません。
+ディレクトリ名は ASCII の数字、英小文字、アンダースコアで構成されます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>directory</var> の指す領域に空文字列を書き込み、原因に
+を示すエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:subbook_directory2"><code>EB_Error_Code eb_subbook_directory2 (EB_Book *<var>book</var>, EB_Subbook_Code <var>subbook_code</var>, char *<var>directory</var>)</code></a></h4>
+
+<p>
+<code>eb_subbook_directory()</code> と似ていますが、選択中の副本ではなく、
+引数 <var>subbook_code</var> で指定された副本のディレクトリ名を書き込む点
+が異なります。
+</p>
+
+<p>
+<var>book</var> は副本を選択していなくても構いませんが、あらかじめ
+書籍に結び付けられていなければなりません。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOK</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:set_subbook"><code>EB_Error_Code eb_set_subbook (EB_Book *<var>book</var>, EB_Subbook_Code <var>code</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_set_subbook()</code> は、<var>book</var> の副本
+<var>code</var> を選択します。
+すでに副本を選択していた場合は、いったん未選択の状態にしてから副本
+<var>subbook_code</var> を選択します。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+このとき、外字は未選択の状態となり、検索、テキストデータの読み込み、
+バイナリデータの読み込みについての状態記録は、すべてリセットされます。
+失敗すると、副本を未選択の状態にして、原因を示すエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> は書籍に結び付けられていなければなりません。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOK</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:unset_subbook"><code>void eb_unset_subbook (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_unset_subbook()</code> は、<var>book</var> が選択している
+副本を未選択の状態にします。
+<var>book</var> が書籍に結び付いていないか、副本が選択されていない場合は、
+何もしません。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-06.html">前へ</a>] [<a href="eb-08.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

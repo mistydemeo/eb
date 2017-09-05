@@ -1,0 +1,1513 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Local Character</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Local Character">
+<META NAME="keywords" CONTENT="EB Library: Local Character">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC60"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC59"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC61"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 10. 外字 </H1>
+<!--docid::SEC60::-->
+<P>
+
+文字コードに収録されていない、私的に定義した文字のことを、俗に「外字」
+と言います。
+外字として定義した個々の文字を識別するために、文字コードに収録された
+文字とは重複しない位置に、各文字の文字番号に割り振るのが普通です。
+(割り当てる文字番号の詳細については、「<A HREF="eb-ja_2.html#SEC6">文字コード</A>」節を参照。)
+</P><P>
+
+市販の電子ブック、EPWING でも、ほとんどが外字を使っています。
+外字の定義状況は書籍同士でバラバラで、まったく統一感はありません。
+つまり、同じ文字番号を使っていても、定義されている外字は書籍によって
+違います。
+外字は副本毎に定義することが可能ですが、一つの CD-ROM 書籍内でも副本に
+よって定義が異なることも珍しくありません。
+副本によっては、数百から数千の外字を定義していることもあります。
+</P><P>
+
+CD-ROM 書籍では、定義した外字の字形データ (つまりフォント) を用意して
+います。
+フォントはビットマップデータであり、書籍によっては大きさの異なる数種類
+のフォントを用意しています。
+</P><P>
+
+逆に言えば、外字に対して提供されるデータは、フォントだけです。
+ある文字番号を割り当てられた外字が、漢字なのか、発音記号なのか、そう
+いった補助的な情報は用意されていません。
+アプリケーションプログラムが外字をサポートするためには、外字のフォント
+をそのまま表示する以外に方法はないでしょう。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC61">10.1 半角外字と全角外字</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC62">10.2 外字の大きさと外字コード</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC63">10.3 選択中の外字フォントの高さ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC64">10.4 外字フォントの取り出し</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC65">10.5 外字フォントの変換</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC66">10.6 テキスト中の外字</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC67">10.7 データ型の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC68">10.8 定数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC69">10.9 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_10.html#SEC70">10.10 サンプルプログラム</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Narrow &#38; Wide Font"></A>
+<HR SIZE="6">
+<A NAME="SEC61"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC62"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.1 半角外字と全角外字 </H2>
+<!--docid::SEC61::-->
+<P>
+
+CD-ROM 書籍における外字には、「全角外字」「半角外字」の二種類があります。
+全角外字は用意されているフォントの横と縦の長さがおよそ 1:1 になっており、
+半角外字では 1:2 になっています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>　　　　　　全角外字　　　　　　　　　　半角外字　　
+　　　　（１６×１６）　　　　　　　　（８×１６）
+□□□□□□□□□□□□□□□□　　□□□□□□□□
+□□□□□□□□□□□□□□□□　　□□■■□■□□
+□□□■■■■■■□□□■□□□　　□□□□■□□□
+□□□□□□□□■□■□■□□□　　□□□■■□□□
+□□□□■□□■□□■□■□□□　　□□■□□■□□
+□□□□■□□■■■■■■□□□　　□■□□□■□□
+□□■■■■■□□□■□■□□□　　□□□■□■□□
+□□□□□□□□□□■□■□□□　　□□■□■■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■■■■■■■■■■□□□　　□■□□□■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■■■■■■■■■■□□□　　□■□□□■□□
+□□□□□□□□□□□□□□□□　　□□■■■□□□
+□□□□□□□□□□□□□□□□　　□□□□□□□□
+</pre></td></tr></table></P><P>
+
+テキストデータには、半角表示の開始と終了を表すエスケープシーケンスが
+あり (「<A HREF="eb-ja_9.html#SEC46">テキストデータの内部形式</A>」節を参照)、開始と
+終了の間に置かれたものは半角外字、それ以外のところなら全角外字に
+なります。
+</P><P>
+
+文字番号は同じでも、字形が全角と半角ではまったく異なることもあります
+ので、外字の文字番号だけから、全角と半角のどちらかを判断することは
+できません。
+かならず、前方に半角開始のエスケープシーケンスが出現していたかどうか
+という情報に基づいて判断しないといけません。
+</P><P>
+
+ただし、全角か半角かの判定は EB ライブラリ側で行いますので、
+アプリケーションプログラムが文脈の解析を行う必要はありません。
+</P><P>
+
+CD-ROM 書籍の副本には、半角外字あるいは全角外字のどちらか一方だけを
+定義しているものもありますし、両方とも定義しているものもあります。
+</P><P>
+
+<A NAME="Font Size and Font Code"></A>
+<HR SIZE="6">
+<A NAME="SEC62"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC61"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC63"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.2 外字の大きさと外字コード </H2>
+<!--docid::SEC62::-->
+<P>
+
+各副本には、定義している外字のフォントがビットマップ形式で収録されて
+います。
+フォントの大きさは、縦のピクセル数を基準にすると 16, 24, 30, 48 の
+4 種類があり、全角外字、半角外字それぞれのフォントの大きさ
+(横のピクセル数×縦のピクセル数) は次の通りになります。
+</P><P>
+
+<TABLE>
+<TR><TD>縦のピクセル数  </TD><TD>  全角全角  </TD><TD> 半角外字</TD>
+</TR>
+<TR><TD>16              </TD><TD>  16x16     </TD><TD>  8x16</TD>
+</TR>
+<TR><TD>24              </TD><TD>  24x24     </TD><TD> 16x24</TD>
+</TR>
+<TR><TD>30              </TD><TD>  32x30     </TD><TD> 16x30</TD>
+</TR>
+<TR><TD>48              </TD><TD>  48x48     </TD><TD> 24x48</TD>
+</TR></TABLE>
+<P>
+
+ただし、すべての副本でこれら 4 種類のフォントを用意しているわけでは
+ありません。
+縦が 16 ピクセルのものは必ず用意されていますが、それ以外はないことも
+珍しくありません。
+(外字がまったく定義されていなければ、16 ピクセルのフォントも用意され
+ません。)
+</P><P>
+
+EB ライブラリでは、このように縦方向のピクセル数、つまり
+<EM>フォントの高さ (font height)</EM> を基準に、外字フォントの大きさを
+区別しています。
+そして、それぞれのフォントの高さ (16, 24, 30, 48) に対して、
+<EM>外字コード (font code)</EM> というものを割り当てています。
+フォントの高さを指定する際は、必ずこの外字コードを使います。
+</P><P>
+
+<TABLE>
+<TR><TD>縦のピクセル数  </TD><TD>  外字コード</TD>
+</TR>
+<TR><TD>16              </TD><TD>  <CODE>EB_FONT_16</CODE></TD>
+</TR>
+<TR><TD>24              </TD><TD>  <CODE>EB_FONT_24</CODE></TD>
+</TR>
+<TR><TD>30              </TD><TD>  <CODE>EB_FONT_30</CODE></TD>
+</TR>
+<TR><TD>48              </TD><TD>  <CODE>EB_FONT_48</CODE></TD>
+</TR></TABLE>
+<P>
+
+<A NAME="Current Font Height"></A>
+<HR SIZE="6">
+<A NAME="SEC63"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC62"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC64"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.3 選択中の外字フォントの高さ </H2>
+<!--docid::SEC63::-->
+<P>
+
+<CODE>EB_Book</CODE> オブジェクトで選択中の副本が用意している外字フォントの
+高さの中から一つ選んで、
+<EM>選択中の外字フォントの高さ (current font height)</EM> として指定する
+ことができます。
+EB ライブラリで外字のフォントデータ (ビットマップデータ) を取り出すには、
+外字フォントの高さをあらかじめ選択しておく必要があります。
+</P><P>
+
+選択するには、関数 <CODE>eb_set_font()</CODE> を使います。
+以下のプログラムは、高さ 24 ピクセルのフォントを選択する場合の例です。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> が <CODE>EB_Book</CODE> のオブジェクトで、すでに書籍に結び付け
+ * られ、副本を選択中だと仮定しています。*/
+if (eb_set_font(&#38;book, EB_FONT_24) != EB_SUCCESS) {
+    printf("eb_set_font_() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+このプログラムでは、高さ 24 ピクセルのフォントを選択中の副本が用意して
+いるものと仮定していますが、実際には用意していない副本も珍しくありません。
+もし、副本が高さ 24 ピクセルのフォントを用意していなければ、
+<CODE>eb_set_font()</CODE> は <CODE>EB_ERR_NO_SUCH_FONT</CODE> を返します。
+</P><P>
+
+しかし、外字を選択する前に、前もってその副本が用意しているフォントを
+知りたいときもあります。
+これには、2 通りの方法があります。
+</P><P>
+
+まず 1 つ目は、選択中の副本が用意しているフォントの高さの一覧を 
+<CODE>eb_font_list()</CODE> で取得する方法です。
+これは、副本コードの一覧を取得する <CODE>eb_subbook_list()</CODE> と使い方
+が良く似ています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Font_Code font_list[EB_MAX_FONTS];
+int font_count;
+int i;
+
+if (eb_font_list(&#38;book, font_list, &#38;font_count) != EB_SUCCESS) {
+    printf("eb_font_list() failed\n");
+    return;
+}
+
+for (i = 0; i &#60; font_count; i++) {
+    if (font_list[i] == EB_FONT_24)
+        printf("this subbook has EB_FONT_24\n");
+}
+</pre></td></tr></table></P><P>
+
+2 つ目は、<CODE>eb_have_font()</CODE> を使うやり方です。
+この関数は、特定の高さのフォントを、選択中の副本が用意しているかどうか
+調べることができます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_have_font(&#38;book, EB_FONT_24)) {
+    printf("this subbook has EB_FONT_24\n");
+}
+</pre></td></tr></table></P><P>
+
+また、選択中の副本が半角外字、全角外字を定義しているかどうかは、それぞれ
+<CODE>eb_have_narrow_font()</CODE>, <CODE>eb_have_wide_font()</CODE> を使って調べる
+ことができます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_have_narrow_font(&#38;book))
+    printf("this subbook has narrow font\n");
+if (eb_have_wide_font(&#38;book))
+    printf("this subbook has wide font\n");
+</pre></td></tr></table></P><P>
+
+なお、あらかじめ副本を選択しておかないと、外字の高さは選択できないので
+注意して下さい。
+<CODE>eb_set_subbook()</CODE> で選択中の副本を切り替えると、外字フォントの
+高さは常に未選択の状態に戻ります。
+</P><P>
+
+<A NAME="Get Font"></A>
+<HR SIZE="6">
+<A NAME="SEC64"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC63"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC65"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.4 外字フォントの取り出し </H2>
+<!--docid::SEC64::-->
+<P>
+
+外字の高さを選択した状態であれば、外字のフォントデータ
+(ビットマップデータ) を取り出すことができます。
+</P><P>
+
+フォントデータを取り出す関数は、
+全角外字なら <CODE>eb_wide_font_character_bitmap()</CODE>、
+半角外字なら <CODE>eb_narrow_font_character_bitmap()</CODE> です。
+</P><P>
+
+全角外字 <SAMP>`0xa121'</SAMP> のフォントデータを取り出すプログラムは、次のよう
+になります。
+半角外字の場合は、呼び出す関数名が変わるだけです。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> が <CODE>EB_Book</CODE> のオブジェクトで、すでに書籍に結び付け
+ * られ、副本と外字の高さを選択中だと仮定しています。*/
+char bitmap[EB_SIZE_WIDE_FONT_48];
+
+if (eb_wide_font_character_bitmap(book, 0xa121, bitmap)
+    != EB_SUCCESS) {
+    return;
+}
+</pre></td></tr></table></P><P>
+
+ここでは、<CODE>bitmap</CODE> にフォントデータを格納しています。
+<CODE>bitmap</CODE> の領域として <CODE>EB_SIZE_WIDE_FONT_48</CODE> バイトを確保
+していますが、これは高さ 48 ピクセルの外字データを格納するために必要な
+サイズを表します。
+</P><P>
+
+フォントデータのサイズは、外字の高さに応じて一定です。
+高さ 48 ピクセルは外字の中でも最大のサイズなので、このサイズの領域を
+用意すれば、どの高さの外字でも格納できます。
+</P><P>
+
+外字データは、ビットマップ形式のデータになっています。
+背景色をビット値 0, 前景色をビット値 1 として、各ピクセルの値を並べて
+あります。
+並び方ですが、左上からまずは右に向かってピクセルを拾っていき、左端まで
+来たら一つ下の段に降りて、また右方向にピクセルを拾います。
+以下、一番下の段までこれを繰り返します。
+</P><P>
+
+ただし、バイト内では、128, 64, 32, ...1 の桁の順にビット値を格納して
+います。
+つまり、128 の桁は一番左のピクセル、1 の桁は一番右のピクセルに対応
+します。
+</P><P>
+
+以下に、16x16 の全角外字のビットマップの例と、そのバイト列を記します。
+背景色が□、前景色が■です。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>□□□□□□□□□□□□□□□□　　0x00, 0x00,
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+□□□■■■■■■□□□■□□□　　0x1f, 0x88,
+□□□□□□□□■□■□■□□□　　0x00, 0xc8,
+□□□□■□□■□□■□■□□□　　0x09, 0x28,
+□□□□■□□■■■■■■□□□　　0x09, 0xf8,
+□□■■■■■□□□■□■□□□　　0x3e, 0x28,
+□□□□□□□□□□■□■□□□　　0x00, 0x28,
+□□□■□□□□□□□□■□□□　　0x10, 0x08,
+□□□■□□□□□□□□■□□□　　0x10, 0x08,
+□□□■■■■■■■■■■□□□　　0x1f, 0xf8,
+□□□■□□□□□□□□■□□□　　0x18, 0x08,
+□□□■□□□□□□□□■□□□　　0x18, 0x08,
+□□□■■■■■■■■■■□□□　　0x1f, 0xf8,
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+</pre></td></tr></table></P><P>
+
+<A NAME="Convert Font"></A>
+<HR SIZE="6">
+<A NAME="SEC65"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC64"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC66"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.5 外字フォントの変換 </H2>
+<!--docid::SEC65::-->
+<P>
+
+EB ライブラリには、外字のビットマップデータを XBM, XPM, GIF, BMP の
+各画像形式に変換する関数が用意されています。
+変換を行う関数は、次の 4 つです。
+</P><P>
+
+<TABLE>
+<TR><TD>eb_bitmap_to_xbm() </TD><TD> XBM への変換</TD>
+</TR>
+<TR><TD>eb_bitmap_to_xpm() </TD><TD> XPM への変換</TD>
+</TR>
+<TR><TD>eb_bitmap_to_gif() </TD><TD> GIF への変換</TD>
+</TR>
+<TR><TD>eb_bitmap_to_bmp() </TD><TD> BMP への変換</TD>
+</TR></TABLE>
+<P>
+
+どの関数も呼び出し方は同じですが、ここでは XBM への変換のプログラム例
+を示します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>bitmap</CODE> に高さ 16 の全角外字のビットマップデータが格納
+ * されていると仮定しています。*/
+char bitmap[EB_SIZE_WIDE_FONT_16];
+char xbm[EB_SIZE_WIDE_FONT_16_XBM];
+size_t xbmsize;
+
+if (eb_wide_font_character_bitmap(bitmap, EB_WIDTH_WIDE_FONT_16,
+    EB_HEIGHT_FONT_16, xbm, &#38;xbmsize) != EB_SUCCESS) {
+    return;
+}
+</pre></td></tr></table></P><P>
+
+XPM, GIF への変換では、前景色は黒、背景色は透明になります。
+BMP への変換では、前景色は黒、背景色は白になります。
+XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
+</P><P>
+
+<A NAME="Local Character in Text"></A>
+<HR SIZE="6">
+<A NAME="SEC66"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC65"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC67"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.6 テキスト中の外字 </H2>
+<!--docid::SEC66::-->
+<P>
+
+外字はテキストデータ (本文、メニューなど) の中で使われています。
+</P><P>
+
+アプリケーションプログラムが、テキストデータ中に出現する外字を識別して
+処理を行うには、外字に対するフックを設定して、フック関数の中で処理する
+ことになります。
+</P><P>
+
+外字に対するフックは、全角外字に対する <CODE>EB_HOOK_WIDE_FONT</CODE> と
+半角外字に対する <CODE>EB_HOOK_NARROW_FONT</CODE> の二種類があります。
+いずれも、外字が一字出現する度に、設定したフック関数を呼び出します。
+</P><P>
+
+フックの扱い方については、「<A HREF="eb-ja_9.html#SEC56">フックコードの一覧</A>」節を参照。
+</P><P>
+
+<A NAME="Font Data Types"></A>
+<HR SIZE="6">
+<A NAME="SEC67"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC66"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC68"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.7 データ型の詳細 </H2>
+<!--docid::SEC67::-->
+<P>
+
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX394"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Font_Code</B>
+<DD><A NAME="IDX395"></A>
+<A NAME="IDX396"></A>
+<A NAME="IDX397"></A>
+<A NAME="IDX398"></A>
+<A NAME="IDX399"></A>
+<A NAME="IDX400"></A>
+</P><P>
+
+外字コードは、外字の高さ (ピクセル数) を表します。
+現在のところ、定義されている高さは次の通りです。
+</P><P>
+
+<UL>
+<LI><CODE>EB_FONT_16</CODE>
+<LI><CODE>EB_FONT_24</CODE>
+<LI><CODE>EB_FONT_30</CODE>
+<LI><CODE>EB_FONT_48</CODE>
+<LI><CODE>EB_FONT_INVALID</CODE>
+</UL>
+<P>
+
+外字コードの実体は整数値ですが、<CODE>EB_FONT_16</CODE> の値は 16 では
+ありません。
+他も同様ですので、注意して下さい。
+</P><P>
+
+<CODE>EB_FONT_INVALID</CODE> は特別な外字コードで、不正な外字コード値を表す
+ために用います。
+</DL>
+</P><P>
+
+<A NAME="Font Constants"></A>
+<HR SIZE="6">
+<A NAME="SEC68"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC67"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC69"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.8 定数の詳細 </H2>
+<!--docid::SEC68::-->
+<P>
+
+この節で説明している定数を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX401"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_WIDTH_NARROW_FONT_16</B>
+<DD><A NAME="IDX402"></A>
+<DT><U>Constant:</U> <B>EB_WIDTH_NARROW_FONT_24</B>
+<DD><A NAME="IDX403"></A>
+<DT><U>Constant:</U> <B>EB_WIDTH_NARROW_FONT_30</B>
+<DD><A NAME="IDX404"></A>
+<DT><U>Constant:</U> <B>EB_WIDTH_NARROW_FONT_48</B>
+<DD><A NAME="IDX405"></A>
+<DT><U>Constant:</U> <B>EB_WIDTH_WIDE_FONT_16</B>
+<DD><A NAME="IDX406"></A>
+<DT><U>Constant:</U> <B>EB_WIDTH_WIDE_FONT_24</B>
+<DD><A NAME="IDX407"></A>
+<DT><U>Constant:</U> <B>EB_WIDTH_WIDE_FONT_30</B>
+<DD><A NAME="IDX408"></A>
+<DT><U>Constant:</U> <B>EB_WIDTH_WIDE_FONT_48</B>
+<DD><A NAME="IDX409"></A>
+<A NAME="IDX410"></A>
+<A NAME="IDX411"></A>
+<A NAME="IDX412"></A>
+<A NAME="IDX413"></A>
+<A NAME="IDX414"></A>
+<A NAME="IDX415"></A>
+<A NAME="IDX416"></A>
+</P><P>
+
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個
+分の幅 (横方向のピクセル数) を <CODE>int</CODE> 型で表しています。
+</DL>
+</P><P>
+
+<A NAME="IDX417"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_HEIGHT_NARROW_FONT_16</B>
+<DD><A NAME="IDX418"></A>
+<DT><U>Constant:</U> <B>EB_HEIGHT_NARROW_FONT_24</B>
+<DD><A NAME="IDX419"></A>
+<DT><U>Constant:</U> <B>EB_HEIGHT_NARROW_FONT_30</B>
+<DD><A NAME="IDX420"></A>
+<DT><U>Constant:</U> <B>EB_HEIGHT_NARROW_FONT_48</B>
+<DD><A NAME="IDX421"></A>
+<DT><U>Constant:</U> <B>EB_HEIGHT_WIDE_FONT_16</B>
+<DD><A NAME="IDX422"></A>
+<DT><U>Constant:</U> <B>EB_HEIGHT_WIDE_FONT_24</B>
+<DD><A NAME="IDX423"></A>
+<DT><U>Constant:</U> <B>EB_HEIGHT_WIDE_FONT_30</B>
+<DD><A NAME="IDX424"></A>
+<DT><U>Constant:</U> <B>EB_HEIGHT_WIDE_FONT_48</B>
+<DD><A NAME="IDX425"></A>
+<A NAME="IDX426"></A>
+<A NAME="IDX427"></A>
+<A NAME="IDX428"></A>
+<A NAME="IDX429"></A>
+<A NAME="IDX430"></A>
+<A NAME="IDX431"></A>
+<A NAME="IDX432"></A>
+</P><P>
+
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+の縦方向のピクセル数を <CODE>int</CODE> 型で表しています。
+</P><P>
+
+<CODE>EB_HEIGHT_NARROW_FONT_16</CODE> および <CODE>EB_HEIGHT_WIDE_FONT_16</CODE> の
+実際の値は 16 です。
+(外字コード <CODE>EB_FONT_16</CODE> の実際の値は 16 ではありませんので、注意
+して下さい。)
+</DL>
+</P><P>
+
+<A NAME="IDX433"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_16</B>
+<DD><A NAME="IDX434"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_24</B>
+<DD><A NAME="IDX435"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_30</B>
+<DD><A NAME="IDX436"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_48</B>
+<DD><A NAME="IDX437"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_16</B>
+<DD><A NAME="IDX438"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_24</B>
+<DD><A NAME="IDX439"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_30</B>
+<DD><A NAME="IDX440"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_48</B>
+<DD><A NAME="IDX441"></A>
+<A NAME="IDX442"></A>
+<A NAME="IDX443"></A>
+<A NAME="IDX444"></A>
+<A NAME="IDX445"></A>
+<A NAME="IDX446"></A>
+<A NAME="IDX447"></A>
+<A NAME="IDX448"></A>
+</P><P>
+
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを格納するのに必要な領域の大きさを表しています。
+値は <CODE>int</CODE> 型で、単位はバイトです。
+</DL>
+</P><P>
+
+<A NAME="IDX449"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_16_XBM</B>
+<DD><A NAME="IDX450"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_24_XBM</B>
+<DD><A NAME="IDX451"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_30_XBM</B>
+<DD><A NAME="IDX452"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_48_XBM</B>
+<DD><A NAME="IDX453"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_16_XBM</B>
+<DD><A NAME="IDX454"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_24_XBM</B>
+<DD><A NAME="IDX455"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_30_XBM</B>
+<DD><A NAME="IDX456"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_48_XBM</B>
+<DD><A NAME="IDX457"></A>
+<A NAME="IDX458"></A>
+<A NAME="IDX459"></A>
+<A NAME="IDX460"></A>
+<A NAME="IDX461"></A>
+<A NAME="IDX462"></A>
+<A NAME="IDX463"></A>
+<A NAME="IDX464"></A>
+</P><P>
+
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを <CODE>eb_bitmap_to_xbm()</CODE> を用いて XBM 形式に変換
+する際に、変換後の XBM 形式のデータの大きさを表しています。
+値は <CODE>int</CODE> 型で、単位はバイトです。
+</DL>
+</P><P>
+
+<A NAME="IDX465"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_16_XPM</B>
+<DD><A NAME="IDX466"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_24_XPM</B>
+<DD><A NAME="IDX467"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_30_XPM</B>
+<DD><A NAME="IDX468"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_48_XPM</B>
+<DD><A NAME="IDX469"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_16_XPM</B>
+<DD><A NAME="IDX470"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_24_XPM</B>
+<DD><A NAME="IDX471"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_30_XPM</B>
+<DD><A NAME="IDX472"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_48_XPM</B>
+<DD><A NAME="IDX473"></A>
+<A NAME="IDX474"></A>
+<A NAME="IDX475"></A>
+<A NAME="IDX476"></A>
+<A NAME="IDX477"></A>
+<A NAME="IDX478"></A>
+<A NAME="IDX479"></A>
+<A NAME="IDX480"></A>
+</P><P>
+
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを <CODE>eb_bitmap_to_xpm()</CODE> を用いて XPM 形式に変換
+する際に、変換後の XPM 形式のデータの大きさを表しています。
+値は <CODE>int</CODE> 型で、単位はバイトです。
+</DL>
+</P><P>
+
+<A NAME="IDX481"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_16_GIF</B>
+<DD><A NAME="IDX482"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_24_GIF</B>
+<DD><A NAME="IDX483"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_30_GIF</B>
+<DD><A NAME="IDX484"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_48_GIF</B>
+<DD><A NAME="IDX485"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_16_GIF</B>
+<DD><A NAME="IDX486"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_24_GIF</B>
+<DD><A NAME="IDX487"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_30_GIF</B>
+<DD><A NAME="IDX488"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_48_GIF</B>
+<DD><A NAME="IDX489"></A>
+<A NAME="IDX490"></A>
+<A NAME="IDX491"></A>
+<A NAME="IDX492"></A>
+<A NAME="IDX493"></A>
+<A NAME="IDX494"></A>
+<A NAME="IDX495"></A>
+<A NAME="IDX496"></A>
+</P><P>
+
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを <CODE>eb_bitmap_to_gif()</CODE> を用いて GIF 形式に変換
+する際に、変換後の GIF 形式のデータの大きさを表しています。
+値は <CODE>int</CODE> 型で、単位はバイトです。
+</DL>
+</P><P>
+
+<A NAME="IDX497"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_16_BMP</B>
+<DD><A NAME="IDX498"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_24_BMP</B>
+<DD><A NAME="IDX499"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_30_BMP</B>
+<DD><A NAME="IDX500"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_NARROW_FONT_48_BMP</B>
+<DD><A NAME="IDX501"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_16_BMP</B>
+<DD><A NAME="IDX502"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_24_BMP</B>
+<DD><A NAME="IDX503"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_30_BMP</B>
+<DD><A NAME="IDX504"></A>
+<DT><U>Constant:</U> <B>EB_SIZE_WIDE_FONT_48_BMP</B>
+<DD><A NAME="IDX505"></A>
+<A NAME="IDX506"></A>
+<A NAME="IDX507"></A>
+<A NAME="IDX508"></A>
+<A NAME="IDX509"></A>
+<A NAME="IDX510"></A>
+<A NAME="IDX511"></A>
+<A NAME="IDX512"></A>
+</P><P>
+
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを <CODE>eb_bitmap_to_bmp()</CODE> を用いて BMP 形式に変換
+する際に、変換後の BMP 形式のデータの大きさを表しています。
+値は <CODE>int</CODE> 型で、単位はバイトです。
+</DL>
+</P><P>
+
+<A NAME="Font Functions"></A>
+<HR SIZE="6">
+<A NAME="SEC69"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC68"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC70"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.9 関数の詳細 </H2>
+<!--docid::SEC69::-->
+<P>
+
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/font.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX513"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_font</B> <I>(EB_Book *<VAR>book</VAR>, EB_Font_Code *<VAR>font_code</VAR>)</I>
+<DD><A NAME="IDX514"></A>
+</P><P>
+
+関数 <CODE>eb_font()</CODE> は、選択している副本において、選択中の外字フォント
+の高さを表す外字コードを <VAR>font_code</VAR> の指す領域に書き込みます。
+</P><P>
+
+成功すると関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると <VAR>font_code</VAR> の指す領域に <CODE>EB_FONT_INVALID</CODE> を
+書き込み、原因を示すエラーコードを返します。
+</P><P>
+
+あらかじめ、外字フォントの高さが選択されていなければなりません。
+外字が選択されていなければ、<CODE>EB_ERR_NO_CUR_FONT</CODE> を返します。
+副本そのものを選択していない場合も、同様です。
+</DL>
+</P><P>
+
+<A NAME="IDX515"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_set_font</B> <I>(EB_Book *<VAR>book</VAR>, EB_Font_Code <VAR>font_code</VAR>)</I>
+<DD><A NAME="IDX516"></A>
+</P><P>
+
+関数 <CODE>eb_set_font()</CODE> は、選択中の副本における外字フォントの高さを
+セットします。
+セットする外字フォントの「高さ」は、対応する外字コードを引数
+<VAR>font_code</VAR> で指定します。
+</P><P>
+
+この関数は、成功すると <CODE>EB_SUCCESS</CODE> を返し、指定した「高さ」が
+「選択中の外字フォントの高さ」となります。
+すでに外字フォントの高さを選択していた場合は、いったん未選択の状態に
+してからあらためて <VAR>font_code</VAR> を選択します。
+</P><P>
+
+失敗すると原因を示すエラーコードを返し、外字フォントの高さは未選択の
+状態になります。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくては
+なりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を
+返します。
+また、その副本が持っていない外字フォントの高さが指定されると、
+<CODE>EB_ERR_NO_SUCH_FONT</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX517"></A>
+<DL>
+<DT><U>Function:</U> void <B>eb_unset_font</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX518"></A>
+</P><P>
+
+関数 <CODE>eb_unset_font()</CODE> は、選択中の外字フォントの高さを未選択の
+状態に戻します。
+<VAR>book</VAR> が書籍に結び付いていない場合や副本が選択されていない場合、
+もしくは外字フォントの高さが選択されていない場合は何もしません。
+</DL>
+</P><P>
+
+<A NAME="IDX519"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_font_list</B> <I>(EB_Book *<VAR>book</VAR>, EB_Font_Code *<VAR>font_list</VAR>, int *<VAR>font_count</VAR>)</I>
+<DD><A NAME="IDX520"></A>
+<A NAME="IDX521"></A>
+</P><P>
+
+関数 <CODE>eb_font_list()</CODE> は、選択中の副本が定義している外字の高さの
+一覧を <CODE>EB_Font_Code</CODE> 型の配列にして、<VAR>font_list</VAR> の指す領域
+に書き込みます。
+</P><P>
+
+配列は、最大で <CODE>EB_MAX_FONTS</CODE> 個の要素を持ちます。
+加えて、書籍が収録している副本の個数を <VAR>font_count</VAR> の指す領域に
+書き込みます。
+(現在のバージョンでは 、<CODE>EB_MAX_FONTS</CODE> の値は 4 になっています。
+高さ 16, 24, 30, 48 ピクセルの 4 種類です。)
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>font_count</VAR> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくては
+なりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を
+返します。
+</DL>
+</P><P>
+
+<A NAME="IDX522"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_have_font</B> <I>(EB_Book *<VAR>book</VAR>, EB_Font_Code <VAR>font_code</VAR>)</I>
+<DD><A NAME="IDX523"></A>
+</P><P>
+
+関数 <CODE>eb_font()</CODE> は、<VAR>font_code</VAR> で指定した高さの外字フォント
+を、選択中の副本が持っているかどうかを調べます。
+</P><P>
+
+持っていれば 1 を返し、持っていなければ 0 を返します。
+<VAR>book</VAR> が副本を選択していない場合も 0 を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX524"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_font_height</B> <I>(EB_Book *<VAR>book</VAR>, int *<VAR>height</VAR>)</I>
+<DD><A NAME="IDX525"></A>
+</P><P>
+
+関数 <CODE>eb_font_height()</CODE> は、<VAR>book</VAR> が選択中の外字フォントの高さ
+(縦方向のピクセル数) を <VAR>height</VAR> の指す領域に書き込みます。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>height</VAR> の指す領域に 0 を書き込み、原因を示すエラーコード
+を返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> は外字フォントの高さを選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_FONT</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX526"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_font_height2</B> <I>(EB_Font_Code <VAR>font_code</VAR>, int *<VAR>height</VAR>)</I>
+<DD><A NAME="IDX527"></A>
+</P><P>
+
+<CODE>eb_font_height()</CODE> と似ていますが、選択中の副本ではなく、引数
+<VAR>font_height</VAR> で指定された外字コードの高さ (縦方向のピクセル数) を
+書き込む点が異なります。
+</DL>
+</P><P>
+
+<A NAME="IDX528"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_have_narrow_font</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX529"></A>
+<DT><U>Function:</U> int <B>eb_have_wide_font</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX530"></A>
+<A NAME="IDX531"></A>
+</P><P>
+
+関数 <CODE>eb_have_narrow_font()</CODE> は、選択中の副本が半角外字を定義して
+いるかどうかを調べます。
+同様に、関数 <CODE>eb_have_wide_font()</CODE> は、全角外字を定義しているか
+どうかを調べます。
+</P><P>
+
+定義していれば 1 を、定義していなければ 0 を返します。
+<VAR>book</VAR> が副本を選択していない場合も 0 を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX532"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_width</B> <I>(EB_Book *<VAR>book</VAR>, int *<VAR>width</VAR>)</I>
+<DD><A NAME="IDX533"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_width</B> <I>(EB_Book *<VAR>book</VAR>, int *<VAR>width</VAR>)</I>
+<DD><A NAME="IDX534"></A>
+<A NAME="IDX535"></A>
+</P><P>
+
+関数 <CODE>eb_narrow_font_width()</CODE> は、<VAR>book</VAR> が選択中の外字フォント
+の高さにおける半角外字の幅 (横方向のピクセル数) を、<VAR>height</VAR> の指す
+領域に書き込みます。
+同様に、<CODE>eb_wide_font_width()</CODE> は全角外字の幅を書き込みます。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>width</VAR> の指す領域に 0 を書き込み、原因を示すエラーコード
+を返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> は外字の高さを選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_FONT</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX536"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_width2</B> <I>(EB_Font_Code <VAR>font_code</VAR>, int *<VAR>width</VAR>)</I>
+<DD><A NAME="IDX537"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_width2</B> <I>(EB_Font_Code <VAR>font_code</VAR>, int *<VAR>width</VAR>)</I>
+<DD><A NAME="IDX538"></A>
+<A NAME="IDX539"></A>
+</P><P>
+
+<CODE>eb_narrow_font_width()</CODE>, <CODE>eb_wide_font_width()</CODE> と似て
+いますが、選択中の副本ではなく、引数<VAR>font_height</VAR> で指定された
+外字コードの幅 (横方向のピクセル数) を書き込む点が異なります。
+</DL>
+</P><P>
+
+<A NAME="IDX540"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_size</B> <I>(EB_Book *<VAR>book</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX541"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_size</B> <I>(EB_Book *<VAR>book</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX542"></A>
+<A NAME="IDX543"></A>
+</P><P>
+
+関数 <CODE>eb_narrow_font_size()</CODE> は、<VAR>book</VAR> が選択中の外字フォント
+の高さにおける半角外字一個分のデータサイズ (バイト数) を、<VAR>size</VAR> の
+指す領域に書き込みます。
+同様に、<CODE>eb_wide_font_size()</CODE> は全角外字のサイズを書き込みます。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>size</VAR> の指す領域に 0 を書き込み、原因を示すエラーコード
+を返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> は外字フォントの高さを選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_FONT</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX544"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_size2</B> <I>(EB_Font_Code <VAR>font_code</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX545"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_size2</B> <I>(EB_Font_Code <VAR>font_code</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX546"></A>
+<A NAME="IDX547"></A>
+</P><P>
+
+<CODE>eb_narrow_font_size()</CODE>, <CODE>eb_wide_font_size()</CODE> と似ていますが、
+選択中の副本ではなく、引数 <VAR>font_height</VAR> で指定された外字コードの
+外字一個分のデータサイズを書き込む点が異なります。
+</DL>
+</P><P>
+
+<A NAME="IDX548"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_start</B> <I>(EB_Book *<VAR>book</VAR>, int *<VAR>start</VAR>)</I>
+<DD><A NAME="IDX549"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_start</B> <I>(EB_Book *<VAR>book</VAR>, int *<VAR>start</VAR>)</I>
+<DD><A NAME="IDX550"></A>
+<A NAME="IDX551"></A>
+</P><P>
+
+関数 <CODE>eb_narrow_font_start()</CODE> は、<VAR>book</VAR> が選択中の副本における
+半角外字の先頭の文字番号 (半角外字の文字番号の中で最小のもの) を、
+<VAR>start</VAR> の指す領域に書き込みます。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> は副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+副本が半角外字を定義していない場合は、<CODE>EB_ERR_NO_CUR_FONT</CODE> を
+返します。
+</P><P>
+
+関数 <CODE>eb_wide_font_start()</CODE> は、半角外字ではなく全角外字について
+調べるという点を除いて、<CODE>eb_narrow_font_start()</CODE> と同じです。
+</DL>
+</P><P>
+
+<A NAME="IDX552"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_end</B> <I>(EB_Book *<VAR>book</VAR>, int *<VAR>end</VAR>)</I>
+<DD><A NAME="IDX553"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_end</B> <I>(EB_Book *<VAR>book</VAR>, int *<VAR>end</VAR>)</I>
+<DD><A NAME="IDX554"></A>
+<A NAME="IDX555"></A>
+</P><P>
+
+関数 <CODE>eb_narrow_font_end()</CODE> は、<VAR>book</VAR> が選択中の副本における
+半角外字の最後の文字番号 (半角外字の文字番号の中で最大のもの) を、
+<VAR>start</VAR> の指す領域に書き込みます。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> は副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+副本が半角外字を定義していない場合は、<CODE>EB_ERR_NO_CUR_FONT</CODE> を
+返します。
+</P><P>
+
+関数 <CODE>eb_wide_font_end()</CODE> は、半角外字ではなく全角外字について
+調べるという点を除いて、<CODE>eb_narrow_font_end()</CODE> と同じです。
+</DL>
+</P><P>
+
+<A NAME="IDX556"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_character_bitmap</B> <I>(EB_Book *<VAR>book</VAR>, int <VAR>character_number</VAR>, char *<VAR>bitmap</VAR>)</I>
+<DD><A NAME="IDX557"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_character_bitmap</B> <I>(EB_Book *<VAR>book</VAR>, int <VAR>character_number</VAR>, char *<VAR>bitmap</VAR>)</I>
+<DD><A NAME="IDX558"></A>
+<A NAME="IDX559"></A>
+</P><P>
+
+関数 <CODE>eb_narrow_font_character_bitmap()</CODE> は、<VAR>book</VAR> が選択中
+の副本で定義している、半角外字のビットマップデータを取り出します。
+取り出す外字の文字番号を、<VAR>character_number</VAR> で指定します。
+</P><P>
+
+成功すると、関数はビットマップデータを <VAR>bitmap</VAR> の指す領域に書き込み、
+<CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>bitmap</VAR> の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> は外字フォントの高さを選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_FONT</CODE> を返します。
+副本が半角外字を定義していない場合も、やはり <CODE>EB_ERR_NO_CUR_FONT</CODE>
+を返します。
+文字番号 <VAR>character_number</VAR> が外字の定義範囲外にある場合は、
+<CODE>EB_ERR_NO_SUCH_CHAR_BMP</CODE> を返します。
+</P><P>
+
+関数 <CODE>eb_wide_font_character_bitmap()</CODE> は、半角外字ではなく
+全角外字のビットマップデータを取り出すという点を除いて、
+<CODE>eb_narrow_font_character_bitmap()</CODE> と同じです。
+</P><P>
+
+ビットマップデータの形式については、
+「<A HREF="eb-ja_10.html#SEC64">外字フォントの取り出し</A>」節を参照。
+</DL>
+</P><P>
+
+<A NAME="IDX560"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_forward_narrow_font_character</B> <I>(EB_Book *<VAR>book</VAR>, int <VAR>n</VAR>, int *<VAR>character_number</VAR>)</I>
+<DD><A NAME="IDX561"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_forward_wide_font_character</B> <I>(EB_Book *<VAR>book</VAR>, int <VAR>n</VAR>, int *<VAR>character_number</VAR>)</I>
+<DD><A NAME="IDX562"></A>
+<A NAME="IDX563"></A>
+</P><P>
+
+関数 <CODE>eb_forward_narrow_font_character()</CODE> は、<VAR>book</VAR> が選択中
+の副本で定義されている半角外字の文字番号 <VAR>character_number</VAR> の
+<VAR>n</VAR> 個後ろに位置する外字の文字番号を取得します。
+</P><P>
+
+まず、関数を呼び出す際に、<VAR>character_number</VAR> の指す領域に文字番号を
+書き込んでおきます。
+関数の処理が成功すると、戻ったときに <VAR>n</VAR> 個分だけ後方の文字番号に
+書き換わっています。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> は副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+副本が半角外字を持っていない場合は、<CODE>EB_ERR_NO_CUR_FONT</CODE> を返します。
+</P><P>
+
+<VAR>n</VAR> 個後ろにもう外字がない場合や、呼び出した際に
+<VAR>character_number</VAR> の指す領域に書き込んであった文字番号が外字の
+定義範囲外にある場合は <CODE>EB_ERR_NO_SUCH_CHAR_BMP</CODE> を返します。
+</P><P>
+
+<VAR>n</VAR> には負の数を指定することもできます。
+この場合、次の呼び出しと等価になります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* n &#60; 0 とする */
+eb_backward_narrow_font_character (book, -n, character_number);
+</pre></td></tr></table></P><P>
+
+関数 <CODE>eb_forward_wide_font_character()</CODE> は、半角外字ではなく
+全角外字について操作するという点を除いて、
+<CODE>eb_forward_narrow_font_character()</CODE> と同じです。
+</DL>
+</P><P>
+
+<A NAME="IDX564"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_backward_narrow_font_character</B> <I>(EB_Book *<VAR>book</VAR>, int <VAR>n</VAR>, int *<VAR>character_number</VAR>)</I>
+<DD><A NAME="IDX565"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_backward_wide_font_character</B> <I>(EB_Book *<VAR>book</VAR>, int <VAR>n</VAR>, int *<VAR>character_number</VAR>)</I>
+<DD><A NAME="IDX566"></A>
+<A NAME="IDX567"></A>
+</P><P>
+
+関数 <CODE>eb_backward_narrow_font_character()</CODE> は
+<CODE>eb_forward_narrow_font_character()</CODE> とはちょうど逆の関数です。
+<VAR>book</VAR> が選択中の副本で定義されている半角外字の文字番号
+<VAR>character_number</VAR> の <VAR>n</VAR> 個前方に位置する外字の文字番号を
+取得します。
+</P><P>
+
+同様に、<CODE>eb_backward_wide_font_character()</CODE> は、全角外字について
+<VAR>n</VAR> 個前方の外字の文字番号を取得する関数で、
+<CODE>eb_forward_wide_font_character()</CODE> と反対の関数です。
+</P><P>
+
+<VAR>n</VAR> には負の数を指定することも可能で、それぞれ次の呼び出しと等価
+になります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* 半角外字の場合 (n &#60; 0) */
+eb_forward_narrow_font_character (book, -n, character_number);
+
+/* 全角外字の場合 (n &#60; 0) */
+eb_forward_wide_font_character (book, -n, character_number);
+</pre></td></tr></table></DL>
+</P><P>
+
+<A NAME="IDX568"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_xbm_size</B> <I>(EB_Font_Code <VAR>height</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX569"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_xpm_size</B> <I>(EB_Font_Code <VAR>height</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX570"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_gif_size</B> <I>(EB_Font_Code <VAR>height</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX571"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_narrow_font_bmp_size</B> <I>(EB_Font_Code <VAR>height</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX572"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_xbm_size</B> <I>(EB_Font_Code <VAR>height</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX573"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_xpm_size</B> <I>(EB_Font_Code <VAR>height</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX574"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_gif_size</B> <I>(EB_Font_Code <VAR>height</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX575"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_wide_font_bmp_size</B> <I>(EB_Font_Code <VAR>height</VAR>, size_t *<VAR>size</VAR>)</I>
+<DD><A NAME="IDX576"></A>
+<A NAME="IDX577"></A>
+<A NAME="IDX578"></A>
+<A NAME="IDX579"></A>
+<A NAME="IDX580"></A>
+<A NAME="IDX581"></A>
+<A NAME="IDX582"></A>
+<A NAME="IDX583"></A>
+</P><P>
+
+最初の 4 つの関数
+(<CODE>eb_narrow_font_xbm_size()</CODE> 〜 <CODE>eb_narrow_font_bmp_size()</CODE>)
+は、外字コード <VAR>height</VAR> の
+半角外字一個のビットマップを XBM, XPM, GIF, BMP 形式にそれぞれ変換
+したときのデータサイズを <VAR>size</VAR> の指す領域に書き込みます。
+</P><P>
+
+同様に、後ろの 4 つの関数
+(<CODE>eb_wide_font_xbm_size()</CODE> 〜 <CODE>eb_wide_font_bmp_size()</CODE>)
+は、全角外字を変換したときのデータサイズを書き込みます。
+</P><P>
+
+いずれの関数も、成功すると <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>size</VAR> の指す領域に 0 を書き込み、原因を示すエラーコード
+を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX584"></A>
+<DL>
+<DT><U>Function:</U> void <B>eb_bitmap_to_xbm</B> <I>(const char *<VAR>bitmap</VAR>, int <VAR>width</VAR>, int <VAR>height</VAR>, char *<VAR>image</VAR>, size_t *<VAR>image_length</VAR>)</I>
+<DD><A NAME="IDX585"></A>
+<DT><U>Function:</U> void <B>eb_bitmap_to_xpm</B> <I>(const char *<VAR>bitmap</VAR>, int <VAR>width</VAR>, int <VAR>height</VAR>, char *<VAR>image</VAR>, size_t *<VAR>image_length</VAR>)</I>
+<DD><A NAME="IDX586"></A>
+<DT><U>Function:</U> void <B>eb_bitmap_to_gif</B> <I>(const char *<VAR>bitmap</VAR>, int <VAR>width</VAR>, int <VAR>height</VAR>, char *<VAR>image</VAR>, size_t *<VAR>image_length</VAR>)</I>
+<DD><A NAME="IDX587"></A>
+<DT><U>Function:</U> void <B>eb_bitmap_to_bmp</B> <I>(const char *<VAR>bitmap</VAR>, int <VAR>width</VAR>, int <VAR>height</VAR>, char *<VAR>image</VAR>, size_t *<VAR>image_length</VAR>)</I>
+<DD><A NAME="IDX588"></A>
+<A NAME="IDX589"></A>
+<A NAME="IDX590"></A>
+<A NAME="IDX591"></A>
+</P><P>
+
+これら 4 つの関数は、<CODE>eb_narrow_font_character()</CODE> または
+<CODE>eb_wide_font_character()</CODE> で取り出した外字のビットマップを XBM,
+XPM, GIF, BMP 形式にそれぞれ変換します。
+</P><P>
+
+ビットマップデータの指す領域を <VAR>bitmap</VAR> で指定し、ビットマップの
+高さと幅を <VAR>width</VAR>, <VAR>height</VAR> で渡します。
+</P><P>
+
+関数の呼び出しから戻ると、<VAR>image</VAR> の指す領域に変換後のデータが
+書き込まれ、<VAR>image_length</VAR> の指す領域に変換後のデータの大きさが
+書き込まれます。
+</P><P>
+
+XPM, GIF への変換では、前景色は黒、背景色は透明になります。
+BMP への変換では、前景色は黒、背景色は白になります。
+XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
+</DL>
+</P><P>
+
+<A NAME="Font Sample"></A>
+<HR SIZE="6">
+<A NAME="SEC70"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC69"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 10.10 サンプルプログラム </H2>
+<!--docid::SEC70::-->
+<P>
+
+<A NAME="IDX592"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/*
+ * 使用方法:
+ *     font &#60;book-path&#62; &#60;subbook-index&#62;
+ * 例:
+ *     font /cdrom 0
+ * 説明:
+ *     &#60;book-path&#62; で指定した CD-ROM 書籍から特定の副本を選び、その
+ *     副本が定義している半角外字 (高さ 16 ピクセル) をすべてアスキー
+ *     アートで表示します。
+ *
+ *     その副本が、高さ 16 ピクセルの半角外字を定義していないと、エ
+ *     ラーになります。
+ *
+ *     &#60;subbook-index&#62; には、検索対象の副本のインデックスを指定しま
+ *     す。インデックスは、書籍の最初の副本から順に 0、1、2 ... に
+ *     なります。
+ */
+#include "config.h"
+
+#include &#60;stdio.h&#62;
+#include &#60;stdlib.h&#62;
+
+#include &#60;eb/eb.h&#62;
+#include &#60;eb/error.h&#62;
+#include &#60;eb/font.h&#62;
+
+int
+main(argc, argv)
+    int argc;
+    char *argv[];
+{
+    EB_Error_Code error_code;
+    EB_Book book;
+    EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
+    int subbook_count;
+    int subbook_index;
+    int font_start;
+    unsigned char bitmap[EB_SIZE_NARROW_FONT_16];
+    int i, j;
+
+    /* コマンド行引数をチェック。*/
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s book-path subbook-index\n",
+            argv[0]);
+        exit(1);
+    }
+
+    /* EB ライブラリと `book' を初期化。*/
+    eb_initialize_library();
+    eb_initialize_book(&#38;book);
+
+    /* 書籍を `book' に結び付ける。*/
+    error_code = eb_bind(&#38;book, argv[1]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+
+    /* 副本の一覧を取得。*/
+    error_code = eb_subbook_list(&#38;book, subbook_list, &#38;subbook_count);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* 副本のインデックスを取得。*/
+    subbook_index = atoi(argv[2]);
+
+    /*「現在の副本 (current subbook)」を設定。*/
+    if (eb_set_subbook(&#38;book, subbook_list[subbook_index]) &#60; 0) {
+        fprintf(stderr, "%s: failed to set the current subbook, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /*「現在の外字の大きさ」を設定。*/
+    if (eb_set_font(&#38;book, EB_FONT_16) &#60; 0) {
+        fprintf(stderr, "%s: failed to set the font size, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* 外字の開始位置を取得。*/
+    error_code = eb_narrow_font_start(&#38;book, &#38;font_start);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get font information, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    i = font_start;
+    for (;;) {
+        /* 外字のビットマップデータを取得。*/
+        error_code = eb_narrow_font_character_bitmap(&#38;book, i,
+            (char *)bitmap);
+        if (error_code != EB_SUCCESS) {
+            fprintf(stderr, "%s: failed to get font data, %s\n",
+                argv[0], eb_error_message(error_code));
+            goto die;
+        }
+
+        /* ビットマップをアスキーアートにして出力。*/
+        printf("code point=%04x\n", i);
+        for (j = 0; j &#60; 16; j++) {
+            fputc((bitmap[j] &#38; 0x80) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &#38; 0x40) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &#38; 0x20) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &#38; 0x10) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &#38; 0x08) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &#38; 0x04) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &#38; 0x02) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &#38; 0x01) ? '*' : ' ', stdout);
+            fputc('\n', stdout);
+        }
+        fputs("--------\n", stdout);
+
+        /* 外字の文字番号を一つ進める。*/
+        error_code = eb_forward_narrow_font_character(&#38;book, 1, &#38;i);
+        if (error_code != EB_SUCCESS)
+            break;
+    }
+        
+    /* 書籍と EB ライブラリの利用を終了。*/
+    eb_finalize_book(&#38;book);
+    eb_finalize_library();
+    exit(0);
+
+    /* エラー発生で終了するときの処理。*/
+  die:
+    eb_finalize_book(&#38;book);
+    eb_finalize_library();
+    exit(1);
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="Binary Data"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_10.html#SEC60"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_11.html#SEC71"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

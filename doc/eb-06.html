@@ -1,0 +1,787 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-05.html">前へ</a>] [<a href="eb-07.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="error-handling">エラー処理</a></h2>
+
+<p>
+EB ライブラリの関数の呼び出しは、常に成功するとは限りません。
+たとえば、<code>EB_Book</code> オブジェクトを書籍に結びつける関数
+<code>eb_bind()</code> には、引数として書籍のトップディレクトリを渡しますが、
+存在しないディレクトリを指定した場合、処理は失敗に終わります。
+</p>
+
+<p>
+一般にこうした事象は、ユーザが誤ったパスを指定したときに起こりますが、
+メモリ不足のように、ユーザのミスが原因ではない失敗も起こりえます。
+</p>
+
+<p>
+本章では、関数の呼び出しが失敗した場合の処理について説明します。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="error-code-and-message">エラーコードとエラーメッセージ</a></h3>
+
+<p>
+EB ライブラリの関数の多くは、戻り値として <code>EB_Error_Code</code>
+型の値を返します。
+処理が成功したときに返す値は <code>EB_SUCCESS</code> ですが、失敗したときは
+エラーの原因に応じて様々な値を返します。
+このため、EB ライブラリでは次のような <code>EB_SUCCESS</code> との比較処理
+がよく行われます。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Error_Code error_code;
+
+error_code = eb_bind(&amp;book, "/mnt/cdrom");
+if (error_code != EB_SUCCESS) {
+    printf("eb_bind() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+エラーコードの値は、関数 <code>eb_error_message()</code> によって
+エラーメッセージに変換することもできます。
+こうすることで、エラーの原因をアプリケーションプログラムのユーザに
+もう少し分かりやすく伝えることができます。
+</p>
+
+<blockquote class="program">
+<pre>
+error_code = eb_bind(&amp;book, "/mnt/cdrom");
+if (error_code != EB_SUCCESS) {
+    printf("eb_bind() failed, %s\n",
+        eb_error_message(error_code));
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+<code>error_code</code> が <code>EB_ERR_TOO_LONG_FILENAME</code> に
+セットされていれば、次のようなエラーメッセージが出力されます。
+</p>
+
+<blockquote>
+<pre>
+too long filename
+</pre>
+</blockquote>
+
+<p>
+あるいは、次のように日本語のメッセージかも知れません。
+</p>
+
+<blockquote>
+<pre>
+ファイル名が長すぎます
+</pre>
+</blockquote>
+
+<p>
+メッセージの国際化機能 (NLS) を無効にして EB ライブラリをコンパイル
+した場合は、常に英語のメッセージが返ります。
+有効にした場合は、ロケールの設定によってどちらの言語のメッセージが
+返るかが決まります。
+</p>
+
+<p>
+本書ではプログラムを簡潔にするために、エラー処理は最低限しか行って
+いません。
+けれども一般のアプリケーションプログラムでは、関数の呼び出しが成功
+したかどうかを常にチェックし、処理が失敗した際はエラーメッセージを出力
+して、ユーザにエラーの原因を伝えるのが望ましいといえます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="tolerance-to-error">エラーに対する寛容さ</a></h3>
+
+<p>
+<code>EB_Book</code> オブジェクトは、状態に関するパラメタをいくつか持って
+います。
+オブジェクトが CD-ROM 書籍に結び付いているかどうかも、こうしたパラメタ
+のうちの一つです。
+</p>
+
+<p>
+引数に <code>EB_Book</code> オブジェクトへのポインタを取る関数には、
+あらかじめオブジェクトの特定のパラメタがセットされていることを前提と
+しているものもあります。
+たとえば、<code>eb_path()</code> は、オブジェクトが書籍に結び付いていること
+を前提としています。
+では、もしも書籍に結び付いていないオブジェクトを <code>eb_path()</code> に
+渡したらどうなるでしょうか。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Book book;
+EB_Error_Code error_code;
+char path[EB_MAX_PATH_LENGTH + 1];
+
+eb_initialize_library();
+eb_initialize(&amp;book);
+error_code = eb_path(&amp;book, path);    /* どうなる? */
+</pre>
+</blockquote>
+
+<p>
+この場合、<code>eb_path()</code> は <code>EB_ERR_UNBOUND_BOOK</code> を
+返します。
+EB ライブラリの関数は、必要なパラメタがセットされていないオブジェクトを
+検知して拒絶します。
+</p>
+
+<p>
+しかしながら、参照マニュアルで明示されている場合を除いて、EB ライブラリ
+の関数は、与えられたポインタが <code>NULL</code> かどうかまでは調べません。
+次のようなことをすると、プログラムを異常終了させてしまいます。
+</p>
+
+<blockquote class="program">
+<pre>
+eb_bind(NULL, "/mnt/cdrom");    /* 異常終了! */
+eb_bind(&amp;book, NULL);           /* これも異常終了! */
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="error-data-types">データ型の詳細</a></h3>
+
+<p>
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/error.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:Error_Code"><code>EB_Error_Code</code> 型</a></h4>
+
+<p>
+データ型 <code>EB_Error_Code</code> は、EB ライブラリのエラーコードを
+表します。
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <code>==</code> と <code>!=</code> で一致比較することができます。
+</p>
+
+<p>
+EB ライブラリでは、全部で <code>EB_NUMBER_OF_ERRORS</code> 個の
+フックコードを定義しています。
+エラーコードの一覧については、
+次の節 (<a href="eb-06.html#error-code-list">「エラーコードの一覧」</a> を参照のこと)
+を参照して下さい。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="error-code-list">エラーコードの一覧</a></h3>
+
+<p>
+この節で説明しているエラーコードを使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/error.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SUCCESS">定数 <code>EB_SUCCESS</code></a></h4>
+
+<p>
+成功。
+エラーは起きていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_MEMORY_EXHAUSTED">定数 <code>EB_ERR_MEMORY_EXHAUSTED</code></a></h4>
+
+<p>
+EB ライブラリが <code>malloc()</code> を呼び出したが、<code>NULL</code>
+が返ってきた。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_TOO_LONG_FILE_NAME">定数 <code>EB_ERR_TOO_LONG_FILE_NAME</code></a></h4>
+
+<p>
+与えられた書籍のパス名が長すぎる。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_BAD_FILE_NAME">定数 <code>EB_ERR_BAD_FILE_NAME</code></a></h4>
+
+<p>
+書籍のパス名が不正である。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_BAD_DIR_NAME">定数 <code>EB_ERR_BAD_DIR_NAME</code></a></h4>
+
+<p>
+ディレクトリ名が不正である。
+(EB ライブラリの内部処理用なので、
+このエラーコードがアプリケーションプログラムに返ることはありません。)
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_TOO_LONG_WORD">定数 <code>EB_ERR_TOO_LONG_WORD</code></a></h4>
+
+<p>
+与えられた検索語は長すぎる。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_BAD_WORD">定数 <code>EB_ERR_BAD_WORD</code></a></h4>
+
+<p>
+与えられた検索語に不正な文字が含まれている。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_EMPTY_WORD">定数 <code>EB_ERR_EMPTY_WORD</code></a></h4>
+
+<p>
+与えられた検索語は空である。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_GETCWD">定数 <code>EB_ERR_FAIL_GETCWD</code></a></h4>
+
+<p>
+<code>getcwd()</code> もしくは <code>getwd()</code> が失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_OPEN_CAT">定数 <code>EB_ERR_FAIL_OPEN_CAT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍のカタログファイルを開くことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_OPEN_CATAPP">定数 <code>EB_ERR_FAIL_OPEN_CATAPP</code></a></h4>
+
+<p>
+EB ライブラリが、appendix のカタログファイルを開くことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_OPEN_TEXT">定数 <code>EB_ERR_FAIL_OPEN_TEXT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍の本文ファイルを開くことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_OPEN_FONT">定数 <code>EB_ERR_FAIL_OPEN_FONT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍の外字ファイルを開くことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_OPEN_APP">定数 <code>EB_ERR_FAIL_OPEN_APP</code></a></h4>
+
+<p>
+EB ライブラリが、appendix ファイルを開くことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_OPEN_BINARY">定数 <code>EB_ERR_FAIL_OPEN_BINARY</code></a></h4>
+
+<p>
+EB ライブラリが、バイナリデータファイルを開くことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_READ_CAT">定数 <code>EB_ERR_FAIL_READ_CAT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍のカタログファイルを読み込むことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_READ_CATAPP">定数 <code>EB_ERR_FAIL_READ_CATAPP</code></a></h4>
+
+<p>
+EB ライブラリが、appendix のカタログファイルを読み込むことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_READ_TEXT">定数 <code>EB_ERR_FAIL_READ_TEXT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍の本文ファイルを読むことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_READ_FONT">定数 <code>EB_ERR_FAIL_READ_FONT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍の外字ファイルを読み込むことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_READ_APP">定数 <code>EB_ERR_FAIL_READ_APP</code></a></h4>
+
+<p>
+EB ライブラリが、appendix のメインファイルを読み込むことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_READ_BINARY">定数 <code>EB_ERR_FAIL_READ_BINARY</code></a></h4>
+
+<p>
+EB ライブラリが、書籍のバイナリデータファイルを読み込むことに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_SEEK_CAT">定数 <code>EB_ERR_FAIL_SEEK_CAT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍のカタログファイルのシークに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_SEEK_CATAPP">定数 <code>EB_ERR_FAIL_SEEK_CATAPP</code></a></h4>
+
+<p>
+EB ライブラリが、appendix のカタログファイルのシークに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_SEEK_TEXT">定数 <code>EB_ERR_FAIL_SEEK_TEXT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍の本文ファイルのシークに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_SEEK_FONT">定数 <code>EB_ERR_FAIL_SEEK_FONT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍の外字ファイルのシークに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_SEEK_APP">定数 <code>EB_ERR_FAIL_SEEK_APP</code></a></h4>
+
+<p>
+EB ライブラリが、appendix のメインファイルのシークに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_FAIL_SEEK_BINARY">定数 <code>EB_ERR_FAIL_SEEK_BINARY</code></a></h4>
+
+<p>
+EB ライブラリが、書籍のバイナリデータファイルのシークに失敗した。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_UNEXP_CAT">定数 <code>EB_ERR_UNEXP_CAT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍のカタログファイル内で、期待とは異なるデータ列を
+見つけた。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_UNEXP_CATAPP">定数 <code>EB_ERR_UNEXP_CATAPP</code></a></h4>
+
+<p>
+EB ライブラリが、appendix のカタログファイル内で、想定外のデータ列を
+見つけた。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_UNEXP_TEXT">定数 <code>EB_ERR_UNEXP_TEXT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍の本文ファイル内で、想定外のデータ列を見つけた。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_UNEXP_FONT">定数 <code>EB_ERR_UNEXP_FONT</code></a></h4>
+
+<p>
+EB ライブラリが、書籍の外字ファイル内で、想定外のデータ列を見つけた。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_UNEXP_APP">定数 <code>EB_ERR_UNEXP_APP</code></a></h4>
+
+<p>
+EB ライブラリが、appendix のメインファイル内で、想定外のデータ列を
+見つけた。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_UNEXP_BINARY">定数 <code>EB_ERR_UNEXP_BINARY</code></a></h4>
+
+<p>
+EB ライブラリが、書籍のバイナリデータファイル内で、想定外のデータ列を
+見つけた。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_UNBOUND_BOOK">定数 <code>EB_ERR_UNBOUND_BOOK</code></a></h4>
+
+<p>
+呼び出された EB ライブラリの関数は、書籍に結び付けられた
+<code>EB_Book</code> オブジェクトを引数にとるが、与えられたオブジェクトは
+書籍に結び付けられていなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_UNBOUND_APP">定数 <code>EB_ERR_UNBOUND_APP</code></a></h4>
+
+<p>
+呼び出された EB ライブラリの関数は、appendix に結び付けられた
+<code>EB_Appendix</code> オブジェクトを引数にとるが、与えられた
+オブジェクトは appendix に結び付けられて
+いなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUB">定数 <code>EB_ERR_NO_SUB</code></a></h4>
+
+<p>
+書籍は副本を一つも持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_APPSUB">定数 <code>EB_ERR_NO_APPSUB</code></a></h4>
+
+<p>
+appendix は副本を一つも持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_FONT">定数 <code>EB_ERR_NO_FONT</code></a></h4>
+
+<p>
+選択中の副本は、外字を一種類も持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_TEXT">定数 <code>EB_ERR_NO_TEXT</code></a></h4>
+
+<p>
+選択中の副本は、本文データを持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_CUR_SUB">定数 <code>EB_ERR_NO_CUR_SUB</code></a></h4>
+
+<p>
+呼び出された関数は、副本が選択されている <code>EB_Book</code>
+オブジェクトを引数としてとるが、与えられたオブジェクトでは選択されて
+いなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_CUR_APPSUB">定数 <code>EB_ERR_NO_CUR_APPSUB</code></a></h4>
+
+<p>
+呼び出された関数は、副本が選択されている <code>EB_Appendix</code>
+オブジェクトを引数にとるが、与えられたオブジェクトでは選択されて
+いなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_CUR_FONT">定数 <code>EB_ERR_NO_CUR_FONT</code></a></h4>
+
+<p>
+呼び出された関数は、外字が選択されている <code>EB_Book</code>
+オブジェクトを引数にとるが、与えられたオブジェクトでは選択されて
+いなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_CUR_BINARY">定数 <code>EB_ERR_NO_CUR_BINARY</code></a></h4>
+
+<p>
+呼び出された関数は、バイナリデータの読み込み要求をセットしている
+<code>EB_Book</code> オブジェクトを引数にとるが、与えられたオブジェクトでは
+セットされていなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_SUB">定数 <code>EB_ERR_NO_SUCH_SUB</code></a></h4>
+
+<p>
+<code>EB_Book</code> オブジェクトと副本コードが関数に与えられたが、
+<code>EB_Book</code> オブジェクトに結び付けられている書籍は、その
+副本コードに一致する副本を持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_APPSUB">定数 <code>EB_ERR_NO_SUCH_APPSUB</code></a></h4>
+
+<p>
+<code>EB_Appendix</code> オブジェクトと副本コードが関数に与えられたが、
+<code>EB_Appendix</code> オブジェクトに結び付けられている appendix は、
+その副本コードに一致する副本を持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_FONT">定数 <code>EB_ERR_NO_SUCH_FONT</code></a></h4>
+
+<p>
+<code>EB_Book</code> オブジェクトと外字の縦のサイズが関数に与えられたが、
+<code>EB_Book</code> オブジェクトに結びつけられていた書籍で選択中の副本は、
+そのサイズの外字を持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_CHAR_BMP">定数 <code>EB_ERR_NO_SUCH_CHAR_BMP</code></a></h4>
+
+<p>
+<code>EB_Book</code> オブジェクトと文字番号が関数に与えられたが、
+<code>EB_Book</code> オブジェクトに結び付けられていた書籍で選択中の副本は、
+その番号の外字のビットマップデータを持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_CHAR_TEXT">定数 <code>EB_ERR_NO_SUCH_CHAR_TEXT</code></a></h4>
+
+<p>
+<code>EB_Appendix</code> オブジェクトと文字番号が関数に与えられたが、
+<code>EB_Appendix</code> オブジェクトに結び付けられている appendix で
+選択中の副本は、その番号の外字の代替文字列を持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_SEARCH">定数 <code>EB_ERR_NO_SUCH_SEARCH</code></a></h4>
+
+<p>
+選択中の副本は、指定された検索メソッドを持っていないので、検索は行えない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_HOOK">定数 <code>EB_ERR_NO_SUCH_HOOK</code></a></h4>
+
+<p>
+不正なフックコードが関数に渡された。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_BINARY">定数 <code>EB_ERR_NO_SUCH_BINARY</code></a></h4>
+
+<p>
+指定された位置に、指定された形式のバイナリデータは存在しない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_DIFF_CONTENT">定数 <code>EB_ERR_DIFF_CONTENT</code></a></h4>
+
+<p>
+アプリケーションプログラムからテキストデータの取得を要求されたが、指定
+されたテキストデータの種類が、前回リクエストされたときと一致していない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_PREV_SEARCH">定数 <code>EB_ERR_NO_PREV_SEARCH</code></a></h4>
+
+<p>
+<code>eb_hit_list()</code> が呼び出されたが、アプリケーションプログラム
+から前もって検索のリクエストがなされていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_MULTI_ID">定数 <code>EB_ERR_NO_SUCH_MULTI_ID</code></a></h4>
+
+<p>
+<code>EB_Book</code> オブジェクトと複合検索コードが関数に渡されたが、
+結び付けられた書籍で選択中の副本は、そのコードに一致する複合検索を持って
+いない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_ENTRY_ID">定数 <code>EB_ERR_NO_SUCH_ENTRY_ID</code></a></h4>
+
+<p>
+<code>EB_Book</code> オブジェクトと複合検索エントリコードが関数に
+渡されたが、結び付けられた書籍で選択中の副本は、そのエントリコードに
+一致する複合検索エントリを持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_TOO_MANY_WORDS">定数 <code>EB_ERR_TOO_MANY_WORDS</code></a></h4>
+
+<p>
+アプリケーションプログラムから条件検索もしくは複合検索の検索をリクエスト
+されたが、検索語の個数が多すぎる。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_WORD">定数 <code>EB_ERR_NO_WORD</code></a></h4>
+
+<p>
+アプリケーションプログラムから条件検索もしくは複合検索の検索をリクエスト
+されたが、検索語がすべて空である。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_CANDIDATES">定数 <code>EB_ERR_NO_CANDIDATES</code></a></h4>
+
+<p>
+<code>eb_multi_entry_candidates()</code> が呼び出されたが、
+指定された複合検索エントリは、検索語の候補一覧データを持っていない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_END_OF_CONTENT">定数 <code>EB_ERR_END_OF_CONTENT</code></a></h4>
+
+<p>
+<code>eb_forward_text()</code> あるいは <code>eb_backward_text()</code>
+で本文の頭出しを行おうとしたが、すでに本文の末尾ないし先頭に達していて、
+それ以上先に進むことができなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_PREV_SEEK">定数 <code>EB_ERR_NO_PREV_SEEK</code></a></h4>
+
+<p>
+あらかじめ <code>eb_seek_text()</code> でシークを行っていない状態で、
+テキストデータの読み込みや頭出しを行おうとした。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_EBNET_UNSUPPORTED">定数 <code>EB_ERR_EBNET_UNSUPPORTED</code></a></h4>
+
+<p>
+この EB ライブラリは、遠隔ホストへのアクセスには対応していない。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_EBNET_FAIL_CONNECT">定数 <code>EB_ERR_EBNET_FAIL_CONNECT</code></a></h4>
+
+<p>
+遠隔ホストへのアクセスを試みたが、サーバ (EBNETD) に接続できなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_EBNET_SERVER_BUSY">定数 <code>EB_ERR_EBNET_SERVER_BUSY</code></a></h4>
+
+<p>
+遠隔ホストへの接続を行ったが、書籍にアクセスしているクライアントの数が
+すでに上限に達しているため、その書籍を利用できなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_EBNET_NO_PERMISSION">定数 <code>EB_ERR_EBNET_NO_PERMISSION</code></a></h4>
+
+<p>
+遠隔ホストへの接続を行ったが、その書籍への利用権限がないため、サーバ
+からアクセスを拒否された。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_UNBOUND_BOOKLIST">定数 <code>EB_ERR_UNBOUND_BOOKLIST</code></a></h4>
+
+<p>
+呼び出された EB ライブラリの関数は、遠隔ホストに結び付けられた
+<code>EB_BookList</code> オブジェクトを引数にとるが、与えられたオブジェクト
+は遠隔ホストに結び付けられていなかった。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:ERR_NO_SUCH_BOOK">定数 <code>EB_ERR_NO_SUCH_BOOK</code></a></h4>
+
+<p>
+<code>EB_BookList</code> オブジェクトと書籍の要素番号を関数に渡されたが、
+<code>EB_BookList</code> に結び付けられた遠隔ホスト上には、その要素番号に
+該当する書籍は存在しない。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="error-functions">関数の詳細</a></h3>
+
+<p>
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/error.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:error_string"><code>const char *eb_error_string (EB_Error_Code <var>error_code</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_error_string()</code> は、エラーコード <var>error_code</var>
+を文字列に変換したものを返します。
+文字列の文字コードは、ASCII になります。
+たとえば、エラーコード値 <code>EB_SUCCESS</code> を渡すと文字列
+<samp>"EB_SUCCESS"</samp> を返します。
+未知のエラーコードを渡したときは、<samp>"EB_ERR_UNKNOWN"</samp> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:error_message"><code>const char *eb_error_message (EB_Error_Code <var>error_code</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_error_message()</code> は、エラーコード <var>error_code</var>
+に対応したメッセージを文字列にして返します。
+関数の返すメッセージは、英語か日本語になります。
+</p>
+
+<p>
+国際化機能を有効にして EB ライブラリをコンパイルしていない場合は、常に
+英語のメッセージを返します。
+このときのメッセージの文字コードは、ASCII になります。
+</p>
+
+<p>
+メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイル
+した場合は、ロケールの設定に応じてどちらの言語のメッセージを返すのか
+が決まります。
+また、GNU gettext バージョン 0.36 以降では iconv() と連携することにより、
+メッセージの文字コードもロケールに応じて変化します。
+gettext が iconv() との連携を行わなければ、英語のメッセージは ASCII、
+日本語のメッセージは日本語 EUC になります。
+この関数の呼び出しによって、gettext のテキストドメインの設定は変化
+しません。
+</p>
+
+<p>
+未知のエラーコードを渡したときに返すメッセージは、英語では
+<samp>"unknown error"</samp>、日本語では <samp>"未知のエラーです"</samp>
+になります。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-05.html">前へ</a>] [<a href="eb-07.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

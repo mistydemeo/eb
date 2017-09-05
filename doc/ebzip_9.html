@@ -1,0 +1,157 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebzip: Comparision Result</TITLE>
+
+<META NAME="description" CONTENT="ebzip: Comparision Result">
+<META NAME="keywords" CONTENT="ebzip: Comparision Result">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_8.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_8.html#SEC20"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> A. Comparision of Compression Results </H1>
+<!--docid::SEC21::-->
+<P>
+
+Compression result of <TT>`START'</TT> file in a certain English-Japanese
+and Japanese-English dictionary (EBXA):
+</P><P>
+
+<TABLE>
+<TR><TD>compression level           </TD><TD>  file size        </TD><TD>  ratio</TD>
+</TR>
+<TR><TD>(original)            </TD><TD>  154476544 bytes  </TD><TD>  100.0%</TD>
+</TR>
+<TR><TD>level 0               </TD><TD>  54922039 bytes   </TD><TD>  35.6%</TD>
+</TR>
+<TR><TD>level 1               </TD><TD>  49615791 bytes   </TD><TD>  32.1%</TD>
+</TR>
+<TR><TD>level 2               </TD><TD>  45983464 bytes   </TD><TD>  29.8%</TD>
+</TR>
+<TR><TD>level 3               </TD><TD>  43431397 bytes   </TD><TD>  28.1%</TD>
+</TR>
+<TR><TD>(reference: gzip -6)  </TD><TD>  38712247 bytes   </TD><TD>  25.0%</TD>
+</TR></TABLE>
+<P>
+
+Compression result of <TT>`START'</TT> file in a certain English dictionary
+(EBG):
+</P><P>
+
+<TABLE>
+<TR><TD>compression level     </TD><TD>  file size       </TD><TD>  ratio</TD>
+</TR>
+<TR><TD>(original)            </TD><TD>  55511040 bytes  </TD><TD>  100.0%</TD>
+</TR>
+<TR><TD>level 0               </TD><TD>  25866491 bytes  </TD><TD>  46.6%</TD>
+</TR>
+<TR><TD>level 1               </TD><TD>  24419066 bytes  </TD><TD>  44.0%</TD>
+</TR>
+<TR><TD>level 2               </TD><TD>  23453212 bytes  </TD><TD>  42.2%</TD>
+</TR>
+<TR><TD>level 3               </TD><TD>  22748840 bytes  </TD><TD>  41.0%</TD>
+</TR>
+<TR><TD>(reference: gzip -6)  </TD><TD>  20930009 bytes  </TD><TD>  37.7%</TD>
+</TR></TABLE>
+<P>
+
+Compression result of <TT>`HONMON'</TT> file in a certain Japanese
+dictionary (EPWING V1):
+</P><P>
+
+<TABLE>
+<TR><TD>compression level     </TD><TD>  file size       </TD><TD>  ratio</TD>
+</TR>
+<TR><TD>(original)            </TD><TD>  23642112 bytes  </TD><TD>  100.0%</TD>
+</TR>
+<TR><TD>level 0               </TD><TD>   9927048 bytes  </TD><TD>  42.0%</TD>
+</TR>
+<TR><TD>level 1               </TD><TD>   9213184 bytes  </TD><TD>  39.0%</TD>
+</TR>
+<TR><TD>level 2               </TD><TD>   8767603 bytes  </TD><TD>  37.1%</TD>
+</TR>
+<TR><TD>level 3               </TD><TD>   8495563 bytes  </TD><TD>  35.9%</TD>
+</TR>
+<TR><TD>(reference: gzip -6)  </TD><TD>   8114658 bytes  </TD><TD>  34.3%</TD>
+</TR></TABLE>
+<P>
+
+Compression result of <TT>`HONMON2'</TT> file in a certain Japanese
+dictionary (EPWING V5):
+</P><P>
+
+<TABLE>
+<TR><TD>compression level     </TD><TD>  file size        </TD><TD>  ratio</TD>
+</TR>
+<TR><TD>(uncompressed)        </TD><TD>  220069888 bytes  </TD><TD> 100.0%</TD>
+</TR>
+<TR><TD>(original)            </TD><TD>  149139690 bytes  </TD><TD>  67.8%</TD>
+</TR>
+<TR><TD>level 0               </TD><TD>   82973263 bytes  </TD><TD>  37.7%</TD>
+</TR>
+<TR><TD>level 1               </TD><TD>   78163751 bytes  </TD><TD>  35.5%</TD>
+</TR></TABLE>
+<P>
+
+Compression result of the <TT>`START'</TT> file in a certain
+encyclopedia (S-EBXA):
+</P><P>
+
+<TABLE>
+<TR><TD>compression level     </TD><TD>  file size        </TD><TD>  ratio</TD>
+</TR>
+<TR><TD>(uncompressed)        </TD><TD>  225140735 bytes  </TD><TD> 100.0%</TD>
+</TR>
+<TR><TD>(original)            </TD><TD>  176467968 bytes  </TD><TD>  78.4%</TD>
+</TR>
+<TR><TD>level 0               </TD><TD>  146045331 bytes  </TD><TD>  64.9%</TD>
+</TR>
+<TR><TD>level 1               </TD><TD>  138137218 bytes  </TD><TD>  61.4%</TD>
+</TR></TABLE>
+<P>
+
+<A NAME="Compressed File Format"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_8.html#SEC20"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

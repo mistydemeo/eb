@@ -1,0 +1,407 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rel="icon" type="image/png" href="eb_i.png">
+<title>EB Library (NEWS)</title>
+</head>
+<body>
+
+<p class="header">
+<img src="eb_s.png" alt="logo">
+</p>
+
+<!-- ############################################################# -->
+<h1>NEWS</h1>
+<pre>
+Major changes in release 4.0.
+
+* Refine EB_BookList APIs.
+* Add two error codes: EB_ERR_UNBOUND_BOOKLIST and EB_ERR_NO_SUCH_BOOK.
+* Rename `eb3.m4' to `eb4.m4'.
+* Add `--ebnet-ebnet' option to `cofigure'.
+* Install `eb/flags.h' which is automatically included by `eb/defs.h'.
+* Fix some serious and minor bugs.
+
+Major changes in release 4.0beta3.
+
+* Support for Japanese encodings other than EUC-JP.
+* Add some Windows support codes.
+  Use `eb-win32' package to build EB Library on Windows.
+* Add `--text-position' (-p) option to `ebstopcode'.
+
+Major changes in release 4.0beta2.
+
+* Fix serious bugs in search methods.
+
+Major changes in release 4.0beta1.
+
+* Rename `ebstopchk' to `ebstopcode'.
+  Also rename its option name from `--stop-code' to `--code'.
+* Delete `--case' and `--suffix' options of `ebappendix'.
+* Add Japanese edition of `ebappendix' document.
+* Add `--book-list' option to `ebinfo'.
+* Add `ebdump' and `ebfixlog' to the `misc' sub-directory.
+* Fix some bugs.
+
+Major changes in release 4.0beta0.
+
+* Support for remote access.
+* Add the `ebstopchk' command.
+
+Major changes in release 3.3.2.
+
+* Fix version number of the shared library.
+* Support for Nichi-Ei-Futsu Jiten (YRRS-059).
+
+Major changes in release 3.3.1.
+
+* Support for EPWING Geinus Eiwa Daijiten.
+* Fix a bug in handling of multi-search.
+* Fix a bug of debug mode.
+
+Major changes in release 3.3.
+
+* Fix a bug of eb_read_binary_mpeg().
+
+Major changes in release 3.3beta3.
+
+* Fix multi search.
+* Fix some minor bugs.
+
+Major changes in release 3.3beta2.
+
+* Fix some serious and minor bugs.
+* Install `eb3.m4' in `$(datadir)/aclocal'.
+
+Major changes in release 3.3beta1.
+
+* Fix some bugs.
+
+Major changes in release 3.3beta0.
+
+* Revise file name and compression type detection codes for EPWING.
+* The eb_multi_title() function is added, which gets a title of the
+  specified multi search.
+  Using this function, the `ebinfo' command also outputs multi search
+  titles when `--multi-search' (or `-m') option is specified.
+* Fix a bug of `ebrefile'.
+* Add two text hooks for inline image support.
+
+Major changes in release 3.2.3.
+
+* Fix a bug in handling of PCM sound data.
+* Add two text hooks.
+
+Major changes in release 3.2.2.
+
+* Fix bug in handling of appendix.
+* Fix gettext message catalogs.
+
+Major changes in release 3.2.1.
+
+* Fix a bug in text read routine.
+* Import zlib-1.1.4.
+
+Major changes in release 3.2.
+
+* No major change.
+
+Major changes in release 3.2beta3.
+
+* Fix some installation problems.
+
+Major changes in release 3.2beta2.
+
+* If the EB_DEBUG environment variable is defined, EB Library outputs
+  messages for debugging.
+  `--enable-debug' option of configure is removed.
+* Fix a critical bug in decompression of EBZIP compression format.
+
+Major changes in release 3.2beta1.
+
+* The maximum compression level of ebzip is changed from 3 to 5.
+* Fix some bugs.
+
+Major changes in release 3.2beta0.
+
+* Implement eb_backward_text() and revise eb_forward_text().
+* The EB Library programming document (Japanese edition) is back.
+* Samples programs are back.
+
+Major changes in release 3.1.
+
+* Fix bugs in compressed S-EBXA support.
+
+Major changes in release 3.1beta1.
+
+* Add debug codes.
+  Those codes are enabled by `configure --enable-debug'.
+* Rename eb_initialize_all_subbooks() to eb_load_all_subbooks(), and
+  eb_initialize_all_appendix_subbooks() to eb_load_all_appendix_subbooks().
+  For backward compatibility, the old function names are defined as cpp
+  macros.
+* Support for DUDEN EBG CD-ROMs is back.
+* Fix a bug in handling of CD-ROM mounted on the root directory.
+* Overhaul initialization and finalization routines in the library.
+* Fix some minor bugs.
+
+Major changes in release 3.1beta0:
+
+* Support compressed S-EBXA CD-ROM book.
+  Support Nippon daihyakka zensho, accessories to Sony DataDiscMan DP-S1000.
+
+Major changes in release 3.0.1:
+
+* Fix some bugs.
+
+Major changes in release 3.0:
+
+* LANGUAGE data in EB is no longer supported.
+
+Major changes in release 3.0beta1:
+
+* ebrefile is re-written with C.
+  Japanese message catalog is also available.
+* Fix some bugs.
+
+Major changes in release 3.0beta0:
+
+* Support linintl of GNU gettext 0.10.36.
+  Now utility tools in this package link libiconv, if available.
+  `--with-iconv-includes' and `--with-iconv-libraries' options are added
+  to `configure'.
+* libintl source is deleted.
+  Also `--with-included-gettext' option is deleted from configure.
+  If libintl is not found on the system, NLS support is disabled.
+* Support monochrome graphic data of EPWING and EB.
+* ebzip supports movie, graphic, and sound data files.
+  `-s' and `--skip-content' option is added.
+* Fix many minor bugs.
+
+Major changes in release 3.0alpha4:
+
+* Support EPWING movie, and color graphic, data.
+* For EB Library application, provide M4 macro file `eb3.m4'.
+  (autoconf 2.49 is required.)
+
+Major changes in release 3.0alpha3:
+
+* Text hook API is revised.
+
+Major changes in release 3.0alpha2:
+
+* Fix many bugs.
+
+Major changes in release 3.0alpha1:
+
+* Supprt EPWING V6 compression format.
+* Ignore case and suffix inconsistency between file and/or directory names.
+* Delete `--suffix' and `--case' options from ebzip.
+* Font API is slightly changed.
+* Fix lots of minor bugs.
+
+Major changes in release 3.0alpha0:
+
+* Support multi search.
+* Support keyword search.
+* National language support with GNU gettext.
+  Japanese message catalog is available.
+* Experimental Ptheads support.
+  The new option `--enable-pthreads' is added to `configure'.
+* configure automatically detects zlib.
+* API is changed.
+  It has some incompatibities to version 2.x API.
+* Fix many minor bugs.
+
+Major changes in release 2.3.7:
+
+* Support EBG ``DUDEN Die sinn-und sachverwandten Worter'' and ``DUDEN
+  Das Fremdworterbuch''.
+
+Major changes in release 2.3.6:
+
+* Fix a bug for "Nihongo Goi Taikei" (EPWING, Iwanami Shoten).
+* Fix a bug for "EDICT" (JIS X 4081, free distribution).
+
+Major changes in release 2.3.5:
+
+* No major change.
+
+Major changes in release 2.3.4:
+
+* Fix a bug in the EPWING decompression routine.
+* Fix some minor bugs.
+
+Major changes in release 2.3.3:
+
+* Fix version number for shared library.
+
+Major changes in release 2.3.2:
+
+* Fix a minor bug.
+
+(2.3.1 is not released)
+
+Major changes in release 2.3:
+
+* No major change.
+
+Major changes in release 2.3beta2:
+
+* No major change.
+
+Major changes in release 2.3beta2:
+
+* Fix minor bugs.
+
+Major changes in release 2.3beta1:
+
+* Experimental EBXA-C support.
+* Experimental support of automatic stop-code detection.
+
+Major changes in release 2.3beta0:
+
+* Support CD-ROM books compressed with the EPWING compression format.
+* Change informational messages of `ebzip'.
+* Fix a bug in `ebrefile'.
+  `ebrefile' didn't find catalog file in the same order as `ebzip' does.
+
+Major changes in release 2.2.1:
+
+* Merge samples and samples-ja.
+* Add `--enable-samples' to `configure'.
+* Improve DOS, Windows, OS/2 supports.
+
+Major changes in release 2.2:
+
+* Add documents of EB Library.
+
+Major changes in release 2.1.2:
+
+* Fix an version number of the shared EB library.
+* Use libtool that supports FreeBSD-ELF.
+
+Major changes in release 2.1.1:
+
+* Add some codes for Windows VC++.
+* Bug fixes.
+
+Major changes in release 2.1:
+
+* Bug fixes.
+
+Major changes in release 2.1beta2:
+
+* Add compression level 3 to `ebzip'.
+* Add the new command `ebrefile'.
+
+Major changes in release 2.1beta1:
+
+* Bug fixes.
+
+Major changes in release 2.1beta0:
+
+* Add document about `ebfont'.
+* Add Japanese documents.
+* Add `--with-zlib', `--with-zlib-includes', `--with-zlib-libraries'
+  options to `configure'.
+* Support CD-ROM book compression/uncompression.
+* Add the new command `ebzip'.
+* Rename the `--filename-case' option of ebappendix to `--case'.
+* Add `--no-catalogs' option of `ebappendix', again.
+* Add the `--subbook'(-S) option to `ebfont'.
+* Change directory structures `ebfont' generates.
+* Import zlib sources.
+* Bug fixes.
+
+Major changes in release 2.0.3:
+
+* Bug fixes.
+
+Major changes in release 2.0.2:
+
+* Bug fixes.
+
+Major changes in release 2.0.1:
+
+* No major change.
+
+Major changes in release 2.0:
+
+* Bug fixes.
+
+Major changes in release 2.0beta1:
+
+* Rename the `--filename-cases' option of ebappendix to `--filename-case'.
+* Bug fixes.
+
+Major changes in release 2.0beta0:
+
+* Support building a shared version of EB library by using GNU libtool.
+* Change functions' interfaces.
+  EB library has some incompatibilities between 1.0.x and 2.0.
+* Add Texinfo document for `ebinfo'.
+* Support almost features described in JIS X 4081-1996.
+* Change directory layout of the source code distribution.
+* Delete the `--no-catalogs' option of `ebappendix'.
+* Bug fixes.
+
+Major changes in release 1.0.6:
+
+* Bug fixes.
+
+Major changes in release 1.0.5:
+
+* Bug fixes.
+
+Major changes in release 1.0.4:
+
+* No major change.
+
+Major changes in release 1.0.3:
+
+* Support the Concise Oxford dicitionary.  
+* Fix Makefile.am for compilation on multiple architectures.
+  You can compile the package for more than one kind of computer at
+  the same time.
+* Change interface to bitmap conversion functions.
+* Bug fixes.
+
+Major changes in release 1.0.2:
+
+* Add functions to the EB library.
+  The functions generate image files of local defined characters
+  in a CD-ROM book.  Supported image formats are XBM, XPM, and GIF.
+* Bug fixes.
+
+Major changes in release 1.0.1:
+
+* Recognize display control sequences described in JIS X 4081-1996.
+* Support kanji word search for some EPWING books.
+* Support EPWING `Readers eiwa jiten', kenkyusha.
+* Bug fixes.
+
+Major changes in release 1.0:
+
+* Bug fixes.
+
+Major changes in release 1.0beta2:
+
+* Bug fixes.
+
+Major changes in release 1.0beta1:
+
+* Change the format of appendix data files.
+* Bug fixes.
+</pre>
+<!-- ############################################################# -->
+<hr>
+<p class="footer">
+<a href="index-ja.html"><img class="banner" src="eb_b.png" alt="banner"></a>
+<a href="index-ja.html">ホームページ (日本語版)</a>に戻る。
+</p>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebzip コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebzip-05.html">前へ</a>] [<a href="ebzip-07.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="information">情報出力</a></h2>
+
+<p>
+<code>ebzipinfo</code> (<code>ebzip --information</code>
+<code>ebunzip --information</code> と同じ) は CD-ROM 書籍の圧縮状態を出力
+します。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="information-example">情報出力の実行例</a></h3>
+
+<p>
+<code>/dict</code> にある、圧縮された CD-ROM 書籍の情報を出力するには
+次のコマンドを実行します。
+<code>/dict</code> に置かれている、圧縮された CD-ROM 書籍の情報を出力
+するには、次のようにします。
+</p>
+
+<blockquote>
+<pre>
+% ebzipifo /dict
+</pre>
+</blockquote>
+
+<p>
+<code>ebzipinfo</code> は標準出力に次のような情報を出力します。
+</p>
+
+<blockquote>
+<pre>
+==&gt; /dict/spanish/spanish/start.ebz &lt;==
+154290176 -&gt; 54881862 バイト (35.6%, ebzip 圧縮レベル 0)
+
+==&gt; /dict/spanish/language.ebz &lt;==
+compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
+
+==&gt; /dict/spanish/catalog &lt;==
+2048 バイト (非圧縮)
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="options-for-information">情報出力のオプション</a></h3>
+
+<p>
+<samp>--subbook</samp> や <samp>--skip-content</samp> オプションを
+指定すると、条件に合致したファイルの情報だけを出力します
+(これらのオプションについての詳細は、
+<a href="ebzip-04.html#partial-compression">「一部だけの圧縮」</a>を参照のこと)。
+</p>
+
+<p>
+<code>ebzipinfo</code> は <samp>--force-overwrite</samp>、
+<samp>--keep</samp>、<samp>--level</samp>、<samp>--no-overwrite</samp>、
+<samp>--output-directory</samp>、<samp>--quiet</samp>、<samp>--silence</samp>、
+<samp>--test</samp> オプションを無視します。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebzip-05.html">前へ</a>] [<a href="ebzip-07.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebstopcode: Invoke ebstopcode</TITLE>
+
+<META NAME="description" CONTENT="ebstopcode: Invoke ebstopcode">
+<META NAME="keywords" CONTENT="ebstopcode: Invoke ebstopcode">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_3.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Invoke <CODE>ebstopcode</CODE> </H1>
+<!--docid::SEC2::-->
+<P>
+
+Its usual way to invoke <CODE>ebstopcode</CODE> is as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebstopcode <VAR>book-path</VAR> <VAR>subbook</VAR>
+</pre></td></tr></table></P><P>
+
+<VAR>book-path</VAR> points to the top directory of a CD-ROM book where
+the file <TT>`catalog'</TT> or <TT>`catalogs'</TT> resides.
+It may be a remote access identifer (<SAMP>`ebnet://...'</SAMP>).
+If <VAR>book-path</VAR> is omitted, the current working directory is assumed.
+</P><P>
+
+<VAR>subbook</VAR> is a directory name of the target subbook.
+Use the <CODE>ebinfo</CODE> command to see what subbooks your CD-ROM has:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo /cdrom
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
+character code: JIS X 0208
+the number of subbooks: 2
+
+subbook 1:
+  title: New English Japanese Dictionary (4th edition)
+  directory: english
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+
+subbook 2:
+  title: CD-ROM French Japanese Dictionary (3rd edition)
+  directory: french
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+
+</pre></td></tr></table></P><P>
+
+(See section `Invoke <CODE>ebinfo</CODE>' in <CITE>ebinfo</CITE>,
+for more details about the <CODE>ebinfo</CODE> command).
+<BR>
+In this example, there are two subbooks in the book, and their 
+directory names are <CODE>english</CODE> and <CODE>french</CODE>.
+</P><P>
+
+Type the follwing to analyze text stop code of the <CODE>english</CODE> subbook:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebstopcode /cdrom english
+</pre></td></tr></table></P><P>
+
+<CODE>ebstopcode</CODE> outputs text and candidates for stop code of the subbook,
+like this:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>=== stop-code?: 0x1f09 0x0001 ===
+
+=== stop-code?: 0x1f41 0x0100 ===
+A
+
+=== stop-code?: 0x1f09 0x0001 ===
+n 1: the blood group whose red cells carry the A antigen.
+
+=== stop-code?: 0x1f09 0x0001 ===
+2: a metric unit of length equal to one ten billionth of a meter.
+
+=== stop-code?: 0x1f09 0x0001 ===
+3: the basic unit of electric current adopted under the System
+International d'Unites.
+
+=== stop-code?: 0x1f09 0x0001 ===
+
+=== stop-code?: 0x1f41 0x0100 ===
+(snip)
+</pre></td></tr></table></P><P>
+
+Each <SAMP>`stop-code?:'</SAMP> line shows a candidate for stop code.
+Specifying it as text stop code, EB Library stops displaying text at
+the point.
+</P><P>
+
+The appropriate stop code of the <CODE>english</CODE> subbook is
+"0x1f41 0x0100".
+Test the stop code using <SAMP>`--no-candidate'</SAMP> and <SAMP>`--code'</SAMP>
+options:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebstopcode --no-candidate --code "0x1f41 0x0100" /cdrom english
+A
+n 1: the blood group whose red cells carry the A antigen.
+2: a metric unit of length equal to one ten billionth of a meter.
+3: the basic unit of electric current adopted under the System
+International d'Unites.
+</pre></td></tr></table></P><P>
+
+<A NAME="Summary of Options"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

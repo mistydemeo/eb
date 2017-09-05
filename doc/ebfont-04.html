@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebfont コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebfont-03.html">前へ</a>] [<a href="ebfont.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="summary-of-options"><code>ebfont</code> のオプション一覧</a></h2>
+
+<p>
+<code>ebzip</code> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<samp>-</samp> ではなく <samp>--</samp> を
+用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができます。
+</p>
+
+<dl>
+<dt><code>-d</code></dt>
+<dt><code>--debug</code></dt>
+<dt><code>--verbose</code></dt>
+<dd>
+デバッグ用の情報を、標準エラー出力に出力します。
+
+<dt><code>-f <var>高さ</var></code></dt>
+<dt><code>--font-height <var>高さ</var></code></dt>
+<dd>
+高さが <var>高さ</var> の外字の画像ファイルを生成します。
+<var>高さ</var> は、高さをカンマ (<samp>,</samp>) で区切って並べたもので
+なくてはなりません。
+高さの指定として許されるのは、<samp>16</samp>、<samp>24</samp>、
+<samp>30</samp>、<samp>48</samp> です。
+指定がなければ、<code>ebfont</code> は高さが 16 ピクセルのフォントのものを
+生成します。
+(詳しくは、<a href="ebfont-03.html#heights">「高さ」</a>を参照のこと。)
+
+<dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
+<dd>
+ヘルプメッセージを標準出力に出力して、終了します。
+
+<dt><code>-i <var>画像形式</var></code></dt>
+<dt><code>--image-format <var>画像形式</var></code></dt>
+<dd>
+<var>画像形式</var> 形式の画像ファイルを生成します。
+<var>画像形式</var> は、画像形式名をカンマ (<samp>,</samp>) で区切って
+並べたものでなくてはなりません。
+対応している画像形式の名前は <samp>xbm</samp>、<samp>xpm</samp>、
+<samp>gif</samp>、<samp>bmp</samp>、<samp>gif</samp>、<samp>png</samp>
+です。
+指定しなかったときは、<samp>ebfont</samp> は XBM 形式の画像ファイルを
+生成します。
+(詳しくは、<a href="ebfont-03.html#image-formats">「画像形式」</a>を参照のこと。)
+
+<dt><code>-o <var>ディレクトリ</var></code></dt>
+<dt><code>--output-directory <var>ディレクトリ</var></code></dt>
+<dd>
+画像ファイルを <var>ディレクトリ</var> 以下に出力します。
+指定しなかったときは、<code>ebfont</code> はカレントディレクトリ
+(<code>.</code>) の下に画像ファイルを生成します。
+(詳しくは、<a href="ebfont-03.html#invoke-ebfont">「<code>ebfont</code> の実行」</a>
+を参照のこと。)
+
+<dt><code>-S <var>副本</var></code></dt>
+<dt><code>--subbook <var>副本</var></code></dt>
+<dd>
+<code>ebfont</code> に、どの副本の外字を生成させるのかを指定します。
+<var>副本</var> は、副本のディレクトリ名をカンマ (<samp>,</samp>) で
+区切って並べたものでなくてはなりません。
+指定しなかったときは、すべての副本が生成の対象になります。
+(詳しくは、<a href="ebfont-03.html#subbooks">「副本」</a>を参照のこと。)
+
+<dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
+<dd>
+バージョン番号を標準出力に出力して、終了します。
+</dl>
+
+<hr>
+<p>
+[<a href="ebfont-03.html">前へ</a>] [<a href="ebfont.html#toc">目次</a>] 
+</p>
+</body>
+</html>

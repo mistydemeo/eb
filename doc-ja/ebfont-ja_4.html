@@ -1,0 +1,124 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Summary of Options</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Summary of Options">
+<META NAME="keywords" CONTENT="EB Library: Summary of Options">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_3.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. <CODE>ebfont</CODE> のオプション一覧 </H1>
+<!--docid::SEC7::-->
+<P>
+
+<CODE>ebzip</CODE> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<SAMP>`-'</SAMP> ではなく <SAMP>`--'</SAMP> を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-d</CODE>
+<DD><DT><CODE>--debug</CODE>
+<DD>デバッグ用の情報を、標準エラー出力に出力します。
+<P>
+
+<DT><CODE>-f <VAR>高さ</VAR></CODE>
+<DD><DT><CODE>--font-height <VAR>高さ</VAR></CODE>
+<DD>高さが <VAR>高さ</VAR> の外字の画像ファイルを生成します。
+<VAR>高さ</VAR> は、高さをカンマ (<SAMP>`,'</SAMP>) で区切って並べたもので
+なくてはなりません。
+高さの指定として許されるのは、<SAMP>`16'</SAMP>、<SAMP>`24'</SAMP>、<SAMP>`30'</SAMP>、<SAMP>`48'</SAMP>
+です。
+指定がなければ、<CODE>ebfont</CODE> は高さが 16 ピクセルのフォントのものを
+生成します。
+(詳しくは、「<A HREF="ebfont-ja_3.html#SEC5">高さ</A>」節を参照)。
+<P>
+
+<DT><CODE>-h</CODE>
+<DD><DT><CODE>--help</CODE>
+<DD>ヘルプメッセージを標準出力に出力して、終了します。
+<P>
+
+<DT><CODE>-i <VAR>画像形式</VAR></CODE>
+<DD><DT><CODE>--image-format <VAR>画像形式</VAR></CODE>
+<DD><VAR>画像形式</VAR> 形式の画像ファイルを生成します。
+<VAR>画像形式</VAR> は、画像形式名をカンマ (<SAMP>`,'</SAMP>) で区切って並べたも
+のでなくてはなりません。
+対応している画像形式の名前は <SAMP>`xbm'</SAMP>、<SAMP>`xpm'</SAMP>、<SAMP>`gif'</SAMP>、
+<SAMP>`bmp'</SAMP> です。
+指定しなかったときは、<SAMP>`ebfont'</SAMP> は XBM 形式の画像ファイルを生成し
+ます。
+(詳しくは、「<A HREF="ebfont-ja_3.html#SEC4">画像形式</A>」節を参照)。
+<P>
+
+<DT><CODE>-o <VAR>ディレクトリ</VAR></CODE>
+<DD><DT><CODE>--output-directory <VAR>ディレクトリ</VAR></CODE>
+<DD>画像ファイルを <VAR>ディレクトリ</VAR> 以下に出力します。
+指定しなかったときは、<CODE>ebfont</CODE> はカレントディレクトリ (<CODE>.</CODE>)
+の下に画像ファイルを生成します。
+(詳しくは、「<A HREF="ebfont-ja_3.html#SEC3"><CODE>ebfont</CODE> の実行</A>」節を参照)。
+<P>
+
+<DT><CODE>-S <VAR>副本</VAR></CODE>
+<DD><DT><CODE>--subbook <VAR>副本</VAR></CODE>
+<DD><CODE>ebfont</CODE> に、どの副本の外字を生成させるのかを指定します。
+<VAR>副本</VAR> は、副本のディレクトリ名をカンマ (<SAMP>`,'</SAMP>) で区切って
+並べたものでなくてはなりません。
+指定しなかったときは、すべての副本が生成の対象になります。
+(詳しくは、「<A HREF="ebfont-ja_3.html#SEC6">副本</A>」節を参照)。
+<P>
+
+<DT><CODE>-v</CODE>
+<DD><DT><CODE>--version</CODE>
+<DD>バージョン番号を標準出力に出力して、終了します。
+</DL>
+<P>
+
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

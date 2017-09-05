@@ -1,0 +1,480 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Compression</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Compression">
+<META NAME="keywords" CONTENT="EB Library: Compression">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_3.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. 圧縮 </H1>
+<!--docid::SEC4::-->
+<P>
+
+<CODE>ebzip</CODE> (<CODE>ebunzip --compress</CODE>、<CODE>ebzipinfo --compress</CODE>
+と等価) は CD-ROM 書籍の圧縮を行います。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_4.html#SEC5">4.1 圧縮の実行例 (1)</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_4.html#SEC6">4.2 圧縮の実行例 (2)</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_4.html#SEC7">4.3 圧縮レベル</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_4.html#SEC8">4.4 テスト</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_4.html#SEC9">4.5 一部だけの圧縮</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_4.html#SEC10">4.6 古いファイルの上書き</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_4.html#SEC11">4.7 圧縮された書籍の圧縮</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Compression Example 1"></A>
+<HR SIZE="6">
+<A NAME="SEC5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.1 圧縮の実行例 (1) </H2>
+<!--docid::SEC5::-->
+<P>
+
+この節では、ハードディスクにすでにコピーしてある CD-ROM 書籍を圧縮す
+るにはどうしたらいいかを説明します。
+CD-ROM 書籍がすでに <TT>`/dict'</TT> にコピーされているものの、まだ圧縮
+されていないと仮定します。
+この書籍は <TT>`/dict'</TT> の下に、次のようなファイルを持っています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/dict/catalog
+/dict/language
+/dict/kanji/start
+/dict/english/start
+</pre></td></tr></table></P><P>
+
+この書籍を圧縮するには、次のようにします。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% cd /dict
+% ebzip
+</pre></td></tr></table></P><P>
+
+これは次のようにしても同じです。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --output-directory /dict /dict
+</pre></td></tr></table></P><P>
+
+圧縮には、しばらくかかることがあります。
+圧縮の間、<CODE>ebzip</CODE> は、次のように状況を知らせるメッセージを出力
+します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; /dict/kanji/start を圧縮 &#60;==
+./dict/kanji/start.ebz に出力
+ 1.0% 処理済み (2097152 / 220069888 バイト)
+ 1.9% 処理済み (4194304 / 220069888 バイト)
+ 2.9% 処理済み (6291456 / 220069888 バイト)
+        : (略)
+完了 (220069888 / 220069888 バイト)
+220069888 -&#62; 78163751 バイト (35.5%)
+</pre></td></tr></table></P><P>
+
+圧縮が完了すると、<TT>`/dict'</TT> の下のディレクトリ構成が少し変化して
+いるのが分かります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/dict/catalog
+/dict/language.ebz
+/dict/kanji/start.ebz
+/dict/english/start.ebz
+</pre></td></tr></table></P><P>
+
+拡張子 <SAMP>`.ebz'</SAMP> がいくつかのファイル (<TT>`/dict/language.ebz'</TT>、
+<TT>`/dict/kanji/start.ebz'</TT>、<TT>`/dict/english/start.ebz'</TT>) に
+付いています。
+これらが圧縮されたファイルです。
+他のファイルは変化していません。
+</P><P>
+
+<CODE>ebzip</CODE> が圧縮するファイルは、
+<TT>`START'</TT>、<TT>`HONMON'</TT>、<TT>`HONMON2'</TT>、<TT>`HONMONS'</TT>、
+<TT>`LANGUAGE'</TT> ファイルと <TT>`GAIJI'</TT> ディレクトリにある外字ファイルです。
+</P><P>
+
+<A NAME="Compression Example 2"></A>
+<HR SIZE="6">
+<A NAME="SEC6"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.2 圧縮の実行例 (2) </H2>
+<!--docid::SEC6::-->
+<P>
+
+この節では、もう一つ別の例を採り上げます。
+この節では、CD-ROM ディスクのファイルを圧縮し、それをハードディスクに
+置く方法について説明します。
+元の CD-ROM 書籍が <TT>`/cdrom'</TT> にマウントされ、書籍は <TT>`/cdrom'</TT>
+の下に次のようなファイルを持っていると仮定します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/cdrom/catalog
+/cdrom/language
+/cdrom/german/start
+/cdrom/french/start
+/cdrom/italian/start
+</pre></td></tr></table></P><P>
+
+この書籍を圧縮し、<TT>`/dict'</TT> の下に置くためには、次のコマンドを実
+行します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% cd /dict
+% ebzip --keep /cdrom
+</pre></td></tr></table></P><P>
+
+これは次のようにしても同じです。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --keep --output-directory /dict /cdrom
+</pre></td></tr></table></P><P>
+
+出力側のディレクトリ <TT>`/dict'</TT> は空でも構いませんが、圧縮前にあらか
+じめ作っておかなければならないので、注意して下さい。
+この例では、<SAMP>`--keep'</SAMP> オプションを使っています。
+特に指定しなければ、<CODE>ebzip</CODE> は、圧縮後に元のファイルを削除しますが、
+<SAMP>`--keep'</SAMP> オプションはこの振る舞いを抑制します。
+</P><P>
+
+<TT>`/dict'</TT> と <TT>`/cdrom'</TT> のディレクトリ構成はほとんど同じですが、
+<TT>`/dict'</TT> の下の圧縮されたファイルには拡張子 <SAMP>`.ebz'</SAMP> が付いて
+います。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/dict/catalog
+/dict/language.ebz
+/dict/german/start.ebz
+/dict/french/start.ebz
+/dict/italian/start.ebz
+</pre></td></tr></table></P><P>
+
+中間のディレクトリ <TT>`/dict/german'</TT>、<TT>`/dict/french'</TT>、
+<TT>`/dict/italian'</TT> は、もし無ければ <CODE>ebzip</CODE> によって作成されます。
+<TT>`catalog'</TT> と <TT>`catalogs'</TT> は、出力側のディレクトリにコピー
+されます。
+EB ライブラリが対応していないファイル、ディレクトリについては、
+<CODE>ebzip</CODE> は無視します (圧縮もコピーもしません)。
+</P><P>
+
+<A NAME="Compression Level"></A>
+<HR SIZE="6">
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.3 圧縮レベル </H2>
+<!--docid::SEC7::-->
+<P>
+
+<CODE>ebzip</CODE> は、0 〜 5 という 6 つの圧縮レベルを持っています。
+圧縮レベル 0 は、圧縮・伸長が最も速いですが、圧縮率は最悪です。
+圧縮レベル 5 は、圧縮率が最良ですが、圧縮・伸長は最も遅くなります。
+圧縮レベルは、<SAMP>`--level'</SAMP> (<SAMP>`-l'</SAMP>) オプションで設定します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --level 2 --output-directory /dict /dict
+</pre></td></tr></table></P><P>
+
+無指定時のレベルは 0 (最も速いが圧縮率は最悪) です。
+</P><P>
+
+<A NAME="Test"></A>
+<HR SIZE="6">
+<A NAME="SEC8"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC7"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC9"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.4 テスト </H2>
+<!--docid::SEC8::-->
+<P>
+
+<CODE>ebzip</CODE> を <CODE>--test</CODE> (<CODE>-t</CODE>) オプション付きで実行すると、
+<CODE>ebzip</CODE> は圧縮したデータを実際のファイルには書き込まなくなります。
+圧縮する前に圧縮後のファイルの大きさを知りたいときに、便利です。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --test /dict /dict
+</pre></td></tr></table></P><P>
+
+<A NAME="Partial Compression"></A>
+<HR SIZE="6">
+<A NAME="SEC9"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC8"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC10"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.5 一部だけの圧縮 </H2>
+<!--docid::SEC9::-->
+<P>
+
+なにも設定しないと、<CODE>ebzip</CODE> は書籍一冊の全体を圧縮しますが、
+<SAMP>`--subbook'</SAMP> (<SAMP>`-S'</SAMP>) や <SAMP>`--skip-content'</SAMP> (<SAMP>`-s'</SAMP>)
+オプションを使うと一部だけを圧縮できます。
+</P><P>
+
+<SAMP>`--subbook'</SAMP> オプションは引数を一つ取り、そこにカンマ (<SAMP>`,'</SAMP>) 
+で区切って、圧縮したい副本のディレクトリ名を並べて書きます。
+<CODE>ebinfo</CODE> コマンドを用いると、あなたの所有している書籍にどのよう
+な副本が含まれているのかを知ることができます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo /mnt/cdrom
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 3
+
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: english
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: french
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 3:
+  題名: ポケット独和辞典（第三版）
+  ディレクトリ: german
+  検索方式: メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+</pre></td></tr></table></P><P>
+
+(<CODE>ebinfo</CODE> コマンドに関しての詳細は、
+<CITE>ebinfo-ja</CITE> の「<CODE>ebinfo</CODE> の実行」節を参照)。
+<BR>
+この例では、3 つの副本が書籍には含まれており、それらのディレクトリ名は
+<CODE>english</CODE>, <CODE>french</CODE>, <CODE>german</CODE> だということが分かります。
+</P><P>
+
+<CODE>english</CODE> と <CODE>german</CODE> だけを圧縮するには、次のようにします。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --subbook english,french /dict
+</pre></td></tr></table></P><P>
+
+ディレクトリ名の大文字、小文字の違いは無視されます。
+<SAMP>`--subbook'</SAMP> の引数は、次のように分けて書くこともできます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --subbook english --subbook french /dict
+</pre></td></tr></table></P><P>
+
+残りの副本 (この例では <CODE>german</CODE>) のファイルは圧縮されることもコピー
+されることもありませんので、この時点ではまだこの書籍に対する圧縮の作業は
+完了していません。
+この書籍を使用するためには、さらなる操作を行って残りの副本を圧縮するか、
+<CODE>ebrefile</CODE> コマンドを使って残りの副本を <TT>`catalog(s)'</TT> ファイル
+の副本登録リストから削除しなくてはなりません (詳しくは
+<CITE>ebrefile-ja</CITE> の「<CODE>ebzip</CODE> との連携」節を参照)。
+</P><P>
+
+副本同士で、異なる圧縮レベルを設定することも可能です
+(たとえば、<CODE>english</CODE> と <CODE>french</CODE> はレベル 0 で圧縮し、
+<CODE>german</CODE> はレベル 2 で圧縮する)。
+</P><P>
+
+<SAMP>`--skip-content'</SAMP> (<SAMP>`-s'</SAMP>) は <SAMP>`--subbook'</SAMP> に似ていますが、
+<SAMP>`--skip-content'</SAMP> では無視するファイルのデータ型を指定します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --skip-content sound,movie --subbook french /dict
+</pre></td></tr></table></P><P>
+
+この例では、<CODE>ebzip</CODE> は音声と動画ファイルを飛ばします。
+現在のところ、<CODE>ebzip</CODE> によって認識されるデータ型は、次の通りです。
+</P><P>
+
+<UL>
+<LI><CODE>font</CODE>
+<BR>
+外字のフォント
+<LI><CODE>graphic</CODE>
+<BR>
+画像データ
+<LI><CODE>sound</CODE>
+<BR>
+音声データ
+<LI><CODE>movie</CODE>
+<BR>
+動画データ
+</UL>
+<P>
+
+<A NAME="Overwrite Old Files"></A>
+<HR SIZE="6">
+<A NAME="SEC10"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC9"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC11"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.6 古いファイルの上書き </H2>
+<!--docid::SEC10::-->
+<P>
+
+書き込もうとしたファイルがすでに存在するとき、<CODE>ebzip</CODE> は上書きし
+て良いかどうかの確認を求めてきます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; /dict/science/data/honmon を圧縮 &#60;==
+/dict/science/data/honmon.ebz に出力
+
+ファイルがすでに存在します: /dict/science/data/honmon.ebz
+上書きしますか (はい:y, いいえ:n)?
+</pre></td></tr></table></P><P>
+
+<SAMP>`y'</SAMP> か <SAMP>`n'</SAMP> で答えて下さい。
+<SAMP>`n'</SAMP> と答えると、<CODE>ebzip</CODE> はそのファイルを飛ばして、次に進みます。
+</P><P>
+
+<SAMP>`--force-overwrite'</SAMP> オプションを指定すると、<CODE>ebzip</CODE> はすで
+に存在しているファイルを、確認なしに上書きします。
+同様に、<SAMP>`--no-overwrite'</SAMP> オプションを指定すると、<CODE>ebzip</CODE> は
+確認なしにそのファイルを飛ばして次に進みます。
+</P><P>
+
+<A NAME="Compress Compressed Book"></A>
+<HR SIZE="6">
+<A NAME="SEC11"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC10"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.7 圧縮された書籍の圧縮 </H2>
+<!--docid::SEC11::-->
+<P>
+
+S-EBXA および EPWING 規格においても圧縮形式を定義しており、CD-ROM 書籍
+にはこれらの圧縮形式を実際に採用しているものがあります。
+これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
+</P><P>
+
+<CODE>ebzip</CODE> は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
+することができますが、圧縮することはできません。
+</P><P>
+
+<CODE>ebzip</CODE> に対して、既に圧縮されている CD-ROM 書籍を圧縮するように
+命じると、<CODE>ebzip</CODE> はいったん書籍を伸長してから、ebzip の圧縮形式で
+圧縮し直します。
+</P><P>
+
+一般に ebzip の圧縮形式の方が S-EBXA や EPWING の圧縮形式よりも圧縮率が
+良好です。
+</P><P>
+
+<A NAME="Uncompression"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

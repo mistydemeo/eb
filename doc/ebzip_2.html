@@ -1,0 +1,121 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebzip: Action and Command Name</TITLE>
+
+<META NAME="description" CONTENT="ebzip: Action and Command Name">
+<META NAME="keywords" CONTENT="ebzip: Action and Command Name">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_3.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Action and Command Name </H1>
+<!--docid::SEC2::-->
+<P>
+
+<CODE>ebzip</CODE> has three <EM>action</EM> modes; compression, uncompression
+and information.
+</P><P>
+
+<UL>
+<LI>compression
+<BR>
+Compress a CD-ROM book.
+<P>
+
+<LI>uncompression
+<BR>
+Uncompress a CD-ROM book compressed by <CODE>ebzip</CODE>.
+<P>
+
+<LI>information
+<BR>
+Output information about compression status of a CD-ROM book compressed
+by <CODE>ebzip</CODE>.
+<P>
+
+</UL>
+<P>
+
+When <CODE>ebzip</CODE> is invoked, the action is determined by invoked
+name of the <CODE>ebzip</CODE> command and command line options to
+<CODE>ebzip</CODE>.
+The action is never changed during an execution of <CODE>ebzip</CODE>.
+</P><P>
+
+<CODE>ebzip</CODE> has installed with three different command names;
+<CODE>ebzip</CODE>, <CODE>ebunzip</CODE> and <CODE>ebzipinfo</CODE>.
+(On DOS and Windows systems, <CODE>ebzipinfo</CODE> is renamed to
+<CODE>ebzipinf</CODE>).
+Usually, they are hard-linked like as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ls -li ebzip ebunzip ebzipinfo
+38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebunzip
+38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzip
+38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzipinfo
+</pre></td></tr></table></P><P>
+
+When it is invoked as <CODE>ebunzip</CODE>, the default action is uncompression.
+When it is invoked as <CODE>ebzipinfo</CODE>, information is the default
+action.
+Otherwise, the default action is compression.
+</P><P>
+
+In addition, you can specify the action by the command line options;
+<SAMP>`--compress'</SAMP> (<SAMP>`-z'</SAMP>), <SAMP>`--uncompress'</SAMP> (<SAMP>`-u'</SAMP>) and
+<SAMP>`--information'</SAMP> (<SAMP>`-i'</SAMP>).
+They are prior to invoked names.
+In the following example, "compress" is the action of all the lines:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ebunzip
+ebzip --uncompress
+ebzipinfo --uncompress
+</pre></td></tr></table></P><P>
+
+<A NAME="Invoke ebzip"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebzip コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebzip-07.html">前へ</a>] [<a href="ebzip-09.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="summary-of-options"><code>ebzip</code> のオプション一覧</a></h2>
+
+<p>
+<code>ebzip</code> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<samp>-</samp> ではなく <samp>--</samp> を
+用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができます。
+</p>
+
+<dl>
+<dt><code>-f</code></dt>
+<dt><code>--force-overwrite</code></dt>
+<dd>
+確認を求めずに、既に存在しているファイルを上書きします。
+このオプションは、情報出力の動作のときや、<samp>--test</samp>
+(<samp>-t</samp>) オプションを指定したときは無視されます
+(詳しくは、<a href="ebzip-04.html#overwrite-old-files">「古いファイルの上書き」</a> を
+参照のこと)。
+
+<dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
+<dd>
+ヘルプメッセージを標準出力に出力して、終了します。
+
+<dt><code>-i</code></dt>
+<dt><code>--information</code></dt>
+<dd>
+指定された CD-ROM 書籍の圧縮状態を出力します
+(詳しくは、 <a href="ebzip-06.html#information">「情報出力」</a> を参照のこと)。
+
+<dt><code>-k</code></dt>
+<dt><code>--keep</code></dt>
+<dd>
+出力側のファイルを書き込み終わっても、対応する入力側のファイルは
+削除しません。
+このオプションは、情報出力の動作のときや、<samp>--test</samp>
+(<samp>-t</samp>) オプションを指定したときは無視されます
+(詳しくは、<a href="ebzip-04.html#compression-example-2">「圧縮の実行例 (2)」</a> 
+を参照のこと)。
+
+<dt><code>-l <var>整数</var></code></dt>
+<dt><code>--level <var>整数</var></code></dt>
+<dd>
+圧縮レベルを指定します。
+<var>整数</var> は、<samp>0</samp>、<samp>1</samp>、<samp>2</samp>、
+<samp>3</samp>、<samp>4</samp>、<samp>5</samp> のいずれかでなくては
+いけません。
+レベル 0 は、最も速いものの圧縮率は最悪です。
+レベル 3 は、最も遅いものの圧縮率は最良です。
+指定しなかったときのレベルは 0 です。
+このオプションは、圧縮以外の動作のときは無視されます。
+(詳しくは、<a href="ebzip-04.html#compression-level">「圧縮レベル」</a> を参照のこと。)
+
+<dt><code>-n</code></dt>
+<dt><code>--no-overwrite</code></dt>
+<dd>
+既に存在するファイルがあった場合、上書きの確認を求めずに、そのファイル
+は飛ばして次のファイルに進みます。
+このオプションは、情報出力の動作のときや、<samp>--test</samp>
+(<samp>-t</samp>) オプションを指定したときは無視されます。
+(詳しくは、<a href="ebzip-04.html#overwrite-old-files">「古いファイルの上書き」</a>
+を参照のこと。)
+
+<dt><code>-o <var>ディレクトリ</var></code></dt>
+<dt><code>--output-directory <var>ディレクトリ</var></code></dt>
+<dd>
+出力側のファイルを置くディレクトリを指定します。
+指定しなかったときは、カレントディレクトリ (<samp>.</samp>) になります。
+このオプションは、情報出力の動作のときや、<samp>--test</samp>
+(<samp>-t</samp>) オプションを指定したときは無視されます
+
+<dt><code>-q</code></dt>
+<dt><code>--quiet</code></dt>
+<dt><code>--silence</code></dt>
+<dd>
+情報、警告メッセージを出力しません。
+ただし、圧縮・伸長時に出力側のファイルが既に存在していると、
+<code>ebzip</code> はその出力側のファイルを上書きして良いかどうか
+訊いてきます。
+この質問を抑制するには、<samp>--force-overwrite</samp>(<samp>-f</samp>)
+または <samp>--no-overwrite</samp>(<samp>-n</samp>) を指定して下さい。
+このオプションは、情報出力の動作のときは、無視されます
+
+<dt><code>-s <var>型</var></code></dt>
+<dt><code>--skip-content <var>型</var></code></dt>
+<dd>
+無視するファイルのデータ型を指定します。
+<var>型</var> は、データ型の名前をカンマ (<samp>,</samp>) で区切って
+並べたものでなくてはいけません。
+<code>ebzip</code> が現在のところ認識するデータ型の名前は、
+<code>font</code> (外字のフォント)、<code>graphic</code> (画像データ)、
+<code>sound</code> (音声データ)、<code>movie</code> (動画データ) です。
+指定しなかったときは、どのファイルも無視されません。
+
+<dt><code>-S <var>副本</var></code></dt>
+<dt><code>--subbook <var>副本</var></code></dt>
+<dd>
+圧縮・伸長・情報出力の対象とする副本を指定します。
+<var>副本</var> は、副本のディレクトリ名をカンマ (<samp>,</samp>) で
+区切って並べたものでなくてはいけません。
+指定しなかったときは、すべての副本が対象になります。
+(詳しくは <a href="ebzip-04.html#partial-compression">「一部だけの圧縮」</a> を参照
+のこと。)
+
+<dt><code>-t</code></dt>
+<dt><code>--test</code></dt>
+<dd>
+圧縮・伸長したデータを、実際のファイルには書き込みません。
+このオプションは、情報出力の動作のときは無視されます。
+(詳しくは <a href="ebzip-04.html#test">「テスト」</a> を参照のこと。)
+
+<dt><code>-u</code></dt>
+<dt><code>--uncompress</code></dt>
+<dd>
+CD-ROM 書籍を伸長します。
+(詳しくは <a href="ebzip-05.html#uncompression">「伸長」</a> を参照のこと。)
+
+<dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
+<dd>
+バージョン番号を標準出力に出力して、終了します。
+
+<dt><code>-z</code></dt>
+<dt><code>--compress</code></dt>
+<dd>
+CD-ROM 書籍を圧縮します。
+(詳しくは <a href="ebzip-04.html#compression">「圧縮」</a> を参照のこと。)
+
+</dl>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebzip-07.html">前へ</a>] [<a href="ebzip-09.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+</body>
+</html>

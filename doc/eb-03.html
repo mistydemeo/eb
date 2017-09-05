@@ -1,0 +1,322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-02.html">前へ</a>] [<a href="eb-04.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="compilation">プログラムのコンパイル方法</a></h2>
+
+<p>
+本章では、EB ライブラリを利用したプログラムのコンパイルの仕方について、
+2 通りの方法を説明します。
+</p>
+
+<p>
+一つ目は、ごく私的な、小規模のプログラムをコンパイルする際に向いている
+てっとり早くコンパイルするための方法です。
+EB ライブラリの使い方を覚える目的で簡単なプログラムを組む際は、こちら
+が良いでしょう。
+</p>
+
+<p>
+二つ目は、EB ライブラリを組み込んだアプリケーションをフリーソフトウェア
+としてリリースする際に向いている方法です。
+EB ライブラリには、GNU Autoconf, Automake, Libtool を併用する仕組みを
+用意してありますので、これらを使ったコンパイル方法について説明します。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="compilation-simple-way">てっとり早いコンパイル方法</a></h3>
+
+<p>
+アプリケーションプログラムをコンパイルする際は、ヘッダファイルの
+ディレクトリ位置を C コンパイラに教えてやる必要があるかも知れません。
+一般に UNIX の C コンパイラでは、<samp>-I</samp> オプションで位置を指定
+します。
+</p>
+
+<blockquote>
+<pre>
+cc -I/usr/local/include -c sample.c
+</pre>
+</blockquote>
+
+<p>
+<code>/usr/local/include/eb</code> ではなく、その一つ上を指定します
+(<a href="eb-02.html#header-files">「ヘッダファイル」</a> を参照のこと)。
+</p>
+
+<p>
+次に、リンクして実行バイナリを生成する工程ですが、
+以下に記したライブラリの一部、もしくは全部をリンクします。
+括弧内は、ライブラリのファイル名です (ただし、<code>.a</code> や
+<code>.so</code> といった接尾子は省略)。
+</p>
+
+<dl>
+<dt>EB ライブラリ (libeb)</dt>
+<dd>
+EB ライブラリの本体です。このライブラリは必須です。
+
+<dt>zlib (libz)</dt>
+<dd>
+圧縮と伸長を行うライブラリです
+(詳しくは @url{http://www.gzip.org/zlib/})。
+<code>ebzip</code> コマンドで圧縮した辞書を扱うために使います。
+このライブラリは必須です。
+EB ライブラリのソースコードには zlib も収録されています。
+システムに zlib が インストールされていなければ、EB ライブラリを
+インストールする際に、zlib も自動的にインストールされます。
+
+<dt>gettext ライブラリ (libintl)</dt>
+<dd>
+メッセージの国際化機能 (NLS) を提供するライブラリです
+メッセージの国際化機能を有効にして EB ライブラリをコンパイルしている
+場合は、必要になるかも知れません。
+gettext の実装は何種類かありますが、EB ライブラリで使用できるのは
+メッセージカタログの形式が GNU gettext 互換のものだけです。
+
+メッセージの国際化機能を有効にしている場合でも、OS の標準 C ライブラリ
+として glibc を採用しているシステムでは、指定する必要はありません。
+
+<dt>iconv ライブラリ</dt>
+<dd>
+文字コード変換のライブラリです。
+gettext ライブラリをリンクする場合、一緒に必要となるかも知れません。
+iconv の実装も何種類かあり、OS によっては最初から添付されています。
+</dl>
+
+<p>
+必要なライブラリファイルの名称を、C コンパイラに指定してやります。
+加えて、ファイルの置かれているディレクトリ位置を、C コンパイラに教える
+必要があるかも知れません。
+一般に UNIX の C コンパイラでは、<samp>-L</samp> オプションでディレクトリ
+位置を指定し、<samp>-l</samp> オプションでライブラリのファイル名を指定
+します。
+</p>
+
+<blockquote>
+<pre>
+cc sample.o -L/usr/local/lib -leb -lz -lintl -liconv
+</pre>
+</blockquote>
+
+<p>
+ただし、共有ライブラリをリンクする場合は、実行時におけるライブラリの
+検索パスも合わせて指定する必要があるかも知れません。
+</p>
+
+<blockquote>
+<pre>
+cc sample.o -R/usr/local/lib -L/usr/local/lib -leb -lz -lintl -liconv
+</pre>
+</blockquote>
+
+<p>
+C コンパイラの使い方に関しての詳細は、C コンパイラのマニュアルを参照
+して下さい。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="compilation-with-autoconf">Autoconf を併用したコンパイル方法</a></h3>
+
+<p>
+作業の前に、Autoconf, Automake, Libtool は、あらかじめインストールして
+おいて下さい。
+Autoconf はバージョン 2.50 以降が必要です。
+</p>
+
+<p>
+まず、アプリケーションプログラムの <code>configure.ac</code>
+(もしくは <code>configure.in</code>) に、次の行を加えます。
+</p>
+
+<blockquote class="program">
+<pre>
+eb_LIB_EB4
+</pre>
+</blockquote>
+
+<p>
+マクロ <code>eb_LIB_EB4</code> は、EB ライブラリの使用に必要な一切の
+チェックを行い、さらに <code>configure</code> に次のオプションを追加
+します。
+</p>
+
+<blockquote>
+<pre>
+  --with-eb-conf=FILE     eb.conf file is FILE [SYSCONFDIR/eb.conf]
+</pre>
+</blockquote>
+
+<p>
+<code>eb.conf</code> は、EB ライブラリをインストールしたときの情報を記録
+したファイルで、ライブラリと一緒にインストールされます。
+<code>eb_LIB_EB4</code> はこのファイルを読み込んで、C コンパイラに
+渡さなければいけないオプションなどの情報を得ます。
+<samp>--eb-conf-file</samp> は、<code>eb.conf</code> のファイル名を
+明示的に指定するオプションです。
+</p>
+
+<p>
+マクロ <code>eb_LIB_EB4</code> は、<code>eb4.m4</code> というファイルで
+提供されています。
+EB ライブラリを <code>/usr/local</code> にインストールし、個々のファイル
+のインストール先を変更していなければ、<code>/usr/local/share/aclocal</code>
+にインストールされます。
+この <code>eb4.m4</code> をソースコードの適当なディレクトリの下 (たとえば
+<code>m4</code>) にコピーして下さい。
+</p>
+
+<p>
+<code>aclocal</code> コマンドで <code>aclocal.m4</code> を再生成する際は、
+<samp>-I</samp> オプションでマクロファイルのディレクトリを指定します。
+</p>
+
+<blockquote>
+<pre>
+aclocal -I m4
+</pre>
+</blockquote>
+
+<p>
+加えて、トップディレクトリの <code>Makefile.am</code> の中にも
+<code>aclocal</code> へ渡すオプションを書いておきます。
+</p>
+
+<blockquote class="program">
+<pre>
+ACLOCAL_AMFLAGS = -I m4
+</pre>
+</blockquote>
+
+<p>
+また、ソースコードのディレクトリに Libtool パッケージがまだ用意されて
+いなければ、用意します。
+<code>libtoolize</code> コマンドを実行して下さい。
+Libtool パッケージが、ソースコードのディレクトリにコピーされます。
+</p>
+
+<blockquote>
+<pre>
+libtoolize
+</pre>
+</blockquote>
+
+<p>
+最後に、コンパイルを行うディレクトリの <code>Makefile.am</code> ファイル
+の <code>_LDFLAGS</code> と <code>INCLUDES</code> に、次のような値を追加
+します。
+</p>
+
+<blockquote class="program">
+<pre>
+program_LDFLAGS = $(EBCONF_EBLIBS) $(EBCONF_ZLIBLIBS) $(EBCONF_INTLLIBS)
+INCLUDES = $(EBCONF_EBINCS)
+</pre>
+</blockquote>
+
+<p>
+(<code>program_LDFLAGS</code> の <code>program</code> のところは、
+アプリケーションプログラムの実際のコマンド名にします。)
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="debug-eb-library">EB ライブラリ本体のデバッグ</a></h3>
+
+<p>
+「自分が作ったアプリケーションが正しく動かないのは、ひょっとすると
+EB ライブラリのバグが原因ではないか?」という疑問を抱き、EB ライブラリ
+の挙動を確認したいと思うことがあるかも知れません。
+</p>
+
+<p>
+そのような場合は、環境変数 <code>EB_DEBUG</code> をセットした状態で
+アプリケーションを実行してみて下さい。
+EB ライブラリは標準エラー出力に、次のようなログを (かなり大量ですが)
+出力するようになります。
+</p>
+
+<blockquote>
+<pre>
+[EB] in: eb_set_font(book=0, font_code=0)
+[EB] in: eb_load_narrow_font(book=0)
+[EB] out: eb_load_narrow_font()
+[EB] in: eb_load_wide_font(book=0)
+[EB] out: eb_load_wide_font()
+[EB] out: eb_set_font() = EB_SUCCESS
+</pre>
+</blockquote>
+
+<p>
+これらのログは、関数の呼び出し時の引数列、および関数からの戻り値を
+示しています。
+<code>ebfixlog</code> という Perl5 スクリプトを使うと、ログを整形すること
+ができます。
+このスクリプトは、EB ライブラリのソースコードの <code>misc</code> 
+ディレクトリに収められています。
+</p>
+
+<p>
+<code>ebfixlog</code> は、コマンド行の引数として与えられたファイル
+(引数が指定されなければ標準入力) からメッセージデータを読み込み、
+次のように字下げして出力します。
+</p>
+
+<blockquote>
+<pre>
+[EB] in: eb_set_font(book=0, font_code=0)
+[EB]   in: eb_load_narrow_font(book=0)
+[EB]   out: eb_load_narrow_font()
+[EB]   in: eb_load_wide_font(book=0)
+[EB]   out: eb_load_wide_font()
+[EB] out: eb_set_font() = EB_SUCCESS
+</pre>
+</blockquote>
+
+<p>
+通常 <code>ebfixlog</code> スクリプトは、zio および ebnet と呼ばれる、
+EB ライブラリでファイル入出力を受け持つ処理部のログは読み捨てるように
+なっています。
+これにより、ログの量がかなり減ります。
+</p>
+
+<p>
+zio は EB ライブラリの低レベル入出力の処理部で、頻繁に呼び出されます。
+問題の原因を調べる際も、まずは読み捨てた方がライブラリの内部動作を追跡
+しやすいでしょう。
+</p>
+
+<p>
+<code>ebfixlog</code> の <samp>-z</samp> オプションを使うと、zio の
+メッセージを読み捨てずに出力するようになります。
+</p>
+
+<p>
+ebnet は遠隔アクセスの入出力を処理する部分で、zio よりもさらに
+下位レベルに位置します。
+遠隔アクセスの挙動を追跡するとき以外は、読み捨てた方が良いと思います。
+</p>
+
+<p>
+<code>ebfixlog</code> の <samp>-n</samp> オプションを使うと、ebnet,
+zio 両方のメッセージを読み捨てずに出力するようになります。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-02.html">前へ</a>] [<a href="eb-04.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

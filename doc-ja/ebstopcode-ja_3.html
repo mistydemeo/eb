@@ -1,0 +1,108 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebstopcode: Summary of Options</TITLE>
+
+<META NAME="description" CONTENT="ebstopcode: Summary of Options">
+<META NAME="keywords" CONTENT="ebstopcode: Summary of Options">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja_2.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 3. <CODE>ebstopcode</CODE> のオプション一覧 </H1>
+<!--docid::SEC3::-->
+<P>
+
+<CODE>ebstopcode</CODE> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<SAMP>`-'</SAMP> ではなく <SAMP>`--'</SAMP> を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することが
+できます。
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-c <VAR>コード</VAR></CODE>
+<DD><DT><CODE>--code <VAR>コード</VAR></CODE>
+<DD><VAR>コード</VAR> を区切りコードに指定します (例: "0x1f09 0x0001")。
+<CODE>ebstopcode</CODE> は、<VAR>コード</VAR> を見つけるまで本文を出力します。
+<P>
+
+<DT><CODE>-h</CODE>
+<DD><DT><CODE>--help</CODE>
+<DD>ヘルプメッセージを標準出力に出力して、終了します。
+<P>
+
+<DT><CODE>-l <VAR>長さ</VAR></CODE>
+<DD><DT><CODE>--text-length <VAR>長さ</VAR></CODE>
+<DD>本文データを最長で <VAR>長さ</VAR> バイトまで出力します。
+<VAR>長さ</VAR> を 0 にすると、<CODE>ebstopcode</CODE> は本文全体を出力します。
+このオプションを指定しなかったときは、2048 になります。
+<P>
+
+<DT><CODE>-n</CODE>
+<DD><DT><CODE>--no-candidates</CODE>
+<DD>区切りコードの候補を出力しないようにします。
+<P>
+
+<DT><CODE>-p <VAR>ページ:オフセット</VAR></CODE>
+<DD><DT><CODE>--text-position <VAR>ページ:オフセット</VAR></CODE>
+<DD>本文データの出力をこの位置から開始します。
+<VAR>ページ</VAR> には 0 より大きい 16進整数を、<VAR>オフセット</VAR> には、0〜0x7FF
+の間の 16進整数をそれぞれ指定します。
+このオプションを指定しなかったときは、本文データの先頭位置から出力します。
+<P>
+
+<DT><CODE>-v</CODE>
+<DD><DT><CODE>--version</CODE>
+<DD>バージョン番号を標準出力に出力して、終了します。
+</DL>
+<P>
+
+<SAMP>`--code'</SAMP> (<SAMP>`-c'</SAMP>) と <SAMP>`--length'</SAMP> (<SAMP>`-l'</SAMP>) オプションは、
+互いにもう一方のオプションを打ち消します。
+</P><P>
+
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

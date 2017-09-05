@@ -1,0 +1,185 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebzip コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebzip-04.html">前へ</a>] [<a href="ebzip-06.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="uncompression">伸長</a></h2>
+
+<p>
+<code>ebunzip</code> (<code>ebzip --uncompress</code>、
+<code>ebzipinfo --uncompress</code> と同じ) は、<code>ebzip</code> で
+圧縮した CD-ROM 書籍を伸長します。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="uncompression-example">伸長の実行例</a></h3>
+
+<p>
+伸長の処理手順は、圧縮とかなり似ています。
+<code>/dict</code> の下に圧縮された書籍が置かれているものと仮定します。
+この書籍には、<code>/dict</code> の下に次のようなファイルを持っています。
+</p>
+
+<blockquote>
+<pre>
+/dict/catalog
+/dict/language.ebz
+/dict/kanji/start.ebz
+/dict/english/start.ebz
+</pre>
+</blockquote>
+
+<p>
+この書籍を伸長するには、次のコマンドを実行します。
+</p>
+
+<blockquote>
+<pre>
+% cd /dict
+% ebunzip
+</pre>
+</blockquote>
+
+<p>
+これは次のようにしても同じです。
+</p>
+
+<blockquote>
+<pre>
+% ebunzip --output-directory /dict /dict
+</pre>
+</blockquote>
+
+<p>
+伸長には、しばらくかかることがあります。
+伸長の間、<code>ebunzip</code> は、次のように状況を知らせるメッセージを出力
+します。
+</p>
+
+<blockquote>
+<pre>
+==&gt; /dict/kanji/start.ebz を伸長 &lt;==
+./kanji/start.ebz に出力
+ 5.1% 処理済み (4194304 / 82460672 バイト)
+10.2% 処理済み (8388608 / 82460672 バイト)
+15.3% 処理済み (12582912 / 82460672 バイト)
+        : (略)
+完了 (82460672 / 82460672 バイト)
+25681439 -&gt; 82460672 バイト
+</pre>
+</blockquote>
+
+<p>
+伸長の間、<code>ebunzip</code> は、すでに存在するファイルを上書きしても良いか
+どうか確認を求めてきます。
+</p>
+
+<blockquote>
+<pre>
+==&gt; /dict/kanji/start.ebz を伸長 &lt;==
+/dict/kanji/start に出力
+
+ファイルがすでに存在します: /dict/kanji/start
+上書きしますか (はい:y, いいえ:n)?
+</pre>
+</blockquote>
+
+<p>
+伸長が完了すると、<code>/dict</code> の下のディレクトリ構成は少し変化して
+います。
+</p>
+
+<blockquote>
+<pre>
+/dict/catalog
+/dict/language
+/dict/kanji/start
+/dict/english/start
+</pre>
+</blockquote>
+
+<p>
+伸長されたファイルはファイル名が変化し、
+拡張子 <samp>.ebz</samp> が取り除かれています。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="options-for-uncompression">伸長のオプション</a></h3>
+
+<p>
+多くのオプションは、圧縮時と伸長時とで同じ意味を持っています。
+</p>
+
+<p>
+<samp>--keep</samp> オプションを指定すると、<code>ebunzip</code> は、
+伸長した後に圧縮ファイルを削除しなくなります。
+</p>
+
+<p>
+<samp>--test</samp> オプションを指定すると、<code>ebunzip</code> は伸長
+したデータを実際のファイルには書き込みません。
+このオプションは、ファイルが正しく圧縮されているのかを確認するときに便利
+です
+(<samp>--test</samp> オプションについての詳細は、
+<a href="ebzip-04.html#test">「テスト」</a>を参照のこと)。
+</p>
+
+<p>
+<samp>--subbook</samp> や <samp>--skip-content</samp> オプションを指定
+すると、条件に合致したファイルだけしか伸長しません
+(これらのオプションについての詳細は、
+<a href="ebzip-04.html#partial-compression">「一部だけの圧縮」</a> を参照のこと)。
+</p>
+
+<p>
+<samp>--force-overwrite</samp> や <samp>--no-overwrite</samp> オプション
+を指定すると、<code>ebunzip</code> は上書きしても良いかどうかの確認なしに、
+ファイルを上書きしたり飛ばして次に進んだりします
+(<samp>--force-overwrite</samp> と <samp>--no-overwrite</samp> オプション
+についての詳細は、
+<a href="ebzip-04.html#overwrite-old-files">「古いファイルの上書き」</a> を参照のこと)。
+</p>
+
+<p>
+<code>ebunzip</code> は、<samp>--level</samp> オプションを無視します。
+伸長時に <samp>--level</samp> オプションを指定する必要はありません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="uncompress-compressed-book">圧縮された書籍の伸長</a></h3>
+
+<p>
+S-EBXA および EPWING 規格でも圧縮形式を定義しており、CD-ROM 書籍には
+これらの圧縮形式を実際に採用しているものがあります。
+しかし、S-EBXA や EPWINGの圧縮形式は、ebzip の圧縮形式とは異なります。
+</p>
+
+<p>
+<code>ebzip</code> は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も
+伸長することができますが、圧縮することはできません。
+</p>
+
+<p>
+S-EBXA 形式で圧縮された <code>START</code> ファイルや、EPWING 形式で圧縮
+された <code>HONMON2</code>, <code>HONMONS</code> ファイルを伸長すると、
+伸長後のファイルには拡張子 <samp>.org</samp> が付加されます
+(例: <code>honmon2</code> → <code>honmon2.org</code>)。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebzip-04.html">前へ</a>] [<a href="ebzip-06.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+</body>
+</html>

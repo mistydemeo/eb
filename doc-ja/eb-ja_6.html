@@ -1,0 +1,1060 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Error Handling</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Error Handling">
+<META NAME="keywords" CONTENT="EB Library: Error Handling">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 6. エラー処理 </H1>
+<!--docid::SEC23::-->
+<P>
+
+EB ライブラリの関数の呼び出しは、常に成功するとは限りません。
+たとえば、<CODE>EB_Book</CODE> オブジェクトを書籍に結びつける関数
+<CODE>eb_bind()</CODE> には、引数として書籍のトップディレクトリを渡しますが、
+存在しないディレクトリを指定した場合、処理は失敗に終わります。
+</P><P>
+
+一般にこうした事象は、ユーザが誤ったパスを指定したときに起こりますが、
+メモリ不足のように、ユーザのミスが原因ではない失敗も起こりえます。
+</P><P>
+
+本章では、関数の呼び出しが失敗した場合の処理について説明します。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC24">6.1 エラーコードとエラーメッセージ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC25">6.2 エラーに対する寛容さ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC26">6.3 データ型の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC27">6.4 エラーコードの一覧</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC28">6.5 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Error Code and Message"></A>
+<HR SIZE="6">
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.1 エラーコードとエラーメッセージ </H2>
+<!--docid::SEC24::-->
+<P>
+
+EB ライブラリの関数の多くは、戻り値として <CODE>EB_Error_Code</CODE>
+型の値を返します。
+処理が成功したときに返す値は <CODE>EB_SUCCESS</CODE> ですが、失敗したときは
+エラーの原因に応じて様々な値を返します。
+このため、EB ライブラリでは次のような <CODE>EB_SUCCESS</CODE> との比較処理
+がよく行われます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Error_Code error_code;
+
+error_code = eb_bind(&#38;book, "/mnt/cdrom");
+if (error_code != EB_SUCCESS) {
+    printf("eb_bind() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+エラーコードの値は、関数 <CODE>eb_error_message()</CODE> によって
+エラーメッセージに変換することもできます。
+こうすることで、エラーの原因をアプリケーションプログラムのユーザに
+もう少し分かりやすく伝えることができます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>error_code = eb_bind(&#38;book, "/mnt/cdrom");
+if (error_code != EB_SUCCESS) {
+    printf("eb_bind() failed, %s\n",
+        eb_error_message(error_code));
+    return;
+}
+</pre></td></tr></table></P><P>
+
+<CODE>error_code</CODE> が <CODE>EB_ERR_TOO_LONG_FILENAME</CODE> にセットされて
+いれば、次のようなエラーメッセージが出力されます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>too long filename
+</pre></td></tr></table></P><P>
+
+あるいは、次のように日本語のメッセージかも知れません。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ファイル名が長すぎます
+</pre></td></tr></table></P><P>
+
+メッセージの国際化機能 (NLS) を無効にして EB ライブラリをコンパイル
+した場合は、常に英語のメッセージが返ります。
+有効にした場合は、ロケールの設定によってどちらの言語のメッセージが
+返るかが決まります。
+</P><P>
+
+本書ではプログラムを簡潔にするために、エラー処理は最低限しか行って
+いません。
+けれども一般のアプリケーションプログラムでは、関数の呼び出しが成功
+したかどうかを常にチェックし、処理が失敗した際はエラーメッセージを出力
+して、ユーザにエラーの原因を伝えるのが望ましいといえます。
+</P><P>
+
+<A NAME="Tolerance to Error"></A>
+<HR SIZE="6">
+<A NAME="SEC25"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC24"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC26"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.2 エラーに対する寛容さ </H2>
+<!--docid::SEC25::-->
+<P>
+
+<CODE>EB_Book</CODE> オブジェクトは、状態に関するパラメタをいくつか持って
+います。
+オブジェクトが CD-ROM 書籍に結び付いているかどうかも、こうしたパラメタ
+のうちの一つです。
+</P><P>
+
+引数に <CODE>EB_Book</CODE> オブジェクトへのポインタを取る関数には、あらかじめ
+オブジェクトの特定のパラメタがセットされていることを前提としているもの
+もあります。
+たとえば、<CODE>eb_path()</CODE> は、オブジェクトが書籍に結び付いていること
+を前提としています。
+では、もしも書籍に結び付いていないオブジェクトを <CODE>eb_path()</CODE> に
+渡したらどうなるでしょうか。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Book book;
+EB_Error_Code error_code;
+char path[EB_MAX_PATH_LENGTH + 1];
+
+eb_initialize_library();
+eb_initialize(&#38;book);
+error_code = eb_path(&#38;book, path);    /* どうなる? */
+</pre></td></tr></table></P><P>
+
+この場合、<CODE>eb_path()</CODE> は <CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
+EB ライブラリの関数は、必要なパラメタがセットされていないオブジェクトを
+検知して拒絶します。
+</P><P>
+
+しかしながら、参照マニュアルで明示されている場合を除いて、EB ライブラリ
+の関数は、与えられたポインタが <CODE>NULL</CODE> かどうかまでは調べません。
+次のようなことをすると、プログラムを異常終了させてしまいます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_bind(NULL, "/mnt/cdrom");    /* 異常終了! */
+eb_bind(&#38;book, NULL);           /* これも異常終了! */
+</pre></td></tr></table></P><P>
+
+<A NAME="Error Data Types"></A>
+<HR SIZE="6">
+<A NAME="SEC26"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC25"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC27"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.3 データ型の詳細 </H2>
+<!--docid::SEC26::-->
+<P>
+
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX36"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Error_Code</B>
+<DD><A NAME="IDX37"></A>
+<A NAME="IDX38"></A>
+</P><P>
+
+データ型 <CODE>EB_Error_Code</CODE> は、EB ライブラリのエラーコードを表します。
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <CODE>==</CODE> と <CODE>!=</CODE> で一致比較することができます。
+</P><P>
+
+EB ライブラリでは、全部で <CODE>EB_NUMBER_OF_ERRORS</CODE> 個のフックコードを
+定義しています。
+エラーコードの一覧については、
+次の節 (「<A HREF="eb-ja_6.html#SEC27">エラーコードの一覧</A>」節を参照)
+を参照して下さい。
+</DL>
+</P><P>
+
+<A NAME="Error Code List"></A>
+<HR SIZE="6">
+<A NAME="SEC27"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC26"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC28"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.4 エラーコードの一覧 </H2>
+<!--docid::SEC27::-->
+<P>
+
+この節で説明しているエラーコードを使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX39"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_SUCCESS</B>
+<DD><A NAME="IDX40"></A>
+</P><P>
+
+成功。
+エラーは起きていない。
+</DL>
+</P><P>
+
+<A NAME="IDX41"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_MEMORY_EXHAUSTED</B>
+<DD><A NAME="IDX42"></A>
+</P><P>
+
+EB ライブラリが <CODE>malloc()</CODE> を呼び出したが、<CODE>NULL</CODE> が返ってきた。
+</DL>
+</P><P>
+
+<A NAME="IDX43"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_TOO_LONG_FILE_NAME</B>
+<DD><A NAME="IDX44"></A>
+</P><P>
+
+与えられた書籍のパス名が長すぎる。
+</DL>
+</P><P>
+
+<A NAME="IDX45"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_BAD_FILE_NAME</B>
+<DD><A NAME="IDX46"></A>
+</P><P>
+
+書籍のパス名が不正である。
+</DL>
+</P><P>
+
+<A NAME="IDX47"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_BAD_DIR_NAME</B>
+<DD><A NAME="IDX48"></A>
+</P><P>
+
+ディレクトリ名が不正である。
+(EB ライブラリの内部処理用なので、
+このエラーコードがアプリケーションプログラムに返ることはありません。)
+</DL>
+</P><P>
+
+<A NAME="IDX49"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_TOO_LONG_WORD</B>
+<DD><A NAME="IDX50"></A>
+</P><P>
+
+与えられた検索語は長すぎる。
+</DL>
+</P><P>
+
+<A NAME="IDX51"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_BAD_WORD</B>
+<DD><A NAME="IDX52"></A>
+</P><P>
+
+与えられた検索語に不正な文字が含まれている。
+</DL>
+</P><P>
+
+<A NAME="IDX53"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_EMPTY_WORD</B>
+<DD><A NAME="IDX54"></A>
+</P><P>
+
+与えられた検索語は空である。
+</DL>
+</P><P>
+
+<A NAME="IDX55"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_GETCWD</B>
+<DD><A NAME="IDX56"></A>
+</P><P>
+
+<CODE>getcwd()</CODE> もしくは <CODE>getwd()</CODE> が失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX57"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_CAT</B>
+<DD><A NAME="IDX58"></A>
+</P><P>
+
+EB ライブラリが、書籍のカタログファイルを開くことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX59"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_CATAPP</B>
+<DD><A NAME="IDX60"></A>
+</P><P>
+
+EB ライブラリが、appendix のカタログファイルを開くことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX61"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_TEXT</B>
+<DD><A NAME="IDX62"></A>
+</P><P>
+
+EB ライブラリが、書籍の本文ファイルを開くことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX63"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_FONT</B>
+<DD><A NAME="IDX64"></A>
+</P><P>
+
+EB ライブラリが、書籍の外字ファイルを開くことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX65"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_APP</B>
+<DD><A NAME="IDX66"></A>
+</P><P>
+
+EB ライブラリが、appendix ファイルを開くことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX67"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_OPEN_BINARY</B>
+<DD><A NAME="IDX68"></A>
+</P><P>
+
+EB ライブラリが、バイナリデータファイルを開くことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX69"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_CAT</B>
+<DD><A NAME="IDX70"></A>
+</P><P>
+
+EB ライブラリが、書籍のカタログファイルを読み込むことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX71"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_CATAPP</B>
+<DD><A NAME="IDX72"></A>
+</P><P>
+
+EB ライブラリが、appendix のカタログファイルを読み込むことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX73"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_TEXT</B>
+<DD><A NAME="IDX74"></A>
+</P><P>
+
+EB ライブラリが、書籍の本文ファイルを読むことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX75"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_FONT</B>
+<DD><A NAME="IDX76"></A>
+</P><P>
+
+EB ライブラリが、書籍の外字ファイルを読み込むことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX77"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_APP</B>
+<DD><A NAME="IDX78"></A>
+</P><P>
+
+EB ライブラリが、appendix のメインファイルを読み込むことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX79"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_READ_BINARY</B>
+<DD><A NAME="IDX80"></A>
+</P><P>
+
+EB ライブラリが、書籍のバイナリデータファイルを読み込むことに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX81"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_CAT</B>
+<DD><A NAME="IDX82"></A>
+</P><P>
+
+EB ライブラリが、書籍のカタログファイルのシークに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX83"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_CATAPP</B>
+<DD><A NAME="IDX84"></A>
+</P><P>
+
+EB ライブラリが、appendix のカタログファイルのシークに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX85"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_TEXT</B>
+<DD><A NAME="IDX86"></A>
+</P><P>
+
+EB ライブラリが、書籍の本文ファイルのシークに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX87"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_FONT</B>
+<DD><A NAME="IDX88"></A>
+</P><P>
+
+EB ライブラリが、書籍の外字ファイルのシークに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX89"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_APP</B>
+<DD><A NAME="IDX90"></A>
+</P><P>
+
+EB ライブラリが、appendix のメインファイルのシークに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX91"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_FAIL_SEEK_BINARY</B>
+<DD><A NAME="IDX92"></A>
+</P><P>
+
+EB ライブラリが、書籍のバイナリデータファイルのシークに失敗した。
+</DL>
+</P><P>
+
+<A NAME="IDX93"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_CAT</B>
+<DD><A NAME="IDX94"></A>
+</P><P>
+
+EB ライブラリが、書籍のカタログファイル内で、期待とは異なるデータ列を
+見つけた。
+</DL>
+</P><P>
+
+<A NAME="IDX95"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_CATAPP</B>
+<DD><A NAME="IDX96"></A>
+</P><P>
+
+EB ライブラリが、appendix のカタログファイル内で、想定外のデータ列を
+見つけた。
+</DL>
+</P><P>
+
+<A NAME="IDX97"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_TEXT</B>
+<DD><A NAME="IDX98"></A>
+</P><P>
+
+EB ライブラリが、書籍の本文ファイル内で、想定外のデータ列を見つけた。
+</DL>
+</P><P>
+
+<A NAME="IDX99"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_FONT</B>
+<DD><A NAME="IDX100"></A>
+</P><P>
+
+EB ライブラリが、書籍の外字ファイル内で、想定外のデータ列を見つけた。
+</DL>
+</P><P>
+
+<A NAME="IDX101"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_APP</B>
+<DD><A NAME="IDX102"></A>
+</P><P>
+
+EB ライブラリが、appendix のメインファイル内で、想定外のデータ列を
+見つけた。
+</DL>
+</P><P>
+
+<A NAME="IDX103"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNEXP_BINARY</B>
+<DD><A NAME="IDX104"></A>
+</P><P>
+
+EB ライブラリが、書籍のバイナリデータファイル内で、想定外のデータ列を
+見つけた。
+</DL>
+</P><P>
+
+<A NAME="IDX105"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNBOUND_BOOK</B>
+<DD><A NAME="IDX106"></A>
+</P><P>
+
+呼び出された EB ライブラリの関数は、書籍に結び付けられた <CODE>EB_Book</CODE> 
+オブジェクトを引数にとるが、与えられたオブジェクトは書籍に結び付けら
+れていなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX107"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNBOUND_APP</B>
+<DD><A NAME="IDX108"></A>
+</P><P>
+
+呼び出された EB ライブラリの関数は、appendix に結び付けられた
+<CODE>EB_Appendix</CODE> オブジェクトを引数にとるが、与えられたオブジェクトは
+appendix に結び付けられて
+いなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX109"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUB</B>
+<DD><A NAME="IDX110"></A>
+</P><P>
+
+書籍は副本を一つも持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX111"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_APPSUB</B>
+<DD><A NAME="IDX112"></A>
+</P><P>
+
+appendix は副本を一つも持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX113"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_FONT</B>
+<DD><A NAME="IDX114"></A>
+</P><P>
+
+選択中の副本は、外字を一種類も持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX115"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_TEXT</B>
+<DD><A NAME="IDX116"></A>
+</P><P>
+
+選択中の副本は、本文データを持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX117"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_CUR_SUB</B>
+<DD><A NAME="IDX118"></A>
+</P><P>
+
+呼び出された関数は、副本が選択されている <CODE>EB_Book</CODE> オブジェクトを
+引数としてとるが、与えられたオブジェクトでは選択されていなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX119"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_CUR_APPSUB</B>
+<DD><A NAME="IDX120"></A>
+</P><P>
+
+呼び出された関数は、副本が選択されている <CODE>EB_Appendix</CODE> オブジェクト
+を引数にとるが、与えられたオブジェクトでは選択されていなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX121"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_CUR_FONT</B>
+<DD><A NAME="IDX122"></A>
+</P><P>
+
+呼び出された関数は、外字が選択されている <CODE>EB_Book</CODE> オブジェクトを
+引数にとるが、与えられたオブジェクトでは選択されていなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX123"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_CUR_BINARY</B>
+<DD><A NAME="IDX124"></A>
+</P><P>
+
+呼び出された関数は、バイナリデータの読み込み要求をセットしている
+<CODE>EB_Book</CODE> オブジェクトを引数にとるが、与えられたオブジェクトでは
+セットされていなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX125"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_SUB</B>
+<DD><A NAME="IDX126"></A>
+</P><P>
+
+<CODE>EB_Book</CODE> オブジェクトと副本コードが関数に与えられたが、
+<CODE>EB_Book</CODE> オブジェクトに結び付けられている書籍は、その副本コード
+に一致する副本を持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX127"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_APPSUB</B>
+<DD><A NAME="IDX128"></A>
+</P><P>
+
+<CODE>EB_Appendix</CODE> オブジェクトと副本コードが関数に与えられたが、
+<CODE>EB_Appendix</CODE> オブジェクトに結び付けられている appendix は、その
+副本コードに一致する副本を持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX129"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_FONT</B>
+<DD><A NAME="IDX130"></A>
+</P><P>
+
+<CODE>EB_Book</CODE> オブジェクトと外字の縦のサイズが関数に与えられたが、
+<CODE>EB_Book</CODE> オブジェクトに結びつけられていた書籍で選択中の副本は、
+そのサイズの外字を持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX131"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_CHAR_BMP</B>
+<DD><A NAME="IDX132"></A>
+</P><P>
+
+<CODE>EB_Book</CODE> オブジェクトと文字番号が関数に与えられたが、<CODE>EB_Book</CODE>
+オブジェクトに結び付けられていた書籍で選択中の副本は、その番号の外字の
+ビットマップデータを持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX133"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_CHAR_TEXT</B>
+<DD><A NAME="IDX134"></A>
+</P><P>
+
+<CODE>EB_Appendix</CODE> オブジェクトと文字番号が関数に与えられたが、
+<CODE>EB_Appendix</CODE> オブジェクトに結び付けられている appendix で選択中の
+副本は、その番号の外字の代替文字列を持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX135"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_SEARCH</B>
+<DD><A NAME="IDX136"></A>
+</P><P>
+
+選択中の副本は、指定された検索メソッドを持っていないので、検索は行えない。
+</DL>
+</P><P>
+
+<A NAME="IDX137"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_HOOK</B>
+<DD><A NAME="IDX138"></A>
+</P><P>
+
+不正なフックコードが関数に渡された。
+</DL>
+</P><P>
+
+<A NAME="IDX139"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_BINARY</B>
+<DD><A NAME="IDX140"></A>
+</P><P>
+
+指定された位置に、指定された形式のバイナリデータは存在しない。
+</DL>
+</P><P>
+
+<A NAME="IDX141"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_DIFF_CONTENT</B>
+<DD><A NAME="IDX142"></A>
+</P><P>
+
+アプリケーションプログラムからテキストデータの取得を要求されたが、指定
+されたテキストデータの種類が、前回リクエストされたときと一致していない。
+</DL>
+</P><P>
+
+<A NAME="IDX143"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_PREV_SEARCH</B>
+<DD><A NAME="IDX144"></A>
+</P><P>
+
+<CODE>eb_hit_list()</CODE> が呼び出されたが、アプリケーションプログラムから
+前もって検索のリクエストがなされていない。
+</DL>
+</P><P>
+
+<A NAME="IDX145"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_MULTI_ID</B>
+<DD><A NAME="IDX146"></A>
+</P><P>
+
+<CODE>EB_Book</CODE> オブジェクトと複合検索コードが関数に渡されたが、結び付け
+られた書籍で選択中の副本は、そのコードに一致する複合検索を持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX147"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_ENTRY_ID</B>
+<DD><A NAME="IDX148"></A>
+</P><P>
+
+<CODE>EB_Book</CODE> オブジェクトと複合検索エントリコードが関数に渡されたが、
+結び付けられた書籍で選択中の副本は、そのエントリコードに一致する
+複合検索エントリを持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX149"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_TOO_MANY_WORDS</B>
+<DD><A NAME="IDX150"></A>
+</P><P>
+
+アプリケーションプログラムから条件検索もしくは複合検索の検索をリクエスト
+されたが、検索語の個数が多すぎる。
+</DL>
+</P><P>
+
+<A NAME="IDX151"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_WORD</B>
+<DD><A NAME="IDX152"></A>
+</P><P>
+
+アプリケーションプログラムから条件検索もしくは複合検索の検索をリクエスト
+されたが、検索語がすべて空である。
+</DL>
+</P><P>
+
+<A NAME="IDX153"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_CANDIDATES</B>
+<DD><A NAME="IDX154"></A>
+</P><P>
+
+<CODE>eb_multi_entry_candidates()</CODE> が呼び出されたが、
+指定された複合検索エントリは、検索語の候補一覧データを持っていない。
+</DL>
+</P><P>
+
+<A NAME="IDX155"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_END_OF_CONTENT</B>
+<DD><A NAME="IDX156"></A>
+</P><P>
+
+<CODE>eb_forward_text()</CODE> あるいは <CODE>eb_backward_text()</CODE> で本文の
+頭出しを行おうとしたが、すでに本文の末尾ないし先頭に達していて、それ
+以上先に進むことができなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX157"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_PREV_SEEK</B>
+<DD><A NAME="IDX158"></A>
+</P><P>
+
+あらかじめ <CODE>eb_seek_text()</CODE> でシークを行っていない状態で、
+テキストデータの読み込みや頭出しを行おうとした。
+</DL>
+</P><P>
+
+<A NAME="IDX159"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_EBNET_UNSUPPORTED</B>
+<DD><A NAME="IDX160"></A>
+</P><P>
+
+この EB ライブラリは、遠隔ホストへのアクセスには対応していない。
+</DL>
+</P><P>
+
+<A NAME="IDX161"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_EBNET_FAIL_CONNECT</B>
+<DD><A NAME="IDX162"></A>
+</P><P>
+
+遠隔ホストへのアクセスを試みたが、サーバ (EBNETD) に接続できなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX163"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_EBNET_SERVER_BUSY</B>
+<DD><A NAME="IDX164"></A>
+</P><P>
+
+遠隔ホストへの接続を行ったが、書籍にアクセスしているクライアントの数が
+すでに上限に達しているため、その書籍を利用できなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX165"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_EBNET_NO_PERMISSION</B>
+<DD><A NAME="IDX166"></A>
+</P><P>
+
+遠隔ホストへの接続を行ったが、その書籍への利用権限がないため、サーバ
+からアクセスを拒否された。
+</DL>
+</P><P>
+
+<A NAME="IDX167"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_UNBOUND_BOOKLIST</B>
+<DD><A NAME="IDX168"></A>
+</P><P>
+
+呼び出された EB ライブラリの関数は、遠隔ホストに結び付けられた
+<CODE>EB_BookList</CODE> オブジェクトを引数にとるが、与えられたオブジェクトは
+遠隔ホストに結び付けられていなかった。
+</DL>
+</P><P>
+
+<A NAME="IDX169"></A>
+<DL>
+<DT><U>Constant:</U> <B>EB_ERR_NO_SUCH_BOOK</B>
+<DD><A NAME="IDX170"></A>
+</P><P>
+
+<CODE>EB_BookList</CODE> オブジェクトと書籍の要素番号を関数に渡されたが、
+<CODE>EB_BookList</CODE> に結び付けられた遠隔ホスト上には、その要素番号に該当
+する書籍は存在しない。
+</DL>
+</P><P>
+
+<A NAME="Error Functions"></A>
+<HR SIZE="6">
+<A NAME="SEC28"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC27"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC29"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 6.5 関数の詳細 </H2>
+<!--docid::SEC28::-->
+<P>
+
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX171"></A>
+<DL>
+<DT><U>Function:</U> const char * <B>eb_error_string</B> <I>(EB_Error_Code <VAR>error_code</VAR>)</I>
+<DD><A NAME="IDX172"></A>
+</P><P>
+
+関数 <CODE>eb_error_string()</CODE> は、エラーコード <VAR>error_code</VAR> を文字列
+に変換したものを返します。
+文字列の文字コードは、ASCII になります。
+たとえば、エラーコード値 <CODE>EB_SUCCESS</CODE> を渡すと文字列
+<SAMP>`"EB_SUCCESS"'</SAMP> を返します。
+未知のエラーコードを渡したときは、<SAMP>`"EB_ERR_UNKNOWN"'</SAMP> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX173"></A>
+<DL>
+<DT><U>Function:</U> const char * <B>eb_error_message</B> <I>(EB_Error_Code <VAR>error_code</VAR>)</I>
+<DD><A NAME="IDX174"></A>
+</P><P>
+
+関数 <CODE>eb_error_message()</CODE> は、エラーコード <VAR>error_code</VAR> に対応
+したメッセージを文字列にして返します。
+関数の返すメッセージは、英語か日本語になります。
+</P><P>
+
+国際化機能を有効にして EB ライブラリをコンパイルしていない場合は、常に
+英語のメッセージを返します。
+このときのメッセージの文字コードは、ASCII になります。
+</P><P>
+
+メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイル
+した場合は、ロケールの設定に応じてどちらの言語のメッセージを返すのか
+が決まります。
+また、GNU gettext バージョン 0.36 以降では iconv() と連携することにより、
+メッセージの文字コードもロケールに応じて変化します。
+gettext が iconv() との連携を行わなければ、英語のメッセージは ASCII、
+日本語のメッセージは日本語 EUC になります。
+この関数の呼び出しによって、gettext のテキストドメインの設定は変化
+しません。
+</P><P>
+
+未知のエラーコードを渡したときに返すメッセージは、
+英語では <SAMP>`"unknown error"'</SAMP>、日本語では <SAMP>`"未知のエラーです"'</SAMP>
+になります。
+</DL>
+</P><P>
+
+<A NAME="Subbook"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_6.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC29"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

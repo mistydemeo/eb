@@ -1,0 +1,126 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Action and Command Name</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Action and Command Name">
+<META NAME="keywords" CONTENT="EB Library: Action and Command Name">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_3.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. 動作とコマンド名 </H1>
+<!--docid::SEC2::-->
+<P>
+
+<CODE>ebzip</CODE> は三つの <EM>動作</EM> (<EM>action</EM>) モードを備えています。
+圧縮 (compression)、伸長 (uncompression) と情報出力 (information) です。
+</P><P>
+
+<UL>
+<LI>圧縮 (compression)
+<BR>
+一冊の CD-ROM 書籍を圧縮します。
+<P>
+
+<LI>伸長 (uncompression)
+<BR>
+<CODE>ebzip</CODE> で圧縮された、一冊の CD-ROM 書籍を伸長します。
+<P>
+
+<LI>情報出力 (information)
+<BR>
+<CODE>ebzip</CODE> で圧縮された、一冊の CD-ROM 書籍の圧縮状態に関する情報を
+出力します。
+<P>
+
+</UL>
+<P>
+
+<CODE>ebzip</CODE> は起動時に、起動時に使用されたコマンド名とコマンドライン
+オプションから動作モードを決定します。
+<CODE>ebzip</CODE> の一回の実行の間で、動作モードが変わることはありません。
+</P><P>
+
+<CODE>ebzip</CODE> は <CODE>ebzip</CODE>、<CODE>ebunzip</CODE>, <CODE>ebzipinfo</CODE> という
+異なる 3 つのコマンド名でインストールされます。
+(DOS および Windows システム環境では、<CODE>ebzipinfo</CODE> は
+<CODE>ebzipinf</CODE> に改名されています)。
+一般に、これらは次のようにハードリンクされています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ls -li ebzip ebunzip ebzipinfo
+38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebunzip
+38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzip
+38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzipinfo
+</pre></td></tr></table></P><P>
+
+<CODE>ebunzip</CODE> という名前で起動された場合は、伸長を行います。
+<CODE>ebzipinfo</CODE> という名前で起動された場合、情報出力を行います。
+それ以外の場合は、圧縮を行います。
+</P><P>
+
+コマンドラインオプションでも、動作モードを決定することができます。
+<SAMP>`--compress'</SAMP> (<SAMP>`-z'</SAMP>) で圧縮、<SAMP>`--uncompress'</SAMP> (<SAMP>`-u'</SAMP>) 
+で伸長、<SAMP>`--information'</SAMP> (<SAMP>`-i'</SAMP>) で情報出力を行います。
+オプションは、起動時のコマンド名より優先します。
+次の例では、いずれも動作モードが「伸長」になります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ebunzip
+ebzip --uncompress
+ebzipinfo --uncompress
+</pre></td></tr></table></P><P>
+
+遠隔アクセスには対応していませんので、遠隔アクセス識別子は使用できません。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip ebnet://localhost/cdrom
+ebzip: ebnet には対応していません。
+</pre></td></tr></table></P><P>
+
+<A NAME="Invoking ebzip"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

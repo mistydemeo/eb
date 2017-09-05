@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebappendix コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebappendix-03.html">前へ</a>] [<a href="ebappendix.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="generate-appendix">appendix の生成</a></h2>
+
+<p>
+appendix のソースデータが書けたら、<code>ebappendix</code> コマンドを用いて
+実際の (バイナリ形式の) appendix を生成します。
+</p>
+
+<p>
+以下、この章では <code>ebappendix</code> の実行方法について詳しく説明します。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="invoke-ebappendix"><code>ebappendix</code> の実行</a></h3>
+
+<p>
+<code>ebappendix</code> の一般的な起動方法は次の通りです。
+</p>
+
+<blockquote>
+<pre>
+% ebappendix <var>入力ディレクトリのパス</var>
+</pre>
+</blockquote>
+
+<p>
+<var>入力ディレクトリのパス</var> には、読み込む appendix ソースデータの
+ディレクトリ、つまり <code>catalog.app</code> または <code>catalogs.app</code> 
+ファイルが存在するディレクトリを指定します。
+省略した場合は、カレントディレクトリを指定したとみなされます。
+</p>
+
+<p>
+標準では、出力ファイルはカレントディレクトリに作成されます。
+</p>
+
+<p>
+<samp>--output-directory</samp> オプションを指定することで、
+<code>ebappendix</code> はカレントディレクトリ以外の場所に出力することが
+できます。
+</p>
+
+<blockquote>
+<pre>
+% ebappendix --output-directory <var>出力ディレクトリのパス</var> \
+  <var>入力ディレクトリのパス</var>
+</pre>
+</blockquote>
+
+<p>
+もし出力ディレクトリが存在していなければ、自動的に <code>ebappendix</code>
+が生成します。
+</p>
+
+<p>
+実行すると、<code>ebappendix</code> は出力ディレクトリの下にサブディレクトリ
+を作り、いくつかのファイルを生成します。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="merge-appendix">appendix と CD-ROM 書籍の重ね合わせ</a></h3>
+
+<p>
+HDD 上にコピーした CD-ROM 書籍と同じディレクトリに、appendix を重ねて
+置くことができます。
+</p>
+
+<p>
+これには、<code>ebappendix</code> の <samp>--output-directory</samp> と
+<samp>--no-catalog</samp> オプションを使います。
+<samp>--output-directory</samp> オプションには、CD-ROM 書籍の
+トップディレクトリを指定します。
+</p>
+
+<blockquote>
+<pre>
+% ebappendix --no-catalog --output-directory <var>出力ディレクトリのパス</var> \
+  <var>入力ディレクトリのパス</var>
+</pre>
+</blockquote>
+
+<p>
+なお、appendix の形式 (電子ブックか EPWING か) は CD-ROM 書籍に合わせる
+ようにします
+(詳しくは
+<a href="ebappendix-03.html#write-catalog.app">「<code>catalog(s).app</code> の書き方」</a>
+を参照)。
+</p>
+
+<p>
+<code>ebappendix</code> の実行前後で CD-ROM 書籍のディレクトリ構成が
+どのように変化するのか、例を記してみます。
+まず電子ブックの場合ですが、実行前のディレクトリ構成が次のように
+なっていたとします。
+</p>
+
+<blockquote>
+<pre>
+catalog
+ejdict/start
+howto/start
+</pre>
+</blockquote>
+
+<p>
+<code>ebappendix</code> で appendix を重ね合わせると、次のような構成に
+なります。
+</p>
+
+<blockquote>
+<pre>
+catalog
+ejdict/start
+ejdict/appendix  ← appendix のファイル
+howto/start
+howto/appendix   ← appendix のファイル
+</pre>
+</blockquote>
+
+<p>
+同様に、EPWING で実行前のディレクトリ構成が次のようになっていたと
+すると、
+</p>
+
+<blockquote>
+<pre>
+catalogs
+ejdict/data/honmon
+howto/data/honmon
+</pre>
+</blockquote>
+
+<p>
+実行後は、次のような構成になります。
+</p>
+
+<blockquote>
+<pre>
+catalogs
+ejdict/data/honmon
+ejdict/data/furoku  ← appendix のファイル
+howto/data/honmon
+howto/data/furoku   ← appendix のファイル
+</pre>
+</blockquote>
+
+<p>
+CD-ROM 書籍によっては、ディレクトリ名に大文字が混じっていることが
+ありますが、<code>ebappendix</code> はそれを検出しますので、名前を小文字に
+変えたディレクトリを別途作ってしまうことはありません。
+</p>
+
+<p>
+<samp>--no-catalog</samp> オプションを指定すると、<code>ebappendix</code> は
+カタログファイル <code>catalog</code> や <code>catalogs</code> ファイルを
+生成しなくなります。
+この appendix を EB ライブラリのアプリケーションから使う際は、
+CD-ROM 書籍に最初から用意されている <code>catalog</code> や
+<code>catalogs</code> ファイルを CD-ROM 書籍、appendix 共用の
+カタログファイルとして流用することになります。
+</p>
+
+<p>
+appendix のカタログファイルは、CD-ROM 書籍のカタログファイルの部分集合
+となっているため、こうした事が可能となっています。
+<samp>--no-catalog</samp> オプションを指定し忘れると、
+<code>ebappendix</code> は CD-ROM 書籍のカタログファイルを上書き
+してしまいますので、注意して下さい。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="options-to-ebappendix"><code>ebappendix</code> のオプション</a></h3>
+
+<p>
+<code>ebappendix</code> コマンドは、伝統的な一文字オプション名と覚えやすい
+長いオプション名の両方を扱うことができます。
+長いオプション名を表すには、<samp>-</samp> ではなく <samp>--</samp> を
+用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
+</p>
+
+<dl>
+<dt><code>-b <var>書籍の形式</var></code></dt>
+<dt><code>--booktype <var>書籍の形式</var></code></dt>
+<dd>
+appendix を電子ブック、EPWING のどちらの形式のレイアウトに似せて作る
+のかを指定します。
+電子ブック形式なら <code>eb</code>、EPWING 形式なら <code>epwing</code>
+と指定します。
+
+このオプションを指定しなかった場合、次の要領でどちらの形式で生成する
+のかがが決定されます。
+まず、入力ディレクトリに <code>catalog.app</code> ファイルが存在すれば
+それが読み込まれ、電子ブック形式の appendix が生成されます。
+<code>catalog.app</code> がなく、代わりに <code>catalogs.app</code> が
+存在すればそれが読み込まれ、EPWING 形式の appendix が生成されます。
+(<code>catalogs.app</code> も <code>catalog.app</code> なければ、エラー
+になります。)
+
+<dt><code>-d</code></dt>
+<dt><code>--debug</code></dt>
+<dt><code>--verbose</code></dt>
+<dd>
+デバッグ用のメッセージを、標準エラー出力に出力します。
+
+<dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
+<dd>
+ヘルプメッセージを標準出力に出力して、終了します。
+
+<dt><code>-n</code></dt>
+<dt><code>--no-catalog</code></dt>
+<dd>
+カタログファイル (<code>catalog</code> および <code>catalogs</code>) を
+生成しません。
+このオプションは、書籍と appendix を同じディレクトリに重ね合わせる際に
+有効です
+(詳しくは 
+<a href="ebappendix-04.html#merge-appendix">「appendix と CD-ROM 書籍の重ね合わせ」</a>
+を参照のこと)。
+
+<dt><code>-o <var>ディレクトリ</var></code></dt>
+<dt><code>--output-directory <var>ディレクトリ</var></code></dt>
+<dd>
+出力先のディレクトリを指定します。
+このオプションを省略すると、カレントディレクトリ (<code>.</code>) に
+出力します。
+ディレクトリが存在しなければ、自動的に生成されます。
+
+<dt><code>-t</code></dt>
+<dt><code>--test</code></dt>
+<dd>
+ファイルを出力しません。
+入力ファイルを読み込んで、内容のチェックだけを行います。
+
+<dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
+<dd>
+バージョン番号を標準出力に出力して、終了します。
+</dl>
+
+<hr>
+<p>
+[<a href="ebappendix-03.html">前へ</a>] [<a href="ebappendix.html#toc">目次</a>] 
+</p>
+</body>
+</html>

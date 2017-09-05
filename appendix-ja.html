@@ -1,0 +1,636 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rel="icon" type="image/png" href="eb_i.png">
+<title>Appendix data for CD-ROM books (Japanese)</title>
+</head>
+<body>
+
+<p class="header">
+<img src="eb_s.png" alt="logo">
+</p>
+
+<!-- ############################################################# -->
+<h1>CD-ROM 書籍用の appendix (付録) データ</h1>
+
+<p>
+(<a href="appendix.html">English version of this page</a> is available.)
+</p>
+
+<p>
+<dfn>appendix</dfn> (<dfn>付録</dfn>) とは CD-ROM 書籍の補助データの
+ことです。
+appendix は CD-ROM 書籍の出版社から提供されているものではなく、
+EB ライブラリに固有のものです。
+</p>
+
+<p>
+appendix は以下のデータを CD-ROM 書籍に対して提供します。
+</p>
+
+<dl>
+<dt>本文の区切りコード
+<dd>
+あなたが EB ライブラリのアプリケーションを使って CD-ROM 辞書の中のある
+単語を引く際、その単語の説明が終了する箇所で、アプリケーションが本文の
+出力を止めることをあなたは期待するのではないでしょうか。
+しかし、EB ライブラリはそのような動作を保証することができません。
+なぜなら、CD-ROM 書籍の本文には、項目の終わりを示す印が存在しないから
+です。
+<br><br>
+幸いにも、多くの CD-ROM 書籍には、項目の終わりを示す印の代替として
+使える、<dfn>区切りコード</dfn> (<dfn>stop code</dfn>) というものを
+持っています。
+通常、EB ライブラリはこの区切りコードを自動的に推測するようになって
+いるのですが、時々誤った区切りコードを導き出すことがあります。
+appendix の区切りコードは、その書籍の正しい区切りコードを EB ライブラリ
+に教えてやるために用います。
+</dd>
+
+<dt>外字の代替文字列
+<dd>
+多くの CD-ROM 書籍は、外字 (独自に定義した文字) を持っており、本文中で
+その外字を使っています。
+CD-ROM 書籍では外字のビットマップフォントを用意しており、アプリケーション
+が外字を出力するには、そのフォントを描画しなくてはなりません。
+<br><br>
+appendix では、外字の <dfn>代替文字列</dfn> (<dfn>alternation text</dfn>)
+を定義することができます。
+アプリケーションは、ビットマップフォントを描画する代わりに、その代替
+文字列を出力することにしても良いでしょう。
+</dd>
+</dl>
+
+<p>
+appendix パッケージのレイアウトは CD-ROM 書籍のものとよく似ています。
+トップディレクトリには <code>CATALOG</code> もしくは <code>CATALOGS</code>
+ファイルが存在し、各副本のデータは対応するサブディレクトリに配置されて
+います。
+</p>
+
+<p>
+ここに載っていない CD-ROM 書籍用の appendix パッケージを作成する場合は、
+<a href="doc-ja/ebappendix-ja.html"><code>ebappendix</code></a>
+コマンドを使いましょう。
+appendix のデータファイルの整形を行うことができます。
+</p>
+
+<!-- ############################################################# -->
+<hr>
+<h2>appendix パッケージの一覧</h2>
+
+<p>
+このページ中に記されている相対 URL は、
+<a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/</a> からの相対パスを表しています。
+</p>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="cencro">書籍名</a>
+<dd>ニューセンチュリー英和辞典 - ビジネスマン英和辞典 - 新クラウン和英辞典
+(SONY DD-30DBZ CD-ROM)
+<dt>出版社
+<dd>三省堂
+<dt>形式
+<dd>EBXA
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>YRRS-176
+<dt>appendix のバージョン
+<dd>1.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/cencro-2.3.tar.gz">cencro-1.0.tar.gz</a>
+<dt>備考
+<dd>Satoru Takabayashi さんによって作成されました。<br>
+おそらく市販の YRRS-235 と同じもの。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="chujiten">書籍名</a>
+<dd>新英和・和英中辞典 電子ブック版
+<dt>出版社
+<dd>研究社
+<dt>形式
+<dd>EB
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-7674-3500-5, YRRS-009
+<dt>appendix のバージョン
+<dd>2.3
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/chujiten-2.3.tar.gz">chujiten-2.3.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="chujiten2">書籍名</a>
+<dd>CD-ROM 版 新英和・和英 中辞典
+<dt>出版社
+<dd>研究社
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>---
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/chujiten2-2.0.tar.gz">chujiten2-2.0.tar.gz</a>
+<dt>備考
+<dd>Toshiyuki Miyamoto さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="chujiten6">書籍名</a>
+<dd>新英和 &lt;第 6 版&gt;・和英 &lt;第 4 版&gt; 中辞典 電子ブック版
+<dt>出版社
+<dd>研究社
+<dt>形式
+<dd>EBXA
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-7674-3503-X, YRRS-261<br>
+および ISBN4-7674-3504-8, YRRS-392
+<dt>appendix のバージョン
+<dd>2.3
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/chujiten6-2.3.tar.gz">chujiten6-2.3.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="colloc">書籍名</a>
+<dd>新編英和活用大事典
+<dt>出版社
+<dd>研究社
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-7674-3571-4, EPD-EC1
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/colloc-2.0.tar.gz">colloc-2.0.tar.gz</a>
+<dt>備考
+<dd>Ryuichi Arafune さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="crownfj">書籍名</a>
+<dd>クラウン仏和辞典
+<dt>出版社
+<dd>三省堂
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-385-61220-X
+<dt>appendix バージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/crownfj-2.0.tar.gz">crownfj-2.0.tar.gz</a>
+<dt>備考
+<dd>この辞書を送って頂いた三田吉郎さんに感謝いたします。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="crownfj2">書籍名</a>
+<dd>クラウン仏和辞典
+<dt>出版社
+<dd>三省堂
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-385-61220-X
+<dt>appendix バージョン
+<dd>1.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/crownfj2-1.0.tar.gz">crownfj2-1.0.tar.gz</a>
+<dt>備考
+<dd>三田吉郎さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="crowngj">書籍名</a>
+<dd>クラウン独和辞典
+<dt>出版社
+<dd>三省堂
+<dt>形式
+<dd>EBXA
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-385-61100-9, YRRS-091
+<dt>appendix バージョン
+<dd>1.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/crowngj-1.0.tar.gz">crowngj-1.0.tar.gz</a>
+<dt>備考
+<dd>三田吉郎さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="daihyakka">書籍名</a>
+<dd>日本大百科全書
+<dt>出版社
+<dd>小学館
+<dt>形式
+<dd>EBXA
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>YRRS-403
+<dt>appendix のバージョン
+<dd>1.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/daihyakka-1.0.tar.gz">daihyakka-1.0.tar.gz</a>
+<dt>Note
+<dd>Satoru Takabayashi さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="daijirin">書籍名</a>
+<dd>大辞林
+<dt>出版社
+<dd>三省堂
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>J96050-211A &amp; J96551-155A
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/daijirin-2.0.tar.gz">daijirin-2.0.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="dd75">書籍名</a>
+<dd>SONY Data DiscMan DD-75 付属 CD-ROM
+<dt>出版社
+<dd>ソニー
+<dt>形式
+<dd>EBXA
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>---
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/dd75-2.0.tar.gz">dd75-2.0.tar.gz</a>
+<dt>備考
+<dd>Koutarou Toyono さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="gendai2000">書籍名</a>
+<dd>現代用語の基礎知識 2000
+<dt>出版社
+<dd>自由国民社
+<dt>形式
+<dd>S-EBXA
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-426-10412-2, YRRS-2006
+<dt>appendix のバージョン
+<dd>1.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/gendai2000-1.0.tar.gz">gendai2000-1.0.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="genius">書籍名</a>
+<dd>ジーニアス英和・和英辞典
+<dt>出版社
+<dd>大修館書店
+<dt>形式
+<dd>EBXA
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-469-79056-7, YRRS-406
+<dt>appendix のバージョン
+<dd>1.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/genius-1.0.tar.gz">genius-1.0.tar.gz</a>
+<dt>備考
+<dd>Satoru Takabayashi さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="genius2">書籍名</a>
+<dd>ジーニアス英和・和英辞典
+<dt>出版社
+<dd>大修館書店
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-469-79061-3
+<dt>appendix のバージョン
+<dd>1.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/genius2-1.1.tar.gz">genius2-1.1.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="global">書籍名</a>
+<dd>新グローバル &amp; ニューセンチュリー英和・和英辞典
+<dt>出版社
+<dd>三省堂
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>---
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/global-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/global-2.0.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="heritage">書籍名</a>
+<dd>American Heritage Electronic Dictionary &amp; ROGET'S II Electronic Thesaurus
+<dt>出版社
+<dd>Houghton Mifflin
+<dt>形式
+<dd>EBG
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-384-00344-7, SAN-008
+<dt>appendix のバージョン
+<dd>2.2
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/heritage-2.2.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/heritage-2.2.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="izumi">書籍名</a>
+<dd>改訂新版 ことわざ名言の泉
+<dt>出版社
+<dd>小学館
+<dt>形式
+<dd>EBXA
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-09-906803-X, YRRS-1020
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/izumi-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/izumi-2.0.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="jitenban">書籍名</a>
+<dd>辞典盤
+<dt>出版社
+<dd>アスキー
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-7561-0350-2
+<dt>appendix のバージョン
+<dd>2.4
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/jitenban-2.4.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/jitenban-2.4.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="jitenban97">書籍名</a>
+<dd>辞典盤 97
+<dt>出版社
+<dd>アスキー
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-7561-0350-2
+<dt>appendix のバージョン
+<dd>2.1
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/jitenban97-2.1.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/jitenban97-2.1.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="kanjigen">書籍名</a>
+<dd>漢字源
+<dt>出版社
+<dd>学習研究社
+<dt>形式
+<dd>EB
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>SBN4-05-105774-7, YRRS-050
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kanjigen-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kanjigen-2.0.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="kanjigen2">書籍名</a>
+<dd>漢字源
+<dt>出版社
+<dd>学習研究社
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>---
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kanjigen2-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kanjigen2-2.0.tar.gz</a>
+<dt>備考
+<dd>この appendix パッケージは、外字の代替え文字列を定義していません。
+定義しているのは、区切り用のシーケンス (stop-code) だけです。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="kojien">書籍名</a>
+<dd>広辞苑 電子ブック版
+<dt>出版社
+<dd>岩波書店
+<dt>形式
+<dd>EB
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-00-130011-7, YRRS-007
+<dt>appendix のバージョン
+<dd>2.3
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien-2.3.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien-2.3.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="kojien2">書籍名</a>
+<dd>広辞苑 第四版
+<dt>出版社
+<dd>岩波書店
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>---
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien2-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien2-2.0.tar.gz</a>
+<dt>備考
+<dd>Toshiyuki Miyamoto さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="kojien4">書籍名</a>
+<dd>広辞苑 第4版 電子ブック(増訂)版
+<dt>出版社
+<dd>岩波書店
+<dt>形式
+<dd>EBXA
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-00-130035-4, YRRS-278
+<dt>appendix のバージョン
+<dd>2.2
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien4-2.2.tar.gz">kojien4-2.2.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="oxford">書籍名</a>
+<dd>The Oxford Concise Dictionary and Oxford Thesaurus
+<dt>出版社
+<dd>Oxford University Press / Electronic Book Publishing Europe Ltd
+<dt>形式
+<dd>EBG
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-384-00413-3, SAN-042
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/oxford-2.0.tar.gz">oxford-2.0.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="plus">書籍名</a>
+<dd>リーダーズ + プラス
+<dt>出版社
+<dd>研究社
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>EDP-RP1
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/plus-2.0.tar.gz">plus-2.0.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="readers">書籍名</a>
+<dd>電子ブック版 リーダーズ英和辞典
+<dt>出版社
+<dd>研究社
+<dt>形式
+<dd>EB
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-7674-3530-4, YRRS-172
+<dt>appendix のバージョン
+<dd>2.2
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/readers-2.2.tar.gz">readers-2.2.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="readers2">書籍名</a>
+<dd>CD-ROM版 リーダーズ英和辞典
+<dt>出版社
+<dd>研究社
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>---
+<dt>appendix のバージョン
+<dd>2.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/readers2-2.0.tar.gz">readers2-2.0.tar.gz</a>
+<dt>備考
+<dd>Toshiyuki Miyamoto さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="ruigigo">書籍名</a>
+<dd>類義語使い分け辞典
+<dt>出版社
+<dd>研究社
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>ISBN4-327-99203-8
+<dt>appendix のバージョン
+<dd>1.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/ruigigo-1.0.tar.gz">ruigigo-1.0.tar.gz</a>
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<dl>
+<dt><a name="superdic98">書籍名</a>
+<dd>スーパー統合辞書98
+<dt>出版社
+<dd>富士通
+<dt>形式
+<dd>EPWING
+<dt>ID (ISBN、電子ブックのコードなど)
+<dd>---
+<dt>appendix のバージョン
+<dd>1.0
+<dt>URL
+<dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/superdic98-1.0.tar.gz">superdic98-1.0.tar.gz</a>
+<dt>備考
+<dd>H Mizutani さんによって作成されました。
+</dl>
+
+<!-- ############################################################# -->
+<hr>
+<p class="footer">
+<a href="index-ja.html"><img class="banner" src="eb_b.png" alt="banner"></a>
+<a href="index-ja.html">ホームページ (日本語版)</a>に戻る。
+</p>
+</body>
+</html>

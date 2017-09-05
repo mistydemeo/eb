@@ -1,0 +1,390 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebzip: Compressed File Format</TITLE>
+
+<META NAME="description" CONTENT="ebzip: Compressed File Format">
+<META NAME="keywords" CONTENT="ebzip: Compressed File Format">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC22"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_9.html#SEC21"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC23"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_9.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> B. Compressed File Format </H1>
+<!--docid::SEC22::-->
+<P>
+
+This chapter explains details about compressed file format used by
+<CODE>ebzip</CODE>.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip_10.html#SEC23">B.1 Overview about Compression File Format</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip_10.html#SEC24">B.2 Data Part</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip_10.html#SEC25">B.3 Index Part</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip_10.html#SEC26">B.4 Header Part</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Format Overview"></A>
+<HR SIZE="6">
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> B.1 Overview about Compression File Format </H2>
+<!--docid::SEC23::-->
+<P>
+
+The compressed file format has the following features.
+</P><P>
+
+<UL>
+<LI>
+independent of CPU type, operating system, and file system.
+<P>
+
+<LI>
+loss-less compression.<BR>
+You can recover an original file by uncompressing the compressed
+file.
+<P>
+
+<LI>
+four compression levels.<BR>
+You can choose faster or better compression.
+</UL>
+<P>
+
+A compressed file consists of header, index and data parts.
+They are placed in that order.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+--------+-------------+-----------------------------+
+| header |    index    |            data             |
++--------+-------------+-----------------------------+
+                                                     EOF
+</pre></td></tr></table></P><P>
+
+<A NAME="Data Part"></A>
+<HR SIZE="6">
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> B.2 Data Part </H2>
+<!--docid::SEC24::-->
+<P>
+
+An orignal file is compressed by the following processes.
+</P><P>
+
+At first, <CODE>ebzip</CODE> slices an original file.
+Each <EM>slice</EM> except for the last slice (slice N in the following
+picture) has the same size.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+---------------+---------------+--   --+----------+
+|    slice 1    |    slice 2    |  ...  | slice N  |
++---------------+---------------+--   --+----------+
+                                                   EOF
+</pre></td></tr></table></P><P>
+
+Slice size is determined by the compression level
+(see section <A HREF="ebzip_4.html#SEC7">4.3 Compression Level</A>, about compression level):
+</P><P>
+
+<TABLE>
+<TR><TD>compression level  </TD><TD>  slice size</TD>
+</TR>
+<TR><TD>0                  </TD><TD>   2048 bytes</TD>
+</TR>
+<TR><TD>1                  </TD><TD>   4096 bytes</TD>
+</TR>
+<TR><TD>2                  </TD><TD>   8192 bytes</TD>
+</TR>
+<TR><TD>3                  </TD><TD>  16384 bytes</TD>
+</TR>
+<TR><TD>4                  </TD><TD>  32768 bytes</TD>
+</TR>
+<TR><TD>5                  </TD><TD>  65536 bytes</TD>
+</TR></TABLE>
+<P>
+
+Second, if the last slice is shorter than the slice size, <CODE>ebzip</CODE>
+extends the last slice to the slice size by padding bytes of 0x00.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>                                                    pad 
++---------------+---------------+--   --+---------+-----+
+|    slice 1    |    slice 2    |  ...  |    slice N    |
++---------------+---------------+--   --+---------+-----+
+                                                        EOF
+</pre></td></tr></table></P><P>
+
+Finally, <CODE>ebzip</CODE> compresses each slice into the DEFLATE compressed
+data format, described in RFC 1951.
+A slice is compressed independently of another slice.
+Usually, each compressed slice occupies different size.
+If the number of bits of the compressed slice is not a multiple of 8,
+1 to 7 bits are padded to the number of bits come to a multiple of 8
+at the tail of the compressed slice.
+Thus, each compressed slice starts at byte boundary.
+The contents of the padded bits are undefined, but the padded bits are
+never used.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+------------+----------+--   --+--------------+
+| compressed |compressed|  ...  |  compressed  |
+|   slice 1  | slice 2  |  ...  |   slice N    |
++------------+----------+--   --+--------------+
+</pre></td></tr></table></P><P>
+
+This is a <EM>data part</EM> of the compressed file format, which consists
+of compressed slices.
+</P><P>
+
+The padding in the last slice is compressed as a part of the slice.
+When <CODE>ebunzip</CODE> recovers the last slice, it uncompresses the slice
+and then remove the padding.
+</P><P>
+
+When a compressed slice is larger than or equal to slice size, 
+<CODE>ebzip</CODE> discards the compressed data of the slice.
+In this case, <CODE>ebzip</CODE> records original data as the compressed data
+for that slice instead.
+</P><P>
+
+If an original file is empty, the data part is not appered in a
+compressed file.
+</P><P>
+
+<A NAME="Index Part"></A>
+<HR SIZE="6">
+<A NAME="SEC25"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC24"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC26"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> B.3 Index Part </H2>
+<!--docid::SEC25::-->
+<P>
+
+At compression, <CODE>ebzip</CODE> records an <EM>index</EM> for each compressed
+slice.
+An index represents a distance betweeen the beginning of the compressed
+file to the beginning of a compressed slice.
+The unit of the distance is byte.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+---------+---------+--           --+---------+---------+
+| index 1 | index 2 |  ...........  | index N |index END|
++---------+---------+--           --+---------+---------+
+     |         |                        |         |
+ +---+         +----+                   +------+  +-----------+
+ V                  V                          V              V
++------------------+------------------+--   --+--------------+
+|    compressed    |    compressed    |  ...  |  compressed  |
+|      slice 1     |     slice 2      |  ...  |   slice N    |
++------------------+------------------+--   --+--------------+
+</pre></td></tr></table></P><P>
+
+Each index takes from 2 to 4 bytes, according with size of an original
+file:
+</P><P>
+
+<TABLE>
+<TR><TD>original file size             </TD><TD>  index size</TD>
+</TR>
+<TR><TD>0 ...      65535 bytes  </TD><TD>  2 bytes</TD>
+</TR>
+<TR><TD>65535 ...   16777215 bytes  </TD><TD>  3 bytes</TD>
+</TR>
+<TR><TD>16777216 ... 4294967295 bytes  </TD><TD>  4 bytes</TD>
+</TR></TABLE>
+<P>
+
+All multi-byte numbers in the indexes stored with the most significant
+byte first.
+For example, 0x1234 is stored as follows.
+First byte holds 0x12, and second byte holds 0x34.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+---------+---------+
+|0001 0010|0011 0100|
++---------+---------+
+  (0x12)    (0x34)
+</pre></td></tr></table></P><P>
+
+The index part begins with the index for the compressed slice 1, and 
+the index for the compressed slice 2 follows it.
+The index for compressed slice N is followed by the index for END;
+index for the next byte of the end of the compressed slice N.
+This index also represents the size of the compressed file.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+---------+---------+--       --+---------+---------+
+| index 1 | index 2 |  .......  | index N |index END|
++---------+---------+--       --+---------+---------+
+</pre></td></tr></table></P><P>
+
+If its size is equal to the slice size, the data of the slice is not
+compressed accutually.
+</P><P>
+
+If an original file is empty, the index part has only one index.
+The index represents the size of the compressed file.
+</P><P>
+
+<A NAME="Header Part"></A>
+<HR SIZE="6">
+<A NAME="SEC26"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC25"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> B.4 Header Part </H2>
+<!--docid::SEC26::-->
+<P>
+
+A header part occupies 22 bytes.
+It consists of the following fields.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|   magic ID   |*1| *2  |    file size    | Adler-32  |   mtime   |
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21
+
+*1: zip mode and compression level
+*2: reserved area
+</pre></td></tr></table></P><P>
+
+<DL COMPACT>
+<DT><CODE>magic ID (5 bytes)</CODE>
+<DD>It has the fixed value; 0x45, 0x42, 0x5a, 0x69, 0x70 (<SAMP>`EBZip'</SAMP>
+in ASCII string).
+<P>
+
+<DT><CODE>zip mode (4 bits of the most significant bit side)</CODE>
+<DD>This identifies the compression mode.
+In EB Library version 4.0, only 1 (0001 in binary digits)
+can be prescribed as this version.
+<P>
+
+<DT><CODE>compression level (4 bits of the least-significant-bit side)</CODE>
+<DD>This identifies the compression level.
+<P>
+
+<DT><CODE>reserved area (2 bytes)</CODE>
+<DD>Reserved but not used.
+It is filled with 0x0000.
+<P>
+
+<DT><CODE>file size (6 bytes)</CODE>
+<DD>This contains the size of the original (uncompressed) file.
+<P>
+
+<DT><CODE>Adler-32 (4 bytes)</CODE>
+<DD>This is a checksum value of the uncompressed data computed according
+to Adler-32 algorithm described in RFC 1950.
+<P>
+
+<DT><CODE>mtime (4 bytes)</CODE>
+<DD>This gives the most recent modification time of the original file.
+This value is the time in seconds since 00:00:00 GMT, Jan. 1, 1970.
+</DL>
+<P>
+
+Both <CODE>zip mode</CODE> and <CODE>compression level</CODE> are packed into
+the 5th byte in the header.
+<CODE>zip mode</CODE> includes a most siginificant bit, and
+<CODE>compression level</CODE> includes least-significant-bit.
+If <CODE>zip mode</CODE> is 1 and <CODE>compression level</CODE> is 2, then
+5th byte of the header is 0x12.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre> MSB                         LSB
++---+---+---+---+---+---+---+---+
+| 0   0   0   1   0   0   1   0 | = 0x12
++---+---+---+---+---+---+---+---+
+   (zip mode)   | (compression level)
+</pre></td></tr></table></P><P>
+
+All multi-byte numbers in the header are stored with the most
+significant byte first.
+</P><P>
+
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,108 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebstopcode: Summary of Options</TITLE>
+
+<META NAME="description" CONTENT="ebstopcode: Summary of Options">
+<META NAME="keywords" CONTENT="ebstopcode: Summary of Options">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_2.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 3. Summary of <CODE>ebstopcode</CODE> Options </H1>
+<!--docid::SEC3::-->
+<P>
+
+The <CODE>ebstopcode</CODE> command supports both traditional single-letter
+options and mnemonic long option names.
+Long option names are indicated with <SAMP>`--'</SAMP> instead of <SAMP>`-'</SAMP>.
+Abbreviations for option names are allowed as long as they are unique.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-c <VAR>code</VAR></CODE>
+<DD><DT><CODE>--code <VAR>code</VAR></CODE>
+<DD>Specify <VAR>code</VAR> as text stop code (e.g. "0x1f09 0x0001").
+<CODE>ebstopcode</CODE> displays text until <VAR>code</VAR> is appeared.
+<P>
+
+<DT><CODE>-h</CODE>
+<DD><DT><CODE>--help</CODE>
+<DD>Output help message to standard out, then exit.
+<P>
+
+<DT><CODE>-l <VAR>length</VAR></CODE>
+<DD><DT><CODE>--text-length <VAR>length</VAR></CODE>
+<DD>Outputs text data <VAR>length</VAR> bytes maximum.
+If <VAR>length</VAR> is set to 0, <CODE>ebstopcode</CODE> outputs the whole text.
+By default, the length is set to 2048.
+<P>
+
+<DT><CODE>-n</CODE>
+<DD><DT><CODE>--no-candidates</CODE>
+<DD>Suppress stop code candidates on output.
+<P>
+
+<DT><CODE>-p <VAR>page:offset</VAR></CODE>
+<DD><DT><CODE>--text-position <VAR>page:offset</VAR></CODE>
+<DD>Start outputting text data at this position.
+<VAR>page</VAR> must be a hexadecimal integer greater than 0, and <VAR>offset</VAR>
+must be a hexadecimal integer between 0 and 0x7FF.
+If the option is not specified, <CODE>ebstopcode</CODE> starts outputting at
+the beginning of text data.
+<P>
+
+<DT><CODE>-v</CODE>
+<DD><DT><CODE>--version</CODE>
+<DD>Output version number to standard out, then exit.
+</DL>
+<P>
+
+<SAMP>`--code'</SAMP> (<SAMP>`-c'</SAMP>) and <SAMP>`--length'</SAMP> (<SAMP>`-l'</SAMP>) options
+override each other.
+</P><P>
+
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

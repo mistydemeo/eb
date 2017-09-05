@@ -1,0 +1,97 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebzip: Invoke ebzip</TITLE>
+
+<META NAME="description" CONTENT="ebzip: Invoke ebzip">
+<META NAME="keywords" CONTENT="ebzip: Invoke ebzip">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_2.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_4.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_4.html#SEC4"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 3. Invoke <CODE>ebzip</CODE> </H1>
+<!--docid::SEC3::-->
+<P>
+
+Its usual way to invoke <CODE>ebzip</CODE>, <CODE>ebunzip</CODE> and <CODE>ebzipinfo</CODE>
+are as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip <VAR>book-path</VAR>
+% ebunzip <VAR>book-path</VAR>
+% ebzipinfo <VAR>book-path</VAR>
+</pre></td></tr></table></P><P>
+
+<VAR>book-path</VAR> points to the top directory of a CD-ROM book where
+the file <TT>`catalog'</TT> or <TT>`catalogs'</TT> resides.
+<CODE>ebzip</CODE> compresses a book at <VAR>book-path</VAR>,
+<CODE>ebunzip</CODE> uncompresses a book at <VAR>book-path</VAR>,
+and <CODE>ebzipinfo</CODE> outputs information about a book at <VAR>book-path</VAR>.
+</P><P>
+
+Though you cannot specify two or more book-paths, 
+you can omit book-path like as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip
+% ebunzip
+% ebzipinfo
+</pre></td></tr></table></P><P>
+
+In this case, it is assumed that the current working directory
+(<TT>`.'</TT>) is specified.
+</P><P>
+
+Since the commands don't support remote access, they reject remote 
+access identifier.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip ebnet://localhost/cdrom
+ebzip: ebnet is not supported
+</pre></td></tr></table></P><P>
+
+<A NAME="Compression"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_4.html#SEC4"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

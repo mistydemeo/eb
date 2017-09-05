@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebstopcode コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebstopcode.html">前へ</a>] [<a href="ebstopcode-02.html">次へ</a>] [<a href="ebstopcode.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="introduction">はじめに</a></h2>
+
+<p>
+あなたが EB ライブラリのアプリケーションを使って CD-ROM 書籍の中のある
+単語を引く際、その単語の説明が終了する箇所で、アプリケーションが本文の
+出力を止めることをあなたは期待するのではないでしょうか。
+しかし、EB ライブラリはそのような動作を保証することができません。
+なぜなら、CD-ROM 書籍の本文には、項目の終わりを示す印が存在しないから
+です。
+</p>
+
+<p>
+幸いにも、多くの CD-ROM 書籍には、項目の終わりを示す印の代替として
+使える、<dfn>本文の区切りコード (text stop code)</dfn> というものを持って
+います。
+通常、EB ライブラリはこの区切りコードを自動的に推測するようになって
+いるのですが、時々誤った区切りコードを導き出すことがあります。
+その場合は、<dfn>appendix (付録)</dfn> というものを用いて、EB ライブラリに
+正しい区切りコードを教えてやらなくてはなりません。
+</p>
+
+<p>
+<code>ebstopcode</code> コマンドは、CD-ROM 書籍の本文の区切りコードを解析
+するためのツールです。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebstopcode.html">前へ</a>] [<a href="ebstopcode-02.html">次へ</a>] [<a href="ebstopcode.html#toc">目次</a>] 
+</p>
+</body>
+</html>

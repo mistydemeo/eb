@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebrefile コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebrefile.html">前へ</a>] [<a href="ebrefile-02.html">次へ</a>] [<a href="ebrefile.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="introduction">はじめに</a></h2>
+
+<p>
+一冊の CD-ROM 書籍は、大抵複数の <dfn>副本</dfn> (<dfn>subbook</dfn>) を
+持っています。
+たとえばある CD-ROM 書籍は国語辞典、英和辞典、和英辞典の 3 つの副本を
+収めています。
+個々の副本は、それ自体が独立した「書籍」になっています。
+</p>
+
+<blockquote>
+<pre>
+     (CD-ROM 書籍)
++-----------------------+
+|   [国語辞典] (副本)   |
+|   [英和辞典] (副本)   |
+|   [和英辞典] (副本)   |
++-----------------------+
+</pre>
+</blockquote>
+
+<p>
+EB/EBG/EBXA/EBXA-C/S-EBXA 形式の CD-ROM 書籍は <code>catalog</code> 
+というファイルを、EPWING 形式の CD-ROM 書籍は <code>catalogs</code>
+というファイルを持っています。
+これらのファイルは、その CD-ROM 書籍にはどんな副本が収められているのかを
+定義しています。
+これらのファイルは、CD-ROM 書籍のトップディレクトリに置かれています。
+</p>
+
+<p>
+<code>ebrefile</code> は元のカタログファイルを読み、ユーザから指定された
+副本だけを取り込んだ新しいカタログファイルを生成します。
+言い換えれば、<code>ebrefile</code> は特定の副本の定義を、カタログファイル
+から削除します。
+CD-ROM 書籍が 3 つの副本を持っている場合、<code>ebrefile</code> は
+そのうちの任意の 1 つまたは 2 つの副本を、新しいカタログファイルに
+取り込むことができます。
+ハードディスクに CD-ROM 書籍の一部だけをコピーしたいときに、
+<code>ebrefile</code> は便利です。
+<code>ebrefile</code> は EB ライブラリと一緒に配布されています。
+</p>
+
+<p>
+あなたは、自分の所有する CD-ROM 書籍の使用許諾を守らなくてはいけません。
+<code>ebrefile</code> はフリーソフトウェアですが、あなたの書籍が自由に
+使えるものであるとは限りません。
+<code>ebrefile</code> は、CD-ROM 書籍のあるファイルの内容に変更を加えます。
+ご注意下さい。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebrefile.html">前へ</a>] [<a href="ebrefile-02.html">次へ</a>] [<a href="ebrefile.html#toc">目次</a>] 
+</p>
+</body>
+</html>

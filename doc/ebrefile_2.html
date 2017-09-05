@@ -1,0 +1,276 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebrefile: Invoke ebrefile</TITLE>
+
+<META NAME="description" CONTENT="ebrefile: Invoke ebrefile">
+<META NAME="keywords" CONTENT="ebrefile: Invoke ebrefile">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_2.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_3.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Invoke <CODE>ebrefile</CODE> </H1>
+<!--docid::SEC2::-->
+<P>
+
+Its usual way to invoke <CODE>ebrefile</CODE> is as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebrefile <VAR>book-path</VAR>
+</pre></td></tr></table></P><P>
+
+<VAR>book-path</VAR> points to the top directory of a CD-ROM book where
+the file <TT>`catalog'</TT> or <TT>`catalogs'</TT> resides.
+Though you cannot specify two or more book-paths, 
+you can omit book-path like as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebrefile
+</pre></td></tr></table></P><P>
+
+In this case, <CODE>ebrefile</CODE> assumes that the current working directory
+(<TT>`.'</TT>) is specified.
+</P><P>
+
+Since <CODE>ebrefile</CODE> doesn't support remote access, it rejects remote
+access identifer.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebrefile ebnet://localhost/cdrom
+ebrefile: ebnet is not supported
+</pre></td></tr></table></P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebrefile_2.html#SEC3">2.1 Select Subbooks</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebrefile_2.html#SEC4">2.2 Combination with <CODE>ebzip</CODE></A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Select Subbooks"></A>
+<HR SIZE="6">
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_2.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_2.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_3.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.1 Select Subbooks </H2>
+<!--docid::SEC3::-->
+<P>
+
+By default, <CODE>ebrefile</CODE> imports all subbook definitions in an original
+catalog file to a new catalog file.
+In short, the new catalog file is simply copied from an original.
+The default behavoir is useless.
+<CODE>ebrefile</CODE> is usually invoked with <SAMP>`--subbook'</SAMP> (<SAMP>`-S'</SAMP>)
+option.
+</P><P>
+
+The <SAMP>`--subbook'</SAMP> option takes an argument which is a list of
+directory names of subbooks to be imported, separeted by a comma
+(<SAMP>`,'</SAMP>).
+The <CODE>ebinfo</CODE> command tells you what subbooks your book contains
+and what their directory names are.
+Suppose that the current working directory is a top directory of a
+CD-ROM book.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
+character code: JIS X 0208
+the number of subbooks: 3
+
+subbook 1:
+  title: New English Japanese Dictionary (4th edition)
+  directory: english
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+
+subbook 2:
+  title: CD-ROM French Japanese Dictionary (3rd edition)
+  directory: french
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+
+subbook 3:
+  title: Pocket German Japanese Dictionary (3rd edition)
+  directory: german
+  search methods: menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+</pre></td></tr></table></P><P>
+
+(See section `Invoke <CODE>ebinfo</CODE>' in <CITE>ebinfo</CITE>,
+for more details about the <CODE>ebinfo</CODE> command).
+<BR>
+In this example, there are three subbooks in the book, and their 
+directory names are <CODE>english</CODE>, <CODE>french</CODE> and <CODE>german</CODE>.
+</P><P>
+
+Invoking the following command, <CODE>ebrefile</CODE> build a new catalog file
+which has definitions of <CODE>english</CODE> and <CODE>french</CODE> only.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebrefile --subbook english,french
+</pre></td></tr></table></P><P>
+
+Case of the directory names are not sensitve.
+An argument to <SAMP>`--subbook'</SAMP> can be splitted like as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebrefile --subbook english --subbook french
+</pre></td></tr></table></P><P>
+
+Since <CODE>ebrefile</CODE> cannot change an order of subbook definitions,
+the order of arguments to <SAMP>`--subbook'</SAMP> is not matter.
+</P><P>
+
+<CODE>ebrefile</CODE> generates new catalog file as <TT>`catalogs(s).new'</TT>.
+To replace original catalog file by new one, type the following
+commands:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% mv catalogs catalogs.bak
+% mv catalogs.new catalogs
+</pre></td></tr></table></P><P>
+
+If you don't have to backup the original file, only the second command
+is needed.
+</P><P>
+
+Now, refiling has been completed.
+Execute <CODE>ebinfo</CODE> again.
+The subbook <CODE>germgan</CODE> is diappeared.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
+character code: JIS X 0208
+the number of subbooks: 2
+
+subbook 1:
+  title: New English Japanese Dictionary (4th edition)
+  directory: english
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+
+subbook 2:
+  title: CD-ROM French Japanese Dictionary (3rd edition)
+  directory: french
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+</pre></td></tr></table></P><P>
+
+If you have already copied whole the CD-ROM book onto a hard disk,
+you may remove files of the subbook <CODE>german</CODE>.
+When the directory name consists of lower case letters, type:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% rm -r german
+</pre></td></tr></table></P><P>
+
+<A NAME="Combination with ebzip"></A>
+<HR SIZE="6">
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_2.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_3.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_2.html#SEC2"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_3.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.2 Combination with <CODE>ebzip</CODE> </H2>
+<!--docid::SEC4::-->
+<P>
+
+<CODE>ebrefile</CODE> can be used together with the <CODE>ebzip</CODE> command,
+which compresses files in a CD-ROM book
+(See section `Introduction' in <CITE>ebzip</CITE>, for more details
+about the <CODE>ebzip</CODE> command).
+Usually, the same command line arguments are given to <CODE>ebzip</CODE>
+and <CODE>ebrefile</CODE>.
+</P><P>
+
+Suppose that a CD-ROM book is mounted on <CODE>/cdrom</CODE>, and this
+book has three subbooks; <CODE>english</CODE>, <CODE>french</CODE> and <CODE>german</CODE>.
+By the following operation, the subbook <CODE>english</CODE> and <CODE>french</CODE>
+are compressed and put under the current working directory, and the
+subbook <CODE>german</CODE> are deleted from a subbook list.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --subbook english,french /cdrom
+% ebrefile --subbook english,french /cdrom
+</pre></td></tr></table></P><P>
+
+If you'd like to put the compressed files onto <TT>`/dict'</TT> instead
+of the current working directory, type the following:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip --output-directory /dict --subbook english,french /cdrom
+% ebrefile --output-directory /dict --subbook english,french /cdrom
+</pre></td></tr></table></P><P>
+
+<A NAME="Summary of Options"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_2.html#SEC2"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_3.html#SEC5"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

@@ -1,0 +1,181 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.52
+     from /mnt/work/ndtpd-2.3.7/eb/doc/eb.texi on 2 Febuary 2000 -->
+
+<TITLE>EB Library - Link EB Library to Your Program</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="eb_1.html">first</A>, <A HREF="eb_1.html">previous</A>, <A HREF="eb_3.html">next</A>, <A HREF="eb_8.html">last</A> section, <A HREF="eb_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC2" HREF="eb_toc.html#TOC2">Link EB Library to Your Program</A></H1>
+
+<P>
+This chapter describes how to link EB Library to your program.
+
+</P>
+
+
+
+<H2><A NAME="SEC3" HREF="eb_toc.html#TOC3">Compilation</A></H2>
+
+<P>
+EB Library consits of some header and library files.
+The header files are installed at <TT>`/usr/local/include/eb'</TT>,
+if you have installed EB Library under <TT>`/usr/local'</TT>, and if you
+have not change a directory for header files (<CODE>includedir</CODE>) at
+the installation.
+
+</P>
+<P>
+Adding lines like the following at the beginning of your C program,
+the header files are included.
+
+</P>
+
+<PRE>
+#include &#60;eb/eb.h&#62;
+#include &#60;eb/error.h&#62;
+</PRE>
+
+<P>
+We recommend you to include <TT>`eb/eb.h'</TT> rather than <TT>`eb.h'</TT>.
+
+</P>
+<P>
+At compliation, you may have to give the <SAMP>`-I'</SAMP> option to the C
+compiler, in order to specify the location of the header files.
+
+</P>
+
+<PRE>
+cc -I/usr/local/include -c sample.c
+</PRE>
+
+<P>
+At linkage, you have to add the <SAMP>`-leb'</SAMP> and <SAMP>`-lz'</SAMP> options
+(<SAMP>`-lz'</SAMP> links zlib library) to the C compiler.
+You may also have to give the <SAMP>`-L'</SAMP> opions to the C compiler,
+in order to specify the location of EB Library and zlib.
+The library files are installed at <TT>`/usr/local/lib'</TT>, if you
+have installed EB Library under <TT>`/usr/local'</TT>, and if you
+have not change a directory for library files (<CODE>libdir</CODE>) at the
+installation.
+
+</P>
+<P>
+Suppose that you have installed both EB Library and zlib library
+files at <CODE>/usr/local/lib</CODE>, the command line at linkage is like
+as this:
+
+</P>
+
+<PRE>
+cc sample.o -L/usr/local/lib -leb -lz
+</PRE>
+
+<P>
+For more details, please read the manuals for your C preprocessor, C 
+compiler and linker.
+
+</P>
+
+
+<H2><A NAME="SEC4" HREF="eb_toc.html#TOC4">Configuration</A></H2>
+
+<P>
+The header files in EB Library have some OS and site dependent features
+listed as below.
+You may have to configure your program about the features.
+
+</P>
+<DL COMPACT>
+
+<DT><CODE>const</CODE>
+<DD>
+If the C compiler does not fully support the keyword <CODE>const</CODE>,
+define <CODE>const</CODE> to be empty, like this:
+
+
+<PRE>
+#define const 
+</PRE>
+
+If you are using Autoconf, add <CODE>AC_C_CONST</CODE> to your
+<TT>`configure.in'</TT>.
+
+<DT><CODE>off_t</CODE>
+<DD>
+If <CODE>off_t</CODE> is not defined, define <CODE>off_t</CODE> to be
+<CODE>long</CODE>, like this:
+
+
+<PRE>
+#define off_t long
+</PRE>
+
+If you are using Autoconf, add <CODE>AC_TYPE_OFF_T</CODE> to your
+<TT>`configure.in'</TT>.
+
+<DT><CODE>size_t</CODE>
+<DD>
+If <CODE>size_t</CODE> is not defined, define <CODE>size_t</CODE> to be
+<CODE>unsigned</CODE>, like this:
+
+
+<PRE>
+#define size_t unsigned
+</PRE>
+
+If you are using Autoconf, add <CODE>AC_TYPE_SIZE_T</CODE> to your
+<TT>`configure.in'</TT>.
+
+<DT><CODE>ssize_t</CODE>
+<DD>
+If <CODE>ssize_t</CODE> is not defined, define <CODE>ssize_t</CODE> to be
+<CODE>int</CODE>, like this:
+
+
+<PRE>
+#define ssize_t int
+</PRE>
+
+If you are using Autoconf, add <CODE>AC_CHECK_TYPE(ssize_t, int)</CODE> to
+<TT>`configure.in'</TT>.
+If your <TT>`configure.in'</TT> contains <CODE>AC_CONFIG_HEADER</CODE> or
+<CODE>AM_CONFIG_HEADER</CODE>, also add the following lines to <TT>`acconfig.h'</TT>:
+
+
+<PRE>
+/* Define to `int' if &#60;sys/types.h&#62; doesn't define.  */
+#undef ssize_t
+</PRE>
+
+</DL>
+
+
+
+<H2><A NAME="SEC5" HREF="eb_toc.html#TOC5">Character Code Issue</A></H2>
+
+<P>
+In CD-ROM books, books of the EBG format are written in ISO 8859-1, and
+others are written in JIS X 0208.
+EB Library API (Application Program Interface) uses ISO 8859-1 for EBG,
+but uses EUC-JP for other books, not JIS X 0208.
+When you give a Japanese string to an EB Library funftion as an argument,
+the string must be written in EUC-JP, and when you receive a Japanese
+string from an EB Library function, the string is written in EUC-JP.
+
+</P>
+<P>
+However, the function <CODE>eb_rawtext()</CODE> doesn't follow the character
+code rule.
+It returns a string without any conversion.
+
+</P>
+<P><HR><P>
+Go to the <A HREF="eb_1.html">first</A>, <A HREF="eb_1.html">previous</A>, <A HREF="eb_3.html">next</A>, <A HREF="eb_8.html">last</A> section, <A HREF="eb_toc.html">table of contents</A>.
+</BODY>
+</HTML>

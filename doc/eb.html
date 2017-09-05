@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-01.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h1><a name="toc">EB ライブラリ</a></h1>
+<p>
+この文書は、EB ライブラリバージョン
+4.4.3
+に対応しています。
+</p>
+
+<p>
+目次:
+</p>
+
+<ul>
+ <li><a href="eb-01.html#introduction">はじめに</a>
+ <ul>
+  <li><a href="eb-01.html#electronic-book-and-epwing">電子ブックと EPWING について</a>
+  <li><a href="eb-01.html#construction-of-this-book">本書の構成について</a>
+ </ul>
+ <li><a href="eb-02.html#features">EB ライブラリの特徴</a>
+ <ul>
+  <li><a href="eb-02.html#header-files">ヘッダファイル</a>
+  <li><a href="eb-02.html#character-code">文字コード</a>
+  <li><a href="eb-02.html#compressed-book">圧縮された書籍について</a>
+  <li><a href="eb-02.html#remote-access">遠隔ホスト上の書籍について</a>
+  <li><a href="eb-02.html#system-requirements">システムの要件</a>
+ </ul>
+ <li><a href="eb-03.html#compilation">プログラムのコンパイル方法</a>
+ <ul>
+  <li><a href="eb-03.html#compilation-simple-way">てっとり早いコンパイル方法</a>
+  <li><a href="eb-03.html#compilation-with-autoconf">Autoconf を併用したコンパイル方法</a>
+  <li><a href="eb-03.html#debug-eb-library">EB ライブラリ本体のデバッグ</a>
+ </ul>
+ <li><a href="eb-04.html#init-and-exit">ライブラリの初期化と後始末</a>
+ <ul>
+  <li><a href="eb-04.html#init-and-exit-sample">サンプルプログラム</a>
+  <li><a href="eb-04.html#init-and-exit-functions">関数の詳細</a>
+ </ul>
+ <li><a href="eb-05.html#eb_book">CD-ROM 書籍と <code>EB_Book</code> オブジェクト</a>
+ <ul>
+  <li><a href="eb-05.html#eb_book-explanation"><code>EB_Book</code> オブジェクト</a>
+  <li><a href="eb-05.html#eb_bind-to-remote-host">遠隔ホストへの <code>eb_bind()</code></a>
+  <li><a href="eb-05.html#eb_book-sample">サンプルプログラム</a>
+  <li><a href="eb-05.html#eb_book-data-types">データ型の詳細</a>
+  <li><a href="eb-05.html#eb_book-functions">関数の詳細</a>
+ </ul>
+ <li><a href="eb-06.html#error-handling">エラー処理</a>
+ <ul>
+  <li><a href="eb-06.html#error-code-and-message">エラーコードとエラーメッセージ</a>
+  <li><a href="eb-06.html#tolerance-to-error">エラーに対する寛容さ</a>
+  <li><a href="eb-06.html#error-data-types">データ型の詳細</a>
+  <li><a href="eb-06.html#error-code-list">エラーコードの一覧</a>
+  <li><a href="eb-06.html#error-functions">関数の詳細</a>
+ </ul>
+ <li><a href="eb-07.html#subbook">副本</a>
+ <ul>
+  <li><a href="eb-07.html#subbook-code">副本コード</a>
+  <li><a href="eb-07.html#current-subbook">選択中の副本</a>
+  <li><a href="eb-07.html#subbook-sample">サンプルプログラム</a>
+  <li><a href="eb-07.html#subbook-data-types">データ型の詳細</a>
+  <li><a href="eb-07.html#subbook-functions">関数の詳細</a>
+ </ul>
+ <li><a href="eb-08.html#search">検索</a>
+ <ul>
+  <li><a href="eb-08.html#word-search">前方一致、後方一致、完全一致検索</a>
+  <li><a href="eb-08.html#keyword-search">条件検索</a>
+  <li><a href="eb-08.html#cross-search">クロス検索</a>
+  <li><a href="eb-08.html#multi-search">複合検索</a>
+  <li><a href="eb-08.html#eb_hit">一致エントリの情報</a>
+  <li><a href="eb-08.html#get-remained-entries">残っているエントリの取得</a>
+  <li><a href="eb-08.html#unify-duplicated-entries">重複エントリの削除</a>
+  <li><a href="eb-08.html#search-sample">サンプルプログラム</a>
+  <li><a href="eb-08.html#search-data-types">データ型の詳細</a>
+  <li><a href="eb-08.html#search-functions">関数の詳細</a>
+ </ul>
+ <li><a href="eb-09.html#text-data">テキストデータ</a>
+ <ul>
+  <li><a href="eb-09.html#seek-and-read-text-data">テキストデータのシークと読み込み</a>
+  <li><a href="eb-09.html#text-data-format">テキストデータの内部形式</a>
+  <li><a href="eb-09.html#hook">フック</a>
+  <li><a href="eb-09.html#hook-and-character-code">フックと文字コードの関係</a>
+  <li><a href="eb-09.html#cross-search-result">クロス検索の検索結果</a>
+  <li><a href="eb-09.html#copyright-notice">著作権表示</a>
+  <li><a href="eb-09.html#menu">メニュー</a>
+  <li><a href="eb-09.html#multi-candidates">複合検索の候補一覧</a>
+  <li><a href="eb-09.html#stop-code-issue">区切りコードの問題</a>
+  <li><a href="eb-09.html#text-data-sample">サンプルプログラム</a>
+  <li><a href="eb-09.html#text-data-types">データ型の詳細</a>
+  <li><a href="eb-09.html#hook-function-details">フック関数の詳細</a>
+  <li><a href="eb-09.html#hook-code-list">フックコードの一覧</a>
+  <li><a href="eb-09.html#hookset-access-functions">フックセット操作関数の詳細</a>
+  <li><a href="eb-09.html#builtin-hook-functions">組み込みフック関数の詳細</a>
+  <li><a href="eb-09.html#text-data-functions">テキストデータ操作関数の詳細</a>
+ </ul>
+ <li><a href="eb-10.html#local-character">外字</a>
+ <ul>
+  <li><a href="eb-10.html#narrow-and-wide-font">半角外字と全角外字</a>
+  <li><a href="eb-10.html#font-size-and-font-code">外字の大きさと外字コード</a>
+  <li><a href="eb-10.html#current-font-height">選択中の外字フォントの高さ</a>
+  <li><a href="eb-10.html#get-font">外字フォントの取り出し</a>
+  <li><a href="eb-10.html#convert-font">外字フォントの変換</a>
+  <li><a href="eb-10.html#local-character-in-text">テキスト中の外字</a>
+  <li><a href="eb-10.html#font-data-types">データ型の詳細</a>
+  <li><a href="eb-10.html#font-constants">定数の詳細</a>
+  <li><a href="eb-10.html#font-functions">関数の詳細</a>
+  <li><a href="eb-10.html#font-sample">サンプルプログラム</a>
+ </ul>
+ <li><a href="eb-11.html#binary-data">バイナリデータ</a>
+ <ul>
+  <li><a href="eb-11.html#monochrome-image">モノクロ図版</a>
+  <li><a href="eb-11.html#color-image">カラー図版</a>
+  <li><a href="eb-11.html#clickable-color-image">参照先付きカラー図版</a>
+  <li><a href="eb-11.html#wave-sound">WAVE (PCM) 音声</a>
+  <li><a href="eb-11.html#mpeg-movie">MPEG1 動画</a>
+  <li><a href="eb-11.html#binary-data-functions">関数の詳細</a>
+ </ul>
+ <li><a href="eb-12.html#appendix-data">appendix データ</a>
+ <ul>
+  <li><a href="eb-12.html#eb_appendix"><code>EB_Appendix</code> オブジェクト</a>
+  <li><a href="eb-12.html#appendix-subbook">副本</a>
+  <li><a href="eb-12.html#appendix-stop-code">本文の区切りコード</a>
+  <li><a href="eb-12.html#appendix-alternation-text">外字の代替文字列</a>
+  <li><a href="eb-12.html#appendix-data-types">データ型の詳細</a>
+  <li><a href="eb-12.html#appendix-functions">関数の詳細</a>
+  <li><a href="eb-12.html#appendix-sample">サンプルプログラム</a>
+ </ul>
+ <li><a href="eb-13.html#book-list-on-server">サーバ上の書籍一覧</a>
+ <ul>
+  <li><a href="eb-13.html#eb_booklist-object"><code>EB_BookList</code> オブジェクト</a>
+  <li><a href="eb-13.html#booklist-data">データ型の詳細</a>
+  <li><a href="eb-13.html#booklist-functions">関数の詳細</a>
+  <li><a href="eb-13.html#booklist-sample">サンプルプログラム</a>
+ </ul>
+ <li><a href="eb-14.html#indice">索引</a>
+ <ul>
+  <li><a href="eb-14.html#data-type-index">データ型の索引</a>
+  <li><a href="eb-14.html#function-index">関数の索引</a>
+  <li><a href="eb-14.html#const-index">定数の索引</a>
+ </ul>
+</ul>
+
+<p>
+Copyright (c) 2001-2006  Motoyuki Kasahara
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-01.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

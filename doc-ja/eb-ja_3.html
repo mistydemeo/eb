@@ -1,0 +1,389 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Compilation</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Compilation">
+<META NAME="keywords" CONTENT="EB Library: Compilation">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC10"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC9"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC11"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 3. プログラムのコンパイル方法 </H1>
+<!--docid::SEC10::-->
+<P>
+
+本章では、EB ライブラリを利用したプログラムのコンパイル方法を説明します。
+</P><P>
+
+EB ライブラリを <TT>`/usr/local'</TT> にインストールし、個々のファイルの
+インストール先を変更していなければ、ヘッダファイルは
+<TT>`/usr/local/include/eb'</TT> にインストールされ、ライブラリファイルは
+<TT>`/usr/local/lib'</TT> にインストールされます。
+EB ライブラリを利用したアプリケーションプログラムを作成する際は、
+これらのファイルを使用することになります。
+</P><P>
+
+EB ライブラリのヘッダファイルの一部には、GNU Autoconf の使用を前提
+とした記述が含まれており、Autoconf を併用しないとプログラムが正しく
+コンパイルできません。
+</P><P>
+
+しかし、EB ライブラリの概要を理解するためのプログラムに、わざわざ
+Autoconf を使用するのは大変です。
+そこでまず、Autoconf を使わずにてっとり早くコンパイルする方法を紹介
+します。
+</P><P>
+
+その後で、Autoconf を併用する方法についても説明します。
+フリーソフトウェアとしてアプリケーションを公開するなら、こちらの方法
+をとることをお薦めします。
+Autoconf を単体で使用してもヘッダファイルの問題は解決できますが、
+本書では GNU Automake, および GNU Libtool も一緒に併用した方法につい
+て説明しています。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_3.html#SEC11">3.1 てっとり早いコンパイル方法</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_3.html#SEC12">3.2 Autoconf を併用したコンパイル方法</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_3.html#SEC13">3.3 EB ライブラリ本体のデバッグ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Compilation Simple Way"></A>
+<HR SIZE="6">
+<A NAME="SEC11"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC12"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.1 てっとり早いコンパイル方法 </H2>
+<!--docid::SEC11::-->
+<P>
+
+アプリケーションプログラムをコンパイルする際は、ヘッダファイルの
+ディレクトリ位置を C コンパイラに教えてやる必要があるかも知れません。
+一般に UNIX の C コンパイラでは、<SAMP>`-I'</SAMP> オプションで位置を指定します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cc -I/usr/local/include -c sample.c
+</pre></td></tr></table></P><P>
+
+<TT>`/usr/local/include/eb'</TT> ではなく、その一つ上を指定します
+(「<A HREF="eb-ja_2.html#SEC5">ヘッダファイル</A>」節を参照)。
+</P><P>
+
+ただし、EB ライブラリは Autoconf を併用することを前提としているため、
+そのままではコンパイルエラーが発生してしまいます。
+そこで、この節では Autoconf を併用する代わりに、次の手順で回避します。
+</P><P>
+
+<OL>
+<LI>EB ライブラリ 4.0 のソースードを展開します。
+<LI>ソースコードに付属している <CODE>configure</CODE> スクリプトを実行します。
+<CODE>configure</CODE> のコマンド行引数は、インストール時と同じものを指定
+します。
+<LI><TT>`config.h'</TT> というファイルが生成されるので、アプリケーション
+プログラムのディレクトリにコピーします。
+</OL>
+<P>
+
+アプリケーションプログラムのソースファイルでは、この <TT>`config.h'</TT> 
+を読み込むようにします。
+必ずファイルの一番先頭で読み込んで下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "config.h"
+</pre></td></tr></table></P><P>
+
+またこれに伴い、<TT>`config.h'</TT> のディレクトリ位置を指定するために、
+C コンパイラのオプションをさらに追加する必要があるかも知れません。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cc -I. -I/usr/local/include -c sample.c
+</pre></td></tr></table></P><P>
+
+次に、リンクして実行バイナリを生成する工程ですが、
+以下に記したライブラリの一部、もしくは全部をリンクします。
+括弧内は、ライブラリのファイル名です (ただし、<CODE>.a</CODE> や <CODE>.so</CODE>
+といった接尾子は省略)。
+</P><P>
+
+<DL COMPACT>
+<DT>EB ライブラリ (libeb)
+<DD>EB ライブラリの本体です。このライブラリは必須です。
+<P>
+
+<DT>zlib (libz)
+<DD>圧縮と伸長を行うライブラリです
+(詳しくは <A HREF="http://www.gzip.org/zlib/">http://www.gzip.org/zlib/</A>)。
+<CODE>ebzip</CODE> コマンドで圧縮した辞書を扱うために使います。
+このライブラリは必須です。
+EB ライブラリのソースコードには zlib も収録されています。
+システムに zlib が インストールされていなければ、EB ライブラリを
+インストールする際に、zlib も自動的にインストールされます。
+<P>
+
+<DT>gettext ライブラリ (libintl)
+<DD>メッセージの国際化機能 (NLS) を提供するライブラリです
+メッセージの国際化機能を有効にして EB ライブラリをコンパイルしている
+場合は、必要になるかも知れません。
+gettext の実装は何種類かありますが、EB ライブラリで使用できるのは
+メッセージカタログの形式が GNU gettext 互換のものだけです。
+<P>
+
+メッセージの国際化機能を有効にしている場合でも、OS の標準 C ライブラリ
+として glibc を採用しているシステムでは、指定する必要はありません。
+</P><P>
+
+<DT>iconv ライブラリ
+<DD>文字コード変換のライブラリです。
+gettext ライブラリをリンクする場合、一緒に必要となるかも知れません。
+iconv の実装も何種類かあり、OS によっては最初から添付されています。
+</DL>
+<P>
+
+必要なライブラリファイルの名称を、C コンパイラに指定してやります。
+加えて、ファイルの置かれているディレクトリ位置を、C コンパイラに教える
+必要があるかも知れません。
+一般に UNIX の C コンパイラでは、<SAMP>`-L'</SAMP> オプションでディレクトリ
+位置を指定し、<SAMP>`-l'</SAMP> オプションでライブラリのファイル名を指定します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cc sample.o -L/usr/local/lib -leb -lz -lintl -liconv
+</pre></td></tr></table></P><P>
+
+ただし、共有ライブラリをリンクする場合は、実行時におけるライブラリの
+検索パスも合わせて指定する必要があるかも知れません。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>cc sample.o -R/usr/local/lib -L/usr/local/lib -leb -lz -lintl -liconv
+</pre></td></tr></table></P><P>
+
+C コンパイラの使い方に関しての詳細は、C コンパイラのマニュアルを参照
+して下さい。
+</P><P>
+
+<A NAME="Compilation with Autoconf"></A>
+<HR SIZE="6">
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.2 Autoconf を併用したコンパイル方法 </H2>
+<!--docid::SEC12::-->
+<P>
+
+作業の前に、Autoconf, Automake, Libtool は、あらかじめインストールして
+おいて下さい。
+Autoconf はバージョン 2.50 以降が必要です。
+</P><P>
+
+まず、アプリケーションプログラムの <TT>`configure.ac'</TT>
+(もしくは <TT>`configure.in'</TT>) に、次の行を加えます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_LIB_EB4
+</pre></td></tr></table></P><P>
+
+マクロ <CODE>eb_LIB_EB4</CODE> は、EB ライブラリの使用に必要な一切のチェック
+を行い、さらに <TT>`configure'</TT> に次のオプションを追加します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  --with-eb-conf=FILE     eb.conf file is FILE [SYSCONFDIR/eb.conf]
+</pre></td></tr></table></P><P>
+
+<TT>`eb.conf'</TT> は、EB ライブラリをインストールしたときの情報を記録した
+ファイルで、ライブラリと一緒にインストールされます。
+<CODE>eb_LIB_EB4</CODE> はこのファイルを読み込んで、C コンパイラに渡さなければ
+いけないオプションなどの情報を得ます。
+<SAMP>`--eb-conf-file'</SAMP> は、<TT>`eb.conf'</TT> のファイル名を明示的に指定する
+オプションです。
+</P><P>
+
+マクロ <CODE>eb_LIB_EB4</CODE> は、<TT>`eb4.m4'</TT> というファイルで提供されて
+います。
+EB ライブラリを <TT>`/usr/local'</TT> にインストールし、個々のファイルの
+インストール先を変更していなければ、<TT>`/usr/local/share/aclocal'</TT> に
+インストールされます。
+この <TT>`eb4.m4'</TT> をソースコードの適当なディレクトリの下 (たとえば
+<TT>`m4'</TT>) にコピーして下さい。
+</P><P>
+
+<CODE>aclocal</CODE> コマンドで <TT>`aclocal.m4'</TT> を再生成する際は、
+<SAMP>`-I'</SAMP> オプションでマクロファイルのディレクトリを指定します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>aclocal -I m4
+</pre></td></tr></table></P><P>
+
+加えて、トップディレクトリの <TT>`Makefile.am'</TT> の中にも
+<CODE>aclocal</CODE> へ渡すオプションを書いておきます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ACLOCAL_AMFLAGS = -I m4
+</pre></td></tr></table></P><P>
+
+また、ソースコードのディレクトリに Libtool パッケージがまだ用意されて
+いなければ、用意します。
+<CODE>libtoolize</CODE> コマンドを実行して下さい。
+Libtool パッケージが、ソースコードのディレクトリにコピーされます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>libtoolize
+</pre></td></tr></table></P><P>
+
+最後に、コンパイルを行うディレクトリの <TT>`Makefile.am'</TT> ファイルの
+<CODE>_LDFLAGS</CODE> と <CODE>INCLUDES</CODE> に、次のような値を追加します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>program_LDFLAGS = $(EBCONF_EBLIBS) $(EBCONF_ZLIBLIBS) $(EBCONF_INTLLIBS)
+INCLUDES = $(EBCONF_EBINCS)
+</pre></td></tr></table></P><P>
+
+(<CODE>program_LDFLAGS</CODE> の <CODE>program</CODE> のところは、
+アプリケーションプログラムの実際のコマンド名にします。)
+</P><P>
+
+<A NAME="Debug EB Library"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 3.3 EB ライブラリ本体のデバッグ </H2>
+<!--docid::SEC13::-->
+<P>
+
+「自分が作ったアプリケーションが正しく動かないのは、ひょっとすると
+EB ライブラリのバグが原因ではないか?」という疑問を抱き、EB ライブラリ
+の挙動を確認したいと思うことがあるかも知れません。
+</P><P>
+
+そのような場合は、環境変数 <CODE>EB_DEBUG</CODE> をセットした状態で
+アプリケーションを実行してみて下さい。
+EB ライブラリは標準エラー出力に、次のようなログを (かなり大量ですが)
+出力するようになります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>[EB] in: eb_set_font(book=0, font_code=0)
+[EB] in: eb_load_narrow_font(book=0)
+[EB] out: eb_load_narrow_font()
+[EB] in: eb_load_wide_font(book=0)
+[EB] out: eb_load_wide_font()
+[EB] out: eb_set_font() = EB_SUCCESS
+</pre></td></tr></table></P><P>
+
+これらのログは、関数の呼び出し時の引数列、および関数からの戻り値を
+示しています。
+<CODE>ebfixlog</CODE> という Perl5 スクリプトを使うと、ログを整形することが
+できます。
+このスクリプトは、EB ライブラリのソースコードの <CODE>misc</CODE> ディレクトリ
+に収められています。
+</P><P>
+
+<CODE>ebfixlog</CODE> は、コマンド行の引数として与えられたファイル (引数が
+指定されなければ標準入力) からメッセージデータを読み込み、次のように
+字下げして出力します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>[EB] in: eb_set_font(book=0, font_code=0)
+[EB]   in: eb_load_narrow_font(book=0)
+[EB]   out: eb_load_narrow_font()
+[EB]   in: eb_load_wide_font(book=0)
+[EB]   out: eb_load_wide_font()
+[EB] out: eb_set_font() = EB_SUCCESS
+</pre></td></tr></table></P><P>
+
+通常 <CODE>ebfixlog</CODE> スクリプトは、zio および ebnet と呼ばれる、
+EB ライブラリでファイル入出力を受け持つ処理部のログは読み捨てるように
+なっています。
+これにより、ログの量がかなり減ります。
+</P><P>
+
+zio は EB ライブラリの低レベル入出力の処理部で、頻繁に呼び出されます。
+問題の原因を調べる際も、まずは読み捨てた方がライブラリの内部動作を追跡
+しやすいでしょう。
+</P><P>
+
+<CODE>ebfixlog</CODE> の <SAMP>`-z'</SAMP> オプションを使うと、zio のメッセージを
+読み捨てずに出力するようになります。
+</P><P>
+
+ebnet は遠隔アクセスの入出力を処理する部分で、zio よりもさらに
+下位レベルに位置します。
+遠隔アクセスの挙動を追跡するとき以外は、読み捨てた方が良いと思います。
+</P><P>
+
+<CODE>ebfixlog</CODE> の <SAMP>`-n'</SAMP> オプションを使うと、ebnet, zio 両方の
+メッセージを読み捨てずに出力するようになります。
+</P><P>
+
+<A NAME="Init and Exit"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

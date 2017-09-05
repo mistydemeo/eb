@@ -1,0 +1,44 @@
+body {
+    color:			#000000;
+    background-color:		#ffffff;
+}
+
+h1 {
+    font-size:			x-large;
+    text-align:			center;
+}
+
+h2 {
+    font-size:			large;
+    background-color:		#cfcfcf;
+    padding:			3px;
+    border-style:		solid;
+    border-width:		1px;
+}
+
+h3 {
+    font-size:			normal;
+    font-weight:		bold;
+}
+
+p.header {
+    text-align:			center;
+}
+
+a:link {
+    color:			#0000ff;
+}
+
+a:visited {
+    color:			#990066;
+}
+
+img.banner {
+    text-align:			right;
+    border-style:		none;
+    float:			right;
+}
+
+em.colored {
+    color:			#ff0000;
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebinfo コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebinfo-03.html">前へ</a>] [<a href="ebinfo-05.html">次へ</a>] [<a href="ebinfo.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="book-list-on-ebnet-server">EBNET サーバの書籍一覧</a></h2>
+
+<p>
+通常の出力の代わりに、<code>ebinfo</code> は EBNET サーバが公開している
+書籍の一覧を出力することもできます。
+この場合のコマンド行の概要は、次のようになります。
+</p>
+
+<blockquote>
+<pre>
+% ebinfo --book-list <var>遠隔サーバ識別子</var>
+</pre>
+</blockquote>
+
+<p>
+ここで、<var>遠隔サーバ識別子</var> は、書籍名を含まない遠隔アクセス識別子
+になります。
+たとえば、
+</p>
+
+<blockquote>
+<pre>
+% ebinfo --book-list ebnet://dict.example.com
+名前             題名
+encycl           ブラウンコンサイス百科事典
+encycl.app       ブラウンコンサイス百科事典 (appendix)
+crossword        クロスワードパズル辞典
+travel           ワールドトラベルガイド
+</pre>
+</blockquote>
+
+<p>
+「名前」の末尾に <samp>.app</samp> が付いているものは appendix (付録)、
+それ以外は書籍本体です。
+ただし、そのクライアントに対してアクセスを許可しない書籍や appendix は
+出力されません。
+</p>
+
+<p>
+続けて、この中の <samp>encycl</samp> という書籍の情報を見るには、次の
+ようにします。
+</p>
+
+<blockquote>
+<pre>
+% ebinfo ebnet://dict.example.com/cncyclopedia
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 1
+
+副本 1:
+  題名: ブラウンコンサイス百科事典
+  ディレクトリ: brown
+  検索方式: 前方一致 後方一致 条件 複合 メニュー
+  フォントの大きさ: 16 24
+  半角フォントの文字: 0xa121 -- 0xa452
+  全角フォントの文字: 0xa321 -- 0xa452
+</pre>
+</blockquote>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebinfo-03.html">前へ</a>] [<a href="ebinfo-05.html">次へ</a>] [<a href="ebinfo.html#toc">目次</a>] 
+</p>
+</body>
+</html>

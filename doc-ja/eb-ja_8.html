@@ -1,0 +1,1064 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Search</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Search">
+<META NAME="keywords" CONTENT="EB Library: Search">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC35"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC34"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC36"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_7.html#SEC29"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 8. 検索 </H1>
+<!--docid::SEC35::-->
+<P>
+
+CD-ROM 書籍において、検索は非常に重要な機能です。
+EB ライブラリでは、次のような検索メソッドが利用できます。
+</P><P>
+
+<UL>
+<LI>前方一致検索 (word search)
+<LI>後方一致検索 (end-word search)
+<LI>完全一致検索 (exact-word search)
+<LI>条件検索 (keyword search)
+<LI>複合検索 (multi search)
+</UL>
+<P>
+
+ただし、すべての CD-ROM 書籍、すべての副本で、ここに挙げたすべての
+検索メソッドが利用可能なわけではありません。
+副本の中には、いずれの検索メソッドも提供しないものも存在します。
+</P><P>
+
+EB ライブラリでは、検索を行うことができるのは、選択中の副本に対して
+だけです。
+</P><P>
+
+この章では、それぞれの検索メソッドの簡単な説明と、EB ライブラリでの
+扱い方について説明します。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_8.html#SEC36">8.1 前方一致、後方一致、完全一致検索</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_8.html#SEC37">8.2 条件検索</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_8.html#SEC38">8.3 複合検索</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_8.html#SEC39">8.4 一致エントリの情報</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_8.html#SEC40">8.5 残っているエントリの取得</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_8.html#SEC41">8.6 重複エントリの削除</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_8.html#SEC42">8.7 データ型の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_8.html#SEC43">8.8 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Word Search"></A>
+<HR SIZE="6">
+<A NAME="SEC36"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC37"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.1 前方一致、後方一致、完全一致検索 </H2>
+<!--docid::SEC36::-->
+<P>
+
+前方一致、後方一致、完全一致検索は、いずれも一個の入力語に一致する
+エントリを探し出す検索メソッドです。
+</P><P>
+
+前方一致検索は、入力語と先頭部分が一致するエントリを検索します。
+たとえば、「江戸」という語は、「江戸」「江戸時代」「江戸っ子」といった
+エントリに一致します。
+</P><P>
+
+後方一致検索は、入力語と末尾が一致するエントリを検索します。
+たとえば、`bye' という語は、`bye'、`good bye'、`bye bye' といった
+エントリに一致します。
+</P><P>
+
+完全一致検索は、一個の検索語と完全に一致するエントリだけを検索します。
+</P><P>
+
+以下は、前方一致検索のプログラムの例です。
+選択中の副本の中から、先頭が <SAMP>`librar'</SAMP> で始まるエントリを探して
+います。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> が <CODE>EB_Book</CODE> のオブジェクトで、すでに書籍に結び付け
+ * られ、副本を選択中だと仮定しています。*/
+#define MAX_HITS 50
+EB_Hit hits[MAX_HITS];
+int hit_count;
+
+if (eb_search_word(&#38;book, "librar") != EB_SUCCESS) {
+    printf("eb_search_word() failed\n");
+    return;
+}
+if (eb_hit_list(&#38;book, MAX_HITS, hits, &#38;hit_count)
+    != EB_SUCCESS) {
+    printf("eb_hit_list() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+<CODE>eb_search_word()</CODE> は前方一致検索をリクエストする関数です。
+この例では、<SAMP>`librar'</SAMP> という検索文字列を与えています。
+ただし、この関数は一致したエントリを返すことはしません。
+</P><P>
+
+一致したエントリの取得は、続く <CODE>eb_hit_list()</CODE> 関数を呼び出した
+際に行われます。
+<CODE>eb_hit_list()</CODE> は一致したエントリの一覧を配列 <CODE>hits[]</CODE>
+の指す領域に書き込み、見つかった一致エントリの個数を <CODE>&#38;hit_count</CODE>
+の指す領域に書き込みます。
+この例では、<CODE>eb_hit_list()</CODE> は最大で <CODE>MAX_HITS</CODE> (= 50) 個
+のエントリを探します。
+(つまり、50 個見つかったら検索を止めます。)
+</P><P>
+
+もし、選択中の副本が英々辞典だとすると、少なくとも <SAMP>`library'</SAMP> と
+<SAMP>`librarian'</SAMP> という 2 つのエントリに関する情報が得られるでしょう。
+このとき、配列 <CODE>hits[]</CODE> は次のようになっています。
+(ただし、<SAMP>`library'</SAMP> と <SAMP>`librarian'</SAMP> エントリの順序は、
+下の絵とは異なっているかも知れません。)
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>┌───────────┬───────────┬─
+│　ｌｉｂｒａｒｉａｎ　│　　ｌｉｂｒａｒｙ　　│
+└───────────┴───────────┴─
+　　　ｈｉｔｓ［０］　　　　　ｈｉｔｓ［１］
+</pre></td></tr></table></P><P>
+
+<CODE>hits[]</CODE> の中身については、本章の後ろの節でもう少し詳しく説明
+します。
+</P><P>
+
+ここまでは前方一致検索を例にとりましたが、後方一致の場合は
+<CODE>eb_search_word()</CODE> の代わりに <CODE>eb_search_endword()</CODE>
+を呼ぶようにします。
+他はすべて同じです。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_search_endword(&#38;book, "nalization") != EB_SUCCESS) {
+    printf("eb_search_endword() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+完全一致の場合も同様です。
+<CODE>eb_search_exactword()</CODE> を呼ぶようにする以外は、すべて同じ
+です。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_search_exactword(&#38;book, "library") != EB_SUCCESS) {
+    printf("eb_search_exactword() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="Keyword Search"></A>
+<HR SIZE="6">
+<A NAME="SEC37"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC36"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC38"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.2 条件検索 </H2>
+<!--docid::SEC37::-->
+<P>
+
+条件検索は、複数個の入力語にすべて一致するエントリを検索します。
+たとえば、英々辞典の条件検索では、入力語をすべて含んだ例文を検索する
+ようになっているかも知れません。
+</P><P>
+
+以下は、条件検索で <SAMP>`make'</SAMP>, <SAMP>`with'</SAMP> という語の双方と一致する
+エントリを、選択中の副本の中から探し出すプログラムの断片です。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> が <CODE>EB_Book</CODE> のオブジェクトで、すでに書籍に結び付け
+ * られ、副本を選択中だと仮定しています。*/
+static const char *keywords[3] = {"make", "with", NULL};
+
+if (eb_search_word(&#38;book, keywords) != EB_SUCCESS) {
+    printf("eb_search_word() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+条件検索を行う関数は、<CODE>eb_search_keyword()</CODE> です。
+前方一致、後方一致、完全一致検索の関数と基本的に扱い方は一緒ですが、
+複数の入力語を受け付けるようになっています。
+関数には、入力語の文字列 (へのポインタ) を配列にしたものを渡します。
+配列の最後には <CODE>NULL</CODE> を置き、配列の終端を明示する必要がある点に
+注意して
+下さい。
+</P><P>
+
+前方一致、後方一致、完全一致検索と同様に、<CODE>eb_search_keyword()</CODE> も
+検索のリクエストを行うだけで、一致したエントリの取得は行いません。
+エントリの取得には、やはり同様に <CODE>eb_hit_list()</CODE> 関数を使います。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Hit hits[MAX_HITS];
+int hit_count;
+
+if (eb_hit_list(&#38;book, MAX_HITS, hits, &#38;hit_count)
+    != EB_SUCCESS) {
+    printf("eb_hit_list() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="Multi Search"></A>
+<HR SIZE="6">
+<A NAME="SEC38"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC37"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC39"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.3 複合検索 </H2>
+<!--docid::SEC38::-->
+<P>
+
+複合検索は、条件検索と同じく、複数個の入力語にすべて一致するエントリを
+検索しますが、個々の入力語にあらかじめ題目が付けられています。
+</P><P>
+
+また、前方一致、後方一致、完全一致、条件検索はすべて、各副本につき
+一種類しかありませんが、複合検索だけは一つの副本の中で複数の種類が用意
+されていることがあります。
+たとえば、ある世界人名事典には、次のように人名検索用と頻出用語の検索用
+の 2 種類の複合検索が用意されているかも知れません。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(複合検索その 1: 人名を検索する)
+    入力語 0: 国・地域
+    入力語 1: 時代
+    入力語 2: 性別
+    入力語 3: キーワード
+    入力語 4: キーワード
+</pre></td></tr></table></P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(複合検索その 2: 頻出用語を検索する)
+    入力語 0: 用語
+    入力語 1: キーワード
+    入力語 2: キーワード
+</pre></td></tr></table></P><P>
+
+この例のように、個々の複合検索は、入力語の題目だけでなく、入力語の数も
+まちまちです。
+また、検索する際はすべての入力語を埋める必要はなく、少なくとも一個の
+入力語が空でなければ、検索は成功します。
+</P><P>
+
+副本内の複合検索は、種類毎に <EM>複合検索コード (multi search code)</EM>
+によって識別されます。
+関数 <CODE>eb_multi_search_list()</CODE> を使うと、選択中の副本で利用可能な
+複合検索の一覧が得られます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> が <CODE>EB_Book</CODE> のオブジェクトで、すでに書籍に結び付け
+ * られ、副本を選択中だと仮定しています。*/
+EB_Multi_Search_Code multi_codes[EB_MAX_MULTI_SEARCHES];
+int multi_count;
+
+if (eb_multi_search_list(&#38;book, multi_codes, &#38;multi_count)
+    != EB_SUCCESS) {
+    printf("eb_multi_search_list() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+この複合検索コードは、複合検索のための関数で必要となります。
+たとえば、<CODE>eb_multi_title()</CODE> は、指定した複合検索の題名
+(例:「人名検索」「頻出用語検索」) を取得する関数ですが、このときの
+複合検索の指定には、複合検索コードを用います。
+以下の例では、一覧の先頭に載っている複合検索 (<CODE>multi_codes[0]</CODE>)
+を指定しています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>char title[EB_MAX_MULTI_TITLE_LENGTH + 1];
+
+if (eb_multi_title(&#38;book, multi_codes[0], title)
+    != EB_SUCCESS) {
+    printf("eb_multi_title() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+さらに関数によっては、複合検索コードに加えて、何番目の入力語かも指定
+してやる必要があります。
+たとえば、特定の入力語の題目を得る関数 <CODE>eb_multi_entry_label()</CODE>
+が、これに該当します。
+0 番目の入力語 (つまり先頭の入力語) の題目を取得するには、次のように
+します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>char label[EB_MAX_MULTI_LABEL_LENGTH + 1];
+
+if (eb_multi_entry_label(&#38;book, multi_code[0], 0, label)
+    != EB_SUCCESS) {
+    printf("eb_multi_entry_label() failed\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+複合検索を行う関数は、<CODE>eb_search_multi()</CODE> です。
+使い方は条件検索とほぼ同じで、入力語の文字列を配列にしたものを引数
+として渡し、配列の最後には <CODE>NULL</CODE> を置いて下さい。
+埋められていない入力語のところには、空文字列を置きます。
+</P><P>
+
+<CODE>eb_search_multi()</CODE> も検索のリクエストを行うだけで、一致した
+エントリの取得は行いません。
+取得するには <CODE>eb_hit_list()</CODE> を使います。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Hit hits[MAX_HITS];
+int hit_count;
+
+if (eb_hit_list(&#38;book, MAX_HITS, hits, &#38;hit_count)
+    != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+なお、複合検索の入力語によっては
+<EM>候補一覧 (candidates)</EM> があらじめ用意されていることがあります。
+これは、入力語として有効な語をあらかじめ列挙しておき、
+アプリケーションプログラムのユーザに選択させる仕組みです。
+候補一覧については、この章ではなく「テキストデータ」の章で説明します
+(「<A HREF="eb-ja_9.html#SEC51">複合検索の候補一覧</A>」節を参照)。
+</P><P>
+
+<A NAME="EB_Hit"></A>
+<HR SIZE="6">
+<A NAME="SEC39"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC38"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC40"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.4 一致エントリの情報 </H2>
+<!--docid::SEC39::-->
+<P>
+
+<CODE>eb_hit_list()</CODE> は、リクエストされた検索 (前方一致、後方一致、
+完全一致、条件、複合) に一致したエントリの情報と見つかったエントリの
+個数を、それぞれ <CODE>EB_Hit</CODE> 型の配列領域および <CODE>int</CODE> 型の
+領域に書き込みます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> が <CODE>EB_Book</CODE> のオブジェクトで、すでに書籍に結び付け
+ * られ、副本を選択中だと仮定しています。*/
+EB_Hit hits[MAX_HITS];
+int hit_count;
+
+if (eb_hit_list(&#38;book, MAX_HITS, hits, &#38;hit_count)
+    != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre></td></tr></table></P><P>
+
+<CODE>EB_Hit</CODE> 配列の個々の要素には、一致したエントリの
+<EM>見出し (heading)</EM> と <EM>本文 (text)</EM> の開始位置が書き込まれて
+います。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>　　　　　　　　　　　　　見出し
+　　　　　　　　　　　　┌────────────┐
+　ＥＢ＿Ｈｉｔ　　　┏━┿ｌｉｂｒａｒｉａｎ　ｎ．│
+┌───────┐　┃　└────────────┘
+│ｈｅａｄｉｎｇ┿━┛　　本文
+│　　　　　　　│　　　┌────────────────────┐
+│　　　ｔｅｘｔ┿━━━┿ｌｉｂｒａｒｉａｎ　　　　　　　　　　　│
+└───────┘　　　│ｎ．（１）Ａ　ｐｅｒｓｏｎ　ｗｈｏ　ｉｓ│
+　　　　　　　　　　　　│ａ　ｓｐｅｃｉａｌｉｓｔ　ｉｎ　　　　　│
+　　　　　　　　　　　　│ｌｉｂｒａｒｙ　ｗｏｒｋ．（２）．．．　│
+　　　　　　　　　　　　└────────────────────┘
+</pre></td></tr></table></P><P>
+
+見出しと本文についてのより詳しい解説と取得方法については、
+「<A HREF="eb-ja_9.html#SEC44">テキストデータ</A>」節を参照。
+</P><P>
+
+<A NAME="Get Remained Entries"></A>
+<HR SIZE="6">
+<A NAME="SEC40"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC39"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC41"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.5 残っているエントリの取得 </H2>
+<!--docid::SEC40::-->
+<P>
+
+前に述べたように、<CODE>eb_hit_list()</CODE> を呼び出すときは、一致する
+エントリを最大で何個まで探すのかを引数で指定します。
+また、<CODE>eb_hit_list()</CODE> は処理が成功すると、実際に見つかったエントリ
+の数をアプリケーションプログラムに教えます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>error_code = eb_hit_list(&#38;book, MAX_HITS, hits, &#38;hit_count);
+if (error_code == EB_SUCCESS)
+    printf("%d entries found\n", hit_count);
+</pre></td></tr></table></P><P>
+
+指定した最大個数よりも多くの一致エントリが副本に存在している場合は、
+<CODE>eb_hit_list()</CODE> を繰り返し呼び出すことで、残りのエントリを取得
+することができます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>for (;;) {
+    if (eb_hit_list(&#38;book, MAX_HITS, hits, &#38;hit_count)
+        != EB_SUCCESS) {
+        fprintf(stderr, "an error occurs.\n");
+        return;
+    }
+    if (hit_count == 0)
+        break;
+    /* 取得した一致エントリの処理 */
+}
+</pre></td></tr></table></P><P>
+
+一致エントリがもう残っていなければ、<CODE>eb_hit_list()</CODE> は
+<CODE>&#38;hit_count</CODE> の指す領域に 0 を書き込んで、<CODE>EB_SUCCESS</CODE> を
+返します。
+</P><P>
+
+ただし、途中で <CODE>eb_hit_list()</CODE> が失敗すると (<CODE>EB_SUCCESS</CODE>
+以外の値を返すと)、検索リクエストに関する状態記録はリセットされるため、
+一致エントリの取得をそれ以上続けることはできません。
+</P><P>
+
+<A NAME="Unify Duplicated Entries"></A>
+<HR SIZE="6">
+<A NAME="SEC41"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC40"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC42"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.6 重複エントリの削除 </H2>
+<!--docid::SEC41::-->
+<P>
+
+<CODE>eb_hit_list()</CODE> を用いて一致したエントリを取得すると、中身が実質的に
+変わらないエントリが複数含まれていることがあります。
+EB ライブラリは、こうした重複エントリの削除は行いません。
+必要なら、アプリケーション側で行うことになります。
+</P><P>
+
+重複を完璧に取り除くなら、以下のすべての条件に一致するエントリを
+重複エントリとみなし、二度目以降に出現したエントリを削除します。
+</P><P>
+
+<UL>
+<LI>エントリの指す本文の位置が同じ
+<LI>エントリの指す見出しの文字列 (位置ではなく文字列そのもの) が同じ
+</UL>
+<P>
+
+(見出し文字列の取得方法については、
+「<A HREF="eb-ja_9.html#SEC44">テキストデータ</A>」節を参照。)
+</P><P>
+
+重複は、直前のエントリに対してのみ起こるとは限りません。
+たとえば、<CODE>eb_hit_list()</CODE> で一致エントリが 50 個得られた場合、
+最後の 50 個目は前方の 49 個と重複検査を行う必要があります。
+したがって、全体ではエントリ同士の比較を 1 + 2 + ... + 49 = 1225 回
+行うことになります。
+</P><P>
+
+書籍によっては重複エントリが取りきれない可能性もありますが、もう少し
+簡単な方法もいくつかあります。
+処理を簡単にする第一の方法は、重複エントリの判定条件を次のように変える
+ことです。
+</P><P>
+
+<UL>
+<LI>エントリの指す本文の位置が同じ
+<LI>エントリの指す見出しの文字列の位置が同じ
+</UL>
+<P>
+
+さらに処理を簡単にするには、直前の 1個のエントリに対してだけ重複検査を
+行うという方法もあります。
+これなら、50 個の一致エントリに対して、比較は 49 回で済みます。
+ただしこの方法は、書籍によってはまったく効果がありません。
+</P><P>
+
+<A NAME="Search Data Types"></A>
+<HR SIZE="6">
+<A NAME="SEC42"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC41"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC43"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.7 データ型の詳細 </H2>
+<!--docid::SEC42::-->
+<P>
+
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX200"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Hit</B>
+<DD><A NAME="IDX201"></A>
+</P><P>
+
+<CODE>EB_Hit</CODE> は、検索に一致したエントリの情報を格納するためのデータ型
+です。
+内部構造は、次のように定義されています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef struct EB_Hit_Struct EB_Hit;
+
+struct EB_Hit_Struct {
+    EB_Position heading;  /* 見出しの位置 */
+    EB_Position text;     /* 本文の位置   */
+};
+</pre></td></tr></table></P><P>
+
+アプリケーションプログラムは、直接 <CODE>EB_Hit</CODE> オブジェクトのメンバ
+を参照したり、セットしたりしても構いません。
+</DL>
+</P><P>
+
+<A NAME="IDX202"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Position</B>
+<DD><A NAME="IDX203"></A>
+</P><P>
+
+データ型 <CODE>EB_Position</CODE> は、副本のデータの位置を表します。
+内部構造は、次のように定義されています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef struct EB_Position_Struct EB_Position;
+
+struct EB_Position_Struct {
+    int page;     /* ページ番号 */
+    int offset;   /* ページ内のオフセット */
+};
+</pre></td></tr></table></P><P>
+
+ページ番号は 1 から始まり、ページ内のオフセットは 0 〜 2047 の範囲と
+なります。
+ただし、アプリケーションプログラムを作成する上で、このことを覚えておく
+必要はありません。
+</P><P>
+
+アプリケーションプログラムは、直接 <CODE>EB_Position</CODE> オブジェクトの
+メンバを参照したり、セットしたりしても構いません。
+</DL>
+</P><P>
+
+<A NAME="IDX204"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Muti_Search_Code</B>
+<DD><A NAME="IDX205"></A>
+<A NAME="IDX206"></A>
+</P><P>
+
+データ型 <CODE>EB_Multi_Search_Code</CODE> は複合検索コードを表します。
+副本に用意されている複合検索は、それぞれ一意の複合検索コードを
+持っています。
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <CODE>==</CODE> と <CODE>!=</CODE> で一致比較することができます。
+</P><P>
+
+また、不正な複合検索コード値を表す <CODE>EB_MULTI_INVALID</CODE> という特別な
+副本コードが定義されています。
+利用可能な複合検索に対して、この複合検索コードが割り当てられることは
+ありません。
+</DL>
+</P><P>
+
+<A NAME="Search Functions"></A>
+<HR SIZE="6">
+<A NAME="SEC43"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC42"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 8.8 関数の詳細 </H2>
+<!--docid::SEC43::-->
+<P>
+
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX207"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_have_word_search</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX208"></A>
+<DT><U>Function:</U> int <B>eb_have_endword_search</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX209"></A>
+<DT><U>Function:</U> int <B>eb_have_exactword_search</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX210"></A>
+<A NAME="IDX211"></A>
+<A NAME="IDX212"></A>
+</P><P>
+
+関数 <CODE>eb_have_word_search()</CODE> は、<VAR>book</VAR> が選択中の副本で
+前方一致検索メソッドが利用可能どうかを調べます。
+同様に <CODE>eb_have_endword_search()</CODE> は後方一致検索メソッドについて、
+<CODE>eb_have_exactword_search()</CODE> は完全一致検索メソッドについて
+利用可能どうかを調べます。
+</P><P>
+
+利用可能なら 1 を返します。
+メソッドを持っていないか、そもそも副本が選択されていない場合は 0 を
+返します。
+</DL>
+</P><P>
+
+<A NAME="IDX213"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_have_keyword_search</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD></P><P>
+
+関数 <CODE>eb_have_keyword_search()</CODE> は、<VAR>book</VAR> が選択中の副本で
+条件検索メソッドが利用可能どうかを調べます。
+</P><P>
+
+利用可能なら 1 を返します。
+メソッドを持っていないか、そもそも副本が選択されていない場合は 0 を
+返します。
+</DL>
+</P><P>
+
+<A NAME="IDX214"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_have_multi_search</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX215"></A>
+</P><P>
+
+関数 <CODE>eb_have_multi_search()</CODE> は、<VAR>book</VAR> が選択中の副本で
+複合検索メソッドが利用可能どうかを調べます。
+</P><P>
+
+最低 1 種類でも利用可能なら 1 を返します。
+メソッドを持っていないか、そもそも副本が選択されていない場合は 0 を
+返します。
+</DL>
+</P><P>
+
+<A NAME="IDX216"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_multi_search_list</B> <I>(EB_Book *<VAR>book</VAR>, EB_Multi_Search_Code *<VAR>multi_list</VAR>, int *<VAR>multi_count</VAR>)</I>
+<DD><A NAME="IDX217"></A>
+<A NAME="IDX218"></A>
+</P><P>
+
+関数 <CODE>eb_multi_search_list()</CODE> は、<VAR>book</VAR> が選択中の副本に用意
+されている複合検索を調べ、複合検索コードの一覧を <CODE>EB_Multi_Search_Code</CODE>
+型の配列にして、<VAR>multi_list</VAR> の指す領域に書き込みます。
+配列は、最大で <CODE>EB_MAX_MULTI_SEARCHES</CODE> 個の要素を持ちます。
+加えて、複合検索の種類数を <VAR>multi_count</VAR> の指す領域に書き込みます。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>subbook_count</VAR> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX219"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_multi_entry_count</B> <I>(EB_Book *<VAR>book</VAR>, EB_Multi_Search_Code <VAR>multi_id</VAR>, int *<VAR>entry_count</VAR>)</I>
+<DD><A NAME="IDX220"></A>
+<A NAME="IDX221"></A>
+</P><P>
+
+関数 <CODE>eb_multi_search_list()</CODE> は、<VAR>book</VAR> が選択中の副本に用意
+されている複合検索 <VAR>multi_id</VAR> について調べ、入力語の個数を
+<VAR>entry_count</VAR> の指す領域に書き込みます。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+このとき書き込まれる入力語の個数は、1 以上 <CODE>EB_MAX_MULTI_ENTRIES</CODE>
+以下になります。
+失敗すると、<VAR>entry_count</VAR> の指す領域には 0 を書き込み、原因を示す
+エラーコードを返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX222"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_multi_entry_label</B> <I>(EB_Book *<VAR>book</VAR>, EB_Multi_Search_Code <VAR>multi_id</VAR>, int <VAR>entry_index</VAR>, char *<VAR>label</VAR>)</I>
+<DD><A NAME="IDX223"></A>
+<A NAME="IDX224"></A>
+</P><P>
+
+関数 <CODE>eb_multi_search_list()</CODE> は、<VAR>book</VAR> が選択中の副本に用意
+されている複合検索 <VAR>multi_id</VAR> について調べ、<VAR>entry_index</VAR> 番目
+の検索語の題目を <VAR>label</VAR> の指す領域に書き込みます。
+<VAR>entry_index</VAR> は、先頭の検索語を 0 番目と数えます。
+題目は最長で <CODE>EB_MAX_MULTI_LABEL_LENGTH</CODE> バイトになります。
+この長さに、ナル文字は含みません。
+</P><P>
+
+書籍の文字コード
+(「<A HREF="eb-ja_5.html#SEC21">[CD-ROM 書籍と <CODE>EB_Book</CODE> オブジェクト] データ型の詳細</A>」節を参照)
+が <CODE>EB_CHARCODE_ISO8859_1</CODE> なら、題目を表す文字列は ISO 8859-1 に
+なり、それ以外の文字コードなら日本語 EUC になります。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>label</VAR> の指す領域には空文字列を書き込み、原因を示す
+エラーコードを返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX225"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_multi_entry_have_candidates</B> <I>(EB_Book *<VAR>book</VAR>, EB_Multi_Search_Code <VAR>multi_id</VAR>, int <VAR>entry_index</VAR>)</I>
+<DD><A NAME="IDX226"></A>
+</P><P>
+
+関数 <CODE>eb_multi_search_list()</CODE> は、<VAR>book</VAR> が選択中の副本に用意
+されている複合検索 <VAR>multi_id</VAR> について調べ、<VAR>entry_index</VAR> 番目
+の検索語が候補一覧を持っているかどうか調べます。
+<VAR>entry_index</VAR> は、先頭の検索語を 0 番目と数えます。
+</P><P>
+
+持っていれば 1 を返します。
+持っていないか、そもそも副本が選択されていない場合、あるいは
+<VAR>multi_id</VAR>, や <VAR>entry_index</VAR> が不正な値だった場合は 0 を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX227"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_multi_entry_candidates</B> <I>(EB_Book *<VAR>book</VAR>, EB_Multi_Search_Code <VAR>multi_id</VAR>, int <VAR>entry_index</VAR>, EB_Position *<VAR>position</VAR>)</I>
+<DD></P><P>
+
+関数 <CODE>eb_multi_search_list()</CODE> は、<VAR>book</VAR> が選択中の副本に用意
+されている複合検索 <VAR>multi_id</VAR> について調べ、<VAR>entry_index</VAR> 番目
+の検索語の候補一覧の位置を <VAR>position</VAR> の指す領域に書き込みます。
+先頭の検索語が 0 番目になります。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>positin</VAR> の指す領域には <CODE>eb_seek_text()</CODE> が必ず
+失敗する位置情報を書き込み、原因を示すエラーコードを返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="IDX228"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_search_word</B> <I>(EB_Book *<VAR>book</VAR>, const char *<VAR>input_word</VAR>)</I>
+<DD><A NAME="IDX229"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_search_endword</B> <I>(EB_Book *<VAR>book</VAR>, const char *<VAR>input_word</VAR>)</I>
+<DD><A NAME="IDX230"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_search_exactword</B> <I>(EB_Book *<VAR>book</VAR>, const char *<VAR>input_word</VAR>)</I>
+<DD><A NAME="IDX231"></A>
+<A NAME="IDX232"></A>
+<A NAME="IDX233"></A>
+<A NAME="IDX234"></A>
+</P><P>
+
+関数 <CODE>eb_search_word()</CODE> は、<VAR>book</VAR> が選択中の副本に対する
+前方一致検索をリクエストします。
+同様に <CODE>eb_search_endword()</CODE> は後方一致検索を、
+<CODE>eb_search_exactword()</CODE> は完全一致検索をリクエストします。
+</P><P>
+
+検索する語は、引数 <VAR>input_word</VAR> で指定します。
+ただし、これらの関数は検索をリクエストするだけで、一致したエントリの
+情報を返すことはしません。
+一致したエントリの取得には <CODE>eb_hit_list()</CODE> を使います。
+関数は、成功すると <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
+失敗すると、関数を呼び出す前にリクエストしていた検索の状態記録はリセット
+されますので、その状態のまま <CODE>eb_hit_list()</CODE> を呼び出しても、やはり
+失敗に終わります。
+</P><P>
+
+書籍の文字コード
+(「<A HREF="eb-ja_5.html#SEC21">[CD-ROM 書籍と <CODE>EB_Book</CODE> オブジェクト] データ型の詳細</A>」節を参照)
+が <CODE>EB_CHARCODE_ISO8859_1</CODE> なら、関数に渡す検索語は ISO 8859-1 で
+書かれていなければなりません。
+それ以外の文字コードの場合は、日本語 EUC で書かれていなければなりません。
+不正な文字番号を含んでいた場合、関数は <CODE>EB_ERR_BAD_WORD</CODE> を返します。
+</P><P>
+
+加えて、検索語は 1 バイト以上、<CODE>EB_MAX_WORD_LENGTH</CODE> (= 255) バイト
+以下でなければなりません。
+この長さに、ナル文字は含みません。
+長すぎる場合は、<CODE>EB_ERR_TOO_LONG_WORD</CODE> を、
+長さが 0 (空文字列) の場合は <CODE>EB_ERR_EMPTY_WORD</CODE> を返します。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+なお、一致するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
+</DL>
+</P><P>
+
+<A NAME="IDX235"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_search_keyword</B> <I>(EB_Book *<VAR>book</VAR>, const char * const <VAR>input_words</VAR>[])</I>
+<DD><A NAME="IDX236"></A>
+<DT><U>Function:</U> EB_Error_Code <B>eb_search_multi</B> <I>(EB_Book *<VAR>book</VAR>, EB_Multi_Search_Code <VAR>multi_id</VAR>, const char * const <VAR>input_words</VAR>[])</I>
+<DD><A NAME="IDX237"></A>
+<A NAME="IDX238"></A>
+<A NAME="IDX239"></A>
+<A NAME="IDX240"></A>
+<A NAME="IDX241"></A>
+</P><P>
+
+関数 <CODE>eb_search_word()</CODE> は、<VAR>book</VAR> が選択中の副本に対する
+条件検索をリクエストします。
+同様に <CODE>eb_search_multi()</CODE> は複合検索をリクエストします。
+</P><P>
+
+検索する語は、引数 <VAR>input_words</VAR> で指定します。
+条件検索と複合検索はいずれも複数個の検索語を受け付けますので、検索語を
+配列にして渡します。
+このとき、配列の末尾の要素には <CODE>NULL</CODE> を置き、配列の終端を明示します。
+</P><P>
+
+どちらの関数も検索をリクエストするだけで、一致したエントリの情報を
+返すことはしません。
+一致したエントリの取得には <CODE>eb_hit_list()</CODE> を使います。
+関数は、成功すると <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
+失敗すると、関数を呼び出す前にリクエストしていた検索の状態記録はリセット
+されますので、その状態のまま <CODE>eb_hit_list()</CODE> を呼び出しても、やはり
+失敗に終わります。
+</P><P>
+
+書籍の文字コード
+(「<A HREF="eb-ja_5.html#SEC21">[CD-ROM 書籍と <CODE>EB_Book</CODE> オブジェクト] データ型の詳細</A>」節を参照)
+が <CODE>EB_CHARCODE_ISO8859_1</CODE> なら、関数に渡す検索語は ISO 8859-1 で
+書かれていなければなりません。
+それ以外の文字コードの場合は、日本語 EUC で書かれていなければなりません。
+不正な文字番号を含んでいた場合、関数は <CODE>EB_ERR_BAD_WORD</CODE> を返します。
+</P><P>
+
+加えて、個々の検索語は <CODE>EB_MAX_WORD_LENGTH</CODE> (= 255) バイト以下で
+なければなりません。
+この長さに、ナル文字は含みません。
+長すぎる場合は、<CODE>EB_ERR_TOO_LONG_WORD</CODE> を返します。
+長さが 0 バイトの検索語は無視されますが、少なくとも 1 個の検索語は長さ
+が 1 以上ないといけません。
+長さが 1 以上の検索語が 1 つもないときは、<CODE>EB_ERR_NO_WORD</CODE> を
+返します。
+</P><P>
+
+末尾の NULL を除いた配列の要素数は、条件検索では <CODE>EB_MAX_KEYWORDS</CODE>
+以下、複合検索では <CODE>EB_MAX_MULTI_ENTRIES</CODE> 以下でなくてはなりません。
+個数が多すぎると <CODE>EB_ERRO_TOO_MANY_WORDS</CODE> を返します。
+空文字列の要素を差し引いた個数ではなく、単純に渡された要素数が上限を
+超えているとエラーになりますので、注意が必要です。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+なお、一致するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
+</DL>
+</P><P>
+
+<A NAME="IDX242"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_hit_list</B> <I>(EB_Book *<VAR>book</VAR>, int <VAR>max_hit_count</VAR>, EB_Hit *<VAR>hit_list</VAR>, int *<VAR>hit_count</VAR>)</I>
+<DD><A NAME="IDX243"></A>
+</P><P>
+
+関数 <CODE>eb_hit_list()</CODE> は、あらかじめ以下のいずれかの関数でリクエスト
+された検索を実行し、一致したエントリを取得します。
+</P><P>
+
+<UL>
+<LI><CODE>eb_search_word()</CODE>  (前方一致検索)
+<LI><CODE>eb_search_endword()</CODE>  (後方一致検索)
+<LI><CODE>eb_search_exactword()</CODE>  (完全一致検索)
+<LI><CODE>eb_search_keyword()</CODE>  (条件検索)
+<LI><CODE>eb_search_multi()</CODE>  (複合検索)
+</UL>
+<P>
+
+したがって、この関数を呼ぶ前に、上記のいずれかの関数の呼び出しに成功して
+いなくてはなりません。
+</P><P>
+
+<CODE>eb_hit_list()</CODE> は最大で <VAR>hit_count</VAR> 個の一致エントリを
+<VAR>hit_list</VAR> に書き込みます。
+そして、書き込んだ一致エントリの数を <VAR>hit_count</VAR> が指す領域に
+書き込みます。
+それ以上の個数の一致エントリが存在する場合、残ったエントリの情報は、
+この関数を繰り返し呼び出すことで得ることができます。
+</P><P>
+
+ただし、以下に挙げた関数を呼び出すと、リクエストした検索に関する状態記録
+がリセットされますので、一致したエントリの取得は継続できなくなります。
+</P><P>
+
+<UL>
+<LI><CODE>eb_set_subbook()</CODE>
+<LI><CODE>eb_unset_subbook()</CODE>
+<LI><CODE>eb_load_all_subbooks()</CODE>
+<LI><CODE>eb_bind()</CODE>
+<LI><CODE>eb_finalize_book()</CODE>
+<LI><CODE>eb_search_word()</CODE>
+<LI><CODE>eb_search_endword()</CODE>
+<LI><CODE>eb_search_exactword()</CODE>
+<LI><CODE>eb_search_keyword()</CODE>
+<LI><CODE>eb_search_multi()</CODE>
+</UL>
+<P>
+
+繰り返し呼んだ場合も、一致したエントリの情報はその都度 <VAR>hit_list</VAR>
+の先頭から書き込み、<VAR>hit_count</VAR> が指す領域に書き込む値も、その回
+の <CODE>eb_hit_list()</CODE> の呼び出しで書き込んだ一致エントリの数になります。
+</P><P>
+
+成功すると、この関数は <CODE>EB_SUCCESS</CODE> を返します。
+たとえ一致したエントリがなくても、処理が正常に終了すれば、関数は
+<CODE>EB_SUCCESS</CODE> を返します。
+</P><P>
+
+失敗すると、<VAR>hit_count</VAR> が指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+この場合、リクエストしていた検索の状態記録はリセットされますので、
+これ以上 <CODE>eb_hit_list()</CODE> を呼んで、残った一致エントリを取得する
+ことはできなくなります。
+</P><P>
+
+あらかじめ、<VAR>book</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+また、先に挙げた検索のリクエストが成功していない状態でこの関数を呼ぶと、
+<CODE>EB_ERR_NO_PREV_SEARCH</CODE> を返します。
+</DL>
+</P><P>
+
+<A NAME="Text Data"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_8.html#SEC35"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_9.html#SEC44"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

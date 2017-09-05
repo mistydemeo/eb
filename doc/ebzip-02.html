@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebzip コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebzip-01.html">前へ</a>] [<a href="ebzip-03.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="action-and-command-name">動作とコマンド名</a></h2>
+
+<p>
+<code>ebzip</code> は三つの <dfn>動作</dfn> (<dfn>action</dfn>) モードを
+備えています。
+圧縮 (compression)、伸長 (uncompression) と情報出力 (information) です。
+</p>
+
+<ul>
+<li>圧縮 (compression)<br>
+一冊の CD-ROM 書籍を圧縮します。
+
+<li>伸長 (uncompression)<br>
+<code>ebzip</code> で圧縮された、一冊の CD-ROM 書籍を伸長します。
+
+<li>情報出力 (information)<br>
+<code>ebzip</code> で圧縮された、一冊の CD-ROM 書籍の圧縮状態に関する
+情報を出力します。
+
+</ul>
+
+<p>
+<code>ebzip</code> は起動時に、起動時に使用されたコマンド名と
+コマンドラインオプションから動作モードを決定します。
+<code>ebzip</code> の一回の実行の間で、動作モードが変わることは
+ありません。
+</p>
+
+<p>
+<code>ebzip</code> は <code>ebzip</code>、<code>ebunzip</code>, 
+<code>ebzipinfo</code> という異なる 3 つのコマンド名でインストール
+されます。
+(一部の環境では、<code>ebzipinfo</code> は <code>ebzipinf</code> 
+という名前になっています。)
+
+<p>
+<code>ebunzip</code> という名前で起動された場合は、伸長を行います。
+<code>ebzipinfo</code> という名前で起動された場合、情報出力を行います。
+それ以外の場合は、圧縮を行います。
+</p>
+
+<p>
+コマンドラインオプションでも、動作モードを決定することができます。
+<samp>--compress</samp> (<samp>-z</samp>) で圧縮、<samp>--uncompress</samp>
+(<samp>-u</samp>) で伸長、<samp>--information</samp> (<samp>-i</samp>)
+で情報出力を行います。
+オプションは、起動時のコマンド名より優先します。
+次の例では、いずれも動作モードが「伸長」になります。
+</p>
+
+<blockquote>
+<pre>
+ebunzip
+ebzip --uncompress
+ebzipinfo --uncompress
+</pre>
+</blockquote>
+
+<p>
+遠隔アクセスには対応していませんので、遠隔アクセス識別子は使用できません。
+</p>
+
+<blockquote>
+<pre>
+% ebzip ebnet://localhost/cdrom
+ebzip: ebnet には対応していません。
+</pre>
+</blockquote>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebzip-01.html">前へ</a>] [<a href="ebzip-03.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Compressed File Format</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Compressed File Format">
+<META NAME="keywords" CONTENT="EB Library: Compressed File Format">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC22"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_9.html#SEC21"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC23"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_9.html#SEC21"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> B. 圧縮ファイルの形式 </H1>
+<!--docid::SEC22::-->
+<P>
+
+この章では、<CODE>ebzip</CODE> が扱っている圧縮ファイル形式の詳細について説
+明します。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_10.html#SEC23">B.1 圧縮ファイル形式の概要</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_10.html#SEC24">B.2 データ部</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_10.html#SEC25">B.3 インデックス部</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_10.html#SEC26">B.4 ヘッダ部</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Format Overview"></A>
+<HR SIZE="6">
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> B.1 圧縮ファイル形式の概要 </H2>
+<!--docid::SEC23::-->
+<P>
+
+圧縮ファイル形式は次のような特徴を持っています。
+</P><P>
+
+<UL>
+<LI>
+CPU の種類、オペレーティングシステム、ファイルシステムに依存しません。
+<P>
+
+<LI>
+非損失圧縮です。<BR>
+圧縮ファイルを伸長することによって、元のファイルを復元できます。
+<P>
+
+<LI>
+6 つの圧縮レベルがあります。<BR>
+伸長の速さか圧縮率の良さの、いずれかを選ぶことができます。
+</UL>
+<P>
+
+圧縮されたファイルは、ヘッダ部、インデックス部、およびデータ部から構
+成され、この順でファイルに配置されます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+--------+-------------+-----------------------------+
+| ヘッダ |インデックス |          データ             |
++--------+-------------+-----------------------------+
+                                                     EOF
+</pre></td></tr></table></P><P>
+
+<A NAME="Data Part"></A>
+<HR SIZE="6">
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> B.2 データ部 </H2>
+<!--docid::SEC24::-->
+<P>
+
+元のファイルは、次の行程で圧縮されます。
+</P><P>
+
+まず、<CODE>ebzip</CODE> は元のファイルを分割します。
+個々の <EM>スライス</EM> (<EM>slice</EM>) は、末尾のものを除けば、同じ
+大きさになっています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+---------------+---------------+--   --+----------+
+|  スライス 1   |  スライス 2   |  ...  |スライス N|
++---------------+---------------+--   --+----------+
+                                                  EOF
+</pre></td></tr></table></P><P>
+
+スライス・サイズは、圧縮レベルから決まります
+(圧縮レベルについては 「<A HREF="ebzip-ja_4.html#SEC7">圧縮レベル</A>」節を参照)。
+</P><P>
+
+<TABLE>
+<TR><TD>圧縮レベル  </TD><TD>  スライスの大きさ</TD>
+</TR>
+<TR><TD>0           </TD><TD>   2048 バイト</TD>
+</TR>
+<TR><TD>1           </TD><TD>   4096 バイト</TD>
+</TR>
+<TR><TD>2           </TD><TD>   8192 バイト</TD>
+</TR>
+<TR><TD>3           </TD><TD>  16384 バイト</TD>
+</TR>
+<TR><TD>4           </TD><TD>  32768 バイト</TD>
+</TR>
+<TR><TD>5           </TD><TD>  65536 バイト</TD>
+</TR></TABLE>
+<P>
+
+次に、末尾のスライスがスライス・サイズよりも短かった場合、
+<CODE>ebzip</CODE> はスライス・サイズと同じになるまで伸ばし、伸ばした
+部分に 0x00 を埋めます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>                                                 伸した部分
++---------------+---------------+--   --+---------+-----+
+|  スライス 1   |  スライス 2   |  ...  |  スライス N   |
++---------------+---------------+--   --+---------+-----+
+                                                        EOF
+</pre></td></tr></table></P><P>
+
+最後に、<CODE>ebzip</CODE> は個々のスライスを、RFC 1951 に記されている
+DEFLATE 圧縮データ形式で圧縮します。
+おのおののスライスは、他のスライスとは独立して圧縮されます。
+圧縮されたスライスのビット数が 8 の倍数でなければ、1 〜 7 ビットを圧
+縮されたスライスの末尾に足し、8 の倍数になるようにします。
+これにより、圧縮されたそれぞれのスライスはバイトの境界から開始されま
+す。
+足されたビットの内容は未定義ですが、このビットは決して使用されません。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+------------+----------+--   --+--------------+
+| 圧縮された |圧縮された|  ...  |  圧縮された  |
+| スライス 1 |スライス 2|  ...  |  スライス N  |
++------------+----------+--   --+--------------+
+</pre></td></tr></table></P><P>
+
+これが圧縮ファイル形式における <EM>データ部</EM> になり、圧縮されたスライ
+スから構成されます。
+</P><P>
+
+末尾のスライスの伸ばした部分は、末尾のスライスの一部として圧縮され
+ます。
+<CODE>ebunzip</CODE> が末尾のスライスを復元するときは、スライスを伸長して
+から伸ばした部分を取り除くという作業を行います。
+</P><P>
+
+圧縮したスライスの大きさが、スライス・サイズよりも大きいか等しいときは、
+<CODE>ebzip</CODE> はそのスライスの圧縮データを廃棄します。
+この場合、<CODE>ebzip</CODE> は元のデータをそのスライスの圧縮データとして代わ
+りに記録します。
+</P><P>
+
+元のファイルが空だったときは、圧縮ファイルのデータ部はありません。
+</P><P>
+
+<A NAME="Index Part"></A>
+<HR SIZE="6">
+<A NAME="SEC25"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC24"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC26"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> B.3 インデックス部 </H2>
+<!--docid::SEC25::-->
+<P>
+
+圧縮時に、<CODE>ebzip</CODE> は圧縮した個々のスライスの <EM>インデックス</EM>
+(<EM>index</EM>) を記録します。
+個々のインデックスは、圧縮ファイルの先頭から圧縮されたスライスの先頭
+までの距離を表します。
+距離の単位はバイトです。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+---------+---------+--           --+---------+---------+
+|インデッ |インデッ |  ...........  |インデッ |インデッ |
+|クス 1   |クス 2   |  ...........  |クス N   |クス END |
++---------+---------+--           --+---------+---------+
+     |         |                        |         |
+ +---+         +----+                   +------+  +-----------+
+ V                  V                          V              V
++------------------+------------------+--   --+--------------+
+|    圧縮された    |    圧縮された    |  ...  |  圧縮された  |
+|    スライス 1    |    スライス 2    |  ...  |  スライス N  |
++------------------+------------------+--   --+--------------+
+</pre></td></tr></table></P><P>
+
+個々のインデックスは 2 〜 4 バイトの大きさを持ちます。
+インデックスの大きさは、元のファイルの大きさで決まります。
+</P><P>
+
+<TABLE>
+<TR><TD>元のファイルの大きさ           </TD><TD>  インデックスの大きさ</TD>
+</TR>
+<TR><TD>0 〜      65535 バイト  </TD><TD>  2 バイト</TD>
+</TR>
+<TR><TD>65535 〜   16777215 バイト  </TD><TD>  3 バイト</TD>
+</TR>
+<TR><TD>16777216 〜 4294967295 バイト  </TD><TD>  4 バイト</TD>
+</TR></TABLE>
+<P>
+
+インデックス内での、複数バイトからなる数値はすべて、値の大きい方の部分
+を表すバイト (most significant byte) が先に来た形で記録されます。
+たとえば、0x1234 は次のように記録されます。
+最初のバイトは 0x12 となり、次のバイトは 0x34 になります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+---------+---------+
+|0001 0010|0011 0100|
++---------+---------+
+  (0x12)    (0x34)
+</pre></td></tr></table></P><P>
+
+インデックス部は、圧縮されたスライス 1 のインデックスで始まり、その後ろ
+に圧縮されたスライス 2 のインデックスが続きます。
+圧縮されたスライス N のインデックスの後ろには、「終端」へのインデックス
+が置かれます。
+このインデックスは、圧縮されたスライス N の末尾の次のバイトへのインデッ
+クスになります。
+また、圧縮されたファイルのサイズを示すことにもなります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+---------+---------+--           --+---------+---------+
+|インデッ |インデッ |  ...........  |インデッ |インデッ |
+|クス 1   |クス 2   |  ...........  |クス N   |クス END |
++---------+---------+--           --+---------+---------+
+</pre></td></tr></table></P><P>
+
+圧縮されたスライスの大きさがスライスサイズに等しいときは、そのスライス
+のデータは実際には圧縮されていないことを示します。
+</P><P>
+
+元のファイルが空だったときは、インデックス部はインデックスを一つだけ持
+ちます。
+このインデックスは圧縮されたファイルの大きさを表します。
+</P><P>
+
+<A NAME="Header Part"></A>
+<HR SIZE="6">
+<A NAME="SEC26"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC25"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> B.4 ヘッダ部 </H2>
+<!--docid::SEC26::-->
+<P>
+
+ヘッダ部は 22 バイトからなります。
+次のフィールドから構成されます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+| マジック ID  |*1| *2  |ファイルの大きさ | Adler-32  | 修正時刻  |
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21
+
+*1: zip モードと圧縮レベル
+*2: 予約領域
+</pre></td></tr></table></P><P>
+
+<DL COMPACT>
+<DT><CODE>マジック ID (5 バイト)</CODE>
+<DD>0x45, 0x42, 0x5a, 0x69, 0x70 (ASCII 文字列で表すと <SAMP>`EBZip'</SAMP>) とい
+う固定した値を持ちます。
+<P>
+
+<DT><CODE>zip モード (MSB 側の 4 ビット)</CODE>
+<DD>圧縮モードを表します。
+EB ライブラリバージョン 4.0 では、1 (2 進数で 0001) だけが
+規定されています。
+<P>
+
+<DT><CODE>圧縮レベル (LSB 側の 4 ビット)</CODE>
+<DD>圧縮レベルを表します。
+<P>
+
+<DT><CODE>予約領域 (2 バイト)</CODE>
+<DD>予約されていますが、使われていません。
+0x0000 で埋められます。
+<P>
+
+<DT><CODE>ファイルの大きさ (6 バイト)</CODE>
+<DD>元の (非圧縮時の) ファイルの大きさを記録しています。
+<P>
+
+<DT><CODE>Adler-32 (4 バイト)</CODE>
+<DD>RFC 1950 に記されている Adler-32 というアルゴリズムを用いて計算した、
+非圧縮データのチェックサムの値です。
+<P>
+
+<DT><CODE>修正時刻 (4 バイト)</CODE>
+<DD>元のファイルの最終修正時刻です。
+グリニッジ標準時の 1970 年 1 月 1 日 0 時 0 分 0 秒からの経過秒数で
+表します。
+</DL>
+<P>
+
+<CODE>zip モード</CODE> と <CODE>圧縮レベル</CODE> は、両方ともヘッダの 5 バイト目
+に入ります。
+<CODE>zip モード</CODE> は、値の最も大きい部分を表すビット (most significant
+bit) を含み、<CODE>圧縮レベル</CODE> は最も小さい部分を表すビット (least
+significant bit) を含んでいます。
+<CODE>zip モード</CODE> が 1 で、<CODE>圧縮レベル</CODE> が 2 なら、ヘッダの 5 バ
+イト目は 0x12 になります。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre> MSB                         LSB
++---+---+---+---+---+---+---+---+
+| 0   0   0   1   0   0   1   0 | = 0x12
++---+---+---+---+---+---+---+---+
+  (zip モード)  |  (圧縮レベル)
+</pre></td></tr></table></P><P>
+
+ヘッダ内での、複数バイトからなる数値はすべて、値の大きい方の部分
+を表すバイト (most significant byte) が先に来た形で記録されます。
+</P><P>
+
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_10.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

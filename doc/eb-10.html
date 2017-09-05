@@ -1,0 +1,1328 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-09.html">前へ</a>] [<a href="eb-11.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="local-character">外字</a></h2>
+
+<p>
+文字コードに収録されていない、私的に定義した文字のことを、俗に「外字」
+と言います。
+外字として定義した個々の文字を識別するために、文字コードに収録された
+文字とは重複しない位置に、各文字の文字番号に割り振るのが普通です。
+(割り当てる文字番号の詳細については、<a href="eb-02.html#character-code">「文字コード」</a> を参照のこと。)
+</p>
+
+<p>
+市販の電子ブック、EPWING でも、ほとんどが外字を使っています。
+外字の定義状況は書籍同士でバラバラで、まったく統一感はありません。
+つまり、同じ文字番号を使っていても、定義されている外字は書籍によって
+違います。
+外字は副本毎に定義することが可能ですが、一つの CD-ROM 書籍内でも副本に
+よって定義が異なることも珍しくありません。
+副本によっては、数百から数千の外字を定義していることもあります。
+</p>
+
+<p>
+CD-ROM 書籍では、定義した外字の字形データ (つまりフォント) を用意して
+います。
+フォントはビットマップデータであり、書籍によっては大きさの異なる数種類
+のフォントを用意しています。
+</p>
+
+<p>
+逆に言えば、外字に対して提供されるデータは、フォントだけです。
+ある文字番号を割り当てられた外字が、漢字なのか、発音記号なのか、
+そういった補助的な情報は用意されていません。
+アプリケーションプログラムが外字をサポートするためには、外字のフォント
+をそのまま表示する以外に方法はないでしょう。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="narrow-and-wide-font">半角外字と全角外字</a></h3>
+
+<p>
+CD-ROM 書籍における外字には、「全角外字」「半角外字」の二種類があります。
+全角外字は用意されているフォントの横と縦の長さがおよそ 1:1 になっており、
+半角外字では 1:2 になっています。
+</p>
+
+<blockquote>
+<pre>
+　　　　　　全角外字　　　　　　　　　　半角外字　　
+　　　　（１６×１６）　　　　　　　　（８×１６）
+□□□□□□□□□□□□□□□□　　□□□□□□□□
+□□□□□□□□□□□□□□□□　　□□■■□■□□
+□□□■■■■■■□□□■□□□　　□□□□■□□□
+□□□□□□□□■□■□■□□□　　□□□■■□□□
+□□□□■□□■□□■□■□□□　　□□■□□■□□
+□□□□■□□■■■■■■□□□　　□■□□□■□□
+□□■■■■■□□□■□■□□□　　□□□■□■□□
+□□□□□□□□□□■□■□□□　　□□■□■■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■■■■■■■■■■□□□　　□■□□□■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■■■■■■■■■■□□□　　□■□□□■□□
+□□□□□□□□□□□□□□□□　　□□■■■□□□
+□□□□□□□□□□□□□□□□　　□□□□□□□□
+</pre>
+</blockquote>
+
+<p>
+テキストデータには、半角表示の開始と終了を表すエスケープシーケンスが
+あり (<a href="eb-09.html#text-data-format">「テキストデータの内部形式」</a> を参照のこと)、
+開始と終了の間に置かれたものは半角外字、それ以外のところなら全角外字に
+なります。
+</p>
+
+<p>
+文字番号は同じでも、字形が全角と半角ではまったく異なることもあります
+ので、外字の文字番号だけから、全角と半角のどちらかを判断することは
+できません。
+かならず、前方に半角開始のエスケープシーケンスが出現していたかどうか
+という情報に基づいて判断しないといけません。
+</p>
+
+<p>
+ただし、全角か半角かの判定は EB ライブラリ側で行いますので、
+アプリケーションプログラムが文脈の解析を行う必要はありません。
+</p>
+
+<p>
+CD-ROM 書籍の副本には、半角外字あるいは全角外字のどちらか一方だけを
+定義しているものもありますし、両方とも定義しているものもあります。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="font-size-and-font-code">外字の大きさと外字コード</a></h3>
+
+<p>
+各副本には、定義している外字のフォントがビットマップ形式で収録されて
+います。
+フォントの大きさは、縦のピクセル数を基準にすると 16, 24, 30, 48 の
+4 種類があり、全角外字、半角外字それぞれのフォントの大きさ
+(横のピクセル数×縦のピクセル数) は次の通りになります。
+</p>
+
+<table summary="フォントの大きさ">
+<tr><td>縦のピクセル数  <td>  全角全角  <td> 半角外字</tr>
+<tr><td>16              <td>  16x16     <td>  8x16</tr>
+<tr><td>24              <td>  24x24     <td> 16x24</tr>
+<tr><td>30              <td>  32x30     <td> 16x30</tr>
+<tr><td>48              <td>  48x48     <td> 24x48</tr>
+</table>
+
+<p>
+ただし、すべての副本でこれら 4 種類のフォントを用意しているわけでは
+ありません。
+縦が 16 ピクセルのものは必ず用意されていますが、それ以外はないことも
+珍しくありません。
+(外字がまったく定義されていなければ、16 ピクセルのフォントも用意され
+ません。)
+</p>
+
+<p>
+EB ライブラリでは、このように縦方向のピクセル数、つまり
+<dfn>フォントの高さ (font height)</dfn> を基準に、外字フォントの大きさを
+区別しています。
+そして、それぞれのフォントの高さ (16, 24, 30, 48) に対して、
+<dfn>外字コード (font code)</dfn> というものを割り当てています。
+フォントの高さを指定する際は、必ずこの外字コードを使います。
+</p>
+
+<table summary="フォントの高さと外字コードの対応表">
+<tr><td>縦のピクセル数  <td>  外字コード</tr>
+<tr><td>16              <td>  <code>EB_FONT_16</code></tr>
+<tr><td>24              <td>  <code>EB_FONT_24</code></tr>
+<tr><td>30              <td>  <code>EB_FONT_30</code></tr>
+<tr><td>48              <td>  <code>EB_FONT_48</code></tr>
+</table>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="current-font-height">選択中の外字フォントの高さ</a></h3>
+
+<p>
+<code>EB_Book</code> オブジェクトで選択中の副本が用意している外字フォント
+の高さの中から一つ選んで、
+<dfn>選択中の外字フォントの高さ (current font height)</dfn> として指定する
+ことができます。
+EB ライブラリで外字のフォントデータ (ビットマップデータ) を取り出すには、
+外字フォントの高さをあらかじめ選択しておく必要があります。
+</p>
+
+<p>
+選択するには、関数 <code>eb_set_font()</code> を使います。
+以下のプログラムは、高さ 24 ピクセルのフォントを選択する場合の例です。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
+ * 書籍に結び付けられ、副本を選択中だと仮定しています。*/
+if (eb_set_font(&amp;book, EB_FONT_24) != EB_SUCCESS) {
+    printf("eb_set_font_() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+このプログラムでは、高さ 24 ピクセルのフォントを選択中の副本が用意して
+いるものと仮定していますが、実際には用意していない副本も珍しくありません。
+もし、副本が高さ 24 ピクセルのフォントを用意していなければ、
+<code>eb_set_font()</code> は <code>EB_ERR_NO_SUCH_FONT</code> を返します。
+</p>
+
+<p>
+しかし、外字を選択する前に、前もってその副本が用意しているフォントを
+知りたいときもあります。
+これには、2 通りの方法があります。
+</p>
+
+<p>
+まず 1 つ目は、選択中の副本が用意しているフォントの高さの一覧を 
+<code>eb_font_list()</code> で取得する方法です。
+これは、副本コードの一覧を取得する <code>eb_subbook_list()</code> と
+使い方が良く似ています。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Font_Code font_list[EB_MAX_FONTS];
+int font_count;
+int i;
+
+if (eb_font_list(&amp;book, font_list, &amp;font_count) != EB_SUCCESS) {
+    printf("eb_font_list() failed\n");
+    return;
+}
+
+for (i = 0; i &lt; font_count; i++) {
+    if (font_list[i] == EB_FONT_24)
+        printf("this subbook has EB_FONT_24\n");
+}
+</pre>
+</blockquote>
+
+<p>
+2 つ目は、<code>eb_have_font()</code> を使うやり方です。
+この関数は、特定の高さのフォントを、選択中の副本が用意しているかどうか
+調べることができます。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_have_font(&amp;book, EB_FONT_24)) {
+    printf("this subbook has EB_FONT_24\n");
+}
+</pre>
+</blockquote>
+
+<p>
+また、選択中の副本が半角外字、全角外字を定義しているかどうかは、それぞれ
+<code>eb_have_narrow_font()</code>, <code>eb_have_wide_font()</code>
+を使って調べることができます。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_have_narrow_font(&amp;book))
+    printf("this subbook has narrow font\n");
+if (eb_have_wide_font(&amp;book))
+    printf("this subbook has wide font\n");
+</pre>
+</blockquote>
+
+<p>
+なお、あらかじめ副本を選択しておかないと、外字の高さは選択できないので
+注意して下さい。
+<code>eb_set_subbook()</code> で選択中の副本を切り替えると、外字フォント
+の高さは常に未選択の状態に戻ります。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="get-font">外字フォントの取り出し</a></h3>
+
+<p>
+外字の高さを選択した状態であれば、外字のフォントデータ
+(ビットマップデータ) を取り出すことができます。
+</p>
+
+<p>
+フォントデータを取り出す関数は、
+全角外字なら <code>eb_wide_font_character_bitmap()</code>、
+半角外字なら <code>eb_narrow_font_character_bitmap()</code> です。
+</p>
+
+<p>
+全角外字 <samp>0xa121</samp> のフォントデータを取り出すプログラムは、
+次のようになります。
+半角外字の場合は、呼び出す関数名が変わるだけです。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
+ * 書籍に結び付けられ、副本と外字の高さを選択中だと仮定しています。*/
+char bitmap[EB_SIZE_WIDE_FONT_48];
+
+if (eb_wide_font_character_bitmap(book, 0xa121, bitmap)
+    != EB_SUCCESS) {
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+ここでは、<code>bitmap</code> にフォントデータを格納しています。
+<code>bitmap</code> の領域として <code>EB_SIZE_WIDE_FONT_48</code>
+バイトを確保していますが、これは高さ 48 ピクセルの外字データを格納する
+ために必要なサイズを表します。
+</p>
+
+<p>
+フォントデータのサイズは、外字の高さに応じて一定です。
+高さ 48 ピクセルは外字の中でも最大のサイズなので、このサイズの領域を
+用意すれば、どの高さの外字でも格納できます。
+</p>
+
+<p>
+外字データは、ビットマップ形式のデータになっています。
+背景色をビット値 0, 前景色をビット値 1 として、各ピクセルの値を並べて
+あります。
+並び方ですが、左上からまずは右に向かってピクセルを拾っていき、左端まで
+来たら一つ下の段に降りて、また右方向にピクセルを拾います。
+以下、一番下の段までこれを繰り返します。
+</p>
+
+<p>
+ただし、バイト内では、128, 64, 32, ...1 の桁の順にビット値を格納して
+います。
+つまり、128 の桁は一番左のピクセル、1 の桁は一番右のピクセルに対応
+します。
+</p>
+
+<p>
+以下に、16x16 の全角外字のビットマップの例と、そのバイト列を記します。
+背景色が□、前景色が■です。
+</p>
+
+<blockquote>
+<pre>
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+□□□■■■■■■□□□■□□□　　0x1f, 0x88,
+□□□□□□□□■□■□■□□□　　0x00, 0xc8,
+□□□□■□□■□□■□■□□□　　0x09, 0x28,
+□□□□■□□■■■■■■□□□　　0x09, 0xf8,
+□□■■■■■□□□■□■□□□　　0x3e, 0x28,
+□□□□□□□□□□■□■□□□　　0x00, 0x28,
+□□□■□□□□□□□□■□□□　　0x10, 0x08,
+□□□■□□□□□□□□■□□□　　0x10, 0x08,
+□□□■■■■■■■■■■□□□　　0x1f, 0xf8,
+□□□■□□□□□□□□■□□□　　0x18, 0x08,
+□□□■□□□□□□□□■□□□　　0x18, 0x08,
+□□□■■■■■■■■■■□□□　　0x1f, 0xf8,
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="convert-font">外字フォントの変換</a></h3>
+
+<p>
+EB ライブラリには、外字のビットマップデータを XBM, XPM, GIF, BMP, PNG
+の各画像形式に変換する関数が用意されています。
+変換を行う関数は、次の 5 つです。
+</p>
+
+<table summary="外字のビットマップデータの変換関数">
+<tr><td><code>eb_bitmap_to_xbm()</code>  <td> XBM への変換</tr>
+<tr><td><code>eb_bitmap_to_xpm()</code>  <td> XPM への変換</tr>
+<tr><td><code>eb_bitmap_to_gif()</code>  <td> GIF への変換</tr>
+<tr><td><code>eb_bitmap_to_bmp()</code>  <td> BMP への変換</tr>
+<tr><td><code>eb_bitmap_to_png()</code>  <td> PNG への変換</tr>
+</table>
+
+<p>
+どの関数も呼び出し方は同じですが、ここでは XBM への変換のプログラム例
+を示します。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>bitmap</code> に高さ 16 の全角外字のビットマップデータが格納
+ * されていると仮定しています。*/
+char bitmap[EB_SIZE_WIDE_FONT_16];
+char xbm[EB_SIZE_WIDE_FONT_16_XBM];
+size_t xbmsize;
+
+if (eb_wide_font_character_bitmap(bitmap, EB_WIDTH_WIDE_FONT_16,
+    EB_HEIGHT_FONT_16, xbm, &amp;xbmsize) != EB_SUCCESS) {
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+XPM, GIF, PNG への変換では、前景色は黒、背景色は透明になります。
+BMP への変換では、前景色は黒、背景色は白になります。
+XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="local-character-in-text">テキスト中の外字</a></h3>
+
+<p>
+外字はテキストデータ (本文、メニューなど) の中で使われています。
+</p>
+
+<p>
+アプリケーションプログラムが、テキストデータ中に出現する外字を識別して
+処理を行うには、外字に対するフックを設定して、フック関数の中で処理する
+ことになります。
+</p>
+
+<p>
+外字に対するフックは、全角外字に対する <code>EB_HOOK_WIDE_FONT</code> と
+半角外字に対する <code>EB_HOOK_NARROW_FONT</code> の二種類があります。
+いずれも、外字が一字出現する度に、設定したフック関数を呼び出します。
+</p>
+
+<p>
+フックの扱い方については、<a href="eb-09.html#hook-code-list">「フックコードの一覧」</a> を参照のこと。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="font-data-types">データ型の詳細</a></h3>
+
+<p>
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/eb.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:Font_Code"><code>EB_Font_Code</code> 型</a></h4>
+
+<p>
+外字コードは、外字の高さ (ピクセル数) を表します。
+現在のところ、定義されている高さは次の通りです。
+</p>
+
+<ul>
+<li><code>EB_FONT_16</code>
+<li><code>EB_FONT_24</code>
+<li><code>EB_FONT_30</code>
+<li><code>EB_FONT_48</code>
+<li><code>EB_FONT_INVALID</code>
+</ul>
+
+<p>
+外字コードの実体は整数値ですが、<code>EB_FONT_16</code> の値は 16 では
+ありません。
+他も同様ですので、注意して下さい。
+</p>
+
+<p>
+<code>EB_FONT_INVALID</code> は特別な外字コードで、不正な外字コード値を
+表すために用います。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="font-constants">定数の詳細</a></h3>
+
+<p>
+この節で説明している定数を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/font.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:WIDTH_NARROW_FONT_16">定数 <code>EB_WIDTH_NARROW_FONT_16</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:WIDTH_NARROW_FONT_24">定数 <code>EB_WIDTH_NARROW_FONT_24</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:WIDTH_NARROW_FONT_30">定数 <code>EB_WIDTH_NARROW_FONT_30</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:WIDTH_NARROW_FONT_48">定数 <code>EB_WIDTH_NARROW_FONT_48</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:WIDTH_WIDE_FONT_16">定数 <code>EB_WIDTH_WIDE_FONT_16</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:WIDTH_WIDE_FONT_24">定数 <code>EB_WIDTH_WIDE_FONT_24</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:WIDTH_WIDE_FONT_30">定数 <code>EB_WIDTH_WIDE_FONT_30</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:WIDTH_WIDE_FONT_48">定数 <code>EB_WIDTH_WIDE_FONT_48</code></a></h4>
+
+<p>
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個
+分の幅 (横方向のピクセル数) を <code>int</code> 型で表しています。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HEIGHT_NARROW_FONT_16">定数 <code>EB_HEIGHT_NARROW_FONT_16</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HEIGHT_NARROW_FONT_24">定数 <code>EB_HEIGHT_NARROW_FONT_24</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HEIGHT_NARROW_FONT_30">定数 <code>EB_HEIGHT_NARROW_FONT_30</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HEIGHT_NARROW_FONT_48">定数 <code>EB_HEIGHT_NARROW_FONT_48</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HEIGHT_WIDE_FONT_16">定数 <code>EB_HEIGHT_WIDE_FONT_16</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HEIGHT_WIDE_FONT_24">定数 <code>EB_HEIGHT_WIDE_FONT_24</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HEIGHT_WIDE_FONT_30">定数 <code>EB_HEIGHT_WIDE_FONT_30</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HEIGHT_WIDE_FONT_48">定数 <code>EB_HEIGHT_WIDE_FONT_48</code></a></h4>
+
+<p>
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+の縦方向のピクセル数を <code>int</code> 型で表しています。
+</p>
+
+<p>
+<code>EB_HEIGHT_NARROW_FONT_16</code> および
+<code>EB_HEIGHT_WIDE_FONT_16</code> の実際の値は 16 です。
+(外字コード <code>EB_FONT_16</code> の実際の値は 16 ではありませんので、
+注意して下さい。)
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_16">定数 <code>EB_SIZE_NARROW_FONT_16</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_24">定数 <code>EB_SIZE_NARROW_FONT_24</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_30">定数 <code>EB_SIZE_NARROW_FONT_30</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_48">定数 <code>EB_SIZE_NARROW_FONT_48</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_16">定数 <code>EB_SIZE_WIDE_FONT_16</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_24">定数 <code>EB_SIZE_WIDE_FONT_24</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_30">定数 <code>EB_SIZE_WIDE_FONT_30</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_48">定数 <code>EB_SIZE_WIDE_FONT_48</code></a></h4>
+
+<p>
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを格納するのに必要な領域の大きさを表しています。
+値は <code>int</code> 型で、単位はバイトです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_16_XBM">定数 <code>EB_SIZE_NARROW_FONT_16_XBM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_24_XBM">定数 <code>EB_SIZE_NARROW_FONT_24_XBM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_30_XBM">定数 <code>EB_SIZE_NARROW_FONT_30_XBM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_48_XBM">定数 <code>EB_SIZE_NARROW_FONT_48_XBM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_16_XBM">定数 <code>EB_SIZE_WIDE_FONT_16_XBM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_24_XBM">定数 <code>EB_SIZE_WIDE_FONT_24_XBM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_30_XBM">定数 <code>EB_SIZE_WIDE_FONT_30_XBM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_48_XBM">定数 <code>EB_SIZE_WIDE_FONT_48_XBM</code></a></h4>
+
+<p>
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを <code>eb_bitmap_to_xbm()</code> を用いて XBM 形式
+に変換する際に、変換後の XBM 形式のデータの大きさを表しています。
+値は <code>int</code> 型で、単位はバイトです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_16_XPM">定数 <code>EB_SIZE_NARROW_FONT_16_XPM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_24_XPM">定数 <code>EB_SIZE_NARROW_FONT_24_XPM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_30_XPM">定数 <code>EB_SIZE_NARROW_FONT_30_XPM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_48_XPM">定数 <code>EB_SIZE_NARROW_FONT_48_XPM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_16_XPM">定数 <code>EB_SIZE_WIDE_FONT_16_XPM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_24_XPM">定数 <code>EB_SIZE_WIDE_FONT_24_XPM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_30_XPM">定数 <code>EB_SIZE_WIDE_FONT_30_XPM</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_48_XPM">定数 <code>EB_SIZE_WIDE_FONT_48_XPM</code></a></h4>
+
+<p>
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを <code>eb_bitmap_to_xpm()</code> を用いて XPM 形式
+に変換する際に、変換後の XPM 形式のデータの大きさを表しています。
+値は <code>int</code> 型で、単位はバイトです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_16_GIF">定数 <code>EB_SIZE_NARROW_FONT_16_GIF</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_24_GIF">定数 <code>EB_SIZE_NARROW_FONT_24_GIF</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_30_GIF">定数 <code>EB_SIZE_NARROW_FONT_30_GIF</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_48_GIF">定数 <code>EB_SIZE_NARROW_FONT_48_GIF</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_16_GIF">定数 <code>EB_SIZE_WIDE_FONT_16_GIF</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_24_GIF">定数 <code>EB_SIZE_WIDE_FONT_24_GIF</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_30_GIF">定数 <code>EB_SIZE_WIDE_FONT_30_GIF</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_48_GIF">定数 <code>EB_SIZE_WIDE_FONT_48_GIF</code></a></h4>
+
+<p>
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを <code>eb_bitmap_to_gif()</code> を用いて GIF 形式
+に変換する際に、変換後の GIF 形式のデータの大きさを表しています。
+値は <code>int</code> 型で、単位はバイトです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_16_BMP">定数 <code>EB_SIZE_NARROW_FONT_16_BMP</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_24_BMP">定数 <code>EB_SIZE_NARROW_FONT_24_BMP</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_30_BMP">定数 <code>EB_SIZE_NARROW_FONT_30_BMP</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_48_BMP">定数 <code>EB_SIZE_NARROW_FONT_48_BMP</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_16_BMP">定数 <code>EB_SIZE_WIDE_FONT_16_BMP</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_24_BMP">定数 <code>EB_SIZE_WIDE_FONT_24_BMP</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_30_BMP">定数 <code>EB_SIZE_WIDE_FONT_30_BMP</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_48_BMP">定数 <code>EB_SIZE_WIDE_FONT_48_BMP</code></a></h4>
+
+<p>
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを <code>eb_bitmap_to_bmp()</code> を用いて BMP 形式
+に変換する際に、変換後の BMP 形式のデータの大きさを表しています。
+値は <code>int</code> 型で、単位はバイトです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_16_PNG">定数 <code>EB_SIZE_NARROW_FONT_16_PNG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_24_PNG">定数 <code>EB_SIZE_NARROW_FONT_24_PNG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_30_PNG">定数 <code>EB_SIZE_NARROW_FONT_30_PNG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_NARROW_FONT_48_PNG">定数 <code>EB_SIZE_NARROW_FONT_48_PNG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_16_PNG">定数 <code>EB_SIZE_WIDE_FONT_16_PNG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_24_PNG">定数 <code>EB_SIZE_WIDE_FONT_24_PNG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_30_PNG">定数 <code>EB_SIZE_WIDE_FONT_30_PNG</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:SIZE_WIDE_FONT_48_PNG">定数 <code>EB_SIZE_WIDE_FONT_48_PNG</code></a></h4>
+
+<p>
+これらの定数は、半角、全角およびそれぞれの高さ (外字コード) の外字一個分
+のビットマップデータを <code>eb_bitmap_to_png()</code> を用いて PNG 形式
+に変換する際に、変換後の PNG 形式のデータの大きさを表しています。
+値は <code>int</code> 型で、単位はバイトです。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="font-functions">関数の詳細</a></h3>
+
+<p>
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/font.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:font"><code>EB_Error_Code eb_font (EB_Book *<var>book</var>, EB_Font_Code *<var>font_code</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_font()</code> は、選択している副本において、選択中の
+外字フォントの高さを表す外字コードを <var>font_code</var> の指す領域に
+書き込みます。
+</p>
+
+<p>
+成功すると関数は <code>EB_SUCCESS</code> を返します。
+失敗すると <var>font_code</var> の指す領域に <code>EB_FONT_INVALID</code>
+を書き込み、原因を示すエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、外字フォントの高さが選択されていなければなりません。
+外字が選択されていなければ、<code>EB_ERR_NO_CUR_FONT</code> を返します。
+副本そのものを選択していない場合も、同様です。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:set_font"><code>EB_Error_Code eb_set_font (EB_Book *<var>book</var>, EB_Font_Code <var>font_code</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_set_font()</code> は、選択中の副本における外字フォントの
+高さをセットします。
+セットする外字フォントの「高さ」は、対応する外字コードを引数
+<var>font_code</var> で指定します。
+</p>
+
+<p>
+この関数は、成功すると <code>EB_SUCCESS</code> を返し、指定した「高さ」が
+「選択中の外字フォントの高さ」となります。
+すでに外字フォントの高さを選択していた場合は、いったん未選択の状態に
+してからあらためて <var>font_code</var> を選択します。
+</p>
+
+<p>
+失敗すると原因を示すエラーコードを返し、外字フォントの高さは未選択の
+状態になります。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+また、その副本が持っていない外字フォントの高さが指定されると、
+<code>EB_ERR_NO_SUCH_FONT</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:unset_font"><code>void eb_unset_font (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_unset_font()</code> は、選択中の外字フォントの高さを未選択
+の状態に戻します。
+<var>book</var> が書籍に結び付いていない場合や副本が選択されていない場合、
+もしくは外字フォントの高さが選択されていない場合は何もしません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:font_list"><code>EB_Error_Code eb_font_list (EB_Book *<var>book</var>, EB_Font_Code *<var>font_list</var>, int *<var>font_count</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_font_list()</code> は、選択中の副本が定義している外字の
+高さの一覧を <code>EB_Font_Code</code> 型の配列にして、<var>font_list</var>
+の指す領域に書き込みます。
+</p>
+
+<p>
+配列は、最大で <code>EB_MAX_FONTS</code> 個の要素を持ちます。
+加えて、書籍が収録している副本の個数を <var>font_count</var> の指す領域に
+書き込みます。
+(現在のバージョンでは 、<code>EB_MAX_FONTS</code> の値は 4 になっています。
+高さ 16, 24, 30, 48 ピクセルの 4 種類です。)
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>font_count</var> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> 内のいずれかの副本が選択されていなくては
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_font"><code>int eb_have_font (EB_Book *<var>book</var>, EB_Font_Code <var>font_code</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_font()</code> は、<var>font_code</var> で指定した高さの
+外字フォントを、選択中の副本が持っているかどうかを調べます。
+</p>
+
+<p>
+持っていれば 1 を返し、持っていなければ 0 を返します。
+<var>book</var> が副本を選択していない場合も 0 を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:font_height"><code>EB_Error_Code eb_font_height (EB_Book *<var>book</var>, int *<var>height</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_font_height()</code> は、<var>book</var> が選択中の
+外字フォントの高さ (縦方向のピクセル数) を <var>height</var> の指す領域に
+書き込みます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>height</var> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> は外字フォントの高さを選択していなくては
+なりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_FONT</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:font_height2"><code>EB_Error_Code eb_font_height2 (EB_Font_Code <var>font_code</var>, int *<var>height</var>)</code></a></h4>
+
+<p>
+<code>eb_font_height()</code> と似ていますが、選択中の副本ではなく、引数
+<var>font_height</var> で指定された外字コードの高さ (縦方向のピクセル数)
+を書き込む点が異なります。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_narrow_font"><code>int eb_have_narrow_font (EB_Book *<var>book</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_wide_font"><code>int eb_have_wide_font (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_have_narrow_font()</code> は、選択中の副本が半角外字を定義
+しているかどうかを調べます。
+同様に、関数 <code>eb_have_wide_font()</code> は、全角外字を定義しているか
+どうかを調べます。
+</p>
+
+<p>
+定義していれば 1 を、定義していなければ 0 を返します。
+<var>book</var> が副本を選択していない場合も 0 を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_width"><code>EB_Error_Code eb_narrow_font_width (EB_Book *<var>book</var>, int *<var>width</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_width"><code>EB_Error_Code eb_wide_font_width (EB_Book *<var>book</var>, int *<var>width</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_narrow_font_width()</code> は、<var>book</var> が選択中の
+外字フォントの高さにおける半角外字の幅 (横方向のピクセル数) を、
+<var>height</var> の指す領域に書き込みます。
+同様に、<code>eb_wide_font_width()</code> は全角外字の幅を書き込みます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>width</var> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> は外字の高さを選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_FONT</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_width2"><code>EB_Error_Code eb_narrow_font_width2 (EB_Font_Code <var>font_code</var>, int *<var>width</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_width2"><code>EB_Error_Code eb_wide_font_width2 (EB_Font_Code <var>font_code</var>, int *<var>width</var>)</code></a></h4>
+
+<p>
+<code>eb_narrow_font_width()</code>, <code>eb_wide_font_width()</code> と
+似ていますが、選択中の副本ではなく、引数<var>font_height</var> で指定された
+外字コードの幅 (横方向のピクセル数) を書き込む点が異なります。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_size"><code>EB_Error_Code eb_narrow_font_size (EB_Book *<var>book</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_size"><code>EB_Error_Code eb_wide_font_size (EB_Book *<var>book</var>, size_t *<var>size</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_narrow_font_size()</code> は、<var>book</var> が選択中の
+外字フォントの高さにおける半角外字一個分のデータサイズ (バイト数) を、
+<var>size</var> の指す領域に書き込みます。
+同様に、<code>eb_wide_font_size()</code> は全角外字のサイズを書き込みます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>size</var> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> は外字フォントの高さを選択していなくては
+なりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_FONT</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_size2"><code>EB_Error_Code eb_narrow_font_size2 (EB_Font_Code <var>font_code</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_size2"><code>EB_Error_Code eb_wide_font_size2 (EB_Font_Code <var>font_code</var>, size_t *<var>size</var>)</code></a></h4>
+
+<p>
+<code>eb_narrow_font_size()</code>, <code>eb_wide_font_size()</code> と
+似ていますが、選択中の副本ではなく、引数 <var>font_height</var> で指定
+された外字コードの外字一個分のデータサイズを書き込む点が異なります。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_start"><code>EB_Error_Code eb_narrow_font_start (EB_Book *<var>book</var>, int *<var>start</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_start"><code>EB_Error_Code eb_wide_font_start (EB_Book *<var>book</var>, int *<var>start</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_narrow_font_start()</code> は、<var>book</var> が選択中の
+副本における半角外字の先頭の文字番号 (半角外字の文字番号の中で最小のもの)
+を、<var>start</var> の指す領域に書き込みます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> は副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+副本が半角外字を定義していない場合は、<code>EB_ERR_NO_CUR_FONT</code> を
+返します。
+</p>
+
+<p>
+関数 <code>eb_wide_font_start()</code> は、半角外字ではなく全角外字に
+ついて調べるという点を除いて、<code>eb_narrow_font_start()</code> と同じ
+です。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_end"><code>EB_Error_Code eb_narrow_font_end (EB_Book *<var>book</var>, int *<var>end</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_end"><code>EB_Error_Code eb_wide_font_end (EB_Book *<var>book</var>, int *<var>end</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_narrow_font_end()</code> は、<var>book</var> が選択中の副本
+における半角外字の最後の文字番号 (半角外字の文字番号の中で最大のもの) を、
+<var>start</var> の指す領域に書き込みます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> は副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+副本が半角外字を定義していない場合は、<code>EB_ERR_NO_CUR_FONT</code> を
+返します。
+</p>
+
+<p>
+関数 <code>eb_wide_font_end()</code> は、半角外字ではなく全角外字について
+調べるという点を除いて、<code>eb_narrow_font_end()</code> と同じです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_character_bitmap"><code>EB_Error_Code eb_narrow_font_character_bitmap (EB_Book *<var>book</var>, int <var>character_number</var>, char *<var>bitmap</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_character_bitmap"><code>EB_Error_Code eb_wide_font_character_bitmap (EB_Book *<var>book</var>, int <var>character_number</var>, char *<var>bitmap</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_narrow_font_character_bitmap()</code> は、<var>book</var>
+が選択中の副本で定義している、半角外字のビットマップデータを取り出します。
+取り出す外字の文字番号を、<var>character_number</var> で指定します。
+</p>
+
+<p>
+成功すると、関数はビットマップデータを <var>bitmap</var> の指す領域に
+書き込み、<code>EB_SUCCESS</code> を返します。
+失敗すると、<var>bitmap</var> の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> は外字フォントの高さを選択していなくては
+なりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_FONT</code> を返します。
+副本が半角外字を定義していない場合も、やはり <code>EB_ERR_NO_CUR_FONT</code>
+を返します。
+文字番号 <var>character_number</var> が外字の定義範囲外にある場合は、
+<code>EB_ERR_NO_SUCH_CHAR_BMP</code> を返します。
+</p>
+
+<p>
+関数 <code>eb_wide_font_character_bitmap()</code> は、半角外字ではなく
+全角外字のビットマップデータを取り出すという点を除いて、
+<code>eb_narrow_font_character_bitmap()</code> と同じです。
+</p>
+
+<p>
+ビットマップデータの形式については、
+<a href="eb-10.html#get-font">「外字フォントの取り出し」</a> を参照のこと。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:forward_narrow_font_character"><code>EB_Error_Code eb_forward_narrow_font_character (EB_Book *<var>book</var>, int <var>n</var>, int *<var>character_number</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:forward_wide_font_character"><code>EB_Error_Code eb_forward_wide_font_character (EB_Book *<var>book</var>, int <var>n</var>, int *<var>character_number</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_forward_narrow_font_character()</code> は、<var>book</var>
+が選択中の副本で定義されている半角外字の文字番号 <var>character_number</var>
+の<var>n</var> 個後ろに位置する外字の文字番号を取得します。
+</p>
+
+<p>
+まず、関数を呼び出す際に、<var>character_number</var> の指す領域に
+文字番号を書き込んでおきます。
+関数の処理が成功すると、戻ったときに <var>n</var> 個分だけ後方の文字番号
+に書き換わっています。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> は副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+副本が半角外字を持っていない場合は、<code>EB_ERR_NO_CUR_FONT</code> を
+返します。
+</p>
+
+<p>
+<var>n</var> 個後ろにもう外字がない場合や、呼び出した際に
+<var>character_number</var> の指す領域に書き込んであった文字番号が外字の
+定義範囲外にある場合は <code>EB_ERR_NO_SUCH_CHAR_BMP</code> を返します。
+</p>
+
+<p>
+<var>n</var> には負の数を指定することもできます。
+この場合、次の呼び出しと等価になります。
+</p>
+
+<blockquote class="program">
+<pre>
+/* n &lt; 0 とする */
+eb_backward_narrow_font_character (book, -n, character_number);
+</pre>
+</blockquote>
+
+<p>
+関数 <code>eb_forward_wide_font_character()</code> は、半角外字ではなく
+全角外字について操作するという点を除いて、
+<code>eb_forward_narrow_font_character()</code> と同じです。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:backward_narrow_font_character"><code>EB_Error_Code eb_backward_narrow_font_character (EB_Book *<var>book</var>, int <var>n</var>, int *<var>character_number</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:backward_wide_font_character"><code>EB_Error_Code eb_backward_wide_font_character (EB_Book *<var>book</var>, int <var>n</var>, int *<var>character_number</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_backward_narrow_font_character()</code> は
+<code>eb_forward_narrow_font_character()</code> とはちょうど逆の関数です。
+<var>book</var> が選択中の副本で定義されている半角外字の文字番号
+<var>character_number</var> の <var>n</var> 個前方に位置する外字の
+文字番号を取得します。
+</p>
+
+<p>
+同様に、<code>eb_backward_wide_font_character()</code> は、全角外字に
+ついて <var>n</var> 個前方の外字の文字番号を取得する関数で、
+<code>eb_forward_wide_font_character()</code> と反対の関数です。
+</p>
+
+<p>
+<var>n</var> には負の数を指定することも可能で、それぞれ次の呼び出しと
+等価になります。
+</p>
+
+<blockquote class="program">
+<pre>
+/* 半角外字の場合 (n &lt; 0) */
+eb_forward_narrow_font_character (book, -n, character_number);
+
+/* 全角外字の場合 (n &lt; 0) */
+eb_forward_wide_font_character (book, -n, character_number);
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_xbm_size"><code>EB_Error_Code eb_narrow_font_xbm_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_xpm_size"><code>EB_Error_Code eb_narrow_font_xpm_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_gif_size"><code>EB_Error_Code eb_narrow_font_gif_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_bmp_size"><code>EB_Error_Code eb_narrow_font_bmp_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:narrow_font_png_size"><code>EB_Error_Code eb_narrow_font_png_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_xbm_size"><code>EB_Error_Code eb_wide_font_xbm_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_xpm_size"><code>EB_Error_Code eb_wide_font_xpm_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_gif_size"><code>EB_Error_Code eb_wide_font_gif_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_bmp_size"><code>EB_Error_Code eb_wide_font_bmp_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:wide_font_png_size"><code>EB_Error_Code eb_wide_font_png_size (EB_Font_Code <var>height</var>, size_t *<var>size</var>)</code></a></h4>
+
+<p>
+最初の 5 つの関数
+(<code>eb_narrow_font_xbm_size()</code> 〜
+<code>eb_narrow_font_png_size()</code>) は、外字コード <var>height</var>
+の半角外字一個のビットマップを XBM, XPM, GIF, BMP, PNG 形式にそれぞれ変換
+したときのデータサイズを <var>size</var> の指す領域に書き込みます。
+</p>
+
+<p>
+同様に、後ろの 5 つの関数
+(<code>eb_wide_font_xbm_size()</code> 〜
+<code>eb_wide_font_png_size()</code>) は、全角外字を変換したときの
+データサイズを書き込みます。
+</p>
+
+<p>
+いずれの関数も、成功すると <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>size</var> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:bitmap_to_xbm"><code>EB_Error_Code eb_bitmap_to_xbm (const char *<var>bitmap</var>, int <var>width</var>, int <var>height</var>, char *<var>image</var>, size_t *<var>image_length</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:bitmap_to_xpm"><code>EB_Error_Code eb_bitmap_to_xpm (const char *<var>bitmap</var>, int <var>width</var>, int <var>height</var>, char *<var>image</var>, size_t *<var>image_length</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:bitmap_to_gif"><code>EB_Error_Code eb_bitmap_to_gif (const char *<var>bitmap</var>, int <var>width</var>, int <var>height</var>, char *<var>image</var>, size_t *<var>image_length</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:bitmap_to_bmp"><code>EB_Error_Code eb_bitmap_to_bmp (const char *<var>bitmap</var>, int <var>width</var>, int <var>height</var>, char *<var>image</var>, size_t *<var>image_length</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:bitmap_to_png"><code>EB_Error_Code eb_bitmap_to_png (const char *<var>bitmap</var>, int <var>width</var>, int <var>height</var>, char *<var>image</var>, size_t *<var>image_length</var>)</code></a></h4>
+
+<p>
+これら 5 つの関数は、<code>eb_narrow_font_character()</code> または
+<code>eb_wide_font_character()</code> で取り出した外字のビットマップを
+XBM, XPM, GIF, BMP, PNG 形式にそれぞれ変換します。
+</p>
+
+<p>
+ビットマップデータの指す領域を <var>bitmap</var> で指定し、ビットマップの
+高さと幅を <var>width</var>, <var>height</var> で渡します。
+</p>
+
+<p>
+関数の呼び出しから戻ると、<var>image</var> の指す領域に変換後のデータが
+書き込まれ、<var>image_length</var> の指す領域に変換後のデータの大きさが
+書き込まれます。
+</p>
+
+<p>
+XPM, GIF, PNG への変換では、前景色は黒、背景色は透明になります。
+BMP への変換では、前景色は黒、背景色は白になります。
+XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="font-sample">サンプルプログラム</a></h3>
+
+<blockquote>
+<pre>
+/*                                                            -*- C -*-
+ * Copyright (c) 2002-2006  Motoyuki Kasahara
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * 使用方法:
+ *     font &lt;book-path&gt; &lt;subbook-index&gt;
+ * 例:
+ *     font /cdrom 0
+ * 説明:
+ *     &lt;book-path&gt; で指定した CD-ROM 書籍から特定の副本を選び、その
+ *     副本が定義している半角外字 (高さ 16 ピクセル) をすべてアスキー
+ *     アートで表示します。
+ *
+ *     その副本が、高さ 16 ピクセルの半角外字を定義していないと、エ
+ *     ラーになります。
+ *
+ *     &lt;subbook-index&gt; には、検索対象の副本のインデックスを指定しま
+ *     す。インデックスは、書籍の最初の副本から順に 0、1、2 ... に
+ *     なります。
+ */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#include &lt;eb/eb.h&gt;
+#include &lt;eb/error.h&gt;
+#include &lt;eb/font.h&gt;
+
+int
+main(int argc, char *argv[])
+{
+    EB_Error_Code error_code;
+    EB_Book book;
+    EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
+    int subbook_count;
+    int subbook_index;
+    int font_start;
+    unsigned char bitmap[EB_SIZE_NARROW_FONT_16];
+    int i, j;
+
+    /* コマンド行引数をチェック。*/
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s book-path subbook-index\n",
+            argv[0]);
+        exit(1);
+    }
+
+    /* EB ライブラリと `book' を初期化。*/
+    eb_initialize_library();
+    eb_initialize_book(&amp;book);
+
+    /* 書籍を `book' に結び付ける。*/
+    error_code = eb_bind(&amp;book, argv[1]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+
+    /* 副本の一覧を取得。*/
+    error_code = eb_subbook_list(&amp;book, subbook_list, &amp;subbook_count);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* 副本のインデックスを取得。*/
+    subbook_index = atoi(argv[2]);
+
+    /*「現在の副本 (current subbook)」を設定。*/
+    error_code = eb_set_subbook(&amp;book, subbook_list[subbook_index]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to set the current subbook, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /*「現在の外字の大きさ」を設定。*/
+    if (eb_set_font(&amp;book, EB_FONT_16) &lt; 0) {
+        fprintf(stderr, "%s: failed to set the font size, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* 外字の開始位置を取得。*/
+    error_code = eb_narrow_font_start(&amp;book, &amp;font_start);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get font information, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    i = font_start;
+    for (;;) {
+        /* 外字のビットマップデータを取得。*/
+        error_code = eb_narrow_font_character_bitmap(&amp;book, i,
+            (char *)bitmap);
+        if (error_code != EB_SUCCESS) {
+            fprintf(stderr, "%s: failed to get font data, %s\n",
+                argv[0], eb_error_message(error_code));
+            goto die;
+        }
+
+        /* ビットマップをアスキーアートにして出力。*/
+        printf("code point=%04x\n", i);
+        for (j = 0; j &lt; 16; j++) {
+            fputc((bitmap[j] &amp; 0x80) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &amp; 0x40) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &amp; 0x20) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &amp; 0x10) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &amp; 0x08) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &amp; 0x04) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &amp; 0x02) ? '*' : ' ', stdout);
+            fputc((bitmap[j] &amp; 0x01) ? '*' : ' ', stdout);
+            fputc('\n', stdout);
+        }
+        fputs("--------\n", stdout);
+
+        /* 外字の文字番号を一つ進める。*/
+        error_code = eb_forward_narrow_font_character(&amp;book, 1, &amp;i);
+        if (error_code != EB_SUCCESS)
+            break;
+    }
+        
+    /* 書籍と EB ライブラリの利用を終了。*/
+    eb_finalize_book(&amp;book);
+    eb_finalize_library();
+    exit(0);
+
+    /* エラー発生で終了するときの処理。*/
+  die:
+    eb_finalize_book(&amp;book);
+    eb_finalize_library();
+    exit(1);
+}
+</pre>
+</blockquote>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-09.html">前へ</a>] [<a href="eb-11.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

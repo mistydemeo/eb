@@ -1,0 +1,224 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Init and Exit</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Init and Exit">
+<META NAME="keywords" CONTENT="EB Library: Init and Exit">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. ライブラリの初期化と後始末 </H1>
+<!--docid::SEC14::-->
+<P>
+
+この章からは、EB ライブラリのプログラミングについての解説になります。
+</P><P>
+
+まず、アプリケーションプログラムから EB ライブラリを利用するには、
+最初にライブラリを初期化する必要があります。
+</P><P>
+
+ライブラリの初期化を行うには、<CODE>eb_initialize_library()</CODE> という
+関数を呼び出します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_initialize_library() != EB_SUCCESS) {
+    printf("eb_initialize_library() failed\n");
+    exit(1);
+}
+</pre></td></tr></table></P><P>
+
+同様に、ライブラリを使い終わったら、<CODE>eb_finalize_library()</CODE> という
+関数を呼び出して後始末をします。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_finalize_library();
+</pre></td></tr></table></P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_4.html#SEC15">4.1 サンプルプログラム</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_4.html#SEC16">4.2 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Init and Exit Sample"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.1 サンプルプログラム </H2>
+<!--docid::SEC15::-->
+<P>
+
+<A NAME="IDX1"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/*
+ * 使用方法:
+ *     initexit
+ * 例:
+ *     initexit
+ * 説明:
+ *     EB ライブラリの初期化、後始末をしてみます。
+ *     プログラムの外側から見れば、これは何の意味もない動作です。
+ */
+#include "config.h"
+
+#include &#60;stdio.h&#62;
+#include &#60;stdlib.h&#62;
+
+#include &#60;eb/eb.h&#62;
+#include &#60;eb/error.h&#62;
+
+int
+main(argc, argv)
+    int argc;
+    char *argv[];
+{
+    EB_Error_Code error_code;
+
+    /* EB ライブラリを初期化。*/
+    error_code = eb_initialize_library();
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        exit(1);
+    }
+
+    /* EB ライブラリの利用を終了。*/
+    eb_finalize_library();
+    exit(0);
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="Init and Exit Functions"></A>
+<HR SIZE="6">
+<A NAME="SEC16"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC15"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 4.2 関数の詳細 </H2>
+<!--docid::SEC16::-->
+<P>
+
+この項で説明している関数を使うには、<TT>`eb/eb.h'</TT> を読み込んで下さい。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX2"></A>
+<DL>
+<DT><U>Function:</U> EB_Error_Code <B>eb_initialize_library</B> <I>()</I>
+<DD><A NAME="IDX3"></A>
+</P><P>
+
+関数 <CODE>eb_initialize_library()</CODE> は、EB ライブラリを初期化します。
+アプリケーションプログラムは、EB ライブラリの他の関数を呼ぶ前に、必ず
+一回だけこの関数を呼ぶ必要があります。
+</P><P>
+
+メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイル
+した場合、<CODE>eb_initialize_library()</CODE> は <CODE>bindtextdomain()</CODE> を
+呼び出します。
+したがって、アプリケーションプログラムが <CODE>setlocale()</CODE> を呼び出す
+のは、この関数を呼び出す前である必要があります。
+</P><P>
+
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
+</P><P>
+
+ライブラリを初期化せずに、EB ライブラリの他の関数を呼んだ場合の動作は
+未定義です。
+また、すでに初期化を済ませた状態で、再度 <CODE>eb_initialize_library()</CODE>
+を呼んでもいけません。
+呼んだ場合の動作は未定義です。
+</DL>
+</P><P>
+
+<A NAME="IDX4"></A>
+<DL>
+<DT><U>Function:</U> void <B>eb_finalize_library</B> <I>()</I>
+<DD><A NAME="IDX5"></A>
+</P><P>
+
+関数 <CODE>eb_finalize_library()</CODE> は、EB ライブラリを使い終わった際の
+後始末を行います。
+ただし、アプリケーションプログラム側で使用した
+<CODE>EB_Book</CODE>、<CODE>EB_Hookset</CODE>、<CODE>EB_Appendix</CODE> オブジェクトの
+後始末は行いません。
+オブジェクトを後始末するには、それぞれ専用の関数
+<CODE>eb_finalize_book()</CODE>、<CODE>eb_finalize_hookset()</CODE>、
+<CODE>eb_finalize_appendix()</CODE>
+を各オブジェクトに対して別途呼んでやる必要があります。
+</P><P>
+
+ライブラリの後始末をした後は、EB ライブラリのいかなる関数も呼んでは
+いけません。
+呼んだ場合の動作は未定義です。
+</DL>
+</P><P>
+
+<A NAME="EB_Book"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_4.html#SEC14"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_5.html#SEC17"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

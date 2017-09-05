@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebfont コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebfont-01.html">前へ</a>] [<a href="ebfont-03.html">次へ</a>] [<a href="ebfont.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="what-is-local-character">外字とは</a></h2>
+
+<p>
+CD-ROM 書籍の多くは、書籍固有の文字、外字 (local characters) を定義して
+います。
+たとえば、CD-ROM 書籍に使われる文字セットは発音記号を持っていないため、
+英和辞書の中には発音記号を定義しているものがあります。
+</p>
+
+<p>
+CD-ROM 書籍は、外字のビットマップデータも持っています。
+<code>ebfont</code> コマンドは、CD-ROM 書籍のビットマップデータを読み、
+それを指定された画像形式に変換し、ファイルに書き出します。
+<code>ebfont</code> は、XBM、XPM、GIF、BMP、PNG のうちのいずれか、
+または複数の画像ファイルを生成することができます。
+特に指定がなければ、XBM 形式が選択されます。
+</p>
+
+<p>
+外字は、<dfn>半角</dfn> (<dfn>narrow</dfn>) と <dfn>全角</dfn>
+(<dfn>wide</dfn>) の 2 種類に分類されます。
+半角の文字のビットマップデータでは、高さは幅の約半分です。
+全角の文字のビットマップデータでは、高さと幅はほぼ同じです。
+CD-ROM 書籍は、一冊の中に両方の種類の外字を定義することが可能で、
+<code>ebfont</code> は両方の種類の画像ファイルを生成します。
+</p>
+
+<p>
+CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して
+4 種類のサイズを定義しています。
+外字の幅、高さ、サイズは次の通りです。
+</p>
+
+<table summary="外字の幅、高さ、サイズの表">
+<tr><td>高さ  <td>  半角   <td>  全角</tr>
+<tr><td>16    <td>   8x16  <td>  16x16</tr>
+<tr><td>24    <td>  16x24  <td>  24x24</tr>
+<tr><td>30    <td>  16x30  <td>  32x30</tr>
+<tr><td>48    <td>  24x48  <td>  48x48</tr>
+</table>
+
+<p>
+特に指定がなければ、<code>ebfont</code> は高さが 16 ピクセルのフォントの
+画像ファイルを生成します。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebfont-01.html">前へ</a>] [<a href="ebfont-03.html">次へ</a>] [<a href="ebfont.html#toc">目次</a>] 
+</p>
+</body>
+</html>

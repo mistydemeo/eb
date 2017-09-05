@@ -1,0 +1,235 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Uncompression</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Uncompression">
+<META NAME="keywords" CONTENT="EB Library: Uncompression">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. 伸長 </H1>
+<!--docid::SEC12::-->
+<P>
+
+<CODE>ebunzip</CODE> (<CODE>ebzip --uncompress</CODE>、<CODE>ebzipinfo --uncompress</CODE>
+と同じ) は、<CODE>ebzip</CODE> で圧縮した CD-ROM 書籍を伸長します。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_5.html#SEC13">5.1 伸長の実行例</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_5.html#SEC14">5.2 伸長のオプション</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_5.html#SEC15">5.3 圧縮された書籍の伸長</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Uncompression Example"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.1 伸長の実行例 </H2>
+<!--docid::SEC13::-->
+<P>
+
+伸長の処理手順は、圧縮とかなり似ています。
+<TT>`/dict'</TT> の下に圧縮された書籍が置かれているものと仮定します。
+この書籍には、<TT>`/dict'</TT> の下に次のようなファイルを持っています。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/dict/catalog
+/dict/language.ebz
+/dict/kanji/start.ebz
+/dict/english/start.ebz
+</pre></td></tr></table></P><P>
+
+この書籍を伸長するには、次のコマンドを実行します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% cd /dict
+% ebunzip
+</pre></td></tr></table></P><P>
+
+これは次のようにしても同じです。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebunzip --output-directory /dict /dict
+</pre></td></tr></table></P><P>
+
+伸長には、しばらくかかることがあります。
+伸長の間、<CODE>ebunzip</CODE> は、次のように状況を知らせるメッセージを出力
+します。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; /dict/kanji/start.ebz を伸長 &#60;==
+./kanji/start.ebz に出力
+ 5.1% 処理済み (4194304 / 82460672 バイト)
+10.2% 処理済み (8388608 / 82460672 バイト)
+15.3% 処理済み (12582912 / 82460672 バイト)
+        : (略)
+完了 (82460672 / 82460672 バイト)
+25681439 -&#62; 82460672 バイト
+</pre></td></tr></table></P><P>
+
+伸長の間、<CODE>ebunzip</CODE> は、すでに存在するファイルを上書きしても良いか
+どうか確認を求めてきます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; /dict/kanji/start.ebz を伸長 &#60;==
+/dict/kanji/start に出力
+
+ファイルがすでに存在します: /dict/kanji/start
+上書きしますか (はい:y, いいえ:n)?
+</pre></td></tr></table></P><P>
+
+伸長が完了すると、<TT>`/dict'</TT> の下のディレクトリ構成は少し変化して
+います。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/dict/catalog
+/dict/language
+/dict/kanji/start
+/dict/english/start
+</pre></td></tr></table></P><P>
+
+伸長されたファイルはファイル名が変化し、
+拡張子 <SAMP>`.ebz'</SAMP> が取り除かれています。
+</P><P>
+
+<A NAME="Options for Uncompression"></A>
+<HR SIZE="6">
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.2 伸長のオプション </H2>
+<!--docid::SEC14::-->
+<P>
+
+多くのオプションは、圧縮時と伸長時とで同じ意味を持っています。
+</P><P>
+
+<SAMP>`--keep'</SAMP> オプションを指定すると、<CODE>ebunzip</CODE> は、伸長した後に
+圧縮ファイルを削除しなくなります。
+</P><P>
+
+<SAMP>`--test'</SAMP> オプションを指定すると、<CODE>ebunzip</CODE> は伸長したデータ
+を実際のファイルには書き込みません。
+このオプションは、ファイルが正しく圧縮されているのかを確認するときに便
+利です
+(<SAMP>`--test'</SAMP> オプションについての詳細は、「<A HREF="ebzip-ja_4.html#SEC8">テスト</A>」節を参照)。
+</P><P>
+
+<SAMP>`--subbook'</SAMP> や <SAMP>`--skip-content'</SAMP> オプションを指定すると、条件
+に合致したファイルだけしか伸長しません
+(これらのオプションについての詳細は、
+「<A HREF="ebzip-ja_4.html#SEC9">一部だけの圧縮</A>」節を参照)。
+</P><P>
+
+<SAMP>`--force-overwrite'</SAMP> や <SAMP>`--no-overwrite'</SAMP> オプションを指定する
+と、<CODE>ebunzip</CODE> は上書きしても良いかどうかの確認なしに、ファイルを
+上書きしたり飛ばして次に進んだりします
+(<SAMP>`--force-overwrite'</SAMP> と <SAMP>`--no-overwrite'</SAMP> オプションについての
+詳細は、「<A HREF="ebzip-ja_4.html#SEC10">古いファイルの上書き</A>」節を参照)。
+</P><P>
+
+<CODE>ebunzip</CODE> は、<SAMP>`--level'</SAMP> オプションを無視します。
+伸長時に <SAMP>`--level'</SAMP> オプションを指定する必要はありません。
+</P><P>
+
+<A NAME="Uncompress Compressed Book"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_6.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.3 圧縮された書籍の伸長 </H2>
+<!--docid::SEC15::-->
+<P>
+
+S-EBXA および EPWING 規格でも圧縮形式を定義しており、CD-ROM 書籍には
+これらの圧縮形式を実際に採用しているものがあります。
+しかし、S-EBXA や EPWINGの圧縮形式は、ebzip の圧縮形式とは異なります。
+</P><P>
+
+<CODE>ebzip</CODE> は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
+することができますが、圧縮することはできません。
+</P><P>
+
+S-EBXA 形式で圧縮された <CODE>START</CODE> ファイルや、EPWING 形式で圧縮された
+<TT>`HONMON2'</TT>, <TT>`HONMONS'</TT> ファイルを伸長すると、伸長後のファイル
+には拡張子 <SAMP>`.org'</SAMP> が付加されます
+(例: <TT>`honmon2'</TT> → <TT>`honmon2.org'</TT>)。
+</P><P>
+
+<A NAME="Information"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_5.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

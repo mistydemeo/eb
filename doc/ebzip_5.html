@@ -1,0 +1,236 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebzip: Uncompression</TITLE>
+
+<META NAME="description" CONTENT="ebzip: Uncompression">
+<META NAME="keywords" CONTENT="ebzip: Uncompression">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC12"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_4.html#SEC11"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC13"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_4.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. Uncompression </H1>
+<!--docid::SEC12::-->
+<P>
+
+<CODE>ebunzip</CODE> (equivalent to <CODE>ebzip --uncompress</CODE> and
+<CODE>ebzipinfo --uncompress</CODE>) uncompresses a CD-ROM book compressed
+by <CODE>ebzip</CODE>.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip_5.html#SEC13">5.1 Example of Uncompression</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip_5.html#SEC14">5.2 Options for Uncompression</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip_5.html#SEC15">5.3 Uncompress Compressed Book</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Uncompression Example"></A>
+<HR SIZE="6">
+<A NAME="SEC13"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC12"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC14"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.1 Example of Uncompression </H2>
+<!--docid::SEC13::-->
+<P>
+
+Uncompression procedure is closely similar to compression.
+Suppose that a compressed subbook resides under <TT>`/dict'</TT>.
+The book has the following files under <TT>`/dict'</TT>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/dict/catalog
+/dict/language.ebz
+/dict/kanji/start.ebz
+/dict/english/start.ebz
+</pre></td></tr></table></P><P>
+
+Execute the following command to uncompress the book:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% cd /dict
+% ebunzip
+</pre></td></tr></table></P><P>
+
+This is equivalent to:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebunzip --output-directory /dict /dict
+</pre></td></tr></table></P><P>
+
+Uncompression may take a while.
+<CODE>ebunzip</CODE> outputs status messages during the uncompression like
+as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; uncompress /dict/kanji/start.ebz &#60;==
+output to ./kanji/start.ebz
+ 5.1% done (4194304 / 82460672 bytes)
+10.2% done (8388608 / 82460672 bytes)
+15.3% done (12582912 / 82460672 bytes)
+        : (snip)
+completed (82460672 / 82460672 bytes)
+25681439 -&#62; 82460672 bytes
+</pre></td></tr></table></P><P>
+
+During the uncompression, <CODE>ebunzip</CODE> asks you whether an existed file
+may be overwritten or not:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; uncompress /dict/kanji/start.ebz &#60;==
+output to /dict/kanji/start
+
+the file already exists: /dict/kanji/start
+do you wish to overwrite (y or n)? 
+</pre></td></tr></table></P><P>
+
+When the uncompression has done, the directory structure under
+<TT>`dict'</TT> is slightly changed.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/dict/catalog
+/dict/language
+/dict/kanji/start
+/dict/english/start
+</pre></td></tr></table></P><P>
+
+Uncompressed files change their file names;
+the suffix <SAMP>`.ebz'</SAMP> is removed from them.
+</P><P>
+
+<A NAME="Options for Uncompression"></A>
+<HR SIZE="6">
+<A NAME="SEC14"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC13"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC15"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.2 Options for Uncompression </H2>
+<!--docid::SEC14::-->
+<P>
+
+Most options have the same meanings at compression and uncompression.
+</P><P>
+
+When the <SAMP>`--keep'</SAMP> option is specified, <CODE>ebunzip</CODE> doesn't
+delete compressed files after uncompression.
+</P><P>
+
+Invoking <CODE>ebunzip</CODE> with the <SAMP>`--test'</SAMP> option, <CODE>ebunzip</CODE>
+doesn't write uncompressed data to acutual files.
+This option is usuful for checking validity of compressed files.
+See section <A HREF="ebzip_4.html#SEC8">4.4 Test</A>, for more details about the <SAMP>`--test'</SAMP> option.
+</P><P>
+
+When the <SAMP>`--subbook'</SAMP> and/or <SAMP>`--skip-content'</SAMP> options are
+specified, <CODE>ebunzip</CODE> only uncompresses files matched to the given
+condition only.
+See section <A HREF="ebzip_4.html#SEC9">4.5 Partial Compression</A>, for more details about these options.
+</P><P>
+
+When the <SAMP>`--force-overwrite'</SAMP> or <SAMP>`--no-overwrite'</SAMP> option is
+specified, <CODE>ebunzip</CODE> overwrites or skips files without confirmation
+for overwriting.
+See section <A HREF="ebzip_4.html#SEC10">4.6 Overwrite Old Files</A>, for more details about the
+<SAMP>`--force-overwrite'</SAMP> and <SAMP>`--no-overwrite'</SAMP> options.
+</P><P>
+
+<CODE>ebunzip</CODE> ignores the <SAMP>`--level'</SAMP> option.
+You don't have to specify the <SAMP>`--level'</SAMP> option at uncompression.
+</P><P>
+
+<A NAME="Uncompress Compressed Book"></A>
+<HR SIZE="6">
+<A NAME="SEC15"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC14"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_6.html#SEC16"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC12"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.3 Uncompress Compressed Book </H2>
+<!--docid::SEC15::-->
+<P>
+
+Also S-EBXA and EPWING define compression formats, and some CD-ROM
+books of S-EBXA and EPWING are compressed with the formats.
+However, their compression formats are different from that of ebzip.
+</P><P>
+
+<CODE>ebzip</CODE> (<CODE>ebunzip</CODE>) can also uncompress CD-ROM book compressed
+with the EPWING or S-EBXA compression fomrat, but it cannot compress
+book with the format.
+</P><P>
+
+When <CODE>ebzip</CODE> (<CODE>ebunzip</CODE>) has uncompressed S-EBXA's <TT>`START'</TT>
+file, EPWING's <TT>`HONMON2'</TT> file or EPWING's <TT>`HONMONS'</TT> file,
+it adds the suffix <SAMP>`.org'</SAMP> to the uncompressed file
+(e.g. <TT>`honmon2'</TT> -&#62; <TT>`honmon2.org'</TT>).
+</P><P>
+
+<A NAME="Information"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_5.html#SEC12"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_6.html#SEC16"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

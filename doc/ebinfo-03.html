@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebinfo コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebinfo-02.html">前へ</a>] [<a href="ebinfo-04.html">次へ</a>] [<a href="ebinfo.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="details-about-information">出力される情報の詳細ついて</a></h2>
+
+<p>
+この節では、<code>ebinfo</code> が出力する情報の詳細について説明します。
+</p>
+
+<dl>
+<dt>disc type:</dt>
+<dd>
+その書籍の形式。EB/EBG/EBXA/EBXA-C/S-EBXA または EPWING です。
+
+<dt>character code:</dt>
+<dd>
+その書籍で使用されている文字コー。ISO 8859-1 または JIS X 0208 です。
+
+<dt>the number of subbooks:</dt>
+<dd>
+その書籍に収録されている副本 (subbbok) の数。
+</dl>
+
+<p>
+加えて、その書籍のそれぞれの副本について、以下の情報が出力されます。
+</p>
+
+<dl>
+<dt>title:</dt>
+<dd>
+副本の題名。
+書籍が JIS X 0208 に書かれているときは、題名は EUC (Extended UNIX Code) 
+で表示されます。
+
+<dt>directory:</dt>
+<dd>
+その副本に関連するファイルが置かれるディレクトリの名前。
+英小文字は大文字に変換されます。
+
+<dt>search methods:</dt>
+<dd>
+副本が対応している検索方法の一覧。
+この一覧は、以下に記した検索方法の一部、もしくは全部から構成されます。
+
+<dl>
+<dt>copyright</dt>
+<dd>
+著作権表示 (copyright notice)。
+厳密に言えば、これは検索方法ではないのですが、CD-ROM 書籍の内部形式の
+関係から、表示するようにしています。
+
+<dt>word</dt>
+<dd>
+前方一致検索 (Word search)。
+
+<dt>endword</dt>
+<dd>
+後方一致検索 (Endword search)。
+
+<dt>keyword</dt>
+<dd>
+条件検索 (Keyword search)。
+
+<dt>cross</dt>
+<dd>
+クロス検索 (Keyword search)。
+
+<dt>multi</dt>
+<dd>
+複合検索 (Multi search)。
+
+<dt>menu</dt>
+<dd>
+メニュー検索 (Menu search).
+
+<dt>graphic</dt>
+<dd>
+グラフィック検索 (Graphic search).
+
+</dl>
+
+<p>
+副本が持つ、フォントのサイズの一覧。
+この一覧には、16, 24, 30, 48 という 4 つのサイズの一部、もしくは全部から
+構成されます。
+</p>
+
+<p>
+副本が定義している半角文字の文字番号の範囲。
+</p>
+
+<p>
+副本が定義している全角文字の文字番号の範囲。
+</p>
+
+</dl>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebinfo-02.html">前へ</a>] [<a href="ebinfo-04.html">次へ</a>] [<a href="ebinfo.html#toc">目次</a>] 
+</p>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebfont: What is Local Character</TITLE>
+
+<META NAME="description" CONTENT="ebfont: What is Local Character">
+<META NAME="keywords" CONTENT="ebfont: What is Local Character">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_3.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. What is Local Character? </H1>
+<!--docid::SEC2::-->
+<P>
+
+Many CD-ROM books define their local characters.
+For example, some English Japanese dictionaries define pronunciation
+marks as the local characters because the character set used in CD-ROM
+books doesn't have pronunciation marks.
+</P><P>
+
+CD-ROM books also have bitmap data of the local characters.
+The <CODE>ebfont</CODE> command reads the bitmap data, convert them to a
+specified image formats, and write them to files.
+<CODE>ebfont</CODE> can generates image files as XBM (X BitMap format), XPM
+(X PixMap format), GIF (Graphics Interchange Format) and/or BMP.
+By default, XBM format is selected.
+</P><P>
+
+Local characters are classified to two types; <EM>narrow</EM> and <EM>wide</EM>.
+In narrow type characters, the height of the bitmap data is about half
+of its width.
+In wide type characters, the width and height of the bitmap data are
+almost same.
+A CD-ROM book can defines local characters of both types.
+</P><P>
+
+The internal fomrat specification of CD-ROM book defines four heights
+for local characters, for both narrow and wide types.
+Their witdths, heights and sizes are follows:
+</P><P>
+
+<TABLE>
+<TR><TD>height  </TD><TD>  narrow  </TD><TD>  wide</TD>
+</TR>
+<TR><TD>16      </TD><TD>   8x16   </TD><TD>  16x16</TD>
+</TR>
+<TR><TD>24      </TD><TD>  16x24   </TD><TD>  24x24</TD>
+</TR>
+<TR><TD>30      </TD><TD>  16x30   </TD><TD>  32x30</TD>
+</TR>
+<TR><TD>48      </TD><TD>  24x48   </TD><TD>  48x48</TD>
+</TR></TABLE>
+<P>
+
+By deafult, <CODE>ebfont</CODE> generates image files for fonts with the
+height of 16 pixels.
+</P><P>
+
+<A NAME="Invoke ebfont"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

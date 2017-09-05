@@ -1,0 +1,200 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Introduction</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Introduction">
+<META NAME="keywords" CONTENT="EB Library: Introduction">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC1"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC2"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<A NAME="Introduction"></A>
+<H1> 1. はじめに </H1>
+<!--docid::SEC1::-->
+<P>
+
+EB ライブラリは、CD-ROM 書籍にアクセスするための C 言語のライブラリです。
+主に UNIX 系 OS のシステム上で動作させることができます。
+EB ライブラリは、電子ブック (EB, EBG, EBXA, EBXA-C, S-EBXA) および
+EPWING 形式の CD-ROM 書籍に対応しています。
+</P><P>
+
+このライブラリは、書籍内部のデータ形式についての理解はなるべく必要と
+せずに、アプリケーションプログラムを開発できることを目標に開発されて
+います。
+</P><P>
+
+本書は、EB ライブラリを使ってアプリケーションプログラムを作成する
+開発者向けに、ライブラリの仕様を解説した文書です。
+そして、ライブラリの公式な参照マニュアルでもあります。
+読み進めるにあたって、読者は EB ライブラリおよび CD-ROM 書籍の内部構造
+について知っている必要はありませんが、電子ブックか EPWING を利用して、
+実際に CD-ROM 書籍がどのようなものかを理解しておくことをお薦めします。
+また、C 言語によるプログラミングについては、十分に理解していることを前提
+とします。
+</P><P>
+
+この文書は、EB ライブラリバージョン 4.0 に対応しています。
+本書の内容に沿って EB ライブラリを使ったアプリケーションプログラムを
+作成するには、お使用いのシステムに EB ライブラリバージョン 4.0
+と C コンパイラをインストールしておいて下さい。
+</P><P>
+
+EB ライブラリはフリーソフトウェアです。
+あなたは、Free Software Foundation が公表した GNU General Public License
+(GNU 一般公有使用許諾) バージョン 2 あるいはそれ以降の各バージョンの中
+からいずれかを選択し、そのバージョンが定める条項に従って本プログラムを
+再頒布または変更することができます。
+</P><P>
+
+EB ライブラリは有用とは思いますが、頒布にあたっては、市場性及び
+特定目的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。
+詳細については GNU General Public License をお読み下さい。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_1.html#SEC2">1.1 電子ブックと EPWING について</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_1.html#SEC3">1.2 本書の構成について</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Electronic Book and EPWING"></A>
+<HR SIZE="6">
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.1 電子ブックと EPWING について </H2>
+<!--docid::SEC2::-->
+<P>
+
+電子ブックと EPWING は、いずれも主に日本で使われている電子書籍の
+データ形式の名称で、CD-ROM に収めた形で数々の書籍が市販されています。
+CD-ROM は ISO 9660 形式 なので、CD-ROM ドライブが扱えるシステムであれば、
+容易にアクセスすることができます。
+電子書籍のデータ形式とはいっても、実際は辞書向けに特化した構造となって
+おり、市販されている書籍も辞書の類が圧倒的に多いようです。
+</P><P>
+
+電子ブック、EPWING ともに、データ形式に関する規格の全容は一般公開されて
+いませんが、EPWING ついては規格の一部が日本工業規格 JIS X 4081 
+「電子出版検索データ構造」として公開されています。
+さらに、EPWING と電子ブックのデータ形式は、酷似していることが知られて
+います。
+</P><P>
+
+EB ライブラリの開発者も、電子ブック、EPWING 規格の全容は知りません。
+EB ライブラリでは JIS X 4081 の記述をもとに、電子ブック、EPWING を読める
+ようにしてあります。
+しかしながら、規格の全容が分からない状態で開発しているため、残念ながら
+一部に正しく読めない書籍が存在します。
+</P><P>
+
+<A NAME="Construction of This Book"></A>
+<HR SIZE="6">
+<A NAME="SEC3"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC2"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC1"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 1.2 本書の構成について </H2>
+<!--docid::SEC3::-->
+<P>
+
+次章「EB ライブラリの特徴」では、EB ライブラリが対応している機能、対応
+していない機能について、簡単に説明します。
+また、ライブラリの概略に関して、最初に知っておいたほうが良いと思われる
+事柄をいくつか説明しています。
+</P><P>
+
+さらに次の章「プログラムのコンパイル方法」では、EB ライブラリを利用した
+プログラムのコンパイル方法を説明します。
+本書のサンプルプログラムをコンパイルするために必要な情報も、この章に
+記してあります。
+</P><P>
+
+そして、その次の章「ライブラリの初期化と後始末」からが、実際の
+EB ライブラリのプログラミングの解説となります。
+それぞれの章は、次のような節から構成されています。
+ただし、章によっては一部の節がない場合もあります。
+</P><P>
+
+<DL COMPACT>
+<DT>解説
+<DD>その章で解説する機能や概念についての基礎知識、EB ライブラリの仕様の
+概要について解説しています。
+<P>
+
+<DT>サンプルプログラム
+<DD>「解説」ではプログラムの断片だけを示すことが多いので、動作可能な
+プログラムのサンプルをここで示します。
+<P>
+
+<DT>データ型の詳細
+<DD><DT>関数の詳細
+<DD><DT>定数値の一覧
+<DD>データ型や関数、定数値などについての参照マニュアルです。
+</DL>
+<P>
+
+<A NAME="Features"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

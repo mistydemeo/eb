@@ -1,0 +1,120 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebfont: Summary of Options</TITLE>
+
+<META NAME="description" CONTENT="ebfont: Summary of Options">
+<META NAME="keywords" CONTENT="ebfont: Summary of Options">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_3.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 4. Summary of <CODE>ebfont</CODE> Options </H1>
+<!--docid::SEC7::-->
+<P>
+
+The <CODE>ebfont</CODE> command supports both traditional single-letter
+options and mnemonic long option names.
+Long option names are indicated with <SAMP>`--'</SAMP> instead of <SAMP>`-'</SAMP>.
+Abbreviations for option names are allowed as long as they are unique.
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>-d</CODE>
+<DD><DT><CODE>--debug</CODE>
+<DD>Print debugging information to standard error.
+<P>
+
+<DT><CODE>-f <VAR>heights</VAR></CODE>
+<DD><DT><CODE>--font-height <VAR>heights</VAR></CODE>
+<DD>Generate image files of local characters with <VAR>heights</VAR>.
+<VAR>heights</VAR> must be a list of heights separated by a comma
+(<SAMP>`,'</SAMP>).
+The valid heights are <SAMP>`16'</SAMP>, <SAMP>`24'</SAMP>, <SAMP>`30'</SAMP> and <SAMP>`48'</SAMP>.
+By default, <CODE>ebfont</CODE> generates fonts with a height of 16 pixels.
+(See section <A HREF="ebfont_3.html#SEC5">3.2 Heights</A>, for more details).
+<P>
+
+<DT><CODE>-h</CODE>
+<DD><DT><CODE>--help</CODE>
+<DD>Output help message to standard out, then exit.
+<P>
+
+<DT><CODE>-i <VAR>formats</VAR></CODE>
+<DD><DT><CODE>--image-format <VAR>formats</VAR></CODE>
+<DD>Generates image files as <VAR>formats</VAR>.
+<VAR>formats</VAR> must be a list of format names separated by a comma
+(<SAMP>`,'</SAMP>).
+Supported format names are <SAMP>`xbm'</SAMP>, <SAMP>`xpm'</SAMP>, <SAMP>`gif'</SAMP> and
+<SAMP>`bmp'</SAMP>.
+By default, <SAMP>`ebfont'</SAMP> generates image files as XBM format.
+(See section <A HREF="ebfont_3.html#SEC4">3.1 Image Formats</A>, for more details).
+<P>
+
+<DT><CODE>-o <VAR>directory</VAR></CODE>
+<DD><DT><CODE>--output-directory <VAR>directory</VAR></CODE>
+<DD>Output image files under <VAR>directory</VAR>.
+By default, <CODE>ebfont</CODE> generates image files under the current working
+directory (<CODE>.</CODE>).
+(See section <A HREF="ebfont_3.html#SEC3">3. Invoke <CODE>ebfont</CODE></A>, for more details).
+<P>
+
+<DT><CODE>-S <VAR>subbooks</VAR></CODE>
+<DD><DT><CODE>--subbook <VAR>subbooks</VAR></CODE>
+<DD>Specify target subbooks in which <CODE>ebfont</CODE> generates local characters.
+<VAR>subbooks</VAR> must be a list of directory names of subbooks separeted
+by a comma (<SAMP>`,'</SAMP>).
+By default, all subbooks are specified as target.
+(See section <A HREF="ebfont_3.html#SEC6">3.3 Subbooks</A>, for more details).
+<P>
+
+<DT><CODE>-v</CODE>
+<DD><DT><CODE>--version</CODE>
+<DD>Output version number to standard out, then exit.
+</DL>
+<P>
+
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_3.html#SEC3"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[ &gt;&gt; ]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

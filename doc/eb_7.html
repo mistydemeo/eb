@@ -1,0 +1,454 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 7  2000 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Word Search</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Word Search">
+<META NAME="keywords" CONTENT="EB Library: Word Search">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC23"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_6.html#SEC22"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC24"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_6.html#SEC22"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 7. Word, End-Word, Exact-Word Searches </H1>
+<!--docid::SEC23::-->
+<P>
+
+Word search, end-word search, and exact-word search are search methods
+to search the current subbook for entires matched to the given word.
+Word search looks for entires whose heads are matched to the given word.
+End-word search looks for entires whose tails are matched to the given
+word.
+Exact-word search looks for entires that matches exactly to the given
+word.
+</P><P>
+
+The following is an example of word search.
+It searches for entries beginning with <SAMP>`librar'</SAMP>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#define MAX_HITS    50
+
+/* It assumes that <CODE>book</CODE> is a variable of <CODE>EB_Book</CODE> and */
+/* it has already set the current subbook.               */
+EB_Hit hits[MAX_HITS];
+int hitcount;
+
+if (eb_search_word(&#38;book, "librar") == -1) {
+    fprintf(stderr, "an error occurs.\n");
+    exit(1);
+}
+hitcount = eb_hit_list(&#38;book, hits, MAX_HITS);
+if (hitcount == -1) {
+    fprintf(stderr, "an error occurs.\n");
+    exit(1);
+}
+</pre></td></tr></table></P><P>
+
+The function <CODE>eb_search_word()</CODE> requests a word search.
+But, the function doesn't return a hit entry.
+It is done by <CODE>eb_hit_list()</CODE>.
+<CODE>eb_hit_list()</CODE> records hit entries onto <CODE>hits</CODE>, and it
+returns the number of hit entries recorded onto <CODE>hits</CODE>.
+In this example, <CODE>eb_hit_list()</CODE> gets <CODE>MAX_HITS</CODE> (= 50)
+entries maximum.
+</P><P>
+
+If the current subbook is English dictionary, we will get at least
+two entries; <SAMP>`library'</SAMP> and <SAMP>`librarian'</SAMP>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>+-------------+-------------+---
+| (librarian) |  (library)  |   
++-------------+-------------+---
+    hits[0]       hits[1]
+</pre></td></tr></table></P><P>
+
+(The order of the <SAMP>`library'</SAMP> and <SAMP>`librarian'</SAMP> entries may be
+different from the above picture.)
+</P><P>
+
+Each element in <CODE>hits</CODE> holds positions of <EM>heading</EM> and
+<EM>text</EM> of the hit entry.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>                     heading
+                   +-----------+
+              +---&#62;| librarian |
++----------+  |    +-----------+
+| heading ----+      text
+|          |       +-------------------------------------+
+|    text --------&#62;| librarian                           |
++----------+       | n. (1) A person who is a specialist |
+   hits[0]         | in library work. (2) ...            |
+                   +-------------------------------------+
+</pre></td></tr></table></P><P>
+
+In other words, the element doesn't have heading and text themselves.
+This chapter doesn't explain how to get heading and text.
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_7.html#SEC24">7.1 Get Remained Entries</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_7.html#SEC25">7.2 Data Types</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_7.html#SEC26">7.3 Functions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Get Remained Entries"></A>
+<HR SIZE="6">
+<A NAME="SEC24"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC23"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC25"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC23"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.1 Get Remained Entries </H2>
+<!--docid::SEC24::-->
+<P>
+
+As mentioned before, the second argument to <CODE>eb_hit_list()</CODE> is
+the maximum number of hit entries to be gotten.
+In the following example, we get only <CODE>MAX_HITS</CODE> entries maximum,
+even if more entries are matched:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>hitcount = eb_hit_list(&#38;book, hits, MAX_HITS);
+</pre></td></tr></table></P><P>
+
+To get the remained entries, please invoke <CODE>eb_hit_list()</CODE>
+repeatedly until it returns 0:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>for (;;) {
+    hitcount = eb_hit_list(&#38;book, hits, MAX_HITS);
+    if (hitcount == 0) {
+        break;
+    } else if (hitcount == -1) {
+        fprintf(stderr, "an error occurs.\n");
+        exit(1);
+    }
+    /* show headings of hit entires */
+}
+</pre></td></tr></table></P><P>
+
+However, the actions described below reset internal repetition status
+of <CODE>eb_hit_list()</CODE>.
+After the reset, you cannot get the remained entires any longer.
+</P><P>
+
+<UL>
+<LI>Call one of the following functions for the <CODE>EB_Book</CODE> object.
+<UL>
+<LI><CODE>eb_set_subbook()</CODE>
+<LI><CODE>eb_unset_subbook()</CODE>
+<LI><CODE>eb_set_all_subbooks()</CODE>
+<LI><CODE>eb_bind()</CODE>
+<LI><CODE>eb_clear()</CODE>
+<LI><CODE>eb_suspend()</CODE>
+</UL>
+<P>
+
+<LI>Call one of the following functions for <EM>any</EM> <CODE>EB_Book</CODE>
+object.
+<UL>
+<LI><CODE>eb_search_word()</CODE>
+<LI><CODE>eb_search_endword()</CODE>
+<LI><CODE>eb_search_exactword()</CODE>
+<P>
+
+<LI>Call one of the following functions for another <CODE>EB_Book</CODE>
+object.
+<LI><CODE>eb_hit_list()</CODE> (see below)
+</UL>
+</UL>
+<P>
+
+If you invoke <CODE>eb_hit_list()</CODE> for an <CODE>EB_Book</CODE> object
+different from that specified at the previous call, an error occurs.
+In this case, the function returns -1 and it sets <CODE>eb_error</CODE>.
+</P><P>
+
+The internal repetition status is also reset when <CODE>eb_hit_list()</CODE>
+fails (i.e. it returns -1).
+</P><P>
+
+<A NAME="Word Search Data Types"></A>
+<HR SIZE="6">
+<A NAME="SEC25"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC24"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC26"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC23"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.2 Data Types </H2>
+<!--docid::SEC25::-->
+<P>
+
+Please include <TT>`eb/eb.h'</TT> to use the data types described in this
+section:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX100"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Hit</B>
+<DD></P><P>
+
+The data type <CODE>EB_Hit</CODE> represents a hit entry of the search.
+This data type is defined as:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef struct {
+    EB_Position heading;
+    EB_Position text;
+} EB_Hit;
+</pre></td></tr></table></P><P>
+
+You may access and set the members in this type directly.
+</DL>
+</P><P>
+
+<A NAME="IDX101"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Position</B>
+<DD></P><P>
+
+The data type <CODE>EB_Position</CODE> represents a position in subbook
+contents.
+This data type is defined as:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef struct {
+    int page;
+    int offset;
+} EB_Position;
+</pre></td></tr></table></P><P>
+
+You may access and set the members in this type directly.
+</DL>
+</P><P>
+
+<A NAME="Word Search Functions"></A>
+<HR SIZE="6">
+<A NAME="SEC26"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC25"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC23"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 7.3 Functions </H2>
+<!--docid::SEC26::-->
+<P>
+
+Please include <TT>`eb/eb.h'</TT> to use the functions described in this
+section:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX102"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_have_exactword_search</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_have_exactword_search()</CODE> returns 1 if the current
+subbook of <VAR>book</VAR> has the exact word search method. 
+It returns 0 and sets <CODE>eb_error</CODE> to <CODE>EB_ERR_NO_SUCH_SEARCH</CODE>
+if the current subbook doesn't have the method, or if the current subbook
+is not set.
+</DL>
+</P><P>
+
+<A NAME="IDX103"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_search_exactword</B> <I>(EB_Book *<VAR>book</VAR>, const char *<VAR>inputword</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_search_exactword()</CODE> searches the current subbook
+of <VAR>book</VAR> for entries matched exactly to <VAR>inputword</VAR>.
+The current subbook must have been set beforehand.
+The <VAR>inputword</VAR> must be written in EUC-JP or ISO 8859-1 according
+with the character code of <VAR>book</VAR>.
+</P><P>
+
+This function only sends a search request to EB Library.
+It doesn't return a hit entires.
+Hit entries are gotten by <CODE>eb_hit_list()</CODE>.
+</P><P>
+
+If succeeds, it returns 0.
+Otherwise, it returns -1, and sets <CODE>eb_error</CODE>.
+subbook.
+</DL>
+</P><P>
+
+<A NAME="IDX104"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_have_word_search</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_have_word_search()</CODE> returns 1 if the current
+subbook of <VAR>book</VAR> has the word search method.
+It returns 0 and sets <CODE>eb_error</CODE> to <CODE>EB_ERR_NO_SUCH_SEARCH</CODE>
+if the current subbook doesn't have the method, or if the current subbook
+is not set.
+</DL>
+</P><P>
+
+<A NAME="IDX105"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_search_word</B> <I>(EB_Book *<VAR>book</VAR>, const char *<VAR>inputword</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_search_word()</CODE> searches the current subbook
+of <VAR>book</VAR> for entries whose heads are matched to <VAR>inputword</VAR>.
+The current subbook must have been set beforehand.
+The <VAR>inputword</VAR> may be written in EUC-JP or ISO 8859-1 according
+with the character code of <VAR>book</VAR>.
+</P><P>
+
+This function only sends a search request to EB Library.
+It doesn't return a hit entires.
+Hit entries are gotten by <CODE>eb_hit_list()</CODE>.
+</P><P>
+
+If succeeds, it returns 0.
+Otherwise, it returns -1, and sets <CODE>eb_error</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX106"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_have_endword_search</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_have_endword_search()</CODE> returns 1 if the current
+subbook of <VAR>book</VAR> has the end word search method.
+It returns 0 and sets <CODE>eb_error</CODE> to <CODE>EB_ERR_NO_SUCH_SEARCH</CODE>
+if the current subbook doesn't have the method, or if the current subbook
+is not set.
+</DL>
+</P><P>
+
+<A NAME="IDX107"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_search_endword</B> <I>(EB_Book *<VAR>book</VAR>, const char *<VAR>inputword</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_endsearch_word()</CODE> searches the current subbook
+of <VAR>book</VAR> for entries whose tails are matched to <VAR>inputword</VAR>.
+The <VAR>inputword</VAR> may be written in EUC-JP or ISO 8859-1 according
+with the character code of <VAR>book</VAR>.
+</P><P>
+
+This function only sends a search request to EB Library.
+It doesn't return a hit entires.
+Hit entries are gotten by <CODE>eb_hit_list()</CODE>.
+</P><P>
+
+If succeeds, it returns 0.
+Otherwise, it returns -1, and sets <CODE>eb_error</CODE>.
+subbook.
+</DL>
+</P><P>
+
+<A NAME="IDX108"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_hit_list</B> <I>(EB_Book *<VAR>book</VAR>, EB_Hit *<VAR>hits</VAR>, int <VAR>maxhits</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_hit_list()</CODE> gets hit entries of 
+<CODE>eb_search_exactword()</CODE>, <CODE>eb_search_word()</CODE>, or
+<CODE>eb_search_endword()</CODE> that was called beforehand.
+Accordingly, you must have call one of these function successfully
+before call this function.
+Otherwise, this function fails.
+</P><P>
+
+<VAR>book</VAR> passed to <CODE>eb_hit_list()</CODE> and passed to
+<CODE>eb_search_exactword()</CODE> (or <CODE>eb_search_word()</CODE> or
+<CODE>eb_search_endword()</CODE>) must be the same.
+This function fails if you give a different <CODE>EB_Book</CODE> object to
+<CODE>eb_hit_list()</CODE>.
+</P><P>
+
+<CODE>eb_hit_list()</CODE> puts <VAR>maxhits</VAR> hit entries maximum into
+<VAR>hits</VAR>.
+If <CODE>eb_hit_list()</CODE> finds more hit entries, it gets first
+<VAR>maxhits</VAR> entries.
+You can get remained entries by invoking <CODE>eb_hit_list()</CODE> repeatedly
+until it returns 0 (see section <A HREF="eb_7.html#SEC24">7.1 Get Remained Entries</A>).
+</P><P>
+
+If succeeds, this function returns the number of entries recorded onto
+<VAR>hits</VAR>.
+Otherwise, it returns -1, and sets <CODE>eb_error</CODE>.
+</DL>
+</P><P>
+
+<A NAME="Index"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_7.html#SEC23"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>July, 7  2000</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

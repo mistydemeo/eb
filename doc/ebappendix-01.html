@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebappendix コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebappendix.html">前へ</a>] [<a href="ebappendix-02.html">次へ</a>] [<a href="ebappendix.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="what-is-appendix">appendix (付録) とは</a></h2>
+
+<p>
+<dfn>appendix</dfn> (<dfn>付録</dfn>) とは CD-ROM 書籍の補助データのことです。
+appendix は CD-ROM 書籍の出版社から提供されているものではなく、
+EB ライブラリに固有のものです。
+</p>
+
+<p>
+appendix は以下のデータを CD-ROM 書籍に対して提供します。
+</p>
+
+<dl>
+<dt>本文の区切りコード</dt>
+<dd>
+あなたが EB ライブラリを使って CD-ROM 辞書の中のある単語を引く際、その
+単語の説明が終了する箇所で、EB ライブラリが本文の出力を止めることを
+あなたは期待するのではないでしょうか。
+しかし、EB ライブラリはそのような動作を保証することができません。
+なぜなら、CD-ROM 書籍の本文には、項目の終わりを示す印が存在しないから
+です。
+
+幸いにも、多くの CD-ROM 書籍には、項目の終わりを示す印の代替として
+使える、<dfn>区切りコード</dfn> (<dfn>stop code</dfn>) というものを持って
+います。
+通常、EB ライブラリはこの区切りコードを自動的に推測するようになって
+いるのですが、時々誤った区切りコードを導き出すことがあります。
+appendix の区切りコードは、その書籍の正しい区切りコードを EB ライブラリ
+に教えてやるために用います。
+
+<dt>外字の代替文字列</dt>
+<dd>
+多くの CD-ROM 書籍は、外字 (独自に定義した文字) を持っており、本文中で
+その外字を使っています。
+CD-ROM 書籍では外字のビットマップフォントを用意しており、
+クライアントアプリケーションが外字を出力するには、そのフォントを描画
+しなくてはなりません。
+
+appendix では、外字の <dfn>代替文字列</dfn> (<dfn>alternation text</dfn>)
+を定義することができます。
+アプリケーションは、ビットマップフォントを描画する代わりに、その
+代替文字列を出力することにしても良いでしょう。
+</dl>
+
+<p>
+appendix のレイアウトは CD-ROM 書籍のものとよく似ています。
+トップディレクトリには <code>catalog</code> もしくは <code>catalogs</code>
+ファイルが存在し、各副本のデータは対応するサブディレクトリに配置されて
+います。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebappendix.html">前へ</a>] [<a href="ebappendix-02.html">次へ</a>] [<a href="ebappendix.html#toc">目次</a>] 
+</p>
+</body>
+</html>

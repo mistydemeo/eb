@@ -1,0 +1,131 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>ebinfo: Invoke ebinfo</TITLE>
+
+<META NAME="description" CONTENT="ebinfo: Invoke ebinfo">
+<META NAME="keywords" CONTENT="ebinfo: Invoke ebinfo">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_3.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. Invoke <CODE>ebinfo</CODE> </H1>
+<!--docid::SEC2::-->
+<P>
+
+Its usual way to invoke <CODE>ebinfo</CODE> is as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo <VAR>book-path</VAR>
+</pre></td></tr></table></P><P>
+
+<VAR>book-path</VAR> points to the top directory of a CD-ROM book where
+the file <TT>`catalog'</TT> or <TT>`catalogs'</TT> resides.
+It may be a local path (e.g. <SAMP>`/mnt/dict'</SAMP>) or a remote access
+identifier (e.g. <SAMP>`ebnet://localhost/dict'</SAMP>).
+Though you cannot specify two or more book-paths, 
+you can omit book-path like as follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo
+</pre></td></tr></table></P><P>
+
+In this case, <CODE>ebinfo</CODE> assumes that the current working directory
+(<TT>`.'</TT>) is specified.
+<CODE>ebinfo</CODE> outputs information about the specified book like as
+follows:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo /mnt/cdrom
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
+character code: JIS X 0208
+the number of subbooks: 2
+
+subbook 1:
+  title: New English Japanese Dictionary (3rd edition)
+  directory: ejdict
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+
+subbook 2:
+  title: How to use the book
+  directory: howto
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+</pre></td></tr></table></P><P>
+
+If a subbook in the book supports multi-search, <CODE>ebinfo</CODE> also
+outputs detail information about multi-search by specifying the
+<SAMP>`--multi-search'</SAMP> (or <SAMP>`-m'</SAMP>) option.
+The mulit-search information is like as follows.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>  multi search 1:
+    label 1: country or region
+      with candidates: yes
+    label 2: period
+      with candidates: no
+    label 3: category
+      with candidates: yes
+    label 4: authority
+      with candidates: no
+  multi search 2:
+    label 1: author
+      with candidates: no
+    label 2: title
+      with candidates: no
+    label 3: date
+      with candidates: no
+    label 4: publisher
+      with candidates: no
+</pre></td></tr></table></P><P>
+
+<A NAME="Details about Information"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

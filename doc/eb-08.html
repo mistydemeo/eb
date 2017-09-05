@@ -1,0 +1,1218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-07.html">前へ</a>] [<a href="eb-09.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="search">検索</a></h2>
+
+<p>
+CD-ROM 書籍において、検索は非常に重要な機能です。
+EB ライブラリでは、次のような検索メソッドが利用できます。
+</p>
+
+<ul>
+<li>前方一致検索 (word search)
+<li>後方一致検索 (end-word search)
+<li>完全一致検索 (exact-word search)
+<li>条件検索 (keyword search)
+<li>クロス検索 (cross search)
+<li>複合検索 (multi search)
+</ul>
+
+<p>
+ただし、すべての CD-ROM 書籍、すべての副本で、ここに挙げたすべての
+検索メソッドが利用可能なわけではありません。
+副本の中には、いずれの検索メソッドも提供しないものも存在します。
+</p>
+
+<p>
+EB ライブラリでは、検索を行うことができるのは、選択中の副本に対して
+だけです。
+</p>
+
+<p>
+この章では、それぞれの検索メソッドの簡単な説明と、EB ライブラリでの
+扱い方について説明します。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="word-search">前方一致、後方一致、完全一致検索</a></h3>
+
+<p>
+前方一致、後方一致、完全一致検索は、いずれも一個の入力語に一致する
+エントリを探し出す検索メソッドです。
+</p>
+
+<p>
+前方一致検索は、入力語と先頭部分が一致するエントリを検索します。
+たとえば、「江戸」という語は、「江戸」「江戸時代」「江戸っ子」といった
+エントリに一致します。
+</p>
+
+<p>
+後方一致検索は、入力語と末尾が一致するエントリを検索します。
+たとえば、`bye' という語は、`bye'、`good bye'、`bye bye' といった
+エントリに一致します。
+</p>
+
+<p>
+完全一致検索は、一個の検索語と完全に一致するエントリだけを検索します。
+</p>
+
+<p>
+以下は、前方一致検索のプログラムの例です。
+選択中の副本の中から、先頭が <samp>librar</samp> で始まるエントリを探して
+います。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
+ * 書籍に結び付けられ、副本を選択中だと仮定しています。*/
+#define MAX_HITS 50
+EB_Hit hits[MAX_HITS];
+int hit_count;
+
+if (eb_search_word(&amp;book, "librar") != EB_SUCCESS) {
+    printf("eb_search_word() failed\n");
+    return;
+}
+if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
+    != EB_SUCCESS) {
+    printf("eb_hit_list() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+<code>eb_search_word()</code> は前方一致検索をリクエストする関数です。
+この例では、<samp>librar</samp> という検索文字列を与えています。
+ただし、この関数は一致したエントリを返すことはしません。
+</p>
+
+<p>
+一致したエントリの取得は、続く <code>eb_hit_list()</code> 関数を
+呼び出した際に行われます。
+<code>eb_hit_list()</code> は一致したエントリの一覧を配列
+<code>hits[]</code> の指す領域に書き込み、見つかった一致エントリの個数
+を <code>&amp;hit_count</code> の指す領域に書き込みます。
+この例では、<code>eb_hit_list()</code> は最大で <code>MAX_HITS</code>
+(= 50) 個 のエントリを探します。
+(つまり、50 個見つかったら検索を止めます。)
+</p>
+
+<p>
+もし、選択中の副本が英々辞典だとすると、少なくとも <samp>library</samp>
+と <samp>librarian</samp> という 2 つのエントリに関する情報が得られる
+でしょう。
+このとき、配列 <code>hits[]</code> は次のようになっています。
+(ただし、<samp>library</samp> と <samp>librarian</samp> エントリの
+順序は、下の絵とは異なっているかも知れません。)
+</p>
+
+<blockquote>
+<pre>
+┌───────────┬───────────┬─
+│　ｌｉｂｒａｒｉａｎ　│　　ｌｉｂｒａｒｙ　　│
+└───────────┴───────────┴─
+　　　ｈｉｔｓ［０］　　　　　ｈｉｔｓ［１］
+</pre>
+</blockquote>
+
+<p>
+<code>hits[]</code> の中身については、本章の後ろの節でもう少し詳しく
+説明します。
+</p>
+
+<p>
+ここまでは前方一致検索を例にとりましたが、後方一致の場合は
+<code>eb_search_word()</code> の代わりに <code>eb_search_endword()</code>
+を呼ぶようにします。
+他はすべて同じです。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_search_endword(&amp;book, "nalization") != EB_SUCCESS) {
+    printf("eb_search_endword() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+完全一致の場合も同様です。
+<code>eb_search_exactword()</code> を呼ぶようにする以外は、すべて同じ
+です。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_search_exactword(&amp;book, "library") != EB_SUCCESS) {
+    printf("eb_search_exactword() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="keyword-search">条件検索</a></h3>
+
+<p>
+条件検索は、複数個の入力語にすべて一致するエントリを検索します。
+たとえば、英々辞典の条件検索では、入力語をすべて含んだ例文を検索する
+ようになっているかも知れません。
+</p>
+
+<p>
+以下は、条件検索で <samp>make</samp>, <samp>with</samp> という語の双方と
+一致するエントリを、選択中の副本の中から探し出すプログラムの断片です。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
+ * 書籍に結び付けられ、副本を選択中だと仮定しています。*/
+static const char *keywords[3] = {"make", "with", NULL};
+
+if (eb_search_word(&amp;book, keywords) != EB_SUCCESS) {
+    printf("eb_search_word() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+条件検索を行う関数は、<code>eb_search_keyword()</code> です。
+前方一致、後方一致、完全一致検索の関数と基本的に扱い方は一緒ですが、
+複数の入力語を受け付けるようになっています。
+関数には、入力語の文字列 (へのポインタ) を配列にしたものを渡します。
+配列の最後には <code>NULL</code> を置き、配列の終端を明示する必要が
+ある点に注意して下さい。
+</p>
+
+<p>
+前方一致、後方一致、完全一致検索と同様に、<code>eb_search_keyword()</code>
+も検索のリクエストを行うだけで、一致したエントリの取得は行いません。
+エントリの取得には、やはり同様に <code>eb_hit_list()</code> 関数を
+使います。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Hit hits[MAX_HITS];
+int hit_count;
+
+if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
+    != EB_SUCCESS) {
+    printf("eb_hit_list() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="cross-search">クロス検索</a></h3>
+
+<p>
+クロス検索は、条件検索の亜種とも言うべき検索メソッドです。
+EPWING や電子ブックをみても、どういうルールで使い分けがなされているのか
+分からない程、両者は実によく似ています。
+</p>
+
+<p>
+EB ライブラリでクロス検索を行う関数は <code>eb_search_cross()</code> 
+ですが、使い方は条件検索の関数 <code>eb_search_keyword()</code> と
+まったく同じです。
+使い方の詳細は、<a href="eb-08.html#keyword-search">「条件検索」</a> をご覧下さい。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="multi-search">複合検索</a></h3>
+
+<p>
+複合検索は、条件検索と同じく、複数個の入力語にすべて一致するエントリを
+検索しますが、個々の入力語にあらかじめ題目が付けられています。
+</p>
+
+<p>
+また、前方一致、後方一致、完全一致、条件検索はすべて、各副本につき
+一種類しかありませんが、複合検索だけは一つの副本の中で複数の種類が用意
+されていることがあります。
+たとえば、ある世界人名事典には、次のように人名検索用と頻出用語の検索用
+の 2 種類の複合検索が用意されているかも知れません。
+</p>
+
+<blockquote>
+<pre>
+(複合検索その 1: 人名を検索する)
+    入力語 0: 国・地域
+    入力語 1: 時代
+    入力語 2: 性別
+    入力語 3: キーワード
+    入力語 4: キーワード
+</pre>
+</blockquote>
+
+<blockquote>
+<pre>
+(複合検索その 2: 頻出用語を検索する)
+    入力語 0: 用語
+    入力語 1: キーワード
+    入力語 2: キーワード
+</pre>
+</blockquote>
+
+<p>
+この例のように、個々の複合検索は、入力語の題目だけでなく、入力語の数も
+まちまちです。
+また、検索する際はすべての入力語を埋める必要はなく、少なくとも一個の
+入力語が空でなければ、検索は成功します。
+</p>
+
+<p>
+副本内の複合検索は、種類毎に <dfn>複合検索コード (multi search code)</dfn>
+によって識別されます。
+関数 <code>eb_multi_search_list()</code> を使うと、選択中の副本で利用可能
+な複合検索の一覧が得られます。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
+ * 書籍に結び付けられ、副本を選択中だと仮定しています。*/
+EB_Multi_Search_Code multi_codes[EB_MAX_MULTI_SEARCHES];
+int multi_count;
+
+if (eb_multi_search_list(&amp;book, multi_codes, &amp;multi_count)
+    != EB_SUCCESS) {
+    printf("eb_multi_search_list() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+この複合検索コードは、複合検索のための関数で必要となります。
+たとえば、<code>eb_multi_title()</code> は、指定した複合検索の題名
+(例:「人名検索」「頻出用語検索」) を取得する関数ですが、このときの
+複合検索の指定には、複合検索コードを用います。
+以下の例では、一覧の先頭に載っている複合検索 (<code>multi_codes[0]</code>)
+を指定しています。
+</p>
+
+<blockquote class="program">
+<pre>
+char title[EB_MAX_MULTI_TITLE_LENGTH + 1];
+
+if (eb_multi_title(&amp;book, multi_codes[0], title)
+    != EB_SUCCESS) {
+    printf("eb_multi_title() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+さらに関数によっては、複合検索コードに加えて、何番目の入力語かも指定
+してやる必要があります。
+たとえば、特定の入力語の題目を得る関数 <code>eb_multi_entry_label()</code>
+が、これに該当します。
+0 番目の入力語 (つまり先頭の入力語) の題目を取得するには、次のように
+します。
+</p>
+
+<blockquote class="program">
+<pre>
+char label[EB_MAX_MULTI_LABEL_LENGTH + 1];
+
+if (eb_multi_entry_label(&amp;book, multi_code[0], 0, label)
+    != EB_SUCCESS) {
+    printf("eb_multi_entry_label() failed\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+複合検索を行う関数は、<code>eb_search_multi()</code> です。
+使い方は条件検索とほぼ同じで、入力語の文字列を配列にしたものを引数
+として渡し、配列の最後には <code>NULL</code> を置いて下さい。
+埋められていない入力語のところには、空文字列を置きます。
+</p>
+
+<p>
+<code>eb_search_multi()</code> も検索のリクエストを行うだけで、一致した
+エントリの取得は行いません。
+取得するには <code>eb_hit_list()</code> を使います。
+</p>
+
+<blockquote class="program">
+<pre>
+EB_Hit hits[MAX_HITS];
+int hit_count;
+
+if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
+    != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+なお、複合検索の入力語によっては
+<dfn>候補一覧 (candidates)</dfn> があらじめ用意されていることがあります。
+これは、入力語として有効な語をあらかじめ列挙しておき、
+アプリケーションプログラムのユーザに選択させる仕組みです。
+候補一覧については、この章ではなく「テキストデータ」の章で説明します
+(<a href="eb-09.html#multi-candidates">「複合検索の候補一覧」</a> を参照のこと)。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="eb_hit">一致エントリの情報</a></h3>
+
+<p>
+<code>eb_hit_list()</code> は、リクエストされた検索 (前方一致、後方一致、
+完全一致、条件、複合) に一致したエントリの情報と見つかったエントリの
+個数を、それぞれ <code>EB_Hit</code> 型の配列領域および <code>int</code> 型の
+領域に書き込みます。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに書籍に結び付け
+ * られ、副本を選択中だと仮定しています。*/
+EB_Hit hits[MAX_HITS];
+int hit_count;
+
+if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
+    != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+<code>EB_Hit</code> 配列の個々の要素には、一致したエントリの
+<dfn>見出し (heading)</dfn> と <dfn>本文 (text)</dfn> の開始位置が
+書き込まれています。
+</p>
+
+<blockquote>
+<pre>
+　　　　　　　　　　　　　見出し
+　　　　　　　　　　　　┌────────────┐
+　ＥＢ＿Ｈｉｔ　　　┏━┿ｌｉｂｒａｒｉａｎ　ｎ．│
+┌───────┐　┃　└────────────┘
+│ｈｅａｄｉｎｇ┿━┛　　本文
+│　　　　　　　│　　　┌────────────────────┐
+│　　　ｔｅｘｔ┿━━━┿ｌｉｂｒａｒｉａｎ　　　　　　　　　　　│
+└───────┘　　　│ｎ．（１）Ａ　ｐｅｒｓｏｎ　ｗｈｏ　ｉｓ│
+　　　　　　　　　　　　│ａ　ｓｐｅｃｉａｌｉｓｔ　ｉｎ　　　　　│
+　　　　　　　　　　　　│ｌｉｂｒａｒｙ　ｗｏｒｋ．（２）．．．　│
+　　　　　　　　　　　　└────────────────────┘
+</pre>
+</blockquote>
+
+<p>
+見出しと本文についてのより詳しい解説と取得方法については、
+<a href="eb-09.html#text-data">「テキストデータ」</a> を参照のこと。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="get-remained-entries">残っているエントリの取得</a></h3>
+
+<p>
+前に述べたように、<code>eb_hit_list()</code> を呼び出すときは、一致する
+エントリを最大で何個まで探すのかを引数で指定します。
+また、<code>eb_hit_list()</code> は処理が成功すると、実際に見つかった
+エントリの数をアプリケーションプログラムに教えます。
+</p>
+
+<blockquote class="program">
+<pre>
+error_code = eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count);
+if (error_code == EB_SUCCESS)
+    printf("%d entries found\n", hit_count);
+</pre>
+</blockquote>
+
+<p>
+指定した最大個数よりも多くの一致エントリが副本に存在している場合は、
+<code>eb_hit_list()</code> を繰り返し呼び出すことで、残りのエントリを
+取得することができます。
+</p>
+
+<blockquote class="program">
+<pre>
+for (;;) {
+    if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
+        != EB_SUCCESS) {
+        fprintf(stderr, "an error occurs.\n");
+        return;
+    }
+    if (hit_count == 0)
+        break;
+    /* 取得した一致エントリの処理 */
+}
+</pre>
+</blockquote>
+
+<p>
+一致エントリがもう残っていなければ、<code>eb_hit_list()</code> は
+<code>&amp;hit_count</code> の指す領域に 0 を書き込んで、
+<code>EB_SUCCESS</code> を返します。
+</p>
+
+<p>
+ただし、途中で <code>eb_hit_list()</code> が失敗すると
+(<code>EB_SUCCESS</code> 以外の値を返すと)、検索リクエストに関する
+状態記録はリセットされるため、一致エントリの取得をそれ以上続けることは
+できません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="unify-duplicated-entries">重複エントリの削除</a></h3>
+
+<p>
+<code>eb_hit_list()</code> を用いて一致したエントリを取得すると、中身が
+実質的に変わらないエントリが複数含まれていることがあります。
+EB ライブラリは、こうした重複エントリの削除は行いません。
+必要なら、アプリケーション側で行うことになります。
+</p>
+
+<p>
+重複を完璧に取り除くなら、以下のすべての条件に一致するエントリを
+重複エントリとみなし、二度目以降に出現したエントリを削除します。
+</p>
+
+<ul>
+<li>エントリの指す本文の位置が同じ
+<li>エントリの指す見出しの文字列 (位置ではなく文字列そのもの) が同じ
+</ul>
+
+<p>
+(見出し文字列の取得方法については、
+<a href="eb-09.html#text-data">「テキストデータ」</a> を参照のこと。)
+</p>
+
+<p>
+重複は、直前のエントリに対してのみ起こるとは限りません。
+たとえば、<code>eb_hit_list()</code> で一致エントリが 50 個得られた場合、
+最後の 50 個目は前方の 49 個と重複検査を行う必要があります。
+したがって、全体ではエントリ同士の比較を 1 + 2 + ... + 49 = 1225 回
+行うことになります。
+</p>
+
+<p>
+書籍によっては重複エントリが取りきれない可能性もありますが、もう少し
+簡単な方法もいくつかあります。
+処理を簡単にする第一の方法は、重複エントリの判定条件を次のように変える
+ことです。
+</p>
+
+<ul>
+<li>エントリの指す本文の位置が同じ
+<li>エントリの指す見出しの文字列の位置が同じ
+</ul>
+
+<p>
+さらに処理を簡単にするには、直前の 1個のエントリに対してだけ重複検査を
+行うという方法もあります。
+これなら、50 個の一致エントリに対して、比較は 49 回で済みます。
+ただしこの方法は、書籍によってはまったく効果がありません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="search-sample">サンプルプログラム</a></h3>
+
+<blockquote>
+<pre>
+/*                                                            -*- C -*-
+ * Copyright (c) 1999-2006  Motoyuki Kasahara
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * 使用方法:
+ *     word &lt;book-path&gt; &lt;subbook-index&gt; &lt;word&gt;
+ * 例:
+ *     word /cdrom 0 apple
+ * 説明:
+ *     &lt;book-path&gt; で指定した CD-ROM 書籍の特定の副本の中から &lt;word&gt;
+ *     という単語を完全一致検索で探し、ヒットしたすべてのエントリの
+ *     見出しを表示します。
+ *
+ *     &lt;subbook-index&gt; には、検索対象の副本のインデックスを指定しま
+ *     す。インデックスは、書籍の最初の副本から順に 0、1、2 ... に
+ *     なります。
+ */
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#include &lt;eb/eb.h&gt;
+#include &lt;eb/error.h&gt;
+#include &lt;eb/text.h&gt;
+
+#define MAX_HITS 50
+#define MAXLEN_HEADING 127
+
+int
+main(int argc, char *argv[])
+{
+    EB_Error_Code error_code;
+    EB_Book book;
+    EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
+    EB_Hit hits[MAX_HITS];
+    char heading[MAXLEN_HEADING + 1];
+    int subbook_count;
+    int subbook_index;
+    int hit_count;
+    ssize_t heading_length;
+    int i;
+
+    /* コマンド行引数をチェック。*/
+    if (argc != 4) {
+        fprintf(stderr, "Usage: %s book-path subbook-index word\n",
+            argv[0]);
+        exit(1);
+    }
+
+    /* EB ライブラリと `book' を初期化。*/
+    eb_initialize_library();
+    eb_initialize_book(&amp;book);
+
+    /* 書籍を `book' に結び付ける。*/
+    error_code = eb_bind(&amp;book, argv[1]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        goto die;
+    }
+
+    /* 副本の一覧を取得。*/
+    error_code = eb_subbook_list(&amp;book, subbook_list, &amp;subbook_count);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* 副本のインデックスを取得。*/
+    subbook_index = atoi(argv[2]);
+
+    /*「現在の副本 (current subbook)」を設定。*/
+    error_code = eb_set_subbook(&amp;book, subbook_list[subbook_index]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to set the current subbook, %s\n",
+            argv[0], eb_error_message(error_code));
+        goto die;
+    }
+
+    /* 単語検索のリクエストを送出。*/
+    error_code = eb_search_exactword(&amp;book, argv[3]);
+    if (error_code != EB_SUCCESS) {
+        fprintf(stderr, "%s: failed to search for the word, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[3]);
+        goto die;
+    }
+
+    for (;;) {
+        /* 残っているヒットエントリを取得。*/
+        error_code = eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count);
+        if (error_code != EB_SUCCESS) {
+            fprintf(stderr, "%s: failed to get hit entries, %s\n",
+                argv[0], eb_error_message(error_code));
+            goto die;
+        }
+        if (hit_count == 0)
+            break;
+
+        for (i = 0; i &lt; hit_count; i++) {
+            /* 見出しの位置へ移動。*/
+            error_code = eb_seek_text(&amp;book, &amp;(hits[i].heading));
+            if (error_code != EB_SUCCESS) {
+                fprintf(stderr, "%s: failed to seek the subbook, %s\n",
+                    argv[0], eb_error_message(error_code));
+                goto die;
+            }
+
+            /* 見出しを取得して表示。*/
+            error_code = eb_read_heading(&amp;book, NULL, NULL, NULL,
+                MAXLEN_HEADING, heading, &amp;heading_length);
+            if (error_code != EB_SUCCESS) {
+                fprintf(stderr, "%s: failed to read the subbook, %s\n",
+                    argv[0], eb_error_message(error_code));
+                goto die;
+            }
+            printf("%s\n", heading);
+        }
+    }
+        
+    /* 書籍と EB ライブラリの利用を終了。*/
+    eb_finalize_book(&amp;book);
+    eb_finalize_library();
+    exit(0);
+
+    /* エラー発生で終了するときの処理。*/
+  die:
+    eb_finalize_book(&amp;book);
+    eb_finalize_library();
+    exit(1);
+}
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="search-data-types">データ型の詳細</a></h3>
+
+<p>
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/eb.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:Hit"><code>EB_Hit</code> 型</a></h4>
+
+<p>
+<code>EB_Hit</code> は、検索に一致したエントリの情報を格納するための
+データ型です。
+内部構造は、次のように定義されています。
+</p>
+
+<blockquote class="program">
+<pre>
+typedef struct EB_Hit_Struct EB_Hit;
+
+struct EB_Hit_Struct {
+    EB_Position heading;  /* 見出しの位置 */
+    EB_Position text;     /* 本文の位置   */
+};
+</pre>
+</blockquote>
+
+<p>
+アプリケーションプログラムは、直接 <code>EB_Hit</code> オブジェクトの
+メンバを参照したり、セットしたりしても構いません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:Position"><code>EB_Position</code> 型</a></h4>
+
+<p>
+データ型 <code>EB_Position</code> は、副本のデータの位置を表します。
+内部構造は、次のように定義されています。
+</p>
+
+<blockquote class="program">
+<pre>
+typedef struct EB_Position_Struct EB_Position;
+
+struct EB_Position_Struct {
+    int page;     /* ページ番号 */
+    int offset;   /* ページ内のオフセット */
+};
+</pre>
+</blockquote>
+
+<p>
+ページ番号は 1 から始まり、ページ内のオフセットは 0 〜 2047 の範囲と
+なります。
+ただし、アプリケーションプログラムを作成する上で、このことを覚えておく
+必要はありません。
+</p>
+
+<p>
+アプリケーションプログラムは、直接 <code>EB_Position</code> オブジェクト
+のメンバを参照したり、セットしたりしても構いません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="type:Multi_Search_Code"><code>EB_Multi_Search_Code</code> 型</a></h4>
+
+<p>
+データ型 <code>EB_Multi_Search_Code</code> は複合検索コードを表します。
+副本に用意されている複合検索は、それぞれ一意の複合検索コードを
+持っています。
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <code>==</code> と <code>!=</code> で一致比較することが
+できます。
+</p>
+
+<p>
+また、不正な複合検索コード値を表す <code>EB_MULTI_INVALID</code> という
+特別な副本コードが定義されています。
+利用可能な複合検索に対して、この複合検索コードが割り当てられることは
+ありません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="search-functions">関数の詳細</a></h3>
+
+<p>
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/eb.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_word_search"><code>int eb_have_word_search (EB_Book *<var>book</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_endword_search"><code>int eb_have_endword_search (EB_Book *<var>book</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_exactword_search"><code>int eb_have_exactword_search (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_have_word_search()</code> は、<var>book</var> が選択中の
+副本で前方一致検索メソッドが利用可能どうかを調べます。
+同様に <code>eb_have_endword_search()</code> は後方一致検索メソッドに
+ついて、<code>eb_have_exactword_search()</code> は完全一致検索メソッドに
+ついて利用可能どうかを調べます。
+</p>
+
+<p>
+利用可能なら 1 を返します。
+メソッドを持っていないか、そもそも副本が選択されていない場合は 0 を
+返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_keyword_search"><code>int eb_have_keyword_search (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_have_keyword_search()</code> は、<var>book</var> が選択中の
+副本で条件検索メソッドが利用可能どうかを調べます。
+</p>
+
+<p>
+利用可能なら 1 を返します。
+メソッドを持っていないか、そもそも副本が選択されていない場合は 0 を
+返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:have_multi_search"><code>int eb_have_multi_search (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_have_multi_search()</code> は、<var>book</var> が選択中の
+副本で複合検索メソッドが利用可能どうかを調べます。
+</p>
+
+<p>
+最低 1 種類でも利用可能なら 1 を返します。
+メソッドを持っていないか、そもそも副本が選択されていない場合は 0 を
+返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:multi_search_list"><code>EB_Error_Code eb_multi_search_list (EB_Book *<var>book</var>, EB_Multi_Search_Code *<var>multi_list</var>, int *<var>multi_count</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_multi_search_list()</code> は、<var>book</var> が選択中の
+副本に用意されている複合検索を調べ、複合検索コードの一覧を
+<code>EB_Multi_Search_Code</code> 型の配列にして、<var>multi_list</var>
+の指す領域に書き込みます。
+配列は、最大で <code>EB_MAX_MULTI_SEARCHES</code> 個の要素を持ちます。
+加えて、複合検索の種類数を <var>multi_count</var> の指す領域に書き込みます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>subbook_count</var> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:multi_entry_count"><code>EB_Error_Code eb_multi_entry_count (EB_Book *<var>book</var>, EB_Multi_Search_Code <var>multi_id</var>, int *<var>entry_count</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_multi_search_list()</code> は、<var>book</var> が選択中の
+副本に用意されている複合検索 <var>multi_id</var> について調べ、入力語の
+個数を <var>entry_count</var> の指す領域に書き込みます。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+このとき書き込まれる入力語の個数は、1 以上 <code>EB_MAX_MULTI_ENTRIES</code>
+以下になります。
+失敗すると、<var>entry_count</var> の指す領域には 0 を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:multi_title"><code>EB_Error_Code eb_multi_title (EB_Book *<var>book</var>, EB_Multi_Search_Code <var>multi_id</var>, char *<var>title</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_multi_search_list()</code> は、<var>book</var> が選択中の
+副本に用意されている複合検索 <var>multi_id</var> の題名を <var>title</var>
+の指す領域に書き込みます。
+題目は最長で <code>EB_MAX_MULTI_TITLE_LENGTH</code> バイトになります。
+この長さに、ナル文字は含みません。
+</p>
+
+<p>
+書籍の文字コード
+(<a href="eb-05.html#eb_book-data-types">「[CD-ROM 書籍と <code>EB_Book</code> オブジェクト] データ型の詳細」</a> を参照のこと)
+が <code>EB_CHARCODE_ISO8859_1</code> なら、題目を表す文字列は ISO 8859-1
+になり、それ以外の文字コードなら日本語 EUC になります。
+</p>
+
+<p>
+書籍によっては、複合検索は用意していても、複合検索の題名データを持って
+いないことがあります。
+その場合、EB ライブラリが代わりに付けた題名が <var>title</var> に
+書き込まれます。
+</p>
+
+<p>
+書籍の文字コードが <code>EB_CHARCODE_ISO8859_1</code> なら、
+EB ライブラリが付ける題名は、"Multi Search 1", "Multi Search 2", ...
+になります。
+それ以外の文字コードであれば、題名は日本語 EUC で書かれた「複合検索 1」
+「複合検索 2」... という文字列になります。
+</p>
+	
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>label</var> の指す領域には空文字列を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:multi_entry_label"><code>EB_Error_Code eb_multi_entry_label (EB_Book *<var>book</var>, EB_Multi_Search_Code <var>multi_id</var>, int <var>entry_index</var>, char *<var>label</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_multi_search_list()</code> は、<var>book</var> が選択中の
+副本に用意されている複合検索 <var>multi_id</var> について調べ、
+<var>entry_index</var> 番目の検索語の題目を <var>label</var> の指す領域に
+書き込みます。
+<var>entry_index</var> は、先頭の検索語を 0 番目と数えます。
+題目は最長で <code>EB_MAX_MULTI_LABEL_LENGTH</code> バイトになります。
+この長さに、ナル文字は含みません。
+</p>
+
+<p>
+書籍の文字コード
+(<a href="eb-05.html#eb_book-data-types">「[CD-ROM 書籍と <code>EB_Book</code> オブジェクト] データ型の詳細」</a> を参照のこと)
+が <code>EB_CHARCODE_ISO8859_1</code> なら、題目を表す文字列は ISO 8859-1
+になり、それ以外の文字コードなら日本語 EUC になります。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>label</var> の指す領域には空文字列を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:multi_entry_have_candidates"><code>int eb_multi_entry_have_candidates (EB_Book *<var>book</var>, EB_Multi_Search_Code <var>multi_id</var>, int <var>entry_index</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_multi_search_list()</code> は、<var>book</var> が選択中の
+副本に用意されている複合検索 <var>multi_id</var> について調べ、
+<var>entry_index</var> 番目の検索語が候補一覧を持っているかどうか調べます。
+<var>entry_index</var> は、先頭の検索語を 0 番目と数えます。
+</p>
+
+<p>
+持っていれば 1 を返します。
+持っていないか、そもそも副本が選択されていない場合、あるいは
+<var>multi_id</var>, や <var>entry_index</var> が不正な値だった場合は
+0 を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:multi_entry_candidates"><code>EB_Error_Code eb_multi_entry_candidates (EB_Book *<var>book</var>, EB_Multi_Search_Code <var>multi_id</var>, int <var>entry_index</var>, EB_Position *<var>position</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_multi_search_list()</code> は、<var>book</var> が選択中の
+副本に用意されている複合検索 <var>multi_id</var> について調べ、
+<var>entry_index</var> 番目の検索語の候補一覧の位置を <var>position</var>
+の指す領域に書き込みます。
+先頭の検索語が 0 番目になります。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>positin</var> の指す領域には <code>eb_seek_text()</code>
+が必ず失敗する位置情報を書き込み、原因を示すエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:search_word"><code>EB_Error_Code eb_search_word (EB_Book *<var>book</var>, const char *<var>input_word</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:search_endword"><code>EB_Error_Code eb_search_endword (EB_Book *<var>book</var>, const char *<var>input_word</var>)</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:search_exactword"><code>EB_Error_Code eb_search_exactword (EB_Book *<var>book</var>, const char *<var>input_word</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_search_word()</code> は、<var>book</var> が選択中の副本に
+対する前方一致検索をリクエストします。
+同様に <code>eb_search_endword()</code> は後方一致検索を、
+<code>eb_search_exactword()</code> は完全一致検索をリクエストします。
+</p>
+
+<p>
+検索する語は、引数 <var>input_word</var> で指定します。
+ただし、これらの関数は検索をリクエストするだけで、一致したエントリの
+情報を返すことはしません。
+一致したエントリの取得には <code>eb_hit_list()</code> を使います。
+関数は、成功すると <code>EB_SUCCESS</code> を返します。
+失敗すると、原因を示すエラーコードを返します。
+失敗すると、関数を呼び出す前にリクエストしていた検索の状態記録はリセット
+されますので、その状態のまま <code>eb_hit_list()</code> を呼び出しても、
+やはり失敗に終わります。
+</p>
+
+<p>
+書籍の文字コード
+(<a href="eb-05.html#eb_book-data-types">「[CD-ROM 書籍と <code>EB_Book</code> オブジェクト] データ型の詳細」</a> を参照のこと)
+が <code>EB_CHARCODE_ISO8859_1</code> なら、関数に渡す検索語は ISO 8859-1
+で書かれていなければなりません。
+それ以外の文字コードの場合は、日本語 EUC で書かれていなければなりません。
+不正な文字番号を含んでいた場合、関数は <code>EB_ERR_BAD_WORD</code> を
+返します。
+</p>
+
+<p>
+加えて、検索語は 1 バイト以上、<code>EB_MAX_WORD_LENGTH</code> (= 255)
+バイト以下でなければなりません。
+この長さに、ナル文字は含みません。
+長すぎる場合は、<code>EB_ERR_TOO_LONG_WORD</code> を、
+長さが 0 (空文字列) の場合は <code>EB_ERR_EMPTY_WORD</code> を返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+なお、一致するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:search_keyword"><code>EB_Error_Code eb_search_keyword (EB_Book *<var>book</var>, const char * const <var>input_words</var>[])</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:search_cross"><code>EB_Error_Code eb_search_cross (EB_Book *<var>book</var>, const char * const <var>input_words</var>[])</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:search_multi"><code>EB_Error_Code eb_search_multi (EB_Book *<var>book</var>, EB_Multi_Search_Code <var>multi_id</var>, const char * const <var>input_words</var>[])</code></a></h4>
+
+<p>
+関数 <code>eb_search_keyword()</code> は、<var>book</var> が選択中の
+副本に対する条件検索をリクエストします。
+同様に <code>eb_search_cross()</code> はクロス検索を、
+<code>eb_search_multi()</code> は複合検索をそれぞれリクエストします。
+</p>
+
+<p>
+検索する語は、引数 <var>input_words</var> で指定します。
+条件検索と複合検索はいずれも複数個の検索語を受け付けますので、検索語を
+配列にして渡します。
+このとき、配列の末尾の要素には <code>NULL</code> を置き、配列の終端を
+明示します。
+</p>
+
+<p>
+いずれの関数も検索をリクエストするだけで、一致したエントリの情報を
+返すことはしません。
+一致したエントリの取得には <code>eb_hit_list()</code> を使います。
+関数は、成功すると <code>EB_SUCCESS</code> を返します。
+失敗すると、原因を示すエラーコードを返します。
+失敗すると、関数を呼び出す前にリクエストしていた検索の状態記録はリセット
+されますので、その状態のまま <code>eb_hit_list()</code> を呼び出しても、
+やはり失敗に終わります。
+</p>
+
+<p>
+書籍の文字コード
+(<a href="eb-05.html#eb_book-data-types">「[CD-ROM 書籍と <code>EB_Book</code> オブジェクト] データ型の詳細」</a> を参照のこと)
+が <code>EB_CHARCODE_ISO8859_1</code> なら、関数に渡す検索語は ISO 8859-1
+で書かれていなければなりません。
+それ以外の文字コードの場合は、日本語 EUC で書かれていなければなりません。
+不正な文字番号を含んでいた場合、関数は <code>EB_ERR_BAD_WORD</code> を
+返します。
+</p>
+
+<p>
+加えて、個々の検索語は <code>EB_MAX_WORD_LENGTH</code> (= 255) バイト以下
+でなければなりません。
+この長さに、ナル文字は含みません。
+長すぎる場合は、<code>EB_ERR_TOO_LONG_WORD</code> を返します。
+長さが 0 バイトの検索語は無視されますが、少なくとも 1 個の検索語は長さ
+が 1 以上ないといけません。
+長さが 1 以上の検索語が 1 つもないときは、<code>EB_ERR_NO_WORD</code> を
+返します。
+</p>
+
+<p>
+末尾の NULL を除いた配列の要素数は、条件検索では <code>EB_MAX_KEYWORDS</code>
+以下、クロス検索では <code>EB_MAX_CROSS_ENTRIES</code> 以下、
+複合検索では <code>EB_MAX_MULTI_ENTRIES</code> 以下でなくては
+なりません。
+個数が多すぎると <code>EB_ERRO_TOO_MANY_WORDS</code> を返します。
+空文字列の要素を差し引いた個数ではなく、単純に渡された要素数が上限を
+超えているとエラーになりますので、注意が必要です。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+なお、一致するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:hit_list"><code>EB_Error_Code eb_hit_list (EB_Book *<var>book</var>, int <var>max_hit_count</var>, EB_Hit *<var>hit_list</var>, int *<var>hit_count</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_hit_list()</code> は、あらかじめ以下のいずれかの関数で
+リクエストされた検索を実行し、一致したエントリを取得します。
+</p>
+
+<ul>
+<li><code>eb_search_word()</code>  (前方一致検索)
+<li><code>eb_search_endword()</code>  (後方一致検索)
+<li><code>eb_search_exactword()</code>  (完全一致検索)
+<li><code>eb_search_keyword()</code>  (条件検索)
+<li><code>eb_search_cross()</code>  (クロス検索)
+<li><code>eb_search_multi()</code>  (複合検索)
+</ul>
+
+<p>
+したがって、この関数を呼ぶ前に、上記のいずれかの関数の呼び出しに成功して
+いなくてはなりません。
+</p>
+
+<p>
+<code>eb_hit_list()</code> は最大で <var>max_hit_count</var> 個の
+一致エントリを <var>hit_list</var> に書き込みます。
+そして、書き込んだ一致エントリの数を <var>hit_count</var> が指す領域に
+書き込みます。
+それ以上の個数の一致エントリが存在する場合、残ったエントリの情報は、
+この関数を繰り返し呼び出すことで得ることができます。
+</p>
+
+<p>
+ただし、以下に挙げた関数を呼び出すと、リクエストした検索に関する状態記録
+がリセットされますので、一致したエントリの取得は継続できなくなります。
+</p>
+
+<ul>
+<li><code>eb_set_subbook()</code>
+<li><code>eb_unset_subbook()</code>
+<li><code>eb_load_all_subbooks()</code>
+<li><code>eb_bind()</code>
+<li><code>eb_finalize_book()</code>
+<li><code>eb_search_word()</code>
+<li><code>eb_search_endword()</code>
+<li><code>eb_search_exactword()</code>
+<li><code>eb_search_keyword()</code>
+<li><code>eb_search_cross()</code>
+<li><code>eb_search_multi()</code>
+</ul>
+
+<p>
+繰り返し呼んだ場合も、一致したエントリの情報はその都度 <var>hit_list</var>
+の先頭から書き込み、<var>hit_count</var> が指す領域に書き込む値も、その回
+の <code>eb_hit_list()</code> の呼び出しで書き込んだ一致エントリの数に
+なります。
+</p>
+
+<p>
+成功すると、この関数は <code>EB_SUCCESS</code> を返します。
+たとえ一致したエントリがなくても、処理が正常に終了すれば、関数は
+<code>EB_SUCCESS</code> を返します。
+</p>
+
+<p>
+失敗すると、<var>hit_count</var> が指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
+この場合、リクエストしていた検索の状態記録はリセットされますので、
+これ以上 <code>eb_hit_list()</code> を呼んで、残った一致エントリを取得
+することはできなくなります。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+また、先に挙げた検索のリクエストが成功していない状態でこの関数を呼ぶと、
+<code>EB_ERR_NO_PREV_SEARCH</code> を返します。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-07.html">前へ</a>] [<a href="eb-09.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

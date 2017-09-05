@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-2022-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rel="icon" type="image/png" href="eb_i.png">
+<title>EB Library</title>
+</head>
+<body>
+
+<p class="header">
+<img src="eb.png" alt="ロゴ">
+</p>
+
+<!-- ############################################################# -->
+<h1>EB ライブラリ</h1>
+
+<p>
+これは EB ライブラリの公式ホームページです。<br>
+最新バージョンは 4.4.3 です。<br>
+</p>
+
+<!-- ############################################################# -->
+<h2>目次</h2>
+
+<ul>
+<li>EB ライブラリについて
+  <ul>
+  <li><a href="#what-is">EB ライブラリとは</a>
+  <li><a href="security.html">セキュリティについての注意</a>
+  </ul>
+<li>ダウンロード (FTP サーバ)
+  <ul>
+  <li><a href="ftp://ftp.sra.co.jp/pub/misc/eb/eb-4.4.3.tar.bz2">バージョン 4.4.3 のソースコード</a>
+  <li><a href="ftp://ftp.sra.co.jp/pub/misc/eb/eb-4.2.2.tar.bz2">バージョン 4.2.2 のソースコード</a>
+  <li><a href="ftp://ftp.sra.co.jp/pub/misc/eb/eb-4.2.2-win32.zip">バージョン 4.2.2 の Windows 用追加ソースコード</a>
+  <li><a href="ftp://ftp.sra.co.jp/pub/misc/eb/eb-4.2.2-win32.exe">バージョン 4.2.2 の Windows 用インストーラ</a>
+  <li><a href="ftp://ftp.sra.co.jp/pub/misc/eb/">ファイル一覧</a>
+  </ul>
+  アクセスできないときは、時間をおいて再度試して下さい。
+  FTP サーバが混雑している可能性があります。
+<li><a name="supported">CD-ROM 書籍一覧</a>
+  <ul>
+  <li><a href="supported.html">対応 CD-ROM 書籍一覧</a>
+  <li><a href="unsupported.html">非対応 CD-ROM 書籍一覧</a>
+  <li><a href="report.html">対応状況の報告のお願い</a>
+  <li><a href="appendix.html">appendix (付録) パッケージ一覧</a>
+  </ul>
+<li>ドキュメント
+  <ul>
+  <li><a href="win32.html">Windows 向けソース/バイナリ配布版について</a>
+  <li><a href="doc/eb.html">EB ライブラリのドキュメント</a>
+  <li><a href="doc/ebappendix.html">ebappendix のドキュメント</a>
+  <li><a href="doc/ebfont.html">ebfont のドキュメント</a>
+  <li><a href="doc/ebinfo.html">ebinfo のドキュメント</a>
+  <li><a href="doc/ebrefile.html">ebrefile のドキュメント</a>
+  <li><a href="doc/ebstopcode.html">ebstopcode のドキュメント</a>
+  <li><a href="doc/ebzip.html">ebzip のドキュメント</a>
+  <li><a href="eb-3.0-diff.txt">技術メモ「EB Library 3.0 の変更点について」</a>
+  <li><a href="faq.html">よくある質問</a>
+  </ul>
+<li>履歴
+  <ul>
+  <li><a href="NEWS.html">NEWS</a>
+  <li><a href="ChangeLog.html">ChangeLog (英語)</a>
+  <li><a href="ChangeLog1.html">ChangeLog.1 (英語)</a>
+  <li><a href="ChangeLog0.html">ChangeLog.0 (英語)</a>
+  </ul>
+<li>その他
+  <ul>
+  <li><a href="../ebnetd/index.html">EB ライブラリ用遠隔アクセスサーバ EBNETD</a>
+  <li><a href="../winebzip/">ebzip/ebunzip をウィンドウ上で操作できる Windows 用ソフトウェア WinEBZip</a>
+  <li><a href="related.html">関連するソフトウェア</a>
+  </ul>
+</ul>
+
+<!-- ############################################################# -->
+<h2><a name="what-is">EB ライブラリとは</a></h2>
+
+<p>
+EB ライブラリは CD-ROM 書籍にアクセスするための C のライブラリです。
+UNIX 系 OS および Windows (2000以降) のシステム上で動作させることがで
+きます。
+</p>
+
+<p>
+EB ライブラリは EB, EBG, EBXA, EBXA-C, S-EBXA および EPWING 形式の
+CD-ROM 書籍に対応しています。これらは、主に日本で販売されている辞書
+に使われています。CD-ROM 書籍自体は ISO 9660 形式になっていますので、
+他の ISO 9660 形式と同じ要領でマウントすることができます。
+</p>
+
+<p>
+また、EB ライブラリは幾つかのユーテリティコマンドも提供しています。
+</p>
+
+<blockquote>
+<dl>
+<dt><a href="doc/ebappendix.html">ebappendix</a>
+<dd>appendix (付録) データを整形する
+<dt><a href="doc/ebfont.html">ebfont</a>
+<dd>CD-ROM 書籍内の外字のフォントデータを取り出す
+<dt><a href="doc/ebinfo.html">ebinfo</a>
+<dd>CD-ROM 書籍に関する情報を出力する
+<dt><a href="doc/ebrefile.html">ebrefile</a>
+<dd>CD-ROM 書籍のカタログファイルを構成し直す
+<dt><a href="doc/ebstopcode.html">ebstopcode</a>
+<dd>CD-ROM 書籍の本文の区切りコードを検査する
+<dt><a href="doc/ebzip.html">ebunzip</a>
+<dd>CD-ROM 書籍を伸長する
+<dt><a href="doc/ebzip.html">ebzip</a>
+<dd>CD-ROM 書籍を圧縮する
+<dt><a href="doc/ebzip.html">ebzipinfo</a>
+<dd>CD-ROM 書籍の圧縮情報を出力する
+</dl>
+</blockquote>
+
+<p>
+EB ライブラリはフリーソフトウェアです。
+ソースコードおよびバイナリを、いわゆる
+<a href="COPYING.txt">Modified BSD ライセンス</a> の下で使用すること
+が可能です。
+</p>
+
+<p>
+ご意見やバグのご報告に関するメールは、日本語か英語で
+m-kasahr@sra.co.jp 宛にお送り下さい。
+</p>
+
+<!-- ############################################################# -->
+<hr>
+<p class="footer">
+<a href="index.html"><img class="banner" src="eb_b.png" alt="バナー"></a>
+Text by Motoyuki Kasahara<br>
+Logo &amp; Banner by Sumiya Sakoda<br>
+</p>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Features</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Features">
+<META NAME="keywords" CONTENT="EB Library: Features">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC4"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC3"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC5"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. EB ライブラリの特徴 </H1>
+<!--docid::SEC4::-->
+<P>
+
+前に述べたように、EB ライブラリは、電子ブック (EB, EBG, EBXA, EBXA-C, S-EBXA)
+と EPWING 形式の CD-ROM 書籍に対応しています。
+</P><P>
+
+EB ライブラリは、これらの CD-ROM 書籍に対して、次の処理を行うことが
+できます。
+</P><P>
+
+<UL>
+<LI>前方一致検索
+<LI>後方一致検索
+<LI>完全一致検索
+<LI>条件検索
+<LI>複合検索
+<LI>見出しデータの取得
+<LI>本文データの取得
+<LI>メニューの取得
+<LI>著作権表示の取得
+<LI>カラー図版データの取得 (ただし EPWING のみ)
+<LI>モノクロ図版データの取得
+<LI>外字データの取得
+<LI>動画データの取得
+</UL>
+<P>
+
+この章では、EB ライブラリの概要に関して、あらかじめ知っておいて頂いた
+ほうが良いと思われるその他の事柄について、何点か説明します。
+</P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_2.html#SEC5">2.1 ヘッダファイル</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_2.html#SEC6">2.2 文字コード</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_2.html#SEC7">2.3 圧縮された書籍について</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_2.html#SEC8">2.4 遠隔ホスト上の書籍について</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_2.html#SEC9">2.5 古いシステムへの対応</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Header Files"></A>
+<HR SIZE="6">
+<A NAME="SEC5"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC6"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.1 ヘッダファイル </H2>
+<!--docid::SEC5::-->
+<P>
+
+EB ライブラリには、いくつかのヘッダファイルが用意されています。
+</P><P>
+
+<DL COMPACT>
+<DT><TT>`appendix.h'</TT>
+<DD>appendix (付録) に関連した宣言、定義を行う。
+<DT><TT>`binary.h'</TT>
+<DD>バイナリデータに関連した宣言、定義を行う。
+<DT><TT>`eb.h'</TT>
+<DD>EB ライブラリの基本ヘッダファイル。
+<DT><TT>`error.h'</TT>
+<DD>エラーコードに関連した宣言、定義を行う。
+<DT><TT>`font.h'</TT>
+<DD>外字に関連した宣言、定義を行う。
+<DT><TT>`text.h'</TT>
+<DD>テキストデータ (本文、見出しなど) に関連した宣言、定義を行う。
+</DL>
+<P>
+
+これ以外にもいくつかのファイルがインストールされますが、上に挙げた
+ヘッダファイルから読み込まれるもので、アプリケーションプログラムが
+直接読み込む必要はありません。
+</P><P>
+
+アプリケーションプログラムは、EB ライブラリを使う際にこのヘッダファイル
+をファイルの先頭付近で読み込みます。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+#include &#60;eb/error.h&#62;
+</pre></td></tr></table></P><P>
+
+<TT>`eb.h'</TT> ではなく、<TT>`eb/eb.h'</TT> を読み込むようにして下さい。
+</P><P>
+
+<A NAME="Character Code"></A>
+<HR SIZE="6">
+<A NAME="SEC6"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC5"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC7"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.2 文字コード </H2>
+<!--docid::SEC6::-->
+<P>
+
+EB ライブラリでは、CD-ROM 書籍内のデータを文字列にしてアプリケーション
+に渡す際の文字コードを規定しています。
+</P><P>
+
+EBG (海外の電子ブック) については、データが ISO 8859-1 (ラテン文字 1、
+ただし制御文字を除く) で書かれているため、データのやり取りも ISO 8859-1
+で行います。
+ただし、外字だけは 2 バイトで表現し、0x0101 〜 0x1efe の領域を使用します。
+(外字領域の下位 16 ビットは 0x01 〜 0xfe の範囲を使用します。) 
+</P><P>
+
+EBG, EBXA-C を除いた電子ブック、および EPWING については、データが
+JIS X 0208 (日本語のかな漢字) で書かれており、JIS X 0208 を 0x2121 〜
+0x7e7e にマッピングし、0xa121 〜 0xfe7e を外字領域にしています (下図)。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>　　　　　　　　　　　　　　　　上位８ビット
+
+　　　　　　　　　００　２１　　　　７ｅ　ａ１　　　　ｆｅ
+　　　　　　　００┌──┬─────┬──┬─────┬┐
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　２１├──┼─────┼──┼─────┼┤
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│ＪＩＳ　Ｘ│　　│　外字　　││
+　　　　　　　　　│　　│０２０８　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　７ｅ├──┼─────┼──┼─────┼┤
+下位８ビット　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　ａ１├──┼─────┼──┼─────┼┤
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　ｆｅ├──┼─────┼──┼─────┼┤
+　　　　　　　　　└──┴─────┴──┴─────┴┘
+</pre></td></tr></table></P><P>
+
+EB ライブラリでは JIS X 0208 部分を日本語 EUC (EUC-JP) にエンコード
+して、アプリケーションとのやり取りも日本語 EUC で行います。
+したがって、JIS X 0208 部分は 0xa1a1 〜 0xfefe にマッピングされます。
+</P><P>
+
+EBXA-C (中日・日中辞書の電子ブック) については、データが JIS X 0208
+(日本語のかな漢字) と GB 2312 (中国語の簡体字) で書かれており、
+JIS X 0208 を 0x2121 〜 0x7e7e にマッピング、
+GB 2312 を 0x21a1 〜 0x7efe にマッピングし、
+0xa121 〜 0xfe7e を外字領域にしています (下図)。
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>　　　　　　　　　　　　　　　　上位８ビット
+
+　　　　　　　　　００　２１　　　　７ｅ　ａ１　　　　ｆｅ
+　　　　　　　００┌──┬─────┬──┬─────┬┐
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　２１├──┼─────┼──┼─────┼┤
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│ＪＩＳ　Ｘ│　　│　外字　　││
+　　　　　　　　　│　　│０２０８　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　７ｅ├──┼─────┼──┼─────┼┤
+下位８ビット　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　ａ１├──┼─────┼──┼─────┼┤
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│ＧＢ　　　│　　│　　　　　││
+　　　　　　　　　│　　│２３１２　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　ｆｅ├──┼─────┼──┼─────┼┤
+　　　　　　　　　└──┴─────┴──┴─────┴┘
+</pre></td></tr></table></P><P>
+
+EB ライブラリでは、アプリケーションとのやり取りに使う文字コードは、
+日本語 EUC および中国語 EUC (EUC-ZH) です。
+したがって、そのままでは JIS X 0208 と GB 2312 が 0xa1a1 〜 0xfefe に
+マッピングされ、衝突してしまいます。
+この問題をどう回避するのかは、アプリケーション側で決める必要があります
+(詳しくは、「<A HREF="eb-ja_9.html#SEC48">フックと文字コードの関係</A>」節を参照)。
+</P><P>
+
+電子ブック、EPWING ともに、外字については、アプリケーション側でどう
+扱うかを決める必要があります。
+外字について詳しくは 「<A HREF="eb-ja_10.html#SEC60">外字</A>」節を参照。
+</P><P>
+
+<A NAME="Compressed Book"></A>
+<HR SIZE="6">
+<A NAME="SEC7"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC6"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC8"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.3 圧縮された書籍について </H2>
+<!--docid::SEC7::-->
+<P>
+
+EB ライブラは、データを圧縮して収録した書籍を扱うことができます。
+今のところ、次の 4 種類の圧縮方法に対応しています。
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>ebzip</CODE> 圧縮形式
+<DD>EB ライブラリ独自の圧縮形式です。
+付属の <CODE>ebzip</CODE> コマンドを使うと、この形式で圧縮した書籍を作れます。
+<P>
+
+<DT>EPWING V4, V5 形式
+<DD>市販の EPWING V4, V5 の書籍の一部に、この形式で圧縮したものがあります。
+<P>
+
+<DT>EPWING V6 形式
+<DD>市販の EPWING V6 の書籍の一部に、この形式で圧縮したものがあります。
+EPWING V4, V5 形式の改良型です。
+<P>
+
+<DT>S-EBXA 形式
+<DD>市販の S-EBXA の書籍の一部に、この形式で圧縮したものがあります。
+</DL>
+<P>
+
+データの伸長は EB ライブラリ側で自動的に行われるため、
+アプリケーションプログラムからは、アクセスしている書籍が圧縮されているか
+どうか分かりません。
+アプリケーションプログラムは、書籍が圧縮されているかどうかで処理を変える
+必要はありません。
+</P><P>
+
+<A NAME="Remote Access"></A>
+<HR SIZE="6">
+<A NAME="SEC8"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC7"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC9"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.4 遠隔ホスト上の書籍について </H2>
+<!--docid::SEC8::-->
+<P>
+
+バージョン 4.0 から、EB ライブラリは他のホストの書籍にアクセスできる
+ようになりました。
+</P><P>
+
+遠隔アクセスの処理はすべて EB ライブラリ側で行われますので、
+アプリケーションプログラムは、書籍が自分のホスト上にあるかどうかで、
+EB ライブラリの呼び出し手順を変える必要はありません。
+</P><P>
+
+ただし、他のホストからアクセスすると、処理速度は非常に遅くなります。
+そのため、効率良く処理できるよう、アプリケーションの処理方法を工夫すべき
+状況が生じることはあるかも知れません。
+</P><P>
+
+<A NAME="Traditional System"></A>
+<HR SIZE="6">
+<A NAME="SEC9"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC8"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 2.5 古いシステムへの対応 </H2>
+<!--docid::SEC9::-->
+<P>
+
+アプリケーションプログラムのコンパイルに用いるコンパイラには、
+ANSI (ANSI X3.159-1989, ISO/IEC 9899-1990) 対応のものを対象としています。
+また、システムには POSIX.1 (IEEE Std. 1003.2-1990, ISO/IEC 9945-1:1990) 
+準拠ないし互換のものを対象としています。
+</P><P>
+
+ただし、古いコンパイラや UNIX 系システムへの対応もそれなりに行われて
+います。
+ここでは、古いコンパイラや UNIX 系システムでアプリケーションプログラム
+をコンパイルする際の注意点を挙げておきます。
+</P><P>
+
+<DL COMPACT>
+<DT><CODE>const</CODE>
+<DD><CODE>const</CODE> 修飾子が使えないコンパイラでは、本書の中の <CODE>const</CODE> 
+と書かれた部分はすべて無視して下さい。
+<P>
+
+<DT><CODE>void *</CODE>
+<DD>EB ライブラリには、<CODE>void *</CODE> を引数にとる関数がありますが、
+CPP マクロ <CODE>__STDC__</CODE> が定義されていないコンパイラでは、
+<CODE>void *</CODE> の代わりに <CODE>char *</CODE> を使います。
+</DL>
+<P>
+
+本書の以降の節ではこれらのことを明記しませんので、<CODE>const</CODE> や
+<CODE>void *</CODE> と書かれている箇所は、適宜読み替えて下さい。
+</P><P>
+
+<A NAME="Compilation"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_2.html#SEC4"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_3.html#SEC10"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

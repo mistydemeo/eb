@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebrefile コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebrefile-01.html">前へ</a>] [<a href="ebrefile-03.html">次へ</a>] [<a href="ebrefile.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="invoke-ebrefile"><code>ebrefile</code> の実行</a></h2>
+
+<p>
+<code>ebrefile</code> の一般的な起動方法は次の通りです。
+</p>
+
+<blockquote>
+<pre>
+% ebrefile <var>書籍へのパス</var>
+</pre>
+</blockquote>
+
+<p>
+<var>書籍へのパス</var> には、CD-ROM 書籍のトップディレクトリ、つまり 
+<code>catalog</code> または <code>catalogs</code> ファイルが存在する
+ディレクトリを指定します。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
+</p>
+
+<blockquote>
+<pre>
+% ebrefile
+</pre>
+</blockquote>
+
+<p>
+この場合、<code>ebrefile</code> はカレントディレクトリ (<code>.</code>)
+が指定されたものと判断します。
+</p>
+
+<p>
+遠隔アクセスには対応していませんので、遠隔アクセス識別子は使用できません。
+</p>
+
+<blockquote>
+<pre>
+% ebrefile ebnet://localhost/cdrom
+ebrefile: ebnet には対応していません。
+</pre>
+</blockquote>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="select-subbooks">副本の選択</a></h3>
+
+<p>
+特に指定がないと、<code>ebrefile</code> は、元のカタログファイルで定義
+されているすべての副本を新しい副本に取り込みます。
+つまり、新しいカタログファイルは、単に元のファイルのコピーになります。
+この振る舞いは、役に立ちません。
+<code>ebrefile</code> は、通常 <samp>--subbook</samp> (<samp>-S</samp>)
+オプションを指定して起動します。
+</p>
+
+<p>
+<samp>--subbook</samp> (<samp>-S</samp>) オプションは引数を一つ取り、
+そこにカンマ (<samp>,</samp>) で区切って、新しいカタログファイルに
+取り込みたい副本のディレクトリ名を並べて書きます。
+<code>ebinfo</code> コマンドを用いると、あなたの所有している書籍に
+どのような副本が含まれているのかを知ることができます。
+</p>
+
+<blockquote>
+<pre>
+% ebinfo /mnt/cdrom
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 3
+
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: english
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: french
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 3:
+  題名: ポケット独和辞典（第三版）
+  ディレクトリ: german
+  検索方式: メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+</pre>
+</blockquote>
+
+<p>
+(<code>ebinfo</code> コマンドに関しての詳細は、
+<a href="ebinfo.html">ebinfo コマンドのマニュアル</a> を参照のこと。)
+この例では、3 つの副本が書籍には含まれており、その名前は <code>english</code>
+<code>french</code>, <code>german</code> だということが分かります。
+</p>
+
+<p>
+次のコマンドを実行すると、<code>ebrefile</code> は副本として
+<code>english</code> と <code>french</code> だけを定義した新しいカタログ
+を生成します。
+</p>
+
+<blockquote>
+<pre>
+% ebrefile --subbook english,french
+</pre>
+</blockquote>
+
+<p>
+ディレクトリ名の大文字・小文字の違いは、区別されません。
+<samp>--subbook</samp> の引数は、次のように分けて書くこともできます。
+</p>
+
+<blockquote>
+<pre>
+% ebrefile --subbook english --subbook french
+</pre>
+</blockquote>
+
+<p>
+<code>ebrefile</code> は副本の定義順序を変えることはできませんので、
+<samp>--subbook</samp> に与える引数の順序は任意です。
+</p>
+
+<p>
+これで再構成は完了です。
+もういちど <code>ebinfo</code> を起動してみましょう。
+副本 <code>german</code> が消えています。
+</p>
+
+<blockquote>
+<pre>
+% ebinfo /mnt/cdrom
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 2
+
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: english
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: french
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+</pre>
+</blockquote>
+
+<p>
+もし、CD-ROM 書籍全体をすでにハードディスクにコピーしているなら、
+副本 <code>german</code> のファイルは削除しても構いません。
+ディレクトリ名が小文字で構成されているなら、次のようにします。
+</p>
+
+<blockquote>
+<pre>
+% rm -r german
+</pre>
+</blockquote>
+
+<p>
+<code>ebrefile</code> は、読み込んだカタログファイルにそのまま上書きして
+新たなカタログファイルを生成しますが、元のカタログファイルの複製が、
+<code>catalog(s).old</code> というファイル名で保存されます。
+副本の選択を間違えてしまった場合は、いったん元に戻しましょう。
+(以下では、カタログファイルが <code>catalogs</code> だと仮定しています。)
+</p>
+
+<blockquote>
+<pre>
+% mv catalogs.old catalogs
+</pre>
+</blockquote>
+
+<p>
+ただし 実行時に <code>catalog(s).old</code> が既に存在していると、上書き
+せずに残します。
+この場合、カタログファイルの複製は新たに作られませんので、注意して下さい。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="combination-with-ebzip"><code>ebzip</code> との連携</a></h3>
+
+<p>
+<code>ebrefile</code> は、<code>ebzip</code> という CD-ROM 書籍を圧縮する
+コマンドと併用することができます
+(<code>ebzip</code> コマンドに関しての詳細は、
+<a href="ebzip.html">ebzip コマンドのマニュアル</a> を参照のこと。)
+通常、 <code>ebzip</code> と <code>ebrefile</code> にはコマンド行で同じ
+引数を与えます。
+</p>
+
+<p>
+CD-ROM 書籍が <code>/cdrom</code> にマウントされ、この書籍には
+<code>english</code>、<code>french</code>、<code>german</code> という
+3 つの副本が収められているとします。
+以下に記した操作によって、副本 <code>english</code>、<code>french</code>
+は圧縮されてカレントディレクトリの下に置かれ、副本 <code>german</code> は
+副本のリストから削除されます。
+</p>
+
+<blockquote>
+<pre>
+% ebzip --subbook english,french /cdrom
+% ebrefile --subbook english,french /cdrom
+</pre>
+</blockquote>
+
+<p>
+圧縮したファイルをカレントディレクトリ以外に置くには、次のようにします。
+</p>
+
+<blockquote>
+<pre>
+% ebzip --output-directory /dict --subbook english,french /cdrom
+% ebrefile --output-directory /dict --subbook english,french /cdrom
+</pre>
+</blockquote>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebrefile-01.html">前へ</a>] [<a href="ebrefile-03.html">次へ</a>] [<a href="ebrefile.html#toc">目次</a>] 
+</p>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebstopcode コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebstopcode-02.html">前へ</a>] [<a href="ebstopcode.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="summary-of-options"><code>ebstopcode</code> のオプション一覧</a></h2>
+
+<p>
+<code>ebstopcode</code> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<samp>-</samp> ではなく <samp>--</samp> を
+用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することが
+できます。
+</p>
+
+<dl>
+<dt><code>-c <var>コード</var></code></dt>
+<dt><code>--code <var>コード</var></code></dt>
+<dd>
+<var>コード</var> を区切りコードに指定します (例: "0x1f09 0x0001")。
+<code>ebstopcode</code> は、<var>コード</var> を見つけるまで本文を出力します。
+
+<dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
+<dd>
+ヘルプメッセージを標準出力に出力して、終了します。
+
+<dt><code>-l <var>長さ</var></code></dt>
+<dt><code>--length <var>長さ</var></code></dt>
+<dd>
+本文データを最長で <var>長さ</var> バイトまで出力します。
+<var>長さ</var> を 0 にすると、<code>ebstopcode</code> は本文全体を出力します。
+このオプションを指定しなかったときは、2048 になります。
+
+<dt><code>-n</code></dt>
+<dt><code>--no-candidates</code></dt>
+<dd>
+区切りコードの候補を出力しないようにします。
+
+<dt><code>-p <var>ページ:オフセット</var></code></dt>
+<dt><code>--text-position <var>ページ:オフセット</var></code></dt>
+<dd>
+本文データの出力をこの位置から開始します。
+<var>ページ</var> には 0 より大きい 16進整数を、<var>オフセット</var> には、
+0〜0x7FF の間の 16進整数をそれぞれ指定します。
+このオプションを指定しなかったときは、本文データの先頭位置から出力します。
+
+<dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
+<dd>
+バージョン番号を標準出力に出力して、終了します。
+</dl>
+
+<p>
+<samp>--code</samp> (<samp>-c</samp>) と <samp>--length</samp>
+(<samp>-l</samp>) オプションは、互いにもう一方のオプションを打ち消します。
+</p>
+
+<hr>
+<p>
+[<a href="ebstopcode-02.html">前へ</a>] [<a href="ebstopcode.html#toc">目次</a>] 
+</p>
+</body>
+</html>

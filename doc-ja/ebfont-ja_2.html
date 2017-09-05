@@ -1,0 +1,105 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on December, 28  2003 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: What is Local Character</TITLE>
+
+<META NAME="description" CONTENT="EB Library: What is Local Character">
+<META NAME="keywords" CONTENT="EB Library: What is Local Character">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC2"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_1.html#SEC1"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_3.html#SEC3"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 2. 外字とは </H1>
+<!--docid::SEC2::-->
+<P>
+
+CD-ROM 書籍の多くは、書籍固有の文字、外字 (local characters) を定義し
+ています。
+たとえば、CD-ROM 書籍に使われる文字セットは発音記号を持っていないため、
+英和辞書の中には発音記号を定義しているものがあります。
+</P><P>
+
+CD-ROM 書籍は、外字のビットマップデータも持っています。
+<CODE>ebfont</CODE> コマンドは、CD-ROM 書籍のビットマップデータを読み、
+それを指定された画像形式に変換し、ファイルに書き出します。
+<CODE>ebfont</CODE> は、XBM (X BitMap format)、XPM (X PixMap format)、
+GIF (Graphics Interchange Format)、BMP のうちのいずれか、または複数の
+画像ファイルを生成することができます。
+特に指定がなければ、XBM 形式が選択されます。
+</P><P>
+
+外字は、<EM>半角</EM> (<EM>narrow</EM>) と <EM>全角</EM> (<EM>wide</EM>) の 2 種
+類に分類されます。
+半角の文字のビットマップデータでは、高さは幅の約半分です。
+全角の文字のビットマップデータでは、高さと幅はほぼ同じです。
+CD-ROM 書籍は、一冊の中に両方の種類の外字を定義することが可能で、
+<CODE>ebfont</CODE> は両方の種類の画像ファイルを生成します。
+</P><P>
+
+CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して 4 
+種類のサイズを定義しています。
+外字の幅、高さ、サイズは次の通りです。
+</P><P>
+
+<TABLE>
+<TR><TD>高さ  </TD><TD>  半角   </TD><TD>  全角</TD>
+</TR>
+<TR><TD>16    </TD><TD>   8x16  </TD><TD>  16x16</TD>
+</TR>
+<TR><TD>24    </TD><TD>  16x24  </TD><TD>  24x24</TD>
+</TR>
+<TR><TD>30    </TD><TD>  16x30  </TD><TD>  32x30</TD>
+</TR>
+<TR><TD>48    </TD><TD>  24x48  </TD><TD>  48x48</TD>
+</TR></TABLE>
+<P>
+
+特に指定がなければ、<CODE>ebfont</CODE> は高さが 16 ピクセルのフォントの画像
+ファイルを生成します。
+</P><P>
+
+<A NAME="Invoke ebfont"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_1.html#SEC1"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_3.html#SEC3"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>December, 28  2003</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

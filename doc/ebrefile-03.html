@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebrefile コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebrefile-02.html">前へ</a>] [<a href="ebrefile.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="summary-of-options"><code>ebrefile</code> のオプション一覧</a></h2>
+
+<p>
+<code>ebrefile</code> コマンドは、伝統的な一文字オプション名と覚えやすい
+長いオプション名の両方を扱うことができます。
+長いオプション名を表すには、<samp>-</samp> ではなく <samp>--</samp> を
+用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができます。
+</p>
+
+<dl>
+<dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
+<dd>
+ヘルプメッセージを標準出力に出力して、終了します。
+
+<dt><code>-o <var>ディレクトリ</var></code></dt>
+<dt><code>--output-directory <var>ディレクトリ</var></code></dt>
+<dd>
+新しいカタログファイルを置くディレクトリを指定します。
+指定しなかったときは、カレントディレクトリ (<samp>.</samp>) になります
+(詳しくは、<a href="ebrefile-02.html#invoke-ebrefile">「<code>ebrefile</code> の実行」</a>
+を参照のこと)。
+
+<dt><code>-S <var>副本</var></code></dt>
+<dt><code>--subbook <var>副本</var></code></dt>
+<dd>
+<code>ebrefile</code> が新しいカタログファイルに取り込むべき副本を指定します。
+<var>副本</var> は、副本のディレクトリ名をカンマ (<samp>,</samp>) で区切って
+並べたものでなくてはいけません。
+指定しなかったときは、すべての副本が対象になります
+(詳しくは、<a href="ebrefile-02.html#select-subbooks">「副本の選択」</a> を参照のこと)。
+
+<dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
+<dd>
+バージョン番号を標準出力に出力して、終了します。
+</dl>
+
+<hr>
+<p>
+[<a href="ebrefile-02.html">前へ</a>] [<a href="ebrefile.html#toc">目次</a>] 
+</p>
+</body>
+</html>

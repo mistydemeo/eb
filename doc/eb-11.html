@@ -1,0 +1,788 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- #file "eb.html" -->
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>EB ライブラリ</title>
+</head>
+
+<body>
+<p>
+[<a href="eb-10.html">前へ</a>] [<a href="eb-12.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="binary-data">バイナリデータ</a></h2>
+
+<p>
+<dfn>バイナリデータ (binary data)</dfn> とは、
+図版や動画、音声といったマルチメディアデータのことを指します。
+バイナリデータは、必ずテキストデータ
+(<a href="eb-09.html#text-data">「テキストデータ」</a> を参照のこと)
+から参照される形で利用されます。
+</p>
+
+<p>
+今のところ EB ライブラリでは、全種類のバイナリデータを取り扱うことが
+できるわけではありません。
+電子ブックで扱えるのは、2 階調のモノクロ図版と、カラー図版 (JPEG) だけ
+です。
+EPWING では、モノクロ図版、カラー図版 (BMP および JPEG) に加えて、
+WAVE (PCM) 音声、MPEG 動画を扱うことができます。
+</p>
+
+<p>
+ただし、EB ライブラリが提供しているのは、こうしたバイナリデータを
+CD-ROM 書籍から取得する機能だけです。
+表示したり再生したりする機能は用意していませんので、注意して下さい。
+</p>
+
+<p>
+アプリケーションは、英和辞書や国語辞書といった辞書だけを対象にするなら、
+バイナリデータの表示や再生には対応しなくても支障はありません。
+しかし一方では、図鑑や数式の表現にモノクロ図版を使っている数学辞典の
+ように、対応しないと不便なものもあります。
+バイナリデータの表示や再生の機能を実装するかどうかは、アプリケーション
+の対象辞書をどの範囲までにするのかによって決めると良いでしょう。
+</p>
+
+<p>
+以下、この章では種類別にバイナリデータの扱い方について説明します。
+</p>
+
+<p>
+バイナリデータの種類毎にデータの取り出し方は微妙に異なりますが (これは
+データの収録方法が微妙に異なっているからに他なりません)、おおよそ手順
+は、次のようなものになります。
+</p>
+
+<ol>
+<li>
+テキストデータのフックを用いて、バイナリデータの参照情報を取得する。
+
+<li>
+<code>eb_binary_set_...()</code> 関数を呼び出して、指定した位置の
+バイナリデータをこれから読み込む旨を EB ライブラリに伝える。
+
+<li>
+<code>eb_read_binary()</code> で実際にデータを読み込む。
+</ol>
+
+<p>
+テキストデータと同様に、バイナリデータも副本に属するデータ
+ですので、副本を選択していないと取得することはできません。
+バイナリデータの読み込みには、テキストデータとは別の
+ファイルディスクリプタが割り当てられます。
+したがって、双方を交互に読み込んでも、動作には影響はありません。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="monochrome-image">モノクロ図版</a></h3>
+
+<p>
+2 階調のモノクロ図版は、電子ブック、EPWING 双方に存在し、EB ライブラリ
+ではどちらも扱うことができます。
+(電子ブックに存在する 16 階調のモノクロ図版は、今のところ EB ライブラリ
+では対応していません。)
+</p>
+
+<p>
+モノクロ図版データの内部形式は外字と同じですが、EB ライブラリでは、
+1 ピクセルに 1bit を割り当てた BMP 形式に変換してアプリケーションに
+渡すようにしています。
+したがって、アプリケーションからは、あたかも BMP の図版データが収録
+されているようにみえます。
+</p>
+
+<p>
+テキストデータ内からは、バイナリデータであるモノクロ図版を参照する形
+をとります。
+モノクロ図版を取り出すには、この参照情報が必要です。
+参照情報の取得は、テキストデータ処理時に、モノクロ図版の開始と終了を
+表すエスケープシーケンスへのフック <code>EB_HOOK_BEGIN_MONO_GRAPHIC</code>
+と <code>EB_HOOK_END_MONO_GRAPHIC</code> を用いて行います。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_MONO_GRAPHIC</code> がフック関数に渡す引数
+(<code>argv</code>) は 4 つあり、このうちの <code>argv[2]</code> と
+<code>argv[3]</code> が図版の幅と高さ (ピクセル数) を意味します。
+</p>
+
+<p>
+また、フック <code>EB_HOOK_END_MONO_GRAPHIC</code> がフック関数に渡す
+引数は 3 つで、<code>argv[1]</code> と <code>argv[2]</code> が、
+図版データのページ番号とオフセットになります。
+</p>
+
+<p>
+モノクロ図版を取得するには、上記のフックから得た図版のページ番号と
+オフセット、および幅と高さを記憶しておきます。
+</p>
+
+<p>
+次に、<code>eb_set_binary_mono_graphic()</code> を呼び出して、これから
+モノクロ図版のデータを取得することを EB ライブラリに伝えます。
+<code>eb_set_binary_mono_graphic()</code> への引数には、
+<code>EB_Book</code> オブジェクトと、先ほど得た図版へのページ番号、
+オフセット、幅、高さを渡します。
+<code>EB_Book</code> オブジェクトは、これから取り出そうとしている図版を
+収録している副本をあらかじめ選択しておく必要があります。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>eb_set_binary_mono_graphic()</code> の関数プロトタイプ */
+EB_Error_Code
+eb_set_binary_mono_graphic(EB_Book *book, EB_Position *position,
+    int width, int height);
+</pre>
+</blockquote>
+
+<p>
+電子ブックでは、フック関数に渡される幅と高さの値は 0 になっていますが、
+そのまま <code>eb_set_binary_mono_graphic()</code> に渡します。
+(EPWING では 0 を渡してはいけません。)
+</p>
+
+<p>
+以上で図版データの取得準備ができたので、データを読み込みます。
+これには、<code>eb_read_binary()</code> を使います。
+</p>
+
+<blockquote class="program">
+<pre>
+#define MAX_LENGTH 1000
+char bitmap[MAX_LENGTH];
+ssize_t bitmap_length;
+
+if (eb_read_binary(&amp;book, MAX_LENGTH, bitmap, &amp;bitmap_length)
+    != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+成功すると、読み込んだ図版データが <code>bitmap</code> に書き込まれ、
+何バイト書き込んだのかが <code>bitmap_length</code> に書き込まれます。
+書き込まれるバイト数は、最大で <code>MAX_LENGTH</code> バイトです。
+</p>
+
+<p>
+必ずしも一回の <code>eb_read_binary()</code> の呼び出しで図版データを
+終端まで読み込む必要はなく、関数を繰り返し呼び出せば、前回の続きを
+読み込むことができます。
+<code>eb_read_binary()</code> は、図版データの終端まで来るとそれ以上
+データは読み込みませんので、<code>eb_read_binary()</code> が 0 を返した
+時点で図版データが終端したことを認識できます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="color-image">カラー図版</a></h3>
+
+<p>
+カラー図版は、電子ブックでは JPEG 形式、EPWING では JPEG と BMP (DIB)
+形式のものが使用されています。
+EB ライブラリはこれらをすべて扱うことができますが、電子ブックへの対応
+は限定的なものになっています。(詳しくは後述します。)
+</p>
+
+<p>
+カラー図版のデータを取り出すには、モノクロ図版と同様にテキストデータ
+からカラー図版への参照情報をフックを通じて取得し、続いて実際に
+カラー図版のデータを読み込むという手順になります。
+</p>
+
+<p>
+<code>eb_set_binary_color_graphic()</code> を呼び出して、これから
+アプリケーションがカラー図版のデータを取得しようとしていることを
+EB ライブラリに伝えます。
+<code>eb_set_binary_color_graphic()</code> への引数には、
+<code>EB_Book</code> オブジェクトに加えて、カラー図版のページ番号と
+オフセットを渡します。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>eb_set_binary_color_graphic()</code> の関数プロトタイプ */
+EB_Error_Code
+eb_set_binary_color_graphic(EB_Book *book, EB_Position *position);
+</pre>
+</blockquote>
+
+<p>
+<code>EB_Book</code> オブジェクトは、これから取り出そうとしている図版を
+収録している副本をあらかじめ選択しておきます。
+
+カラー図版のページ番号とオフセットの情報は、カラー図版の開始と終了を表す
+エスケープシーケンスへのフックから得ます。
+フックは、インライン表示用と非インライン用の 2 種類があり、さらに
+それぞれ開始フックが JPEG 用と BMP 用に分かれています。
+</p>
+
+<dl>
+<dt><code>EB_HOOK_BEGIN_COLOR_BMP</code></dt>
+<dt><code>EB_HOOK_BEGIN_COLOR_JPEG</code></dt>
+<dd>
+非インライン用 BMP, JPEG の開始フック
+
+<dt><code>EB_HOOK_END_COLOR_GRAPHIC</code></dt>
+<dd>
+非インライン用カラー図版 (BMP, JPEG 共通) の終了フック
+
+<dt><code>EB_HOOK_BEGIN_IN_COLOR_BMP</code></dt>
+<dt><code>EB_HOOK_BEGIN_IN_COLOR_JPEG</code></dt>
+<dd>
+インライン用 BMP, JPEG の開始フック
+
+<dt><code>EB_HOOK_END_IN_COLOR_GRAPHIC</code></dt>
+<dd>
+非インライン用カラー図版 (BMP, JPEG 共通) の終了フック
+</dl>
+
+<p>
+非インライン用の終了フック <code>EB_HOOK_END_GRAPHIC</code> では、
+フック関数に渡す引数の <code>argv[2]</code> と <code>argv[3]</code> が、
+図版データのページ番号とオフセットになりますので、これを
+<code>eb_set_binary_color_graphic()</code> に渡してやります。 
+同様に、インライン用の終了フック <code>EB_HOOK_END_IN_GRAPHIC</code>
+では、<code>argv[2]</code> と <code>argv[3]</code> がページ番号と
+オフセットですので、これを渡します。
+</p>
+
+<p>
+後は、実際にカラー図版のデータを取り出します。
+これには、モノクロ図版と同様に <code>eb_read_binary()</code> を用います。
+使い方はまったく一緒ですので、詳しくは
+<a href="eb-11.html#monochrome-image">「モノクロ図版」</a> を参照してください。
+</p>
+
+<p>
+ただし、電子ブックのカラー図版については、データの終了位置が来ても
+EB ライブラリは読み込みを止めないという制限事項があります。
+これは、データの大きさに関する情報が記されていないためで、データの
+終端位置は、アプリケーションが JPEG のデータをデコードして割り出すしか
+ありません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="clickable-color-image">参照先付きカラー図版</a></h3>
+
+<p>
+カラー図版には、画像内の特定の矩形領域に参照先の情報を付け加えたものが
+あります。
+HTML におけるクリッカブル・イメージ (clickable image) とほぼ同じで、その
+矩形領域内にマウスポインタがある間にマウスをクリックすると、あらかじめ
+決められたリンク先に画面が遷移するという仕掛けです。
+リンク先となる矩形領域は、画像一つに対して複数個登録できます。
+</p>
+
+<blockquote>
+<pre>
+　　　　　　　参照先付きカラー図版の例
+┌────────────────────────┐
+│┌　─　─　─　─　┐　　┌　─　─　─　─　┐│
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+││　　矩形領域１　　│　　│　　矩形領域２　　││
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+│└　─　─　─　─　┘　　└　─　─　─　─　┘│
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+│┌　─　─　─　─　┐　　　　　　　　　　　　　│
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+││　　矩形領域３　　│　　　　　　図版　　　　　│
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+│└　─　─　─　─　┘　　　　　　　　　　　　　│
+└────────────────────────┘
+</pre>
+</blockquote>
+
+<p>
+参照先付きカラー図版の取り扱い方は、通常のカラー図版を拡張した形と
+なります。通常のカラー図版の場合では、たとえば JPEG の非インライン
+画像では、次のような順番でフックが呼び出されます。
+</p>
+
+<ol>
+<li><code>EB_HOOK_BEGIN_COLOR_JPEG</code> (非インライン用 JPEG 開始)
+<li><code>EB_HOOK_END_COLOR_GRAPHIC</code> (非インライン用 JPEG 終了)
+</ol>
+
+<p>
+これに対して参照先付きのカラー図版では、この2つのフックの間に、矩形領域
+情報に関するフックが挿入されます。
+</p>
+
+<ol>
+<li><code>EB_HOOK_BEGIN_COLOR_JPEG</code> (非インライン用 JPEG 開始)
+<li><code>EB_HOOK_BEGIN_CLICKABLE_AREA</code> (矩形領域1 開始)
+<li><code>EB_HOOK_END_CLICKABLE_AREA</code> (矩形領域1 終了)
+<li><code>EB_HOOK_BEGIN_CLICKABLE_AREA</code> (矩形領域2 開始)
+<li><code>EB_HOOK_END_CLICKABLE_AREA</code> (矩形領域2 終了)<br>
+    以下、矩形領域3、矩形領域4 ... と矩形領域の個数分だけ続く。
+<li><code>EB_HOOK_END_COLOR_GRAPHIC</code> (非インライン用 JPEG 終了)
+</ol>
+
+<p>
+矩形領域に関する具体的な情報は、<code>EB_HOOK_BEGIN_CLICKABLE_AREA</code>
+(開始フック) のほうで取得します。
+フック関数に渡す引数の <code>argv[1]</code> と <code>argv[2]</code> が、
+それぞれ矩形領域の開始 x, y 座標を表します。
+カラー図版の左上の座標が (0, 0) です。
+同様に、<code>argv[3]</code> と <code>argv[4]</code> が矩形領域の右方向
+への幅と、下方向への高さを表します。
+最後の <code>argv[5]</code> と <code>argv[6]</code> が参照先のページ番号
+とオフセットとなります。
+</p>
+
+<p>
+アプリケーションが参照先付きカラー図版に対応しない場合は、矩形領域の
+開始情報と終了情報を無視することになります。
+これにより、図版は通常の (参照先を持たない) カラー図版とまったく同じく
+扱われます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="wave-sound">WAVE (PCM) 音声</a></h3>
+
+<p>
+WAVE (PCM) 形式の音声データは EPWING にだけ存在します。
+(代わりに電子ブックには CD-DA 形式の音声データがありますが、EB ライブラリ
+では対応していません。)
+</p>
+
+<p>
+WAVE 形式の音声データを取り出すには、まずテキストデータ中から WAVE 音声
+の参照情報を得ます。
+参照開始と終了を表すエスケープシーケンスへのフック
+<code>EB_HOOK_BEGIN_WAVE</code> と <code>EB_HOOK_END_WAVE</code> が
+それぞれありますので、これを用います。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_WAVE</code> がフック関数に渡す引数のうち、
+<code>argv[2]</code> と <code>argv[3]</code> が音声データの開始位置の
+ページ番号とオフセット、<code>argv[4]</code> と <code>argv[5]</code> が
+終了位置のページ番号とオフセットとなります。
+</p>
+
+<p>
+この開始位置と終了位置を関数 <code>eb_set_binary_wave()</code> に渡して、
+その位置にある音声データをこれから取り出すことを EB ライブラリに伝えます。
+</p>
+
+<blockquote class="program">
+<pre>
+/* <code>eb_set_binary_wave()</code> の関数プロトタイプ */
+EB_Error_Code
+eb_set_binary_wave(EB_Book *book, EB_Position *start_position,
+EB_Position *end_position);
+</pre>
+</blockquote>
+
+<p>
+そして後は、実際に音声データを取り出します。
+これには、他のバイナリデータと同様に <code>eb_read_binary()</code> を
+用います。
+<code>eb_read_binary()</code> の使い方は、
+<a href="eb-11.html#monochrome-image">「モノクロ図版」</a> を参照のこと を参照してください。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="mpeg-movie">MPEG1 動画</a></h3>
+
+<p>
+MPEG1 形式の動画データは EPWING にだけ存在します。
+動画データは EPWING の CD-ROM の movie というディレクトリの下に、
+動画毎に一個のファイルにした形で収められています。
+</p>
+
+<p>
+テキストデータ中に存在する、MPEG データの参照開始と終了を表す
+エスケープシーケンスへのフック <code>EB_HOOK_BEGIN_MPEG</code> と
+<code>EB_HOOK_END_MPEG</code> を使用することで、参照先の MPEG の
+ファイル名を取得できます。
+</p>
+
+<p>
+具体的には、フック <code>EB_HOOK_BEGIN_MPEG</code> がフック関数に渡す
+引数のうち、<code>argv[2]</code> 〜 <code>argv[5]</code> が合わせて一つ
+のファイル名を表すようになっています。
+</p>
+
+<p>
+MPEG 動画のデータを得るには、このファイル名を
+<code>eb_set_binary_mpeg()</code> に渡して、そのファイルの動画データを
+これから取り出す旨を EB ライブラリに伝えます。
+ファイル名は、次のようにして <code>argv + 2</code>
+(<code>&amp;argv[2]</code> でも同じ) を渡します。
+</p>
+
+<blockquote class="program">
+<pre>
+if (eb_set_binary_mpeg(&amp;book, argv + 2) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote>
+
+<p>
+後は、実際に動画データを取り出します。
+これには、やはり他のバイナリデータと同様に <code>eb_read_binary()</code>
+を用います。
+<code>eb_read_binary()</code> の使い方については、
+<a href="eb-11.html#monochrome-image">「モノクロ図版」</a> を参照のこと を参照してください。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="binary-data-functions">関数の詳細</a></h3>
+
+<p>
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+</p>
+
+<blockquote class="program">
+<pre>
+#include &lt;eb/binary.h&gt;
+</pre>
+</blockquote>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:set_binary_mono_graphic"><code>EB_Error_Code eb_set_binary_mono_graphic (EB_Book *<var>book</var>, const EB_Position *<var>position</var>, int <var>width</var>, <var>height</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_set_binary_mono_graphic()</code> は、モノクロ図版のデータを
+これから取得しようとしていることを EB ライブラリに伝えます。
+引数 <var>position</var> は図版の位置、<var>width</var>, <var>height</var>
+には図版の幅と高さを渡します。
+これらの情報は、図版の参照元であるテキストデータに記載されており、通常は
+フック関数を通じて得るようにします。
+ただし、電子ブックでは幅と高さの値の情報がテキストデータに記されていない
+ため、0 を渡すことになります。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因に応じたエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、図版を取り出そうとしている副本を選択しておかなければ
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+図版の位置、幅、高さの値が明らかにおかしいと EB ライブラリが判断した
+ときは、<code>EB_ERR_NO_SUCH_BINARY</code> を返します。
+</p>
+
+<p>
+この関数は、実際に図版データを読み込むことはしません。
+読み込みには、<code>eb_read_binary()</code> を用います。
+モノクロ図版のデータは、1 ピクセルに 1bit を割り当てた BMP 形式になって
+います。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:set_binary_color_graphic"><code>EB_Error_Code eb_set_binary_color_graphic (EB_Book *<var>book</var>, const EB_Position *<var>position</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_set_binary_color_graphic()</code> は、EPWING のカラー図版の
+データをこれから取得しようとしていることを EB ライブラリに伝えます。
+引数 <var>position</var> は図版の位置を渡します。
+位置の情報は、図版の参照元であるテキストデータに記載されており、通常は
+フック関数を通じて得るようにします。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+</p>
+
+<p>
+あらかじめ、図版を取り出そうとしている副本を選択しておかなければ
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+図版の位置が明らかにおかしいと EB ライブラリが判断したときは、
+<code>EB_ERR_NO_SUCH_BINARY</code> を返します。
+</p>
+
+<p>
+この関数は、実際に図版データを読み込むことはしません。
+読み込みには、<code>eb_read_binary()</code> を用います。
+カラー図版データは、JPEG か BMP (DIB) のいずかの形式になっています。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:set_binary_wave"><code>EB_Error_Code eb_set_binary_wave (EB_Book *<var>book</var>, const EB_Position *<var>start_position</var>, EB_Position *<var>end_position</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_set_binary_wave()</code> は、WAVE (PCM) 形式の音声のデータ
+をこれから取得しようとしていることを EB ライブラリに伝えます。
+引数 <var>start_position</var> と <var>end_position</var> には音声データ
+の開始位置を渡します。
+位置の情報は、音声データの参照元であるテキストデータに記載されており、
+通常はフック関数を通じて得るようにします。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因に応じたエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、音声データを取り出そうとしている副本を選択しておかなければ
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code> を
+返します。
+音声データの位置が明らかにおかしいと EB ライブラリが判断したときは、
+<code>EB_ERR_NO_SUCH_BINARY</code> を返します。
+</p>
+
+<p>
+この関数は、実際に音声データを読み込むことはしません。
+読み込みには、<code>eb_read_binary()</code> を用います。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:set_binary_mpeg"><code>EB_Error_Code eb_set_binary_mpeg (EB_Book *<var>book</var>, const unsigned int *<var>argv</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_set_binary_mpeg()</code> は、MPEG1 形式の動画のデータを
+これから取得しようとしていることを EB ライブラリに伝えます。
+引数 <var>argv</var> には動画データのファイル名を渡します。
+ただし、このファイル名は文字列ではなく、フック関数
+<code>EB_HOOK_BEGIN_MPEG</code> に渡された引数 <code>argv[2]</code>
+〜 <code>argv[5]</code> の部分を渡します。
+つまり、フック関数の引数 <code>argv + 2</code> を、
+<code>eb_set_binary_mpeg()</code> への引数 <var>argv</var> として
+渡します。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因に応じたエラーコードを返します。
+</p>
+
+<p>
+あらかじめ、動画データを取り出そうとしている副本を選択しておかなければ
+なりません。
+<var>book</var> が副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code>
+を返します。
+存在しない動画ファイル名を EB ライブラリが判断したときは、
+<code>EB_ERR_NO_SUCH_BINARY</code> を返します。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+</p>
+
+<p>
+この関数は、実際に動画データを読み込むことはしません。
+読み込みには、<code>eb_read_binary()</code> を用います。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:read_binary"><code>EB_Error_Code eb_read_binary (EB_Book *<var>book</var>, size_t <var>binary_max_length</var>, char *<var>binary</var>, ssize_t *<var>binary_length</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_read_binary()</code> は、バイナリデータを読み込みます。
+読み込もうとしているバイナリデータは、事前に
+</p>
+
+<ul>
+<li><code>eb_set_binary_mono_graphic()</code>
+<li><code>eb_set_binary_color_graphic()</code>
+<li><code>eb_set_binary_wave()</code>
+<li><code>eb_set_binary_mpeg()</code>
+</ul>
+
+<p>
+のいずれかの関数で、EB ライブラリに通知しておく必要があります。
+</p>
+
+<p>
+読み込んだデータは引数 <var>binary</var> の指す先の領域に書き込まれます。
+また、このとき書き込まれたバイト数は、<var>binary_length</var> の指す
+先の領域にセットされます。
+ただし、書き込まれるバイト数は、最長でも引数 <var>binary_max_length</var>
+に指定した値までとなります。
+</p>
+
+<p>
+この関数は、特に読み込んだデータの終端にナル文字を付加するような事は
+しません。
+読み込まれるデータもバイナリ形式なので、途中にナル文字が出現する事も
+あります。
+</p>
+
+<p>
+この関数を一回呼び出しだだけで、バイナリデータ全体を一気に取得する
+必要はありません。
+繰り返し呼び出せば、前回の続きからデータが読み込まれます。
+</p>
+
+<p>
+ただし、以下に挙げた関数を呼び出すと、バイナリデータの読み込みに関する
+状態記録がリセットされますので、それ以上の読み込みはできなくなります。
+</p>
+
+<ul>
+<li><code>eb_set_subbook()</code>
+<li><code>eb_unset_subbook()</code>
+<li><code>eb_load_all_subbooks()</code>
+<li><code>eb_bind()</code>
+<li><code>eb_finalize_book()</code>
+<li><code>eb_set_binary_mono_graphic()</code>
+<li><code>eb_set_binary_color_graphic()</code>
+<li><code>eb_set_binary_wave()</code>
+<li><code>eb_set_binary_mpeg()</code>
+</ul>
+
+<p>
+<code>eb_read_binary()</code> を繰り返し呼んだ場合、バイナリデータは
+その都度 <var>binary</var> の先頭から書き込まれ、*<var>binary_length</var>
+の値も、その回の <code>eb_read_binary()</code> の呼び出しで書き込まれた
+バイト数になります。
+</p>
+
+<p>
+データの終端に来ると、それ以上この関数を呼んでも関数は <var>binary</var>
+には何も書き込まず、*<var>binary_length</var> に 0 を書き込み、
+<code>EB_SUCCESS</code> を返します。
+</p>
+
+<p>
+成功すると、この関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>binary_length</var> が指す領域に -1 を書き込み、原因を
+示すエラーコードを返します。
+この場合、バイナリデータの読み込み状態の記録がリセットされますので、
+データの続きを読み込むことはできなくなります。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくては
+なりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+また、冒頭に挙げた関数の呼び出しが成功していない状態でこの関数を呼ぶと、
+<code>EB_ERR_NO_CUR_BINARY</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:compose_movie_file_name"><code>EB_Error_Code eb_compose_movie_file_name (const unsigned int *<var>argv</var>, char *<var>composed_file_name</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_compose_movie_file_name()</code> は、動画データのファイル名
+を通常の文字列に変換します。
+</p>
+
+<p>
+EB ライブラリでは、動画データのファイル名はフック関数
+<code>EB_HOOK_BEGIN_MPEG</code> に渡された 4 つの int 型引数
+(<code>argv[2]</code> 〜 <code>argv[5]</code>) によって表現されます。
+</p>
+
+<p>
+動画データを読み込む際は、これをそのまま <code>eb_set_binary_mpeg()</code>
+に渡せば良いのですが、ファイル名を通常の文字列で得たい場合は、この関数を
+用います。
+たとえば、個々の動画に一意の ID のようなものを振りたい場合は、ファイル
+名を ID として使うと良いかも知れません。
+なお、この関数で変換して得られるファイル名にはパスが含まれていません。
+</p>
+
+<p>
+フック関数の引数 <code>argv + 2</code> をこの関数への引数 <var>argv</var>
+として渡すと、<var>composed_file_name</var> が指す先の領域に、文字列形式
+に変換されたファイル名が格納されます。
+ファイル名は最長で <code>EB_MAX_DIRECTORY_NAME_LENGTH</code> (= 8) バイト
+になります。
+この長さには終端のナル文字の分を含んでいませんので、格納領域にはもう
+1 バイト余裕が要ります。
+</p>
+
+<p>
+なお、格納されたファイル名は、実際に存在するファイル名とは若干異なって
+いる可能性があります。
+たとえば、英字の大文字と小文字、接尾子の有無などの違いがこれに当たります。
+この関数は、あくまで文字列に機械的に変換するだけなので、ファイルが実在
+するかどうかのチェックはしません。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:compose_movie_path_name"><code>EB_Error_Code eb_compose_movie_path_name (EB_Book *<var>book</var>, const unsigned int *<var>argv</var>, char *<var>composed_path_name</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_compose_movie_path_name()</code> は、動画データのファイル名
+を通常の文字列に変換します。
+働きは、前述の関数 <code>eb_compose_movie_file_name()</code> に良く
+似ていますが、<code>eb_compose_movie_path_name()</code> が返すファイル名
+は、絶対パスの形式になっている点が異なります。
+</p>
+
+<p>
+また、<code>eb_compose_movie_path_name()</code> では、ファイル名が実在
+するかどうかのチェックを行うという点も、大きな違いです。
+ファイル名を文字列に変換した上で、英字の大文字と小文字の違いや接尾子の
+有無は、実在のファイルに合わせて調整したものを返します。
+したがって、パスを除いた部分で比較しても、
+<code>eb_compose_movie_file_name()</code> が返すファイル名とは必ずしも
+一致しません。
+</p>
+
+<p>
+引数 <code>book</code> は、動画ファイルを収録している副本を選択して
+おかなければなりません。
+副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<p>
+引数 <code>argv</code> の意味は、<code>eb_compose_movie_file_name()</code>
+と同じです。
+</p>
+
+<p>
+ファイル名の変換が成功すると、関数は <var>composed_path_name</var> が
+指す先の領域に、文字列形式に変換された動画ファイル名を格納し、
+<code>EB_SUCCESS</code> を返します。
+ファイル名は最長で <code>EB_MAX_PATH_LENGTH</code> バイトになります。
+この長さには終端のナル文字の分を含んでいませんので、格納領域にはもう
+1 バイト余裕が要ります。
+</p>
+
+<p>
+ファイル名が実在しないと、<code>EB_ERR_BAD_FILE_NAME</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:decompose_movie_file_name"><code>EB_Error_Code eb_decompose_movie_file_name (unsigned int *<var>argv</var>, const char *<var>composed_file_name</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_compose_movie_file_name()</code> は、
+<code>eb_compose_movie_file_name()</code> とちょうど逆の働きをします。
+つまり、通常の文字列に変換された動画データのファイル名
+<var>composed_file_name</var> を、4 つの int 型引数 <var>argv</var> に
+戻します。
+したがって、<var>argv</var> の指す領域は、少なくとも int 型の値を 4 つ
+格納できる大きさが必要です。
+</p>
+
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="eb-10.html">前へ</a>] [<a href="eb-12.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
+</p>
+</body>
+</html>

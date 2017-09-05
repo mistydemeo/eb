@@ -1,0 +1,546 @@
+<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- Created on July, 7  2000 by texi2html 1.64 -->
+<!-- 
+Written by: Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Olaf Bachmann <obachman@mathematik.uni-kl.de>
+Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
+ 
+-->
+<HEAD>
+<TITLE>EB Library: Subbook</TITLE>
+
+<META NAME="description" CONTENT="EB Library: Subbook">
+<META NAME="keywords" CONTENT="EB Library: Subbook">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META NAME="Generator" CONTENT="texi2html 1.64">
+
+</HEAD>
+
+<BODY LANG="EN" BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080" ALINK="#FF0000">
+
+<A NAME="SEC17"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC16"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC18"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_4.html#SEC11"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_6.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H1> 5. Subbook </H1>
+<!--docid::SEC17::-->
+<P>
+
+A CD-ROM book usually has some <EM>subbooks</EM>.
+For example, a certain CD-ROM book has three subbooks; Japanese
+dictionary, English dictinary and Encyclopedia.
+Each subbook itself is an independent <EM>book</EM>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>           (CD-ROM book)
++---------------------------------+
+| [Japanese Dicctionary](subbook) |
+|                                 |
+| [English Dicctionary] (subbook) |
+|                                 |
+| [Encyclopedia]        (subbook) |
++---------------------------------+
+</pre></td></tr></table></P><P>
+
+EB Library assigns a <EM>subbook code</EM> to each subbook.
+EB Library uses the code to identify a subbook, so that each subbook
+code is unique in a book.
+The type <CODE>EB_Subbook_Code</CODE> represents the subbook code.
+<CODE>eb_subbook_list()</CODE> returns a list of subbook codes of all subbooks
+in a book.
+The following source code is an example of <CODE>eb_subbook_list()</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* It assumes that <CODE>book</CODE> is a variable of <CODE>EB_Book</CODE> and */
+/* it has already been bound to a book.                  */
+EB_Subbook_Code subbook_codes[EB_MAX_SUBBOOKS];
+int count, i;
+
+count = eb_subbook_list(&#38;book, subbook_codes);
+if (count == -1) {
+    fprintf(stderr, "failed to get a subbook list, %s\n",
+        eb_error_message());
+}
+</pre></td></tr></table></P><P>
+
+If <CODE>eb_subbook_list()</CODE> succeeds, the subbook list is stored into
+<CODE>subbook_codes</CODE>.
+The subbook code of the first subbook in the list is represented as
+<CODE>subbook_codes[0]</CODE>, the next code is represented as 
+<CODE>subbook_codes[1]</CODE>, and so on.
+The last code is represented as <CODE>subbook_codes[count -1]</CODE>,
+because <CODE>eb_subbook_list()</CODE> returns the number of subbooks in
+the book.
+For example, you can get the title of the first subbook by the
+following way.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>title = eb_subbook_title2(&#38;book, subbook_codes[0]);
+</pre></td></tr></table></P><P>
+
+<BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_5.html#SEC18">5.1 Current Subbook</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_5.html#SEC19">5.2 Sample Program</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_5.html#SEC20">5.3 Data Types</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb_5.html#SEC21">5.4 Functions</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+</TABLE></BLOCKQUOTE>
+<P>
+
+<A NAME="Current Subbook"></A>
+<HR SIZE="6">
+<A NAME="SEC18"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC19"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_6.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.1 Current Subbook </H2>
+<!--docid::SEC18::-->
+<P>
+
+Only one subbook may becomes the <EM>current subbook</EM> in a book
+at the same time.
+Most operations, such as searching a word and getting text, are
+permitted to the current subbook only.
+The function <CODE>eb_set_subbook()</CODE> sets the current subbook to
+the specified subbook.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>(EB_Book object)                        (CD-ROM book)
+  +-------+                  +---------------------------------+
+  |current|                  | [Japanese Dicctionary](subbook) |
+  |subbook| eb_set_subbook() |                                 |
+  |   *-----------------------&#62;[English Dicctionary] (subbook) |
+  |       |                  |                                 |
+  +-------+                  | [Encyclopedia]        (subbook) |
+                             +---------------------------------+
+</pre></td></tr></table></P><P>
+
+At the initial state, no subbok is selected as the current subbook.
+</P><P>
+
+<CODE>eb_set_subbook()</CODE> takes a subbook code as an argument.
+If the function succeeds, the subbook of the code is set to the current
+subbook.
+The following source code is an example of <CODE>eb_set_subbook()</CODE>.
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* It assumes that <CODE>book</CODE> is a variable of <CODE>EB_Book</CODE> and */
+/* it has already been bound to a book.                  */
+EB_Subbook_Code subbook_codes[EB_MAX_SUBBOOKS];
+int count, i;
+
+count = eb_subbook_list(&#38;book, subbook_codes);
+if (count == -1) {
+    /* eb_subbook_list() is failed */
+}
+
+for (i = 0; i &#60; count; i++) {
+    if (eb_set_subbook(&#38;book, subbook_codes[i]) == -1) {
+        /* eb_set_subbook() is failed */
+    }
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="Subbook Sample"></A>
+<HR SIZE="6">
+<A NAME="SEC19"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC18"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC20"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_6.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.2 Sample Program </H2>
+<!--docid::SEC19::-->
+<P>
+
+<A NAME="IDX85"></A>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/*
+ * Filename:
+ *     subbook.c
+ *
+ * Usage:
+ *     subbook book-path
+ *
+ * Example:
+ *     subbook /cdrom
+ *
+ * Description:
+ *     This program shows titles of subbooks in a book.
+ *     `book-path' points to the top directory of the CD-ROM book
+ *     where the file CATALOG or CATALOGS resides.
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include &#60;stdio.h&#62;
+
+#ifdef HAVE_STDLIB_H
+#include &#60;stdlib.h&#62;
+#endif
+
+#include &#60;eb/eb.h&#62;
+#include &#60;eb/error.h&#62;
+
+int
+main(argc, argv)
+    int argc;
+    char *argv[];
+{
+    EB_Book book;
+    EB_Subbook_Code sublist[EB_MAX_SUBBOOKS];
+    int subcount;
+    const char *title;
+    int i;
+
+    /*
+     * Check for command line arguments.
+     */
+    if (argc != 2) {
+	fprintf(stderr, "Usage: %s book-path\n", argv[0]);
+	exit(1);
+    }
+
+    /*
+     * Initialize `book'.
+     */
+    eb_initialize(&#38;book);
+
+    /*
+     * Bind a book to `book'.
+     */
+    if (eb_bind(&#38;book, argv[1]) == -1) {
+	fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+	    argv[0], eb_error_message(), argv[1]);
+	exit(1);
+    }
+
+    /*
+     * Get the subbook list.
+     */
+    subcount = eb_subbook_list(&#38;book, sublist);
+    if (subcount &#60; 0) {
+	fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
+	    argv[0], eb_error_message());
+	eb_clear(&#38;book);
+	exit(1);
+    }
+
+    /*
+     * Output titles of subbooks in the book.
+     */
+    for (i = 0; i &#60; subcount; i++) {
+	title = eb_subbook_title2(&#38;book, sublist[i]);
+	if (title == NULL) {
+	    fprintf(stderr, "%s: failed to get the title, %s\n",
+		argv[0], eb_error_message());
+	    continue;
+	}
+	printf("%d: %s\n", i, title);
+    }
+
+    /*
+     * Clear the book.
+     */
+    eb_clear(&#38;book);
+
+    exit(0);
+}
+</pre></td></tr></table></P><P>
+
+<A NAME="Subbook Data Types"></A>
+<HR SIZE="6">
+<A NAME="SEC20"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC19"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC21"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_6.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.3 Data Types </H2>
+<!--docid::SEC20::-->
+<P>
+
+Please include <TT>`eb/eb.h'</TT> to use the data types described in this
+section:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX86"></A>
+<DL>
+<DT><U>Data type:</U> <B>EB_Subbook_Code</B>
+<DD></P><P>
+
+The <CODE>EB_Subbook_Code</CODE> data type represents a subbook code.
+Each subbook in a book has an unique subbook code.
+This type is defined from a signed integral type, so that you can compare
+two codes by the <CODE>==</CODE> and <CODE>!=</CODE> binomial operators.
+</DL>
+</P><P>
+
+<A NAME="Subbook Functions"></A>
+<HR SIZE="6">
+<A NAME="SEC21"></A>
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC20"> &lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_6.html#SEC22"> &gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> Up </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_6.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<H2> 5.4 Functions </H2>
+<!--docid::SEC21::-->
+<P>
+
+Please include <TT>`eb/eb.h'</TT> to use the functions described in this
+section:
+</P><P>
+
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
+</pre></td></tr></table></P><P>
+
+<A NAME="IDX87"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_initialize_all_subbooks</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_initialize_all_subbooks()</CODE> initializes all subbooks
+in <VAR>book</VAR>.
+<VAR>book</VAR> must have been bound beforehand.
+</P><P>
+
+Usually, initialization of a subbook is done at the first time the subbook
+is set as the current subbook.
+The function does the initialization in advance.
+This function is usuful for standalone server applications.
+Call <CODE>eb_initialize_all_subbooks()</CODE> before accepting connections from
+clients.
+When a connected client requests to set a subbook, the server can respond
+to the request faster than usual because the initialization of the subbook
+has already been done.
+</P><P>
+
+If succeeds, it returns the number of subbooks in <VAR>book</VAR>.
+Otherwise, it returns -1 and sets <CODE>eb_error</CODE>.
+This function never changes the current subbook of <VAR>book</VAR>.
+</DL>
+</P><P>
+
+<A NAME="IDX88"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_subbook_count</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_subbook_count()</CODE> gets the number of subbooks in
+<VAR>book</VAR>.
+<VAR>book</VAR> must have been bound beforehand.
+</P><P>
+
+If succeeds, it returns the number of subbooks.
+Otherwise, it returns -1 and sets <CODE>eb_error</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX89"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_subbook_list</B> <I>(EB_Book *<VAR>book</VAR>, EB_Subbook_Code *<VAR>list</VAR>)</I>
+<DD><A NAME="IDX90"></A>
+</P><P>
+
+The function <CODE>eb_subbook_list()</CODE> makes a list of the subbook codes
+of the subbooks in <VAR>book</VAR>.
+<VAR>book</VAR> must have been bound beforehand.
+This function puts the generated list into <VAR>list</VAR> as an array of
+<CODE>EB_Subbook_Code</CODE>.
+The array contains <CODE>EB_MAX_SUBBOOKS</CODE> elements maximum.
+</P><P>
+
+If succeeds, it returns the number of subbooks in <VAR>book</VAR>.
+Otherwise, it returns -1 and sets <CODE>eb_error</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX91"></A>
+<DL>
+<DT><U>Function:</U> EB_Subbook_Code <B>eb_subbook</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_subbook()</CODE> gets the subbook code of the current
+subbook of <VAR>book</VAR>.
+The current subbook of <VAR>book</VAR> must have been set beforehand.
+</P><P>
+
+If succeeds, it returns the number of subbooks in <VAR>book</VAR>.
+Otherwise, it returns -1 and sets <CODE>eb_error</CODE>.
+</DL>
+</P><P>
+
+<A NAME="IDX92"></A>
+<DL>
+<DT><U>Function:</U> const char * <B>eb_subbook_title</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX93"></A>
+</P><P>
+
+The function <CODE>eb_subbook_title()</CODE> gets the title of the current
+subbook of <VAR>book</VAR>.
+The current subbook of <VAR>book</VAR> must have been set beforehand.
+The length of the title string is <CODE>EB_MAXLEN_TITLE</CODE> maximum.
+The length doesn't count the terminating NUL character.
+The title is written in EUC-JP or ISO 8859-1.
+</P><P>
+
+If succeeds, it returns the title (e.g. "English Japanese Dictionary").
+Otherwise, it returns <CODE>NULL</CODE> and sets <CODE>eb_error</CODE>.
+</P><P>
+
+Please note that the title returned from this function is a constant
+string kept in <VAR>book</VAR>.
+When <VAR>book</VAR> becomes unbound (i.e. call <CODE>eb_clear</CODE> for <VAR>book</VAR>),
+also the title string is destroyed.
+Accordingly, you must not refer to the title in the unbound book.
+</DL>
+</P><P>
+
+<A NAME="IDX94"></A>
+<DL>
+<DT><U>Function:</U> const char * <B>eb_subbook_title2</B> <I>(EB_Book *<VAR>book</VAR>, EB_Subbook_Code <VAR>code</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_subbook_title2()</CODE> is the same as
+<CODE>eb_subbook_title()</CODE>, except that it returns the title of the
+subbook specified at the argument <VAR>code</VAR>.
+The current subbook of <VAR>book</VAR> may be unset, but <VAR>book</VAR> must
+have been bound beforehand.
+</DL>
+</P><P>
+
+<A NAME="IDX95"></A>
+<DL>
+<DT><U>Function:</U> const char * <B>eb_subbook_directory</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX96"></A>
+</P><P>
+
+The function <CODE>eb_subbook_directory()</CODE> gets the directory name of
+the current subbook of <VAR>book</VAR>.
+The current subbook of <VAR>book</VAR> must have been set beforehand.
+All files which belong to the current subbook are resides under the
+directory relative to the top directory of the CD-ROM book.
+The length of the directory name is <CODE>EB_MAXLEN_BASENAME</CODE> maximum.
+The length doesn't count the terminating NUL character.
+The directory name consists of `d' characters (space, digit, upper case
+letter, and underscore) defined in ISO 9660.
+</P><P>
+
+If succeeds, it returns the directory name (e.g. "JPDICT").
+Otherwise, it returns <CODE>NULL</CODE> and sets <CODE>eb_error</CODE>.
+</P><P>
+
+Please note that the directory name returned from this function is a
+constant string kept in <VAR>book</VAR>.
+When <VAR>book</VAR> becomes unbound (i.e. call <CODE>eb_clear</CODE> for <VAR>book</VAR>),
+also the directory name is destroyed.
+Accordingly, you must not refer to the directory name in the unbound book.
+</DL>
+</P><P>
+
+<A NAME="IDX97"></A>
+<DL>
+<DT><U>Function:</U> const char * <B>eb_subbook_directory2</B> <I>(EB_Book *<VAR>book</VAR>, EB_Subbook_Code <VAR>code</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_subbook_directory2()</CODE> is the same as
+<CODE>eb_subbook_directory()</CODE>, except that it returns the directory name
+of the subbook specified at the argument <VAR>code</VAR>.
+The current subbook of <VAR>book</VAR> may be unset, but <VAR>book</VAR> must
+have been bound beforehand.
+</DL>
+</P><P>
+
+<A NAME="IDX98"></A>
+<DL>
+<DT><U>Function:</U> int <B>eb_set_subbook</B> <I>(EB_Book *<VAR>book</VAR>, EB_Subbook_Code <VAR>code</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_set_subbook()</CODE> sets the current subbook of <VAR>book</VAR>
+to <VAR>code</VAR>.
+<VAR>book</VAR> must have been bound beforehand.
+When the current subbook has already been set to the specified subbook,
+this function unsets the current subbook, and then it sets the current
+subbook to <VAR>code</VAR>.
+</P><P>
+
+If succeeds, it returns 0.
+Otherwise, it returns -1, sets <CODE>eb_error</CODE>, and unsets the current
+subbook.
+</DL>
+</P><P>
+
+<A NAME="IDX99"></A>
+<DL>
+<DT><U>Function:</U> void <B>eb_unset_subbook</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD></P><P>
+
+The function <CODE>eb_unset_subbook()</CODE> unsets the current subbook of
+<VAR>book</VAR>.
+If <VAR>book</VAR> is unbound, or if the current subbook has not been set,
+this function does nothing.
+</DL>
+</P><P>
+
+<A NAME="Search Basics"></A>
+<HR SIZE="6">
+<TABLE CELLPADDING=1 CELLSPACING=1 BORDER=0>
+<TR><TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_5.html#SEC17"> &lt;&lt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_6.html#SEC22"> &gt;&gt; </A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT"> &nbsp; <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb.html#SEC_Top">Top</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_toc.html#SEC_Contents">Contents</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_8.html#SEC27">Index</A>]</TD>
+<TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb_abt.html#SEC_About"> ? </A>]</TD>
+</TR></TABLE>
+<BR>  
+<FONT SIZE="-1">
+This document was generated
+by <I>Motoyuki Kasahara</I> on <I>July, 7  2000</I>
+using <A HREF="http://www.mathematik.uni-kl.de/~obachman/Texi2html
+"><I>texi2html</I></A>
+
+</BODY>
+</HTML>

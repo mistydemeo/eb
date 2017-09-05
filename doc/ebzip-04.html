@@ -1,0 +1,414 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="ebutils.css">
+<link rev="made" href="mailto:m-kasahr@sra.co.jp">
+<title>ebzip コマンド</title>
+</head>
+
+<body>
+<p>
+[<a href="ebzip-03.html">前へ</a>] [<a href="ebzip-05.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+<hr>
+<h2><a name="compression">圧縮</a></h2>
+
+<p>
+<code>ebzip</code> (<code>ebunzip --compress</code>、
+<code>ebzipinfo --compress</code> と等価) は CD-ROM 書籍の圧縮を行います。
+</p>
+
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="compression-example-1">圧縮の実行例 (1)</a></h3>
+
+<p>
+この節では、ハードディスクにすでにコピーしてある CD-ROM 書籍を圧縮するには
+どうしたらいいかを説明します。
+CD-ROM 書籍がすでに <code>/dict</code> にコピーされているものの、まだ圧縮
+されていないと仮定します。
+この書籍は <code>/dict</code> の下に、次のようなファイルを持っています。
+</p>
+
+<blockquote>
+<pre>
+/dict/catalog
+/dict/language
+/dict/kanji/start
+/dict/english/start
+</pre>
+</blockquote>
+
+<p>
+この書籍を圧縮するには、次のようにします。
+</p>
+
+<blockquote>
+<pre>
+% cd /dict
+% ebzip
+</pre>
+</blockquote>
+
+<p>
+これは次のようにしても同じです。
+</p>
+
+<blockquote>
+<pre>
+% ebzip --output-directory /dict /dict
+</pre>
+</blockquote>
+
+<p>
+圧縮には、しばらくかかることがあります。
+圧縮の間、<code>ebzip</code> は、次のように状況を知らせるメッセージを出力
+します。
+</p>
+
+<blockquote>
+<pre>
+==&gt; /dict/kanji/start を圧縮 &lt;==
+./dict/kanji/start.ebz に出力
+ 1.0% 処理済み (2097152 / 220069888 バイト)
+ 1.9% 処理済み (4194304 / 220069888 バイト)
+ 2.9% 処理済み (6291456 / 220069888 バイト)
+        : (略)
+完了 (220069888 / 220069888 バイト)
+220069888 -&gt; 78163751 バイト (35.5%)
+</pre>
+</blockquote>
+
+<p>
+圧縮が完了すると、<code>/dict</code> の下のディレクトリ構成が少し変化して
+いるのが分かります。
+</p>
+
+<blockquote>
+<pre>
+/dict/catalog
+/dict/language.ebz
+/dict/kanji/start.ebz
+/dict/english/start.ebz
+</pre>
+</blockquote>
+
+<p>
+拡張子 <samp>.ebz</samp> がいくつかのファイル
+(<code>/dict/language.ebz</code>、<code>/dict/kanji/start.ebz</code>、
+<code>/dict/english/start.ebz</code>) に付いています。
+これらが圧縮されたファイルです。
+他のファイルは変化していません。
+</p>
+
+<p>
+<code>ebzip</code> が圧縮するファイルは、
+<code>START</code>、<code>HONMON</code>、<code>HONMON2</code>、
+<code>HONMONS</code>、<code>LANGUAGE</code> ファイルと <code>GAIJI</code>
+ディレクトリにある外字ファイルです。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="compression-example-2">圧縮の実行例 (2)</a></h3>
+
+<p>
+この節ではもう一つ別の例として、CD-ROM ディスクのファイルを圧縮し、それ
+をハードディスクに置く方法について説明します。
+元の CD-ROM 書籍が <code>/cdrom</code> にマウントされ、書籍は
+<code>/cdrom</code> の下に次のようなファイルを持っていると仮定します。
+</p>
+
+<blockquote>
+<pre>
+/cdrom/catalog
+/cdrom/language
+/cdrom/german/start
+/cdrom/french/start
+/cdrom/italian/start
+</pre>
+</blockquote>
+
+<p>
+この書籍を圧縮し、<code>/dict</code> の下に置くためには、次のコマンドを
+実行します。
+</p>
+
+<blockquote>
+<pre>
+% cd /dict
+% ebzip --keep /cdrom
+</pre>
+</blockquote>
+
+<p>
+これは次のようにしても同じです。
+</p>
+
+<blockquote>
+<pre>
+% ebzip --keep --output-directory /dict /cdrom
+</pre>
+</blockquote>
+
+<p>
+出力側のディレクトリ <code>/dict</code> は空でも構いませんが、圧縮前に
+あらかじめ作っておかなければならないので、注意して下さい。
+この例では、<samp>--keep</samp> オプションを使っています。
+特に指定しなければ、<code>ebzip</code> は、圧縮後に元のファイルを削除
+しますが、<samp>--keep</samp> オプションはこの振る舞いを抑制します。
+</p>
+
+<p>
+<code>/dict</code> と <code>/cdrom</code> のディレクトリ構成はほとんど
+同じですが、<code>/dict</code> の下の圧縮されたファイルには拡張子
+<samp>.ebz</samp> が付いています。
+</p>
+
+<blockquote>
+<pre>
+/dict/catalog
+/dict/language.ebz
+/dict/german/start.ebz
+/dict/french/start.ebz
+/dict/italian/start.ebz
+</pre>
+</blockquote>
+
+<p>
+中間のディレクトリ <code>/dict/german</code>、<code>/dict/french</code>、
+<code>/dict/italian</code> は、もし無ければ <code>ebzip</code> によって
+作成されます。
+<code>catalog</code> と <code>catalogs</code> は、出力側のディレクトリ
+にコピーされます。
+EB ライブラリが対応していないファイル、ディレクトリについては、
+<code>ebzip</code> は無視します (圧縮もコピーもしません)。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="compression-level">圧縮レベル</a></h3>
+
+<p>
+<code>ebzip</code> は、0 〜 5 という 6 つの圧縮レベルを持っています。
+圧縮レベル 0 は、圧縮・伸長が最も速いですが、圧縮率は最悪です。
+圧縮レベル 5 は、圧縮率が最良ですが、圧縮・伸長は最も遅くなります。
+圧縮レベルは、<samp>--level</samp> (<samp>-l</samp>) オプションで設定します。
+</p>
+
+<blockquote>
+<pre>
+% ebzip --level 2 --output-directory /dict /dict
+</pre>
+</blockquote>
+
+<p>
+無指定時のレベルは 0 (最速だが圧縮率は最悪) です。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="test">テスト</a></h3>
+
+<p>
+<code>ebzip</code> を <code>--test</code> (<code>-t</code>) オプション付き
+で実行すると、<code>ebzip</code> は圧縮したデータを実際のファイルには
+書き込まなくなります。
+圧縮する前に圧縮後のファイルの大きさを知りたいときに、便利です。
+</p>
+
+<blockquote>
+<pre>
+% ebzip --test /dict /dict
+</pre>
+</blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="partial-compression">一部だけの圧縮</a></h3>
+
+<p>
+なにも設定しないと、<code>ebzip</code> は書籍一冊の全体を圧縮しますが、
+<samp>--subbook</samp> (<samp>-S</samp>) や <samp>--skip-content</samp>
+(<samp>-s</samp>) オプションを使うと一部だけを圧縮できます。
+</p>
+
+<p>
+<samp>--subbook</samp> オプションは引数を一つ取り、そこにカンマ
+(<samp>,</samp>) で区切って、圧縮したい副本のディレクトリ名を並べて
+書きます。
+<code>ebinfo</code> コマンドを用いると、あなたの所有している書籍に
+どのような副本が含まれているのかを知ることができます。
+</p>
+
+<blockquote>
+<pre>
+% ebinfo /mnt/cdrom
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 3
+
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: english
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: french
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+副本 3:
+  題名: ポケット独和辞典（第三版）
+  ディレクトリ: german
+  検索方式: メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+</pre>
+</blockquote>
+
+<p>
+(<code>ebinfo</code> コマンドに関しての詳細は、
+<a href="ebinfo.html">ebinfo コマンドのマニュアル</a> を参照のこと。)
+この例では、3 つの副本が書籍には含まれており、それらのディレクトリ名は
+<code>english</code>, <code>french</code>, <code>german</code> 
+だということが分かります。
+</p>
+
+<p>
+<code>english</code> と <code>german</code> だけを圧縮するには、次の
+ようにします。
+</p>
+
+<blockquote>
+<pre>
+% ebzip --subbook english,french /dict
+</pre>
+</blockquote>
+
+<p>
+ディレクトリ名の大文字、小文字の違いは無視されます。
+<samp>--subbook</samp> の引数は、次のように分けて書くこともできます。
+</p>
+
+<blockquote>
+<pre>
+% ebzip --subbook english --subbook french /dict
+</pre>
+</blockquote>
+
+<p>
+残りの副本 (この例では <code>german</code>) のファイルは圧縮されることも
+コピーされることもありませんので、この時点ではまだこの書籍に対する圧縮の
+作業は完了していません。
+この書籍を使用するためには、さらなる操作を行って残りの副本を圧縮するか、
+<code>ebrefile</code> コマンドを使って残りの副本を <code>catalog(s)</code>
+ファイルの副本登録リストから削除しなくてはなりません
+(<code>ebrefile</code> コマンドについて詳しくは、
+<a href="ebrefile.html">ebrefile コマンド のマニュアル</a>
+の「<code>ebzip</code> との連携」項を参照のこと)。
+</p>
+
+<p>
+副本の一部ずつを複数回に分けて圧縮する場合、すべての副本で同じ圧縮レベル
+を指定する必要はありません。
+(たとえば、<code>english</code> と <code>french</code> はレベル 0 で圧縮し、
+<code>german</code> はレベル 2 で圧縮する)。
+</p>
+
+<p>
+<samp>--skip-content</samp> (<samp>-s</samp>) は <samp>--subbook</samp>
+に似ていますが、<samp>--skip-content</samp> では無視するファイルの
+データ型を指定します。
+</p>
+
+<blockquote>
+<pre>
+% ebzip --skip-content sound,movie --subbook french /dict
+</pre>
+</blockquote>
+
+<p>
+この例では、<code>ebzip</code> は音声と動画ファイルを飛ばします。
+現在のところ、<code>ebzip</code> によって認識されるデータ型は、
+次の通りです。
+</p>
+
+<ul>
+<li><code>font</code><br>
+外字のフォント
+<li><code>graphic</code><br>
+画像データ
+<li><code>sound</code><br>
+音声データ
+<li><code>movie</code><br>
+動画データ
+</ul>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="overwrite-old-files">古いファイルの上書き</a></h3>
+
+<p>
+書き込もうとしたファイルがすでに存在するとき、<code>ebzip</code> は
+上書きして良いかどうかの確認を求めてきます。
+</p>
+
+<blockquote>
+<pre>
+==&gt; /dict/science/data/honmon を圧縮 &lt;==
+/dict/science/data/honmon.ebz に出力
+
+ファイルがすでに存在します: /dict/science/data/honmon.ebz
+上書きしますか (はい:y, いいえ:n)?
+</pre>
+</blockquote>
+
+<p>
+<samp>y</samp> か <samp>n</samp> で答えて下さい。
+<samp>n</samp> と答えると、<code>ebzip</code> はそのファイルを飛ばして、
+次に進みます。
+</p>
+
+<p>
+<samp>--force-overwrite</samp> オプションを指定すると、<code>ebzip</code>
+はすでに存在しているファイルを、確認なしに上書きします。
+同様に、<samp>--no-overwrite</samp> オプションを指定すると、
+<code>ebzip</code> は確認なしにそのファイルを飛ばして次に進みます。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="compress-compressed-book">圧縮された書籍の圧縮</a></h3>
+
+<p>
+S-EBXA および EPWING 規格においても圧縮形式を定義しており、CD-ROM 書籍
+にはこれらの圧縮形式を実際に採用しているものがあります。
+これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
+</p>
+
+<p>
+<code>ebzip</code> は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も
+伸長することができますが、圧縮することはできません。
+</p>
+
+<p>
+<code>ebzip</code> に対して、既に圧縮されている CD-ROM 書籍を圧縮するように
+命じると、<code>ebzip</code> はいったん書籍を伸長してから、ebzip の圧縮形式で
+圧縮し直します。
+</p>
+
+<p>
+一般に ebzip の圧縮形式の方が S-EBXA や EPWING の圧縮形式よりも圧縮率が
+良好です。
+</p>
+
+<!-- ================================================================ -->
+<hr>
+<p>
+[<a href="ebzip-03.html">前へ</a>] [<a href="ebzip-05.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
+</p>
+</body>
+</html>

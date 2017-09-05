@@ -1,0 +1,494 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.52
+     from /mnt/work/ndtpd-2.3.7/eb/doc/eb.texi on 2 Febuary 2000 -->
+
+<TITLE>EB Library - Initialization</TITLE>
+</HEAD>
+<BODY>
+Go to the <A HREF="eb_1.html">first</A>, <A HREF="eb_2.html">previous</A>, <A HREF="eb_4.html">next</A>, <A HREF="eb_8.html">last</A> section, <A HREF="eb_toc.html">table of contents</A>.
+<P><HR><P>
+
+
+<H1><A NAME="SEC6" HREF="eb_toc.html#TOC6">Initialization</A></H1>
+
+<P>
+In EB Library, all accesses to a CD-ROM book are done through a data
+object of the <CODE>EB_Book</CODE> type.
+
+</P>
+
+<PRE>
+EB_Book book;
+</PRE>
+
+<P>
+Of course, the space of the data object may be allocated by
+<CODE>malloc()</CODE>:
+
+</P>
+
+<PRE>
+EB_Book *book_pointer;
+
+book_pointer = (EB_Book *) malloc(sizeof(EB_Book));
+</PRE>
+
+<P>
+Since contents of the <CODE>EB_Book</CODE> object (i.e. the contents of the
+<CODE>book</CODE> variable, and the space refered by <CODE>book_pointer</CODE>) have
+not initialized yet, we initialize the object by the following way:
+
+</P>
+
+<PRE>
+eb_initialize(&#38;book);
+eb_initialize(book_pointer);
+</PRE>
+
+<P>
+Please note that an argument passed to <CODE>eb_initialize()</CODE> is a
+pointer to a <CODE>EB_Book</CODE> object, not a <CODE>EB_Book</CODE> object itself.
+Many functions in EB Library take a pointer to <CODE>EB_Book</CODE> object
+as the first argument.
+
+</P>
+<P>
+Then, we bind the <CODE>EB_Book</CODE> object to a CD-ROM book entity.
+It is done by the function <CODE>eb_bind()</CODE>.
+
+</P>
+
+<PRE>
+(EB_Book object)            (CD-ROM book)
+  +-------+             +-------------------+
+  |       |  eb_bind()  |                   |
+  |       |=============|    /mnt/cdrom     |
+  +-------+             |                   |
+                        +-------------------+
+</PRE>
+
+<P>
+This is the sample source code of <CODE>eb_bind()</CODE>:
+
+</P>
+
+<PRE>
+if (eb_bind(&#38;book, "/mnt/cdrom") == -1) {
+    fprintf(stderr, "failed to bind the book\n");
+    exit(1);
+}
+</PRE>
+
+<P>
+The path <TT>`/mnt/cdrom'</TT> is the top directory of the book where the
+file <TT>`CATALOG'</TT> or <TT>`CATALOGS'</TT> resides.
+When <CODE>eb_bind()</CODE> is failed, it returns -1.
+However, meaning of the return value are not important at this point.
+Details about error handling are described at section <A HREF="eb_4.html#SEC11">Error Handling</A>.
+
+</P>
+<P>
+Contrary to <CODE>eb_bind()</CODE>, <CODE>eb_clear()</CODE> undoes the binding.
+When you close a book, you must invoke <CODE>eb_clear()</CODE> to the 
+<CODE>EB_Book</CODE> object bound to the book.
+A bound object opens some files and allocates memories internally.
+<CODE>eb_clear()</CODE> closes all opened files and release all allocated
+memories.
+
+</P>
+
+<PRE>
+(EB_Book object)            (CD-ROM book)
+  +-------+             +-------------------+
+  |       |  eb_clear() |                   |
+  |       |=           =|    /mnt/cdrom     |
+  +-------+             |                   |
+                        +-------------------+
+</PRE>
+
+<P>
+This is the sample source code of <CODE>eb_clear()</CODE>:
+
+</P>
+
+<PRE>
+eb_clear(&#38;book);
+</PRE>
+
+<P>
+A <CODE>EB_Book</CODE> object whose memories are allocated by <CODE>malloc()</CODE>
+can be released by <CODE>free()</CODE> safely when the object is unbound.
+
+</P>
+
+
+
+<H2><A NAME="SEC7" HREF="eb_toc.html#TOC7">Compressed Book</A></H2>
+
+<P>
+EB Library can access a book compressed by the <CODE>ebzip</CODE> command.
+Since the library automatically uncompress data, you don't have to
+be aware of whether the bound book is compressed or not.
+
+</P>
+<P>
+(see see section `Compression' in <CITE>ebzip</CITE>, for more details
+about compression).
+
+</P>
+
+
+<H2><A NAME="SEC8" HREF="eb_toc.html#TOC8">Sample Program</A></H2>
+
+<P>
+<A NAME="IDX1"></A>
+
+<PRE>
+/*
+ * Filename:
+ *     disctype.c
+ *
+ * Usage:
+ *     disctype book-path
+ *
+ * Example:
+ *     disctype /cdrom
+ *
+ * Description:
+ *     This program shows disc type (EB/EBG/EBXA/EBXA-C/S-EBXA or
+ *     EPWING) of a CD-ROM book.  `book-path' points to the top
+ *     directory of the CD-ROM book where the file CATALOG or CATALOGS
+ *     resides.
+ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include &#60;stdio.h&#62;
+
+#ifdef HAVE_STDLIB_H
+#include &#60;stdlib.h&#62;
+#endif
+
+#include &#60;eb/eb.h&#62;
+#include &#60;eb/error.h&#62;
+
+int
+main(argc, argv)
+    int argc;
+    char *argv[];
+{
+    EB_Book book;
+    EB_Disc_Code disc_code;
+
+    /*
+     * Check for command line arguments.
+     */
+    if (argc != 2) {
+	fprintf(stderr, "Usage: %s book-path\n", argv[0]);
+	exit(1);
+    }
+
+    /*
+     * Initialize `book'.
+     */
+    eb_initialize(&#38;book);
+
+    /*
+     * Bind a book.  Exit if it fails.
+     */
+    if (eb_bind(&#38;book, argv[1]) == -1) {
+	fprintf(stderr, "%s: failed to bind the book: %s\n",
+	    argv[0], argv[1]);
+	exit(1);
+    }
+
+    /*
+     * Show disc type.
+     */
+    disc_code = eb_disc_type(&#38;book);
+    fputs("disc type: ", stdout);
+    if (disc_code == EB_DISC_EB) {
+	fputs("EB/EBG/EBXA", stdout);
+    } else if (disc_code == EB_DISC_EPWING) {
+	fputs("WPING", stdout);
+    } else {
+	fputs("unknown", stdout);
+    }
+    fputc('\n', stdout);
+
+    /*
+     * Clear the book.
+     */
+    eb_clear(&#38;book);
+
+    exit(0);
+}
+</PRE>
+
+
+
+<H2><A NAME="SEC9" HREF="eb_toc.html#TOC9">Data Types</A></H2>
+
+<P>
+Please include <TT>`eb/eb.h'</TT> to use the data types described in this
+section:
+
+</P>
+
+<PRE>
+#include &#60;eb/eb.h&#62;
+</PRE>
+
+<P>
+<DL>
+<DT><U>Data type:</U> <B>EB_Book</B>
+<DD><A NAME="IDX2"></A>
+
+</P>
+<P>
+The data type <CODE>EB_Book</CODE> represents a CD-ROM book.
+In EB Library, all accesses to the CD-ROM book are done through an
+object of this type.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Data type:</U> <B>EB_Disc_Code</B>
+<DD><A NAME="IDX3"></A>
+<A NAME="IDX4"></A>
+<A NAME="IDX5"></A>
+
+</P>
+<P>
+The data type <CODE>EB_Disc_Code</CODE> represents a format code of CD-ROM
+book.
+<CODE>EB_DISC_EB</CODE> and <CODE>EB_DISC_EPWING</CODE> are currently defined as
+the format codes.
+This type is defined from a signed integral type, so that you can compare
+two codes by the <CODE>==</CODE> and <CODE>!=</CODE> binomial operators.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Data type:</U> <B>EB_Character_Code</B>
+<DD><A NAME="IDX6"></A>
+<A NAME="IDX7"></A>
+<A NAME="IDX8"></A>
+
+</P>
+<P>
+The <CODE>EB_Character_Code</CODE> type represents a character code used in
+a CD-ROM book.
+<CODE>EB_CHARCODE_ISO8859_1</CODE> and <CODE>EB_CHARCODE_JISX0208</CODE> are
+currently defined as the character codes.
+This type is defined from a signed integral type, so that you can compare
+two codes by the <CODE>==</CODE> and <CODE>!=</CODE> binomial operators.
+</DL>
+
+</P>
+
+
+<H2><A NAME="SEC10" HREF="eb_toc.html#TOC10">Functions</A></H2>
+
+<P>
+Please include <TT>`eb/eb.h'</TT> to use the functions described in this
+section:
+
+</P>
+
+<PRE>
+#include &#60;eb/eb.h&#62;
+</PRE>
+
+<P>
+(see section <A HREF="eb_4.html#SEC11">Error Handling</A> for more details about error codes and the
+global variable <CODE>eb_error</CODE>).
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> void <B>eb_initialize</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX9"></A>
+
+</P>
+<P>
+The function <CODE>eb_initialize()</CODE> initializes an <CODE>EB_Book</CODE> object
+pointed by <VAR>book</VAR>.
+Each object must be initialized just once, before any other EB Library
+function is called to the object.
+
+</P>
+<P>
+Don't call another EB Library function to an uninitialized object.
+Don't call <CODE>eb_initialize()</CODE> twice to an object.
+They may cause memory leak.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> int <B>eb_bind</B> <I>(EB_Book *<VAR>book</VAR>, const char *<VAR>path</VAR>)</I>
+<DD><A NAME="IDX10"></A>
+
+</P>
+<P>
+The function <CODE>eb_bind()</CODE> binds an <CODE>EB_Book</CODE> object pointed
+by <VAR>book</VAR> to a CD-ROM book on <VAR>path</VAR>.
+The path must points to the top directory of the book where the file
+<TT>`CATALOG'</TT> or <TT>`CATALOGS'</TT> resides.
+If the path may not be started with slash (<CODE>/</CODE>), it is
+assumed that the path is relative to the current directory.
+The empty path is assumed to be the current directory (<CODE>.</CODE>).
+If <VAR>book</VAR> has already bound a book, this function unbinds it,
+and then binds the object to the book on <VAR>path</VAR>.
+
+</P>
+<P>
+If it succeeds to bind the object, it returns 0.
+Otherwise, it returns -1, and sets <CODE>eb_errno</CODE>.
+In this case, the object becomes unbound.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> void <B>eb_suspend</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX11"></A>
+
+</P>
+<P>
+The function <CODE>eb_suspend()</CODE> unsets all <EM>current</EM> status
+in an <CODE>EB_Book</CODE> object; unsets the current subbook, current
+language, and current font height.
+If the <CODE>EB_Book</CODE> object is unbound, or has already been suspended,
+this function does nothing.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> void <B>eb_clear</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX12"></A>
+
+</P>
+<P>
+The function <CODE>eb_clear()</CODE> unbinds an <CODE>EB_Book</CODE> object
+pointed by <VAR>book</VAR>.
+All alocated memories kept in the object are released, and all
+file descriptors managed by the object are closed.
+The function does nothing to an object which has already been
+unbound.
+To use the object again, you must call <CODE>eb_bind()</CODE> for it.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> int <B>eb_is_bound</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX13"></A>
+
+</P>
+<P>
+The function <CODE>eb_is_bound()</CODE> examines whether <VAR>book</VAR> is bound
+or not.
+If it is bound, this function returns 1.
+Otherwise it returns 0, and it sets <CODE>eb_error</CODE> to
+<CODE>EB_ERR_UNBOUND_BOOK</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> const char * <B>eb_path</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX14"></A>
+
+</P>
+<P>
+The function <CODE>eb_path()</CODE> returns the path of the book bound to
+<VAR>book</VAR>.
+<VAR>book</VAR> must have been bound beforehand.
+
+</P>
+<P>
+The returned path may be different from that specified at
+<CODE>eb_bind()</CODE>, since the function always returns the path as
+<EM>canonicalized</EM> form.
+The term <EM>canonicalized</EM> means:
+
+</P>
+
+<UL>
+<LI>
+
+If the relative path has specified at <CODE>eb_bind()</CODE>, it is
+converted to the absolute path.
+<LI>
+
+All the <TT>`/..'</TT> in the path specified at <CODE>eb_bind()</CODE>
+are converted to straight forms.
+<LI>
+
+All the <TT>`/.'</TT> in the path specified at <CODE>eb_bind()</CODE>
+are deleted.
+<LI>
+
+All successive slashes (e.g. <TT>`//'</TT>) are unified.
+<LI>
+
+One or more slashes at the tail of the path are removed.
+</UL>
+
+<P>
+If succeeds, this function returns the path.
+Otherwise, it returns -1 and sets <CODE>eb_error</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> EB_Disc_Code <B>eb_disc_type</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX15"></A>
+
+</P>
+<P>
+The function <CODE>eb_disc_type()</CODE> inspects the format type of <VAR>book</VAR>.
+<VAR>book</VAR> must have been bound beforehand.
+
+</P>
+<P>
+If the book is EB/EBG/EBXA/EBXA-C/S-EBXA, it returns <CODE>EB_DISC_EB</CODE>.
+If the book is EPWING, it returns <CODE>EB_DISC_EPWING</CODE>.
+If this function fails, it returns -1 and sets <CODE>eb_error</CODE>.
+</DL>
+
+</P>
+<P>
+<DL>
+<DT><U>Function:</U> EB_Character_Code <B>eb_character_code</B> <I>(EB_Book *<VAR>book</VAR>)</I>
+<DD><A NAME="IDX16"></A>
+
+</P>
+<P>
+The function <CODE>eb_character_code()</CODE> inspects the character code
+in which <VAR>book</VAR> is written.
+<VAR>book</VAR> must have been bound beforehand.
+
+</P>
+<P>
+If the book is written in ISO 8859-1, it returns
+<CODE>EB_CHARCODE_ISO8859_1</CODE>.
+If the book is written in JIS X 0208, it returns
+<CODE>EB_CHARCODE_JISX0208</CODE>.
+If this function fails, it returns -1 and sets <CODE>eb_error</CODE>.
+</DL>
+
+</P>
+<P><HR><P>
+Go to the <A HREF="eb_1.html">first</A>, <A HREF="eb_2.html">previous</A>, <A HREF="eb_4.html">next</A>, <A HREF="eb_8.html">last</A> section, <A HREF="eb_toc.html">table of contents</A>.
+</BODY>
+</HTML>
