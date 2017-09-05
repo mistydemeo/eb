@@ -435,6 +435,7 @@ zio_open_plain(zio, file_name)
 
     zio->code = ZIO_PLAIN;
     zio->file_size = lseek(zio->file, 0, SEEK_END);
+    zio->slice_size = ZIO_SIZE_PAGE;
     if (zio->file_size < 0 || lseek(zio->file, 0, SEEK_SET) < 0)
 	goto failed;
 
@@ -1988,14 +1989,17 @@ zio_unzip_slice_sebxa(out_buffer, in_file)
 		    % ZIO_SEBXA_SLICE_LENGTH;
 		copy_length = (c1 & 0x0f) + 3;
 
-		if (out_length <= copy_offset)
-		    goto failed;
 		if (ZIO_SEBXA_SLICE_LENGTH < out_length + copy_length)
 		    copy_length = ZIO_SEBXA_SLICE_LENGTH - out_length;
 
-		copy_p = (unsigned char *)out_buffer + copy_offset;
-		for (j = 0; j < copy_length; j++)
-		    *out_buffer_p++ = *copy_p++;
+		if (copy_offset < out_length) {
+		    copy_p = (unsigned char *)out_buffer + copy_offset;
+		    for (j = 0; j < copy_length; j++)
+			*out_buffer_p++ = *copy_p++;
+		} else {
+		    for (j = 0; j < copy_length; j++)
+			*out_buffer_p++ = 0x00;
+		}
 
 		in_read_rest -= 2;
 		in_buffer_p += 2;
@@ -2017,10 +2021,11 @@ zio_unzip_slice_sebxa(out_buffer, in_file)
 	     * Return if the slice has been uncompressed.
 	     */
 	    if (ZIO_SEBXA_SLICE_LENGTH <= out_length)
-		break;
+		goto succeeded;
 	}
     }
 
+  succeeded:
     LOG(("out: zio_unzip_slice_sebxa() = %d", 0));
     return 0;
 

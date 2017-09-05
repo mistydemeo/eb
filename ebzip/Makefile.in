@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4j from Makefile.am.
+# Makefile.in generated automatically by automake 1.5 from Makefile.am.
 
 # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -109,7 +109,7 @@ bin_PROGRAMS = ebzip
 noinst_HEADERS = ebzip.h
 
 ebzip_SOURCES = ebzip.c ebzip1.c copyfile.c unzipbook.c unzipfile.c \
-	zipbook.c zipfile.c zipinfobook.c zipinfofile.c
+	zipbook.c zipfile.c zipinfobook.c zipinfofile.c sebxa.c
 
 ebzip_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS)
 ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS)
@@ -130,7 +130,8 @@ PROGRAMS = $(bin_PROGRAMS)
 
 am_ebzip_OBJECTS = ebzip.$(OBJEXT) ebzip1.$(OBJEXT) copyfile.$(OBJEXT) \
 	unzipbook.$(OBJEXT) unzipfile.$(OBJEXT) zipbook.$(OBJEXT) \
-	zipfile.$(OBJEXT) zipinfobook.$(OBJEXT) zipinfofile.$(OBJEXT)
+	zipfile.$(OBJEXT) zipinfobook.$(OBJEXT) zipinfofile.$(OBJEXT) \
+	sebxa.$(OBJEXT)
 ebzip_OBJECTS = $(am_ebzip_OBJECTS)
 ebzip_LDFLAGS =
 
@@ -141,10 +142,10 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 @AMDEP_TRUE@DEP_FILES = $(DEPDIR)/copyfile.Po $(DEPDIR)/ebzip.Po \
-@AMDEP_TRUE@	$(DEPDIR)/ebzip1.Po $(DEPDIR)/unzipbook.Po \
-@AMDEP_TRUE@	$(DEPDIR)/unzipfile.Po $(DEPDIR)/zipbook.Po \
-@AMDEP_TRUE@	$(DEPDIR)/zipfile.Po $(DEPDIR)/zipinfobook.Po \
-@AMDEP_TRUE@	$(DEPDIR)/zipinfofile.Po
+@AMDEP_TRUE@	$(DEPDIR)/ebzip1.Po $(DEPDIR)/sebxa.Po \
+@AMDEP_TRUE@	$(DEPDIR)/unzipbook.Po $(DEPDIR)/unzipfile.Po \
+@AMDEP_TRUE@	$(DEPDIR)/zipbook.Po $(DEPDIR)/zipfile.Po \
+@AMDEP_TRUE@	$(DEPDIR)/zipinfobook.Po $(DEPDIR)/zipinfofile.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -216,6 +217,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/copyfile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/ebzip.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/ebzip1.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/sebxa.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/unzipbook.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/unzipfile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/zipbook.Po@am__quote@

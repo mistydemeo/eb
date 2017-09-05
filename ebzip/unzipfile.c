@@ -58,13 +58,15 @@ static int trap_file = -1;
 /*
  * Unexported function.
  */
+static int ebzip_unzip_file_internal EB_P((const char *, const char *,
+    Zio_Code, int));
 static RETSIGTYPE trap EB_P((int));
 
 
 /*
  * Uncompress a file `in_file_name'.
- * It uncompresses the existed file nearest to the beginning of the
- * list.  If it succeeds, 0 is returned.  Otherwise -1 is returned.
+ * For START file, use ebzip_unzip_start_file() instead.
+ * If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 int
 ebzip_unzip_file(out_file_name, in_file_name, in_zio_code)
@@ -72,11 +74,41 @@ ebzip_unzip_file(out_file_name, in_file_name, in_zio_code)
     const char *in_file_name;
     Zio_Code in_zio_code;
 {
+    return ebzip_unzip_file_internal(out_file_name, in_file_name,
+	in_zio_code, 0);
+}
+
+/*
+ * Uncompress START file `in_file_name'.
+ * If it succeeds, 0 is returned.  Otherwise -1 is returned.
+ */
+int
+ebzip_unzip_start_file(out_file_name, in_file_name, in_zio_code, index_page)
+    const char *out_file_name;
+    const char *in_file_name;
+    Zio_Code in_zio_code;
+    int index_page;
+{
+    return ebzip_unzip_file_internal(out_file_name, in_file_name,
+	in_zio_code, index_page);
+}
+
+/*
+ * Internal function for ebzip_unzip_file() and ebzip_unzip_sebxa_start().
+ * If it succeeds, 0 is returned.  Otherwise -1 is returned.
+ */
+static int
+ebzip_unzip_file_internal(out_file_name, in_file_name, in_zio_code, index_page)
+    const char *out_file_name;
+    const char *in_file_name;
+    Zio_Code in_zio_code;
+    int index_page;
+{
     Zio in_zio;
     unsigned char *buffer = NULL;
     size_t total_length;
     int out_file = -1;
-    size_t length;
+    ssize_t length;
     struct stat in_status, out_status;
     unsigned int crc = 1;
     int information_interval;
@@ -167,6 +199,20 @@ ebzip_unzip_file(out_file_name, in_file_name, in_zio_code)
 	    invoked_name, strerror(errno), in_file_name);
 	goto failed;
     }
+    if (in_zio_code == ZIO_SEBXA) {
+	off_t index_location;
+	off_t index_base;
+	off_t zio_start_location;
+	off_t zio_end_location;
+
+	if (get_sebxa_indexes(in_file_name, index_page, &index_location,
+	    &index_base, &zio_start_location, &zio_end_location) < 0) {
+	    goto failed;
+	}
+	zio_set_sebxa_mode(&in_zio, index_location, index_base,
+	    zio_start_location, zio_end_location);
+    }
+
     if (!ebzip_test_flag) {
 	trap_file_name = out_file_name;
 #ifdef SIGHUP
@@ -202,11 +248,10 @@ ebzip_unzip_file(out_file_name, in_file_name, in_zio_code)
     total_slices = (in_zio.file_size + in_zio.slice_size - 1)
 	/ in_zio.slice_size;
     information_interval = EBZIP_PROGRESS_INTERVAL_FACTOR;
+
     for (i = 0; i < total_slices; i++) {
 	/*
-	 * Read the slice from `file' and unzip it, if it is zipped.
-	 * We assumes the slice is not compressed if its length is
-	 * equal to `slice_size'.
+	 * Read a slice.
 	 */
 	if (zio_lseek(&in_zio, total_length, SEEK_SET) < 0) {
 	    fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),

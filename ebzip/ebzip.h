@@ -283,25 +283,33 @@ int ebzip_copy_files_in_directory EB_P((const char *, const char *));
 /* ebzip1.c */
 int ebzip1_slice EB_P((char *, size_t *, char *, size_t));
 
-/* filename.c */
-void fix_path_name_suffix EB_P((char *, const char *));
+/* sebxa.c */
+int fix_sebxa_start EB_P((const char *, int));
+int get_sebxa_indexes EB_P((const char *, int, off_t *, off_t *, off_t *,
+    off_t *));
 
 /* unzipbook.c */
 int ebzip_unzip_book EB_P((const char *, const char *,
     char [][EB_MAX_DIRECTORY_NAME_LENGTH + 1], int));
+
 /* unzipfile.c */
 int ebzip_unzip_file EB_P((const char *, const char *, Zio_Code));
+int ebzip_unzip_start_file EB_P((const char *, const char *, Zio_Code, int));
 
 /* zipbook.c */
 int ebzip_zip_book EB_P((const char *, const char *,
     char [][EB_MAX_DIRECTORY_NAME_LENGTH + 1], int));
+
 /* zipfile.c */
 int ebzip_zip_file EB_P((const char *, const char *, Zio_Code));
+int ebzip_zip_start_file EB_P((const char *, const char *, Zio_Code, int));
 
 /* zipinfobook.c */
 int ebzip_zipinfo_book EB_P((const char *,
     char [][EB_MAX_DIRECTORY_NAME_LENGTH + 1], int));
+
 /* zipinfofile.c */
 int ebzip_zipinfo_file EB_P((const char *, Zio_Code));
+int ebzip_zipinfo_start_file EB_P((const char *, Zio_Code, int));
 
 #endif /* EBZIP_H */

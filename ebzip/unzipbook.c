@@ -173,8 +173,11 @@ ebzip_unzip_book_eb(book, out_top_path, book_path, subbook_list,
 	    eb_compose_path_name2(out_top_path, subbook->directory_name,
 		subbook->text_file_name, out_path_name);
 	    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
-	    ebzip_unzip_file(out_path_name, in_path_name, in_zio_code);
+	    ebzip_unzip_start_file(out_path_name, in_path_name, in_zio_code,
+		subbook->index_page);
 	}
+
+	fix_sebxa_start(out_path_name, subbook->index_page);
     }
 
     /*

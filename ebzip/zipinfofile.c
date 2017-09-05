@@ -48,15 +48,46 @@
 #endif
 
 /*
- * Output status of a file `file_name'.
- * It outputs status of the existed file nearest to the beginning of
- * the list.
+ * Unexported functions.
+ */
+static int ebzip_zipinfo_file_internal EB_P((const char *, Zio_Code, int));
+
+
+/*
+ * Output status of a file `in_file_name'.
+ * For START file, use ebzip_zipinfo_start_file() instead.
  * If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 int
 ebzip_zipinfo_file(in_file_name, in_zio_code)
     const char *in_file_name;
     Zio_Code in_zio_code;
+{
+    return ebzip_zipinfo_file_internal(in_file_name, in_zio_code, 0);
+}
+
+/*
+ * Output status of START file `in_file_name'.
+ * If it succeeds, 0 is returned.  Otherwise -1 is returned.
+ */
+int
+ebzip_zipinfo_start_file(in_file_name, in_zio_code, index_page)
+    const char *in_file_name;
+    Zio_Code in_zio_code;
+    int index_page;
+{
+    return ebzip_zipinfo_file_internal(in_file_name, in_zio_code, index_page);
+}
+
+/*
+ * Output status of a file `file_name'.
+ * If it succeeds, 0 is returned.  Otherwise -1 is returned.
+ */
+static int
+ebzip_zipinfo_file_internal(in_file_name, in_zio_code, index_page)
+    const char *in_file_name;
+    Zio_Code in_zio_code;
+    int index_page;
 {
     Zio in_zio;
     int in_file = -1;
@@ -71,6 +102,7 @@ ebzip_zipinfo_file(in_file_name, in_zio_code)
     /*
      * Open the file.
      */
+    zio_initialize(&in_zio);
     if (stat(in_file_name, &in_status) == 0 && S_ISREG(in_status.st_mode))
 	in_file = zio_open(&in_zio, in_file_name, in_zio_code);
 
@@ -78,6 +110,19 @@ ebzip_zipinfo_file(in_file_name, in_zio_code)
 	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
 	    invoked_name, strerror(errno), in_file_name);
 	goto failed;
+    }
+    if (in_zio_code == ZIO_SEBXA) {
+	off_t index_location;
+	off_t index_base;
+	off_t zio_start_location;
+	off_t zio_end_location;
+
+	if (get_sebxa_indexes(in_file_name, index_page, &index_location,
+	    &index_base, &zio_start_location, &zio_end_location) < 0) {
+	    goto failed;
+	}
+	zio_set_sebxa_mode(&in_zio, index_location, index_base,
+	    zio_start_location, zio_end_location);
     }
 
     /*
@@ -102,6 +147,8 @@ ebzip_zipinfo_file(in_file_name, in_zio_code)
 	}
 	if (in_zio.code == ZIO_EBZIP1)
 	    printf(_("ebzip level %d compression)\n"), in_zio.zip_level);
+	else if (in_zio.code == ZIO_SEBXA)
+	    printf(_("S-EBXA compression)\n"));
 	else
 	    printf(_("EPWING compression)\n"));
     }

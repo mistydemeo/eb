@@ -93,13 +93,13 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 * Test::                        テスト
 * Partial Compression::         一部だけの圧縮
 * Overwrite Old Files::         古いファイルの上書き
-* Compress Compressed EPWING::  圧縮された EPWING の圧縮
+* Compress Compressed Book::    圧縮された書籍の圧縮
 
 伸長
 
 * Uncompression Example::       伸長の実例
 * Options for Uncompression::   伸長のオプション
-* Uncompress Compressed EPWING::  圧縮された EPWING の伸長
+* Uncompress Compressed Book::  圧縮された書籍の伸長
 
 情報出力
 
@@ -258,7 +258,7 @@ ebzipinfo --uncompress
 * Test::                        テスト
 * Partial Compression::         一部だけの圧縮
 * Overwrite Old Files::         古いファイルの上書き
-* Compress Compressed EPWING::  圧縮された EPWING の圧縮
+* Compress Compressed Book::    圧縮された書籍の圧縮
 @end menu
 
 @c -------------------------------------------------------------------
@@ -532,7 +532,7 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @code{font}、@code{graphic}、@code{sound}、@code{movie} です。
 
 @c -------------------------------------------------------------------
-@node Overwrite Old Files, Compress Compressed EPWING, Partial Compression, Compression
+@node Overwrite Old Files, Compress Compressed Book, Partial Compression, Compression
 @section 古いファイルの上書き
 
 書き込もうとしたファイルがすでに存在するとき、@code{ebzip} は上書きし
@@ -558,20 +558,22 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 確認なしにそのファイルを飛ばして次に進みます。
 
 @c -------------------------------------------------------------------
-@node Compress Compressed EPWING,  , Overwrite Old Files, Compression
-@section 圧縮された EPWING 書籍の圧縮
+@node Compress Compressed Book,  , Overwrite Old Files, Compression
+@section 圧縮された書籍の圧縮
 
-EPWING では ebzip のものとは異なる圧縮形式を定義しています。
-EPWING V4 およびそれ以降のバージョンの CD-ROM 書籍では、この圧縮形式を
-採用しているものがあります。
+S-EBXA および EPWING においても圧縮形式を定義しており、CD-ROM 書籍には
+これらの圧縮形式を実際に採用しているものがあります。
+これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
 
-@code{ebzip} は EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長すること
-ができますが、圧縮することはできません。
+@code{ebzip} は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
+することができますが、圧縮することはできません。
 
-@code{ebzip} に対して EPWING 圧縮形式で圧縮された CD-ROM 書籍を圧縮する
-ように命じると、@code{ebzip} はいったん書籍を伸長してから、ebzip の圧縮
-形式で圧縮し直します。
-一般に ebzip の圧縮形式の方が EPWING 圧縮形式よりも圧縮率が良好です。
+@code{ebzip} に対して、既に圧縮されている CD-ROM 書籍を圧縮するように
+命じると、@code{ebzip} はいったん書籍を伸長してから、ebzip の圧縮形式で
+圧縮し直します。
+
+一般に ebzip の圧縮形式の方が S-EBXA や EPWING の圧縮形式よりも圧縮率が
+良好です。
 
 @c ===================================================================
 @node Uncompression, Information, Compression, Top
@@ -583,7 +585,7 @@ EPWING V4 およびそれ以降のバージョンの CD-ROM 書籍では、この圧縮形式を
 @menu
 * Uncompression Example::       伸長の実例
 * Options for Uncompression::   伸長のオプション
-* Uncompress Compressed EPWING::  圧縮された EPWING の伸長
+* Uncompress Compressed Book::  圧縮された書籍の伸長
 @end menu
 
 @c -------------------------------------------------------------------
@@ -668,7 +670,7 @@ EPWING V4 およびそれ以降のバージョンの CD-ROM 書籍では、この圧縮形式を
 拡張子 @samp{.ebz} が取り除かれています。
 
 @c -------------------------------------------------------------------
-@node Options for Uncompression, Uncompress Compressed EPWING, Uncompression Example, Uncompression
+@node Options for Uncompression, Uncompress Compressed Book, Uncompression Example, Uncompression
 @section 伸長のオプション
 
 多くのオプションは、圧縮時と伸長時とで同じ意味を持っています。
@@ -697,15 +699,15 @@ EPWING V4 およびそれ以降のバージョンの CD-ROM 書籍では、この圧縮形式を
 伸長時に @samp{--level} オプションを指定する必要はありません。
 
 @c -------------------------------------------------------------------
-@node Uncompress Compressed EPWING,  , Options for Uncompression, Uncompression
-@section 圧縮された EPWING CD-ROM 書籍の伸長
+@node Uncompress Compressed Book,  , Options for Uncompression, Uncompression
+@section 圧縮された書籍の伸長
 
-EPWING では ebzip のものとは異なる圧縮形式を定義しています。
-EPWING V4 およびそれ以降のバージョンの CD-ROM 書籍では、この圧縮形式を
-採用しているものがあります。
+S-EBXA および EPWING では ebzip のものとは異なる圧縮形式を定義しており、
+CD-ROM 書籍にはこれらの圧縮形式を実際に採用しているものがあります。
+これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
 
-@code{ebzip} は EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長すること
-ができますが、圧縮することはできません。
+@code{ebzip} は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
+することができますが、圧縮することはできません。
 
 @c ===================================================================
 @node Information, Delete a Book, Uncompression, Top
@@ -956,6 +958,16 @@ CD-ROM 書籍を圧縮します。
 @item (元のファイル)         @tab  149139690 bytes  @tab  67.8%
 @item レベル 0               @tab   82973263 bytes  @tab  37.7%
 @item レベル 1               @tab   78163751 bytes  @tab  35.5%
+@end multitable
+
+ある百科事典 (S-EBXA) の @file{START} ファイルを圧縮した結果:
+
+@multitable @columnfractions .4 .3 .3
+@item 圧縮レベル            @tab  file size        @tab  ratio
+@item (非圧縮)              @tab  225140735 bytes  @tab 100.0%
+@item (元のファイル)        @tab  176467968 bytes  @tab  78.4%
+@item レベル 0              @tab  146045331 bytes  @tab  64.9%
+@item レベル 1              @tab  138137218 bytes  @tab  61.4%
 @end multitable
 
 @c ===================================================================

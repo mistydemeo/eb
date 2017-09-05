@@ -148,8 +148,10 @@ ebzip_zipinfo_book_eb(book, book_path, subbook_list, subbook_count)
 	eb_compose_path_name2(book->path, subbook->directory_name,
 	    subbook->text_file_name, in_path_name);
 
-	if (in_zio_code != ZIO_INVALID)
-	    ebzip_zipinfo_file(in_path_name, in_zio_code);
+	if (in_zio_code != ZIO_INVALID) {
+	    ebzip_zipinfo_start_file(in_path_name, in_zio_code, 
+		subbook->index_page);
+	}
     }
 
     /*

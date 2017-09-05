@@ -35,39 +35,39 @@ strdup __argz_count __argz_stringify __argz_next])
   dnl * --enable-nls option
   dnl * 
   AC_ARG_ENABLE(nls,
-    [  --enable-nls           Native Language Support [[yes]]],
+    AC_HELP_STRING([--enable-nls], [Native Language Support [[yes]]]),
     ENABLE_NLS=$enableval, ENABLE_NLS=auto)
 
   dnl * 
   dnl * --with-gettext-includes option
   dnl * 
   AC_ARG_WITH(gettext-includes,
-  [  --with-gettext-includes=DIR
-                          gettext include files are in DIR],
+    AC_HELP_STRING([--with-gettext-includes=DIR],
+      [gettext include files are in DIR]),
   [gettext_includes="-I${withval}"], [gettext_includes=''])
 
   dnl * 
   dnl * --with-gettext-libraries option
   dnl * 
   AC_ARG_WITH(gettext-libraries,
-  [  --with-gettext-libraries=DIR
-                          gettext library files are in DIR],
+    AC_HELP_STRING([--with-gettext-libraries=DIR],
+      [gettext library files are in DIR]),
   [gettext_libraries="-L${withval}"], [gettext_libraries=''])
 
   dnl * 
   dnl * --with-iconv-includes option
   dnl * 
   AC_ARG_WITH(iconv-includes,
-  [  --with-iconv-includes=DIR
-                          iconv include files are in DIR],
+    AC_HELP_STRING([--with-iconv-includes=DIR],
+      [iconv include files are in DIR]),
   [iconv_includes="-I${withval}"], [iconv_includes=''])
 
   dnl * 
   dnl * --with-iconv-libraries option
   dnl * 
   AC_ARG_WITH(iconv-libraries,
-  [  --with-iconv-libraries=DIR
-                          iconv library files are in DIR],
+    AC_HELP_STRING([--with-iconv-libraries=DIR],
+      [iconv library files are in DIR]),
   [iconv_libraries="-L${withval}"], [iconv_libraries=''])
 
   AC_MSG_CHECKING([for NLS support])

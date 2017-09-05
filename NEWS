@@ -1,3 +1,7 @@
+Major changes in release 3.1.
+
+* Fix bugs in compressed S-EBXA support.
+
 Major changes in release 3.1beta1.
 
 * Add debug codes.

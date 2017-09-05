@@ -1,3 +1,75 @@
+2001-08-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.1.
+
+	* configure.ac (AC_INIT): Don't pass unique file as an argument.
+	Use AC_CONFIG_SRCDIR instead.
+	* configure.ac (AC_PREREQ): Set to 2.52.
+
+2001-08-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to 3.1.
+
+	* eb/zio.c (zio_open_plain): Set `slice_size'.
+	* eb/zio.c (zio_unzip_slice_sebxa): If copy offset is out of range,
+	fill 0x00.
+
+	* po-ebutils/Makefile.am (POTFILES): Add `ebzip/sebxa.c'.
+	* ebzip/Makefile.am (ebzip_SOURCES): Add `sebxa.c'.
+	* ebzip/sebxa.c: New file.
+	
+	* ebzip/copyfile.c: Include "eb.h", "error.h" and "build-post.h".
+	* ebzip/unzipbook.c (ebzip_unzip_book_eb): Fix START file after
+	compression.
+
+	* ebzip/unzipfile.c (ebzip_unzip_file): Splited into 
+	ebzip_unzip_file() ebzip_unzip_start_file() and 
+	ebzip_unzip_file_internal().
+	* ebzip/zipfile.c (ebzip_zip_file): Splited into 
+	ebzip_zip_file() ebzip_zip_start_file() and 
+	ebzip_zip_file_internal().
+	* ebzip/zipinfofile.c (ebzip_zipinfo_file): Splited into 
+	ebzip_zipinfo_file() ebzip_zipinfo_start_file() and 
+	ebzip_zipinfo_file_internal().
+
+	* ebzip/zipinfobook.c (ebzip_zipinfo_book_eb):
+	Call ebzip_zipinfo_start_file() rather than ebzip_zipinfo_file() to
+	inspect START file.
+	* ebzip/zipbook.c (ebzip_zip_book_eb): 
+	Call ebzip_zip_start_file() rather than ebzip_zip_file() to
+	compress START file.
+	* ebzip/unzipbook.c (ebzip_unzip_book_eb): 
+	Call ebzip_unzip_start_file() rather than ebzip_unzip_file() 
+	to uncompress START file.
+
+2001-08-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/zio.c (zio_unzip_slice_sebxa): Fix a critical bug that any
+	uncompression requests cannot be performed correctly.
+
+2001-08-14  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/match.c (eb_match_word_latin, eb_exact_match_word_latin):
+	The function names ware exchanged by mistake, reported by
+	HASEGAWA Masafumi.  Fixed.
+	* eb/appendix.h (eb_load_all_appendix_subbooks): Add missing
+	function declaration, reported by HASEGAWA Masafumi.
+	* eb/defs.h (EB_VERSION_MINOR): Set the macro to `1', reported
+	by HASEGAWA Masafumi.
+
+	* configure.ac (AC_ARG_ENABLE, AC_ARG_WITH): Use AC_HELP_STRING.
+	* m4/gettext.m4 (AC_ARG_ENABLE, AC_ARG_WITH): Likewise.
+	* m4/eb3.m4 (AC_ARG_ENABLE, AC_ARG_WITH): Likewise.
+	* configure.ac (AC_OUTPUT): Use AC_CONFIG_FILES to specify
+	configuration file names.  Call AC_OUTPUT with no argument.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to 3.1beta2.
+
+2001-08-13  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/configure.ac (AC_ARG_ENABLE): Disable `--enable-debug' by
+	default, reported by Kazu TAKAGI.
+
 2001-08-07  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.1beta1.

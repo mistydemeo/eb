@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.1beta1, for EB Library version 3.1beta1.
+   This is edition 3.1, for EB Library version 3.1.
 
 * Menu:
 
@@ -52,13 +52,13 @@ Compression
 * Test::                        Test.
 * Partial Compression::         Partial Compression.
 * Overwrite Old Files::         Overwrite Old Files.
-* Compress Compressed EPWING::  Compress Compressed EPWING.
+* Compress Compressed Book::    Compress Compressed Book.
 
 Uncompression
 
 * Uncompression Example::       Example of Uncompression.
 * Options for Uncompression::   Options for Uncompression.
-* Uncompress Compressed EPWING::  Uncompress Compressed EPWING.
+* Uncompress Compressed Book::  Uncompress Compressed Book.
 
 Information
 
@@ -101,7 +101,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 3.1beta1, for EB Library version 3.1beta1.
+   This is edition 3.1, for EB Library version 3.1.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -194,7 +194,7 @@ Compression
 * Test::                        Test.
 * Partial Compression::         Partial Compression.
 * Overwrite Old Files::         Overwrite Old Files.
-* Compress Compressed EPWING::  Compress Compressed EPWING.
+* Compress Compressed Book::    Compress Compressed Book.
 
 
 File: ebzip.info,  Node: Compression Example 1,  Next: Compression Example 2,  Prev: Compression,  Up: Compression
@@ -397,7 +397,7 @@ names currently recognized by `ebzip' are: `font', `graphic', `sound'
 and `movie'.
 
 
-File: ebzip.info,  Node: Overwrite Old Files,  Next: Compress Compressed EPWING,  Prev: Partial Compression,  Up: Compression
+File: ebzip.info,  Node: Overwrite Old Files,  Next: Compress Compressed Book,  Prev: Partial Compression,  Up: Compression
 
 Overwrite Old Files
 ===================
@@ -419,23 +419,25 @@ existed files without confirmation.  Similary, when the
 confirmation.
 
 
-File: ebzip.info,  Node: Compress Compressed EPWING,  Prev: Overwrite Old Files,  Up: Compression
+File: ebzip.info,  Node: Compress Compressed Book,  Prev: Overwrite Old Files,  Up: Compression
 
-Compress Compressed EPWING CD-ROM Book
-======================================
+Compress Compressed Book
+========================
 
-   EPWING also defines compression format which is different from ebzip.
-Some CD-ROM books of EPWING V4 and later version use the compression.
+   Also S-EBXA and EPWING define compression formats, and some CD-ROM
+books of S-EBXA and EPWING are compressed with the formats.  The
+formats are different from the ebzip compression format.
 
-   `ebzip' (`ebunzip') can also uncompress CD-ROM books compressed with
-the EPWING compression fomrat, but it cannot compress files with the
-format.
+   `ebzip' (`ebunzip') can also uncompress CD-ROM book compressed with
+the EPWING or S-EBXA compression fomrat, but it cannot compress book
+with the format.
 
-   If you command `ebzip' to compress a CD-ROM book wich has been
-compressed with EPWING compression format, then `ebzip' uncompresses
-the book first, and next compresses it with the ebzip compression.
-Compression ratio of the ebzip compression format is generally better
-than that of EPWING format.
+   If you command `ebzip' to compress a CD-ROM book which has been
+compressed with a compression format, `ebzip' automatically
+uncompresses the book and compresses it with the ebzip compression.
+
+   Compression ratio of the ebzip compression format is generally better
+than those of EPWING and S-EBXA formats.
 
 
 File: ebzip.info,  Node: Uncompression,  Next: Information,  Prev: Compression,  Up: Top
@@ -450,7 +452,7 @@ Uncompression
 
 * Uncompression Example::       Example of Uncompression.
 * Options for Uncompression::   Options for Uncompression.
-* Uncompress Compressed EPWING::  Uncompress Compressed EPWING.
+* Uncompress Compressed Book::  Uncompress Compressed Book.
 
 
 File: ebzip.info,  Node: Uncompression Example,  Next: Options for Uncompression,  Prev: Uncompression,  Up: Uncompression
@@ -509,7 +511,7 @@ Uncompressed files change their filenames; the suffix `.ebz' is removed
 from them.
 
 
-File: ebzip.info,  Node: Options for Uncompression,  Next: Uncompress Compressed EPWING,  Prev: Uncompression Example,  Up: Uncompression
+File: ebzip.info,  Node: Options for Uncompression,  Next: Uncompress Compressed Book,  Prev: Uncompression Example,  Up: Uncompression
 
 Options for Uncompression
 =========================
@@ -537,17 +539,18 @@ overwriting.  *Note Overwrite Old Files::, for more details about the
 the `--level' option at uncompression.
 
 
-File: ebzip.info,  Node: Uncompress Compressed EPWING,  Prev: Options for Uncompression,  Up: Uncompression
+File: ebzip.info,  Node: Uncompress Compressed Book,  Prev: Options for Uncompression,  Up: Uncompression
 
-Uncompress Compressed EPWING CD-ROM Book
-========================================
+Uncompress Compressed Book
+==========================
 
-   EPWING also defines compression format which is different from ebzip.
-Some CD-ROM books of EPWING V4 and later version use the compression.
+   Also S-EBXA and EPWING define compression formats, and some CD-ROM
+books of S-EBXA and EPWING are compressed with the formats.  The
+formats are different from the ebzip compression format.
 
-   `ebzip' (`ebunzip') can also uncompress CD-ROM books compressed with
-the EPWING compression fomrat, but it cannot compress files with the
-format.
+   `ebzip' (`ebunzip') can also uncompress CD-ROM book compressed with
+the EPWING or S-EBXA compression fomrat, but it cannot compress book
+with the format.
 
 
 File: ebzip.info,  Node: Information,  Next: Delete a Book,  Prev: Uncompression,  Up: Top
@@ -728,8 +731,8 @@ File: ebzip.info,  Node: Comparision Result,  Next: Compressed File Format,  Pre
 Comparision of Compression Results
 **********************************
 
-   Compression result of the `START' file in a certain English-Japanese
-and Japanese-English dictionary (EBXA):
+   Compression result of `START' file in a certain English-Japanese and
+Japanese-English dictionary (EBXA):
 
 compression level             file size              ratio
 (original)                    154476544 bytes        100.0%
@@ -739,8 +742,8 @@ level 2                       45983464 bytes         29.8%
 level 3                       43431397 bytes         28.1%
 (reference: gzip -6)          38712247 bytes         25.0%
 
-   Compression result of the `START' file in a certain English
-dictionary (EBG):
+   Compression result of `START' file in a certain English dictionary
+(EBG):
 
 compression level             file size              ratio
 (original)                    55511040 bytes         100.0%
@@ -750,8 +753,8 @@ level 2                       23453212 bytes         42.2%
 level 3                       22748840 bytes         41.0%
 (reference: gzip -6)          20930009 bytes         37.7%
 
-   Compression result of the `HONMON' file in a certain Japanese
-dictionary (EPWING V1):
+   Compression result of `HONMON' file in a certain Japanese dictionary
+(EPWING V1):
 
 compression level             file size              ratio
 (original)                    23642112 bytes         100.0%
@@ -761,7 +764,7 @@ level 2                       8767603 bytes          37.1%
 level 3                       8495563 bytes          35.9%
 (reference: gzip -6)          8114658 bytes          34.3%
 
-   Compression result of the `HONMON2' file in a certain Japanese
+   Compression result of `HONMON2' file in a certain Japanese
 dictionary (EPWING V5):
 
 compression level             file size              ratio
@@ -769,6 +772,15 @@ compression level             file size              ratio
 (original)                    149139690 bytes        67.8%
 level 0                       82973263 bytes         37.7%
 level 1                       78163751 bytes         35.5%
+
+   Compression result of the `START' file in a certain encyclopedia
+(S-EBXA):
+
+compression level             file size              ratio
+(uncompressed)                225140735 bytes        100.0%
+(original)                    176467968 bytes        78.4%
+level 0                       146045331 bytes        64.9%
+level 1                       138137218 bytes        61.4%
 
 
 File: ebzip.info,  Node: Compressed File Format,  Prev: Comparision Result,  Up: Top
@@ -952,7 +964,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     3.1beta1, only 1 (0001 in binary digits) can be prescribed as this
+     3.1, only 1 (0001 in binary digits) can be prescribed as this
      version.
 
 `compression level (4 bits of the least-significant-bit side)'
@@ -990,31 +1002,31 @@ significant byte first.
 
 Tag Table:
 Node: Top1042
-Node: Introduction2743
-Node: Action and Command Name4134
-Node: Invoking ebzip5744
-Node: Compression6515
-Node: Compression Example 17122
-Node: Compression Example 28702
-Node: Compression Level10249
-Node: Test10840
-Node: Partial Compression11186
-Node: Overwrite Old Files14049
-Node: Compress Compressed EPWING14797
-Node: Uncompression15572
-Node: Uncompression Example16014
-Node: Options for Uncompression17571
-Node: Uncompress Compressed EPWING18754
-Node: Information19242
-Node: Information Example19629
-Node: Options for Information20282
-Node: Delete a Book20825
-Node: Summary of Options21123
-Node: Comparision Result24611
-Node: Compressed File Format26715
-Node: Format Overview27140
-Node: Data Part27996
-Node: Index Part30662
-Node: Header Part32989
+Node: Introduction2727
+Node: Action and Command Name4108
+Node: Invoking ebzip5718
+Node: Compression6489
+Node: Compression Example 17094
+Node: Compression Example 28674
+Node: Compression Level10221
+Node: Test10812
+Node: Partial Compression11158
+Node: Overwrite Old Files14021
+Node: Compress Compressed Book14767
+Node: Uncompression15579
+Node: Uncompression Example16017
+Node: Options for Uncompression17574
+Node: Uncompress Compressed Book18755
+Node: Information19270
+Node: Information Example19657
+Node: Options for Information20310
+Node: Delete a Book20853
+Node: Summary of Options21151
+Node: Comparision Result24639
+Node: Compressed File Format27103
+Node: Format Overview27528
+Node: Data Part28384
+Node: Index Part31050
+Node: Header Part33377
 
 End Tag Table

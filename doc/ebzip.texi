@@ -92,13 +92,13 @@ Compression
 * Test::                        Test.
 * Partial Compression::         Partial Compression.
 * Overwrite Old Files::         Overwrite Old Files.
-* Compress Compressed EPWING::  Compress Compressed EPWING.
+* Compress Compressed Book::    Compress Compressed Book.
 
 Uncompression
 
 * Uncompression Example::       Example of Uncompression.
 * Options for Uncompression::   Options for Uncompression.
-* Uncompress Compressed EPWING::  Uncompress Compressed EPWING.
+* Uncompress Compressed Book::  Uncompress Compressed Book.
 
 Information
 
@@ -262,7 +262,7 @@ In this case, it is assumed that the current working directory
 * Test::                        Test.
 * Partial Compression::         Partial Compression.
 * Overwrite Old Files::         Overwrite Old Files.
-* Compress Compressed EPWING::  Compress Compressed EPWING.
+* Compress Compressed Book::    Compress Compressed Book.
 @end menu
 
 @c -------------------------------------------------------------------
@@ -534,7 +534,7 @@ The data type names currently recognized by @code{ebzip} are:
 @code{font}, @code{graphic}, @code{sound} and @code{movie}.
 
 @c -------------------------------------------------------------------
-@node Overwrite Old Files, Compress Compressed EPWING, Partial Compression, Compression
+@node Overwrite Old Files, Compress Compressed Book, Partial Compression, Compression
 @section Overwrite Old Files
 
 @code{ebzip} asks you whether a file may be overwritten or not when the
@@ -560,21 +560,23 @@ Similary, when the @samp{--no-overwrite} option is specified,
 @code{ebzip} skips the file without confirmation.
 
 @c -------------------------------------------------------------------
-@node Compress Compressed EPWING,  , Overwrite Old Files, Compression
-@section Compress Compressed EPWING CD-ROM Book
+@node Compress Compressed Book,  , Overwrite Old Files, Compression
+@section Compress Compressed Book
 
-EPWING also defines compression format which is different from ebzip.
-Some CD-ROM books of EPWING V4 and later version use the compression.
+Also S-EBXA and EPWING define compression formats, and some CD-ROM
+books of S-EBXA and EPWING are compressed with the formats.
+The formats are different from the ebzip compression format.
 
-@code{ebzip} (@code{ebunzip}) can also uncompress CD-ROM books compressed
-with the EPWING compression fomrat, but it cannot compress files with
-the format.
+@code{ebzip} (@code{ebunzip}) can also uncompress CD-ROM book
+compressed with the EPWING or S-EBXA compression fomrat, but it cannot
+compress book with the format.
 
-If you command @code{ebzip} to compress a CD-ROM book wich has been
-compressed with EPWING compression format, then @code{ebzip} uncompresses
-the book first, and next compresses it with the ebzip compression.
+If you command @code{ebzip} to compress a CD-ROM book which has been
+compressed with a compression format, @code{ebzip} automatically
+uncompresses the book and compresses it with the ebzip compression.
+
 Compression ratio of the ebzip compression format is generally better
-than that of EPWING format.
+than those of EPWING and S-EBXA formats.
 
 @c ===================================================================
 @node Uncompression, Information, Compression, Top
@@ -587,7 +589,7 @@ by @code{ebzip}.
 @menu
 * Uncompression Example::       Example of Uncompression.
 * Options for Uncompression::   Options for Uncompression.
-* Uncompress Compressed EPWING::  Uncompress Compressed EPWING.
+* Uncompress Compressed Book::  Uncompress Compressed Book.
 @end menu
 
 @c -------------------------------------------------------------------
@@ -672,7 +674,7 @@ Uncompressed files change their filenames;
 the suffix @samp{.ebz} is removed from them.
 
 @c -------------------------------------------------------------------
-@node Options for Uncompression, Uncompress Compressed EPWING, Uncompression Example, Uncompression
+@node Options for Uncompression, Uncompress Compressed Book, Uncompression Example, Uncompression
 @section Options for Uncompression
 
 Most options have the same meanings at compression and uncompression.
@@ -700,15 +702,16 @@ for overwriting.
 You don't have to specify the @samp{--level} option at uncompression.
 
 @c -------------------------------------------------------------------
-@node Uncompress Compressed EPWING,  , Options for Uncompression, Uncompression
-@section Uncompress Compressed EPWING CD-ROM Book
+@node Uncompress Compressed Book,  , Options for Uncompression, Uncompression
+@section Uncompress Compressed Book
 
-EPWING also defines compression format which is different from ebzip.
-Some CD-ROM books of EPWING V4 and later version use the compression.
+Also S-EBXA and EPWING define compression formats, and some CD-ROM
+books of S-EBXA and EPWING are compressed with the formats.
+The formats are different from the ebzip compression format.
 
-@code{ebzip} (@code{ebunzip}) can also uncompress CD-ROM books compressed
-with the EPWING compression fomrat, but it cannot compress files with
-the format.
+@code{ebzip} (@code{ebunzip}) can also uncompress CD-ROM book compressed
+with the EPWING or S-EBXA compression fomrat, but it cannot compress
+book with the format.
 
 @c ===================================================================
 @node Information, Delete a Book, Uncompression, Top
@@ -904,7 +907,7 @@ Compress a CD-ROM book.
 @node Comparision Result, Compressed File Format, Summary of Options, Top
 @appendix Comparision of Compression Results
 
-Compression result of the @file{START} file in a certain English-Japanese
+Compression result of @file{START} file in a certain English-Japanese
 and Japanese-English dictionary (EBXA):
 
 @multitable @columnfractions .4 .3 .3
@@ -917,8 +920,8 @@ and Japanese-English dictionary (EBXA):
 @item (reference: gzip -6)  @tab  38712247 bytes   @tab  25.0%
 @end multitable
 
-Compression result of the @file{START} file in a certain English
-dictionary (EBG):
+Compression result of @file{START} file in a certain English dictionary
+(EBG):
 
 @multitable @columnfractions .4 .3 .3
 @item compression level     @tab  file size       @tab  ratio
@@ -930,7 +933,7 @@ dictionary (EBG):
 @item (reference: gzip -6)  @tab  20930009 bytes  @tab  37.7%
 @end multitable
 
-Compression result of the @file{HONMON} file in a certain Japanese
+Compression result of @file{HONMON} file in a certain Japanese
 dictionary (EPWING V1):
 
 @multitable @columnfractions .4 .3 .3
@@ -943,7 +946,7 @@ dictionary (EPWING V1):
 @item (reference: gzip -6)  @tab   8114658 bytes  @tab  34.3%
 @end multitable
 
-Compression result of the @file{HONMON2} file in a certain Japanese
+Compression result of @file{HONMON2} file in a certain Japanese
 dictionary (EPWING V5):
 
 @multitable @columnfractions .4 .3 .3
@@ -952,6 +955,17 @@ dictionary (EPWING V5):
 @item (original)            @tab  149139690 bytes  @tab  67.8%
 @item level 0               @tab   82973263 bytes  @tab  37.7%
 @item level 1               @tab   78163751 bytes  @tab  35.5%
+@end multitable
+
+Compression result of the @file{START} file in a certain
+encyclopedia (S-EBXA):
+
+@multitable @columnfractions .4 .3 .3
+@item compression level     @tab  file size        @tab  ratio
+@item (uncompressed)        @tab  225140735 bytes  @tab 100.0%
+@item (original)            @tab  176467968 bytes  @tab  78.4%
+@item level 0               @tab  146045331 bytes  @tab  64.9%
+@item level 1               @tab  138137218 bytes  @tab  61.4%
 @end multitable
 
 @c ===================================================================

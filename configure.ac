@@ -1,9 +1,10 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT(eb/eb.c)
-AC_PREREQ(2.49)
-AM_INIT_AUTOMAKE(eb, 3.1beta1)
+AC_INIT
+AC_CONFIG_SRCDIR(eb/eb.c)
+AC_PREREQ(2.52)
+AM_INIT_AUTOMAKE(eb, 3.1)
 
 dnl *
 dnl * Library version info.
@@ -42,7 +43,7 @@ dnl *
 dnl * --enable-debug option.
 dnl *
 AC_ARG_ENABLE(debug,
-[  --enable-debug         enable debug code [[no]]],
+AC_HELP_STRING([--enable-debug], [enable debug code [[no]]]),
 [case "${enableval}" in
    yes) ENABLE_DEBUG=yes  ;;
    no)  ENABLE_DEBUG=no ;;
@@ -57,7 +58,7 @@ dnl *
 dnl * --enable-pthread option.
 dnl *
 AC_ARG_ENABLE(pthread,
-[  --enable-pthread       build pthread safe libraries [[no]]],
+AC_HELP_STRING([--enable-pthread], [build pthread safe libraries [[no]]]),
 [case "${enableval}" in
    yes) ENABLE_PTHREAD=yes  ;;
    no)  ENABLE_PTHREAD=no ;;
@@ -68,24 +69,24 @@ dnl *
 dnl * --with-pthread-cppflags option.
 dnl *
 AC_ARG_WITH(pthread-cppflags,
-[  --with-pthread-cppflags=FLAGS
-                          additional CPPFLAGS for pthread support],
+AC_HELP_STRING([--with-pthread-cppflags=FLAGS],
+    [additional CPPFLAGS for pthread support]),
 [PTHREAD_CPPFLAGS="${withval}"], [PTHREAD_CPPFLAGS=''])
 
 dnl *
 dnl * --with-pthread-cflags option.
 dnl *
 AC_ARG_WITH(pthread-cflags,
-[  --with-pthread-cflags=FLAGS
-                          additional CFLAGS for pthread support],
+AC_HELP_STRING([--with-pthread-cflags=FLAGS], 
+    [additional CFLAGS for pthread support]),
 [PTHREAD_CFLAGS="${withval}"], [PTHREAD_CFLAGS=''])
 
 dnl *
 dnl * --with-pthread-ldflags option.
 dnl *
 AC_ARG_WITH(pthread-ldflags,
-[  --with-pthread-ldflags=FLAGS
-                          additional LDFLAGS for pthread support],
+AC_HELP_STRING([--with-pthread-ldflags=FLAGS],
+    [additional LDFLAGS for pthread support]),
 [PTHREAD_LDFLAGS="${withval}"], [PTHREAD_LDFLAGS=''])
 
 dnl *
@@ -130,7 +131,7 @@ dnl *
 dnl * --with-included-zlib option.
 dnl *
 AC_ARG_WITH(included-zlib,
-[  --with-included-zlib    use zlib included here],
+AC_HELP_STRING([--with-included-zlib], [use zlib included here]),
 [case "${withval}" in
    yes|no) included_zlib=${withval} ;;
    *)   AC_MSG_ERROR(invalid argument to --with-included-zlib) ;;
@@ -140,8 +141,7 @@ dnl *
 dnl * --with-zlib-includes option.
 dnl *
 AC_ARG_WITH(zlib-includes,
-[  --with-zlib-includes=DIR
-                          zlib include files are in DIR],
+AC_HELP_STRING([--with-zlib-includes=DIR], [zlib include files are in DIR]),
 [z_includedir="${withval}"], [z_includedir=''])
 
 if test "X$z_includedir" != X ; then
@@ -154,8 +154,7 @@ dnl *
 dnl * --with-zlib-libraries option.
 dnl *
 AC_ARG_WITH(zlib-libraries,
-[  --with-zlib-libraries=DIR
-                          zlib library files are in DIR],
+AC_HELP_STRING([--with-zlib-libraries=DIR], [zlib library files are in DIR]),
 [z_libdir="${withval}"], [z_libdir=''])
 
 if test "X$z_libdir" != X ; then
@@ -291,7 +290,8 @@ dnl *
 dnl * Output Files.
 dnl * 
 AM_CONFIG_HEADER(config.h)
-AC_OUTPUT(Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile \
-	ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebzip/Makefile \
-	doc/Makefile doc-ja/Makefile po-eb/Makefile po-ebutils/Makefile \
-	m4/Makefile)
+AC_CONFIG_FILES([Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile
+    ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebzip/Makefile
+    doc/Makefile doc-ja/Makefile po-eb/Makefile po-ebutils/Makefile
+    m4/Makefile])
+AC_OUTPUT
