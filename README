@@ -1,44 +1,44 @@
 
-			    EB $B%i%$%V%i%j(B
-	    CD-ROM $B=q@R$K%"%/%;%9$9$k$?$a$N(B C $B$N%i%$%V%i%j(B
+			    EB ライブラリ
+	    CD-ROM 書籍にアクセスするための C のライブラリ
 
 
-EB $B%i%$%V%i%j$O(B CD-ROM $B=q@R$K%"%/%;%9$9$k$?$a$N(B C $B$N%i%$%V%i%j$G$9!#(B
-UNIX $B7O(B OS $B$*$h$S(B Windows (2000$B0J9_(B) $B$N%7%9%F%`>e$GF0:n$5$;$k$3$H$,$G(B
-$B$-$^$9!#(B($B$?$@$7!"(BWindows $B$G%3%s%Q%$%k$9$k$K$O!"JL%Q%C%1!<%8$,I,MW$G$9!#(B)
+EB ライブラリは CD-ROM 書籍にアクセスするための C のライブラリです。
+UNIX 系 OS および Windows (2000以降) のシステム上で動作させることがで
+きます。(ただし、Windows でコンパイルするには、別パッケージが必要です。)
 
-EB $B%i%$%V%i%j$O(B EB, EBG, EBXA, EBXA-C, S-EBXA $B$*$h$S(B EPWING $B7A<0$N(B
-CD-ROM $B=q@R$KBP1~$7$F$$$^$9!#$3$l$i$O!"<g$KF|K\$GHNGd$5$l$F$$$k<-=q$K(B
-$B;H$o$l$F$$$^$9!#(BCD-ROM $B=q@R<+BN$O(B ISO 9660 $B7A<0$K$J$C$F$$$^$9$N$G!"B>(B
-$B$N(B ISO 9660 $B7A<0$HF1$8MWNN$G%^%&%s%H$9$k$3$H$,$G$-$^$9!#(B
+EB ライブラリは EB, EBG, EBXA, EBXA-C, S-EBXA および EPWING 形式の
+CD-ROM 書籍に対応しています。これらは、主に日本で販売されている辞書に
+使われています。CD-ROM 書籍自体は ISO 9660 形式になっていますので、他
+の ISO 9660 形式と同じ要領でマウントすることができます。
 
-$B$^$?!"(BEB $B%i%$%V%i%j$O4v$D$+$N%f!<%F%j%F%#%3%^%s%I$bDs6!$7$F$$$^$9!#(B
+また、EB ライブラリは幾つかのユーテリティコマンドも提供しています。
 
-	ebappendix	appendix ($BIUO?(B) $B%G!<%?$r@07A$9$k(B
-	ebfont		CD-ROM $B=q@RFb$N30;z$N%U%)%s%H%G!<%?$r<h$j=P$9(B
-	ebinfo		CD-ROM $B=q@R$K4X$9$k>pJs$r=PNO$9$k(B
-	ebrefile	CD-ROM $B=q@R$N%+%?%m%0%U%!%$%k$r9=@.$7D>$9(B
-	ebstopcode	CD-ROM $B=q@R$NK\J8$N6h@Z$j%3!<%I$r8!::$9$k(B
-	ebunzip		CD-ROM $B=q@R$r?-D9$9$k(B
-	ebzip		CD-ROM $B=q@R$r05=L$9$k(B
-	ebzipinfo	CD-ROM $B=q@R$N05=L>pJs$r=PNO$9$k(B
+	ebappendix	appendix (付録) データを整形する
+	ebfont		CD-ROM 書籍内の外字のフォントデータを取り出す
+	ebinfo		CD-ROM 書籍に関する情報を出力する
+	ebrefile	CD-ROM 書籍のカタログファイルを構成し直す
+	ebstopcode	CD-ROM 書籍の本文の区切りコードを検査する
+	ebunzip		CD-ROM 書籍を伸長する
+	ebzip		CD-ROM 書籍を圧縮する
+	ebzipinfo	CD-ROM 書籍の圧縮情報を出力する
 
 
-$B%P!<%8%g%s(B 4.0 $B$+$i!"(BEB $B%i%$%V%i%j$OB>$N%[%9%H$N=q@R$K%"%/%;%9$G$-$k(B
-$B$h$&$K$J$j$^$7$?!#1s3V%"%/%;%9MQ$N<1JL;R$r;H$&$3$H$G!"B>%[%9%H>e$N(B
-CD-ROM $B=q@R$r;XDj$9$k$3$H$,$G$-$^$9!#$3$N<1JL;R$O!"<!$N$h$&$J7A<0$r$H(B
-$B$j$^$9!#(B
+バージョン 4.0 から、EB ライブラリは他のホストの書籍にアクセスできる
+ようになりました。遠隔アクセス用の識別子を使うことで、他ホスト上の
+CD-ROM 書籍を指定することができます。この識別子は、次のような形式をと
+ります。
 
-	ebnet://<$B%[%9%H(B>:<$B%]!<%H(B>/<$B=q@RL>(B>	  (CD-ROM $B=q@RK\BN(B)
-	ebnet://<$B%[%9%H(B>:<$B%]!<%H(B>/<$B=q@RL>(B>.app	  ($BIUO?%Q%C%1!<%8(B)
+	ebnet://<ホスト>:<ポート>/<書籍名>	  (CD-ROM 書籍本体)
+	ebnet://<ホスト>:<ポート>/<書籍名>.app	  (付録パッケージ)
 
-<$B%[%9%H(B> $B$O1s3V%[%9%H$N(B IP $B%"%I%l%9$b$7$/$O%[%9%HL>$G$9!#$?$@$7!"(BIPv6
-$B%"%I%l%9$r;XDj$9$k>l9g$O!"%"%I%l%9$r(B `[' $B$H(B `]' $B$G0O$`I,MW$,$"$j$^$9!#(B
-<$B%]!<%H(B> $B$O!"$=$N%[%9%H$,BT$A<u$1$F$$$k%]!<%H$NHV9f$G$9!#%[%9%H$,BT$A(B
-$B<u$1$F$$$k%]!<%H$,I8=`$N(B 22010 $BHV$G$"$l$P!"(B`:<$B%]!<%H(B>' $B$NItJ,$O>JN,2D(B
-$BG=$G$9!#(B
+<ホスト> は遠隔ホストの IP アドレスもしくはホスト名です。ただし、IPv6
+アドレスを指定する場合は、アドレスを `[' と `]' で囲む必要があります。
+<ポート> は、そのホストが待ち受けているポートの番号です。ホストが待ち
+受けているポートが標準の 22010 番であれば、`:<ポート>' の部分は省略可
+能です。
 
-$B0J2<$KNc$r5-$7$^$9!#(B
+以下に例を記します。
 	ebnet://eb.example.com/dict
 	ebnet://eb.example.com:22010/dict.app
 	ebnet://192.168.1.1/dict.app
@@ -46,26 +46,26 @@ CD-ROM $B=q@R$r;XDj$9$k$3$H$,$G$-$^$9!#$3$N<1JL;R$O!"<!$N$h$&$J7A<0$r$H(B
 	ebnet://[fe80::290:27ff:fe3]/dict.app
 	ebnet://[fe80::290:27ff:fe3]:22010/dict
 
-$B1s3V%"%/%;%9$r9T$&$K$O!"(BEBNETD $B$r(B <$B%[%9%H(B> $B>e$K%$%s%9%H!<%k$9$kI,MW$,(B
-$B$"$j$^$9!#(BEBNETD $B$O!"(BEB Library $BMQ$N1s3V%"%/%;%9%5!<%P$N%=%U%H%&%'%"(B
-$B$G$9!#(B
+遠隔アクセスを行うには、EBNETD を <ホスト> 上にインストールする必要が
+あります。EBNETD は、EB Library 用の遠隔アクセスサーバのソフトウェア
+です。
 
-EB $B%i%$%V%i%j$O%U%j!<%=%U%H%&%'%"$G$9!#%=!<%9%3!<%I$*$h$S%P%$%J%j$r!"(B
-$B$$$o$f$k(B Modified BSD $B%i%$%;%s%9(B $B$N2<$G;HMQ$9$k$3$H$,2DG=$G$9!#(B
-($B%P!<%8%g%s(B 4.1$B$h$j$bA0$N$b$N$O!"(BGPL $B$r:NMQ$7$F$$$^$7$?!#(B)
-$B%i%$%;%s%9$K4X$7$F!">\$7$/$O(B COPYING $B$H$$$&1QJ8$N%U%!%$%k$r;2>H$7$F(B
-$B2<$5$$!#(B
+EB ライブラリはフリーソフトウェアです。ソースコードおよびバイナリを、
+いわゆる Modified BSD ライセンス の下で使用することが可能です。
+(バージョン 4.1よりも前のものは、GPL を採用していました。)
+ライセンスに関して、詳しくは COPYING という英文のファイルを参照して
+下さい。
 
-$B:G?7$N(B EB $B%i%$%V%i%j$O<!$N$H$3$m$+$iF~<j$G$-$^$9!#(B
+最新の EB ライブラリは次のところから入手できます。
 
 	ftp://ftp.sra.co.jp/pub/misc/eb/
 
-EB $B%i%$%V%i%j$K4X$9$k>pJs$O<!$N$H$3$m$+$iF@$k$3$H$,$G$-$^$9!#(B
+EB ライブラリに関する情報は次のところから得ることができます。
 
 	http://www.sra.co.jp/people/m-kasahr/eb/
 
-$B%3%a%s%H$d%P%0$NJs9p$O(B
+コメントやバグの報告は
 
 	m-kasahr@sra.co.jp
 
-$B08$K!"F|K\8l$+1Q8l$G$*Aw$j2<$5$$!#(B
+宛に、日本語か英語でお送り下さい。
