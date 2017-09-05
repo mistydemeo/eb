@@ -11,20 +11,28 @@ ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) @DEPENDENCIES_FOR_LIBZ@
 
 INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/libebutils @INCLUDES_FOR_LIBZ@
 
+# Shorten command name `ebzipinfo' for DOS & Win32.
+if EXEEXT_EXE
+ebzipinfo = ebzipinf
+else
+ebzipinfo = ebzipinfo
+endif
+
 install-exec-hook:
-	rm -f $(DESTDIR)$(bindir)/ebunzip $(DESTDIR)$(bindir)/ebzipinfo
-	ln $(DESTDIR)$(bindir)/`echo ebzip|sed '$(transform)'` \
-	   $(DESTDIR)$(bindir)/`echo ebunzip|sed '$(transform)'` \
-	   || cp $(DESTDIR)$(bindir)/`echo ebzip|sed '$(transform)'` \
-	      $(DESTDIR)$(bindir)/`echo ebunzip|sed '$(transform)'`
-	ln $(DESTDIR)$(bindir)/`echo ebzip|sed '$(transform)'` \
-	   $(DESTDIR)$(bindir)/`echo ebzipinfo|sed '$(transform)'` \
-	   || cp $(DESTDIR)$(bindir)/`echo ebzip|sed '$(transform)'` \
-	      $(DESTDIR)$(bindir)/`echo ebzipinfo|sed '$(transform)'`
+	rm -f $(DESTDIR)$(bindir)/ebunzip$(EXEEXT)
+	ln $(DESTDIR)$(bindir)/`echo ebzip|sed '$(transform)'`$(EXEEXT) \
+	   $(DESTDIR)$(bindir)/`echo ebunzip|sed '$(transform)'`$(EXEEXT) \
+	   || cp $(DESTDIR)$(bindir)/`echo ebzip|sed '$(transform)'`$(EXEEXT) \
+	      $(DESTDIR)$(bindir)/`echo ebunzip|sed '$(transform)'`$(EXEEXT)
+	rm -f $(DESTDIR)$(bindir)/ebzipinfo$(EXEEXT)
+	ln $(DESTDIR)$(bindir)/`echo ebzip|sed '$(transform)'`$(EXEEXT) \
+	   $(DESTDIR)$(bindir)/`echo $(ebzipinfo)|sed '$(transform)'`$(EXEEXT) \
+	   || cp $(DESTDIR)$(bindir)/`echo ebzip|sed '$(transform)'`$(EXEEXT) \
+	      $(DESTDIR)$(bindir)/`echo $(ebzipinfo)|sed '$(transform)'`$(EXEEXT)
 
 uninstall-hook:
-	rm -f $(DESTDIR)$(bindir)/`echo ebunzip|sed '$(transform)'`
-	rm -f $(DESTDIR)$(bindir)/`echo ebzipinfo|sed '$(transform)'`
+	rm -f $(DESTDIR)$(bindir)/`echo ebunzip|sed '$(transform)'`$(EXEEXT)
+	rm -f $(DESTDIR)$(bindir)/`echo $(ebzipinfo)|sed '$(transform)'`$(EXEEXT)
 
 ### *.o dependencies ###
 ebzip.o: ebzip.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/error.h \

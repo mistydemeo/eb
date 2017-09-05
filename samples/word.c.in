@@ -1,4 +1,4 @@
-/*
+/*                                                            -*- C -*-
  * Copyright (c) 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
@@ -13,23 +13,40 @@
  */
 
 /*
- * $B%U%!%$%kL>(B:
- *     word.c
- *
- * $B;HMQJ}K!(B:
- *     word book-path word subbook-index
- *
- * $BNc(B:
- *     word /cdrom apple 0
- *
- * $B@bL@(B:
- *     $B$3$N%W%m%0%i%`$O0l:}$N(B CD-ROM $B=q@R$N$"$kI{K\$NCf$+$i(B `word'
- *     $B$rC5$7=P$7$^$9!#%R%C%H$7$?$9$Y$F$N%(%s%H%j$N8+=P$7$rI8=`=PNO(B
- *     $B$X=PNO$7$^$9!#(B`book-path' $B$O=q@R$N%H%C%W%G%#%l%/%H%j!"$D$^$j(B
- *     CATALOG $B$^$?$O(B CATALOGS $B%U%!%$%k$NB8:_$9$k%G%#%l%/%H%j$r;X$9(B
- *     $B$h$&$K$7$^$9!#(B
- *     `subbook-index' $B$O8!:wBP>]$NI{K\$N%$%s%G%C%/%9$G$9!#=q@R$NCf(B
- *     $B$N:G=i$NI{K\$N%$%s%G%C%/%9$,(B `0'$B!"<!$,(B `1' $B$K$J$j$^$9!#(B
+ * en: Filename:
+ * en:     word.c
+ * en:
+ * en: Usage:
+ * en:     word book-path word subbook-index
+ * en:
+ * en: Example:
+ * en:     word /cdrom apple 0
+ * en:
+ * en: Description:
+ * en:     This program searches a subbook in a book for `word'.
+ * en:     It outputs headings of all hit entires to standard out.
+ * en:     `book-path' points to the top directory of the CD-ROM book
+ * en:     where the file CATALOG or CATALOGS resides.
+ * en:     `subbook-index' is the index of the subbook to be searched.
+ * en:     The index of the first subbook in a book is `0', and the
+ * en:     next is `1'.
+ * ja: ¥Õ¥¡¥¤¥ëÌ¾:
+ * ja:     word.c
+ * ja:
+ * ja: »ÈÍÑÊıË¡:
+ * ja:     word book-path word subbook-index
+ * ja:
+ * ja: Îã:
+ * ja:     word /cdrom apple 0
+ * ja:
+ * ja: ÀâÌÀ:
+ * ja:     ¤³¤Î¥×¥í¥°¥é¥à¤Ï°ìºı¤Î CD-ROM ½ñÀÒ¤Î¤¢¤ëÉûËÜ¤ÎÃæ¤«¤é `word'
+ * ja:     ¤òÃµ¤·½Ğ¤·¤Ş¤¹¡£¥Ò¥Ã¥È¤·¤¿¤¹¤Ù¤Æ¤Î¥¨¥ó¥È¥ê¤Î¸«½Ğ¤·¤òÉ¸½à½ĞÎÏ
+ * ja:     ¤Ø½ĞÎÏ¤·¤Ş¤¹¡£`book-path' ¤Ï½ñÀÒ¤Î¥È¥Ã¥×¥Ç¥£¥ì¥¯¥È¥ê¡¢¤Ä¤Ş¤ê
+ * ja:     CATALOG ¤Ş¤¿¤Ï CATALOGS ¥Õ¥¡¥¤¥ë¤ÎÂ¸ºß¤¹¤ë¥Ç¥£¥ì¥¯¥È¥ê¤ò»Ø¤¹
+ * ja:     ¤è¤¦¤Ë¤·¤Ş¤¹¡£
+ * ja:     `subbook-index' ¤Ï¸¡º÷ÂĞ¾İ¤ÎÉûËÜ¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹¤Ç¤¹¡£½ñÀÒ¤ÎÃæ
+ * ja:     ¤ÎºÇ½é¤ÎÉûËÜ¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹¤¬ `0'¡¢¼¡¤¬ `1' ¤Ë¤Ê¤ê¤Ş¤¹¡£
  */
 
 #ifdef HAVE_CONFIG_H
@@ -65,7 +82,8 @@ main(argc, argv)
     int i;
 
     /*
-     * $B%3%^%s%I9T0z?t$r%A%'%C%/!#(B
+     * en: Check for command line arguments.
+     * ja: ¥³¥Ş¥ó¥É¹Ô°ú¿ô¤ò¥Á¥§¥Ã¥¯¡£
      */
     if (argc != 4) {
         fprintf(stderr, "Usage: %s book-path subbook-index word\n",
@@ -74,12 +92,14 @@ main(argc, argv)
     }
 
     /*
-     * `book' $B$r=i4|2=!#(B
+     * en: Initialize `book'.
+     * ja: `book' ¤ò½é´ü²½¡£
      */
     eb_initialize(&book);
 
     /*
-     * $B=q@R$r(B `book' $B$K7k$SIU$1$k!#(B
+     * en: Bind a book to `book'.
+     * ja: ½ñÀÒ¤ò `book' ¤Ë·ë¤ÓÉÕ¤±¤ë¡£
      */
     if (eb_bind(&book, argv[1]) == -1) {
         fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
@@ -88,7 +108,8 @@ main(argc, argv)
     }
 
     /*
-     * $BI{K\$N0lMw$r<hF@!#(B
+     * en: Get the subbook list.
+     * ja: ÉûËÜ¤Î°ìÍ÷¤ò¼èÆÀ¡£
      */
     subcount = eb_subbook_list(&book, sublist);
     if (subcount < 0) {
@@ -98,7 +119,8 @@ main(argc, argv)
     }
 
     /*
-     * $BI{K\$N%$%s%G%C%/%9$r<hF@!#(B
+     * en: Get the subbook-index.
+     * ja: ÉûËÜ¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹¤ò¼èÆÀ¡£
      */
     subindex = atoi(argv[2]);
     if (subindex < 0 || subindex >= subcount) {
@@ -108,7 +130,8 @@ main(argc, argv)
     }
 
     /*
-     * $B!V8=:_$NI{K\(B (current subbook)$B!W$r@_Dj!#(B
+     * en: Set the current subbook.
+     * ja: ¡Ö¸½ºß¤ÎÉûËÜ (current subbook)¡×¤òÀßÄê¡£
      */
     if (eb_set_subbook(&book, sublist[subindex]) < 0) {
         fprintf(stderr, "%s: failed to set the current subbook, %s\n",
@@ -117,7 +140,8 @@ main(argc, argv)
     }
 
     /*
-     * $BC18l8!:w$N%j%/%(%9%H$rAw=P!#(B
+     * en: Send a word search request.
+     * ja: Ã±¸ì¸¡º÷¤Î¥ê¥¯¥¨¥¹¥È¤òÁ÷½Ğ¡£
      */
     if (eb_search_word(&book, argv[3]) < 0) {
         fprintf(stderr, "%s: failed to search for the word, %s: %s\n",
@@ -127,7 +151,8 @@ main(argc, argv)
 
     for (;;) {
         /*
-         * $B;D$C$F$$$k%R%C%H%(%s%H%j$r<hF@!#(B
+         * en: Get remained hit entries.
+         * ja: »Ä¤Ã¤Æ¤¤¤ë¥Ò¥Ã¥È¥¨¥ó¥È¥ê¤ò¼èÆÀ¡£
          */
         hitcount = eb_hit_list(&book, hits, MAX_HITS);
         if (hitcount == 0) {
@@ -140,7 +165,8 @@ main(argc, argv)
 
         for (i = 0; i < hitcount; i++) {
             /*
-             * $B8+=P$7$N0LCV$X0\F0!#(B
+             * en: Seek to the location where a heading resides.
+             * ja: ¸«½Ğ¤·¤Î°ÌÃÖ¤Ø°ÜÆ°¡£
              */
             if (eb_seek(&book, &(hits[i].heading)) < 0) {
                 fprintf(stderr, "%s: failed to seek the subbook, %s\n",
@@ -149,7 +175,8 @@ main(argc, argv)
             }
 
             /*
-             * $B8+=P$7$r<hF@!#(B
+             * en: Get the heading.
+             * ja: ¸«½Ğ¤·¤Î°ÌÃÖ¤Ø°ÜÆ°¡£
              */
             len = eb_heading(&book, NULL, NULL, heading, MAXLEN_HEADING);
             if (len < 0) {
@@ -159,21 +186,24 @@ main(argc, argv)
             }
 
             /*
-             * $B8+=P$7$r=PNO!#(B
+             * en: Output the heading.
+             * ja: ¸«½Ğ¤·¤ò¼èÆÀ¡£
              */
             printf("%s\n", heading);
         }
     }
         
     /*
-     * $B=q@R$NMxMQ$r=*N;!#(B
+     * en: Clear the book.
+     * ja: ½ñÀÒ¤ÎÍøÍÑ¤ò½ªÎ»¡£
      */
     eb_clear(&book);
 
     exit(0);
 
     /*
-     * $B%(%i!<$,H/@8!#(B
+     * en: Error occurs.
+     * ja: ¥¨¥é¡¼¤¬È¯À¸¡£
      */
   failed:
     eb_clear(&book);

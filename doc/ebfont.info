@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.2, for EB Library version 2.2.
+   This is edition 2.2.1, for EB Library version 2.2.1.
 
 * Menu:
 
@@ -66,7 +66,7 @@ later version.
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 2.2, for EB Library version 2.2.
+   This is edition 2.2.1, for EB Library version 2.2.1.
 
 
 File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
@@ -307,12 +307,12 @@ long as they are unique.
 
 Tag Table:
 Node: Top1042
-Node: Introduction1587
-Node: What is Local Character2453
-Node: Invoking ebfont4124
-Node: Image Formats5545
-Node: Heights6439
-Node: Subbooks7200
-Node: Summary of Options9131
+Node: Introduction1591
+Node: What is Local Character2461
+Node: Invoking ebfont4132
+Node: Image Formats5553
+Node: Heights6447
+Node: Subbooks7208
+Node: Summary of Options9139
 
 End Tag Table

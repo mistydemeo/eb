@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.2, for EB Library version 2.2.
+   This is edition 2.2.1, for EB Library version 2.2.1.
 
 * Menu:
 
@@ -91,7 +91,7 @@ Though `ebzip' is free software, your books may not be free.
 `ebrefile' modifies contents of a certain file in a CD-ROM book.
 Please be careful.
 
-   This is edition 2.2, for EB Library version 2.2.
+   This is edition 2.2.1, for EB Library version 2.2.1.
 
 
 File: ebrefile.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -342,11 +342,11 @@ allowed as long as they are unique.
 
 Tag Table:
 Node: Top1048
-Node: Introduction1570
-Node: Invoking ebrefile3612
-Node: Select Subbooks4308
-Node: Adjust Filename8092
-Node: Combination with ebzip9826
-Node: Summary of Options11138
+Node: Introduction1574
+Node: Invoking ebrefile3620
+Node: Select Subbooks4316
+Node: Adjust Filename8100
+Node: Combination with ebzip9834
+Node: Summary of Options11146
 
 End Tag Table

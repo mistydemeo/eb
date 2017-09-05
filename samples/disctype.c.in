@@ -1,4 +1,4 @@
-/*
+/*                                                            -*- C -*-
  * Copyright (c) 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
@@ -13,20 +13,33 @@
  */
 
 /*
- * ファイル名:
- *     disctype.c
- *
- * 使用方法:
- *     disctype book-path
- *
- * 例:
- *     disctype /cdrom
- *
- * 説明:
- *     このプログラムは一冊の CD-ROM 書籍の種類 (EB/EBG/EBXA か EPWING
- *     か) を表示します。`book-path' は書籍のトップディレクトリ、つま
- *     り CATALOG または CATALOGS ファイルの存在するディレクトリを指す
- *     ようにします。
+ * en: Filename:
+ * en:     disctype.c
+ * en:
+ * en: Usage:
+ * en:     disctype book-path
+ * en:
+ * en: Example:
+ * en:     disctype /cdrom
+ * en:
+ * en: Description:
+ * en:     This program shows disc type (EB/EBG/EBXA or EPWING) of a
+ * en:     CD-ROM book.  `book-path' points to the top directory of
+ * en:     the CD-ROM book where the file CATALOG or CATALOGS resides.
+ * ja: ファイル名:
+ * ja:     disctype.c
+ * ja:
+ * ja: 使用方法:
+ * ja:     disctype book-path
+ * ja:
+ * ja: 例:
+ * ja:     disctype /cdrom
+ * ja:
+ * ja: 説明:
+ * ja:     このプログラムは一冊の CD-ROM 書籍の種類 (EB/EBG/EBXA か EPWING
+ * ja:     か) を表示します。`book-path' は書籍のトップディレクトリ、つま
+ * ja:     り CATALOG または CATALOGS ファイルの存在するディレクトリを指す
+ * ja:     ようにします。
  */
 
 #ifdef HAVE_CONFIG_H
@@ -51,7 +64,8 @@ main(argc, argv)
     EB_Disc_Code disc_code;
 
     /*
-     * コマンド行引数をチェック。
+     * en: Check for command line arguments.
+     * ja: コマンド行引数をチェック。
      */
     if (argc != 2) {
 	fprintf(stderr, "Usage: %s book-path\n", argv[0]);
@@ -59,12 +73,14 @@ main(argc, argv)
     }
 
     /*
-     * `book' を初期化。
+     * en: Initialize `book'.
+     * ja: `book' を初期化。
      */
     eb_initialize(&book);
 
     /*
-     * 書籍に結び付ける。失敗したら終了する。
+     * en: Bind a book.  Exit if it fails.
+     * ja: 書籍に結び付ける。失敗したら終了する。
      */
     if (eb_bind(&book, argv[1]) == -1) {
 	fprintf(stderr, "%s: failed to bind the book: %s\n",
@@ -73,7 +89,8 @@ main(argc, argv)
     }
 
     /*
-     * 書籍の種類を表示。
+     * en: Show disc type.
+     * ja: 書籍の種類を表示。
      */
     disc_code = eb_disc_type(&book);
     fputs("disc type: ", stdout);
@@ -87,7 +104,8 @@ main(argc, argv)
     fputc('\n', stdout);
 
     /*
-     * 書籍の利用を終了。
+     * en: Clear the book.
+     * ja: 書籍の利用を終了。
      */
     eb_clear(&book);
 

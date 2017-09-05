@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 #endif
 
 #include <stdio.h>
-#include <syslog.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
@@ -236,7 +235,7 @@ main(argc, argv)
      */
     set_fakelog_name(invoked_name);
     set_fakelog_mode(FAKELOG_TO_STDERR);
-    set_fakelog_level(LOG_ERR);
+    set_fakelog_level(FAKELOG_ERR);
 
     /*
      * Parse command line options.
@@ -251,7 +250,7 @@ main(argc, argv)
 	     * Option `-d'.  Debug mode.
 	     */
 	    debug_flag = 1;
-	    set_fakelog_level(LOG_DEBUG);
+	    set_fakelog_level(FAKELOG_DEBUG);
 	    break;
 
 	case 'f':
@@ -664,7 +663,7 @@ static void
 output_version()
 {
     printf("%s (EB Library) version %s\n", program_name, program_version);
-    printf("Copyright (c) 1997, 1998  Motoyuki Kasahara\n\n");
+    printf("Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara\n\n");
     printf("This is free software; you can redistribute it and/or modify\n");
     printf("it under the terms of the GNU General Public License as published by\n");
     printf("the Free Software Foundation; either version 2, or (at your option)\n");

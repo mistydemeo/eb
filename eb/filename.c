@@ -39,7 +39,7 @@
 #endif
 
 /* for Visual C++ by KSK Jan/30/1998 */
-#if defined(HAVE_DIRECT_H) && defined(HAVE_GETDCWD)
+#if defined(HAVE_DIRECT_H) && defined(HAVE__GETDCWD)
 #include <direct.h>            /* for _getcwd(), _getdcwd() */
 #define getcwd _getcwd
 #define getdcwd _getdcwd

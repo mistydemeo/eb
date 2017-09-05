@@ -168,7 +168,11 @@ CD-ROM 書籍の出版社がハードディスク (および他の補助記憶装置) に書籍を
 @code{ebzip} は起動時に、@code{ebzip} コマンドの起動時の名前とコマンド
 ラインオプションから動作を決定します。
 @code{ebzip} の一回の実行の間で、動作が変わることはありません。
-@code{ebzip} は異なる 3 つの名前でインストールされます。
+
+@code{ebzip} は @code{ebzip}、@code{ebunzip}, @code{ebzipinfo} という
+異なる 3 つのコマンド名でインストールされます。
+(DOS および Windows システム環境では、@code{ebzipinfo} は
+@code{ebzipinf} に改名されています)。
 一般に、これらは次のようにハードリンクされています。
 
 @example

@@ -10,18 +10,16 @@ else
 JA_DOC_SUBDIR = 
 endif
 
-SUBDIRS = $(ZLIB_SUBDIR) eb libebutils ebappendix ebfont ebinfo ebrefile \
-	ebzip doc $(JA_DOC_SUBDIR)
+if ENABLE_SAMPLES
+SAMPLES_SUBDIR = samples
+else
+SAMPLES_SUBDIR =
+endif
 
-EXTRA_DIST = INSTALL-ja README-ja \
-	samples/Makefile.am samples/Makefile.in samples/README \
-	samples/aclocal.m4 samples/configure samples/configure.in \
-	samples/disctype.c samples/missing samples/stamp-h.in \
-	samples/subbook.c samples/word.c \
-	samples-ja/Makefile.am samples-ja/Makefile.in samples-ja/README-ja \
-	samples-ja/aclocal.m4 samples-ja/configure samples-ja/configure.in \
-	samples-ja/disctype.c samples-ja/missing samples-ja/stamp-h.in \
-	samples-ja/subbook.c samples-ja/word.c
+SUBDIRS = $(ZLIB_SUBDIR) eb libebutils ebappendix ebfont ebinfo ebrefile \
+	ebzip doc $(JA_DOC_SUBDIR) $(SAMPLES_SUBDIR)
+
+EXTRA_DIST = INSTALL-ja README-ja
 
 appendixdir = $(pkgdatadir)/appendix
 appendix_DATA =

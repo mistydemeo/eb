@@ -80,13 +80,13 @@ stamp-ebzip: ebzip.texi $(top_srcdir)/configure.in
 	      cp vti.tmp $(srcdir)/stamp-ebzip)
 	-@rm -f vti.tmp
 
-disctype.c.texi: $(C2TEXI) $(samplesdir)/disctype.c
+disctype.c.texi: $(C2TEXI) $(samplesdir)/disctype.c.in
 	-@rm -f disctype.c.texi
-	sed -e '1,/^$$/d' $(samplesdir)/disctype.c \
-	  | $(SHELL) $(C2TEXI) > disctype.c.texi
+	sed -e '1,/^$$/d' -e '/ ja:/d' -e 's/ en://' \
+	  $(samplesdir)/disctype.c.in | $(SHELL) $(C2TEXI) > disctype.c.texi
 
-subbook.c.texi: $(C2TEXI) $(samplesdir)/subbook.c
-	-@rm -f subbook.c
-	sed -e '1,/^$$/d' $(samplesdir)/subbook.c \
-	  | $(SHELL) $(C2TEXI) > subbook.c.texi
+subbook.c.texi: $(C2TEXI) $(samplesdir)/subbook.c.in
+	-@rm -f subbook.c.texi
+	sed -e '1,/^$$/d' -e '/ ja:/d' -e 's/ en://' \
+	  $(samplesdir)/subbook.c.in | $(SHELL) $(C2TEXI) > subbook.c.texi
 

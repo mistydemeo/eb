@@ -29,6 +29,21 @@
 #define FAKELOG_TO_BOTH		3
 
 /*
+ * Log priorities.
+ */
+#define FAKELOG_QUIET		0
+#define FAKELOG_EMERG		1
+#define FAKELOG_ALERT		2
+#define FAKELOG_CRIT		3
+#define FAKELOG_ERR		4
+#define FAKELOG_WARNING		5
+#define FAKELOG_NOTICE		6
+#define FAKELOG_INFO		7
+#define FAKELOG_DEBUG		8
+#define FAKELOG_UNKNOWN		9
+
+
+/*
  * Maximum length of log-name.
  */
 #define FAKELOG_MAXLEN_LOGNAME	64

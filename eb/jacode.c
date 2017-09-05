@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997  Motoyuki Kasahara
+ * Copyright (c) 1997, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,34 +58,46 @@ eb_sjis_to_euc(outstr, instr)
 	c1 = *ip++;
 	if (c1 == '\0')
 	    break;
+
 	if (c1 <= 0x7f) {
+	    /*
+	     * JIS X 0201 Roman character.
+	     */
 	    *op++ = c1;
-	    continue;
-	}
-
-	c2 = *ip++;
-	if (c2 == 0x00)
-	    break;
-	if (c2 < 0x9f) {
-	    if (c1 < 0xdf)
-		c1 = ((c1 - 0x30) << 1) - 1;
-	    else
-		c1 = ((c1 - 0x70) << 1) - 1;
-
-	    if (c2 < 0x7f)
-		c2 += 0x61;
-	    else
-		c2 += 0x60;
+	} else if (0xa1 <= c1 && c1 <= 0xdf) {
+	    /*
+	     * JIS X 0201 Kana.
+	     */
+	    *op++ = ' ';
 	} else {
-	    if (c1 < 0xdf)
-		c1 = (c1 - 0x30) << 1;
-	    else
-		c1 = (c1 - 0x70) << 1;
-	    c2 += 0x02;
-	}
+	    /*
+	     * JIS X 0208 character.
+	     */
+	    c2 = *ip++;
+	    if (c2 == 0x00)
+		break;
 
-	*op++ = c1;
-	*op++ = c2;
+	    if (c2 < 0x9f) {
+		if (c1 < 0xdf)
+		    c1 = ((c1 - 0x30) << 1) - 1;
+		else
+		    c1 = ((c1 - 0x70) << 1) - 1;
+
+		if (c2 < 0x7f)
+		    c2 += 0x61;
+		else
+		    c2 += 0x60;
+	    } else {
+		if (c1 < 0xdf)
+		    c1 = (c1 - 0x30) << 1;
+		else
+		    c1 = (c1 - 0x70) << 1;
+		c2 += 0x02;
+	    }
+
+	    *op++ = c1;
+	    *op++ = c2;
+	}
     }
 
     *op = '\0';

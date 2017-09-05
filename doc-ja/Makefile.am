@@ -7,7 +7,7 @@ ebinfo_ja_TEXINFOS = ebinfo-ver.texi
 ebrefile_ja_TEXINFOS = ebrefile-ver.texi
 ebzip_ja_TEXINFOS = ebzip-ver.texi
 
-samplesdir = $(srcdir)/../samples-ja
+samplesdir = $(srcdir)/../samples
 
 C2TEXI = $(srcdir)/c2texi
 
@@ -80,13 +80,13 @@ stamp-ebzip: ebzip-ja.texi $(top_srcdir)/configure.in
 	      cp vti.tmp $(srcdir)/stamp-ebzip)
 	-@rm -f vti.tmp
 
-disctype.c.texi: $(C2TEXI) $(samplesdir)/disctype.c
+disctype.c.texi: $(C2TEXI) $(samplesdir)/disctype.c.in
 	-@rm -f disctype.c.texi
-	sed -e '1,/^$$/d' $(samplesdir)/disctype.c \
-	  | $(SHELL) $(C2TEXI) > disctype.c.texi
+	sed -e '1,/^$$/d' -e '/ en:/d' -e 's/ ja://' \
+	  $(samplesdir)/disctype.c.in | $(SHELL) $(C2TEXI) > disctype.c.texi
 
-subbook.c.texi: $(C2TEXI) $(samplesdir)/subbook.c
-	-@rm -f subbook.c
-	sed -e '1,/^$$/d' $(samplesdir)/subbook.c \
-	  | $(SHELL) $(C2TEXI) > subbook.c.texi
+subbook.c.texi: $(C2TEXI) $(samplesdir)/subbook.c.in
+	-@rm -f subbook.c.texi
+	sed -e '1,/^$$/d' -e '/ en:/d' -e 's/ ja://' \
+	   $(samplesdir)/subbook.c.in | $(SHELL) $(C2TEXI) > subbook.c.texi
 

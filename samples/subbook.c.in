@@ -1,4 +1,4 @@
-/*
+/*                                                            -*- C -*-
  * Copyright (c) 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
@@ -13,20 +13,33 @@
  */
 
 /*
- * ファイル名:
- *     subbook.c
- *
- * 使用方法:
- *     subbook book-path
- *
- * 例:
- *     subbook /cdrom
- *
- * 説明:
- *     このプログラムは一冊の CD-ROM 書籍に含まれている副本の題名を表
- *     示します。`book-path' は書籍のトップディレクトリ、つまり
- *     CATALOG または CATALOGS ファイルの存在するディレクトリを指すよ
- *     うにします。
+ * en: Filename:
+ * en:     subbook.c
+ * en:
+ * en: Usage:
+ * en:     subbook book-path
+ * en:
+ * en: Example:
+ * en:     subbook /cdrom
+ * en:
+ * en: Description:
+ * en:     This program shows titles of subbooks in a book.
+ * en:     `book-path' points to the top directory of the CD-ROM book
+ * en:     where the file CATALOG or CATALOGS resides.
+ * ja: ファイル名:
+ * ja:     subbook.c
+ * ja:
+ * ja: 使用方法:
+ * ja:     subbook book-path
+ * ja:
+ * ja: 例:
+ * ja:     subbook /cdrom
+ * ja:
+ * ja: 説明:
+ * ja:     このプログラムは一冊の CD-ROM 書籍に含まれている副本の題名を表
+ * ja:     示します。`book-path' は書籍のトップディレクトリ、つまり
+ * ja:     CATALOG または CATALOGS ファイルの存在するディレクトリを指すよ
+ * ja:     うにします。
  */
 
 #ifdef HAVE_CONFIG_H
@@ -54,7 +67,8 @@ main(argc, argv)
     int i;
 
     /*
-     * コマンド行引数をチェック。
+     * en: Check for command line arguments.
+     * ja: コマンド行引数をチェック。
      */
     if (argc != 2) {
 	fprintf(stderr, "Usage: %s book-path\n", argv[0]);
@@ -62,12 +76,14 @@ main(argc, argv)
     }
 
     /*
-     * `book' を初期化。
+     * en: Initialize `book'.
+     * ja: `book' を初期化。
      */
     eb_initialize(&book);
 
     /*
-     * 書籍を `book' に結び付ける。
+     * en: Bind a book to `book'.
+     * ja: 書籍を `book' に結び付ける。
      */
     if (eb_bind(&book, argv[1]) == -1) {
 	fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
@@ -76,7 +92,8 @@ main(argc, argv)
     }
 
     /*
-     * 副本の一覧を取得。
+     * en: Get the subbook list.
+     * ja: 副本の一覧を取得。
      */
     subcount = eb_subbook_list(&book, sublist);
     if (subcount < 0) {
@@ -87,12 +104,13 @@ main(argc, argv)
     }
 
     /*
-     * 書籍に含まれている副本の題名を出力。
+     * en: Output titles of subbooks in the book.
+     * ja: 書籍に含まれている副本の題名を出力。
      */
     for (i = 0; i < subcount; i++) {
 	title = eb_subbook_title2(&book, sublist[i]);
 	if (title == NULL) {
-	    fprintf(stderr, "%s: failed to get the title, %s:\n",
+	    fprintf(stderr, "%s: failed to get the title, %s\n",
 		argv[0], eb_error_message());
 	    continue;
 	}
@@ -100,7 +118,8 @@ main(argc, argv)
     }
 
     /*
-     * 書籍の利用を終了。
+     * en: Clear the book.
+     * ja: 書籍の利用を終了。
      */
     eb_clear(&book);
 

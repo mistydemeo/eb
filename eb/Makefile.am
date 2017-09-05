@@ -6,7 +6,7 @@ pkginclude_HEADERS = appendix.h defs.h eb.h error.h font.h language.h \
 noinst_HEADERS = internal.h
 
 libeb_la_SOURCES = appendix.c appsub.c bitmap.c copyright.c eb.c error.c \
-	filename.c font.c graphic.c hook.c jpcode.c keyword.c language.c \
+	filename.c font.c graphic.c hook.c jacode.c keyword.c language.c \
 	match.c menu.c message.c multi.c narwalt.c narwfont.c search.c \
 	setword.c stopcode.c subbook.c text.c uint.c unzip1.c widealt.c \
 	widefont.c zio.c
@@ -32,7 +32,7 @@ filename.o: filename.c ../config.h eb.h defs.h error.h
 font.o: font.c ../config.h eb.h defs.h error.h font.h internal.h
 graphic.o: graphic.c ../config.h eb.h defs.h error.h
 hook.o: hook.c ../config.h eb.h defs.h text.h
-jpcode.o: jpcode.c ../config.h
+jacode.o: jacode.c ../config.h
 keyword.o: keyword.c ../config.h eb.h defs.h error.h internal.h
 language.o: language.c ../config.h eb.h defs.h error.h internal.h \
  language.h
@@ -72,7 +72,7 @@ filename.lo: filename.c ../config.h eb.h defs.h error.h
 font.lo: font.c ../config.h eb.h defs.h error.h font.h internal.h
 graphic.lo: graphic.c ../config.h eb.h defs.h error.h
 hook.lo: hook.c ../config.h eb.h defs.h text.h
-jpcode.lo: jpcode.c ../config.h
+jacode.lo: jacode.c ../config.h
 keyword.lo: keyword.c ../config.h eb.h defs.h error.h internal.h
 language.lo: language.c ../config.h eb.h defs.h error.h internal.h \
  language.h

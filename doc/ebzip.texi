@@ -171,8 +171,11 @@ When @code{ebzip} is invoked, the action is determined by invoked
 name of the @code{ebzip} command and command line options to
 @code{ebzip}.
 The action is never changed during an execution of @code{ebzip}.
-@code{ebzip} has installed with three different names; @code{ebzip},
-@code{ebunzip} and @code{ebzipinfo}.
+
+@code{ebzip} has installed with three different command names;
+@code{ebzip}, @code{ebunzip} and @code{ebzipinfo}.
+(On DOS and Windows systems, @code{ebzipinfo} is renamed to
+@code{ebzipinf}).
 Usually, they are hard-linked like as follows:
 
 @example

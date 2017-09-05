@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1998  Motoyuki Kasahara
+ * Copyright (c) 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
 #endif
 
 #include <stdio.h>
-#include <syslog.h>
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -319,20 +318,20 @@ main(argc, argv)
     /*
      * Determine the default action.
      */
-#ifndef DOS_FILE_PATH
+#ifndef EXEEXT_EXE
     if (strcmp(invoked_basename, "ebunzip") == 0)
 	action_mode = EBZIP_ACTION_UNZIP;
     else if (strcmp(invoked_basename, "ebzipinfo") == 0)
 	action_mode = EBZIP_ACTION_INFO;
-#else /* DOS_FILE_PATH */
+#else /* EXEEXT_EXE */
     if (strcasecmp(invoked_basename, "ebunzip") == 0
 	|| strcasecmp(invoked_basename, "ebunzip.exe") == 0) {
 	action_mode = EBZIP_ACTION_UNZIP;
     } else if (strcasecmp(invoked_basename, "ebzipinfo") == 0
-	|| strcasecmp(invoked_basename, "ebzipinfo.exe") == 0) {
+	|| strcasecmp(invoked_basename, "ebzipinf.exe") == 0) {
 	action_mode = EBZIP_ACTION_INFO;
     }
-#endif /* DOS_FILE_PATH */
+#endif /* EXEEXT_EXE */
 
     /*
      * Set overwrite mode.
@@ -352,7 +351,7 @@ main(argc, argv)
      */
     set_fakelog_name(invoked_name);
     set_fakelog_mode(FAKELOG_TO_STDERR);
-    set_fakelog_level(LOG_ERR);
+    set_fakelog_level(FAKELOG_ERR);
 
     /*
      * Parse command line options.
@@ -757,9 +756,15 @@ output_help()
     printf("  book-directory             top directory of a CD-ROM book\n");
     printf("                             (default: %s)\n",
 	DEFAULT_BOOK_DIRECTORY);
+
     printf("\nDefault action:\n");
+#ifndef EXEEXT
     printf("  When invoked as `ebunzip', uncompression is the default action.\n");
     printf("  When invoked as `ebzipinfo', listing information is the default action.\n");
+#else
+    printf("  When invoked as `ebunzip.exe', uncompression is the default action.\n");
+    printf("  When invoked as `ebzipinf.exe', listing information is the default action.\n");
+#endif
     printf("  Otherwise, compression is the default action.\n");
     printf("\nReport bugs to %s.\n", MAILING_ADDRESS);
     fflush(stdout);
@@ -784,7 +789,7 @@ static void
 output_version()
 {
     printf("%s (EB Library) version %s\n", program_name, program_version);
-    printf("Copyright (c) 1998  Motoyuki Kasahara\n\n");
+    printf("Copyright (c) 1998, 1999  Motoyuki Kasahara\n\n");
     printf("This is free software; you can redistribute it and/or modify\n");
     printf("it under the terms of the GNU General Public License as published by\n");
     printf("the Free Software Foundation; either version 2, or (at your option)\n");
@@ -886,8 +891,8 @@ zip_book(book, out_path)
 	    fix_filename(out_directory + out_path_length, filename_case,
 		EB_SUFFIX_NONE);
 #ifdef DOS_FILE_PATH
-	    eb_canonicalize_filename(in_filename);
-	    eb_canonicalize_filename(out_filename);
+	    eb_canonicalize_filename(in_directory);
+	    eb_canonicalize_filename(out_directory);
 #endif
 	    if (!test_flag
 		&& make_missing_directory(out_directory, out_dirmode) < 0)
@@ -995,8 +1000,8 @@ unzip_book(book, out_path)
 	fix_filename(out_directory + out_path_length, filename_case,
 	    EB_SUFFIX_NONE);
 #ifdef DOS_FILE_PATH
-	eb_canonicalize_filename(in_filename);
-	eb_canonicalize_filename(out_filename);
+	eb_canonicalize_filename(in_directory);
+	eb_canonicalize_filename(out_directory);
 #endif
 	if (!test_flag
 	    && make_missing_directory(out_directory, out_dirmode) < 0)
@@ -1012,8 +1017,8 @@ unzip_book(book, out_path)
 	    fix_filename(out_directory + out_path_length, filename_case,
 		EB_SUFFIX_NONE);
 #ifdef DOS_FILE_PATH
-	    eb_canonicalize_filename(in_filename);
-	    eb_canonicalize_filename(out_filename);
+	    eb_canonicalize_filename(in_directory);
+	    eb_canonicalize_filename(out_directory);
 #endif
 	    if (!test_flag
 		&& make_missing_directory(out_directory, out_dirmode) < 0)
@@ -1056,8 +1061,8 @@ unzip_book(book, out_path)
 	    fix_filename(out_directory + out_path_length, filename_case,
 		EB_SUFFIX_NONE);
 #ifdef DOS_FILE_PATH
-	    eb_canonicalize_filename(in_filename);
-	    eb_canonicalize_filename(out_filename);
+	    eb_canonicalize_filename(in_directory);
+	    eb_canonicalize_filename(out_directory);
 #endif
 	    if (!test_flag
 		&& make_missing_directory(out_directory, out_dirmode) < 0)
@@ -1164,8 +1169,8 @@ zipinfo_book(book)
 	fix_filename(ebz_filename + book->path_length, book->case_code,
 	    book->suffix_code);
 #ifdef DOS_FILE_PATH
-	eb_canonicalize_filename(in_filename);
-	eb_canonicalize_filename(out_filename);
+	eb_canonicalize_filename(orig_filename);
+	eb_canonicalize_filename(ebz_filename);
 #endif
 	zipinfo_file(ebz_filename, orig_filename);
 
@@ -1184,8 +1189,8 @@ zipinfo_book(book)
 		fix_filename(ebz_filename + book->path_length,
 		    book->case_code, book->suffix_code);
 #ifdef DOS_FILE_PATH
-		eb_canonicalize_filename(in_filename);
-		eb_canonicalize_filename(out_filename);
+		eb_canonicalize_filename(orig_filename);
+		eb_canonicalize_filename(ebz_filename);
 #endif
 		zipinfo_file(ebz_filename, orig_filename);
 	    }
@@ -1204,8 +1209,8 @@ zipinfo_book(book)
 	fix_filename(ebz_filename + book->path_length, book->case_code,
 	    book->suffix_code);
 #ifdef DOS_FILE_PATH
-	eb_canonicalize_filename(in_filename);
-	eb_canonicalize_filename(out_filename);
+	eb_canonicalize_filename(orig_filename);
+	eb_canonicalize_filename(ebz_filename);
 #endif
 	zipinfo_file(ebz_filename, orig_filename);
     }
@@ -1222,8 +1227,8 @@ zipinfo_book(book)
     fix_filename(ebz_filename + book->path_length, book->case_code,
 	book->suffix_code);
 #ifdef DOS_FILE_PATH
-    eb_canonicalize_filename(in_filename);
-    eb_canonicalize_filename(out_filename);
+    eb_canonicalize_filename(orig_filename);
+    eb_canonicalize_filename(ebz_filename);
 #endif
     zipinfo_file(ebz_filename, orig_filename);
 

@@ -203,8 +203,8 @@ book.
 @table @asis
 @item title:
 Title of the subbook.
-If the books is written in JIS X 0208, the title is written in Japanese
-EUC (Extended UNIX Code).
+If the books is written in JIS X 0208, the output title is written in
+Japanese EUC (Extended UNIX Code).
 
 @item directory:
 Directory name of a directory under which files of the subbook resides.

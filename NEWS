@@ -1,3 +1,9 @@
+Major changes in release 2.2.1:
+
+* Merge samples and samples-ja.
+* Add `--enable-samples' to `configure'.
+* Improve DOS, Windows, OS/2 supports.
+
 Major changes in release 2.2:
 
 * Add documents of EB Library.

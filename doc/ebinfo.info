@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.2, for EB Library version 2.2.
+   This is edition 2.2.1, for EB Library version 2.2.1.
 
 * Menu:
 
@@ -56,7 +56,7 @@ later version.
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 2.2, for EB Library version 2.2.
+   This is edition 2.2.1, for EB Library version 2.2.1.
 
 
 File: ebinfo.info,  Node: Invoking ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
@@ -145,7 +145,7 @@ the book.
 
 title:
      Title of the subbook.  If the books is written in JIS X 0208, the
-     title is written in Japanese EUC (Extended UNIX Code).
+     output title is written in Japanese EUC (Extended UNIX Code).
 
 directory:
      Directory name of a directory under which files of the subbook
@@ -216,9 +216,9 @@ long as they are unique.
 
 Tag Table:
 Node: Top1042
-Node: Introduction1391
-Node: Invoking ebinfo2159
-Node: Details about Information4129
-Node: Options to ebinfo5835
+Node: Introduction1395
+Node: Invoking ebinfo2167
+Node: Details about Information4137
+Node: Options to ebinfo5850
 
 End Tag Table

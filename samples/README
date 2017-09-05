@@ -1,10 +1,15 @@
-The sample programs of EB Library are placed at this directory, but
-they are *not* compiled together with the library.
+Some sample programs of EB Library are placed at this directory.
 
-The compilation procedure of the programs is:
+The sample programs aren't compiled together with EB Library, unless
+you invoke `configure' with the `--enable-samples' option.  If you
+have not configured with `--enable-samples' (or configured with
+`--disable-samples' or `--enable-samples=no'), and you want to complie
+the sample programs, then please do the following procedure: 
 
-	% ./configure [option...]
-	% make
+	1. Compile EB Library.
+	2. Change directory (`cd') to this directory.
+	3. Type `make all'.
+	(`make install' target is not provided.)
 
-Since the programs link EB Library, you must have compiled EB Library
-beforehand.
+Usage of the sample programs are explained at the beginning of the
+programs.

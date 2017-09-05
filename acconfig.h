@@ -28,6 +28,12 @@
 /* Define if compiled symbols have a leading underscore. */
 #undef WITH_SYMBOL_UNDERSCORE
 
+/* Define if the pathname is DOS-style */
+#undef DOS_FILE_PATH
+
+/* Define if command names have the suffix `.exe' */
+#undef EXEEXT_EXE
+
 @BOTTOM@
 
 #endif /* not CONFIG_H */

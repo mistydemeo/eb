@@ -46,14 +46,14 @@
 /* Define if `struct utimbuf' is declared -- usually in <utime.h>.  */
 #undef HAVE_STRUCT_UTIMBUF
 
-/* The name of the package */
-#undef PACKAGE
-
-/* The the version number of the release that is being developed.  */
-#undef VERSION
-
 /* Mailing address */
 #undef MAILING_ADDRESS
+
+/* Define if command names have the suffix `.exe' */
+#undef EXEEXT_EXE
+
+/* Define if you have the _getdcwd function.  */
+#undef HAVE__GETDCWD
 
 /* Define if you have the getcwd function.  */
 #undef HAVE_GETCWD
@@ -73,11 +73,17 @@
 /* Define if you have the strerror function.  */
 #undef HAVE_STRERROR
 
+/* Define if you have the syslog function.  */
+#undef HAVE_SYSLOG
+
 /* Define if you have the utime function.  */
 #undef HAVE_UTIME
 
 /* Define if you have the vsyslog function.  */
 #undef HAVE_VSYSLOG
+
+/* Define if you have the <direct.h> header file.  */
+#undef HAVE_DIRECT_H
 
 /* Define if you have the <fcntl.h> header file.  */
 #undef HAVE_FCNTL_H
@@ -94,10 +100,20 @@
 /* Define if you have the <string.h> header file.  */
 #undef HAVE_STRING_H
 
+/* Define if you have the <syslog.h> header file.  */
+#undef HAVE_SYSLOG_H
+
 /* Define if you have the <unistd.h> header file.  */
 #undef HAVE_UNISTD_H
 
 /* Define if you have the <utime.h> header file.  */
 #undef HAVE_UTIME_H
+
+/* Name of package */
+#undef PACKAGE
+
+/* Version number of package */
+#undef VERSION
+
 
 #endif /* not CONFIG_H */

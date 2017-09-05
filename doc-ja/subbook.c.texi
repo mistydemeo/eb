@@ -79,7 +79,7 @@ main(argc, argv)
     for (i = 0; i < subcount; i++) @{
 	title = eb_subbook_title2(&book, sublist[i]);
 	if (title == NULL) @{
-	    fprintf(stderr, "%s: failed to get the title, %s:\n",
+	    fprintf(stderr, "%s: failed to get the title, %s\n",
 		argv[0], eb_error_message());
 	    continue;
 	@}

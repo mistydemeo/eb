@@ -1,3 +1,5 @@
+AUTOMAKE_OPTIONS = foreign
+
 lib_LTLIBRARIES = libz.la
 libz_la_SOURCES = adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c \
 	trees.c zutil.c inflate.c infblock.c inftrees.c infcodes.c \

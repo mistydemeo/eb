@@ -1,3 +1,56 @@
+1999-02-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 2.2.1.
+
+	* configure.in (AC_CYGWIN, AC_MINGW32, AC_EXEEXT, AC_OBJEXT): 
+	Added.
+	* configure.in: Add AM_CONDITIONAL(EXEEXT, ...)
+	* ebzip/Makefile.am: add `if..else..endif' statement which
+	branches off according with `EXEEXT'.
+
+	* Makefile.am: add `if..else..endif' statement which branches
+	off according with `ENABLE_SAMPLES'.
+	* Makefile.am (EXTRA_DIST): Delete files under the `samples'
+	and `samples-ja' directories.
+	* Makefile.am (SUBDIRS): Add `$(SAMPLES_SUBDIR)'.
+	* samples/disctype.c, samples/subbook.c, samples/word.c:
+	Import Japanese comments in `samples-ja/*.c' and renamed
+	to `*.c.in'.
+	* samples/Makefile.am (disctype.c, subbook.c, word.c): They
+	are generated from `*.c.in' files.
+	* samples-ja/configure.in, samples-ja/Makefile.am
+	samples-ja/disctype.c, samples/subbook.c, samples/word.c:
+	Removed.
+	* doc/Makefile.am (disctype.c.texi, subbook.c.texi): Generated
+	from  `$(samplesdir)/disctype.c.in' and `$(samplesdir)/subbook.c.in'.
+	* doc-ja/Makefile.am (disctype.c.texi, subbook.c.texi): Likewise.
+	* doc-ja/Makefile.am (samplesdir): Changed to `$(srcdir)/../samples',
+	from `$(srcdir)/../samples-ja'.
+
+1999-02-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebinfo/ebinfo.c (main): Don't include <syslog.h>.
+	* ebfont/ebfont.c (main): Likewise.
+	* ebfont/ebzip.c (main): Likewise.
+	
+	* lib/fakelog.c (set_fakelog_level): Takes a facility with
+	`FAKELOG_' prefix as an argument.
+	* lib/fakelog.h, lib/fakelog.c: Move facility macros definitions
+	(`FAKELOG_QUIET', `FAKELOG_EMERG' ...) from `lib/fakelog.c' to
+	`lib/fakelog.h'.
+	* lib/fakelog.c: include `syslog.h' only when `HAVE_SYSLOG_H'
+	is defined (for DOS and Windows).
+	* lib/fakelog.c (fakelog): call syslog() only when HAVE_SYSLOG
+	is defined (for DOS and Windows).
+	* configure.in (AC_CHECK_FUNCS): Add `syslog'.
+	* configure.in (AC_CHECK_HEADERS): Add `syslog.h'.
+	
+1999-01-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebzip/ebzip.c (zip_book, unzip_book, zipinfo_book): 
+	Fix eb_canonicalize_filename() calls in the `DOS_FILE_PATH'
+	blocks.  Undefined variables were used.
+	
 1999-01-15  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 2.2.

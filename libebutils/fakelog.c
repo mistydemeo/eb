@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  *   AC_C_CONST
  *   AC_TYPE_SIZE_T
  *   AC_HEADER_STDC
- *   AC_CHECK_HEADERS(string.h, memory.h)
- *   AC_CHECK_FUNCS(vsyslog, strerror)
+ *   AC_CHECK_HEADERS(string.h, memory.h, syslog.h)
+ *   AC_CHECK_FUNCS(vsyslog, strerror, syslog)
  *   AC_FUNC_VPRINTF
  */
 
@@ -29,7 +29,10 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <errno.h>
+
+#ifdef HAVE_SYSLOG_H
 #include <syslog.h>
+#endif
 
 #if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
@@ -59,21 +62,6 @@ char *strerror();
 #include "fakelog.h"
 
 #undef syslog
-
-
-/*
- * Log priorities.
- */
-#define FAKELOG_QUIET		0
-#define FAKELOG_EMERG		1
-#define FAKELOG_ALERT		2
-#define FAKELOG_CRIT		3
-#define FAKELOG_ERR		4
-#define FAKELOG_WARNING		5
-#define FAKELOG_NOTICE		6
-#define FAKELOG_INFO		7
-#define FAKELOG_DEBUG		8
-#define FAKELOG_UNKNOWN		9
 
 
 /*
@@ -123,46 +111,16 @@ set_fakelog_level(level)
      * Convert a syslog priority to a fakelog priority.
      */
     switch (level) {
-#ifdef LOG_EMERG
     case LOG_EMERG:
-	loglevel = FAKELOG_EMERG;
-	break;
-#endif
-#ifdef LOG_ALERT
     case LOG_ALERT:
-	loglevel = FAKELOG_ALERT;
-	break;
-#endif
-#ifdef LOG_CRIT
     case LOG_CRIT:
-	loglevel = FAKELOG_CRIT;
-	break;
-#endif
-#ifdef LOG_ERR
     case LOG_ERR:
-	loglevel = FAKELOG_ERR;
-	break;
-#endif
-#ifdef LOG_WARNING
     case LOG_WARNING:
-	loglevel = FAKELOG_WARNING;
-	break;
-#endif
-#ifdef LOG_NOTICE
     case LOG_NOTICE:
-	loglevel = FAKELOG_NOTICE;
-	break;
-#endif
-#ifdef LOG_INFO
     case LOG_INFO:
-	loglevel = FAKELOG_INFO;
-	break;
-#endif
-#ifdef LOG_DEBUG
     case LOG_DEBUG:
-	loglevel = FAKELOG_DEBUG;
+	loglevel = level;
 	break;
-#endif
     default:
 	loglevel = FAKELOG_QUIET;
 	break;
@@ -281,9 +239,11 @@ fakelog(priority, message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
     if (logmode == FAKELOG_TO_SYSLOG || logmode == FAKELOG_TO_BOTH) {
 #if (defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)) && defined(HAVE_VSYSLOG)
 	vsyslog(priority, message, ap);
-#else
+#else /* not (defined(HAVE_VPRINTF) || ... */
+#ifdef HAVE_SYSLOG
 	syslog(priority, message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
-#endif
+#endif /* HAVE_SYSLOG */
+#endif /* not (defined(HAVE_VPRINTF) || ... */
     }
 
     /*
