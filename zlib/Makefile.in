@@ -84,6 +84,7 @@ install_sh = @install_sh@
 
 
 AUTOMAKE_OPTIONS = foreign
+ACLOCAL_AMFLAGS = -I $(srcdir)
 
 lib_LTLIBRARIES = libz.la
 libz_la_SOURCES = adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c \
@@ -97,7 +98,9 @@ noinst_HEADERS = deflate.h infblock.h infcodes.h inffast.h inffixed.h \
 	inftrees.h infutil.h trees.h zutil.h
 
 
-EXTRA_DIST = ChangeLog FAQ INDEX README.altered algorithm.txt zlib.3
+EXTRA_DIST = ChangeLog FAQ INDEX README.altered algorithm.txt libtool.m4 \
+	zlib.3
+
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -132,8 +135,7 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 @AMDEP@$(DEPDIR)/uncompr.Plo $(DEPDIR)/zutil.Plo
 DIST_COMMON =  README $(include_HEADERS) $(noinst_HEADERS) ChangeLog \
 Makefile.am Makefile.in aclocal.m4 config.guess config.sub configure \
-configure.in depcomp install-sh ltconfig ltmain.sh missing \
-mkinstalldirs
+configure.ac depcomp install-sh ltmain.sh missing mkinstalldirs
 
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -145,19 +147,19 @@ OBJECTS = $(am_libz_la_OBJECTS)
 all: all-am
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
 	cd $(top_srcdir) && $(AUTOMAKE) --foreign Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 
-$(ACLOCAL_M4):  configure.in 
-	cd $(srcdir) && $(ACLOCAL)
+$(ACLOCAL_M4):  configure.ac 
+	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
 config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure: $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure: $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
 mostlyclean-libLTLIBRARIES:

@@ -118,7 +118,7 @@ CD-ROM 書籍は、外字のビットマップデータも持っています。
 @code{ebfont} は、XBM (X BitMap format)、XPM (X PixMap format)、
 GIF (Graphics Interchange Format) のうちのいずれか、または複数の画像
 ファイルを生成することができます。
-デフォルトでは、XBM 形式が選択されます。
+特に指定がなければ、XBM 形式が選択されます。
 
 外字は、@dfn{半角} (@dfn{narrow}) と @dfn{全角} (@dfn{wide}) の 2 種
 類に分類されます。
@@ -140,8 +140,8 @@ CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して 4
 @end multitable
 
 @noindent
-デフォルトでは、@code{ebfont} は高さが 16 ピクセルのフォントの画像ファ
-イルを生成します。
+特に指定がなければ、@code{ebfont} は高さが 16 ピクセルのフォントの画像
+ファイルを生成します。
 
 @c ===================================================================
 @node Invoking ebfont, Summary of Options, What is Local Character, Top
@@ -241,8 +241,8 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 @node Heights, Subbooks, Image Formats, Invoking ebfont
 @section 高さ
 
-デフォルトでは、@code{ebfont} は、半角と全角それぞれについて、高さ 16 
-ピクセルのフォントの画像ファイルを生成します。
+特に指定がなければ、@code{ebfont} は、半角と全角それぞれについて、高さ
+16 ピクセルのフォントの画像ファイルを生成します。
 @samp{--font-height} (@samp{-f}) オプションを使用することで、他の高さ
 のフォントの画像ファイルを生成することができます。
 @samp{--font-height} オプションは引数を一つ取り、そこにカンマ (@samp{,})
@@ -359,8 +359,8 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 なくてはなりません。
 高さの指定として許されるのは、@samp{16}、@samp{24}、@samp{30}、@samp{48}
 です。
-デフォルトでは、@code{ebfont} は高さが 16 ピクセルのフォントのもの
-を生成します。
+指定がなければ、@code{ebfont} は高さが 16 ピクセルのフォントのものを
+生成します。
 (詳しくは、@pxref{Heights, , 高さ})。
 
 @item -h
@@ -374,14 +374,15 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 のでなくてはなりません。
 対応している画像形式の名前は @samp{xbm}、@samp{xpm}、@samp{gif} で
 す。
-デフォルトで、@samp{ebfont} は XBM 形式の画像ファイルを生成します。
+指定しなかったときは、@samp{ebfont} は XBM 形式の画像ファイルを生成し
+ます。
 (詳しくは、@pxref{Image Formats, , 画像形式})。
 
 @item -o @var{ディレクトリ}
 @itemx --output-directory @var{ディレクトリ}
 画像ファイルを @var{ディレクトリ} 以下に出力します。
-デフォルトでは、@code{ebfont} はカレントディレクトリ (@code{.}) の
-下に画像ファイルを生成します。
+指定しなかったときは、@code{ebfont} はカレントディレクトリ (@code{.})
+の下に画像ファイルを生成します。
 (詳しくは、@pxref{Invoking ebfont, , @code{ebfont} の実行})。
 
 @item -S @var{副本}
@@ -389,7 +390,7 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 @code{ebfont} に、どの副本の外字を生成させるのかを指定します。
 @var{副本} は、副本のディレクトリ名をカンマ (@samp{,}) で区切って
 並べたものでなくてはなりません。
-デフォルトでは、すべての副本が生成の対象になります。
+指定しなかったときは、すべての副本が生成の対象になります。
 (詳しくは、@pxref{Subbooks, , 副本})。
 
 @item -v

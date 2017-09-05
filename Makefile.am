@@ -1,4 +1,4 @@
-ACLOCAL_AMFLAGS = -I $(srcdir)/m4
+ACLOCAL_AMFLAGS = -I m4
 
 if INCLUDED_ZLIB
 ZLIB_SUBDIR = zlib
@@ -7,7 +7,7 @@ ZLIB_SUBDIR =
 endif
 
 SUBDIRS = $(ZLIB_SUBDIR) eb libebutils ebappendix ebfont ebinfo \
-   ebrefile ebzip doc doc-ja po m4
+   ebrefile ebzip doc doc-ja po-eb po-ebutils m4
 
 EXTRA_DIST = ChangeLog.0 INSTALL-ja README-ja move-if-change eb.conf.in \
    gttest.mo gttest.po

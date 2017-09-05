@@ -1,4 +1,85 @@
+2001-05-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/Makefile, libebutils/Makefile, ebfont/Makefile, ebinfo/Makefile,
+	ebrefile/Makefile, ebzip/Makefile: Delete dependencies between *.c
+	and *.o.
+
+2001-05-09  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* m4/eb3.m4 (eb_LIB_EB3): Avoid other AC_TRY_LINK and CK_TRY_RUN
+	checks linking libeb.* to test program.
+
+2001-05-08  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Makefile.am (ACLOCAL_AMFLAGS): Set the variable to `-I m4', not
+	`-I $(srcdir)/m4'.
+
+2001-05-02  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebzip/zipbook.c (ebzip_zip_book_epwing): Fix a bug that ebzip
+	doesn't compress gaiji files.
+
+	* eb/narwfont.c (eb_initialize_narrow_font): Canonicalize font file
+	name before fix.
+	* eb/filename.c (eb_canonicalize_font_file_name): New function.
+
+	* po-ebutils/Makefile.in (POTFILES): Updated.
+	Delete ebzip/filename.c and add ebrefile/ebrefile.c.
+
+	* ebrefile/Makefile.am: Revised.  Now ebrefile is written in C.
+	* ebrefile/ebrefile.c: New file.
+	* ebrefile/ebrefile.in: Deleted.
+
+2001-04-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebzip/filename.c, eb/filename.c: fix_path_name_suffix() is
+	renamed to eb_fix_path_name_suffix() and its definition is moved
+	from ebzip/filename.c to eb/filename.c.
+	* ebzip/filename.c: Removed.
+	* ebzip/Makefile.am (ebzip_SOURCES): Delete `filename.c'.
+
+	* ebfont/Makefile.am (ebfont_LDADD): Fix the order of library to
+	be linked.
+	* ebinfo/Makefile.am (ebinfo_LDADD): Ditto.
+	* ebzip/Makefile.am (ebzip_LDADD): Ditto.
+
+2001-04-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/setword.c (eb_fix_word): Fix word if the given word is for
+	keyword search or multi-search without candidates.  Reported by
+	Kenichi Suto.
+
+2001-04-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.in: Renamed to `configure.ac'.
+
+2001-04-13  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/narwfont.c (eb_initialize_narrow_font): Fix a bug in reopen
+	a font file, reported by HASEGAWA Masafumi.
+
+2001-04-12  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/subbook.c (eb_initialize_indexes): Fix calcuration of end
+	page number of an index.
+
+	* m4/gettext.m4 (eb_GNU_GETTEXT): Ignore arguments.
+	* configure.in (eb_GNU_GETTEXT): Don't pass arguments to the macro.
+
+	* eb/po: Move the directory to po-eb.
+	* po-eb/Makefile.in (top_builddir, subdir): Updated.
+	* po: Move the directory to po-ebutils.
+	* po-ebutils/Makefile.in (subdir): Updated.
+
+	* configure.in (AC_OUTPUT): Delete `po/Makefile' and `eb/po/Makefile',
+	and add `po-eb/Makefile' and `po-ebutils/Makefile' instead.
+	* Makefile.am (SUBDIRS): Delete `po' and add `po-eb' and `po-ebutils'
+	instead.
+	* eb/Makefile.am (SUBDIRS): Deleted.
+
 2001-04-10  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.0beta0.
 
 	* ebzip/Makefile.am (noinst_HEADERS): Add `ebzip.h'.
 

@@ -17,16 +17,3 @@ stamp-ebutils-h: ebutils.h.in Makefile
 	   $(srcdir)/ebutils.h.in > ebutils.h.tmp
 	$(top_srcdir)/move-if-change ebutils.h.tmp ebutils.h
 	@echo timestamp > stamp-ebutils-h
-
-### *.o dependencies ###
-ebutils.o: ebutils.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
- ../eb/error.h ebutils.h
-getopt.o: getopt.c getopt.h
-getopt1.o: getopt1.c getopt.h
-getumask.o: getumask.c ../config.h
-makedir.o: makedir.c ../config.h
-memset.o: memset.c ../config.h
-samefile.o: samefile.c ../config.h
-strcasecmp.o: strcasecmp.c ../config.h
-strerror.o: strerror.c ../config.h
-yesno.o: yesno.c ../config.h

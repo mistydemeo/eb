@@ -13,7 +13,7 @@ EXTRA_DIST = texinfo-ja.tex stamp-ebfont stamp-ebinfo \
 ebfont-ver.texi: stamp-ebfont
 	cp $(srcdir)/stamp-ebfont $(srcdir)/ebfont-ver.texi
 
-stamp-ebfont: ebfont-ja.texi $(top_srcdir)/configure.in
+stamp-ebfont: ebfont-ja.texi $(top_srcdir)/configure.ac
 	@echo "@set UPDATED `cd $(srcdir) \
 	  && $(SHELL) ./mdate-sh ebfont-ja.texi`" > vti.tmp
 	@echo "@set EDITION $(VERSION)" >> vti.tmp
@@ -26,7 +26,7 @@ stamp-ebfont: ebfont-ja.texi $(top_srcdir)/configure.in
 ebinfo-ver.texi: stamp-ebinfo
 	cp $(srcdir)/stamp-ebinfo $(srcdir)/ebinfo-ver.texi
 
-stamp-ebinfo: ebinfo-ja.texi $(top_srcdir)/configure.in
+stamp-ebinfo: ebinfo-ja.texi $(top_srcdir)/configure.ac
 	@echo "@set UPDATED `cd $(srcdir) \
 	  && $(SHELL) ./mdate-sh ebinfo-ja.texi`" > vti.tmp
 	@echo "@set EDITION $(VERSION)" >> vti.tmp
@@ -39,7 +39,7 @@ stamp-ebinfo: ebinfo-ja.texi $(top_srcdir)/configure.in
 ebrefile-ver.texi: stamp-ebrefile
 	cp $(srcdir)/stamp-ebrefile $(srcdir)/ebrefile-ver.texi
 
-stamp-ebrefile: ebrefile-ja.texi $(top_srcdir)/configure.in
+stamp-ebrefile: ebrefile-ja.texi $(top_srcdir)/configure.ac
 	@echo "@set UPDATED `cd $(srcdir) \
 	  && $(SHELL) ./mdate-sh ebrefile-ja.texi`" > vti.tmp
 	@echo "@set EDITION $(VERSION)" >> vti.tmp
@@ -52,7 +52,7 @@ stamp-ebrefile: ebrefile-ja.texi $(top_srcdir)/configure.in
 ebzip-ver.texi: stamp-ebzip
 	cp $(srcdir)/stamp-ebzip $(srcdir)/ebzip-ver.texi
 
-stamp-ebzip: ebzip-ja.texi $(top_srcdir)/configure.in
+stamp-ebzip: ebzip-ja.texi $(top_srcdir)/configure.ac
 	@echo "@set UPDATED `cd $(srcdir) \
 	  && $(SHELL) ./mdate-sh ebzip-ja.texi`" > vti.tmp
 	@echo "@set EDITION $(VERSION)" >> vti.tmp

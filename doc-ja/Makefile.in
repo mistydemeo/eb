@@ -127,7 +127,6 @@ TEXI2DVI = texi2dvi
 INFO_DEPS = ebfont-ja.info ebinfo-ja.info ebrefile-ja.info ebzip-ja.info
 DVIS = ebfont-ja.dvi ebinfo-ja.dvi ebrefile-ja.dvi ebzip-ja.dvi
 TEXINFOS = ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi ebzip-ja.texi
-depcomp = 
 DIST_COMMON =  $(ebfont_ja_TEXINFOS) $(ebinfo_ja_TEXINFOS) \
 $(ebrefile_ja_TEXINFOS) $(ebzip_ja_TEXINFOS) Makefile.am Makefile.in \
 mdate-sh texinfo.tex
@@ -139,8 +138,8 @@ GZIP_ENV = --best
 all: all-am
 .SUFFIXES:
 .SUFFIXES: .dvi .info .ps .texi .texinfo .txi
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps doc-ja/Makefile
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu doc-ja/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -380,7 +379,7 @@ mostlyclean-am: mostlyclean-aminfo mostlyclean-generic
 ebfont-ver.texi: stamp-ebfont
 	cp $(srcdir)/stamp-ebfont $(srcdir)/ebfont-ver.texi
 
-stamp-ebfont: ebfont-ja.texi $(top_srcdir)/configure.in
+stamp-ebfont: ebfont-ja.texi $(top_srcdir)/configure.ac
 	@echo "@set UPDATED `cd $(srcdir) \
 	  && $(SHELL) ./mdate-sh ebfont-ja.texi`" > vti.tmp
 	@echo "@set EDITION $(VERSION)" >> vti.tmp
@@ -393,7 +392,7 @@ stamp-ebfont: ebfont-ja.texi $(top_srcdir)/configure.in
 ebinfo-ver.texi: stamp-ebinfo
 	cp $(srcdir)/stamp-ebinfo $(srcdir)/ebinfo-ver.texi
 
-stamp-ebinfo: ebinfo-ja.texi $(top_srcdir)/configure.in
+stamp-ebinfo: ebinfo-ja.texi $(top_srcdir)/configure.ac
 	@echo "@set UPDATED `cd $(srcdir) \
 	  && $(SHELL) ./mdate-sh ebinfo-ja.texi`" > vti.tmp
 	@echo "@set EDITION $(VERSION)" >> vti.tmp
@@ -406,7 +405,7 @@ stamp-ebinfo: ebinfo-ja.texi $(top_srcdir)/configure.in
 ebrefile-ver.texi: stamp-ebrefile
 	cp $(srcdir)/stamp-ebrefile $(srcdir)/ebrefile-ver.texi
 
-stamp-ebrefile: ebrefile-ja.texi $(top_srcdir)/configure.in
+stamp-ebrefile: ebrefile-ja.texi $(top_srcdir)/configure.ac
 	@echo "@set UPDATED `cd $(srcdir) \
 	  && $(SHELL) ./mdate-sh ebrefile-ja.texi`" > vti.tmp
 	@echo "@set EDITION $(VERSION)" >> vti.tmp
@@ -419,7 +418,7 @@ stamp-ebrefile: ebrefile-ja.texi $(top_srcdir)/configure.in
 ebzip-ver.texi: stamp-ebzip
 	cp $(srcdir)/stamp-ebzip $(srcdir)/ebzip-ver.texi
 
-stamp-ebzip: ebzip-ja.texi $(top_srcdir)/configure.in
+stamp-ebzip: ebzip-ja.texi $(top_srcdir)/configure.ac
 	@echo "@set UPDATED `cd $(srcdir) \
 	  && $(SHELL) ./mdate-sh ebzip-ja.texi`" > vti.tmp
 	@echo "@set EDITION $(VERSION)" >> vti.tmp

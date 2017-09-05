@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0beta0, for EB Library version 3.0beta0.
+   This is edition 3.0beta1, for EB Library version 3.0beta1.
 
 * Menu:
 
@@ -41,7 +41,6 @@ File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 Invoking `ebrefile'
 
 * Select Subbooks::             Select Subbooks.
-* Adjust Filename::             Adjust Filename.
 * Combination with ebzip::      Combination with `ebzip'.
 
 
@@ -91,7 +90,7 @@ Though `ebzip' is free software, your books may not be free.
 `ebrefile' modifies contents of a certain file in a CD-ROM book.
 Please be careful.
 
-   This is edition 3.0beta0, for EB Library version 3.0beta0.
+   This is edition 3.0beta1, for EB Library version 3.0beta1.
 
 
 File: ebrefile.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -115,11 +114,10 @@ In this case, `ebrefile' assumes that the current working directory
 * Menu:
 
 * Select Subbooks::             Select Subbooks.
-* Adjust Filename::             Adjust Filename.
 * Combination with ebzip::      Combination with `ebzip'.
 
 
-File: ebrefile.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: Invoking ebrefile,  Up: Invoking ebrefile
+File: ebrefile.info,  Node: Select Subbooks,  Next: Combination with ebzip,  Prev: Invoking ebrefile,  Up: Invoking ebrefile
 
 Select Subbooks
 ===============
@@ -176,19 +174,20 @@ Case of the directory names are not sensitve.  An argument to
 
      % ebrefile --subbook english --subbook french
 
-Since `ebrefile' cannot change an order of subbook definitions, an
+Since `ebrefile' cannot change an order of subbook definitions, the
 order of arguments to `--subbook' is not matter.
 
-   The original `CATALOG(S)' file is moved to `CATALOG(S).bak', and a
-new file is put as `CATALOG(S)'.  It means that the top directory of
-the CD-ROM book must be writable.  In other words, at least
-`CATALOG(S)' of the CD-ROM book must have already been copied to a hard
-disk before invoking `ebrefile'.  (However, this rule is not applied
-when the `--output-directory' option is used.  *Note
-`--output-directory': Summary of Options, for more details about the
-`--output-directory' option).
+   `ebrefile' generates new catalog file as `CATALOGS(S).new'.  To
+replace original catalog file by new one, type the following commands:
 
-   Invoke `ebinfo' again.  The subbook `germgan' is diappeared.
+     % mv catalogs catalogs.bak
+     % mv catalogs.new catalogs
+
+If you don't have to backup the original file, only the second command
+is needed.
+
+   Now, refiling has been completed.  Invoke `ebinfo' again.  The
+subbook `germgan' is diappeared.
 
      % ebinfo
      disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
@@ -217,40 +216,7 @@ consists of lower case letters, type:
      % rm -r german
 
 
-File: ebrefile.info,  Node: Adjust Filename,  Next: Combination with ebzip,  Prev: Select Subbooks,  Up: Invoking ebrefile
-
-Adjust Filename
-===============
-
-   `ebrefile' keeps "case" (upper or lower) and "suffix" of the
-original catalog file.  When the catalog filename is `catalogs;1' (case
-is lower, and suffix is `;1'), `ebrefile' puts a new catalog file as
-`catalogs;1', and backup the original catalog file as `catalogs.bak;1'.
-
-   The following table displayes how a filename of `CATALOG(S)' file
-changes.
-
-case/suffix                   original file          backup file
-lower/none                    catalog                catalog.bak
-lower/dot                     catalog.               catalog.bak
-lower/version                 catalog;1              catalog.bak;1
-lower/dot+version             catalog.;1             catalog.bak;1
-upper/none                    CATALOG                CATALOG.BAK
-upper/dot                     CATALOG.               CATALOG.BAK
-upper/version                 CATALOG;1              CATALOG.BAK;1
-upper/dot+version             CATALOG.;1             CATALOG.BAK;1
-
-   The `--case' and `--suffix' options allows you to modify these case
-and suffix styles of new catalog file and backup file.  The `--case'
-option takes an argument, and it must be `upper' or `lower'.  The
-option sets the case of the filename `CATALOG(S)' and `CATALOG(S).BAK'
-to upper or lower.  Also the `--suffix' option takes an argument, and
-it must be `none', `dot', `version' or `both'.  The option sets the
-suffix style of the filename `CATALOG(S)' and `CATALOG(S).BAK' to none,
-dot, version or both (dot+version).
-
-
-File: ebrefile.info,  Node: Combination with ebzip,  Prev: Adjust Filename,  Up: Invoking ebrefile
+File: ebrefile.info,  Node: Combination with ebzip,  Prev: Select Subbooks,  Up: Invoking ebrefile
 
 Combination with `ebzip'
 ========================
@@ -276,12 +242,6 @@ current working directory, type the following:
      % ebzip --output-directory /dict --subbook english,french /cdrom
      % ebrefile --output-directory /dict --subbook english,french /cdrom
 
-Case and suffix of filenames are adjusted by the `--case' and
-`--suffix' options.
-
-     % ebzip --case lower --suffix none --subbook english,french /cdrom
-     % ebrefile --case lower --suffix none --subbook english,french /cdrom
-
 
 File: ebrefile.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up: Top
 
@@ -293,14 +253,6 @@ options and mnemonic long option names.  Long option names are
 indicated with `--' instead of `-'.  Abbreviations for option names are
 allowed as long as they are unique.
 
-`-c CASE'
-`--case CASE'
-     Output a catalog file which have filenames with upper or lower CASE
-     letters.  CASE must be `upper' or `lower'.  When this option is
-     not specified, the case of the new catalog filename comes to be
-     the same as a filename of orignal catalog file.  (*Note Adjust
-     Filename::, for more details).
-
 `-h'
 `--help'
      Output help message to standard out, then exit.
@@ -310,17 +262,6 @@ allowed as long as they are unique.
      Output a new catalog file under DIRECTORY.  By default, `ebrefile'
      generates a new catalog file under the current working directory
      (`.').  (*Note Invoking ebrefile::, for more details).
-
-`-s SUFFIX'
-`--suffix SUFFIX'
-     Specify the suffix of filename of new catalog file.  SUFFIX must
-     be `none', `dot', `version' or `both'.  When SUFFIX is `none', no
-     suffix is appended.  When SUFFIX is `dot', a dot (`.') is appended.
-     When SUFFIX is `version', a version number 1 (`;1') is appended.
-     When SUFFIX is `both', dot and version number 1 (`.;1') is
-     appended.  If this option is not specified, the suffix of the new
-     catalog filename comes to be the same as a filename of original
-     catalog file.  (*Note Adjust Filename::, for more details).
 
 `-S SUBBOOKS'
 `--subbook SUBBOOKS'
@@ -337,11 +278,10 @@ allowed as long as they are unique.
 
 Tag Table:
 Node: Top1036
-Node: Introduction1570
-Node: Invoking ebrefile3639
-Node: Select Subbooks4335
-Node: Adjust Filename8057
-Node: Combination with ebzip9691
-Node: Summary of Options11003
+Node: Introduction1521
+Node: Invoking ebrefile3590
+Node: Select Subbooks4237
+Node: Combination with ebzip7796
+Node: Summary of Options8877
 
 End Tag Table

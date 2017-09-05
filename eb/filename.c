@@ -142,6 +142,28 @@ eb_canonicalize_path_name(path_name)
 
 
 /*
+ * Canonicalize font file name.
+ *    - Suffix including dot is removed
+ *    - Version including semicolon is removed.
+ *
+ * We minght fail to initialize a font after we fix the font file name.
+ * If initialization of the font is tried again, we need the original
+ * font file name, not fixed file name.  Therefore, we get orignal file
+ * name from fixed file name using this function.
+ */
+void
+eb_canonicalize_font_file_name(file_name)
+    char *file_name;
+{
+    char *p;
+
+    for (p = file_name; *p != '\0' && *p != '.' && *p != ';'; p++)
+	;
+    *p = '\0';
+}
+
+
+/*
  * Rewrite `directory_name' to a real directory name in the `path' directory.
  * 
  * If a directory matched to `directory_name' exists, then EB_SUCCESS is
@@ -207,6 +229,68 @@ eb_fix_directory_name2(path, directory_name, sub_directory_name)
 
     sprintf(sub_path, F_("%s/%s", "%s\\%s"), path, directory_name);
     return eb_fix_directory_name(sub_path, sub_directory_name);
+}
+
+
+/*
+ * Fix suffix of `path_name'.
+ *
+ * If `suffix' is an empty string, delete suffix from `path_name'.
+ * Otherwise, add `suffix' to `path_name'.
+ */
+void
+eb_fix_path_name_suffix(path_name, suffix)
+    char *path_name;
+    const char *suffix;
+{
+    char *base_name;
+    char *dot;
+    char *semicolon;
+
+    base_name = strrchr(path_name, F_('/', '\\'));
+    if (base_name == NULL)
+	base_name = path_name;
+    else
+	base_name++;
+
+    dot = strchr(base_name, '.');
+    semicolon = strchr(base_name, ';');
+
+    if (*suffix == '\0') {
+	/*
+	 * Remove `.xxx' from `fixed_file_name':
+	 *   foo.xxx    -->  foo
+	 *   foo.xxx;1  -->  foo;1
+	 *   foo.       -->  foo.     (unchanged)
+	 *   foo.;1     -->  foo.;1   (unchanged)
+	 */
+	if (dot != NULL && *(dot + 1) != '\0' && *(dot + 1) != ';') {
+	    if (semicolon != NULL)
+		sprintf(dot, ";%c", *(semicolon + 1));
+	    else
+		*dot = '\0';
+	}
+    } else {
+	/*
+	 * Add `.xxx' to `fixed_file_name':
+	 *   foo       -->  foo.xxx
+	 *   foo.      -->  foo.xxx
+	 *   foo;1     -->  foo.xxx;1
+	 *   foo.;1    -->  foo.xxx;1
+	 *   foo.xxx   -->  foo.xxx    (unchanged)
+	 */
+	if (dot != NULL) {
+	    if (semicolon != NULL)
+		sprintf(dot, "%s;%c", suffix, *(semicolon + 1));
+	    else
+		strcpy(dot, suffix);
+	} else {
+	    if (semicolon != NULL)
+		sprintf(semicolon, "%s;%c", suffix, *(semicolon + 1));
+	    else
+		strcat(base_name, suffix);
+	}
+    }
 }
 
 

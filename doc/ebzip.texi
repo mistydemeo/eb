@@ -384,7 +384,7 @@ By default, @code{ebzip} deletes original files after compression, but
 the @samp{--keep} option disables this behavior.
 
 The directory strcture under @file{/dict} and @file{/cdrom} are almost
-same, but the suffix @samp{.ebz} is added to the compressed files
+the same, but the suffix @samp{.ebz} is added to the compressed files
 under @file{/dict}.
 
 @example
@@ -440,8 +440,8 @@ before compression.
 @section Partial Compression
 
 @code{ebzip} compresses an entire book by default,
-but the @samp{--subbook} (@samp{-S}) option allows you to compress
-specified subbooks only.
+but the @samp{--subbook} (@samp{-S}) and @samp{--skip-content}
+(@samp{-s}) options allow you to compress part of a book.
 
 The @samp{--subbook} option takes an argument which is a list of
 directory names of subbooks to be compressed, separeted by a comma
@@ -494,9 +494,7 @@ for more details about the @code{ebinfo} command).
 @*
 In this example, there are three subbooks in the book, and their
 directory names are @code{english}, @code{french} and @code{german}.
-
-You can compress only @code{english} and @code{french} by the following
-way:
+By the following, you can compress @code{english} and @code{french}:
 
 @example
 % ebzip --subbook english,french /dict
@@ -523,8 +521,17 @@ You can compress subbooks with different compression levels
 (e.g. compress @code{english} and @code{french} with level 0, and 
 compress @code{german} with level 2).
 
-Regardless of the @samp{--subbook} option, the @file{LANGUAGE} file is
-always compressed.
+The @samp{--skip-content} (@samp{-s}) is similar to @samp{--subbook},
+but @samp{--skip-content} specifies data types of files to be ignored.
+
+@example
+% ebzip --skip-content sound,movie --subbook french /dict
+@end example
+
+@noindent
+In this example, @code{ebzip} skips sound and movie files.
+The data type names currently recognized by @code{ebzip} are:
+@code{font}, @code{graphic}, @code{sound} and @code{movie}.
 
 @c -------------------------------------------------------------------
 @node Overwrite Old Files, Compress Compressed EPWING, Partial Compression, Compression
@@ -556,13 +563,18 @@ Similary, when the @samp{--no-overwrite} option is specified,
 @node Compress Compressed EPWING,  , Overwrite Old Files, Compression
 @section Compress Compressed EPWING CD-ROM Book
 
-@code{ebzip} can compress a CD-ROM book compressed with the EPWING
-compression format.
-It uncompress the book, and then recompresses the book with the ebzip
-compression format.
-Since the ebzip compression is generally better than the EPWING
-compression format, the book compressed by @code{ebzip} is smaller than
-original.
+EPWING also defines compression format which is different from ebzip.
+Some CD-ROM books of EPWING V4 and later version use the compression.
+
+@code{ebzip} (@code{ebunzip}) can also uncompress CD-ROM books compressed
+with the EPWING compression fomrat, but it cannot compress files with
+the format.
+
+If you command @code{ebzip} to compress a CD-ROM book wich has been
+compressed with EPWING compression format, then @code{ebzip} uncompresses
+the book first, and next compresses it with the ebzip compression.
+Compression ratio of the ebzip compression format is generally better
+than that of EPWING format.
 
 @c ===================================================================
 @node Uncompression, Information, Compression, Top
@@ -673,10 +685,10 @@ doesn't write uncompressed data to acutual files.
 This option is usuful for checking validity of compressed files.
 @xref{Test}, for more details about the @samp{--test} option.
 
-When the @samp{--subbook} is specified, @code{ebunzip} only uncompresses
-specified subbooks, in addition with @file{LANGUAGE}.
-@xref{Partial Compression}, for more details about the @samp{--subbook}
-option.
+When the @samp{--subbook} and/or @samp{--skip-content} options are
+specified, @code{ebunzip} only uncompresses files matched to the given
+condition only.
+@xref{Partial Compression}, for more details about these options.
 
 When the @samp{--force-overwrite} or @samp{--no-overwrite} option is
 specified, @code{ebunzip} overwrites or skips files without confirmation
@@ -691,12 +703,12 @@ You don't have to specify the @samp{--level} option at uncompression.
 @node Uncompress Compressed EPWING,  , Options for Uncompression, Uncompression
 @section Uncompress Compressed EPWING CD-ROM Book
 
-@code{ebzip} can uncompress a CD-ROM book compressed with the EPWING
-compression format.
-However, @code{ebzip} cannot restore the original compressed book by
-compressing the uncompressed book again.
-In other words, @code{ebzip} support uncompression of the EPWING
-compression format, but doesn't support compression.
+EPWING also defines compression format which is different from ebzip.
+Some CD-ROM books of EPWING V4 and later version use the compression.
+
+@code{ebzip} (@code{ebunzip}) can also uncompress CD-ROM books compressed
+with the EPWING compression fomrat, but it cannot compress files with
+the format.
 
 @c ===================================================================
 @node Information, Delete a Book, Uncompression, Top
@@ -746,10 +758,10 @@ compressed: 12288 -> 4121 bytes (33.5%, ebzip level 0 compression)
 @node Options for Information,  , Information Example, Information
 @section Options for Information
 
-When you invoke @code{ebzipinfo} with the @samp{--subbook} option, 
-@code{ebzipinfo} outputs information about files of the specified subbooks
-only, in addition with @file{LANGUAGE}, @file{CATALOG} and @file{CATALOGS}.
-@xref{Partial Compression}, for details about the @samp{--subbook} option.
+When you invoke @code{ebzipinfo} with the @samp{--subbook} and/or
+@samp{--skip-content} options, @code{ebzipinfo} outputs information
+about files matched to the given condition only.
+@xref{Partial Compression}, for details about these options.
 
 @code{ebzipinfo} ignores the following options; @samp{--force-overwrite},
 @samp{--keep}, @samp{--level}, @samp{--no-overwrite},
@@ -844,6 +856,15 @@ file may be overwritten or not.
 To supress this question, specify the @samp{--force-overwrite} (@samp{-f})
 or @samp{--no-overwrite} (@samp{-n}) option.
 This option is ignored when the action is uncompression or information.
+
+@item -s @var{types}
+@itemx --skip-content @var{types}
+Specify data types of files to be ignored.
+@var{types} must be a list of data type names separated by a comma
+(@samp{,}).
+The data type names @code{ebzip} currently recognizes are: @code{font},
+@code{graphic}, @code{sound} and @code{movie}.
+By default, none is skipped.
 
 @item -S @var{subbooks}
 @itemx --subbook @var{subbooks}

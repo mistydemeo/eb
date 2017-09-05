@@ -3,7 +3,7 @@ dnl * Process this file with autoconf to produce a configure script.
 dnl *
 AC_INIT(eb/eb.c)
 AC_PREREQ(2.49)
-AM_INIT_AUTOMAKE(eb, 3.0beta0)
+AM_INIT_AUTOMAKE(eb, 3.0beta1)
 
 dnl *
 dnl * Library version info.
@@ -19,19 +19,24 @@ AC_SUBST(MAILING_ADDRESS)
 AC_DEFINE_UNQUOTED(MAILING_ADDRESS, "$MAILING_ADDRESS", [Mailing address])
 
 dnl *
-dnl * C Compiler
+dnl * Programs
 dnl *
 AC_PROG_CC
+AC_PROG_LIBTOOL
+AC_PROG_RANLIB
+AC_PROG_LN_S
+AC_PROG_INSTALL
+
+AC_PATH_PROG(PERL, perl, no)
+if test "$PERL" = no ; then
+   AC_MSG_WARN(perl not found)
+   PERL=/usr/bin/perl
+fi
 
 dnl * 
 dnl * GNU gettext
 dnl * 
-eb_GNU_GETTEXT(po eb/po)
-
-dnl * 
-dnl * GNU libtool
-dnl * 
-AC_PROG_LIBTOOL
+eb_GNU_GETTEXT
 
 dnl *
 dnl * --enable-pthread option.
@@ -188,19 +193,6 @@ dnl *
 AC_CONFIG_SUBDIRS(zlib)
 
 dnl * 
-dnl * Alternative Programs.
-dnl * 
-AC_PROG_RANLIB
-AC_PROG_LN_S
-AC_PROG_INSTALL
-
-AC_PATH_PROG(PERL, perl, no)
-if test "$PERL" = no ; then
-   AC_MSG_WARN(perl not found)
-   PERL=/usr/bin/perl
-fi
-
-dnl * 
 dnl * Compiler Characteristics.
 dnl * 
 AC_C_CONST
@@ -286,4 +278,5 @@ dnl *
 AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile \
 	ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebzip/Makefile \
-	doc/Makefile doc-ja/Makefile eb/po/Makefile po/Makefile m4/Makefile)
+	doc/Makefile doc-ja/Makefile po-eb/Makefile po-ebutils/Makefile \
+	m4/Makefile)

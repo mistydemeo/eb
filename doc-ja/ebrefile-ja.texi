@@ -47,7 +47,7 @@ by Free Software Foundation, Inc.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
+Copyright @copyright{} 1998, 99, 2000, 01  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -75,13 +75,15 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 * Invoking ebrefile::           @code{ebrefile} の実行
 * Summary of Options::          @code{ebrefile} のオプション一覧
 
+@detailmenu
  --- The Detailed Node Listing ---
 
 @code{ebrefile} の実行
 
 * Select Subbooks::             副本の選択
-* Adjust Filename::             ファイル名の調整
 * Combination with ebzip::      @code{ebzip} との連携
+
+@end detailmenu
 @end menu
 
 @c ===================================================================
@@ -169,18 +171,17 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 
 @menu
 * Select Subbooks::             副本の選択
-* Adjust Filename::             ファイル名の調整
 * Combination with ebzip::      @code{ebzip} との連携
 @end menu
 
 @c -------------------------------------------------------------------
-@node Select Subbooks, Adjust Filename, Invoking ebrefile, Invoking ebrefile
+@node Select Subbooks, Combination with ebzip, Invoking ebrefile, Invoking ebrefile
 @section 副本の選択
 
-デフォルトでは、@code{ebrefile} は、元のカタログファイルで定義されてい
+特に指定がないと、@code{ebrefile} は、元のカタログファイルで定義されてい
 るすべての副本を新しい副本に取り込みます。
 つまり、新しいカタログファイルは、単に元のファイルのコピーになります。
-このデフォルトの振る舞いは、役に立ちません。
+この振る舞いは、役に立ちません。
 @code{ebrefile} は、通常 @samp{--subbook} (@samp{-S}) オプションを指定
 して起動します。
 
@@ -255,18 +256,22 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @code{ebrefile} は副本の定義順序を変えることはできませんので、
 @samp{--subbook} に与える引数の順序は、任意です。
 
-元の @file{CATALOG(S)} ファイルは @file{CATALOG(S).bak} に移され、
-新しいファイルは @file{CATALOG(S)} に移動されます。
-これは、CD-ROM 書籍のトップディレクトリが書き込み可能でなければなら
-ないことを意味しています。
-言い換えれば、少なくとも @file{CATALOG(S)} ファイルだけは、あらかじ
-め @code{ebrefile} 起動前にハードディスクにコピーしておかなければな
-らならいということになります。
-(ただし、@samp{--output-directory} オプションを使用している場合、こ
-の規則は当てはまりません。
-@samp{--output-directory} オプションについての詳細
-は @pxref{Summary of Options, , @samp{--output-directory}})。
+@code{ebrefile} は新たなカタログを @file{CATALOGS(S).new} として生成
+します。
+元のカタログファイルを新しいものに置き換えるには、次のコマンドを実行
+します。
 
+@example
+% mv catalogs catalogs.bak
+% mv catalogs.new catalogs
+@end example
+
+@noindent
+元のカタログファイルを取っておく必要がないのであれば、二番目のコマン
+ドだけを実行して下さい。
+
+@noindent
+これで再構成が完了しました。
 もういちど @code{ebinfo} を起動してみましょう。
 副本 @code{german} が消えています。
 
@@ -308,49 +313,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @end example
 
 @c -------------------------------------------------------------------
-@node Adjust Filename, Combination with ebzip, Select Subbooks, Invoking ebrefile
-@section ファイル名の調整
-
-@code{ebrefile} は、大文字・小文字の違い (@dfn{case}) と拡張子
-(@dfn{suffix}) について、元のカタログファイルと同じになるようにします。
-カタログファイルのファイル名が @file{catalogs;1} (小文字、拡張は @samp{;1})
-であれば、@code{ebrefile} は新しいカタログファイルを @file{catalogs;1}
-というファイル名で置き、元のカタログファイルは @file{catalogs.bak;1}
-というファイル名で保存します。
-
-以下の表は、@file{CATALOG(S)} ファイルのファイル名がどのように変化
-するのかを示したものです。
-
-@group
-@multitable @columnfractions .4 .3 .3
-@item 大文字・小文字/拡張子  @tab 元のファイル  @tab バックアップファイル
-@item 小文字/なし            @tab catalog       @tab catalog.bak
-@item 小文字/点              @tab catalog.      @tab catalog.bak
-@item 小文字/バージョン      @tab catalog;1     @tab catalog.bak;1
-@item 小文字/点とバージョン  @tab catalog.;1    @tab catalog.bak;1
-@item 大文字/なし            @tab CATALOG       @tab CATALOG.BAK
-@item 大文字/点              @tab CATALOG.      @tab CATALOG.BAK
-@item 大文字/バージョン      @tab CATALOG;1     @tab CATALOG.BAK;1
-@item 大文字/点とバージョン  @tab CATALOG.;1    @tab CATALOG.BAK;1
-@end multitable
-@end group
-
-@samp{--case} と @samp{--suffix} オプションによって、新しいカタログファ
-イルとバックアップファイルにおけるファイル名の大文字・小文字の違いと
-拡張子を変えることができます。
-@samp{--case} オプションは引数を一つ取り、それは @samp{upper} か
-@samp{lower} でなくてはいけません。
-このオプションは、ファイル名 @file{CATALOG(S)} および @file{CATALOG(S).BAK} 
-が大文字あるいは小文字になるようにします。
-同様に @samp{--suffix} オプションも引数を一つとり、それは
-@samp{none}、@samp{dot}、@samp{version}、@samp{both} のいずれかでなく
-てはいけません。
-このオプションはファイル名 @file{CATALOG(S)} および @file{CATALOG(S).BAK}
-の拡張子を、「なし」「点」「バージョン」「両方」(点 + バージョン) にな
-るようにします。
-
-@c -------------------------------------------------------------------
-@node Combination with ebzip,  , Adjust Filename, Invoking ebrefile
+@node Combination with ebzip,  , Select Subbooks, Invoking ebrefile
 @section @code{ebzip} との連携
 
 @code{ebrefile} は、@code{ebzip} という CD-ROM 書籍を圧縮するコマンド
@@ -380,15 +343,6 @@ CD-ROM 書籍が @code{/cdrom} にマウントされ、この書籍には @code{english}、
 % ebrefile --output-directory /dict --subbook english,french /cdrom
 @end example
 
-@noindent
-ファイル名の大文字と小文字、拡張子のスタイルを変更するには、
-@samp{--case} と @samp{--suffix} オプションを使用します。
-
-@example
-% ebzip --case lower --suffix none --subbook english,french /cdrom
-% ebrefile --case lower --suffix none --subbook english,french /cdrom
-@end example
-
 @c ===================================================================
 @node Summary of Options,  , Invoking ebrefile, Top
 @chapter @code{ebrefile} のオプション一覧
@@ -400,16 +354,6 @@ CD-ROM 書籍が @code{/cdrom} にマウントされ、この書籍には @code{english}、
 す。
 
 @table @code
-@item -c @var{case}
-@itemx --case @var{case}
-新しいカタログファイルのファイル名に大文字・小文字のどちらを使用する
-のかを指定します。
-@var{case} は、@samp{upper} or @samp{lower} でなくてはいけません。
-このオプションを指定しなければ、新しいカタログファイルにおけるファイ
-ル名の大文字・小文字の使用は、元のカタログファイルのファイル名と同じ
-になります
-(詳しくは @pxref{Adjust Filename, , ファイル名の調整})。
-
 @item -h
 @itemx --help
 ヘルプメッセージを標準出力に出力して、終了します。
@@ -417,30 +361,15 @@ CD-ROM 書籍が @code{/cdrom} にマウントされ、この書籍には @code{english}、
 @item -o @var{directory}
 @itemx --output-directory @var{directory}
 新しいカタログファイルを置くディレクトリを指定します。
-デフォルトでは、カレントディレクトリ (@samp{.}) になります。
+指定しなかったときは、カレントディレクトリ (@samp{.}) になります。
 (詳しくは @pxref{Invoking ebrefile, , @code{ebrefile} の実行})。
-
-@item -s @var{suffix}
-@itemx --suffix @var{suffix}
-新しいカタログファイルにおける、ファイル名の拡張子のスタイルを指定します。
-@var{拡張子} は、@samp{none}、@samp{dot}、@samp{version}、@samp{both} 
-のいずれかでなくてはいけません。
-@var{拡張子} が @samp{none} の場合、拡張子は付加されません。
-@var{拡張子} が @samp{dot} のときは、点 (@samp{.}) が付加されます。
-@var{拡張子} が @samp{version} のときは、バージョン番号 (@samp{;1}) 
-が付加されます。
-@var{拡張子} が @samp{both} のときは、点とバージョン番号 (@samp{.;1})
-が付加されます。
-このオプションを指定しなければ、新しいカタログファイルにおけるファイル
-名の拡張子は、元のカタログファイルのファイル名と同じになります
-(詳しくは、@pxref{Adjust Filename, , ファイル名の調整})。
 
 @item -S @var{subbooks}
 @itemx --subbook @var{subbooks}
 @code{ebrefile} が新しいカタログファイルに取り込むべき副本を指定します。
 @var{副本} は、副本のディレクトリ名をカンマ (@samp{,}) で区切って
 並べたものでなくてはいけません。
-デフォルトでは、すべての副本が対象になります
+指定しなかったときは、すべての副本が対象になります
 (詳しくは @pxref{Select Subbooks, , 副本の選択})。
 
 @item -v

@@ -79,7 +79,6 @@ This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 Invoking @code{ebrefile}
 
 * Select Subbooks::             Select Subbooks.
-* Adjust Filename::             Adjust Filename.
 * Combination with ebzip::      Combination with @code{ebzip}.
 @end menu
 
@@ -162,12 +161,11 @@ In this case, @code{ebrefile} assumes that the current working directory
 
 @menu
 * Select Subbooks::             Select Subbooks.
-* Adjust Filename::             Adjust Filename.
 * Combination with ebzip::      Combination with @code{ebzip}.
 @end menu
 
 @c -------------------------------------------------------------------
-@node Select Subbooks, Adjust Filename, Invoking ebrefile, Invoking ebrefile
+@node Select Subbooks, Combination with ebzip, Invoking ebrefile, Invoking ebrefile
 @section Select Subbooks
 
 By default, @code{ebrefile} imports all subbook definitions in an original
@@ -248,18 +246,22 @@ An argument to @samp{--subbook} can be splitted like as follows:
 
 @noindent
 Since @code{ebrefile} cannot change an order of subbook definitions,
-an order of arguments to @samp{--subbook} is not matter.
+the order of arguments to @samp{--subbook} is not matter.
 
-The original @file{CATALOG(S)} file is moved to @file{CATALOG(S).bak},
-and a new file is put as @file{CATALOG(S)}.
-It means that the top directory of the CD-ROM book must be writable.
-In other words, at least @file{CATALOG(S)} of the CD-ROM book must
-have already been copied to a hard disk before invoking @code{ebrefile}.
-(However, this rule is not applied when the @samp{--output-directory}
-option is used.
-@xref{Summary of Options, , @samp{--output-directory}}, for more details
-about the @samp{--output-directory} option).
+@code{ebrefile} generates new catalog file as @file{CATALOGS(S).new}.
+To replace original catalog file by new one, type the following
+commands:
 
+@example
+% mv catalogs catalogs.bak
+% mv catalogs.new catalogs
+@end example
+
+@noindent
+If you don't have to backup the original file, only the second command
+is needed.
+
+Now, refiling has been completed.
 Invoke @code{ebinfo} again.
 The subbook @code{germgan} is diappeared.
 
@@ -301,44 +303,7 @@ When the directory name consists of lower case letters, type:
 @end example
 
 @c -------------------------------------------------------------------
-@node Adjust Filename, Combination with ebzip, Select Subbooks, Invoking ebrefile
-@section Adjust Filename
-
-@code{ebrefile} keeps @dfn{case} (upper or lower) and @dfn{suffix} of
-the original catalog file.
-When the catalog filename is @file{catalogs;1} (case is lower, and suffix
-is @samp{;1}), @code{ebrefile} puts a new catalog file as
-@file{catalogs;1}, and backup the original catalog file as
-@file{catalogs.bak;1}.
-
-The following table displayes how a filename of @file{CATALOG(S)}
-file changes.
-
-@multitable @columnfractions .4 .3 .3
-@item case/suffix       @tab original file      @tab backup file
-@item lower/none        @tab catalog            @tab catalog.bak
-@item lower/dot         @tab catalog.           @tab catalog.bak
-@item lower/version     @tab catalog;1          @tab catalog.bak;1
-@item lower/dot+version @tab catalog.;1         @tab catalog.bak;1
-@item upper/none        @tab CATALOG            @tab CATALOG.BAK
-@item upper/dot         @tab CATALOG.           @tab CATALOG.BAK
-@item upper/version     @tab CATALOG;1          @tab CATALOG.BAK;1
-@item upper/dot+version @tab CATALOG.;1         @tab CATALOG.BAK;1
-@end multitable
-
-The @samp{--case} and @samp{--suffix} options allows you to modify
-these case and suffix styles of new catalog file and backup file.
-The @samp{--case} option takes an argument, and it must be @samp{upper}
-or @samp{lower}.
-The option sets the case of the filename @code{CATALOG(S)} and 
-@code{CATALOG(S).BAK} to upper or lower.
-Also the @samp{--suffix} option takes an argument, and it must be
-@samp{none}, @samp{dot}, @samp{version} or @samp{both}.
-The option sets the suffix style of the filename @code{CATALOG(S)}
-and @code{CATALOG(S).BAK} to none, dot, version or both (dot+version).
-
-@c -------------------------------------------------------------------
-@node Combination with ebzip,  , Adjust Filename, Invoking ebrefile
+@node Combination with ebzip,  , Select Subbooks, Invoking ebrefile
 @section Combination with @code{ebzip}
 
 @code{ebrefile} can be used together with the @code{ebzip} command,
@@ -368,15 +333,6 @@ of the current working directory, type the following:
 % ebrefile --output-directory /dict --subbook english,french /cdrom
 @end example
 
-@noindent
-Case and suffix of filenames are adjusted by the @samp{--case} and
-@samp{--suffix} options.
-
-@example
-% ebzip --case lower --suffix none --subbook english,french /cdrom
-% ebrefile --case lower --suffix none --subbook english,french /cdrom
-@end example
-
 @c ===================================================================
 @node Summary of Options,  , Invoking ebrefile, Top
 @chapter Summary of @code{ebrefile} Options
@@ -387,15 +343,6 @@ Long option names are indicated with @samp{--} instead of @samp{-}.
 Abbreviations for option names are allowed as long as they are unique.
 
 @table @code
-@item -c @var{case}
-@itemx --case @var{case}
-Output a catalog file which have filenames with upper or lower @var{case}
-letters.
-@var{case} must be @samp{upper} or @samp{lower}.
-When this option is not specified, the case of the new catalog filename
-comes to be the same as a filename of orignal catalog file.
-(@xref{Adjust Filename}, for more details).
-
 @item -h
 @itemx --help
 Output help message to standard out, then exit.
@@ -406,20 +353,6 @@ Output a new catalog file under @var{directory}.
 By default, @code{ebrefile} generates a new catalog file under the
 current working directory (@code{.}).
 (@xref{Invoking ebrefile}, for more details).
-
-@item -s @var{suffix}
-@itemx --suffix @var{suffix}
-Specify the suffix of filename of new catalog file.
-@var{suffix} must be @samp{none}, @samp{dot}, @samp{version} or @samp{both}.
-When @var{suffix} is @samp{none}, no suffix is appended.
-When @var{suffix} is @samp{dot}, a dot (@samp{.}) is appended.
-When @var{suffix} is @samp{version}, a version number 1 (@samp{;1}) is
-appended.
-When @var{suffix} is @samp{both}, dot and version number 1 (@samp{.;1})
-is appended.
-If this option is not specified, the suffix of the new catalog filename
-comes to be the same as a filename of original catalog file.
-(@xref{Adjust Filename}, for more details).
 
 @item -S @var{subbooks}
 @itemx --subbook @var{subbooks}

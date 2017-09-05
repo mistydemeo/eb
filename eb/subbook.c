@@ -340,7 +340,7 @@ eb_initialize_indexes(book)
 	    search.space = EB_INDEX_STYLE_DELETE;
 
 	search.start_page = eb_uint4(buffer_p + 2);
-	search.end_page   = search.start_page + eb_uint4(buffer_p + 6);
+	search.end_page   = search.start_page + eb_uint4(buffer_p + 6) - 1;
 	search.candidates_page = 0;
 	*(search.label) = '\0';
 

@@ -6,13 +6,8 @@ LIBEBUTILS = $(top_builddir)/libebutils/libebutils.a
 bin_PROGRAMS = ebinfo
 
 ebinfo_SOURCES = ebinfo.c
-ebinfo_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS)
-ebinfo_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS)
+ebinfo_LDADD = $(LIBEBUTILS) $(LIBEB) $(ZLIBLIBS) $(INTLLIBS)
+ebinfo_DEPENDENCIES = $(LIBEBUTILS) $(LIBEB) $(ZLIBDEPS) $(INTLDEPS)
 
-INCLUDES = -I$(top_srcdir) -I../libebutils -I$(top_srcdir)/libebutils \
+INCLUDES = -I../libebutils -I$(top_srcdir)/libebutils -I$(top_srcdir) \
 	$(INTLINCS)
-
-### *.o dependencies ###
-ebinfo.o: ebinfo.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
- ../eb/error.h ../eb/font.h ../libebutils/getopt.h \
- ../libebutils/ebutils.h

@@ -245,7 +245,7 @@ ebzip_unzip_book_eb(book, out_top_path, book_path, subbook_list,
 		subbook->text_file_name, in_path_name);
 	    eb_compose_path_name2(out_top_path, subbook->directory_name,
 		subbook->text_file_name, out_path_name);
-	    fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+	    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 	    ebzip_unzip_file(out_path_name, in_path_name, in_zio_code);
 	}
     }
@@ -260,7 +260,7 @@ ebzip_unzip_book_eb(book, out_top_path, book_path, subbook_list,
 	    in_path_name);
 	eb_compose_path_name(out_top_path, book->language_file_name,
 	    out_path_name);
-	fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+	eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 	ebzip_unzip_file(out_path_name, in_path_name, in_zio_code);
     }
 
@@ -355,9 +355,9 @@ ebzip_unzip_book_epwing(book, out_top_path, book_path, subbook_list,
 		subbook->data_directory_name, subbook->text_file_name,
 		out_path_name);
 	    if (strncasecmp(subbook->text_file_name, "honmon2", 7) == 0)
-		fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_ORG);
+		eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_ORG);
 	    else
-		fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+		eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 	    ebzip_unzip_file(out_path_name, in_path_name, in_zio_code);
 	}
 
@@ -375,7 +375,7 @@ ebzip_unzip_book_epwing(book, out_top_path, book_path, subbook_list,
 	    eb_compose_path_name3(out_top_path, subbook->directory_name,
 		subbook->data_directory_name, subbook->sound_file_name,
 		out_path_name);
-	    fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+	    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 	    ebzip_unzip_file(out_path_name, in_path_name, in_zio_code);
 	}
 
@@ -393,7 +393,7 @@ ebzip_unzip_book_epwing(book, out_top_path, book_path, subbook_list,
 	    eb_compose_path_name3(out_top_path, subbook->directory_name,
 		subbook->data_directory_name, subbook->graphic_file_name,
 		out_path_name);
-	    fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+	    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 	    ebzip_unzip_file(out_path_name, in_path_name, in_zio_code);
 	}
 
@@ -426,7 +426,7 @@ ebzip_unzip_book_epwing(book, out_top_path, book_path, subbook_list,
 		    eb_compose_path_name3(out_top_path,
 			subbook->directory_name, subbook->gaiji_directory_name,
 			font->file_name, out_path_name);
-		    fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+		    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 		    ebzip_unzip_file(out_path_name, in_path_name, in_zio_code);
 		}
 	    }
@@ -448,7 +448,7 @@ ebzip_unzip_book_epwing(book, out_top_path, book_path, subbook_list,
 		    eb_compose_path_name3(out_top_path,
 			subbook->directory_name, subbook->gaiji_directory_name,
 			font->file_name, out_path_name);
-		    fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+		    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 		    ebzip_unzip_file(out_path_name, in_path_name, in_zio_code);
 		}
 	    }

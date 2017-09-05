@@ -106,12 +106,12 @@ install_sh = @install_sh@
 localedir = @localedir@
 
 
-ACLOCAL_AMFLAGS = -I $(srcdir)/m4
+ACLOCAL_AMFLAGS = -I m4
 @INCLUDED_ZLIB_TRUE@ZLIB_SUBDIR = @INCLUDED_ZLIB_TRUE@zlib
 @INCLUDED_ZLIB_FALSE@ZLIB_SUBDIR = 
 
 SUBDIRS = $(ZLIB_SUBDIR) eb libebutils ebappendix ebfont ebinfo \
-   ebrefile ebzip doc doc-ja po m4
+   ebrefile ebzip doc doc-ja po-eb po-ebutils m4
 
 
 EXTRA_DIST = ChangeLog.0 INSTALL-ja README-ja move-if-change eb.conf.in \
@@ -126,37 +126,37 @@ subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES =  eb/po/Makefile po/Makefile
+CONFIG_CLEAN_FILES =  po-eb/Makefile po-ebutils/Makefile
 DIST_SOURCES = 
 DATA =  $(appendix_DATA) $(sysconf_DATA)
 
-depcomp = 
-DIST_COMMON =  README ./stamp-h.in ABOUT-NLS AUTHORS COPYING ChangeLog \
-INSTALL Makefile.am Makefile.in NEWS aclocal.m4 config.guess \
-config.h.in config.sub configure configure.in depcomp install-sh \
-ltconfig ltmain.sh missing mkinstalldirs
+DIST_COMMON =  README ./stamp-h.in AUTHORS COPYING ChangeLog INSTALL \
+Makefile.am Makefile.in NEWS aclocal.m4 config.guess config.h.in \
+config.sub configure configure.ac depcomp install-sh ltmain.sh missing \
+mkinstalldirs
 
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
 GZIP_ENV = --best
 DIST_SUBDIRS =  zlib eb libebutils ebappendix ebfont ebinfo ebrefile \
-ebzip doc doc-ja po m4
+ebzip doc doc-ja po-eb po-ebutils m4
 all: all-redirect
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps Makefile
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 
-$(ACLOCAL_M4):  configure.in 
+$(ACLOCAL_M4):  configure.ac  m4/eb3.m4 m4/gettext.m4 m4/lcmessage.m4 \
+		m4/libtool.m4 m4/ssizet.m4 m4/utimbuf.m4
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
 config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 	$(SHELL) ./config.status --recheck
-$(srcdir)/configure: $(srcdir)/configure.in $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
+$(srcdir)/configure: $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
 config.h: stamp-h
@@ -176,7 +176,7 @@ $(srcdir)/config.h.in: $(srcdir)/./stamp-h.in
 		rm -f $(srcdir)/./stamp-h.in; \
 		$(MAKE) $(srcdir)/./stamp-h.in; \
 	else :; fi
-$(srcdir)/./stamp-h.in: $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+$(srcdir)/./stamp-h.in: $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
 	@rm -f $(srcdir)/./stamp-h.in $(srcdir)/./stamp-h.inT
 	@echo timestamp > $(srcdir)/./stamp-h.inT 2> /dev/null
 	cd $(top_srcdir) && $(AUTOHEADER)
@@ -184,9 +184,9 @@ $(srcdir)/./stamp-h.in: $(top_srcdir)/configure.in $(ACLOCAL_M4)
 
 distclean-hdr:
 	-rm -f config.h
-eb/po/Makefile: $(top_builddir)/config.status $(top_srcdir)/eb/po/Makefile.in
+po-eb/Makefile: $(top_builddir)/config.status $(top_srcdir)/po-eb/Makefile.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
-po/Makefile: $(top_builddir)/config.status $(top_srcdir)/po/Makefile.in
+po-ebutils/Makefile: $(top_builddir)/config.status $(top_srcdir)/po-ebutils/Makefile.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 
 install-appendixDATA: $(appendix_DATA)
@@ -373,7 +373,7 @@ dist-all: distdir
 distdir: $(DISTFILES)
 	-chmod -R a+w $(distdir) > /dev/null 2>&1; rm -rf $(distdir)
 	mkdir $(distdir)
-	$(mkinstalldirs) $(distdir)/eb/po $(distdir)/po eb/po po
+	$(mkinstalldirs) $(distdir)/po-eb $(distdir)/po-ebutils po-eb po-ebutils
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \

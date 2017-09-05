@@ -8,25 +8,12 @@
 
 ## Note that the following macros must be set by your hand.
 top_builddir = ..
-subdir = po
+subdir = po-eb
 
-TEXTDOMAIN = ebutils
+TEXTDOMAIN = eb
 CATALOGS = ja.mo
 POTFILES = \
-	$(top_srcdir)/libebutils/ebutils.c \
-	$(top_srcdir)/libebutils/getopt.c \
-	$(top_srcdir)/ebfont/ebfont.c \
-	$(top_srcdir)/ebinfo/ebinfo.c \
-	$(top_srcdir)/ebzip/copyfile.c \
-	$(top_srcdir)/ebzip/ebzip.c \
-	$(top_srcdir)/ebzip/ebzip1.c \
-	$(top_srcdir)/ebzip/filename.c \
-	$(top_srcdir)/ebzip/unzipbook.c \
-	$(top_srcdir)/ebzip/unzipfile.c \
-	$(top_srcdir)/ebzip/zipbook.c \
-	$(top_srcdir)/ebzip/zipfile.c \
-	$(top_srcdir)/ebzip/zipinfobook.c \
-	$(top_srcdir)/ebzip/zipinfofile.c
+	$(top_srcdir)/eb/error.c 
 ## end
 
 PACKAGE = @PACKAGE@

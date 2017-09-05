@@ -1,3 +1,9 @@
+Major changes in release 3.0beta1:
+
+* ebrefile is re-written with C.
+  Japanese message catalog is also available.
+* Fix some bugs.
+
 Major changes in release 3.0beta0:
 
 * Support linintl of GNU gettext 0.10.36.
@@ -10,7 +16,6 @@ Major changes in release 3.0beta0:
 * Support monochrome graphic data of EPWING and EB.
 * ebzip supports movie, graphic, and sound data files.
   `-s' and `--skip-content' option is added.
-
 * Fix many minor bugs.
 
 Major changes in release 3.0alpha4:

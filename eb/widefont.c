@@ -55,34 +55,41 @@ eb_initialize_wide_font(book)
      * If the book is EBWING, open the wide font file.
      * (In EB books, font data are stored in the `START' file.)
      */
-    if (zio_mode(&subbook->wide_current->zio) != ZIO_INVALID) {
-	zio_code = ZIO_REOPEN;
-    } else if (book->disc_code == EB_DISC_EB) {
-	zio_code = zio_mode(&subbook->text_zio);
+    if (book->disc_code == EB_DISC_EB) {
+	if (zio_mode(&subbook->wide_current->zio) != ZIO_INVALID)
+	    zio_code = ZIO_REOPEN;
+	else
+	    zio_code = zio_mode(&subbook->text_zio);
 	eb_compose_path_name2(book->path, subbook->directory_name, 
 	    subbook->text_file_name, font_path_name);
+
     } else {
-	strcpy(ebz_hint_name, subbook->wide_current->file_name);
-	strcat(ebz_hint_name, ".ebz");
+	if (zio_mode(&subbook->wide_current->zio) != ZIO_INVALID)
+	    zio_code = ZIO_REOPEN;
+	else {
+	    eb_canonicalize_font_file_name(subbook->wide_current->file_name);
+	    strcpy(ebz_hint_name, subbook->wide_current->file_name);
+	    strcat(ebz_hint_name, ".ebz");
 
-	hint_list[0] = subbook->wide_current->file_name;
-	hint_list[1] = ebz_hint_name;
-	hint_list[2] = NULL;
+	    hint_list[0] = subbook->wide_current->file_name;
+	    hint_list[1] = ebz_hint_name;
+	    hint_list[2] = NULL;
 
-	eb_find_file_name3(book->path, subbook->directory_name, 
+	    eb_find_file_name3(book->path, subbook->directory_name, 
 	    subbook->gaiji_directory_name, hint_list,
-	    subbook->wide_current->file_name, &hint_index);
+		subbook->wide_current->file_name, &hint_index);
 
-	switch (hint_index) {
-	case 0:
-	    zio_code = ZIO_NONE;
-	    break;
-	case 1:
-	    zio_code = ZIO_EBZIP1;
-	    break;
-	default:
-	    error_code = EB_ERR_FAIL_OPEN_FONT;
-	    goto failed;
+	    switch (hint_index) {
+	    case 0:
+		zio_code = ZIO_NONE;
+		break;
+	    case 1:
+		zio_code = ZIO_EBZIP1;
+		break;
+	    default:
+		error_code = EB_ERR_FAIL_OPEN_FONT;
+		goto failed;
+	    }
 	}
 
 	eb_compose_path_name3(book->path, subbook->directory_name,

@@ -117,7 +117,6 @@ CONFIG_CLEAN_FILES =
 SCRIPTS =  $(bin_SCRIPTS)
 
 DIST_SOURCES = 
-depcomp = 
 DIST_COMMON =  Makefile.am Makefile.in
 
 
@@ -126,8 +125,8 @@ DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 GZIP_ENV = --best
 all: all-am
 .SUFFIXES:
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps ebappendix/Makefile
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu ebappendix/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

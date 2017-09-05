@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0beta0, for EB Library version 3.0beta0.
+   This is edition 3.0beta1, for EB Library version 3.0beta1.
 
 * Menu:
 
@@ -101,7 +101,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 3.0beta0, for EB Library version 3.0beta0.
+   This is edition 3.0beta1, for EB Library version 3.0beta1.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -280,8 +280,9 @@ have been created before compression.  In this example, the `--keep'
 option is used.  By default, `ebzip' deletes original files after
 compression, but the `--keep' option disables this behavior.
 
-   The directory strcture under `/dict' and `/cdrom' are almost same,
-but the suffix `.ebz' is added to the compressed files under `/dict'.
+   The directory strcture under `/dict' and `/cdrom' are almost the
+same, but the suffix `.ebz' is added to the compressed files under
+`/dict'.
 
      /dict/catalog
      /dict/language.ebz
@@ -329,7 +330,8 @@ Partial Compression
 ===================
 
    `ebzip' compresses an entire book by default, but the `--subbook'
-(`-S') option allows you to compress specified subbooks only.
+(`-S') and `--skip-content' (`-s') options allow you to compress part
+of a book.
 
    The `--subbook' option takes an argument which is a list of
 directory names of subbooks to be compressed, separeted by a comma
@@ -365,9 +367,8 @@ and what their directory names are.
 (*Note Invoking `ebinfo': (ebinfo)Invoking ebinfo, for more details
 about the `ebinfo' command).
 In this example, there are three subbooks in the book, and their
-directory names are `english', `french' and `german'.
-
-   You can compress only `english' and `french' by the following way:
+directory names are `english', `french' and `german'.  By the
+following, you can compress `english' and `french':
 
      % ebzip --subbook english,french /dict
 
@@ -386,8 +387,14 @@ subbooks from a subbook list in the `CATALOG(S)' file by using the
 subbooks with different compression levels (e.g. compress `english' and
 `french' with level 0, and compress `german' with level 2).
 
-   Regardless of the `--subbook' option, the `LANGUAGE' file is always
-compressed.
+   The `--skip-content' (`-s') is similar to `--subbook', but
+`--skip-content' specifies data types of files to be ignored.
+
+     % ebzip --skip-content sound,movie --subbook french /dict
+
+In this example, `ebzip' skips sound and movie files.  The data type
+names currently recognized by `ebzip' are: `font', `graphic', `sound'
+and `movie'.
 
 
 File: ebzip.info,  Node: Overwrite Old Files,  Next: Compress Compressed EPWING,  Prev: Partial Compression,  Up: Compression
@@ -417,11 +424,18 @@ File: ebzip.info,  Node: Compress Compressed EPWING,  Prev: Overwrite Old Files,
 Compress Compressed EPWING CD-ROM Book
 ======================================
 
-   `ebzip' can compress a CD-ROM book compressed with the EPWING
-compression format.  It uncompress the book, and then recompresses the
-book with the ebzip compression format.  Since the ebzip compression is
-generally better than the EPWING compression format, the book
-compressed by `ebzip' is smaller than original.
+   EPWING also defines compression format which is different from ebzip.
+Some CD-ROM books of EPWING V4 and later version use the compression.
+
+   `ebzip' (`ebunzip') can also uncompress CD-ROM books compressed with
+the EPWING compression fomrat, but it cannot compress files with the
+format.
+
+   If you command `ebzip' to compress a CD-ROM book wich has been
+compressed with EPWING compression format, then `ebzip' uncompresses
+the book first, and next compresses it with the ebzip compression.
+Compression ratio of the ebzip compression format is generally better
+than that of EPWING format.
 
 
 File: ebzip.info,  Node: Uncompression,  Next: Information,  Prev: Compression,  Up: Top
@@ -510,9 +524,9 @@ uncompressed data to acutual files.  This option is usuful for checking
 validity of compressed files.  *Note Test::, for more details about the
 `--test' option.
 
-   When the `--subbook' is specified, `ebunzip' only uncompresses
-specified subbooks, in addition with `LANGUAGE'.  *Note Partial
-Compression::, for more details about the `--subbook' option.
+   When the `--subbook' and/or `--skip-content' options are specified,
+`ebunzip' only uncompresses files matched to the given condition only.
+*Note Partial Compression::, for more details about these options.
 
    When the `--force-overwrite' or `--no-overwrite' option is
 specified, `ebunzip' overwrites or skips files without confirmation for
@@ -528,11 +542,12 @@ File: ebzip.info,  Node: Uncompress Compressed EPWING,  Prev: Options for Uncomp
 Uncompress Compressed EPWING CD-ROM Book
 ========================================
 
-   `ebzip' can uncompress a CD-ROM book compressed with the EPWING
-compression format.  However, `ebzip' cannot restore the original
-compressed book by compressing the uncompressed book again.  In other
-words, `ebzip' support uncompression of the EPWING compression format,
-but doesn't support compression.
+   EPWING also defines compression format which is different from ebzip.
+Some CD-ROM books of EPWING V4 and later version use the compression.
+
+   `ebzip' (`ebunzip') can also uncompress CD-ROM books compressed with
+the EPWING compression fomrat, but it cannot compress files with the
+format.
 
 
 File: ebzip.info,  Node: Information,  Next: Delete a Book,  Prev: Uncompression,  Up: Top
@@ -575,10 +590,10 @@ File: ebzip.info,  Node: Options for Information,  Prev: Information Example,  U
 Options for Information
 =======================
 
-   When you invoke `ebzipinfo' with the `--subbook' option, `ebzipinfo'
-outputs information about files of the specified subbooks only, in
-addition with `LANGUAGE', `CATALOG' and `CATALOGS'.  *Note Partial
-Compression::, for details about the `--subbook' option.
+   When you invoke `ebzipinfo' with the `--subbook' and/or
+`--skip-content' options, `ebzipinfo' outputs information about files
+matched to the given condition only.  *Note Partial Compression::, for
+details about these options.
 
    `ebzipinfo' ignores the following options; `--force-overwrite',
 `--keep', `--level', `--no-overwrite', `--output-directory', `--quiet',
@@ -667,6 +682,13 @@ long as they are unique.
      or not.  To supress this question, specify the `--force-overwrite'
      (`-f') or `--no-overwrite' (`-n') option.  This option is ignored
      when the action is uncompression or information.
+
+`-s TYPES'
+`--skip-content TYPES'
+     Specify data types of files to be ignored.  TYPES must be a list
+     of data type names separated by a comma (`,').  The data type
+     names `ebzip' currently recognizes are: `font', `graphic', `sound'
+     and `movie'.  By default, none is skipped.
 
 `-S SUBBOOKS'
 `--subbook SUBBOOKS'
@@ -930,7 +952,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     3.0beta0, only 1 (0001 in binary digits) can be prescribed as this
+     3.0beta1, only 1 (0001 in binary digits) can be prescribed as this
      version.
 
 `compression level (4 bits of the least-significant-bit side)'
@@ -974,25 +996,25 @@ Node: Invoking ebzip5744
 Node: Compression6515
 Node: Compression Example 17122
 Node: Compression Example 28702
-Node: Compression Level10245
-Node: Test10836
-Node: Partial Compression11182
-Node: Overwrite Old Files13779
-Node: Compress Compressed EPWING14527
-Node: Uncompression15026
-Node: Uncompression Example15468
-Node: Options for Uncompression17025
-Node: Uncompress Compressed EPWING18191
-Node: Information18693
-Node: Information Example19080
-Node: Options for Information19733
-Node: Delete a Book20310
-Node: Summary of Options20608
-Node: Comparision Result23804
-Node: Compressed File Format25908
-Node: Format Overview26333
-Node: Data Part27189
-Node: Index Part29855
-Node: Header Part32182
+Node: Compression Level10249
+Node: Test10840
+Node: Partial Compression11186
+Node: Overwrite Old Files14049
+Node: Compress Compressed EPWING14797
+Node: Uncompression15572
+Node: Uncompression Example16014
+Node: Options for Uncompression17571
+Node: Uncompress Compressed EPWING18754
+Node: Information19242
+Node: Information Example19629
+Node: Options for Information20282
+Node: Delete a Book20825
+Node: Summary of Options21123
+Node: Comparision Result24611
+Node: Compressed File Format26715
+Node: Format Overview27140
+Node: Data Part27996
+Node: Index Part30662
+Node: Header Part32989
 
 End Tag Table

@@ -12,18 +12,10 @@ dnl LIBZ_VERSION_INFO=1:1:0
 dnl AC_SUBST(LIBZ_VERSION_INFO)
 
 dnl *
-dnl * C Compiler
+dnl * Programs.
 dnl *
 AC_PROG_CC
-
-dnl * 
-dnl * GNU libtool
-dnl * 
 AC_PROG_LIBTOOL
-
-dnl * 
-dnl * Alternative Programs.
-dnl * 
 AC_PROG_RANLIB
 AC_PROG_LN_S
 AC_PROG_INSTALL

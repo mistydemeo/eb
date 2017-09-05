@@ -1,4 +1,5 @@
 AUTOMAKE_OPTIONS = foreign
+ACLOCAL_AMFLAGS = -I $(srcdir)
 
 lib_LTLIBRARIES = libz.la
 libz_la_SOURCES = adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c \
@@ -10,4 +11,5 @@ include_HEADERS = zlib.h zconf.h
 noinst_HEADERS = deflate.h infblock.h infcodes.h inffast.h inffixed.h \
 	inftrees.h infutil.h trees.h zutil.h
 
-EXTRA_DIST = ChangeLog FAQ INDEX README.altered algorithm.txt zlib.3
+EXTRA_DIST = ChangeLog FAQ INDEX README.altered algorithm.txt libtool.m4 \
+	zlib.3

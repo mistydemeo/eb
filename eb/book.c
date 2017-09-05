@@ -269,7 +269,7 @@ eb_fix_misleaded_book(book)
 }
 
 /*
- * Hints of catalog file name in appendix package.
+ * Hints of catalog file name in book.
  */
 #define EB_HINT_INDEX_CATALOG		0
 #define EB_HINT_INDEX_CATALOGS		1

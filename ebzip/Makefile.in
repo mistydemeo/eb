@@ -113,8 +113,8 @@ LIBEBUTILS = $(top_builddir)/libebutils/libebutils.a
 bin_PROGRAMS = ebzip
 noinst_HEADERS = ebzip.h
 
-ebzip_SOURCES = ebzip.c ebzip1.c copyfile.c filename.c unzipbook.c \
-	unzipfile.c zipbook.c zipfile.c zipinfobook.c zipinfofile.c
+ebzip_SOURCES = ebzip.c ebzip1.c copyfile.c unzipbook.c unzipfile.c \
+	zipbook.c zipfile.c zipinfobook.c zipinfofile.c
 
 ebzip_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS)
 ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS)
@@ -137,9 +137,8 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 am_ebzip_OBJECTS =  ebzip.$(OBJEXT) ebzip1.$(OBJEXT) copyfile.$(OBJEXT) \
-filename.$(OBJEXT) unzipbook.$(OBJEXT) unzipfile.$(OBJEXT) \
-zipbook.$(OBJEXT) zipfile.$(OBJEXT) zipinfobook.$(OBJEXT) \
-zipinfofile.$(OBJEXT)
+unzipbook.$(OBJEXT) unzipfile.$(OBJEXT) zipbook.$(OBJEXT) \
+zipfile.$(OBJEXT) zipinfobook.$(OBJEXT) zipinfofile.$(OBJEXT)
 ebzip_OBJECTS =  $(am_ebzip_OBJECTS)
 ebzip_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -150,7 +149,11 @@ LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDF
 DIST_SOURCES =  $(ebzip_SOURCES)
 HEADERS =  $(noinst_HEADERS)
 
-depcomp = 
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+@AMDEP@DEP_FILES =  $(DEPDIR)/copyfile.Po $(DEPDIR)/ebzip.Po \
+@AMDEP@$(DEPDIR)/ebzip1.Po $(DEPDIR)/unzipbook.Po \
+@AMDEP@$(DEPDIR)/unzipfile.Po $(DEPDIR)/zipbook.Po $(DEPDIR)/zipfile.Po \
+@AMDEP@$(DEPDIR)/zipinfobook.Po $(DEPDIR)/zipinfofile.Po
 DIST_COMMON =  $(noinst_HEADERS) Makefile.am Makefile.in
 
 
@@ -163,8 +166,8 @@ OBJECTS = $(am_ebzip_OBJECTS)
 all: all-am
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps ebzip/Makefile
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu ebzip/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -218,12 +221,6 @@ distclean-libtool:
 ebzip$(EXEEXT): $(ebzip_OBJECTS) $(ebzip_DEPENDENCIES)
 	@rm -f ebzip$(EXEEXT)
 	$(LINK) $(ebzip_LDFLAGS) $(ebzip_OBJECTS) $(ebzip_LDADD) $(LIBS)
-.c.o:
-	$(COMPILE) -c $<
-.c.obj:
-	$(COMPILE) -c `cygpath -w $<`
-.c.lo:
-	$(LTCOMPILE) -c -o $@ $<
 
 tags: TAGS
 
@@ -256,6 +253,40 @@ GTAGS:
 
 distclean-tags:
 	-rm -f TAGS ID
+
+@AMDEP@@_am_include@ $(DEPDIR)/copyfile.Po
+@AMDEP@@_am_include@ $(DEPDIR)/ebzip.Po
+@AMDEP@@_am_include@ $(DEPDIR)/ebzip1.Po
+@AMDEP@@_am_include@ $(DEPDIR)/unzipbook.Po
+@AMDEP@@_am_include@ $(DEPDIR)/unzipfile.Po
+@AMDEP@@_am_include@ $(DEPDIR)/zipbook.Po
+@AMDEP@@_am_include@ $(DEPDIR)/zipfile.Po
+@AMDEP@@_am_include@ $(DEPDIR)/zipinfobook.Po
+@AMDEP@@_am_include@ $(DEPDIR)/zipinfofile.Po
+
+distclean-depend:
+	-rm -rf $(DEPDIR)
+
+@AMDEP@CCDEPMODE = @CCDEPMODE@
+
+.c.o:
+@AMDEP@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(COMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
+
+.c.lo:
+@AMDEP@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
+@AMDEP@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LTCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
+
+.c.obj:
+@AMDEP@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(COMPILE) -c -o $@ `cygpath -w $<`
+
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
@@ -319,7 +350,8 @@ clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 distclean: distclean-am
 
 distclean-am: clean-am distclean-binPROGRAMS distclean-compile \
-	distclean-generic distclean-libtool distclean-tags
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-tags
 
 maintainer-clean: maintainer-clean-am
 
@@ -333,14 +365,15 @@ mostlyclean-am: mostlyclean-binPROGRAMS mostlyclean-compile \
 
 .PHONY: check check-am clean clean-binPROGRAMS clean-generic \
 	clean-libtool distclean distclean-binPROGRAMS distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-exec install-exec-am \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-binPROGRAMS \
-	maintainer-clean-generic mostlyclean mostlyclean-binPROGRAMS \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	tags uninstall uninstall-am uninstall-binPROGRAMS
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-binPROGRAMS install-data install-data-am \
+	install-exec install-exec-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-binPROGRAMS maintainer-clean-generic \
+	mostlyclean mostlyclean-binPROGRAMS mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool tags uninstall \
+	uninstall-am uninstall-binPROGRAMS
 
 
 install-exec-hook:
@@ -358,40 +391,6 @@ install-exec-hook:
 uninstall-hook:
 	rm -f $(DESTDIR)$(bindir)/`echo ebunzip|sed '$(transform)'`$(EXEEXT)
 	rm -f $(DESTDIR)$(bindir)/`echo $(ebzipinfo)|sed '$(transform)'`$(EXEEXT)
-
-### *.o dependencies ###
-copyfile.o: copyfile.c ../config.h ../libebutils/ebutils.h ../eb/eb.h \
- ../eb/defs.h ../eb/zio.h ../libebutils/getumask.h \
- ../libebutils/makedir.h ../libebutils/samefile.h \
- ../libebutils/yesno.h ../eb/error.h ../eb/internal.h ebzip.h
-ebzip.o: ebzip.c ../config.h ../libebutils/ebutils.h ../eb/eb.h \
- ../eb/defs.h ../eb/zio.h ../eb/error.h ../eb/internal.h ../eb/font.h \
- ../libebutils/getopt.h ../libebutils/getumask.h \
- ../libebutils/makedir.h ../libebutils/samefile.h \
- ../libebutils/yesno.h ebzip.h
-ebzip1.o: ebzip1.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h
-filename.o: filename.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h
-unzipbook.o: unzipbook.c ../config.h ../eb/eb.h ../eb/defs.h \
- ../eb/zio.h ../eb/error.h ../eb/internal.h ../eb/font.h \
- ../libebutils/getumask.h ../libebutils/makedir.h \
- ../libebutils/ebutils.h ebzip.h
-unzipfile.o: unzipfile.c ../config.h ../eb/eb.h ../eb/defs.h \
- ../eb/zio.h ../eb/internal.h ../libebutils/getumask.h \
- ../libebutils/makedir.h ../libebutils/samefile.h \
- ../libebutils/yesno.h ebzip.h ../libebutils/ebutils.h
-zipbook.o: zipbook.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
- ../eb/error.h ../eb/internal.h ../eb/font.h ../libebutils/getumask.h \
- ../libebutils/makedir.h ../libebutils/ebutils.h ebzip.h
-zipfile.o: zipfile.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
- ../eb/internal.h ../libebutils/getumask.h ../libebutils/makedir.h \
- ../libebutils/samefile.h ../libebutils/yesno.h ebzip.h \
- ../libebutils/ebutils.h
-zipinfobook.o: zipinfobook.c ../config.h ../eb/eb.h ../eb/defs.h \
- ../eb/zio.h ../eb/error.h ../eb/internal.h ../eb/font.h \
- ../libebutils/ebutils.h ebzip.h
-zipinfofile.o: zipinfofile.c ../config.h ../eb/eb.h ../eb/defs.h \
- ../eb/zio.h ../eb/internal.h ../libebutils/ebutils.h \
- ../libebutils/samefile.h ../libebutils/yesno.h ebzip.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -144,7 +144,11 @@ LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDF
 DIST_SOURCES =  $(libebutils_a_SOURCES)
 HEADERS =  $(noinst_HEADERS)
 
-depcomp = 
+depcomp = $(SHELL) $(top_srcdir)/depcomp
+@AMDEP@DEP_FILES =  $(DEPDIR)/ebutils.Po $(DEPDIR)/getopt.Po \
+@AMDEP@$(DEPDIR)/getopt1.Po $(DEPDIR)/getumask.Po $(DEPDIR)/makedir.Po \
+@AMDEP@$(DEPDIR)/memset.Po $(DEPDIR)/samefile.Po \
+@AMDEP@$(DEPDIR)/strcasecmp.Po $(DEPDIR)/strerror.Po $(DEPDIR)/yesno.Po
 DIST_COMMON =  $(noinst_HEADERS) Makefile.am Makefile.in memset.c \
 strcasecmp.c strerror.c
 
@@ -158,8 +162,8 @@ OBJECTS = $(am_libebutils_a_OBJECTS)
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps libebutils/Makefile
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu libebutils/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -195,12 +199,6 @@ libebutils.a: $(libebutils_a_OBJECTS) $(libebutils_a_DEPENDENCIES)
 	-rm -f libebutils.a
 	$(libebutils_a_AR) libebutils.a $(libebutils_a_OBJECTS) $(libebutils_a_LIBADD)
 	$(RANLIB) libebutils.a
-.c.o:
-	$(COMPILE) -c $<
-.c.obj:
-	$(COMPILE) -c `cygpath -w $<`
-.c.lo:
-	$(LTCOMPILE) -c -o $@ $<
 
 tags: TAGS
 
@@ -233,6 +231,41 @@ GTAGS:
 
 distclean-tags:
 	-rm -f TAGS ID
+
+@AMDEP@@_am_include@ $(DEPDIR)/ebutils.Po
+@AMDEP@@_am_include@ $(DEPDIR)/getopt.Po
+@AMDEP@@_am_include@ $(DEPDIR)/getopt1.Po
+@AMDEP@@_am_include@ $(DEPDIR)/getumask.Po
+@AMDEP@@_am_include@ $(DEPDIR)/makedir.Po
+@AMDEP@@_am_include@ $(DEPDIR)/memset.Po
+@AMDEP@@_am_include@ $(DEPDIR)/samefile.Po
+@AMDEP@@_am_include@ $(DEPDIR)/strcasecmp.Po
+@AMDEP@@_am_include@ $(DEPDIR)/strerror.Po
+@AMDEP@@_am_include@ $(DEPDIR)/yesno.Po
+
+distclean-depend:
+	-rm -rf $(DEPDIR)
+
+@AMDEP@CCDEPMODE = @CCDEPMODE@
+
+.c.o:
+@AMDEP@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(COMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
+
+.c.lo:
+@AMDEP@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
+@AMDEP@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LTCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
+
+.c.obj:
+@AMDEP@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(COMPILE) -c -o $@ `cygpath -w $<`
+
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
@@ -298,8 +331,9 @@ clean-am: clean-generic clean-libtool clean-noinstLIBRARIES \
 
 distclean: distclean-am
 
-distclean-am: clean-am distclean-compile distclean-generic \
-	distclean-libtool distclean-noinstLIBRARIES distclean-tags
+distclean-am: clean-am distclean-compile distclean-depend \
+	distclean-generic distclean-libtool distclean-noinstLIBRARIES \
+	distclean-tags
 
 maintainer-clean: maintainer-clean-am
 
@@ -313,14 +347,15 @@ mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 
 .PHONY: all-redirect check check-am clean clean-generic clean-libtool \
 	clean-noinstLIBRARIES distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-noinstLIBRARIES \
-	distclean-tags distdir dvi dvi-am info info-am install \
-	install-am install-data install-data-am install-exec \
-	install-exec-am install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	maintainer-clean-noinstLIBRARIES mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	mostlyclean-noinstLIBRARIES tags uninstall uninstall-am
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-noinstLIBRARIES distclean-tags distdir dvi dvi-am \
+	info info-am install install-am install-data install-data-am \
+	install-exec install-exec-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
+	maintainer-clean-generic maintainer-clean-noinstLIBRARIES \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool mostlyclean-noinstLIBRARIES tags uninstall \
+	uninstall-am
 
 
 ebutils.h: stamp-ebutils-h
@@ -330,19 +365,6 @@ stamp-ebutils-h: ebutils.h.in Makefile
 	   $(srcdir)/ebutils.h.in > ebutils.h.tmp
 	$(top_srcdir)/move-if-change ebutils.h.tmp ebutils.h
 	@echo timestamp > stamp-ebutils-h
-
-### *.o dependencies ###
-ebutils.o: ebutils.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
- ../eb/error.h ebutils.h
-getopt.o: getopt.c getopt.h
-getopt1.o: getopt1.c getopt.h
-getumask.o: getumask.c ../config.h
-makedir.o: makedir.c ../config.h
-memset.o: memset.c ../config.h
-samefile.o: samefile.c ../config.h
-strcasecmp.o: strcasecmp.c ../config.h
-strerror.o: strerror.c ../config.h
-yesno.o: yesno.c ../config.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

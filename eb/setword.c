@@ -339,7 +339,7 @@ eb_fix_word(book, search, canonicalized_word, word)
     char *word;
     char *canonicalized_word;
 {
-    if (search->index_id == 0x80 || search->index_id == 0xa1)
+    if (search->index_id == 0xa1 && search->candidates_page != 0)
 	return;
 
     if (book->character_code == EB_CHARCODE_ISO8859_1) {
