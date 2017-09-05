@@ -261,8 +261,8 @@ width=%d, height=%d)",
     context = &book->binary_context;
     context->code = EB_BINARY_MONO_GRAPHIC;
     context->zio = &book->subbook_current->text_zio;
-    context->location = (position->page - 1) * EB_SIZE_PAGE + position->offset
-	+ (width + 7) / 8 * (height - 1);
+    context->location = ((off_t) position->page - 1) * EB_SIZE_PAGE
+	+ position->offset + (width + 7) / 8 * (height - 1);
     context->size = (width + 7) / 8 * height;
     context->offset = 0;
     context->cache_offset = 0;
@@ -509,8 +509,8 @@ width=%d, height=%d)",
 
     context->code = EB_BINARY_GRAY_GRAPHIC;
     context->zio = &book->subbook_current->text_zio;
-    context->location = (position->page - 1) * EB_SIZE_PAGE + position->offset
-	+ (width + 1) / 2 * (height - 1);
+    context->location = ((off_t) position->page - 1) * EB_SIZE_PAGE
+	+ position->offset + (width + 1) / 2 * (height - 1);
     context->size = (width + 1) / 2 * height;
     context->offset = 0;
     context->cache_offset = 0;
@@ -621,9 +621,9 @@ end_position={%d,%d})",
 	goto failed;
     }
 
-    start_location = (start_position->page - 1) * EB_SIZE_PAGE
+    start_location = ((off_t) start_position->page - 1) * EB_SIZE_PAGE
 	+ start_position->offset;
-    end_location   = (end_position->page - 1)   * EB_SIZE_PAGE
+    end_location   = ((off_t) end_position->page - 1)   * EB_SIZE_PAGE
 	+ end_position->offset;
 
     context = &book->binary_context;
@@ -787,7 +787,8 @@ eb_set_binary_color_graphic(EB_Book *book, const EB_Position *position)
     context = &book->binary_context;
     context->code = EB_BINARY_COLOR_GRAPHIC;
     context->zio = &book->subbook_current->graphic_zio;
-    context->location = (position->page - 1) * EB_SIZE_PAGE + position->offset;
+    context->location = ((off_t) position->page - 1) * EB_SIZE_PAGE
+	+ position->offset;
     context->offset = 0;
     context->cache_length = 0;
     context->cache_offset = 0;

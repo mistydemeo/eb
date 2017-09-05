@@ -1,3 +1,14 @@
+2009-03-14  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.4.1.
+
+	* configure.ac (AC_INIT): Set version to 4.4.1.
+	* configure.ac (LIBEB_VERSION_INFO): Set LIBEB_VERSION_INFO to 14:0:1.
+
+	* eb/binary.c (eb_set_binary_mono_graphic, eb_set_binary_gray_graphic,
+	eb_set_binary_wave, eb_set_binary_color_graphic): Apply large
+	file support patch by Kazuhiro Ito.
+
 2009-02-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.4.
