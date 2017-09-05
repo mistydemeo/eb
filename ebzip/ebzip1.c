@@ -52,6 +52,7 @@ ebzip1_slice(out_buffer, out_byte_length, in_buffer, in_byte_length)
 
     if (deflate(&stream, Z_FINISH) != Z_STREAM_END) {
 	*out_byte_length = in_byte_length;
+	deflateEnd(&stream);
 	return 0;
     }
 

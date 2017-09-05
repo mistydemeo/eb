@@ -1082,8 +1082,12 @@ eb_set_subbook_epwing(book, subbook_code)
 	    if (eb_find_file_name3(book->path, subbook->directory_name,
 		subbook->data_directory_name, "honmons",
 		subbook->sound_file_name) == EB_SUCCESS) {
-		eb_path_name_zio_code(subbook->sound_file_name, ZIO_PLAIN,
-		    &sound_zio_code);
+		if (book->version < 6)
+		    default_zio_code = ZIO_PLAIN;
+		else
+		    default_zio_code = ZIO_EPWING6;
+		eb_path_name_zio_code(subbook->sound_file_name,
+		    default_zio_code, &sound_zio_code);
 	    }
 	} else {
 	    strcpy(subbook->sound_file_name, subbook->text_file_name);
