@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.2beta0 版です。 EB ライブラリバージョン 3.2beta0 に対
+   この文書は第 3.2beta1 版です。 EB ライブラリバージョン 3.2beta1 に対
 応しています。
 
 * Menu:
@@ -78,9 +78,9 @@ File: ebfont-ja.info,  Node: What is Local Character,  Next: Invoking ebfont,  P
    CD-ROM 書籍は、外字のビットマップデータも持っています。 `ebfont' コ
 マンドは、CD-ROM 書籍のビットマップデータを読み、 それを指定された画像
 形式に変換し、ファイルに書き出します。 `ebfont' は、 XBM (X BitMap
-format)、XPM (X PixMap format)、 GIF (Graphics Interchange Format) のう
-ちのいずれか、または複数の画像ファイルを生成することができます。 特に
-指定がなければ、XBM 形式が選択されます。
+format)、XPM (X PixMap format)、 GIF (Graphics Interchange Format)、 BMP
+のうちのいずれか、または複数の画像ファイルを生成することができます。
+特に指定がなければ、XBM 形式が選択されます。
 
    外字は、"半角" ("narrow") と "全角" ("wide") の 2 種類に分類されま
 す。 半角の文字のビットマップデータでは、高さは幅の約半分です。 全角の
@@ -123,8 +123,8 @@ File: ebfont-ja.info,  Node: Invoking ebfont,  Next: Summary of Options,  Prev: 
      副本/高さ/narrow/文字番号.拡張子
      副本/高さ/wide/文字番号.拡張子
 
-拡張子は `xbm'、`xpm'、 `gif' のいずれかで、 文字番号は 16 進数 4 桁
-(`0' から `9' と `a' から `f') で、次のようになります。
+拡張子は `xbm'、`xpm'、`gif'、 `bmp' のいずれかで、文字番号は 16 進数
+4 桁 (`0' から `9' と `a' から `f') で、次のようになります。
 
      ejdict/16/narrow/a121.xbm
      ejdict/16/wide/a321.xbm
@@ -151,7 +151,7 @@ File: ebfont-ja.info,  Node: Image Formats,  Next: Heights,  Prev: Invoking ebfo
 画像形式
 ========
 
-   `ebfont' は XBM, XPM, GIF (GIF89a) 形式の画像ファイルを生成すること
+   `ebfont' は XBM, XPM, GIF89a, BMP 形式の画像ファイルを生成すること
 ができます。 画像形式は `--image-format' (`-i')
 オプションで指定します。 `--image-format' オプションは引数を一つ取り、
 そこにカンマ (`,') で区切って、画像形式の名前を並べて書きます。 たとえ
@@ -165,8 +165,11 @@ File: ebfont-ja.info,  Node: Image Formats,  Next: Heights,  Prev: Invoking ebfo
      % ebfont --image-format xpm --image-format gif 書籍へのパス
 
 XPM と GIF 形式では、前景色は黒 (RGB の `#000000') に、背景色は透明に
-なります。 `ebzip' は GIF の画像を生成する際に LZW 圧縮アルゴリズムを使
-わないため、ファイルのサイズは相当大きくなります。
+なります。 BMP 形式では、前景色は黒に、背景色は白 (RGB の `#ffffff')
+になります。
+
+   `ebzip' は GIF の画像を生成する際に LZW 圧縮アルゴリズムを使わない
+ため、ファイルのサイズは相当大きくなります。
 
 
 File: ebfont-ja.info,  Node: Heights,  Next: Subbooks,  Prev: Image Formats,  Up: Invoking ebfont
@@ -276,9 +279,9 @@ File: ebfont-ja.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: To
 `--image-format 画像形式'
      画像形式形式の画像ファイルを生成します。 画像形式は、画像形式名
      をカンマ (`,') で区切って並べたものでなくてはなりません。 対応し
-     ている画像形式の名前は `xbm'、`xpm'、`gif' です。 指定しなかった
-     ときは、`ebfont' は XBM 形式の画像ファイルを生成します。 (詳しく
-     は、*note 画像形式: Image Formats.)。
+     ている画像形式の名前は `xbm'、`xpm'、`gif'、 `bmp' です。 指定しな
+     かったときは、`ebfont' は XBM 形式の画像ファイルを生成します。 (
+     詳しくは、*note 画像形式: Image Formats.)。
 
 `-o ディレクトリ'
 `--output-directory ディレクトリ'
@@ -303,10 +306,10 @@ Tag Table:
 Node: Top1062
 Node: Introduction1600
 Node: What is Local Character2418
-Node: Invoking ebfont3981
-Node: Image Formats5325
-Node: Heights6183
-Node: Subbooks7004
-Node: Summary of Options8875
+Node: Invoking ebfont3985
+Node: Image Formats5335
+Node: Heights6267
+Node: Subbooks7088
+Node: Summary of Options8959
 
 End Tag Table

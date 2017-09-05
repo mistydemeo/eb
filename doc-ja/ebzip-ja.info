@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.2beta0 版です。 EB ライブラリバージョン 3.2beta0 に対
+   この文書は第 3.2beta1 版です。 EB ライブラリバージョン 3.2beta1 に対
 応しています。
 
 * Menu:
@@ -299,9 +299,9 @@ File: ebzip-ja.info,  Node: Compression Level,  Next: Test,  Prev: Compression E
 圧縮レベル
 ==========
 
-   `ebzip' は、0、1、2、3 という 4 つの圧縮レベルを持っています。 圧縮
-レベル 0 は、圧縮・伸長が最も速いですが、圧縮率が最悪です。 圧縮レベル
-3 は、圧縮率が最良ですが、圧縮・伸長が最も遅くなります。 圧縮レベルは、
+   `ebzip' は、0 〜 5 という 6 つの圧縮レベルを持っています。 圧縮レベ
+ル 0 は、圧縮・伸長が最も速いですが、圧縮率が最悪です。 圧縮レベル 5
+は、圧縮率が最良ですが、圧縮・伸長が最も遅くなります。 圧縮レベルは、
 `--level' (`-l') オプションで設定します。
 
      % ebzip --level 2 --output-directory /dict /dict
@@ -653,11 +653,11 @@ File: ebzip-ja.info,  Node: Summary of Options,  Next: Comparision Result,  Prev
 
 `-l 整数'
 `--level 整数'
-     圧縮レベルを指定します。 整数は、`0'、`1'、`2'、`3' のいずれかで
-     なくてはいけません。 レベル 0
-     は、最も速いものの圧縮率は最悪です。 レベル 3 は、最も遅いものの圧
-     縮率は最良です。 指定しなかったときのレベルは 0 です。 このオプシ
-     ョンは、圧縮以外の動作のときは無視されます。
+     圧縮レベルを指定します。 整数は、`0'、`1'、`2'、`3'、`4'、 `5' の
+     いずれかでなくてはいけません。 レベル 0 は、最も速いものの圧縮率は
+     最悪です。 レベル 3 は、最も遅いものの圧縮率は最良です。 指定しな
+     かったときのレベルは 0 です。 このオプションは、圧縮以外の動作のと
+     きは無視されます。
 
      (詳しくは、*note 圧縮レベル: Compression Level.)。
 
@@ -843,6 +843,8 @@ File: ebzip-ja.info,  Node: Data Part,  Next: Index Part,  Prev: Format Overview
 1                                    4096 バイト
 2                                    8192 バイト
 3                                    16384 バイト
+3                                    32768 バイト
+3                                    65536 バイト
 
 次に、末尾のスライスがスライス・サイズよりも短かった場合、 `ebzip' はス
 ライス・サイズと同じになるまで伸ばし、伸ばした部分に 0x00 を埋めます。
@@ -958,7 +960,7 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 3.2beta0 では、 1 (2
+     圧縮モードを表します。 EB ライブラリバージョン 3.2beta1 では、 1 (2
      進数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
@@ -1004,24 +1006,24 @@ Node: Compression6258
 Node: Compression Example 16806
 Node: Compression Example 28390
 Node: Compression Level9954
-Node: Test10453
-Node: Partial Compression10803
-Node: Overwrite Old Files13556
-Node: Compress Compressed Book14350
-Node: Uncompression15041
-Node: Uncompression Example15422
-Node: Options for Uncompression16947
-Node: Uncompress Compressed Book18121
-Node: Information18600
-Node: Information Example18939
-Node: Options for Information19628
-Node: Delete a Book20127
-Node: Summary of Options20423
-Node: Comparision Result23989
-Node: Compressed File Format26307
-Node: Format Overview26711
-Node: Data Part27565
-Node: Index Part30140
-Node: Header Part32807
+Node: Test10449
+Node: Partial Compression10799
+Node: Overwrite Old Files13552
+Node: Compress Compressed Book14346
+Node: Uncompression15037
+Node: Uncompression Example15418
+Node: Options for Uncompression16943
+Node: Uncompress Compressed Book18117
+Node: Information18596
+Node: Information Example18935
+Node: Options for Information19624
+Node: Delete a Book20123
+Node: Summary of Options20419
+Node: Comparision Result23997
+Node: Compressed File Format26315
+Node: Format Overview26719
+Node: Data Part27573
+Node: Index Part30248
+Node: Header Part32915
 
 End Tag Table

@@ -86,6 +86,7 @@ by Free Software Foundation, Inc.
 * Subbook::                     副本
 * Search::                      検索
 * Text Data::                   テキストデータ
+* Local Character::             外字
 * Index::                       索引
 
 @detailmenu
@@ -164,12 +165,22 @@ CD-ROM 書籍と @code{EB_Book} オブジェクト
 * Builtin Hook Functions::      組み込みフック関数の詳細
 * Text Data Functions::         テキストデータ操作関数の詳細
 
+外字
+
+* Narrow & Wide Font::          半角外字と全角外字
+* Font Size and Font Code::     外字の大きさと外字コード
+* Current Font Height::         選択中の外字フォントの高さ
+* Get Font::                    外字フォントの取り出し
+* Convert Font::                外字フォントの変換
+* Local Character in Text::     テキスト中の外字
+* Font Data Types::             データ型の詳細
+* Font Data Functions::         関数の詳細
+
 索引
 
 * Data Type Index::             データ型の索引
 * Function Index::              関数の索引
 * Variable Index::              変数と定数の索引
-* Sample Program Index::        サンプルプログラムの索引
 
 @end detailmenu
 @end menu
@@ -365,18 +376,24 @@ JIS X 0208 (日本語のかな漢字) で書かれており、JIS X 0208 を 0x2121 〜
 
 @example
 @group
-                     上位 8 ビット
+　　　　　　　　　　　　　　　　上位８ビット
 
-                00 21    7e a1     fe
-               00+-+------+-+------+
-               21+-+------+-+------+
-                 | |JIS X | | 外字 |
-下位 8 ビット    | | 0208 | |      |
-               7e+-+------+-+------+
-               a1+-+------+-+------+
-                 | |      | |      |
-                 | |      | |      |
-               fe+-+------+-+------+
+　　　　　　　　　００　２１　　　　７ｅ　ａ１　　　　ｆｅ
+　　　　　　　００┌──┬─────┬──┬─────┬┐
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　２１├──┼─────┼──┼─────┼┤
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│ＪＩＳ　Ｘ│　　│　外字　　││
+　　　　　　　　　│　　│０２０８　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　７ｅ├──┼─────┼──┼─────┼┤
+下位８ビット　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　ａ１├──┼─────┼──┼─────┼┤
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　ｆｅ└──┴─────┴──┴─────┴┘
 @end group
 @end example
 
@@ -393,18 +410,24 @@ GB 2312 を 0x21a1 〜 0x7efe にマッピングし、
 
 @example
 @group
-                     上位 8 ビット
+　　　　　　　　　　　　　　　　上位８ビット
 
-                00 21    7e a1     fe
-               00+-+------+-+------+
-               21+-+------+-+------+
-                 | |JIS X | | 外字 |
-下位 8 ビット    | | 0208 | |      |
-               7e+-+------+-+------+
-               a1+-+------+-+------+
-                 | |  GB  | |      |
-                 | | 2312 | |      |
-               fe+-+------+-+------+
+　　　　　　　　　００　２１　　　　７ｅ　ａ１　　　　ｆｅ
+　　　　　　　００┌──┬─────┬──┬─────┬┐
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　２１├──┼─────┼──┼─────┼┤
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│ＪＩＳ　Ｘ│　　│　外字　　││
+　　　　　　　　　│　　│０２０８　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　７ｅ├──┼─────┼──┼─────┼┤
+下位８ビット　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　ａ１├──┼─────┼──┼─────┼┤
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　　　│　　│ＧＢ　　　│　　│　　　　　││
+　　　　　　　　　│　　│２３１２　│　　│　　　　　││
+　　　　　　　　　│　　│　　　　　│　　│　　　　　││
+　　　　　　　ｆｅ└──┴─────┴──┴─────┴┘
 @end group
 @end example
 
@@ -850,12 +873,12 @@ CD-ROM 書籍を使うには、続いて @code{EB_Book} オブジェクトを CD-ROM 書籍
 
 @example
 @group
-(EB_Book オブジェクト)         (CD-ROM 書籍)
-     +-------+             +-------------------+
-     |       |=============|                   |
-     +-------+  eb_bind()  |    /mnt/cdrom     |
-                           |                   |
-                           +-------------------+
+ＥＢ＿Ｂｏｏｋ　　　　　　　　　　　　ＣＤ−ＲＯＭ書籍
+オブジェクト　　　　　　　　　　┌────────────┐
+┌───┐　　　　　　　　　　　│　　　　　　　　　　　　│
+│　　　┝━━━━━━━━━━━┥　／ｍｎｔ／ｃｄｒｏｍ　│
+└───┘　ｅｂ＿ｂｉｎｄ（）　│　　　　　　　　　　　　│
+　　　　　　　　　　　　　　　　└────────────┘
 @end group
 @end example
 
@@ -1815,12 +1838,12 @@ gettext が iconv() との連携を行わなければ、英語のメッセージは ASCII、
 
 @example
 @group
-    (CD-ROM 書籍)
-+----------------------+
-|  副本 0: [国語辞典]  |
-|  副本 1: [英々辞典]  |
-|  副本 2: [百科事典]  |
-+----------------------+
+　　　ＣＤ−ＲＯＭ書籍
+┌─────────────┐
+│　副本０：　［国語辞典］　│
+│　副本１：　［英々辞典］　│
+│　副本２：　［百科事典］　│
+└─────────────┘
 @end group
 @end example
 
@@ -1857,7 +1880,7 @@ EB ライブラリでは、それぞれの副本に対して @dfn{副本コード (subbook code)}
 @example
 @group
 /* @code{book} が @code{EB_Book} のオブジェクトで、すでに書籍に結び付け
- * られていると仮定しています。                               */
+ * られていると仮定しています。*/
 EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
 int sub_count;
 
@@ -1916,12 +1939,13 @@ if (eb_subbook_title2(&book, sub_codes[0], title)
 
 @example
 @group
-(EB_Book オブジェクト)                 (CD-ROM 書籍)
-     +--------+                  +----------------------+
-     | 選択中 |                  |  副本 0: [国語辞典]  |
-     | の副本 |                  |  副本 1: [英々辞典]  |
-     | (なし) |                  |  副本 2: [百科事典]  |
-     +--------+                  +----------------------+
+ＥＢ＿Ｂｏｏｋ　　　　　　　　　ＣＤ−ＲＯＭ書籍
+オブジェクト
+┌────┐　　　　　　　┌─────────────┐
+│選択中　│　　　　　　　│　副本０：　［国語辞典］　│
+│の副本　│　　　　　　　│　副本１：　［英々辞典］　│
+│＜なし＞│　　　　　　　│　副本２：　［百科事典］　│
+└────┘　　　　　　　└─────────────┘
 @end group
 @end example
 
@@ -1933,7 +1957,7 @@ if (eb_subbook_title2(&book, sub_codes[0], title)
 @example
 @group
 /* @code{book} が @code{EB_Book} のオブジェクトで、すでに書籍に結び付け
- * られていると仮定しています。                               */
+ * られていると仮定しています。*/
 EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
 int sub_count;
 
@@ -1953,12 +1977,13 @@ if (eb_set_subbook(&book, sub_codes[0]) != EB_SUCCESS) @{
 
 @example
 @group
-(EB_Book オブジェクト)                 (CD-ROM 書籍)
-     +--------+                  +----------------------+
-     | 選択中 |        +----------->副本 0: [国語辞典]  |
-     | の副本 |        |         |  副本 1: [英々辞典]  |
-     |   *-------------+         |  副本 2: [百科事典]  |
-     +--------+                  +----------------------+
+ＥＢ＿Ｂｏｏｋ　　　　　　　　　ＣＤ−ＲＯＭ書籍
+オブジェクト
+┌────┐　　　　　　　┌─────────────┐
+│選択中　│　　┏━━━━┿━副本０：　［国語辞典］　│
+│の副本　│　　┃　　　　│　副本１：　［英々辞典］　│
+│　＊━━┿━━┛　　　　│　副本２：　［百科事典］　│
+└────┘　　　　　　　└─────────────┘
 @end group
 @end example
 
@@ -2139,8 +2164,8 @@ if (eb_set_subbook(&book, sub_codes[0]) != EB_SUCCESS) @{
 @deftypefun EB_Error_Code eb_set_subbook (EB_Book *@var{book}, EB_Subbook_Code @var{code})
 @xfindex set_subbook
 
-関数 @code{eb_set_subbook()} は、@var{book} の副本 @var{code} を選択し
-ます。
+関数 @code{eb_set_subbook()} は、@var{book} の副本 @var{code} を選択
+します。
 すでに副本を選択していた場合は、いったん未選択の状態にしてから副本
 @var{subbook_code} を選択します。
 
@@ -2222,7 +2247,7 @@ EB ライブラリでは、検索を行うことができるのは、選択中の副本に対して
 @example
 @group
 /* @code{book} が @code{EB_Book} のオブジェクトで、すでに書籍に結び付け
- * られ、副本を選択中だと仮定しています。                     */
+ * られ、副本を選択中だと仮定しています。*/
 #define MAX_HITS 50
 EB_Hit hits[MAX_HITS];
 int hit_count;
@@ -2261,10 +2286,10 @@ if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
 
 @example
 @group
-+-------------+-------------+---
-| (librarian) |  (library)  |   
-+-------------+-------------+---
-    hits[0]       hits[1]
+┌───────────┬───────────┬─
+│　ｌｉｂｒａｒｉａｎ　│　　ｌｉｂｒａｒｙ　　│
+└───────────┴───────────┴─
+　　　ｈｉｔｓ［０］　　　　　ｈｉｔｓ［１］
 @end group
 @end example
 
@@ -2312,7 +2337,7 @@ if (eb_search_exactword(&book, "library") != EB_SUCCESS) @{
 @example
 @group
 /* @code{book} が @code{EB_Book} のオブジェクトで、すでに書籍に結び付け
- * られ、副本を選択中だと仮定しています。                     */
+ * られ、副本を選択中だと仮定しています。*/
 static const char *keywords[3] = @{"make", "with", NULL@};
 
 if (eb_search_word(&book, keywords) != EB_SUCCESS) @{
@@ -2395,7 +2420,7 @@ if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
 @example
 @group
 /* @code{book} が @code{EB_Book} のオブジェクトで、すでに書籍に結び付け
- * られ、副本を選択中だと仮定しています。                     */
+ * られ、副本を選択中だと仮定しています。*/
 EB_Multi_Search_Code multi_codes[EB_MAX_MULTI_SEARCHES];
 int multi_count;
 
@@ -2486,7 +2511,7 @@ if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
 @example
 @group
 /* @code{book} が @code{EB_Book} のオブジェクトで、すでに書籍に結び付け
- * られ、副本を選択中だと仮定しています。                     */
+ * られ、副本を選択中だと仮定しています。*/
 EB_Hit hits[MAX_HITS];
 int hit_count;
 
@@ -2504,16 +2529,17 @@ if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
 
 @example
 @group
-                     見出し
-                   +---------------+
-              +--->| librarian  n. |
-+----------+  |    +---------------+
-| heading ----+      本文
-|          |       +-------------------------------------+
-|    text -------->| librarian                           |
-+----------+       | n. (1) A person who is a specialist |
-   hits[0]         | in library work. (2) ...            |
-                   +-------------------------------------+
+　　　　　　　　　　　　　見出し
+　　　　　　　　　　　　┌────────────┐
+　　　　　　　　　　┏━┿ｌｉｂｒａｒｉａｎ　ｎ．│
+┌───────┐　┃　└────────────┘
+│ｈｅａｄｉｎｇ┿━┛　　本文
+│　　　　　　　│　　　┌────────────────────┐
+│　　　ｔｅｘｔ┿━━━┿ｌｉｂｒａｒｉａｎ　　　　　　　　　　　│
+└───────┘　　　│ｎ．（１）Ａ　ｐｅｒｓｏｎ　ｗｈｏ　ｉｓ│
+　　　　　　　　　　　　│ａ　ｓｐｅｃｉａｌｉｓｔ　ｉｎ　　　　　│
+　　　　　　　　　　　　│ｌｉｂｒａｒｙ　ｗｏｒｋ．（２）．．．　│
+　　　　　　　　　　　　└────────────────────┘
 @end group
 @end example
 
@@ -2927,7 +2953,7 @@ struct EB_Position_Struct @{
 @end deftypefun
 
 @c ===================================================================
-@node Text Data, Index, Search, Top
+@node Text Data, Local Character, Search, Top
 @chapter テキストデータ
 
 テキストデータの取得は、検索と並ぶ重要な機能です。
@@ -3487,15 +3513,15 @@ hook_end_ref(EB_Book *book, EB_Appendix *appendix, void *container,
 
 @example
 @group
-                        +---------+
-第 1 層                 |メニュー |
-                        +---------+
-                             |
-              +--------------+--------------+
-              V              V              V 
-         +---------+    +---------+    +---------+
-第 2 層  |メニュー |    |メニュー |    |メニュー |
-         +---------+    +---------+    +---------+
+　　　　　　　　　　　　┌─────┐
+第１層　　　　　　　　　│メニュー　│
+　　　　　　　　　　　　└──┰──┘
+　　　　　　　　　　　　　　　┃
+　　　　　　　┏━━━━━━━╋━━━━━━━┓
+　　　　　　　┃　　　　　　　┃　　　　　　　┃
+　　　　┌──┸──┐　┌──┸──┐　┌──┸──┐
+第２層　│メニュー　│　│メニュー　│　│メニュー　│
+　　　　└─────┘　└─────┘　└─────┘
 @end group
 @end example
 
@@ -3612,7 +3638,7 @@ EB_Position position;
 EB_Error_Code err;
 
 /* @code{mulit_id}, @code{entry_id} で、どの複合検索の何番目の
- * 入力語について確認するのかを指定します。             */
+ * 入力語について確認するのかを指定します。*/
 err = eb_multi_entry_candidates(&book, multi_id, entry_id, &position);
 if (err == EB_ERR_NO_CANDIDATES) @{
     /* この入力語には、候補一覧が用意されていない */
@@ -4376,7 +4402,7 @@ MPEG 形式の動画データの参照開始と終了を表すエスケープシーケンスに対する
 
 @c -------------------------------------------------------------------
 @node Hookset Access Functions, Builtin Hook Functions, Hook Code List, Text Data
-@section フックセット操作関数の一覧
+@section フックセット操作関数の詳細
 
 この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
 下さい。
@@ -4547,7 +4573,7 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 
 @c -------------------------------------------------------------------
 @node Text Data Functions,  , Builtin Hook Functions, Text Data
-@section テキストデータ操作関数の一覧
+@section テキストデータ操作関数の詳細
 
 この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
 下さい。
@@ -4577,13 +4603,13 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 @deftypefun EB_Error_Code eb_text (EB_Book *@var{book}, EB_Position *@var{position})
 @deftypefunx EB_Error_Code eb_menu (EB_Book *@var{book}, EB_Position *@var{position})
 @deftypefunx EB_Error_Code eb_copyright (EB_Book *@var{book}, EB_Position *@var{position})
-@xfindex have_text
-@xfindex have_menu
-@xfindex have_copyright
+@xfindex text
+@xfindex menu
+@xfindex copyright
 
-関数 @code{eb_have_text()} は、@var{book} が選択している副本の本文の
+関数 @code{eb_text()} は、@var{book} が選択している副本の本文の
 開始位置を @var{position} の指す領域に書き込みます。
-同様に、@code{eb_have_menu()} はメニューの開始位置を、
+同様に、@code{eb_menu()} はメニューの開始位置を、
 @code{eb_have_copyright()} は著作権表示の開始位置を書き込みます。
 
 成功すると、これらの関数は @code{EB_SUCCESS} を返します。
@@ -4934,14 +4960,762 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 @end deftypefun
 
 @c ===================================================================
-@node Index,  , Text Data, Top
+@node Local Character, Index, Text Data, Top
+@chapter 外字
+
+文字コードに収録されていない、私的に定義した文字のことを、俗に「外字」
+と言います。
+外字として定義した個々の文字を識別するために、文字コードに収録された
+文字とは重複しない位置に、各文字の文字番号に割り振るのが普通です。
+(割り当てる文字番号の詳細については、@pxref{Character Code, , 文字コード}。)
+
+市販の電子ブック、EPWING でも、ほとんど外字を使っています。
+外字の定義状況は書籍同士でバラバラで、まったく統一感はありません。
+つまり、同じ文字番号を使っていても、定義されている外字は書籍によって
+違います。
+外字は副本毎に定義することが可能ですが、一つの CD-ROM 書籍内でも副本に
+よって定義が異なることも珍しくありません。
+副本によっては、数百から数千の外字を定義していることもあります。
+
+CD-ROM 書籍では、定義した外字の字形データ (つまりフォント) を用意して
+います。
+フォントはビットマップデータであり、書籍によっては大きさの異なる数種類
+のフォントを用意しています。
+
+逆に言えば、外字に対して提供されるデータは、フォントだけです。
+ある文字番号を割り当てられた外字が、漢字なのか、発音記号なのか、そう
+いった補助的な情報は用意されていません。
+アプリケーションプログラムが外字をサポートするためには、外字のフォント
+をそのまま表示する以外に方法はないでしょう。
+
+@menu
+* Narrow & Wide Font::          半角外字と全角外字
+* Font Size and Font Code::     外字の大きさと外字コード
+* Current Font Height::         選択中の外字フォントの高さ
+* Get Font::                    外字フォントの取り出し
+* Convert Font::                外字フォントの変換
+* Local Character in Text::     テキスト中の外字
+* Font Data Types::             データ型の詳細
+* Font Data Functions::         関数の詳細
+@end menu
+
+@c -------------------------------------------------------------------
+@node Narrow & Wide Font, Font Size and Font Code, Local Character, Local Character
+@section 半角外字と全角外字
+
+CD-ROM 書籍における外字には、「全角外字」「半角外字」の二種類があります。
+全角外字は用意されているフォントの横と縦の長さがおよそ 1:1 になっており、
+半角外字では 1:2 になっています。
+
+@example
+@group
+　　　　　　全角外字　　　　　　　　　　半角外字　　
+　　　　（１６×１６）　　　　　　　　（８×１６）
+□□□□□□□□□□□□□□□□　　□□□□□□□□
+□□□□□□□□□□□□□□□□　　□□■■□■□□
+□□□■■■■■■□□□■□□□　　□□□□■□□□
+□□□□□□□□■□■□■□□□　　□□□■■□□□
+□□□□■□□■□□■□■□□□　　□□■□□■□□
+□□□□■□□■■■■■■□□□　　□■□□□■□□
+□□■■■■■□□□■□■□□□　　□□□■□■□□
+□□□□□□□□□□■□■□□□　　□□■□■■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■■■■■■■■■■□□□　　□■□□□■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■□□□□□□□□■□□□　　□■□□□■□□
+□□□■■■■■■■■■■□□□　　□■□□□■□□
+□□□□□□□□□□□□□□□□　　□□■■■□□□
+□□□□□□□□□□□□□□□□　　□□□□□□□□
+@end group
+@end example
+
+テキストデータには、半角表示の開始と終了を表すエスケープシーケンスが
+あり (@pxref{Text Data Format, , テキストデータの内部形式})、開始と
+終了の間に置かれたものは半角外字、それ以外のところなら全角外字に
+なります。
+
+文字番号は同じでも、字形が全角と半角ではまったく異なることもあります
+ので、外字の文字番号だけから、全角と半角のどちらかを判断することは
+できません。
+かならず、前方に半角開始のエスケープシーケンスが出現していたかどうか
+という情報に基づいて判断するしかありません。
+
+ただし、全角か半角かの判定は EB ライブラリ側で行いますので、
+アプリケーションプログラムがを文脈の解析を行う必要はありません。
+
+CD-ROM 書籍の副本には、半角外字あるいは全角外字のどちらか一方だけを
+定義しているものもありますし、両方とも定義しているものもあります。
+
+@c -------------------------------------------------------------------
+@node Font Size and Font Code, Current Font Height, Narrow & Wide Font, Local Character
+@section 外字の大きさと外字コード
+
+各副本には、定義している外字のフォントがビットマップ形式で収録されて
+います。
+フォントの大きさは、縦のピクセル数を基準にすると 16, 24, 30, 48 の
+4 種類があり、全角外字、半角外字それぞれのフォントの大きさは次の通り
+になります。
+
+@multitable @columnfractions .4 .3 .3
+@item 縦のピクセル数  @tab  全角全角  @tab 半角外字
+@item 16              @tab  16x16     @tab  8x16
+@item 24              @tab  24x24     @tab 16x24
+@item 30              @tab  32x30     @tab 16x30
+@item 48              @tab  48x48     @tab 24x48
+@end multitable
+
+ただし、すべての副本でこれら 4 種類のフォントを用意しているわけでは
+ありません。
+縦が 16 ピクセルのものは必ず用意されていますが、それ以外はないことも
+珍しくありません。
+(外字がまったく定義されていなければ、16 ピクセルのフォントも用意
+されません。)
+
+EB ライブラリでは、このように縦方向のピクセル数、つまり
+@dfn{フォントの高さ, (font height)} を基準に、外字フォントの大きさを
+区別しています。
+そして、それぞれのフォントの高さ (16, 24, 30, 48) に対して、
+@dfn{外字コード (font code)} というものを割り当てています。
+フォントの高さを指定する際は、必ずこの外字コードを使います。
+
+@multitable @columnfractions .5 .5
+@item 縦のピクセル数  @tab  外字コード
+@item 16              @tab  @code{EB_FONT_16}
+@item 24              @tab  @code{EB_FONT_24}
+@item 30              @tab  @code{EB_FONT_30}
+@item 48              @tab  @code{EB_FONT_48}
+@end multitable
+
+@c -------------------------------------------------------------------
+@node Current Font Height, Get Font, Font Size and Font Code, Local Character
+@section 選択中の外字フォントの高さ
+
+@code{EB_Book} オブジェクトで選択中の副本が用意している外字フォントの
+高さの中から一つ選んで、
+@dfn{選択中の外字フォントの高さ (current font height)} を指定すること
+ができます。
+EB ライブラリで外字のフォントデータ (ビットマップデータ) を取り出すには、
+外字フォントの高さをあらかじめ選択しておく必要があります。
+
+選択するには、関数 @code{eb_set_font()} を使います。
+以下のプログラムは、高さ 24 ピクセルのフォントを選択する場合の例です。
+
+@example
+@group
+/* @code{book} が @code{EB_Book} のオブジェクトで、すでに書籍に結び付け
+ * られ、副本を選択中だと仮定しています。*/
+if (eb_set_font(&book, EB_FONT_24) != EB_SUCCESS) @{
+    printf("eb_set_font_() failed\n");
+    return;
+@}
+@end group
+@end example
+
+このプログラムでは、高さ 24 ピクセルのフォントを選択中の副本が用意して
+いるものと仮定していますが、実際には用意していない副本も珍しくありません。
+もし、副本が高さ 24 ピクセルのフォントを用意していなければ、
+@code{eb_set_font()} は @code{EB_ERR_NO_SUCH_FONT} を返します。
+
+しかし、外字を選択する前に、前もってその副本が用意しているフォントを
+知りたいときもあります。
+これには、2 通りの方法があります。
+
+まず 1 つ目は、選択中の副本が用意しているフォントの高さの一覧を 
+@code{eb_font_list()} で取得する方法です。
+これは、副本コードの一覧を取得する @code{eb_subbook_list()} と使い方
+が良く似ています。
+
+@example
+@group
+EB_Font_Code font_list[EB_MAX_FONTS];
+int font_count;
+int i;
+
+if (eb_font_list(&book, font_list, &font_count) != EB_SUCCESS) @{
+    printf("eb_font_list() failed\n");
+    return;
+@}
+
+for (i = 0; i < font_count; i++) @{
+    if (font_list[i] == EB_FONT_24)
+        printf("this subbook has EB_FONT_24\n");
+@}
+@end group
+@end example
+
+2 つ目は、@code{eb_have_font()} を使うやり方です。
+この関数は、特定の高さのフォントを、選択中の副本が用意しているかどうか
+調べることができます。
+
+@example
+@group
+if (eb_have_font(&book, EB_FONT_24)) @{
+    printf("this subbook has EB_FONT_24\n");
+@}
+@end group
+@end example
+
+また、半角外字、全角外字を定義しているかどうかは、それぞれ
+@code{eb_have_narrow_font()}, @code{eb_have_wide_font()} を使って調べる
+ことができます。
+
+@example
+@group
+if (eb_have_narrow_font(&book))
+    printf("this subbook has narrow font\n");
+if (eb_have_wide_font(&book))
+    printf("this subbook has wide font\n");
+@end group
+@end example
+
+なお、あらかじめ副本を選択しておかないと、外字の高さは選択できないので
+注意して下さい。
+@code{eb_set_subbook()} で選択中の副本を切り替えると、外字フォントの
+高さは常に未選択の状態に戻ります。
+
+@c -------------------------------------------------------------------
+@node Get Font, Convert Font, Current Font Height, Local Character
+@section 外字フォントの取り出し
+
+外字の高さを選択した状態であれば、外字のフォントデータ
+(ビットマップデータ) を取り出すことができます。
+
+フォントデータを取り出す関数は、
+全角外字なら eb_wide_font_character_bitmap()、
+半角外字なら eb_wide_font_character_bitmap() です。
+
+全角外字 @samp{0xa121} のフォントデータを取り出すプログラムは、次のよう
+になります。
+半角外字の場合は、呼び出す関数名が変わるだけです。
+
+@example
+@group
+/* @code{book} が @code{EB_Book} のオブジェクトで、すでに書籍に結び付け
+ * られ、副本と外字の高さを選択中だと仮定しています。*/
+char bitmap[EB_SIZE_WIDE_FONT_48];
+
+if (eb_wide_font_character_bitmap(book, 0xa121, bitmap)
+    != EB_SUCCESS) @{
+    return;
+@}
+@end group
+@end example
+
+@noindent
+ここでは、@code{bitmap} にフォントデータを格納しています。
+@code{bitmap} の領域として @code{EB_SIZE_WIDE_FONT_48} バイトを確保
+していますが、これは高さ 48 ピクセルの外字データを格納するために必要な
+サイズを表します。
+
+フォントデータのサイズは、外字の高さに応じて一定です。
+高さ 48 ピクセルは外字の中でも最大のサイズなので、このサイズの領域を
+用意すれば、どの高さの外字でも格納できます。
+
+外字データは、ビットマップ形式のデータになっています。
+背景色をビット値 0, 前景色をビット値 1 として、各ピクセルの値を並べて
+あります。
+並び方ですが、左上からまずは右に向かってピクセルを拾っていき、左端まで
+来たら一つ下の段に降りて、また右方向にピクセルを拾います。
+以下、一番下の段までこれを繰り返します。
+
+ただし、バイト内では、1 の桁から順に 128 の桁に向かってビット値を格納
+しています。
+つまり、1 の桁は一番左のピクセル、128 の桁は一番右のピクセルに対応
+します。
+
+以下に、16x16 の全角外字のビットマップの例と、そのバイト列を記します。
+背景色が□、前景色が■です。
+
+@example
+@group
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+□□□■■■■■■□□□■□□□　　0xf8, 0x11,
+□□□□□□□□■□■□■□□□　　0x00, 0x13,
+□□□□■□□■□□■□■□□□　　0x90, 0x14,
+□□□□■□□■■■■■■□□□　　0x90, 0x1f,
+□□■■■■■□□□■□■□□□　　0x7c, 0x14,
+□□□□□□□□□□■□■□□□　　0x00, 0x14,
+□□□■□□□□□□□□■□□□　　0x08, 0x10,
+□□□■□□□□□□□□■□□□　　0x08, 0x10,
+□□□■■■■■■■■■■□□□　　0xf8, 0x1f,
+□□□■□□□□□□□□■□□□　　0x08, 0x10,
+□□□■□□□□□□□□■□□□　　0x08, 0x10,
+□□□■■■■■■■■■■□□□　　0xf8, 0x1f,
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+□□□□□□□□□□□□□□□□　　0x00, 0x00,
+@end group
+@end example
+
+@c -------------------------------------------------------------------
+@node Convert Font, Local Character in Text, Get Font, Local Character
+@section 外字フォントの変換
+
+EB ライブラリには、外字のビットマップデータを XBM, XPM, GIF, BMP の
+各画像形式に変換する関数が用意されています。
+変換を行う関数は、次の 4 つです。
+
+@multitable @columnfractions .6 .4
+@item eb_bitmap_to_xbm() @tab XBM への変換
+@item eb_bitmap_to_xpm() @tab XPM への変換
+@item eb_bitmap_to_gif() @tab GIF への変換
+@item eb_bitmap_to_bmp() @tab BMP への変換
+@end multitable
+
+@noindent
+どの関数も呼び出し方は同じですが、ここでは XBM への変換のプログラム例
+を示します。
+
+@example
+@group
+/* @code{bitmap} に高さ 16 の全角外字のビットマップデータが格納
+ * されていると仮定仮定しています。*/
+char bitmap[EB_SIZE_WIDE_FONT_16];
+char xbm[EB_SIZE_WIDE_FONT_16_XBM];
+size_t xbmsize;
+
+if (eb_wide_font_character_bitmap(bitmap, EB_WIDTH_WIDE_FONT_16,
+    EB_HEIGHT_FONT_16, xbm, &xbmsize) != EB_SUCCESS) @{
+    return;
+@}
+@end group
+@end example
+
+XPM, GIF への変換では、前景色は黒、背景色は透明になります。
+BMP への変換では、前景色は黒、背景色は白になります。
+XBM はモノクロ画像用のデータ形式なので、色の設定はありません。
+
+@c -------------------------------------------------------------------
+@node Local Character in Text, Font Data Types, Convert Font, Local Character
+@section テキスト中の外字
+
+外字はテキストデータ (本文、メニューなど) の中で使われています。
+
+アプリケーションプログラムが、テキストデータ中に出現する外字を識別して
+処理を行うには、外字に対するフックを設定して、フック関数の中で処理する
+ことになります。
+
+外字に対するフックは、全角外字に対する @code{EB_HOOK_NARROW_FONT} と
+半角外字に対する @code{EB_HOOK_WIDE_FONT} の二種類があります。
+いずれも、外字が一字出現する度に、設定したフック関数を呼び出します。
+
+フックの扱い方については、@pxref{Hook Code List, , フックコードの一覧}。
+
+@c -------------------------------------------------------------------
+@node Font Data Types, Font Data Functions, Local Character in Text, Local Character
+@section データ型の詳細
+
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+
+@example
+#include <eb/eb.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_Font_Code
+@xtindex Font_Code
+
+外字コードは、外字の高さ (ピクセル数) を表します。
+現在のところ、定義されている高さは次の通りです。
+
+@itemize
+@item @code{EB_FONT_16}
+@item @code{EB_FONT_24}
+@item @code{EB_FONT_30}
+@item @code{EB_FONT_48}
+@item @code{EB_FONT_INVALID}
+@end itemize
+
+外字コードの実体は整数値ですが、@code{EB_FONT_16} の値は 16 では
+ありません。
+他も同様ですので、注意して下さい。
+
+@code{EB_FONT_INVALID} は特別な外字コードで、不正な副本コード値を表す
+ために用います。
+@end deftp
+
+@c -------------------------------------------------------------------
+@node Font Data Functions,  , Font Data Types, Local Character
+@section 関数の詳細
+
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+
+@example
+#include <eb/font.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_font (EB_Book *@var{book}, EB_Font_Code *@var{font_code})
+@xfindex font
+
+関数 @code{eb_font()} は、選択している副本において、選択中の外字フォント
+の高さを表す外字コードを @var{font_code} の指す領域に書き込みます。
+
+成功すると関数は @code{EB_SUCCESS} を返します。
+失敗すると @var{font_code} の指す領域に @code{EB_FONT_INVALID} を
+書き込み、原因を示すエラーコードを返します。
+
+あらかじめ、外字フォントの高さが選択されていなければなりません。
+外字が選択されていなければ、@code{EB_ERR_NO_CUR_FONT} を返します。
+副本そのものを選択していない場合も、同様です。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_set_font (EB_Book *@var{book}, EB_Font_Code @var{font_code})
+@xfindex set_font
+
+関数 @code{eb_set_font()} は、選択中の副本における外字フォントの高さを
+セットします。
+セットする外字フォントの「高さ」は、対応する外字コードを引数
+@var{font_code} で指定します。
+
+この関数は、成功すると @code{EB_SUCCESS} を返し、指定した「高さ」が
+「選択中の外字フォントの高さ」となります。
+すでに外字フォントの高さを選択していた場合は、いったん未選択の状態に
+してからあらためて @var{font_code} を選択します。
+
+失敗すると原因を示すエラーコードを返し、外字フォントの高さは未選択の
+状態になります。
+
+あらかじめ、@var{book} 内のいずれかの副本が選択されていなくては
+なりません。
+@var{book} が副本を選択していなければ、@code{EB_ERR_NO_CUR_SUB} を
+返します。
+また、その副本が持っていない外字フォントの高さが指定されると、
+@code{EB_ERR_NO_SUCH_FONT} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_unset_font (EB_Book *@var{book})
+@xfindex unset_font
+
+関数 @code{eb_unset_font()} は、選択中の外字フォントの高さを未選択の
+状態に戻します。
+@var{book} が書籍に結び付いていない場合や副本が選択されていない場合、
+もしくは外字フォントの高さが選択されていない場合は何もしません。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_have_font (EB_Book *@var{book}, EB_Font_Code @var{font_code})
+@xfindex have_font
+
+関数 @code{eb_font()} は、@var{font_code} で指定した高さの外字フォント
+を、選択中の副本が持っているかどうかを調べます。
+
+持っていれば 1 を返し、持っていなければ 0 を返します。
+@var{book} が副本を選択していない場合も 0 を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_font_height (EB_Book *@var{book}, int *@var{height})
+@xfindex font_height
+
+関数 @code{eb_font_height()} は、@var{book} が選択中の外字フォントの高さ
+(縦方向のピクセル数) を @var{height} の指す領域に書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、@var{height} の指す領域に 0 を書き込み、原因を示すエラーコード
+を返します。
+
+あらかじめ、@var{book} は外字フォントの高さを選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_FONT} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_font_height2 (EB_Font_Code @var{font_code}, int *@var{height})
+@xfindex font_height2
+
+@code{eb_font_height()} と似ていますが、選択中の副本ではなく、引数
+@var{font_height} で指定された外字コードの高さ (縦方向のピクセル数) を
+書き込む点が異なります。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_have_narrow_font (EB_Book *@var{book})
+@deftypefunx int eb_have_wide_font (EB_Book *@var{book})
+@xfindex have_narrow_font
+@xfindex have_wide_font
+
+関数 @code{eb_have_narrow_font()} は、選択中の副本が半角外字を定義して
+いるかどうかを調べます。
+同様に、関数 @code{eb_have_wide_font()} は、全角外字を定義しているか
+どうかを調べます。
+
+定義していれば 1 を、定義していなければ 0 を返します。
+@var{book} が副本を選択していない場合も 0 を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_font_width (EB_Book *@var{book}, int *@var{width})
+@deftypefunx EB_Error_Code eb_wide_font_width (EB_Book *@var{book}, int *@var{width})
+@xfindex narrow_font_width
+@xfindex wide_font_width
+
+関数 @code{eb_narrow_font_width()} は、@var{book} が選択中の外字フォント
+の高さにおける半角外字の幅 (横方向のピクセル数) を、@var{height} の指す
+領域に書き込みます。
+同様に、@code{eb_wide_font_width()} は全角外字の幅を書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、@var{width} の指す領域に 0 を書き込み、原因を示すエラーコード
+を返します。
+
+あらかじめ、@var{book} は外字の高さを選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_FONT} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_font_width2 (EB_Font_Code @var{font_code}, int *@var{width})
+@deftypefunx EB_Error_Code eb_wide_font_width2 (EB_Font_Code @var{font_code}, int *@var{width})
+@xfindex narrow_font_width2
+@xfindex wide_font_width2
+
+@code{eb_narrow_font_width()}, @code{eb_wide_font_width()} と似て
+いますが、選択中の副本ではなく、引数@var{font_height} で指定された
+外字コードの幅 (横方向のピクセル数) を書き込む点が異なります。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_font_size (EB_Book *@var{book}, size_t *@var{size})
+@deftypefunx EB_Error_Code eb_wide_font_size (EB_Book *@var{book}, size_t *@var{size})
+@xfindex narrow_font_size
+@xfindex wide_font_size
+
+関数 @code{eb_narrow_font_size()} は、@var{book} が選択中の外字フォント
+の高さにおける半角外字一個分のデータサイズ (バイト数) を、@var{size} の
+指す領域に書き込みます。
+同様に、@code{eb_wide_font_size()} は全角外字のサイズを書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、@var{size} の指す領域に 0 を書き込み、原因を示すエラーコード
+を返します。
+
+あらかじめ、@var{book} は外字フォントの高さを選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_FONT} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_font_size2 (EB_Font_Code @var{font_code}, size_t *@var{size})
+@deftypefunx EB_Error_Code eb_wide_font_size2 (EB_Font_Code @var{font_code}, size_t *@var{size})
+@xfindex narrow_font_size2
+@xfindex wide_font_size2
+
+@code{eb_narrow_font_size()}, @code{eb_wide_font_size()} と似ていますが、
+選択中の副本ではなく、引数 @var{font_height} で指定された外字コードの
+外字一個分のデータサイズを書き込む点が異なります。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_font_start (EB_Book *@var{book}, int *@var{start})
+@deftypefunx EB_Error_Code eb_wide_font_start (EB_Book *@var{book}, int *@var{start})
+@xfindex narrow_font_start
+@xfindex wide_font_start
+
+関数 @code{eb_narrow_font_start()} は、@var{book} が選択中の副本における
+半角外字の先頭の文字番号 (半角外字の文字番号の中で最小のもの) を、
+@var{start} の指す領域に書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、原因を示すエラーコードを返します。
+
+あらかじめ、@var{book} は副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_SUB} を返します。
+副本が半角外字を定義していない場合は、@code{EB_ERR_NO_CUR_FONT} を
+返します。
+
+関数 @code{eb_wide_font_start()} は、半角外字ではなく全角外字について
+調べるという点を除いて、@code{eb_narrow_font_start()} と同じです。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_font_end (EB_Book *@var{book}, int *@var{end})
+@deftypefunx EB_Error_Code eb_wide_font_end (EB_Book *@var{book}, int *@var{end})
+@xfindex narrow_font_end
+@xfindex wide_font_end
+
+関数 @code{eb_narrow_font_end()} は、@var{book} が選択中の副本における
+半角外字の最後の文字番号 (半角外字の文字番号の中で最大のもの) を、
+@var{start} の指す領域に書き込みます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、原因を示すエラーコードを返します。
+
+あらかじめ、@var{book} は副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_SUB} を返します。
+副本が半角外字を定義していない場合は、@code{EB_ERR_NO_CUR_FONT} を
+返します。
+
+関数 @code{eb_wide_font_end()} は、半角外字ではなく全角外字について
+調べるという点を除いて、@code{eb_narrow_font_end()} と同じです。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_font_character_bitmap (EB_Book *@var{book}, int @var{character_number}, char *@var{bitmap})
+@deftypefunx EB_Error_Code eb_wide_font_character_bitmap (EB_Book *@var{book}, int @var{character_number}, char *@var{bitmap})
+@xfindex narrow_font_character_bitmap
+@xfindex wide_font_character_bitmap
+
+関数 @code{eb_narrow_font_character_bitmap()} は、@var{book} が選択中
+の副本で定義している、半角外字のビットマップデータを取り出します。
+取り出す外字の文字番号を、@var{character_number} で指定します。
+
+成功すると、関数はビットマップデータを @var{bitmap} の指す領域に書き込み、
+@code{EB_SUCCESS} を返します。
+失敗すると、@var{bitmap} の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
+
+あらかじめ、@var{book} は外字フォントの高さを選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_FONT} を返します。
+副本が半角外字を定義していない場合も、やはり @code{EB_ERR_NO_CUR_FONT}
+を返します。
+文字番号 @var{character_number} が外字の定義範囲外にある場合は、
+@code{EB_ERR_NO_SUCH_CHAR_BMP} を返します。
+
+関数 @code{eb_wide_font_character_bitmap()} は、半角外字ではなく
+全角外字のビットマップデータを取り出すという点を除いて、
+@code{eb_narrow_font_character_bitmap()} と同じです。
+
+ビットマップデータの形式については、
+@pxref{Get Font, , 外字フォントの取り出し}。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_forward_narrow_font_character (EB_Book *@var{book}, int @var{n}, int *@var{character_number})
+@deftypefunx EB_Error_Code eb_forward_wide_font_character (EB_Book *@var{book}, int @var{n}, int *@var{character_number})
+@xfindex forward_narrow_font_character
+@xfindex forward_wide_font_character
+
+関数 @code{eb_forward_narrow_font_character()} は、@var{book} が選択中
+の副本で定義されている半角外字の文字番号 @var{character_number} の
+@var{n} 個後ろに位置する外字の文字番号を取得します。
+
+まず、関数を呼び出す際に、@var{character_number} の指す領域に文字番号を
+書き込んでおきます。
+関数の処理が成功すると、戻ったときに @var{n} 個分だけ後方の文字番号に
+書き換わっています。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、原因を示すエラーコードを返します。
+
+あらかじめ、@var{book} は副本を選択していなくてはなりません。
+選択していない場合は、@code{EB_ERR_NO_CUR_SUB} を返します。
+副本が半角外字を持っていない場合は、@code{EB_ERR_NO_CUR_FONT} を返します。
+
+@var{n} 個後ろにもう外字がない場合や、呼び出した際に
+@var{character_number} の指す領域に書き込んであった文字番号が外字の
+定義範囲外にある場合は @code{EB_ERR_NO_SUCH_CHAR_BMP} を返します。
+
+@var{n} には負の数を指定することもできます。
+この場合、次の呼び出しと等価になります。
+
+@example
+/* n < 0 とする */
+eb_backward_narrow_font_character (book, -n, character_number);
+@end example
+
+関数 @code{eb_forward_wide_font_character()} は、半角外字ではなく
+全角外字について操作するという点を除いて、
+@code{eb_forward_narrow_font_character()} と同じです。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_backward_narrow_font_character (EB_Book *@var{book}, int @var{n}, int *@var{character_number})
+@deftypefunx EB_Error_Code eb_backward_wide_font_character (EB_Book *@var{book}, int @var{n}, int *@var{character_number})
+@xfindex backward_narrow_font_character
+@xfindex backward_wide_font_character
+
+関数 @code{eb_backward_narrow_font_character()} は
+@code{eb_forward_narrow_font_character()} とはちょうど逆の関数です。
+@var{book} が選択中の副本で定義されている半角外字の文字番号
+@var{character_number} の @var{n} 個前方に位置する外字の文字番号を
+取得します。
+
+同様に、@code{eb_backward_wide_font_character()} は、全角外字について
+@var{n} 個前方の外字の文字番号を取得する関数で、
+@code{eb_forward_wide_font_character()} と反対の関数です。
+
+@var{n} には負の数を指定することも可能で、それぞれ次の呼び出しと等価
+になります。
+
+@example
+/* 半角外字の場合 (n < 0) */
+eb_forward_narrow_font_character (book, -n, character_number);
+
+/* 全角外字の場合 (n < 0) */
+eb_forward_wide_font_character (book, -n, character_number);
+@end example
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_narrow_font_xbm_size (EB_Font_Code @var{height}, size_t *@var{size})
+@deftypefunx EB_Error_Code eb_narrow_font_xpm_size (EB_Font_Code @var{height}, size_t *@var{size})
+@deftypefunx EB_Error_Code eb_narrow_font_gif_size (EB_Font_Code @var{height}, size_t *@var{size})
+@deftypefunx EB_Error_Code eb_narrow_font_bmp_size (EB_Font_Code @var{height}, size_t *@var{size})
+@deftypefunx EB_Error_Code eb_wide_font_xbm_size (EB_Font_Code @var{height}, size_t *@var{size})
+@deftypefunx EB_Error_Code eb_wide_font_xpm_size (EB_Font_Code @var{height}, size_t *@var{size})
+@deftypefunx EB_Error_Code eb_wide_font_gif_size (EB_Font_Code @var{height}, size_t *@var{size})
+@deftypefunx EB_Error_Code eb_wide_font_bmp_size (EB_Font_Code @var{height}, size_t *@var{size})
+@xfindex narrow_font_xbm_size
+@xfindex narrow_font_xpm_size
+@xfindex narrow_font_gif_size
+@xfindex narrow_font_bmp_size
+@xfindex wide_font_xbm_size
+@xfindex wide_font_xpm_size
+@xfindex wide_font_gif_size
+@xfindex wide_font_bmp_size
+
+最初の 4 つの関数
+(@code{eb_narrow_font_xbm_size()} 〜 @code{eb_narrow_font_bmp_size()})
+は、外字コード @var{height} の
+半角外字一個のビットマップを XBM, XPM, GIF, BMP 形式にそれぞれ変換
+したときのデータサイズを @var{size} の指す領域に書き込みます。
+
+同様に、後ろの 4 つの関数
+(@code{eb_wide_font_xbm_size()} 〜 @code{eb_wide_font_bmp_size()})
+は、全角外字を変換したときのデータサイズを書き込みます。
+
+いずれの関数も、成功すると @code{EB_SUCCESS} を返します。
+失敗すると、@var{size} の指す領域に 0 を書き込み、原因を示すエラーコード
+を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_bitmap_to_xbm (const char *@var{bitmap}, int @var{width}, int @var{height}, char *@var{image}, size_t *@var{image_length})
+@deftypefunx void eb_bitmap_to_xpm (const char *@var{bitmap}, int @var{width}, int @var{height}, char *@var{image}, size_t *@var{image_length})
+@deftypefunx void eb_bitmap_to_gif (const char *@var{bitmap}, int @var{width}, int @var{height}, char *@var{image}, size_t *@var{image_length})
+@deftypefunx void eb_bitmap_to_bmp (const char *@var{bitmap}, int @var{width}, int @var{height}, char *@var{image}, size_t *@var{image_length})
+@xfindex bitmap_to_xbm
+@xfindex bitmap_to_xpm
+@xfindex bitmap_to_gif
+@xfindex bitmap_to_bmp
+
+これら 4 つの関数は、@code{eb_narrow_font_character()} または
+@code{eb_wide_font_character()} で取り出した外字のビットマップを XBM,
+XPM, GIF, BMP 形式にそれぞれ変換します。
+
+ビットマップデータの指す領域を @var{bitmap} で指定し、ビットマップの
+高さと幅を @var{width}, @var{height} で渡します。
+
+関数の呼び出しから戻ると、@var{image} の指す領域に変換後のデータが
+書き込まれ、@var{image_length} の指す領域に変換後のデータの大きさが
+書き込まれます。
+
+XPM, GIF への変換では、前景色は黒、背景色は透明になります。
+BMP への変換では、前景色は黒、背景色は白になります。
+XBM はモノクロ画像用のデータ形式なので、色の設定はありません。
+@end deftypefun
+
+@c ===================================================================
+@node Index,  , Local Character, Top
 @appendix 索引
 
 @menu
 * Data Type Index::             データ型の索引
 * Function Index::              関数の索引
 * Variable Index::              変数と定数の索引
-* Sample Program Index::        サンプルプログラムの索引
 @end menu
 
 @c -------------------------------------------------------------------
@@ -4957,16 +5731,10 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 @printindex xf
 
 @c -------------------------------------------------------------------
-@node Variable Index, Sample Program Index, Function Index, Index
+@node Variable Index,  , Function Index, Index
 @section 変数と定数の索引
 
 @printindex xv
-
-@c -------------------------------------------------------------------
-@node Sample Program Index,  , Variable Index, Index
-@section サンプルプログラムの索引
-
-@printindex pg
 
 @c -------------------------------------------------------------------
 @contents

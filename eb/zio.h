@@ -52,7 +52,7 @@ extern "C" {
 /*
  * Maximum ebzio compression level.
  */
-#define ZIO_MAX_EBZIP_LEVEL		3
+#define ZIO_MAX_EBZIP_LEVEL		5
 
 /*
  * Huffman node types.

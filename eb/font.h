@@ -78,6 +78,8 @@ extern "C" {
 #define EB_SIZE_WIDE_FONT_16_XPM		395
 #define EB_SIZE_NARROW_FONT_16_GIF		186
 #define EB_SIZE_WIDE_FONT_16_GIF		314
+#define EB_SIZE_NARROW_FONT_16_BMP		126
+#define EB_SIZE_WIDE_FONT_16_BMP		126
 
 #define EB_SIZE_NARROW_FONT_24_XBM		383
 #define EB_SIZE_WIDE_FONT_24_XBM		533
@@ -85,6 +87,8 @@ extern "C" {
 #define EB_SIZE_WIDE_FONT_24_XPM		747
 #define EB_SIZE_NARROW_FONT_24_GIF		450
 #define EB_SIZE_WIDE_FONT_24_GIF		642
+#define EB_SIZE_NARROW_FONT_24_BMP		158
+#define EB_SIZE_WIDE_FONT_24_BMP		158
 
 #define EB_SIZE_NARROW_FONT_30_XBM		458
 #define EB_SIZE_WIDE_FONT_30_XBM		833
@@ -92,6 +96,8 @@ extern "C" {
 #define EB_SIZE_WIDE_FONT_30_XPM		1155
 #define EB_SIZE_NARROW_FONT_30_GIF		552
 #define EB_SIZE_WIDE_FONT_30_GIF		1032
+#define EB_SIZE_NARROW_FONT_30_BMP		182
+#define EB_SIZE_WIDE_FONT_30_BMP		182
 
 #define EB_SIZE_NARROW_FONT_48_XBM		983
 #define EB_SIZE_WIDE_FONT_48_XBM		1883
@@ -99,6 +105,8 @@ extern "C" {
 #define EB_SIZE_WIDE_FONT_48_XPM		2571
 #define EB_SIZE_NARROW_FONT_48_GIF		1242
 #define EB_SIZE_WIDE_FONT_48_GIF		2394
+#define EB_SIZE_NARROW_FONT_48_BMP		254
+#define EB_SIZE_WIDE_FONT_48_BMP		446
 
 #define EB_SIZE_FONT_IMAGE	EB_SIZE_WIDE_FONT_48_XPM	    
 
@@ -109,12 +117,15 @@ extern "C" {
 EB_Error_Code eb_narrow_font_xbm_size EB_P((EB_Font_Code, size_t *));
 EB_Error_Code eb_narrow_font_xpm_size EB_P((EB_Font_Code, size_t *));
 EB_Error_Code eb_narrow_font_gif_size EB_P((EB_Font_Code, size_t *));
+EB_Error_Code eb_narrow_font_bmp_size EB_P((EB_Font_Code, size_t *));
 EB_Error_Code eb_wide_font_xbm_size EB_P((EB_Font_Code, size_t *));
 EB_Error_Code eb_wide_font_xpm_size EB_P((EB_Font_Code, size_t *));
 EB_Error_Code eb_wide_font_gif_size EB_P((EB_Font_Code, size_t *));
+EB_Error_Code eb_wide_font_bmp_size EB_P((EB_Font_Code, size_t *));
 void eb_bitmap_to_xbm EB_P((const char *, int, int, char *, size_t *));
 void eb_bitmap_to_xpm EB_P((const char *, int, int, char *, size_t *));
 void eb_bitmap_to_gif EB_P((const char *, int, int, char *, size_t *));
+void eb_bitmap_to_bmp EB_P((const char *, int, int, char *, size_t *));
 
 /* font.c */
 EB_Error_Code eb_font EB_P((EB_Book *, EB_Font_Code *));

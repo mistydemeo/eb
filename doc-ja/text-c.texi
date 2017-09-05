@@ -1,9 +1,9 @@
 @example
 /*
  * 使用方法:
- *     word <book-path> <subbook-index> <number>
+ *     text <book-path> <subbook-index> <number>
  * 例:
- *     word /cdrom apple 0 10
+ *     text /cdrom apple 0 10
  * 説明:
  *     <book-path> で指定した CD-ROM 書籍から特定の副本を選び、本文
  *     の先頭から <number> 個分の単語の説明を出力します。

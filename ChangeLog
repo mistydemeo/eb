@@ -1,3 +1,60 @@
+2002-01-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.2beta1.
+
+	* po-eb/Makefile.in, po-ebutils/Makefile.in (CATALOGS): Renamed
+	to `MOFILES'.
+	* po-eb/Makefile.in, po-ebutils/Makefile.in (POFILES): Added.
+	* po-eb/Makefile.in, po-ebutils/Makefile.in (DISTFILES): Add POFILES.
+
+	* eb/text.h (EB_HOOK_BEGIN_IN_COLOR_BMP, EB_HOOK_BEGIN_IN_COLOR_JPEG,
+	EB_HOOK_END_IN_COLOR_GRAPHIC): Removed.
+	* eb/text.h (EB_HOOK_BEGIN_GRAPHIC_REFERENCE,
+	EB_HOOK_END_GRAPHIC_REFERENCE, EB_HOOK_GRAPHIC_REFERENCE): Added.
+	* eb/readtext.c (eb_read_text_internal): Add handling of 1f4c and 1f6c
+	control sequences.
+
+	* eb/zio.c (eb_read_ebzip, eb_unzip_slice_ebzip): Uncompress data 
+	with small buffer.
+	* eb/zio.h (ZIO_MAX_EBZIP_LEVEL): Changed from 3 to 5.
+
+2001-12-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/zio.c (zio_unzip_slice_ebzip1): Fix a memory leak bug.
+
+2001-11-25  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/readtext.c (eb_read_rawtext): Fix a bug in handling of context
+	code, reported by Takashi NEMOTO.
+
+	* eb/bitmap.c (eb_narrow_font_bmp_size, eb_wide_font_bmp_size, 
+	eb_bitmap_to_bmp): New functions.
+
+	* eb/font.c (main): `error_code' was used uninitialized.  Fixed.
+
+2001-11-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/ebzip1.c (ebzip1_slice): We must call deflateEnd() even when
+	deflate() doesn't succeed.
+	* eb/subbook.c (eb_set_subbook_epwing): We assume that "honmons"
+	in EPWING6 CD-ROM has been compressed, not plain.
+
+2001-11-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/ebzip.c (eb_unzip_slice_epwing6): Fix a bug that it cannot
+	uncompress a page of compression_type != 0, reported by ISHIKAWA
+	Naoya.
+
+2001-11-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/binary.c (eb_unset_binary): Fix typo in a log message.
+
+2001-11-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/binary.c (eb_set_binary_mono_graphic): For Kanjigen (EB),
+	allow the 0x1f31 escape sequence with arguments of 8 bytes, 
+	reported by Yamagata san.
+
 2001-10-27  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.2beta0.

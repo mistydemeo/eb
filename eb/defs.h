@@ -144,7 +144,7 @@ extern "C" {
 #define EB_MAX_MULTI_LABEL_LENGTH	30
 
 /*
- * Maximum number of font heights that a subbok supports.
+ * Maximum length of alternation text string for a private character.
  */
 #define EB_MAX_ALTERNATION_TEXT_LENGTH	31
 
@@ -181,7 +181,7 @@ extern "C" {
 /*
  * The number of text hooks.
  */
-#define EB_NUMBER_OF_HOOKS		40
+#define EB_NUMBER_OF_HOOKS		41
 
 /*
  * The number of search contexts required by a book.

@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.2beta0, for EB Library version 3.2beta0.
+   This is edition 3.2beta1, for EB Library version 3.2beta1.
 
 * Menu:
 
@@ -101,7 +101,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 3.2beta0, for EB Library version 3.2beta0.
+   This is edition 3.2beta1, for EB Library version 3.2beta1.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -301,9 +301,9 @@ File: ebzip.info,  Node: Compression Level,  Next: Test,  Prev: Compression Exam
 Compression Level
 =================
 
-   `ebzip' supports four compression levels, from 0 to 3.  The
+   `ebzip' supports six compression levels, from 0 to 5.  The
 compression level 0 is the fastest compression/uncompression method,
-but it is the worst compression method.  The compression level 3 is the
+but it is the worst compression method.  The compression level 5 is the
 best compression method but it is the slowest compression/uncompression
 method.  The compression level is set by the `--level' (`-l') option.
 
@@ -654,11 +654,11 @@ long as they are unique.
 
 `-l INTEGER'
 `--level INTEGER'
-     Specify compression level.  INTEGER must be `0', `1', `2' or `3'.
-     The level 0 is fastest but least compression method.  The level 3
-     is slowest but best compression method.  The defalt level is 0.
-     This option is ignored when the action is uncompression or
-     information.
+     Specify compression level.  INTEGER must be `0', `1', `2', `3',
+     `4' or `5'.  The level 0 is fastest but least compression method.
+     The level 5 is slowest but best compression method.  The defalt
+     level is 0.  This option is ignored when the action is
+     uncompression or information.
 
      (*Note Compression Level::, for more details).
 
@@ -847,6 +847,8 @@ compression level                    slice size
 1                                    4096 bytes
 2                                    8192 bytes
 3                                    16384 bytes
+4                                    32768 bytes
+5                                    65536 bytes
 
 Second, if the last slice is shorter than the slice size, `ebzip'
 extends the last slice to the slice size by padding bytes of 0x00.
@@ -964,7 +966,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     3.2beta0, only 1 (0001 in binary digits) can be prescribed as this
+     3.2beta1, only 1 (0001 in binary digits) can be prescribed as this
      version.
 
 `compression level (4 bits of the least-significant-bit side)'
@@ -1009,24 +1011,24 @@ Node: Compression6509
 Node: Compression Example 17114
 Node: Compression Example 28694
 Node: Compression Level10241
-Node: Test10832
-Node: Partial Compression11178
-Node: Overwrite Old Files14041
-Node: Compress Compressed Book14787
-Node: Uncompression15599
-Node: Uncompression Example16037
-Node: Options for Uncompression17594
-Node: Uncompress Compressed Book18775
-Node: Information19290
-Node: Information Example19677
-Node: Options for Information20330
-Node: Delete a Book20873
-Node: Summary of Options21171
-Node: Comparision Result24659
-Node: Compressed File Format27123
-Node: Format Overview27548
-Node: Data Part28404
-Node: Index Part31070
-Node: Header Part33397
+Node: Test10831
+Node: Partial Compression11177
+Node: Overwrite Old Files14040
+Node: Compress Compressed Book14786
+Node: Uncompression15598
+Node: Uncompression Example16036
+Node: Options for Uncompression17593
+Node: Uncompress Compressed Book18774
+Node: Information19289
+Node: Information Example19676
+Node: Options for Information20329
+Node: Delete a Book20872
+Node: Summary of Options21170
+Node: Comparision Result24669
+Node: Compressed File Format27133
+Node: Format Overview27558
+Node: Data Part28414
+Node: Index Part31178
+Node: Header Part33505
 
 End Tag Table

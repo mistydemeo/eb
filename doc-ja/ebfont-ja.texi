@@ -116,8 +116,8 @@ CD-ROM 書籍は、外字のビットマップデータも持っています。
 @code{ebfont} コマンドは、CD-ROM 書籍のビットマップデータを読み、
 それを指定された画像形式に変換し、ファイルに書き出します。
 @code{ebfont} は、XBM (X BitMap format)、XPM (X PixMap format)、
-GIF (Graphics Interchange Format) のうちのいずれか、または複数の画像
-ファイルを生成することができます。
+GIF (Graphics Interchange Format)、BMP のうちのいずれか、または複数の
+画像ファイルを生成することができます。
 特に指定がなければ、XBM 形式が選択されます。
 
 外字は、@dfn{半角} (@dfn{narrow}) と @dfn{全角} (@dfn{wide}) の 2 種
@@ -177,9 +177,9 @@ CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して 4
 @end example
 
 @noindent
-@var{拡張子} は @samp{xbm}、@samp{xpm}、@samp{gif} のいずれかで、
-@var{文字番号} は 16 進数 4 桁 (@samp{0} から @samp{9} と
-@samp{a} から @samp{f}) で、次のようになります。
+@var{拡張子} は @samp{xbm}、@samp{xpm}、@samp{gif}、@samp{bmp} の
+いずれかで、@var{文字番号} は 16 進数 4 桁 (@samp{0} から @samp{9}
+と @samp{a} から @samp{f}) で、次のようになります。
 
 @example
 @group
@@ -212,8 +212,8 @@ ejdict/16/wide/a321.xbm
 @node Image Formats, Heights, Invoking ebfont, Invoking ebfont
 @section 画像形式
 
-@code{ebfont} は XBM, XPM, GIF (GIF89a) 形式の画像ファイルを生成するこ
-とができます。
+@code{ebfont} は XBM, XPM, GIF89a, BMP 形式の画像ファイルを生成すること
+ができます。
 画像形式は @samp{--image-format} (@samp{-i}) オプションで指定します。
 @samp{--image-format} オプションは引数を一つ取り、そこにカンマ (@samp{,})
 で区切って、画像形式の名前を並べて書きます。
@@ -234,6 +234,9 @@ ejdict/16/wide/a321.xbm
 @noindent
 XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 透明になります。
+BMP 形式では、前景色は黒に、背景色は白 (RGB の @samp{#ffffff}) に
+なります。
+
 @code{ebzip} は GIF の画像を生成する際に LZW 圧縮アルゴリズムを使わ
 ないため、ファイルのサイズは相当大きくなります。
 
@@ -372,8 +375,8 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 @var{画像形式} 形式の画像ファイルを生成します。
 @var{画像形式} は、画像形式名をカンマ (@samp{,}) で区切って並べたも
 のでなくてはなりません。
-対応している画像形式の名前は @samp{xbm}、@samp{xpm}、@samp{gif} で
-す。
+対応している画像形式の名前は @samp{xbm}、@samp{xpm}、@samp{gif}、
+@samp{bmp} です。
 指定しなかったときは、@samp{ebfont} は XBM 形式の画像ファイルを生成し
 ます。
 (詳しくは、@pxref{Image Formats, , 画像形式})。

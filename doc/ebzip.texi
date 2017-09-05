@@ -408,10 +408,10 @@ directory.
 @node Compression Level, Test, Compression Example 2, Compression
 @section Compression Level
 
-@code{ebzip} supports four compression levels, from 0 to 3.
+@code{ebzip} supports six compression levels, from 0 to 5.
 The compression level 0 is the fastest compression/uncompression method,
 but it is the worst compression method.
-The compression level 3 is the best compression method but it is the
+The compression level 5 is the best compression method but it is the
 slowest compression/uncompression method.
 The compression level is set by the @samp{--level} (@samp{-l}) option.
 
@@ -826,9 +826,10 @@ specify the @samp{--test} (@samp{-t}) option.
 @item -l @var{integer}
 @itemx --level @var{integer}
 Specify compression level.
-@var{integer} must be @samp{0}, @samp{1}, @samp{2} or @samp{3}.
+@var{integer} must be @samp{0}, @samp{1}, @samp{2}, @samp{3},
+@samp{4} or @samp{5}.
 The level 0 is fastest but least compression method.
-The level 3 is slowest but best compression method.
+The level 5 is slowest but best compression method.
 The defalt level is 0.
 This option is ignored when the action is uncompression or information.
 
@@ -1043,6 +1044,8 @@ Slice size is determined by the compression level
 @item 1                  @tab   4096 bytes
 @item 2                  @tab   8192 bytes
 @item 3                  @tab  16384 bytes
+@item 4                  @tab  32768 bytes
+@item 5                  @tab  65536 bytes
 @end multitable
 
 @noindent

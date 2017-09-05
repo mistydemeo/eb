@@ -506,7 +506,7 @@ eb_read_rawtext(book, text_max_length, text, text_length)
     if (book->text_context.code == EB_TEXT_INVALID) {
 	error_code = EB_ERR_NO_PREV_SEEK;
 	goto failed;
-    } else if (book->text_context.code != EB_TEXT_SEEKED) {
+    } else if (book->text_context.code == EB_TEXT_SEEKED) {
 	eb_reset_text_context(book);
 	book->text_context.code = EB_TEXT_RAWTEXT;
     } else if (book->text_context.code != EB_TEXT_RAWTEXT) {
@@ -914,7 +914,7 @@ text_max_length=%ld, forward=%d)",
 		break;
 
 	    case 0x45:
-		/* prefix of sound or picuture */
+		/* beginning of graphic block */
 		in_step = 4;
 		if (cache_rest_length < in_step) {
 		    error_code = EB_ERR_UNEXP_TEXT;
@@ -923,6 +923,8 @@ text_max_length=%ld, forward=%d)",
 		if (eb_uint1(cache_p + 2) != 0x1f) {
 		    argc = 2;
 		    argv[1] = eb_bcd4(cache_p + 2);
+		} else {
+		    in_step = 2;
 		}
 		break;
 
@@ -942,6 +944,24 @@ text_max_length=%ld, forward=%d)",
 		hook = hookset->hooks + EB_HOOK_BEGIN_WAVE;
 		break;
 
+	    case 0x4b:
+		/* beginning of paged reference */
+		in_step = 8;
+		if (cache_rest_length < in_step + 2) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		argc = 3;
+		argv[1] = eb_bcd4(cache_p + 2);
+		argv[2] = eb_bcd2(cache_p + 6);
+		if (cache_p[8]==0x1f && cache_p[9]==0x6b) {
+		    hook = hookset->hooks + EB_HOOK_GRAPHIC_REFERENCE;
+		    in_step = 10;
+		} else {
+		    hook = hookset->hooks + EB_HOOK_BEGIN_GRAPHIC_REFERENCE;
+		}
+		break;
+
 	    case 0x4d:
 		/* beginning of color graphic (BMP or JPEG) */
 		in_step = 20;
@@ -959,7 +979,7 @@ text_max_length=%ld, forward=%d)",
 		    hook = hookset->hooks + EB_HOOK_BEGIN_COLOR_JPEG;
 		break;
 
-	    case 0x49: case 0x4b: case 0x4c: case 0x4e: case 0x4f:
+	    case 0x49: case 0x4c: case 0x4e: case 0x4f:
 		in_step = 2;
 		context->skip_code = eb_uint1(cache_p + 1) + 0x20;
 		break;
@@ -1042,6 +1062,16 @@ text_max_length=%ld, forward=%d)",
 		argv[1] = eb_bcd4(cache_p + 2);
 		argv[2] = eb_bcd2(cache_p + 6);
 		hook = hookset->hooks + EB_HOOK_END_MONO_GRAPHIC;
+		break;
+
+	    case 0x6b:
+		/* end of paged reference */
+		in_step = 2;
+		if (cache_rest_length < in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		hook = hookset->hooks + EB_HOOK_END_GRAPHIC_REFERENCE;
 		break;
 
 	    case 0x6a:
@@ -1629,7 +1659,6 @@ eb_forward_text(book, appendix)
     EB_Appendix *appendix;
 {
     EB_Error_Code error_code;
-    EB_Text_Code saved_text_code;
 
     eb_lock(&book->lock);
     LOG(("in: eb_forward_text(book=%d, appendix=%d)", (int)book->code,

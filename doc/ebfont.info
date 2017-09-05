@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.2beta0, for EB Library version 3.2beta0.
+   This is edition 3.2beta1, for EB Library version 3.2beta1.
 
 * Menu:
 
@@ -65,7 +65,7 @@ _without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 3.2beta0, for EB Library version 3.2beta0.
+   This is edition 3.2beta1, for EB Library version 3.2beta1.
 
 
 File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
@@ -81,8 +81,8 @@ pronunciation marks.
    CD-ROM books also have bitmap data of the local characters.  The
 `ebfont' command reads the bitmap data, convert them to a specified
 image formats, and write them to files.  `ebfont' can generates image
-files as XBM (X BitMap format), XPM (X PixMap format) and/or GIF
-(Graphics Interchange Format).  By default, XBM format is selected.
+files as XBM (X BitMap format), XPM (X PixMap format), GIF (Graphics
+Interchange Format) and/or BMP.  By default, XBM format is selected.
 
    Local characters are classified to two types; "narrow" and "wide".
 In narrow type characters, the height of the bitmap data is about half
@@ -128,7 +128,7 @@ generic forms of their filenames are:
      SUBBOOK/HEIGHT/narrow/CHARACTER-NUMBER.SUFFIX
      SUBBOOK/HEIGHT/wide/CHARACTER-NUMBER.SUFFIX
 
-The SUFFIX is `xbm', `xpm' or `gif'.  The CHARACTER-NUMBER is a
+The SUFFIX is `xbm', `xpm', `gif' or `bmp'.  The CHARACTER-NUMBER is a
 hexadecimal number with 4 digits (`0' to `9', and `a' to `f'), like
 this:
 
@@ -156,7 +156,7 @@ File: ebfont.info,  Node: Image Formats,  Next: Heights,  Prev: Invoking ebfont,
 Image Formats
 =============
 
-   `ebfont' can generates image files of XBM, XPM and GIF (GIF89a)
+   `ebfont' can generates image files of XBM, XPM, GIF89a and BMP
 formats.  These image formats are specified at the `--image-format'
 (`-i') option.  The `--image-format' option takes an argument which is
 a list of image format mames separeted by a comma (`,').  For example,
@@ -170,9 +170,12 @@ An argument to `--image-format' can be splitted like as follows:
      % ebfont --image-format xpm --image-format gif BOOK-PATH
 
 In the XPM and GIF formats, the foreground and background colors of
-images are black (`#000000' in RGB) and transparency.  `ebzip'
-generates GIF images without LZW compression algolythm, so that the
-their sizes are too fat.
+images are black (`#000000' in RGB) and transparency.  In the BMP
+format, foreground and background colors are black and white (`#ffffff'
+in RGB).
+
+   `ebzip' generates GIF images without LZW compression algolythm, so
+that the their sizes are too fat.
 
 
 File: ebfont.info,  Node: Heights,  Next: Subbooks,  Prev: Image Formats,  Up: Invoking ebfont
@@ -281,8 +284,9 @@ long as they are unique.
 `--image-format FORMATS'
      Generates image files as FORMATS.  FORMATS must be a list of
      format names separated by a comma (`,').  Supported format names
-     are `xbm', `xpm', and `gif'.  By default, `ebfont' generates image
-     files as XBM format.  (*Note Image Formats::, for more details).
+     are `xbm', `xpm', `gif' and `bmp'.  By default, `ebfont' generates
+     image files as XBM format.  (*Note Image Formats::, for more
+     details).
 
 `-o DIRECTORY'
 `--output-directory DIRECTORY'
@@ -307,10 +311,10 @@ Tag Table:
 Node: Top1030
 Node: Introduction1587
 Node: What is Local Character2463
-Node: Invoking ebfont4033
-Node: Image Formats5454
-Node: Heights6348
-Node: Subbooks7109
-Node: Summary of Options9048
+Node: Invoking ebfont4038
+Node: Image Formats5466
+Node: Heights6455
+Node: Subbooks7216
+Node: Summary of Options9155
 
 End Tag Table

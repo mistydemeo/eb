@@ -1,0 +1,279 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: eb 3.0\n"
+"POT-Creation-Date: 2001-10-27 10:37+0900\n"
+"PO-Revision-Date: 2001-03-31 22:10+0900\n"
+"Last-Translator: Motoyuki Kasahara <m-kasahr@sra.co.jp>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. 0 -- 4
+#: ../eb/error.c:145
+msgid "no error"
+msgstr "エラーはありません"
+
+#: ../eb/error.c:146
+msgid "memory exhausted"
+msgstr "メモリを使い果たしました"
+
+#: ../eb/error.c:147
+msgid "an empty file name"
+msgstr "空のファイル名です"
+
+#: ../eb/error.c:148
+msgid "too long file name"
+msgstr "ファイル名が長すぎます"
+
+#: ../eb/error.c:149
+#, fuzzy
+msgid "bad file name"
+msgstr "不正なファイル名です"
+
+#. 5 -- 9
+#: ../eb/error.c:152
+msgid "bad directory name"
+msgstr "不正なディレクトリ名です"
+
+#: ../eb/error.c:153
+msgid "too long word"
+msgstr "単語が長すぎます"
+
+#: ../eb/error.c:154
+msgid "a word contains bad character"
+msgstr "単語が不正な文字を含んでいます"
+
+#: ../eb/error.c:155
+msgid "an empty word"
+msgstr "単語が空です"
+
+#: ../eb/error.c:156
+msgid "failed to get the current working directory"
+msgstr "カレントディレクトリが分かりませんでした"
+
+#. 10 -- 14
+#: ../eb/error.c:159
+msgid "failed to open a catalog file"
+msgstr "カタログファイルが開けませんでした"
+
+#: ../eb/error.c:160
+msgid "failed to open an appendix catalog file"
+msgstr "付録のカタログファイルが開けませんでした"
+
+#: ../eb/error.c:161
+msgid "failed to open a text file"
+msgstr "本文ファイルが開けませんでした"
+
+#: ../eb/error.c:162
+msgid "failed to open a font file"
+msgstr "フォントファイルが開けませんでした"
+
+#: ../eb/error.c:163
+msgid "failed to open an appendix file"
+msgstr "付録ファイルが開けませんでした"
+
+#. 15 -- 19
+#: ../eb/error.c:166
+msgid "failed to open a binary file"
+msgstr "バイナリファイルが開けませんでした"
+
+#: ../eb/error.c:167
+msgid "failed to read a catalog file"
+msgstr "カタログファイルが読めませんでした"
+
+#: ../eb/error.c:168
+msgid "failed to read an appendix catalog file"
+msgstr "付録のカタログファイルが読めませんでした"
+
+#: ../eb/error.c:169
+msgid "failed to read a text file"
+msgstr "本文ファイルが読めませんでした"
+
+#: ../eb/error.c:170
+msgid "failed to read a font file"
+msgstr "フォントファイルが読めませんでした"
+
+#. 20 -- 24
+#: ../eb/error.c:173
+#, fuzzy
+msgid "failed to read an appendix file"
+msgstr "付録ファイルが開けませんでした"
+
+#: ../eb/error.c:174
+msgid "failed to read a binary file"
+msgstr "バイナリファイルが読めませんでした"
+
+#: ../eb/error.c:175
+msgid "failed to seek a catalog file"
+msgstr "カタログファイルが読めませんでした"
+
+#: ../eb/error.c:176
+msgid "failed to seek an appendix catalog file"
+msgstr "付録のカタログファイルがシークできませんでした"
+
+#: ../eb/error.c:177
+msgid "failed to seek a text file"
+msgstr "本文ファイルがシークできませんでした"
+
+#. 25 -- 29
+#: ../eb/error.c:180
+msgid "failed to seek a font file"
+msgstr "フォントファイルがシークできませんでした"
+
+#: ../eb/error.c:181
+msgid "failed to seek an appendix file"
+msgstr "付録ファイルが読めませんでした"
+
+#: ../eb/error.c:182
+msgid "failed to seek a binary file"
+msgstr "バイナリファイルがシークできませんでした"
+
+#: ../eb/error.c:183
+msgid "unexpected format in a catalog file"
+msgstr "カタログファイルの形式が想定外です"
+
+#: ../eb/error.c:184
+msgid "unexpected format in an appendix catalog file"
+msgstr "付録のカタログファイルの形式が想定外です"
+
+#. 30 -- 34
+#: ../eb/error.c:187
+msgid "unexpected format in a text file"
+msgstr "本文ファイルの形式が想定外です"
+
+#: ../eb/error.c:188
+msgid "unexpected format in a font file"
+msgstr "フォントファイルの形式が想定外です"
+
+#: ../eb/error.c:189
+msgid "unexpected format in an appendix file"
+msgstr "付録ファイルの形式がが想定外です"
+
+#: ../eb/error.c:190
+msgid "unexpected format in a binary file"
+msgstr "バイナリファイルの形式が想定外です"
+
+#: ../eb/error.c:191
+msgid "book not bound"
+msgstr "書籍は結び付けられていません"
+
+#. 35 -- 39
+#: ../eb/error.c:194
+msgid "appendix not bound"
+msgstr "appendix は結び付けられていません"
+
+#: ../eb/error.c:195
+msgid "no subbook"
+msgstr "副本はありません"
+
+#: ../eb/error.c:196
+msgid "no subbook in the appendix"
+msgstr "付録には副本がありません"
+
+#: ../eb/error.c:197
+msgid "no font"
+msgstr "フォントはありません"
+
+#: ../eb/error.c:198
+msgid "no text file"
+msgstr "本文ファイルはありません"
+
+#. 40 -- 44
+#: ../eb/error.c:201
+msgid "no current subbook"
+msgstr "現時点で副本は選択していません"
+
+#: ../eb/error.c:202
+msgid "no current appendix subbook"
+msgstr "現時点で付録の副本は選択していません"
+
+#: ../eb/error.c:203
+msgid "no current font"
+msgstr "現時点でフォントは選択していません"
+
+#: ../eb/error.c:204
+msgid "no current binary"
+msgstr "現時点でバイナリは選択していません"
+
+#: ../eb/error.c:205
+msgid "no such subbook"
+msgstr "そのような副本はありません"
+
+#. 45 -- 49
+#: ../eb/error.c:208
+msgid "no such appendix subbook"
+msgstr "付録にそのような副本はありません"
+
+#: ../eb/error.c:209
+msgid "no such font"
+msgstr "そのようなフォントはありません"
+
+#: ../eb/error.c:210
+msgid "no such character bitmap"
+msgstr "そのような文字のビットマップはありません"
+
+#: ../eb/error.c:211
+msgid "no such character text"
+msgstr "そのような文字のテキストはありません"
+
+#: ../eb/error.c:212
+msgid "no such search method"
+msgstr "そのような検索方式はありません"
+
+#. 50 -- 54
+#: ../eb/error.c:215
+msgid "no such hook"
+msgstr "そのような書籍はありません"
+
+#: ../eb/error.c:216
+msgid "no such binary"
+msgstr "そのようなバイナリはありません"
+
+#: ../eb/error.c:217
+msgid "different content type"
+msgstr "データの型が異なっています"
+
+#: ../eb/error.c:218
+msgid "no previous search"
+msgstr "検索方式が前もって指定されていません"
+
+#: ../eb/error.c:219
+msgid "no such multi search"
+msgstr "そのような複合検索はありません"
+
+#. 55 -- 59
+#: ../eb/error.c:222
+msgid "no such multi search entry"
+msgstr "そのような複合検索のエントリはありません"
+
+#: ../eb/error.c:223
+msgid "too many words specified"
+msgstr "指定している単語の数が多すぎます"
+
+#: ../eb/error.c:224
+msgid "no word specified"
+msgstr "単語が一つも指定されていません"
+
+#: ../eb/error.c:225
+msgid "no candidates"
+msgstr "候補はありません"
+
+#: ../eb/error.c:226
+#, fuzzy
+msgid "end of content"
+msgstr "本文は終わりです"
+
+#. 60 -- 64
+#: ../eb/error.c:229
+#, fuzzy
+msgid "no previous seek"
+msgstr "検索方式が前もって指定されていません"
+
+#: ../eb/error.c:246
+msgid "unknown error"
+msgstr "未知のエラーです"

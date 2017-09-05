@@ -118,7 +118,7 @@ CD-ROM books also have bitmap data of the local characters.
 The @code{ebfont} command reads the bitmap data, convert them to a
 specified image formats, and write them to files.
 @code{ebfont} can generates image files as XBM (X BitMap format), XPM
-(X PixMap format) and/or GIF (Graphics Interchange Format).
+(X PixMap format), GIF (Graphics Interchange Format) and/or BMP.
 By default, XBM format is selected.
 
 Local characters are classified to two types; @dfn{narrow} and @dfn{wide}.
@@ -179,7 +179,7 @@ The generic forms of their filenames are:
 @end example
 
 @noindent
-The @var{suffix} is @samp{xbm}, @samp{xpm} or @samp{gif}.
+The @var{suffix} is @samp{xbm}, @samp{xpm}, @samp{gif} or @samp{bmp}.
 The @var{character-number} is a hexadecimal number with 4 digits
 (@samp{0} to @samp{9}, and @samp{a} to @samp{f}), like this:
 
@@ -212,7 +212,7 @@ The top directory must have been created before invoking @code{ebfont}.
 @node Image Formats, Heights, Invoking ebfont, Invoking ebfont
 @section Image Formats
 
-@code{ebfont} can generates image files of XBM, XPM and GIF (GIF89a)
+@code{ebfont} can generates image files of XBM, XPM, GIF89a and BMP
 formats.
 These image formats are specified at the @samp{--image-format} (@samp{-i})
 option.
@@ -235,6 +235,9 @@ An argument to @samp{--image-format} can be splitted like as follows:
 @noindent
 In the XPM and GIF formats, the foreground and background colors of 
 images are black (@samp{#000000} in RGB) and transparency.
+In the BMP format, foreground and background colors are black and
+white (@samp{#ffffff} in RGB).
+
 @code{ebzip} generates GIF images without LZW compression algolythm,
 so that the their sizes are too fat.
 
@@ -370,7 +373,8 @@ Output help message to standard out, then exit.
 Generates image files as @var{formats}.
 @var{formats} must be a list of format names separated by a comma
 (@samp{,}).
-Supported format names are @samp{xbm}, @samp{xpm}, and @samp{gif}.
+Supported format names are @samp{xbm}, @samp{xpm}, @samp{gif} and
+@samp{bmp}.
 By default, @samp{ebfont} generates image files as XBM format.
 (@xref{Image Formats}, for more details).
 

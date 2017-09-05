@@ -110,8 +110,8 @@ eb_canonicalize_path_name(path_name)
 	     * `path_name' is a relative path.
 	     * Covert the path name to an absolute path.
 	     */
-	    if (getdcwd(toupper(*path_name) - 'A' + 1, cwd, EB_MAX_PATH_LENGTH + 1)
-		== NULL) {
+	    if (getdcwd(toupper(*path_name) - 'A' + 1, cwd,
+		EB_MAX_PATH_LENGTH + 1) == NULL) {
 		return EB_ERR_FAIL_GETCWD;
 	    }
 	    if (EB_MAX_PATH_LENGTH < strlen(cwd) + 1 + strlen(path_name + 2))

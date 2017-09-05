@@ -11,7 +11,8 @@ top_builddir = ..
 subdir = po-eb
 
 TEXTDOMAIN = eb
-CATALOGS = ja.mo
+POFILES = ja.po
+MOFILES = ja.mo
 POTFILES = \
 	$(top_srcdir)/eb/error.c 
 ## end
@@ -38,7 +39,7 @@ MSGFMT = @MSGFMT@
 XGETTEXT = @XGETTEXT@
 MSGMERGE = msgmerge
 
-DISTFILES = Makefile.in $(TEXTDOMAIN).pot $(CATALOGS)
+DISTFILES = Makefile.in $(TEXTDOMAIN).pot $(MOFILES) $(POFILES)
 
 .SUFFIXES:
 .SUFFIXES: .po .pox .mo
@@ -53,7 +54,7 @@ DISTFILES = Makefile.in $(TEXTDOMAIN).pot $(CATALOGS)
 
 all: all-@ENABLE_NLS@
 
-all-yes: $(CATALOGS)
+all-yes: $(MOFILES)
 all-no:
 
 $(TEXTDOMAIN).pot: $(POTFILES)
@@ -69,7 +70,7 @@ install-data: install-data-@ENABLE_NLS@
 install-data-no: all
 install-data-yes: all
 	$(mkinstalldirs) $(DESTDIR)$(datadir)
-	@catalogs='$(CATALOGS)'; \
+	@catalogs='$(MOFILES)'; \
 	for cat in $$catalogs; do \
 	  cat=`echo $$cat | sed 's/^.*\/\([^\/]*\)$$/\1/'` ; \
 	  lang=`echo $$cat | sed 's/\.mo$$//'`; \
@@ -91,7 +92,7 @@ install-data-yes: all
 installcheck:
 
 uninstall:
-	catalogs='$(CATALOGS)'; \
+	catalogs='$(MOFILES)'; \
 	for cat in $$catalogs; do \
 	  cat=`echo $$cat | sed 's/^.*\/\([^\/]*\)$$/\1/'` ; \
 	  lang=`echo $$cat | sed 's/\.mo$$//'`; \
@@ -128,7 +129,7 @@ dist distdir: update-po $(DISTFILES)
 update-po: Makefile
 	$(MAKE) $(TEXTDOMAIN).pot
 	cd $(srcdir); \
-	catalogs='$(CATALOGS)'; \
+	catalogs='$(MOFILES)'; \
 	for cat in $$catalogs; do \
 	  cat=`echo $$cat | sed 's/^.*\/\([^\/]*\)$$/\1/'` ; \
 	  lang=`echo $$cat | sed 's/\.mo$$//'`; \

@@ -60,6 +60,7 @@ eb_narrow_font_xbm_size(height, size)
     return error_code;
 }
 
+
 /*
  * Return required buffer size for a narrow font character converted
  * to XPM image format.
@@ -100,6 +101,7 @@ eb_narrow_font_xpm_size(height, size)
     LOG(("out: eb_narrow_font_xpm_size() = %s", eb_error_string(error_code)));
     return error_code;
 }
+
 
 /*
  * Return required buffer size for a narrow font character converted
@@ -142,6 +144,49 @@ eb_narrow_font_gif_size(height, size)
     return error_code;
 }
 
+
+/*
+ * Return required buffer size for a narrow font character converted
+ * to BMP image format.
+ */
+EB_Error_Code
+eb_narrow_font_bmp_size(height, size)
+    EB_Font_Code height;
+    size_t *size;
+{
+    EB_Error_Code error_code;
+
+    LOG(("in: eb_narrow_font_bmp_size(height=%d)", (int)height));
+
+    switch (height) {
+    case EB_FONT_16:
+        *size = EB_SIZE_NARROW_FONT_16_BMP;
+    case EB_FONT_24:
+        *size = EB_SIZE_NARROW_FONT_24_BMP;
+    case EB_FONT_30:
+        *size = EB_SIZE_NARROW_FONT_30_BMP;
+    case EB_FONT_48:
+        *size = EB_SIZE_NARROW_FONT_48_BMP;
+    default:
+	error_code = EB_ERR_NO_SUCH_FONT;
+	goto failed;
+    }
+
+    LOG(("out: eb_narrow_font_bmp_size(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *size = 0;
+    LOG(("out: eb_narrow_font_bmp_size() = %s", eb_error_string(error_code)));
+    return error_code;
+}
+
+
 /*
  * Return required buffer size for a wide font character converted
  * to XBM image format.
@@ -182,6 +227,7 @@ eb_wide_font_xbm_size(height, size)
     LOG(("out: eb_wide_font_xbm_size() = %s", eb_error_string(error_code)));
     return error_code;
 }
+
 
 /*
  * Return required buffer size for a wide font character converted
@@ -224,6 +270,7 @@ eb_wide_font_xpm_size(height, size)
     return error_code;
 }
 
+
 /*
  * Return required buffer size for a wide font character converted
  * to GIF image format.
@@ -264,6 +311,49 @@ eb_wide_font_gif_size(height, size)
     LOG(("out: eb_wide_font_gif_size() = %s", eb_error_string(error_code)));
     return error_code;
 }
+
+
+/*
+ * Return required buffer size for a wide font character converted
+ * to BMP image format.
+ */
+EB_Error_Code
+eb_wide_font_bmp_size(height, size)
+    EB_Font_Code height;
+    size_t *size;
+{
+    EB_Error_Code error_code;
+
+    LOG(("in: eb_wide_font_bmp_size(height=%d)", (int)height));
+
+    switch (height) {
+    case EB_FONT_16:
+        *size = EB_SIZE_NARROW_FONT_16_BMP;
+    case EB_FONT_24:
+        *size = EB_SIZE_NARROW_FONT_24_BMP;
+    case EB_FONT_30:
+        *size = EB_SIZE_NARROW_FONT_30_BMP;
+    case EB_FONT_48:
+        *size = EB_SIZE_NARROW_FONT_48_BMP;
+    default:
+	error_code = EB_ERR_NO_SUCH_FONT;
+	goto failed;
+    }
+
+    LOG(("out: eb_wide_font_bmp_size(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *size = 0;
+    LOG(("out: eb_wide_font_bmp_size() = %s", eb_error_string(error_code)));
+    return error_code;
+}
+
 
 /*
  * The maximum number of octets in a line in a XBM file.
@@ -313,22 +403,14 @@ eb_bitmap_to_xbm(bitmap, width, height, xbm, xbm_length)
      */
     for (i = 0; i < bitmap_size; i++) {
 	hex = 0;
-        if (*bitmap_p & 0x80)
-            hex |= 0x01;
-        if (*bitmap_p & 0x40)
-            hex |= 0x02;
-        if (*bitmap_p & 0x20)
-            hex |= 0x04;
-        if (*bitmap_p & 0x10)
-            hex |= 0x08;
-        if (*bitmap_p & 0x08)
-            hex |= 0x10;
-        if (*bitmap_p & 0x04)
-            hex |= 0x20;
-        if (*bitmap_p & 0x02)
-            hex |= 0x40;
-        if (*bitmap_p & 0x01)
-            hex |= 0x80;
+        hex |= (*bitmap_p & 0x80) ? 0x01 : 0x00;
+        hex |= (*bitmap_p & 0x40) ? 0x02 : 0x00;
+        hex |= (*bitmap_p & 0x20) ? 0x04 : 0x00;
+        hex |= (*bitmap_p & 0x10) ? 0x08 : 0x00;
+        hex |= (*bitmap_p & 0x08) ? 0x10 : 0x00;
+        hex |= (*bitmap_p & 0x04) ? 0x20 : 0x00;
+        hex |= (*bitmap_p & 0x02) ? 0x40 : 0x00;
+        hex |= (*bitmap_p & 0x01) ? 0x80 : 0x00;
 	bitmap_p++;
 
 	if (i % XBM_MAX_OCTETS_A_LINE != 0) {
@@ -349,9 +431,9 @@ eb_bitmap_to_xbm(bitmap, width, height, xbm, xbm_length)
     memcpy(xbm_p, "};\n", 3);
     xbm_p += 3;
 
-    *xbm_length = (xbm_p - xbm);
+    *xbm_length = xbm_p - xbm;
 
-    LOG(("out: eb_bitmap_to_xbm(xbm_length=%ld)", (long)*xbm_length));
+    LOG(("out: eb_bitmap_to_xbm(xbm_length=%ld)", (long)(xbm_p - xbm)));
 }
 
 
@@ -454,9 +536,10 @@ eb_bitmap_to_xpm(bitmap, width, height, xpm, xpm_length)
     memcpy(xpm_p, "\"};\n", 4);
     xpm_p += 4;
 
-    *xpm_length = (xpm_p - xpm);
+    if (xpm_length != NULL)
+	*xpm_length = xpm_p - xpm;
 
-    LOG(("out: eb_bitmap_to_xpm(xpm_length=%ld)", (long)*xpm_length));
+    LOG(("out: eb_bitmap_to_xpm(xpm_length=%ld)", (long)(xpm_p - xpm)));
 }
 
 
@@ -467,11 +550,11 @@ eb_bitmap_to_xpm(bitmap, width, height, xpm, xpm_length)
 #define GIF_BACKGROUND_COLOR		0xffffff
 
 /*
- * The preamble of a GIF image.
+ * The preamble of GIF image.
  */
 #define GIF_PREAMBLE_LENGTH	38
 
-static const unsigned char gif_default_preamble[GIF_PREAMBLE_LENGTH] = {
+static const unsigned char gif_preamble[GIF_PREAMBLE_LENGTH] = {
     /*
      * Header. (6 bytes)
      */
@@ -523,6 +606,7 @@ static const unsigned char gif_default_preamble[GIF_PREAMBLE_LENGTH] = {
     0x03
 };
 
+
 /*
  * Convert a bitmap image to GIF format.
  *
@@ -542,7 +626,6 @@ eb_bitmap_to_gif(bitmap, width, height, gif, gif_length)
 {
     unsigned char *gif_p = (unsigned char *)gif;
     const unsigned char *bitmap_p = (const unsigned char *)bitmap;
-    unsigned char gif_preamble[GIF_PREAMBLE_LENGTH];
     int i, j;
 
     LOG(("in: eb_bitmap_to_gif(width=%d, height=%d)", width, height));
@@ -550,38 +633,34 @@ eb_bitmap_to_gif(bitmap, width, height, gif, gif_length)
     /*
      * Copy the default preamble.
      */
-    memcpy(gif_preamble, gif_default_preamble, GIF_PREAMBLE_LENGTH);
+    memcpy(gif_p, gif_preamble, GIF_PREAMBLE_LENGTH);
 
     /*
      * Set logical screen width and height.
      */
-    gif_preamble[6] = width & 0xff;
-    gif_preamble[7] = (width >> 8) & 0xff;
-    gif_preamble[8] = height & 0xff;
-    gif_preamble[9] = (height >> 8) & 0xff;
+    gif_p[6] = width & 0xff;
+    gif_p[7] = (width >> 8) & 0xff;
+    gif_p[8] = height & 0xff;
+    gif_p[9] = (height >> 8) & 0xff;
 
     /*
      * Set global colors.
      */
-    gif_preamble[13] = (GIF_BACKGROUND_COLOR >> 16) & 0xff;
-    gif_preamble[14] = (GIF_BACKGROUND_COLOR >> 8) & 0xff;
-    gif_preamble[15] = GIF_BACKGROUND_COLOR & 0xff;
-    gif_preamble[16] = (GIF_FOREGROUND_COLOR >> 16) & 0xff;
-    gif_preamble[17] = (GIF_FOREGROUND_COLOR >> 8) & 0xff;
-    gif_preamble[18] = GIF_FOREGROUND_COLOR & 0xff;
+    gif_p[13] = (GIF_BACKGROUND_COLOR >> 16) & 0xff;
+    gif_p[14] = (GIF_BACKGROUND_COLOR >> 8) & 0xff;
+    gif_p[15] = GIF_BACKGROUND_COLOR & 0xff;
+    gif_p[16] = (GIF_FOREGROUND_COLOR >> 16) & 0xff;
+    gif_p[17] = (GIF_FOREGROUND_COLOR >> 8) & 0xff;
+    gif_p[18] = GIF_FOREGROUND_COLOR & 0xff;
     
     /*
      * Set image width and height.
      */
-    gif_preamble[32] = width & 0xff;
-    gif_preamble[33] = (width >> 8) & 0xff;
-    gif_preamble[34] = height & 0xff;
-    gif_preamble[35] = (height >> 8) & 0xff;
+    gif_p[32] = width & 0xff;
+    gif_p[33] = (width >> 8) & 0xff;
+    gif_p[34] = height & 0xff;
+    gif_p[35] = (height >> 8) & 0xff;
 
-    /*
-     * Output a preamble.
-     */
-    memcpy(gif_p, gif_preamble, GIF_PREAMBLE_LENGTH);
     gif_p += GIF_PREAMBLE_LENGTH;
 
     /*
@@ -627,9 +706,147 @@ eb_bitmap_to_gif(bitmap, width, height, gif, gif_length)
     memcpy(gif_p, "\001\011\000\073", 4);
     gif_p += 4;
 
-    *gif_length = ((char *)gif_p - gif);
+    if (gif_length != NULL)
+	*gif_length = ((char *)gif_p - gif);
 
-    LOG(("out: eb_bitmap_to_gif(gif_length=%ld)", (long)*gif_length));
+    LOG(("out: eb_bitmap_to_gif(gif_length=%ld)",
+	(long)((char *)gif_p - gif)));
+}
+
+
+/*
+ * The preamble of BMP image.
+ */
+#define BMP_PREAMBLE_LENGTH	62
+
+static const unsigned char bmp_preamble[] = {
+    /* Type. */
+    'B', 'M',
+
+    /* File size. (set at run time) */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Reserved. */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Offset of bitmap bits part. */
+    0x3e, 0x00, 0x00, 0x00, 
+
+    /* Size of bitmap info part. */
+    0x28, 0x00, 0x00, 0x00, 
+
+    /* Width. (set at run time) */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Height. (set at run time) */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Planes. */
+    0x01, 0x00, 
+
+    /* Bits per pixels. */
+    0x01, 0x00,
+
+    /* Compression mode. */
+    0x00, 0x00, 0x00, 0x00,
+
+    /* Size of bitmap bits part. (set at run time) */
+    0x00, 0x00, 0x00, 0x00,
+
+    /* X Pixels per meter. */
+    0x6d, 0x0b, 0x00, 0x00,
+
+    /* Y Pixels per meter. */
+    0x6d, 0x0b, 0x00, 0x00,
+
+    /* Colors */
+    0x02, 0x00, 0x00, 0x00,
+
+    /* Important colors */
+    0x02, 0x00, 0x00, 0x00,
+
+    /* RGB quad of color 0   RGB quad of color 1 */
+    0xff, 0xff, 0xff, 0x00,  0x00, 0x00, 0x00, 0x00,
+};
+
+/*
+ * Convert a bitmap image to BMP format.
+ *
+ * It requires four arguements.  `bmp' is buffer to store the BMP
+ * image data.  `bitmap', `width', and `height' are bitmap data,
+ * width, and height of the bitmap image.
+ */
+void
+eb_bitmap_to_bmp(bitmap, width, height, bmp, bmp_length)
+    const char *bitmap;
+    int width;
+    int height;
+    char *bmp;
+    size_t *bmp_length;
+{
+    unsigned char *bmp_p = (unsigned char *)bmp;
+    size_t data_size;
+    size_t file_size;
+    size_t line_pad_length;
+    size_t bitmap_line_length;
+    int i, j;
+
+    LOG(("in: eb_bitmap_to_bmp(width=%d, height=%d)", width, height));
+
+    if (width % 32 == 0)
+	line_pad_length = 0;
+    else if (width % 32 <= 8)
+	line_pad_length = 3;
+    else if (width % 32 <= 16)
+	line_pad_length = 2;
+    else if (width % 32 <= 24)
+	line_pad_length = 1;
+    else
+	line_pad_length = 0;
+
+    data_size = (width / 2 + line_pad_length) * height;
+    file_size = data_size + BMP_PREAMBLE_LENGTH;
+
+    /*
+     * Set BMP preamble.
+     */
+    memcpy(bmp_p, bmp_preamble, BMP_PREAMBLE_LENGTH);
+
+    bmp_p[2] =  file_size        & 0xff;
+    bmp_p[3] = (file_size >> 8)  & 0xff;
+    bmp_p[4] = (file_size >> 16) & 0xff;
+    bmp_p[5] = (file_size >> 24) & 0xff;
+
+    bmp_p[18] =  width        & 0xff;
+    bmp_p[19] = (width >> 8)  & 0xff;
+    bmp_p[20] = (width >> 16) & 0xff;
+    bmp_p[21] = (width >> 24) & 0xff;
+
+    bmp_p[22] =  height        & 0xff;
+    bmp_p[23] = (height >> 8)  & 0xff;
+    bmp_p[24] = (height >> 16) & 0xff;
+    bmp_p[25] = (height >> 24) & 0xff;
+
+    bmp_p[34] =  data_size        & 0xff;
+    bmp_p[35] = (data_size >> 8)  & 0xff;
+    bmp_p[36] = (data_size >> 16) & 0xff;
+    bmp_p[37] = (data_size >> 24) & 0xff;
+
+    bmp_p += BMP_PREAMBLE_LENGTH;
+    bitmap_line_length = (width + 7) / 8;
+
+    for (i = height - 1; 0 <= i; i--) {
+	memcpy(bmp_p, bitmap + bitmap_line_length * i, bitmap_line_length);
+	bmp_p += bitmap_line_length;
+	for (j = 0; j < line_pad_length; j++, bmp_p++)
+	    *bmp_p = 0x00;
+    }
+
+    if (bmp_length != NULL)
+	*bmp_length = ((char *)bmp_p - bmp);
+
+    LOG(("out: eb_bitmap_to_bmp(bmp_length=%ld)",
+	(long)((char *)bmp_p - bmp)));
 }
 
 
@@ -651,7 +868,7 @@ eb_bitmap_to_gif(bitmap, width, height, gif, gif_length)
 
 #define test_width 32
 #define test_height 16
-static unsigned char test_bits[] = {
+static unsigned char test_bitmap[] = {
    0xff, 0xff, 0xff, 0xff, 0x80, 0x81, 0x83, 0x01, 0x80, 0x81, 0x01, 0x01,
    0x80, 0x81, 0x01, 0x01, 0xe3, 0x8f, 0x11, 0xc7, 0xe3, 0x8f, 0x0f, 0xc7,
    0xe3, 0x81, 0x87, 0xc7, 0xe3, 0x81, 0xc3, 0xc7, 0xe3, 0x81, 0xe1, 0xc7,
@@ -666,32 +883,41 @@ main(argc, argv)
     char *argv[];
 {
     char image[EB_SIZE_FONT_IMAGE];
-    size_t size;
+    size_t image_size;
     int file;
 
-    size = eb_convert_bitmap_xbm(image, test_bits, test_width, test_height);
+    eb_bitmap_to_xbm(test_bitmap, test_width, test_height, image, &image_size);
     file = creat("test.xbm", 0644);
     if (file < 0)
 	exit(1);
-    if (write(file, image, size) != size) {
+    if (write(file, image, image_size) != image_size) {
 	close(file);
 	exit(1);
     }
 
-    size = eb_convert_bitmap_xpm(image, test_bits, test_width, test_height);
+    eb_bitmap_to_xpm(test_bitmap, test_width, test_height, image, &image_size);
     file = creat("test.xpm", 0644);
     if (file < 0)
 	exit(1);
-    if (write(file, image, size) != size) {
+    if (write(file, image, image_size) != image_size) {
 	close(file);
 	exit(1);
     }
 
-    size = eb_convert_bitmap_gif(image, test_bits, test_width, test_height);
+    eb_bitmap_to_gif(test_bitmap, test_width, test_height, image, &image_size);
     file = creat("test.gif", 0644);
     if (file < 0)
 	exit(1);
-    if (write(file, image, size) != size) {
+    if (write(file, image, image_size) != image_size) {
+	close(file);
+	exit(1);
+    }
+
+    eb_bitmap_to_bmp(test_bitmap, test_width, test_height, image, &image_size);
+    file = creat("test.bmp", 0644);
+    if (file < 0)
+	exit(1);
+    if (write(file, image, image_size) != image_size) {
 	close(file);
 	exit(1);
     }
