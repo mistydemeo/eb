@@ -216,7 +216,7 @@ struct Zio_Struct {
 #ifdef PROTOTYPES
 #define ZIO_P(p) p
 #else
-#define ZIO_P(p)
+#define ZIO_P(p) ()
 #endif
 
 /*

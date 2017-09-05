@@ -176,7 +176,7 @@ extern "C" {
 #ifdef PROTOTYPES
 #define EB_P(p) p
 #else
-#define EB_P(p)
+#define EB_P(p) ()
 #endif
 #endif
 
