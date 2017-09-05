@@ -12,16 +12,7 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
+#include "ebconfig.h"
 
 #include "defs.h"
 

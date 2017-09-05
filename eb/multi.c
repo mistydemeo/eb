@@ -12,49 +12,11 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
-#include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
-
-/*
- * The maximum length of path name.
- */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX	MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX	1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
-
 
 /*
  * Get information about the current subbook.
@@ -496,7 +458,7 @@ eb_multi_entry_candidates(book, multi_id, entry_id, position)
     }
 
     if (multi->entries[entry_id].candidates_page == 0) {
-	error_code = EB_ERR_NO_SUCH_SEARCH;
+	error_code = EB_ERR_NO_CANDIDATES;
 	goto failed;
     }
 

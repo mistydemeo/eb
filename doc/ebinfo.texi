@@ -132,7 +132,7 @@ the number of subbooks: 2
 @group
 subbook 1:
   title: New English Japanese Dictionary (3rd edition)
-  directory: EJDICT
+  directory: ejdict
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 0xa121 -- 0xa24e
@@ -142,7 +142,7 @@ subbook 1:
 @group
 subbook 2:
   title: How to use the book
-  directory: HOWTO
+  directory: howto
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 

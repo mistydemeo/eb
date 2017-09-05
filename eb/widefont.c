@@ -12,35 +12,7 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
-/*
- * The maximum length of path name.
- */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX	MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX	1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"
@@ -116,7 +88,7 @@ eb_initialize_wide_font(book)
     /*
      * Read information from the text file.
      */
-    if (eb_zlseek(zip, font_file, (subbook->wide_current->page - 1)
+    if (eb_zlseek(zip, font_file, (off_t)(subbook->wide_current->page - 1)
 	* EB_SIZE_PAGE, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_FONT;
 	goto failed;
@@ -621,7 +593,8 @@ eb_wide_character_bitmap_jis(book, character_number, bitmap)
 
     character_index = ((character_number >> 8) - (start >> 8)) * 0x5e
 	+ ((character_number & 0xff) - (start & 0xff));
-    location = book->subbook_current->wide_current->page * EB_SIZE_PAGE
+    location
+	= (off_t)book->subbook_current->wide_current->page * EB_SIZE_PAGE
 	+ (character_index / (1024 / size)) * 1024
 	+ (character_index % (1024 / size)) * size;
 
@@ -706,7 +679,8 @@ eb_wide_character_bitmap_latin(book, character_number, bitmap)
 
     character_index = ((character_number >> 8) - (start >> 8)) * 0xfe
 	+ ((character_number & 0xff) - (start & 0xff));
-    location = book->subbook_current->wide_current->page * EB_SIZE_PAGE
+    location
+	= (off_t)book->subbook_current->wide_current->page * EB_SIZE_PAGE
 	+ (character_index / (1024 / size)) * 1024
 	+ (character_index % (1024 / size)) * size;
 

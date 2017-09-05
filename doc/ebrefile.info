@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0alpha2, for EB Library version 3.0alpha2.
+   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
 
 * Menu:
 
@@ -91,7 +91,7 @@ Though `ebzip' is free software, your books may not be free.
 `ebrefile' modifies contents of a certain file in a CD-ROM book.
 Please be careful.
 
-   This is edition 3.0alpha2, for EB Library version 3.0alpha2.
+   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
 
 
 File: ebrefile.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -141,21 +141,21 @@ directory is a top directory of a CD-ROM book.
      the number of subbooks: 3
      subbook 1:
        title: New English Japanese Dictionary (4th edition)
-       directory: ENGLISH
+       directory: english
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters: 0xa121 -- 0xa24e
        wide font characters: 0xa321 -- 0xa27e
      subbook 2:
        title: CD-ROM French Japanese Dictionary (3rd edition)
-       directory: FRENCH
+       directory: french
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters:
        wide font characters: 0xa321 -- 0xa27e
      subbook 3:
        title: Pocket German Japanese Dictionary (3rd edition)
-       directory: GERMAN
+       directory: german
        search methods: menu
        font sizes: 16 24 30 48
        narrow font characters:
@@ -164,10 +164,10 @@ directory is a top directory of a CD-ROM book.
 (*Note Invoking `ebinfo': (ebinfo)Invoking ebinfo, for more details
 about the `ebinfo' command).
 In this example, there are three subbooks in the book, and their
-directory names are `ENGLISH', `FRENCH' and `GERMAN'.
+directory names are `english', `french' and `german'.
 
    Invoking the following command, `ebrefile' build a new catalog file
-which has definitions of `ENGLISH' and `FRENCH' only.
+which has definitions of `english' and `french' only.
 
      % ebrefile --subbook english,french
 
@@ -188,7 +188,7 @@ when the `--output-directory' option is used.  *Note
 `--output-directory': Summary of Options, for more details about the
 `--output-directory' option).
 
-   Invoke `ebinfo' again.  The subbook `GERMGAN' is diappeared.
+   Invoke `ebinfo' again.  The subbook `germgan' is diappeared.
 
      % ebinfo
      disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
@@ -197,26 +197,22 @@ when the `--output-directory' option is used.  *Note
      
      subbook 1:
        title: New English Japanese Dictionary (4th edition)
-       directory: ENGLISH
+       directory: english
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters: 0xa121 -- 0xa24e
        wide font characters: 0xa321 -- 0xa27e
      subbook 2:
        title: CD-ROM French Japanese Dictionary (3rd edition)
-       directory: FRENCH
+       directory: french
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters:
        wide font characters: 0xa321 -- 0xa27e
 
    If you have already copied whole the CD-ROM book onto a hard disk,
-you may remove files of the subbook `GERMAN'.  When the directory name
-consists of upper case letters, type:
-
-     % rm -r GERMAN
-
-When the directory name consists of lower case letters, type:
+you may remove files of the subbook `german'.  When the directory name
+consists of lower case letters, type:
 
      % rm -r german
 
@@ -266,9 +262,9 @@ Usually, the same command line arguments are given to `ebzip' and
 `ebrefile'.
 
    Suppose that a CD-ROM book is mounted on `/cdrom', and this book has
-three subbooks; `ENGLISH', `FRENCH' and `GERMAN'.  By the following
-operation, the subbook `ENGLISH' and `FRENCH' are compressed and put
-under the current working directory, and the subbook `GERMAN' are
+three subbooks; `english', `french' and `german'.  By the following
+operation, the subbook `english' and `french' are compressed and put
+under the current working directory, and the subbook `german' are
 deleted from a subbook list.
 
      % ebzip --subbook english,french /cdrom
@@ -344,8 +340,8 @@ Node: Top1032
 Node: Introduction1568
 Node: Invoking ebrefile3639
 Node: Select Subbooks4335
-Node: Adjust Filename8141
-Node: Combination with ebzip9775
-Node: Summary of Options11087
+Node: Adjust Filename8057
+Node: Combination with ebzip9691
+Node: Summary of Options11003
 
 End Tag Table

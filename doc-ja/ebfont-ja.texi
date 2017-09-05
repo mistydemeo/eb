@@ -183,13 +183,13 @@ CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して 4
 
 @example
 @group
-EJDICT/16/narrow/a121.xbm
-EJDICT/16/wide/a321.xbm
+ejdict/16/narrow/a121.xbm
+ejdict/16/wide/a321.xbm
 @end group
 @end example
 
 @noindent
-@file{EJDICT/16/xbm/narrow} などの中間のディレクトリは、もし無けれ
+@file{ejdict/16/xbm/narrow} などの中間のディレクトリは、もし無けれ
 ば @code{ebfont} が生成します。
 
 @samp{--output-directory} オプションを指定することで、@code{ebfont}
@@ -287,7 +287,7 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 @group
 副本 1:
   題名: 新英和辞典（第四版）
-  ディレクトリ: ENGLISH
+  ディレクトリ: english
   検索方式: 前方一致 後方一致 条件 メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 0xa121 -- 0xa24e
@@ -297,7 +297,7 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 @group
 副本 2:
   題名: CD-ROM 仏和辞典（第三版）
-  ディレクトリ: FRENCH
+  ディレクトリ: french
   検索方式: 前方一致 後方一致 条件 メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 
@@ -307,7 +307,7 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 @group
 副本 3:
   題名: ポケット独和辞典（第三版）
-  ディレクトリ: GERMAN
+  ディレクトリ: german
   検索方式: メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 
@@ -320,10 +320,10 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 @pxref{Invoking ebinfo, , @code{ebinfo} の実行, ebinfo-ja, ebinfo-ja})。
 @*
 この例では、3 つの副本が書籍には含まれており、そのディレクトリ名は
-@code{ENGLISH}, @code{FRENCH}, @code{GERMAN} だということが分かります。
+@code{english}, @code{french}, @code{german} だということが分かります。
 
-次のコマンドを実行すると, @code{ebfont} は @code{ENGLISH} と
-@code{FRENCH} の画像ファイルだけを生成します。
+次のコマンドを実行すると, @code{ebfont} は @code{english} と
+@code{french} の画像ファイルだけを生成します。
 
 @example
 % ebfont --subbook english,french /mnt/cdrom

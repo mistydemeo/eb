@@ -173,7 +173,7 @@ parse_subbook_name_argument(argument, name_list, name_count)
 	name_p = name;
 	while (*argument_p != ',' && *argument_p != '\0'
 	    && i < EB_MAX_DIRECTORY_NAME_LENGTH) {
-		*name_p = toupper(*argument_p);
+		*name_p = tolower(*argument_p);
 	    i++;
 	    name_p++;
 	    argument_p++;
@@ -212,9 +212,10 @@ parse_subbook_name_argument(argument, name_list, name_count)
  * When no sub-book is matched to `directory', -1 is returned.
  */
 EB_Subbook_Code
-find_subbook(book, directory)
+find_subbook(book, directory, subbook_code)
     EB_Book *book;
     const char *directory;
+    EB_Subbook_Code *subbook_code;
 {
     EB_Error_Code error_code;
     EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
@@ -236,8 +237,10 @@ find_subbook(book, directory)
         error_code = eb_subbook_directory2(book, subbook_list[i], directory2);
 	if (error_code != EB_SUCCESS)
 	    continue;
-        if (strcasecmp(directory, directory2) == 0)
-            return subbook_list[i];
+        if (strcasecmp(directory, directory2) == 0) {
+            *subbook_code = subbook_list[i];
+	    return EB_SUCCESS;
+	}
     }
 
     fprintf(stderr, _("%s: no such subbook `%s'\n"), invoked_name, directory);

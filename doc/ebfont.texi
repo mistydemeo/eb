@@ -185,13 +185,13 @@ The @var{character-number} is a hexadecimal number with 4 digits
 
 @example
 @group
-EJDICT/16/narrow/a121.xbm
-EJDICT/16/wide/a321.xbm
+ejdict/16/narrow/a121.xbm
+ejdict/16/wide/a321.xbm
 @end group
 @end example
 
 @noindent
-The intermediate directories such as @file{EJDICT/16/xbm/narrow} are
+The intermediate directories such as @file{ejdict/16/xbm/narrow} are
 created by @code{ebfont} if missing.
 
 @code{ebfont} can outputs image files not only under the current
@@ -288,7 +288,7 @@ the number of subbooks: 3
 @group
 subbook 1:
   title: New English Japanese Dictionary (4th edition)
-  directory: ENGLISH
+  directory: english
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 0xa121 -- 0xa24e
@@ -298,7 +298,7 @@ subbook 1:
 @group
 subbook 2:
   title: CD-ROM French Japanese Dictionary (3rd edition)
-  directory: FRENCH
+  directory: french
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 
@@ -308,7 +308,7 @@ subbook 2:
 @group
 subbook 3:
   title: Pocket German Japanese Dictionary (3rd edition)
-  directory: GERMAN
+  directory: german
   search methods: menu
   font sizes: 16 24 30 48
   narrow font characters: 
@@ -321,10 +321,10 @@ subbook 3:
 for more details about the @code{ebinfo} command).
 @*
 In this example, there are three subbooks in the book, and their
-directory names are @code{ENGLISH}, @code{FRENCH} and @code{GERMAN}.
+directory names are @code{english}, @code{french} and @code{german}.
 
 Inkoing the following command, @code{ebfont} generates image files for
-@code{ENGLISH} and @code{FRENCH} only.
+@code{english} and @code{french} only.
 
 @example
 % ebfont --subbook english,french /mnt/cdrom

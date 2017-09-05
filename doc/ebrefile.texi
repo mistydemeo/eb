@@ -196,7 +196,7 @@ the number of subbooks: 3
 @group
 subbook 1:
   title: New English Japanese Dictionary (4th edition)
-  directory: ENGLISH
+  directory: english
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 0xa121 -- 0xa24e
@@ -206,7 +206,7 @@ subbook 1:
 @group
 subbook 2:
   title: CD-ROM French Japanese Dictionary (3rd edition)
-  directory: FRENCH
+  directory: french
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 
@@ -216,7 +216,7 @@ subbook 2:
 @group
 subbook 3:
   title: Pocket German Japanese Dictionary (3rd edition)
-  directory: GERMAN
+  directory: german
   search methods: menu
   font sizes: 16 24 30 48
   narrow font characters: 
@@ -229,10 +229,10 @@ subbook 3:
 for more details about the @code{ebinfo} command).
 @*
 In this example, there are three subbooks in the book, and their 
-directory names are @code{ENGLISH}, @code{FRENCH} and @code{GERMAN}.
+directory names are @code{english}, @code{french} and @code{german}.
 
 Invoking the following command, @code{ebrefile} build a new catalog file
-which has definitions of @code{ENGLISH} and @code{FRENCH} only.
+which has definitions of @code{english} and @code{french} only.
 
 @example
 % ebrefile --subbook english,french
@@ -261,7 +261,7 @@ option is used.
 about the @samp{--output-directory} option).
 
 Invoke @code{ebinfo} again.
-The subbook @code{GERMGAN} is diappeared.
+The subbook @code{germgan} is diappeared.
 
 @example
 @group
@@ -274,7 +274,7 @@ the number of subbooks: 2
 @group
 subbook 1:
   title: New English Japanese Dictionary (4th edition)
-  directory: ENGLISH
+  directory: english
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 0xa121 -- 0xa24e
@@ -284,7 +284,7 @@ subbook 1:
 @group
 subbook 2:
   title: CD-ROM French Japanese Dictionary (3rd edition)
-  directory: FRENCH
+  directory: french
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 
@@ -293,14 +293,7 @@ subbook 2:
 @end example
 
 If you have already copied whole the CD-ROM book onto a hard disk,
-you may remove files of the subbook @code{GERMAN}.
-When the directory name consists of upper case letters, type:
-
-@example
-% rm -r GERMAN
-@end example
-
-@noindent
+you may remove files of the subbook @code{german}.
 When the directory name consists of lower case letters, type:
 
 @example
@@ -356,10 +349,10 @@ Usually, the same command line arguments are given to @code{ebzip}
 and @code{ebrefile}.
 
 Suppose that a CD-ROM book is mounted on @code{/cdrom}, and this
-book has three subbooks; @code{ENGLISH}, @code{FRENCH} and @code{GERMAN}.
-By the following operation, the subbook @code{ENGLISH} and @code{FRENCH}
+book has three subbooks; @code{english}, @code{french} and @code{german}.
+By the following operation, the subbook @code{english} and @code{french}
 are compressed and put under the current working directory, and the
-subbook @code{GERMAN} are deleted from a subbook list.
+subbook @code{german} are deleted from a subbook list.
 
 @example
 % ebzip --subbook english,french /cdrom

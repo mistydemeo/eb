@@ -120,7 +120,7 @@ ebinfo_SOURCES = ebinfo.c
 ebinfo_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS)
 ebinfo_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS)
 
-INCLUDES = -I$(top_srcdir) -I../libebutils -I$(top_srcdir)/libebutils    $(INTLINCS)
+INCLUDES = -I$(top_srcdir) -I../libebutils -I$(top_srcdir)/libebutils 	$(INTLINCS)
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h

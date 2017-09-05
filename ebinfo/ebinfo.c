@@ -334,9 +334,8 @@ output_information(book_path, multi_flag)
 	fputs(_("  font sizes: "), stdout);
 	error_code = eb_font_list(&book, font_list, &font_count);
 	if (error_code != EB_SUCCESS) {
-	    fprintf(stderr, "%s: %s\n\n", invoked_name,
-		eb_error_message(error_code));
-	    fflush(stderr);
+	    fputc('\n', stdout);
+	    output_error_message(error_code);
 	} else {
 	    for (j = 0; j < font_count; j++) {
 		error_code = eb_font_height2(font_list[j], &font_height);
@@ -353,22 +352,22 @@ output_information(book_path, multi_flag)
 	if (eb_have_narrow_font(&book)) {
 	    do {
 		error_code = eb_set_font(&book, font_list[0]);
-		if (error_code != EB_SUCCESS) {
-		    output_error_message(error_code);
+		if (error_code != EB_SUCCESS)
 		    break;
-		}
 		error_code = eb_narrow_font_start(&book, &font_start);
-		if (error_code != EB_SUCCESS) {
-		    output_error_message(error_code);
+		if (error_code != EB_SUCCESS)
 		    break;
-		}
 		error_code = eb_narrow_font_end(&book, &font_end);
-		if (error_code != EB_SUCCESS) {
-		    output_error_message(error_code);
+		if (error_code != EB_SUCCESS)
 		    break;
-		}
-		printf("0x%04x -- 0x%04x\n", font_start, font_end);
 	    } while (0);
+
+	    if (error_code == EB_SUCCESS)
+		printf("0x%04x -- 0x%04x\n", font_start, font_end);
+	    else {
+		fputc('\n', stdout);
+		output_error_message(error_code);
+	    }
 	} else {
 	    fputc('\n', stdout);
 	}
@@ -380,22 +379,22 @@ output_information(book_path, multi_flag)
 	if (eb_have_wide_font(&book)) {
 	    do {
 		error_code = eb_set_font(&book, font_list[0]);
-		if (error_code != EB_SUCCESS) {
-		    output_error_message(error_code);
+		if (error_code != EB_SUCCESS)
 		    break;
-		}
 		error_code = eb_wide_font_start(&book, &font_start);
-		if (error_code != EB_SUCCESS) {
-		    output_error_message(error_code);
+		if (error_code != EB_SUCCESS)
 		    break;
-		}
 		error_code = eb_wide_font_end(&book, &font_end);
-		if (error_code != EB_SUCCESS) {
-		    output_error_message(error_code);
+		if (error_code != EB_SUCCESS)
 		    break;
-		}
-		printf("0x%04x -- 0x%04x\n", font_start, font_end);
 	    } while (0);
+
+	    if (error_code == EB_SUCCESS)
+		printf("0x%04x -- 0x%04x\n", font_start, font_end);
+	    else {
+		fputc('\n', stdout);
+		output_error_message(error_code);
+	    }
 	} else {
 	    fputc('\n', stdout);
 	}

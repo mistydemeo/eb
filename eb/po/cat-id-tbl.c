@@ -60,7 +60,7 @@ const struct _msg_ent _msg_tbl[] = {
   {"no such character text", 51},
   {"no such search method", 52},
   {"no such hook", 53},
-  {"invalid hook workspace usage", 54},
+  {"stop code found", 54},
   {"different content type", 55},
   {"no previous search", 56},
   {"no such multi search", 57},

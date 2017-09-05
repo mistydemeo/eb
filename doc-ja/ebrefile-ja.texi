@@ -201,7 +201,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @group
 副本 1:
   題名: 新英和辞典（第四版）
-  ディレクトリ: ENGLISH
+  ディレクトリ: english
   検索方式: 前方一致 後方一致 条件 メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 0xa121 -- 0xa24e
@@ -211,7 +211,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @group
 副本 2:
   題名: CD-ROM 仏和辞典（第三版）
-  ディレクトリ: FRENCH
+  ディレクトリ: french
   検索方式: 前方一致 後方一致 条件 メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 
@@ -221,7 +221,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @group
 副本 3:
   題名: ポケット独和辞典（第三版）
-  ディレクトリ: GERMAN
+  ディレクトリ: german
   検索方式: メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 
@@ -233,11 +233,11 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 (@code{ebinfo} コマンドに関しての詳細は、
 @pxref{Invoking ebinfo, , @code{ebinfo} の実行, ebinfo-ja, ebinfo-ja})。
 @*
-この例では、3 つの副本が書籍には含まれており、その名前は @code{ENGLISH}
-@code{FRENCH}, @code{GERMAN} だということが分かります。
+この例では、3 つの副本が書籍には含まれており、その名前は @code{english}
+@code{french}, @code{german} だということが分かります。
 
-次のコマンドを実行すると、@code{ebrefile} は副本として @code{ENGLISH}
-と @code{FRENCH} だけを定義した新しいカタログを生成します。
+次のコマンドを実行すると、@code{ebrefile} は副本として @code{english}
+と @code{french} だけを定義した新しいカタログを生成します。
 
 @example
 % ebrefile --subbook english,french
@@ -268,7 +268,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 は @pxref{Summary of Options, , @samp{--output-directory}})。
 
 もういちど @code{ebinfo} を起動してみましょう。
-副本 @code{GERMAN} が消えています。
+副本 @code{german} が消えています。
 
 @example
 @group
@@ -281,7 +281,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @group
 副本 1:
   題名: 新英和辞典（第四版）
-  ディレクトリ: ENGLISH
+  ディレクトリ: english
   検索方式: 前方一致 後方一致 条件 メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 0xa121 -- 0xa24e
@@ -291,7 +291,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @group
 副本 2:
   題名: CD-ROM 仏和辞典（第三版）
-  ディレクトリ: FRENCH
+  ディレクトリ: french
   検索方式: 前方一致 後方一致 条件 メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 
@@ -300,14 +300,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @end example
 
 もし、CD-ROM 書籍全体をすでにハードディスクにコピーしているなら、
-副本 @code{GERMAN} のファイルは削除しても構いません。
-ディレクトリ名が大文字で構成されているなら、次のようにします。
-
-@example
-% rm -r GERMAN
-@end example
-
-@noindent
+副本 @code{german} のファイルは削除しても構いません。
 ディレクトリ名が小文字で構成されているなら、次のようにします。
 
 @example
@@ -367,10 +360,10 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 通常、 @code{ebzip} と @code{ebrefile} にはコマンド行で同じ引数を与
 えます。
 
-CD-ROM 書籍が @code{/cdrom} にマウントされ、この書籍には @code{ENGLISH}、
-@code{FRENCH}、@code{GERMAN} という 3 つの副本が収められているとします。
-以下に記した操作によって、副本 @code{ENGLISH}、@code{FRENCH} は圧縮
-されてカレントディレクトリの下に置かれ、副本 @code{GERMAN} は副本の
+CD-ROM 書籍が @code{/cdrom} にマウントされ、この書籍には @code{english}、
+@code{french}、@code{german} という 3 つの副本が収められているとします。
+以下に記した操作によって、副本 @code{english}、@code{french} は圧縮
+されてカレントディレクトリの下に置かれ、副本 @code{german} は副本の
 リストから削除されます。
 
 @example

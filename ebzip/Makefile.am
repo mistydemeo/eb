@@ -11,8 +11,8 @@ ebzip_SOURCES = ebzip.c ebzip1.c filename.c
 ebzip_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS)
 ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS)
 
-INCLUDES = -I$(top_srcdir) -I../libebutils -I$(top_srcdir)/libebutils \
-   $(INTLINCS) $(ZLIBINCS)
+INCLUDES = -I../libebutils -I$(top_srcdir)/libebutils \
+	-I../eb -I$(top_srcdir)/eb $(INTLINCS) $(ZLIBINCS)
 
 # Shorten command name `ebzipinfo' for DOS & Win32.
 if EXEEXT_EXE

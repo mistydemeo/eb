@@ -23,10 +23,6 @@ EXTRA_DIST = ChangeLog VERSION po2tbl.sed.in
 
 DISTCLEANFILES = libintl.h po2tbl.sed
 
-libintl.h: $(srcdir)/libgettext.h
-	rm -f $@
-	$(LN_S) $(srcdir)/libgettext.h libintl.h
-
 ### *.o dependencies ###
 bindtextdom.o: bindtextdom.c libgettext.h gettext.h gettextP.h \
  loadinfo.h

@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0alpha2, for EB Library version 3.0alpha2.
+   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
 
 * Menu:
 
@@ -55,7 +55,7 @@ _without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 3.0alpha2, for EB Library version 3.0alpha2.
+   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
 
 
 File: ebinfo.info,  Node: Invoking ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
@@ -83,14 +83,14 @@ like as follows:
      the number of subbooks: 2
      subbook 1:
        title: New English Japanese Dictionary (3rd edition)
-       directory: EJDICT
+       directory: ejdict
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters: 0xa121 -- 0xa24e
        wide font characters: 0xa321 -- 0xa27e
      subbook 2:
        title: How to use the book
-       directory: HOWTO
+       directory: howto
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters:

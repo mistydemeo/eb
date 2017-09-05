@@ -12,49 +12,7 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
-#include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
-
-#ifndef HAVE_MEMCPY
-#define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef __STDC__
-void *memchr(const void *, int, size_t);
-int memcmp(const void *, const void *, size_t);
-void *memmove(void *, const void *, size_t);
-void *memset(void *, int, size_t);
-#else /* not __STDC__ */
-char *memchr();
-int memcmp();
-char *memmove();
-char *memset();
-#endif /* not __STDC__ */
-#endif
-
-#ifndef ENABLE_PTHREAD
-#define pthread_mutex_lock(m)
-#define pthread_mutex_unlock(m)
-#endif
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"
@@ -64,10 +22,16 @@ char *memset();
 /*
  * Page-ID macros.
  */
-#define PAGE_ID_IS_LEAF_LAYER(page_id)	(((page_id) & 0x80) == 0x80)
-#define PAGE_ID_IS_LAYER_START(page_id)	(((page_id) & 0x40) == 0x40)
-#define PAGE_ID_IS_LAYER_END(page_id)	(((page_id) & 0x20) == 0x20)
+#define PAGE_ID_IS_LEAF_LAYER(page_id)		(((page_id) & 0x80) == 0x80)
+#define PAGE_ID_IS_LAYER_START(page_id)		(((page_id) & 0x40) == 0x40)
+#define PAGE_ID_IS_LAYER_END(page_id)		(((page_id) & 0x20) == 0x20)
 #define PAGE_ID_HAVE_GROUP_ENTRY(page_id)	(((page_id) & 0x10) == 0x10)
+
+/*
+ * The maximum number of hit entries for tomporary hit lists.
+ * This is used in eb_hit_list().
+ */
+#define EB_TMP_MAX_HITS		64
 
 /*
  * Book-code of the book in which you want to search a word.
@@ -101,7 +65,7 @@ static EB_Error_Code eb_hit_list_keyword EB_P((EB_Book *, EB_Search_Context *,
 static EB_Error_Code eb_hit_list_multi EB_P((EB_Book *, EB_Search_Context *,
     int, EB_Hit *, int *));
 static void eb_and_hit_lists EB_P((EB_Hit [], int *, int, int,
-    EB_Hit [EB_NUMBER_OF_SEARCH_CONTEXTS][], int []));
+    EB_Hit [][EB_TMP_MAX_HITS], int []));
 
 /*
  * Intialize the current search status.
@@ -243,12 +207,6 @@ eb_presearch_word(book, context)
     pthread_mutex_unlock(&cache_mutex);
     return error_code;
 }
-
-/*
- * The maximum number of hit entries for tomporary hit lists.
- * This is used in eb_hit_list().
- */
-#define EB_TMP_MAX_HITS		64
 
 /*
  * Get hit entries of a submitted search request.

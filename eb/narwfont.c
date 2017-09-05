@@ -12,35 +12,7 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
-/*
- * The maximum length of path name.
- */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX	MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX	1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"

@@ -130,6 +130,15 @@ char *strerror();
 #endif
 
 /*
+ * Trick for difference of path notation between UNIX and DOS.
+ */
+#ifndef DOS_FILE_PATH
+#define F_(path1, path2) (path1)
+#else
+#define F_(path1, path2) (path2)
+#endif
+
+/*
  * Command line options.
  */
 static const char *short_options = "df:hi:o:S:v";
@@ -431,8 +440,8 @@ main(argc, argv)
 	EB_Subbook_Code sub;
 
 	for (i = 0; i < subbook_name_count; i++) {
-	    sub = find_subbook(&book, subbook_name_list[i]);
-	    if (sub < 0) {
+	    error_code = find_subbook(&book, subbook_name_list[i], &sub);
+	    if (error_code != EB_SUCCESS) {
 		fprintf(stderr, _("%s: unknown subbook name `%s'\n"),
 		    invoked_name, subbook_name_list[i]);
 	    }
@@ -716,10 +725,8 @@ make_book_fonts(book, out_path, subbook_list, subbook_count, font_list,
 	/*
 	 * Make a directory for the subbook.
 	 */
-	sprintf(subbook_path, "%s/%s", out_path, subbook_directory);
-#ifdef DOS_FILE_PATH
-	eb_canonicalize_file_name(subbook_path);
-#endif
+	sprintf(subbook_path, F_("%s/%s", "%s\\%s"),
+	    out_path, subbook_directory);
 	if (make_missing_directory(subbook_path, 0777 ^ get_umask()) < 0)
 	    goto failed;
 
@@ -801,10 +808,7 @@ make_subbook_fonts(book, subbook_path, font_list, font_count, image_list,
 	 * Make a directory for the font.
 	 */
 	eb_font_height2(font_list[i], &font_height);
-	sprintf(font_path, "%s/%d", subbook_path, font_height);
-#ifdef DOS_FILE_PATH
-	eb_canonicalize_file_name(font_path);
-#endif
+	sprintf(font_path, F_("%s/%d", "%s\\%d"), subbook_path, font_height);
 	if (make_missing_directory(font_path, 0777 ^ get_umask()) < 0)
 	    goto failed;
 
@@ -863,8 +867,7 @@ make_subbook_size_fonts(book, font_path, image_list, image_count)
 	/*
 	 * Make font-files as the image format.
 	 */
-	if (make_subbook_size_image_fonts(book, font_path, image_list[i])
-	    < 0)
+	if (make_subbook_size_image_fonts(book, font_path, image_list[i]) < 0)
 	    goto failed;
     }
 
@@ -944,10 +947,7 @@ make_subbook_size_image_fonts(book, image_path, image)
 	/*
 	 * Make a directory for the narrow font.
 	 */
-	sprintf(type_path, "%s/narrow", image_path);
-#ifdef DOS_FILE_PATH
-	eb_canonicalize_file_name(type_path);
-#endif
+	sprintf(type_path, F_("%s/narrow", "%s\\narrow"), image_path);
 	if (make_missing_directory(type_path, 0777 ^ get_umask()) < 0)
 	    goto failed;
 
@@ -963,11 +963,8 @@ make_subbook_size_image_fonts(book, image_path, image)
 	    /*
 	     * Generate a bitmap file for the character `character_number'.
 	     */
-	    sprintf(file_name, "%s/%04x.%s", type_path, character_number,
-		image_formats[image].suffix);
-#ifdef DOS_FILE_PATH
-	    eb_canonicalize_file_name(file_name);
-#endif
+	    sprintf(file_name, F_("%s/%04x.%s", "%s\\%04x.%s"),
+		type_path, character_number, image_formats[image].suffix);
 	    error_code = eb_narrow_font_character_bitmap(book,
 		character_number, bitmap_data);
 	    if (error_code != EB_SUCCESS) {
@@ -1014,10 +1011,7 @@ character=0x%04x\n",
 	/*
 	 * Make a directory for the wide font.
 	 */
-	sprintf(type_path, "%s/wide", image_path);
-#ifdef DOS_FILE_PATH
-	    eb_canonicalize_file_name(type_path);
-#endif
+	sprintf(type_path, F_("%s/wide", "%s\\wide"), image_path);
 	if (make_missing_directory(type_path, 0777 ^ get_umask()) < 0)
 	    goto failed;
 
@@ -1033,11 +1027,8 @@ character=0x%04x\n",
 	    /*
 	     * Generate a bitmap file for the character `character_number'.
 	     */
-	    sprintf(file_name, "%s/%04x.%s", type_path, character_number,
-		image_formats[image].suffix);
-#ifdef DOS_FILE_PATH
-	    eb_canonicalize_file_name(file_name);
-#endif
+	    sprintf(file_name, F_("%s/%04x.%s", "%s\\%04x.%s"),
+		type_path, character_number, image_formats[image].suffix);
 	    error_code = eb_wide_font_character_bitmap(book, character_number,
 		bitmap_data);
 	    if (error_code != EB_SUCCESS) {

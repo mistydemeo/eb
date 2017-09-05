@@ -12,25 +12,11 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
-
 
 /*
  * Examine whether the current subbook in `book' supports `KEYWORD SEARCH'

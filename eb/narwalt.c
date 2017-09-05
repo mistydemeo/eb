@@ -12,40 +12,12 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"
 #include "appendix.h"
 #include "internal.h"
-
-#ifndef HAVE_MEMCPY
-#define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef __STDC__
-void *memchr(const void *, int, size_t);
-int memcmp(const void *, const void *, size_t);
-void *memmove(void *, const void *, size_t);
-void *memset(void *, int, size_t);
-#else /* not __STDC__ */
-char *memchr();
-int memcmp();
-char *memmove();
-char *memset();
-#endif /* not __STDC__ */
-#endif
 
 /*
  * Unexported functions.

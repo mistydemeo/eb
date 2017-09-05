@@ -100,7 +100,7 @@ extern "C" {
 /*
  * The maximum length of a word to be searched.
  */
-#define EB_MAX_WORD_LENGTH		255
+#define EB_MAX_WORD_LENGTH             255
 
 /*
  * The maximum length of an EB* book title.
@@ -189,14 +189,9 @@ extern "C" {
 #define EB_MAX_ALTERNATION_CACHE	16
 
 /*
- * Maximum length of a text work buffer.
- */
-#define EB_MAX_TEXT_WORK_LENGTH		255
-
-/*
  * The number of text hooks.
  */
-#define EB_NUMBER_OF_HOOKS		32
+#define EB_NUMBER_OF_HOOKS		27
 
 /*
  * The number of search contexts required by a book.
@@ -770,20 +765,34 @@ struct EB_Text_Context_Struct {
     off_t location;
 
     /*
-     * Work buffer passed to hook functions.
+     * The current point of a buffer on which text is written.
      */
-    char work_buffer[EB_MAX_TEXT_WORK_LENGTH + 1];
+    char *out;
 
     /*
-     * Length of a string in `work_buffer'.
+     * Length of `out'.
      */
-    size_t work_length;
+    size_t out_rest_length;
+    
+    /*
+     * Unprocessed string that a hook function writes on text.
+     */
+    char *unprocessed;
 
     /*
-     * The number of bytes added to `location', when a string in
-     * `work_buffer' is flushed.
+     * Size of `unprocessed'.
      */
-    size_t work_step;
+    size_t unprocessed_size;
+
+    /*
+     * Length of the current input text phrase.
+     */
+    size_t in_step;
+
+    /*
+     * Length of the current output text phrase.
+     */
+    size_t out_step;
 
     /*
      * Narrow character region flag.
@@ -815,6 +824,16 @@ struct EB_Text_Context_Struct {
      * Stop-code automatically set by EB Library.
      */
     int auto_stop_code;
+
+    /*
+     * The current candidate word for multi search.
+     */
+    char candidate[EB_MAX_WORD_LENGTH + 1];
+
+    /*
+     * Whether the current text point is in the candidate word or not.
+     */
+    int is_candidate;
 };
 
 /*
@@ -1008,8 +1027,8 @@ struct EB_Hook_Struct {
     /*
      * Hook function for the hook code `code'.
      */
-    EB_Error_Code (*function) EB_P((EB_Book *, EB_Appendix *, char *,
-	EB_Hook_Code, int, const int *));
+    EB_Error_Code (*function) EB_P((EB_Book *, EB_Appendix *, void *,
+	EB_Hook_Code, int, const unsigned int *));
 };
 
 /*

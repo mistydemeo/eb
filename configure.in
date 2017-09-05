@@ -3,7 +3,7 @@ dnl * Process this file with autoconf to produce a configure script.
 dnl *
 AC_INIT(eb/eb.c)
 AC_PREREQ(2.12)
-AM_INIT_AUTOMAKE(eb, 3.0alpha2)
+AM_INIT_AUTOMAKE(eb, 3.0alpha3)
 
 dnl *
 dnl * Library version info.
@@ -334,6 +334,7 @@ dnl *
 dnl * Output Files.
 dnl * 
 AC_OUTPUT_COMMANDS([rm -f intl/libintl.h])
+AC_OUTPUT_COMMANDS([cp $srcdir/intl/libgettext.h intl/libintl.h])
 AC_OUTPUT_COMMANDS(
 [case "$CONFIG_FILES" in *eb/po/Makefile.in*)
    sed -e "/POTFILES =/r eb/po/POTFILES" eb/po/Makefile.in > eb/po/Makefile

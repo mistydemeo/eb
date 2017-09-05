@@ -382,10 +382,6 @@ distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
 
-libintl.h: $(srcdir)/libgettext.h
-	rm -f $@
-	$(LN_S) $(srcdir)/libgettext.h libintl.h
-
 ### *.o dependencies ###
 bindtextdom.o: bindtextdom.c libgettext.h gettext.h gettextP.h \
  loadinfo.h

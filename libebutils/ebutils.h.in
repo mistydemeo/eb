@@ -45,7 +45,8 @@ void output_try_help EB_P((void));
 void output_version EB_P((void));
 int parse_subbook_name_argument EB_P((const char *,
     char [][EB_MAX_DIRECTORY_NAME_LENGTH  + 1], int *));
-EB_Subbook_Code find_subbook EB_P((EB_Book *, const char *));
+EB_Subbook_Code find_subbook EB_P((EB_Book *, const char *,
+    EB_Subbook_Code *));
 void canonicalize_path EB_P((char *));
 
 #endif /* not EBUTILS_H */

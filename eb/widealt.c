@@ -12,40 +12,12 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"
 #include "appendix.h"
 #include "internal.h"
-
-#ifndef HAVE_MEMCPY
-#define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef __STDC__
-void *memchr(const void *, int, size_t);
-int memcmp(const void *, const void *, size_t);
-void *memmove(void *, const void *, size_t);
-void *memset(void *, int, size_t);
-#else /* not __STDC__ */
-char *memchr();
-int memcmp();
-char *memmove();
-char *memset();
-#endif /* not __STDC__ */
-#endif
 
 /*
  * Unexported functions.
@@ -266,7 +238,7 @@ eb_wide_character_text_jis(appendix, character_number, text)
     EB_Error_Code error_code;
     int start;
     int end;
-    int location;
+    off_t location;
     EB_Alternation_Cache *cachep;
 
     start = appendix->subbook_current->wide_start;
@@ -289,7 +261,8 @@ eb_wide_character_text_jis(appendix, character_number, text)
     /*
      * Calculate the location of alternation data.
      */
-    location = (appendix->subbook_current->wide_page - 1) * EB_SIZE_PAGE
+    location
+	= (off_t)(appendix->subbook_current->wide_page - 1) * EB_SIZE_PAGE
 	+ (((character_number >> 8) - (start >> 8)) * 0x5e
 	    + (character_number & 0xff) - (start & 0xff))
 	* (EB_MAX_ALTERNATION_TEXT_LENGTH + 1);
@@ -351,7 +324,7 @@ eb_wide_character_text_latin(appendix, character_number, text)
     EB_Error_Code error_code;
     int start;
     int end;
-    int location;
+    off_t location;
     EB_Alternation_Cache *cache_p;
 
     start = appendix->subbook_current->wide_start;
@@ -374,7 +347,8 @@ eb_wide_character_text_latin(appendix, character_number, text)
     /*
      * Calculate the location of alternation data.
      */
-    location = (appendix->subbook_current->wide_page - 1) * EB_SIZE_PAGE
+    location
+	= (off_t)(appendix->subbook_current->wide_page - 1) * EB_SIZE_PAGE
 	+ (((character_number >> 8) - (start >> 8)) * 0xfe
 	    + (character_number & 0xff) - (start & 0xff))
 	* (EB_MAX_ALTERNATION_TEXT_LENGTH + 1);

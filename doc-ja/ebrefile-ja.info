@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.0alpha2 版です。 EB ライブラリバージョン 3.0alpha2 に
+   この文書は第 3.0alpha3 版です。 EB ライブラリバージョン 3.0alpha3 に
 対応しています。
 
 * Menu:
@@ -92,7 +92,7 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 使えるものであるとは限りません。 `ebrefile' は、CD-ROM 書籍のあるファ
 イルの内容に変更を加えます。 ご注意下さい。
 
-   この文書は第 3.0alpha2 版です。 EB ライブラリバージョン 3.0alpha2 に
+   この文書は第 3.0alpha3 版です。 EB ライブラリバージョン 3.0alpha3 に
 対応しています。
 
 
@@ -144,21 +144,21 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
      副本の数: 3
      副本 1:
        題名: 新英和辞典（第四版）
-       ディレクトリ: ENGLISH
+       ディレクトリ: english
        検索方式: 前方一致後方一致条件メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字: 0xa121 -- 0xa24e
        全角フォントの文字: 0xa321 -- 0xa27e
      副本 2:
        題名: CD-ROM 仏和辞典（第三版）
-       ディレクトリ: FRENCH
+       ディレクトリ: french
        検索方式: 前方一致後方一致条件メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字:
        全角フォントの文字: 0xa321 -- 0xa27e
      副本 3:
        題名: ポケット独和辞典（第三版）
-       ディレクトリ: GERMAN
+       ディレクトリ: german
        検索方式: メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字:
@@ -166,11 +166,11 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
 
 (`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行 :
 (ebinfo-ja)Invoking ebinfo.)。
-この例では、 3 つの副本が書籍には含まれており、その名前は `ENGLISH'
-`FRENCH', `GERMAN' だということが分かります。
+この例では、 3 つの副本が書籍には含まれており、その名前は `english'
+`french', `german' だということが分かります。
 
-   次のコマンドを実行すると、 `ebrefile' は副本として `ENGLISH' と
-`FRENCH' だけを定義した新しいカタログを生成します。
+   次のコマンドを実行すると、 `ebrefile' は副本として `english' と
+`french' だけを定義した新しいカタログを生成します。
 
      % ebrefile --subbook english,french
 
@@ -191,7 +191,7 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
 の規則は当てはまりません。 `--output-directory' オプションについての詳
 細は *note `--output-directory': Summary of Options.)。
 
-   もういちど `ebinfo' を起動してみましょう。 副本 `GERMAN' が消えてい
+   もういちど `ebinfo' を起動してみましょう。 副本 `german' が消えてい
 ます。
 
      % ebinfo /mnt/cdrom
@@ -200,26 +200,22 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
      副本の数: 2
      副本 1:
        題名: 新英和辞典（第四版）
-       ディレクトリ: ENGLISH
+       ディレクトリ: english
        検索方式: 前方一致後方一致条件メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字: 0xa121 -- 0xa24e
        全角フォントの文字: 0xa321 -- 0xa27e
      副本 2:
        題名: CD-ROM 仏和辞典（第三版）
-       ディレクトリ: FRENCH
+       ディレクトリ: french
        検索方式: 前方一致後方一致条件メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字:
        全角フォントの文字: 0xa321 -- 0xa27e
 
    もし、CD-ROM 書籍全体をすでにハードディスクにコピーしているなら、 副
-本 `GERMAN' のファイルは削除しても構いません。 ディレクトリ名が大文字で
+本 `german' のファイルは削除しても構いません。 ディレクトリ名が小文字で
 構成されているなら、次のようにします。
-
-     % rm -r GERMAN
-
-ディレクトリ名が小文字で構成されているなら、次のようにします。
 
      % rm -r german
 
@@ -270,10 +266,10 @@ File: ebrefile-ja.info,  Node: Combination with ebzip,  Prev: Adjust Filename,  
 (ebzip-ja)Introduction.)。 通常、 `ebzip' と `ebrefile' にはコマンド行
 で同じ引数を与えます。
 
-   CD-ROM 書籍が `/cdrom' にマウントされ、この書籍には `ENGLISH'、
-`FRENCH'、`GERMAN' という 3 つの副本が収められているとします。 以下に記
-した操作によって、副本 `ENGLISH'、`FRENCH' は圧縮されてカレントディレ
-クトリの下に置かれ、副本 `GERMAN' は副本のリストから削除されます。
+   CD-ROM 書籍が `/cdrom' にマウントされ、この書籍には `english'、
+`french'、`german' という 3 つの副本が収められているとします。 以下に記
+した操作によって、副本 `english'、`french' は圧縮されてカレントディレ
+クトリの下に置かれ、副本 `german' は副本のリストから削除されます。
 
      % ebzip --subbook english,french /cdrom
      % ebrefile --subbook english,french /cdrom
@@ -350,8 +346,8 @@ Node: Top1026
 Node: Introduction1559
 Node: Invoking ebrefile3714
 Node: Select Subbooks4408
-Node: Adjust Filename8106
-Node: Combination with ebzip9952
-Node: Summary of Options11173
+Node: Adjust Filename8021
+Node: Combination with ebzip9867
+Node: Summary of Options11088
 
 End Tag Table

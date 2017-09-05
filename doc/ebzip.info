@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0alpha2, for EB Library version 3.0alpha2.
+   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
 
 * Menu:
 
@@ -101,7 +101,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 3.0alpha2, for EB Library version 3.0alpha2.
+   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -342,21 +342,21 @@ and what their directory names are.
      the number of subbooks: 3
      subbook 1:
        title: New English Japanese Dictionary (4th edition)
-       directory: ENGLISH
+       directory: english
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters: 0xa121 -- 0xa24e
        wide font characters: 0xa321 -- 0xa27e
      subbook 2:
        title: CD-ROM French Japanese Dictionary (3rd edition)
-       directory: FRENCH
+       directory: french
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters:
        wide font characters: 0xa321 -- 0xa27e
      subbook 3:
        title: Pocket German Japanese Dictionary (3rd edition)
-       directory: GERMAN
+       directory: german
        search methods: menu
        font sizes: 16 24 30 48
        narrow font characters:
@@ -365,9 +365,9 @@ and what their directory names are.
 (*Note Invoking `ebinfo': (ebinfo)Invoking ebinfo, for more details
 about the `ebinfo' command).
 In this example, there are three subbooks in the book, and their
-directory names are `ENGLISH', `FRENCH' and `GERMAN'.
+directory names are `english', `french' and `german'.
 
-   You can compress only `ENGLISH' and `FRENCH' by the following way:
+   You can compress only `english' and `french' by the following way:
 
      % ebzip --subbook english,french /dict
 
@@ -376,15 +376,15 @@ Case of the directory names are not sensitve.  An argument to
 
      % ebzip --subbook english --subbook french /dict
 
-Files in the rest subbooks (`GERMAN' in this example) are not
+Files in the rest subbooks (`german' in this example) are not
 compressed nor copied, so that the compression procedure for the book
 is incompleted at this point.  In order to use the book, you must
 compress the rest subbooks in a further operation, or deletes the rest
 subbooks from a subbook list in the `CATALOG(S)' file by using the
 `ebrefile' command (*Note Combination with `ebzip':
 (ebrefile)Combination with ebzip, for more details).  You can compress
-subbooks with different compression levels (e.g. compress `ENGLISH' and
-`FRENCH' with level 0, and compress `GERMAN' with level 2).
+subbooks with different compression levels (e.g. compress `english' and
+`french' with level 0, and compress `german' with level 2).
 
    Regardless of the `--subbook' option, the `LANGUAGE' file is always
 compressed.
@@ -930,7 +930,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     3.0alpha2, only 1 (0001 in binary digits) can be prescribed as
+     3.0alpha3, only 1 (0001 in binary digits) can be prescribed as
      this version.
 
 `compression level (4 bits of the least-significant-bit side)'

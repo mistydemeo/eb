@@ -12,7 +12,7 @@ ebinfo_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS)
 ebinfo_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS)
 
 INCLUDES = -I$(top_srcdir) -I../libebutils -I$(top_srcdir)/libebutils \
-   $(INTLINCS)
+	$(INTLINCS)
 
 ### *.o dependencies ###
 ebinfo.o: ebinfo.c ../config.h ../eb/eb.h ../eb/error.h ../eb/font.h \

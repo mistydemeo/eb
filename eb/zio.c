@@ -12,99 +12,11 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-#include <errno.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
-#include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#else
-#include <sys/file.h>
-#endif
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
-
-#ifndef HAVE_MEMCPY
-#define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef __STDC__
-void *memchr(const void *, int, size_t);
-int memcmp(const void *, const void *, size_t);
-void *memmove(void *, const void *, size_t);
-void *memset(void *, int, size_t);
-#else /* not __STDC__ */
-char *memchr();
-int memcmp();
-char *memmove();
-char *memset();
-#endif /* not __STDC__ */
-#endif
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-/*
- * The maximum length of path name.
- */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX	MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX	1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
-
-/*
- * Whence parameter for lseek().
- */
-#ifndef SEEK_SET
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
-#endif
-
-#ifdef __STDC__
-#define VOID void
-#else
-#define VOID char
-#endif
-
-#ifndef ENABLE_PTHREAD
-#define pthread_mutex_lock(m)
-#define pthread_mutex_unlock(m)
-#endif
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
-
 
 /*
  * Buffer for caching uncompressed data.

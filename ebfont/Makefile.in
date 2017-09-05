@@ -120,7 +120,7 @@ ebfont_SOURCES = ebfont.c
 ebfont_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS)
 ebfont_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS)
 
-INCLUDES = -I$(top_srcdir) -I../libebutils -I$(top_srcdir)/libebutils    $(INTLINCS)
+INCLUDES = -I$(top_srcdir) -I../libebutils -I$(top_srcdir)/libebutils 	$(INTLINCS)
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h

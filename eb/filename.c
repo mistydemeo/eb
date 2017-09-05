@@ -12,134 +12,26 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
-#include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
-#if HAVE_DIRENT_H
-#include <dirent.h>
-#define NAMLEN(dirent) strlen((dirent)->d_name)
-#else /* not HAVE_DIRENT_H */
-#define dirent direct
-#define NAMLEN(dirent) (dirent)->d_namlen
-#if HAVE_SYS_NDIR_H
-#include <sys/ndir.h>
-#endif /* HAVE_SYS_NDIR_H */
-#if HAVE_SYS_DIR_H
-#include <sys/dir.h>
-#endif /* HAVE_SYS_DIR_H */
-#if HAVE_NDIR_H
-#include <ndir.h>
-#endif /* HAVE_NDIR_H */
-#endif /* not HAVE_DIRENT_H */
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
-
-/* for Visual C++ by KSK Jan/30/1998 */
-#if defined(HAVE_DIRECT_H) && defined(HAVE__GETDCWD)
-#include <direct.h>            /* for _getcwd(), _getdcwd() */
-#define getcwd _getcwd
-#define getdcwd _getdcwd
-#endif
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
-
-#ifndef HAVE_STRCHR
-#define strchr index
-#define strrchr rindex
-#endif /* HAVE_STRCHR */
-
-#ifndef HAVE_MEMCPY
-#define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef __STDC__
-void *memchr(const void *, int, size_t);
-int memcmp(const void *, const void *, size_t);
-void *memmove(void *, const void *, size_t);
-void *memset(void *, int, size_t);
-#else /* not __STDC__ */
-char *memchr();
-int memcmp();
-char *memmove();
-char *memset();
-#endif /* not __STDC__ */
-#endif
-
-#ifndef HAVE_GETCWD
-#define getcwd(d,n) getwd(d)
-#endif
-
-#ifdef  STAT_MACROS_BROKEN
-#ifdef  S_ISREG
-#undef  S_ISREG
-#endif
-#ifdef  S_ISDIR
-#undef  S_ISDIR
-#endif
-#endif  /* STAT_MACROS_BROKEN */
-
-#ifndef S_ISREG
-#define S_ISREG(m)   (((m) & S_IFMT) == S_IFREG)
-#endif
-#ifndef S_ISDIR
-#define S_ISDIR(m)   (((m) & S_IFMT) == S_IFDIR)
-#endif
-
-/*
- * The maximum length of path name.
- */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX        MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX        1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
 
 
 #ifndef DOS_FILE_PATH
 
 /*
  * Canonicalize `path_name' (UNIX version).
- * Replace `/./' and `/../' in `path_name' to equivalent straight
- * form.  If an error occurs, -1 is returned and the error code
- * is set to `error'.  Otherwise 0 is returned.
+ * Convert a path name to an absolute path.
  */
 EB_Error_Code
 eb_canonicalize_path_name(path_name)
     char *path_name;
 {
     char cwd[PATH_MAX + 1];
-    char *source;
-    char *destination;
-    char *slash;
+    char temporary_path_name[PATH_MAX + 1];
     size_t path_name_length;
-    size_t cwd_length;
-    int i;
 
     if (*path_name != '/') {
 	/*
@@ -148,71 +40,19 @@ eb_canonicalize_path_name(path_name)
 	 */
 	if (getcwd(cwd, PATH_MAX + 1) == NULL)
 	    return EB_ERR_FAIL_GETCWD;
-	cwd_length = strlen(cwd);
-	path_name_length = strlen(path_name);
-	if (PATH_MAX < cwd_length + 1 + path_name_length)
+	if (PATH_MAX < strlen(cwd) + 1 + strlen(path_name))
 	    return EB_ERR_TOO_LONG_FILE_NAME;
-
-	source = path_name + path_name_length;
-	destination = path_name + cwd_length + 1 + path_name_length;
-	for (i = 0; i <= path_name_length; i++)
-	    *destination-- = *source--;
-	*destination = '/';
-
-	memcpy(path_name, cwd, cwd_length);
+	sprintf(temporary_path_name, "%s/%s", cwd, path_name);
+	strcpy(path_name, temporary_path_name);
     }
 
     /*
-     * Canonicalize book->path.
-     * Replace `.' and `..' segments in the path.
+     * Unless `path_name' is "/", eliminate `/' in the tail of the
+     * path name.
      */
-    source = path_name;
-    destination = path_name;
-    while (*source != '\0') {
-	if (*source != '/') {
-	    *destination++ = *source++;
-	    continue;
-	}
-
-	/*
-	 * `*source' is slash (`/')
-	 */
-	if (*(source + 1) == '/' || *(source + 1) == '\0') {
-	    /*
-	     * `//' -- Ignore 2nd slash (`/').
-	     */
-	    source++;
-	    continue;
-	} else if (*(source + 1) == '.'
-	    && (*(source + 2) == '/' || *(source + 2) == '\0')) {
-	    /*
-	     * `/.' -- The current segment itself.  Removed.
-	     */
-	    source += 2;
-	} else if (*(source + 1) == '.' && *(source + 2) == '.'
-	    && (*(source + 3) == '/' || *(source + 3) == '\0')) {
-	    /*
-	     * `/..' -- Back to a parent segment.
-	     */
-	    source += 3;
-	    *destination = '\0';
-	    slash = strrchr(path_name, '/');
-	    if (slash == NULL)
-		destination = path_name;
-	    else
-		destination = slash;
-	} else
-	    *destination++ = *source++;
-    }
-    *destination = '\0';
-
-    /*
-     * When the path comes to be empty, set the path to `/'.
-     */
-    if (*(path_name) == '\0') {
-	*(path_name) = '/';
-	*(path_name + 1) = '\0';
-    }
+    path_name_length = strlen(path_name);
+    if (1 < path_name_length && *(path_name + path_name_length - 1) == '/')
+	*(path_name + path_name_length - 1) = '\0';
 
     return EB_SUCCESS;
 }
@@ -221,141 +61,78 @@ eb_canonicalize_path_name(path_name)
 
 /*
  * Canonicalize `path_name' (DOS version).
- * Replace `\.\' and `\..\' in `path_name' to equivalent straight
- * form.  If an error occurs, -1 is returned and the error code
- * is set to `error'.  Otherwise 0 is returned.
+ * Convert a path name to an absolute path with drive letter unless
+ * that is an UNC path.
  *
- * eb_canonicalize_path_name_internal() for MSDOS by KSK Jan/30/1998
+ * Original version by KSK Jan/30/1998.
+ * Current version by Motoyuki Kasahara.
  */
 EB_Error_Code
 eb_canonicalize_path_name(path_name)
     char *path_name;
 {
     char cwd[PATH_MAX + 1];
-    char *source;
-    char *destination;
-    char *slash;
+    char temporary_path_name[PATH_MAX + 1];
     size_t path_name_length;
-    size_t cwd_length;
-    char *ppath_name;		/* path_name without drive letter */
-    int current_drive;
-    int is_unc;			/* is `path_name' UNC path? */
-    int i;
 
-    /* canonicalize path name separator into '\' */
-    for (destination = path_name; *destination != '\0'; destination++) {
-	/* forget about SJIS path_name :-p */
-	if (*destination == '/') 
-	    *destination = '\\';
-    }
-    /* check a drive letter and UNC path */
-    path_name_length = strlen(path_name);
-    current_drive = 0;
-    is_unc = 0;
-    ppath_name = path_name;
-    if (path_name_length >= 2) {
-	if ('a' <= *path_name && *path_name <= 'z'
-	    && *(path_name + 1) == ':') {
-	    current_drive = *path_name - 'a' + 1;
-	    ppath_name = path_name + 2;
-	} else if ('A' <= *path_name && *path_name <= 'Z'
-	    && *(path_name + 1) == ':') {
-	    current_drive = *path_name - 'A' + 1;
-	    ppath_name = path_name + 2;
-	} else if (*path_name == '\\' && *(path_name + 1) == '\\') {
-	    is_unc = 1;
-	    ppath_name = path_name + 1;
-	}
-    }
-
-    if (!is_unc) {
-	if (*ppath_name != '\\' || current_drive == 0) {
-	    /* `path_name' is a relative path or has no drive letter */
-
-	    if (current_drive == 0) {
-		/* `path_name' has no drive letter */
-		if (getcwd(cwd, PATH_MAX + 1) == NULL)
-		    return EB_ERR_FAIL_GETCWD;
-		if (*ppath_name == '\\') {
-		    /*
-		     * `path_name' is a absolute path and has no
-		     * drive letter use only a drive letter
-		     */
-		    cwd[2] = '\0';
-		}
-	    } else {
-		/* `path_name' is a relative path with a drive letter  */
-		if (getdcwd(current_drive, cwd, PATH_MAX + 1) == NULL) {
-		    return EB_ERR_FAIL_GETCWD;
-		}
-	    }
-
-	    cwd_length = strlen(cwd);
-	    path_name_length = strlen(ppath_name);
-	    if (PATH_MAX < cwd_length + 1 + path_name_length)
-		return EB_ERR_TOO_LONG_FILE_NAME;
-
-	    source = ppath_name + path_name_length;
-	    destination = path_name + cwd_length + 1 + path_name_length;
-	    for (i = 0; i <= path_name_length; i++) {
-		*destination-- = *source--;
-	    }
-	    *destination = '\\';
-	    memcpy(path_name, cwd, cwd_length);
-	    ppath_name = path_name + 2;
-	}
-    }
-    /*
-     * Canonicalize book->path.
-     * Replace "." and ".." segments in the path.
-     */
-    source = ppath_name;
-    destination = ppath_name;
-    while (*source != '\0') {
-	if (*source != '\\') {
-	    *destination++ = *source++;
-	    continue;
-	}
-
+    if (*path_name == '\\' && *(path_name + 1) == '\\') {
 	/*
-	 * `*source' is slash (`/')
+	 * `path_name' is UNC path.  Nothing to be done.
 	 */
-	if (*(source + 1) == '\\' || *(source + 1) == '\0') {
+    } else if (isalpha(*path_name) && *(path_name + 1) == ':') {
+	/*
+	 * `path_name' is has a drive letter.
+	 * Nothing to be done if it is an absolute path.
+	 */
+	if (*(path_name + 2) != '\\') {
 	    /*
-	     * `\\' -- Ignore 2nd backslash (`\').
+	     * `path_name' is a relative path.
+	     * Covert the path name to an absolute path.
 	     */
-	    source++;
-	    continue;
-	} else if (*(source + 1) == '.'
-	    && (*(source + 2) == '\\' || *(source + 2) == '\0')) {
-	    /*
-	     * `\.' -- The current segment itself.  Removed.
-	     */
-	    source += 2;
-	} else if (*(source + 1) == '.' && *(source + 2) == '.'
-	    && (*(source + 3) == '\\' || *(source + 3) == '\0')) {
-	    /*
-	     * `\..' -- Back to a parent segment.
-	     */
-	    source += 3;
-	    *destination = '\0';
-	    slash = strrchr(ppath_name, '\\');
-	    if (slash == NULL)
-		destination = ppath_name;
-	    else
-		destination = slash;
-	} else
-	    *destination++ = *source++;
+	    if (getdcwd(toupper(*path_name) - 'A' + 1, cwd, PATH_MAX + 1)
+		== NULL) {
+		return EB_ERR_FAIL_GETCWD;
+	    }
+	    if (PATH_MAX < strlen(cwd) + 1 + strlen(path_name + 2))
+		return EB_ERR_TOO_LONG_FILE_NAME;
+	    sprintf(temporary_path_name, "%s\\%s", cwd, path_name + 2);
+	    strcpy(path_name, temporary_path_name);
+	}
+    } else if (*path_name == '\\') {
+	/*
+	 * `path_name' is has no drive letter and is an absolute path.
+	 * Add a drive letter to the path name.
+	 */
+	if (getcwd(cwd, PATH_MAX + 1) == NULL)
+	    return EB_ERR_FAIL_GETCWD;
+	cwd[1] = '\0';
+	if (PATH_MAX < strlen(cwd) + 1 + strlen(path_name))
+	    return EB_ERR_TOO_LONG_FILE_NAME;
+	sprintf(temporary_path_name, "%s:%s", cwd, path_name);
+	strcpy(path_name, temporary_path_name);
+
+    } else {
+	/*
+	 * `path_name' is has no drive letter and is a relative path.
+	 * Add a drive letter and convert it to an absolute path.
+	 */
+	if (getcwd(cwd, PATH_MAX + 1) == NULL)
+	    return EB_ERR_FAIL_GETCWD;
+
+	if (PATH_MAX < strlen(cwd) + 1 + strlen(path_name))
+	    return EB_ERR_TOO_LONG_FILE_NAME;
+	sprintf(temporary_path_name, "%s\\%s", cwd, path_name);
+	strcpy(path_name, temporary_path_name);
     }
-    *destination = '\0';
+
 
     /*
-     * When the path comes to be empty, set the path to `\\'.
+     * Unless `path_name' is "?:\\", eliminate `\\' in the tail of the
+     * path name.
      */
-    if (*(ppath_name) == '\0') {
-	*(ppath_name) = '\\';
-	*(ppath_name + 1) = '\0';
-    }
+    path_name_length = strlen(path_name);
+    if (3 < path_name_length && *(path_name + path_name_length - 1) = '\\')
+	*(path_name + path_name_length - 1) = '\0';
 
     return EB_SUCCESS;
 }
@@ -364,7 +141,7 @@ eb_canonicalize_path_name(path_name)
 
 
 /*
- * Rewrite `directory_name' in the `path' directory to a real directory name.
+ * Rewrite `directory_name' to a real directory name in the `path' directory.
  * If a directory matched to `directory_name' exists, then 0 is returned,
  * and `directory_name' is rewritten to that name.
  * Otherwise -1 is returned.
@@ -427,8 +204,8 @@ eb_fix_directory_name(path, directory_name)
 
 
 /*
- * Rewrite `sub_directory_name' in the `path/directory_name' directory
- * to a real sub directory name.
+ * Rewrite `sub_directory_name' to a real sub directory name in the
+ * `path/directory_name' directory.
  * If a directory matched to `sub_directory_name' exists, then 0 is
  * returned, and `directory_name' is rewritten to that name.
  * Otherwise -1 is returned.
@@ -441,13 +218,13 @@ eb_fix_directory_name2(path, directory_name, sub_directory_name)
 {
     char sub_path[PATH_MAX + 1];
 
-    sprintf(sub_path, "%s/%s", path, directory_name);
+    sprintf(sub_path, F_("%s/%s", "%s\\%s"), path, directory_name);
     return eb_fix_directory_name(sub_path, sub_directory_name);
 }
 
 
 /*
- * Rewrite `file_name' in the `path_name' directory to a real file name.
+ * Rewrite `file_name' to a real file name in the `path_name' directory.
  * If a file matched to `file_name' exists, then 0 is returned,
  * and `file_name' is rewritten to that name.
  * Otherwise -1 is returned.
@@ -530,9 +307,8 @@ eb_fix_file_name(path_name, file_name)
 
 
 /*
- * Rewrite `file_name' in the directory
- *    `path_name/sub_directory_name' 
- * to a real file name.
+ * Rewrite `file_name' to a real file name in the directory
+ * `path_name/sub_directory_name'.
  *
  * If a file matched to `file_name' exists, then 0 is returned,
  * and `file_name' is rewritten to that name.
@@ -546,15 +322,16 @@ eb_fix_file_name2(path_name, sub_directory_name, file_name)
 {
     char sub_path_name[PATH_MAX + 1];
 
-    sprintf(sub_path_name, "%s/%s", path_name, sub_directory_name);
+    sprintf(sub_path_name, F_("%s/%s", "%s\\%s"),
+	path_name, sub_directory_name);
+
     return eb_fix_file_name(sub_path_name, file_name);
 }
 
 
 /*
- * Rewrite `file_name' in the directory
- *    `path_name/sub_directory_name/sub2_directory_name' 
- * to a real file name.
+ * Rewrite `file_name' to a real file name. in the directory
+ *    `path_name/sub_directory_name/sub2_directory_name'
  *
  * If a file matched to `file_name' exists, then 0 is returned,
  * and `file_name' is rewritten to that name.
@@ -570,8 +347,8 @@ eb_fix_file_name3(path_name, sub_directory_name, sub2_directory_name,
 {
     char sub2_path_name[PATH_MAX + 1];
 
-    sprintf(sub2_path_name, "%s/%s/%s", path_name, sub_directory_name,
-	sub2_directory_name);
+    sprintf(sub2_path_name, F_("%s/%s/%s", "%s\\%s\\%s"),
+	path_name, sub_directory_name, sub2_directory_name);
     return eb_fix_file_name(sub2_path_name, file_name);
 }
 
@@ -595,7 +372,8 @@ eb_compose_path_name(path_name, file_name, suffix, composed_path_name)
 
     sprintf(fixed_file_name, "%s%s", file_name, suffix);
     if (eb_fix_file_name(path_name, fixed_file_name) == 0) {
-	sprintf(composed_path_name, "%s/%s", path_name, fixed_file_name);
+	sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
+	    path_name, fixed_file_name);
 	return 0;
     }
 
@@ -624,10 +402,12 @@ eb_compose_path_name2(path_name, sub_directory_name, file_name, suffix,
     char sub_path_name[PATH_MAX + 1];
 
     sprintf(fixed_file_name, "%s%s", file_name, suffix);
-    sprintf(sub_path_name, "%s/%s", path_name, sub_directory_name);
+    sprintf(sub_path_name, F_("%s/%s", "%s\\%s"),
+	path_name, sub_directory_name);
 
     if (eb_fix_file_name(sub_path_name, fixed_file_name) == 0) {
-	sprintf(composed_path_name, "%s/%s", sub_path_name, fixed_file_name);
+	sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
+	    sub_path_name, fixed_file_name);
 	return 0;
     }
 
@@ -657,11 +437,12 @@ eb_compose_path_name3(path_name, sub_directory_name, sub2_directory_name,
     char sub2_path_name[PATH_MAX + 1];
 
     sprintf(fixed_file_name, "%s%s", file_name, suffix);
-    sprintf(sub2_path_name, "%s/%s/%s", path_name, sub_directory_name,
-	sub2_directory_name);
+    sprintf(sub2_path_name, F_("%s/%s/%s", "%s\\%s\\%s"),
+	path_name, sub_directory_name, sub2_directory_name);
 
     if (eb_fix_file_name(sub2_path_name, fixed_file_name) == 0) {
-	sprintf(composed_path_name, "%s/%s", sub2_path_name, fixed_file_name);
+	sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
+	    sub2_path_name, fixed_file_name);
 	return 0;
     }
 

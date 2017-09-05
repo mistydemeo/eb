@@ -15,12 +15,6 @@
 #ifndef EB_INTERNAL_H
 #define EB_INTERNAL_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <sys/types.h>
-
 #include "defs.h"
 
 /*
@@ -32,21 +26,6 @@
  * Locale directory.
  */
 #define LOCALEDIR		"@localedir@"
-
-/*
- * Tricks for gettext.
- */
-#ifdef ENABLE_NLS
-#define _(string) gettext(string)
-#ifdef gettext_noop
-#define N_(string) gettext_noop(string)
-#else
-#define N_(string) (string)
-#endif
-#else
-#define _(string) (string)
-#define N_(string) (string)
-#endif
 
 /*
  * File and directory names.
@@ -147,16 +126,16 @@
 #define eb_uint1(p) (*(const unsigned char *)(p))
 
 #define eb_uint2(p) ((*(const unsigned char *)(p) << 8) \
-	+ (*(const unsigned char *)((p) + 1)))
+        + (*(const unsigned char *)((p) + 1)))
 
 #define eb_uint3(p) ((*(const unsigned char *)(p) << 16) \
-	+ (*(const unsigned char *)((p) + 1) << 8) \
-	+ (*(const unsigned char *)((p) + 2)))
+        + (*(const unsigned char *)((p) + 1) << 8) \
+        + (*(const unsigned char *)((p) + 2)))
 
 #define eb_uint4(p) ((*(const unsigned char *)(p) << 24) \
-	+ (*(const unsigned char *)((p) + 1) << 16) \
-	+ (*(const unsigned char *)((p) + 2) << 8) \
-	+ (*(const unsigned char *)((p) + 3)))
+        + (*(const unsigned char *)((p) + 1) << 16) \
+        + (*(const unsigned char *)((p) + 2) << 8) \
+        + (*(const unsigned char *)((p) + 3)))
 
 /*
  * External variable declarations.
@@ -271,17 +250,5 @@ char *eb_memmove();
 /* strcasecmp.c */
 int eb_strcasecmp EB_P((const char *, const char *));
 int eb_strncasecmp EB_P((const char *, const char *, size_t));
-
-/*
- * Fake missing function names.
- */
-#ifndef HAVE_MEMMOVE
-#define memmove eb_memmove
-#endif
-
-#ifndef HAVE_STRCASECMP
-#define strcasecmp eb_strcasecmp
-#define strncasecmp eb_strncasecmp
-#endif
 
 #endif /* not EB_INTERNAL_H */

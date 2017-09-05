@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0alpha2, for EB Library version 3.0alpha2.
+   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
 
 * Menu:
 
@@ -65,7 +65,7 @@ _without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 3.0alpha2, for EB Library version 3.0alpha2.
+   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
 
 
 File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
@@ -132,10 +132,10 @@ The SUFFIX is `xbm', `xpm' or `gif'.  The CHARACTER-NUMBER is a
 hexadecimal number with 4 digits (`0' to `9', and `a' to `f'), like
 this:
 
-     EJDICT/16/narrow/a121.xbm
-     EJDICT/16/wide/a321.xbm
+     ejdict/16/narrow/a121.xbm
+     ejdict/16/wide/a321.xbm
 
-The intermediate directories such as `EJDICT/16/xbm/narrow' are created
+The intermediate directories such as `ejdict/16/xbm/narrow' are created
 by `ebfont' if missing.
 
    `ebfont' can outputs image files not only under the current
@@ -215,21 +215,21 @@ and what their directory names are.
      the number of subbooks: 3
      subbook 1:
        title: New English Japanese Dictionary (4th edition)
-       directory: ENGLISH
+       directory: english
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters: 0xa121 -- 0xa24e
        wide font characters: 0xa321 -- 0xa27e
      subbook 2:
        title: CD-ROM French Japanese Dictionary (3rd edition)
-       directory: FRENCH
+       directory: french
        search methods: word endword keyword menu
        font sizes: 16 24 30 48
        narrow font characters:
        wide font characters: 0xa321 -- 0xa27e
      subbook 3:
        title: Pocket German Japanese Dictionary (3rd edition)
-       directory: GERMAN
+       directory: german
        search methods: menu
        font sizes: 16 24 30 48
        narrow font characters:
@@ -238,10 +238,10 @@ and what their directory names are.
 (*Note Invoking `ebinfo': (ebinfo)Invoking ebinfo, for more details
 about the `ebinfo' command).
 In this example, there are three subbooks in the book, and their
-directory names are `ENGLISH', `FRENCH' and `GERMAN'.
+directory names are `english', `french' and `german'.
 
    Inkoing the following command, `ebfont' generates image files for
-`ENGLISH' and `FRENCH' only.
+`english' and `french' only.
 
      % ebfont --subbook english,french /mnt/cdrom
 

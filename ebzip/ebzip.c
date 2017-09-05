@@ -144,10 +144,10 @@ int strncasecmp();
 #endif /* not MAXPATHLEN */
 #endif /* not PATH_MAX */
 
-#include "eb/eb.h"
-#include "eb/error.h"
-#include "eb/internal.h"
-#include "eb/font.h"
+#include "eb.h"
+#include "error.h"
+#include "internal.h"
+#include "font.h"
 
 #include "fakelog.h"
 #include "getopt.h"
@@ -335,6 +335,11 @@ void compose_out_path_name EB_P((const char *, const char *, const char *,
 void compose_out_path_name2 EB_P((const char *, const char *, const char *,
     const char *, char *));
 void compose_out_path_name3 EB_P((const char *, const char *, const char *,
+    const char *, const char *, char *));
+void compose_existent_path_name EB_P((const char *, const char *, char *));
+void compose_existent_path_name2 EB_P((const char *, const char *,
+    const char *, char *));
+void compose_existent_path_name3 EB_P((const char *, const char *,
     const char *, const char *, char *));
 
 /*
@@ -587,8 +592,9 @@ main(argc, argv)
 	}
     } else {
 	for (i = 0; i < subbook_name_count; i++) {
-	    subbook_code = find_subbook(&book, subbook_name_list[i]);
-	    if (subbook_code != EB_SUCCESS)
+	    error_code = find_subbook(&book, subbook_name_list[i],
+		&subbook_code);
+	    if (error_code != EB_SUCCESS)
 		goto die;
 	    subbook_list[subbook_count++] = subbook_code;
 	}
@@ -761,7 +767,8 @@ zip_eb_book(book, out_top_path, book_path)
 	/*
 	 * Make an output directory for the current subbook.
 	 */
-	sprintf(out_sub_path, "%s/%s", out_top_path, subbook->directory_name);
+	compose_existent_path_name(out_top_path, subbook->directory_name,
+	    out_sub_path);
 	if (!test_flag && make_missing_directory(out_sub_path,
 	    out_directory_mode) < 0)
 	    return -1;
@@ -791,8 +798,8 @@ zip_eb_book(book, out_top_path, book_path)
 	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
-	sprintf(in_path_name, "%s/%s/%s", book->path, subbook->directory_name,
-	    in_file_name);
+	compose_existent_path_name2(book->path, subbook->directory_name,
+	    in_file_name, in_path_name);
 	compose_out_path_name2(out_top_path, subbook->directory_name,
 	    in_file_name, EB_SUFFIX_EBZ, out_path_name);
 	if (in_zip_code == EB_ZIP_INVALID) {
@@ -826,7 +833,7 @@ zip_eb_book(book, out_top_path, book_path)
 	in_zip_code = EB_ZIP_INVALID;
     } while (0);
 
-    sprintf(in_path_name, "%s/%s", book->path, in_file_name);
+    compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_EBZ,
 	out_path_name);
     if (in_zip_code == EB_ZIP_INVALID) {
@@ -844,7 +851,7 @@ zip_eb_book(book, out_top_path, book_path)
 	in_zip_code = EB_ZIP_NONE;
     else
 	in_zip_code = EB_ZIP_INVALID;
-    sprintf(in_path_name, "%s/%s", book->path, in_file_name);
+    compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
     if (in_zip_code == EB_ZIP_INVALID) {
@@ -902,7 +909,8 @@ zip_epwing_book(book, out_top_path, book_path)
 	/*
 	 * Make an output directory for the current subbook.
 	 */
-	sprintf(out_sub_path, "%s/%s", out_top_path, subbook->directory_name);
+	compose_existent_path_name(out_top_path, subbook->directory_name,
+	    out_sub_path);
 	if (!test_flag && make_missing_directory(out_sub_path,
 	    out_directory_mode) < 0)
 	    return -1;
@@ -910,8 +918,8 @@ zip_epwing_book(book, out_top_path, book_path)
 	/*
 	 * Make `data' sub directory for the current subbook.
 	 */
-	sprintf(out_sub_path, "%s/%s/%s", out_top_path,
-	    subbook->directory_name, subbook->data_directory_name);
+	compose_existent_path_name2(out_top_path, subbook->directory_name,
+	    subbook->data_directory_name, out_sub_path);
 	if (!test_flag && make_missing_directory(out_sub_path,
 	    out_directory_mode) < 0)
 	    return -1;
@@ -952,9 +960,8 @@ zip_epwing_book(book, out_top_path, book_path)
 	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
-	sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-	    subbook->directory_name, subbook->data_directory_name,
-	    in_file_name);
+	compose_existent_path_name3(book->path, subbook->directory_name,
+	    subbook->data_directory_name, in_file_name, in_path_name);
 	compose_out_path_name3(out_top_path, subbook->directory_name,
 	    subbook->data_directory_name, in_file_name, EB_SUFFIX_EBZ,
 	    out_path_name);
@@ -968,8 +975,8 @@ zip_epwing_book(book, out_top_path, book_path)
 	/*
 	 * Make `gaiji' sub directory for the current subbook.
 	 */
-	sprintf(out_sub_path, "%s/%s/%s", out_top_path,
-	    subbook->directory_name, subbook->gaiji_directory_name);
+	compose_existent_path_name2(out_top_path, subbook->directory_name,
+	    subbook->gaiji_directory_name, out_sub_path);
 	if (!test_flag && make_missing_directory(out_sub_path,
 	    out_directory_mode) < 0)
 	    return -1;
@@ -1004,9 +1011,8 @@ zip_epwing_book(book, out_top_path, book_path)
 		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
-	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-		subbook->directory_name, subbook->gaiji_directory_name,
-		in_file_name);
+	    compose_existent_path_name3(book->path, subbook->directory_name,
+		subbook->gaiji_directory_name, in_file_name, in_path_name);
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_EBZ,
 		out_path_name);
@@ -1048,9 +1054,8 @@ zip_epwing_book(book, out_top_path, book_path)
 		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
-	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-		subbook->directory_name, subbook->gaiji_directory_name,
-		in_file_name);
+	    compose_existent_path_name3(book->path, subbook->directory_name,
+		subbook->gaiji_directory_name, in_file_name, in_path_name);
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_EBZ,
 		out_path_name);
@@ -1071,7 +1076,7 @@ zip_epwing_book(book, out_top_path, book_path)
 	in_zip_code = EB_ZIP_NONE;
     else
 	in_zip_code = EB_ZIP_INVALID;
-    sprintf(in_path_name, "%s/%s", book->path, in_file_name);
+    compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
     if (in_zip_code == EB_ZIP_INVALID) {
@@ -1145,7 +1150,8 @@ unzip_eb_book(book, out_top_path, book_path)
 	/*
 	 * Make an output directory for the current subbook.
 	 */
-	sprintf(out_sub_path, "%s/%s", out_top_path, subbook->directory_name);
+	compose_existent_path_name(out_top_path, subbook->directory_name,
+	    out_sub_path);
 	if (!test_flag && make_missing_directory(out_sub_path,
 	    out_directory_mode) < 0)
 	    return -1;
@@ -1175,8 +1181,8 @@ unzip_eb_book(book, out_top_path, book_path)
 	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
-	sprintf(in_path_name, "%s/%s/%s", book->path, subbook->directory_name,
-	    in_file_name);
+	compose_existent_path_name2(book->path, subbook->directory_name,
+	    in_file_name, in_path_name);
 	compose_out_path_name2(out_top_path, subbook->directory_name,
 	    in_file_name, EB_SUFFIX_NONE, out_path_name);
 	if (in_zip_code == EB_ZIP_INVALID) {
@@ -1208,7 +1214,7 @@ unzip_eb_book(book, out_top_path, book_path)
 	in_zip_code = EB_ZIP_INVALID;
     } while (0);
 
-    sprintf(in_path_name, "%s/%s", book->path, in_file_name);
+    compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
     if (in_zip_code == EB_ZIP_INVALID) {
@@ -1226,7 +1232,7 @@ unzip_eb_book(book, out_top_path, book_path)
 	in_zip_code = EB_ZIP_NONE;
     else
 	in_zip_code = EB_ZIP_INVALID;
-    sprintf(in_path_name, "%s/%s", book->path, in_file_name);
+    compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
     if (in_zip_code == EB_ZIP_INVALID) {
@@ -1284,7 +1290,8 @@ unzip_epwing_book(book, out_top_path, book_path)
 	/*
 	 * Make an output directory for the current subbook.
 	 */
-	sprintf(out_sub_path, "%s/%s", out_top_path, subbook->directory_name);
+	compose_existent_path_name(out_top_path, subbook->directory_name,
+	    out_sub_path);
 	if (!test_flag && make_missing_directory(out_sub_path,
 	    out_directory_mode) < 0)
 	    return -1;
@@ -1292,8 +1299,8 @@ unzip_epwing_book(book, out_top_path, book_path)
 	/*
 	 * Make `data' sub directory for the current subbook.
 	 */
-	sprintf(out_sub_path, "%s/%s/%s", out_top_path,
-	    subbook->directory_name, subbook->data_directory_name);
+	compose_existent_path_name2(out_top_path, subbook->directory_name,
+	    subbook->data_directory_name, out_sub_path);
 	if (!test_flag && make_missing_directory(out_sub_path,
 	    out_directory_mode) < 0)
 	    return -1;
@@ -1334,9 +1341,8 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
-	sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-	    subbook->directory_name, subbook->data_directory_name,
-	    in_file_name);
+	compose_existent_path_name3(book->path, subbook->directory_name,
+	    subbook->data_directory_name, in_file_name, in_path_name);
 	compose_out_path_name3(out_top_path, subbook->directory_name,
 	    subbook->data_directory_name, in_file_name, EB_SUFFIX_NONE,
 	    out_path_name);
@@ -1350,8 +1356,8 @@ unzip_epwing_book(book, out_top_path, book_path)
 	/*
 	 * Make `gaiji' sub directory for the current subbook.
 	 */
-	sprintf(out_sub_path, "%s/%s/%s", out_top_path,
-	    subbook->directory_name, subbook->gaiji_directory_name);
+	compose_existent_path_name2(out_top_path, subbook->directory_name,
+	    subbook->gaiji_directory_name, out_sub_path);
 	if (!test_flag && make_missing_directory(out_sub_path,
 	    out_directory_mode) < 0)
 	    return -1;
@@ -1386,9 +1392,8 @@ unzip_epwing_book(book, out_top_path, book_path)
 		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
-	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-		subbook->directory_name, subbook->gaiji_directory_name,
-		in_file_name);
+	    compose_existent_path_name3(book->path, subbook->directory_name,
+		subbook->gaiji_directory_name, in_file_name, in_path_name);
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_NONE,
 		out_path_name);
@@ -1430,9 +1435,8 @@ unzip_epwing_book(book, out_top_path, book_path)
 		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
-	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-		subbook->directory_name, subbook->gaiji_directory_name,
-		in_file_name);
+	    compose_existent_path_name3(book->path, subbook->directory_name,
+		subbook->gaiji_directory_name, in_file_name, in_path_name);
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_NONE,
 		out_path_name);
@@ -1453,7 +1457,7 @@ unzip_epwing_book(book, out_top_path, book_path)
 	in_zip_code = EB_ZIP_NONE;
     else
 	in_zip_code = EB_ZIP_INVALID;
-    sprintf(in_path_name, "%s/%s", book->path, in_file_name);
+    compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
     if (in_zip_code == EB_ZIP_INVALID) {
@@ -1541,8 +1545,8 @@ zipinfo_eb_book(book, book_path)
 	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
-	sprintf(in_path_name, "%s/%s/%s", book->path, subbook->directory_name,
-	    in_file_name);
+	compose_existent_path_name2(book->path, subbook->directory_name,
+	    in_file_name, in_path_name);
 	if (in_zip_code == EB_ZIP_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
@@ -1572,7 +1576,7 @@ zipinfo_eb_book(book, book_path)
 	in_zip_code = EB_ZIP_INVALID;
     } while (0);
 
-    sprintf(in_path_name, "%s/%s", book->path, in_file_name);
+    compose_existent_path_name(book->path, in_file_name, in_path_name);
     if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
@@ -1588,7 +1592,7 @@ zipinfo_eb_book(book, book_path)
 	in_zip_code = EB_ZIP_NONE;
     else
 	in_zip_code = EB_ZIP_INVALID;
-    sprintf(in_path_name, "%s/%s", book->path, in_file_name);
+    compose_existent_path_name(book->path, in_file_name, in_path_name);
     if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
@@ -1670,9 +1674,8 @@ zipinfo_epwing_book(book, book_path)
 	    in_zip_code = EB_ZIP_INVALID;
 	} while (0);
 
-	sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-	    subbook->directory_name, subbook->data_directory_name,
-	    in_file_name);
+	compose_existent_path_name3(book->path, subbook->directory_name,
+	    subbook->data_directory_name, in_file_name, in_path_name);
 	if (in_zip_code == EB_ZIP_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
@@ -1710,9 +1713,8 @@ zipinfo_epwing_book(book, book_path)
 		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
-	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-		subbook->directory_name, subbook->gaiji_directory_name,
-		in_file_name);
+	    compose_existent_path_name3(book->path, subbook->directory_name,
+		subbook->gaiji_directory_name, in_file_name, in_path_name);
 	    if (in_zip_code == EB_ZIP_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
@@ -1751,9 +1753,8 @@ zipinfo_epwing_book(book, book_path)
 		in_zip_code = EB_ZIP_INVALID;
 	    } while (0);
 
-	    sprintf(in_path_name, "%s/%s/%s/%s", book->path,
-		subbook->directory_name, subbook->gaiji_directory_name,
-		in_file_name);
+	    compose_existent_path_name3(book->path, subbook->directory_name,
+		subbook->gaiji_directory_name, in_file_name, in_path_name);
 	    if (in_zip_code == EB_ZIP_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
@@ -1771,7 +1772,7 @@ zipinfo_epwing_book(book, book_path)
 	in_zip_code = EB_ZIP_NONE;
     else
 	in_zip_code = EB_ZIP_INVALID;
-    sprintf(in_path_name, "%s/%s", book->path, in_file_name);
+    compose_existent_path_name(book->path, in_file_name, in_path_name);
     if (in_zip_code == EB_ZIP_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);

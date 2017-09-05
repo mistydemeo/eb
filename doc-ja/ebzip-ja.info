@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.0alpha2 版です。 EB ライブラリバージョン 3.0alpha2 に
+   この文書は第 3.0alpha3 版です。 EB ライブラリバージョン 3.0alpha3 に
 対応しています。
 
 * Menu:
@@ -391,21 +391,21 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
      副本の数: 3
      副本 1:
        題名: 新英和辞典（第四版）
-       ディレクトリ: ENGLISH
+       ディレクトリ: english
        検索方式: 前方一致後方一致条件メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字: 0xa121 -- 0xa24e
        全角フォントの文字: 0xa321 -- 0xa27e
      副本 2:
        題名: CD-ROM 仏和辞典（第三版）
-       ディレクトリ: FRENCH
+       ディレクトリ: french
        検索方式: 前方一致後方一致条件メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字:
        全角フォントの文字: 0xa321 -- 0xa27e
      副本 3:
        題名: ポケット独和辞典（第三版）
-       ディレクトリ: GERMAN
+       ディレクトリ: german
        検索方式: メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字:
@@ -414,9 +414,9 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
 (`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行 :
 (ebinfo-ja)Invoking ebinfo.)。
 この例では、 3 つの副本が書籍には含まれており、それらのディレクトリ名は
-`ENGLISH', `FRENCH', `GERMAN' だということが分かります。
+`english', `french', `german' だということが分かります。
 
-   `ENGLISH' と `GERMAN' だけを圧縮するには、次のようにします。
+   `english' と `german' だけを圧縮するには、次のようにします。
 
      % ebzip --subbook english,french /dict
 
@@ -425,7 +425,7 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
 
      % ebzip --subbook english --subbook french /dict
 
-残りの副本 (この例では `GERMAN') のファイルは圧縮されることもコピーさ
+残りの副本 (この例では `german') のファイルは圧縮されることもコピーさ
 れることもありませんので、この時点ではまだこの書籍に対する圧縮の作業は
 完了していません。 この書籍を使用するためには、さらなる操作を行って残り
 の副本を圧縮するか、 `ebrefile' コマンドを使って残りの副本を
@@ -433,7 +433,8 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
 しくは *note `ebzip' との連携: (ebrefile-ja)Combination with ebzip.)。
 
    副本同士で、異なる圧縮レベルを設定することは可能です (たとえば、
-`EJDICT' と `HOWTO' はレベル 0 で圧縮し、`TOUR' はレベル 2 で圧縮する)。
+`english' と `french' はレベル 0 で圧縮し、 `german' はレベル 2 で圧縮
+する)。
 
    `--subbook' オプションの有無にかかわらず、`LANGUAGE' ファイルは常に
 圧縮されます。
@@ -1006,7 +1007,7 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 3.0alpha2 では、 1
+     圧縮モードを表します。 EB ライブラリバージョン 3.0alpha3 では、 1
      (2 進数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
@@ -1055,22 +1056,22 @@ Node: Compression Level10042
 Node: Adjust Filenames10555
 Node: Test12576
 Node: Partial Compression12925
-Node: Overwrite Old Files15411
-Node: Compress Compressed EPWING16207
-Node: Uncompression16645
-Node: Uncompression Example17032
-Node: Options for Uncompression18557
-Node: Uncompress Compressed EPWING20105
-Node: Information20550
-Node: Information Example20889
-Node: Options for Information21578
-Node: Delete a Book22153
-Node: Summary of Options22449
-Node: Comparision Result26917
-Node: Compressed File Format28877
-Node: Format Overview29281
-Node: Data Part30135
-Node: Index Part32710
-Node: Header Part35377
+Node: Overwrite Old Files15417
+Node: Compress Compressed EPWING16213
+Node: Uncompression16651
+Node: Uncompression Example17038
+Node: Options for Uncompression18563
+Node: Uncompress Compressed EPWING20111
+Node: Information20556
+Node: Information Example20895
+Node: Options for Information21584
+Node: Delete a Book22159
+Node: Summary of Options22455
+Node: Comparision Result26923
+Node: Compressed File Format28883
+Node: Format Overview29287
+Node: Data Part30141
+Node: Index Part32716
+Node: Header Part35383
 
 End Tag Table

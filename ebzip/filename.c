@@ -43,6 +43,15 @@
 #endif /* not MAXPATHLEN */
 #endif /* not PATH_MAX */
 
+/*
+ * Trick for difference of path notation between UNIX and DOS.
+ */
+#ifndef DOS_FILE_PATH
+#define F_(path1, path2) (path1)
+#else
+#define F_(path1, path2) (path2)
+#endif
+
 #include "eb/eb.h"
 
 void
@@ -96,7 +105,7 @@ compose_out_path_name(path_name, file_name, suffix, out_path_name)
 	}
     }
 
-    sprintf(out_path_name, "%s/%s", path_name, fixed_file_name);
+    sprintf(out_path_name, F_("%s/%s", "%s\\%s"), path_name, fixed_file_name);
 }
 
 void
@@ -109,6 +118,7 @@ compose_out_path_name2(path_name, sub_directory_name, file_name, suffix,
     char *out_path_name;
 {
     char sub_path_name[PATH_MAX + 1];
+
     sprintf(sub_path_name, "%s/%s", path_name, sub_directory_name);
     compose_out_path_name(sub_path_name, file_name, suffix, out_path_name);
 }
@@ -124,8 +134,43 @@ compose_out_path_name3(path_name, sub_directory_name, sub2_directory_name,
     char *out_path_name;
 {
     char sub2_path_name[PATH_MAX + 1];
-    sprintf(sub2_path_name, "%s/%s/%s", path_name, sub_directory_name,
-	sub2_directory_name);
+
+    sprintf(sub2_path_name, F_("%s/%s/%s", "%s\\%s\\%s"), 
+	path_name, sub_directory_name, sub2_directory_name);
     compose_out_path_name(sub2_path_name, file_name, suffix, out_path_name);
+}
+
+void
+compose_existent_path_name(path_name, leaf_name, out_path_name)
+    const char *path_name;
+    const char *leaf_name;
+    char *out_path_name;
+{
+    sprintf(out_path_name, F_("%s/%s", "%s\\%s"), path_name, leaf_name);
+}
+
+void
+compose_existent_path_name2(path_name, directory_name, leaf_name,
+    out_path_name)
+    const char *path_name;
+    const char *directory_name;
+    const char *leaf_name;
+    char *out_path_name;
+{
+    sprintf(out_path_name, F_("%s/%s/%s", "%s\\%s\\%s"),
+	path_name, directory_name, leaf_name);
+}
+
+void
+compose_existent_path_name3(path_name, directory_name, sub_directory_name,
+    leaf_name, out_path_name)
+    const char *path_name;
+    const char *directory_name;
+    const char *sub_directory_name;
+    const char *leaf_name;
+    char *out_path_name;
+{
+    sprintf(out_path_name, F_("%s/%s/%s/%s", "%s\\%s\\%s\\%s"), 
+	path_name, directory_name, sub_directory_name, leaf_name);
 }
 

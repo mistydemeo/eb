@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.0alpha2 版です。 EB ライブラリバージョン 3.0alpha2 に
+   この文書は第 3.0alpha3 版です。 EB ライブラリバージョン 3.0alpha3 に
 対応しています。
 
 * Menu:
@@ -126,10 +126,10 @@ File: ebfont-ja.info,  Node: Invoking ebfont,  Next: Summary of Options,  Prev: 
 拡張子は `xbm'、`xpm'、 `gif' のいずれかで、 文字番号は 16 進数 4 桁
 (`0' から `9' と `a' から `f') で、次のようになります。
 
-     EJDICT/16/narrow/a121.xbm
-     EJDICT/16/wide/a321.xbm
+     ejdict/16/narrow/a121.xbm
+     ejdict/16/wide/a321.xbm
 
-`EJDICT/16/xbm/narrow' などの中間のディレクトリは、もし無ければ
+`ejdict/16/xbm/narrow' などの中間のディレクトリは、もし無ければ
 `ebfont' が生成します。
 
    `--output-directory' オプションを指定することで、`ebfont' はカレント
@@ -210,21 +210,21 @@ File: ebfont-ja.info,  Node: Subbooks,  Prev: Heights,  Up: Invoking ebfont
      副本の数: 3
      副本 1:
        題名: 新英和辞典（第四版）
-       ディレクトリ: ENGLISH
+       ディレクトリ: english
        検索方式: 前方一致後方一致条件メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字: 0xa121 -- 0xa24e
        全角フォントの文字: 0xa321 -- 0xa27e
      副本 2:
        題名: CD-ROM 仏和辞典（第三版）
-       ディレクトリ: FRENCH
+       ディレクトリ: french
        検索方式: 前方一致後方一致条件メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字:
        全角フォントの文字: 0xa321 -- 0xa27e
      副本 3:
        題名: ポケット独和辞典（第三版）
-       ディレクトリ: GERMAN
+       ディレクトリ: german
        検索方式: メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字:
@@ -233,9 +233,9 @@ File: ebfont-ja.info,  Node: Subbooks,  Prev: Heights,  Up: Invoking ebfont
 (`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行 :
 (ebinfo-ja)Invoking ebinfo.)。
 この例では、 3 つの副本が書籍には含まれており、そのディレクトリ名は
-`ENGLISH', `FRENCH', `GERMAN' だということが分かります。
+`english', `french', `german' だということが分かります。
 
-   次のコマンドを実行すると, `ebfont' は `ENGLISH' と `FRENCH' の画像フ
+   次のコマンドを実行すると, `ebfont' は `english' と `french' の画像フ
 ァイルだけを生成します。
 
      % ebfont --subbook english,french /mnt/cdrom

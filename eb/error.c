@@ -12,30 +12,11 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#ifdef ENABLE_PTHREAD
-#include <pthread.h>
-#endif
-
-#ifdef ENABLE_NLS
-#include <libintl.h>
-#include "libintl_r.h"
-#endif
+#include "ebconfig.h"
 
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
-
-#ifndef ENABLE_PTHREAD
-#define pthread_mutex_lock(m)
-#define pthread_mutex_unlock(m)
-#endif
 
 /*
  * Mutex for gettext function call.
@@ -122,7 +103,7 @@ static const char * const error_messages[] = {
     N_("no such character text"),
     N_("no such search method"),
     N_("no such hook"),
-    N_("invalid hook workspace usage"),
+    N_("stop code found"),
     N_("different content type"),
 
     /* 55 -- 59 */

@@ -460,7 +460,7 @@ the number of subbooks: 3
 @group
 subbook 1:
   title: New English Japanese Dictionary (4th edition)
-  directory: ENGLISH
+  directory: english
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 0xa121 -- 0xa24e
@@ -470,7 +470,7 @@ subbook 1:
 @group
 subbook 2:
   title: CD-ROM French Japanese Dictionary (3rd edition)
-  directory: FRENCH
+  directory: french
   search methods: word endword keyword menu
   font sizes: 16 24 30 48
   narrow font characters: 
@@ -480,7 +480,7 @@ subbook 2:
 @group
 subbook 3:
   title: Pocket German Japanese Dictionary (3rd edition)
-  directory: GERMAN
+  directory: german
   search methods: menu
   font sizes: 16 24 30 48
   narrow font characters: 
@@ -493,9 +493,9 @@ subbook 3:
 for more details about the @code{ebinfo} command).
 @*
 In this example, there are three subbooks in the book, and their
-directory names are @code{ENGLISH}, @code{FRENCH} and @code{GERMAN}.
+directory names are @code{english}, @code{french} and @code{german}.
 
-You can compress only @code{ENGLISH} and @code{FRENCH} by the following
+You can compress only @code{english} and @code{french} by the following
 way:
 
 @example
@@ -511,7 +511,7 @@ An argument to @samp{--subbook} can be splitted like as follows:
 @end example
 
 @noindent
-Files in the rest subbooks (@code{GERMAN} in this example) are not
+Files in the rest subbooks (@code{german} in this example) are not
 compressed nor copied, so that the compression procedure for the book
 is incompleted at this point.
 In order to use the book, you must compress the rest subbooks in a
@@ -520,8 +520,8 @@ the @file{CATALOG(S)} file by using the @code{ebrefile} command
 (@xref{Combination with ebzip, , Combination with @code{ebzip}, ebrefile,
 ebrefile}, for more details).
 You can compress subbooks with different compression levels
-(e.g. compress @code{ENGLISH} and @code{FRENCH} with level 0, and 
-compress @code{GERMAN} with level 2).
+(e.g. compress @code{english} and @code{french} with level 0, and 
+compress @code{german} with level 2).
 
 Regardless of the @samp{--subbook} option, the @file{LANGUAGE} file is
 always compressed.

@@ -525,7 +525,7 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @group
 副本 1:
   題名: 新英和辞典（第四版）
-  ディレクトリ: ENGLISH
+  ディレクトリ: english
   検索方式: 前方一致 後方一致 条件 メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 0xa121 -- 0xa24e
@@ -535,7 +535,7 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @group
 副本 2:
   題名: CD-ROM 仏和辞典（第三版）
-  ディレクトリ: FRENCH
+  ディレクトリ: french
   検索方式: 前方一致 後方一致 条件 メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 
@@ -545,7 +545,7 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @group
 副本 3:
   題名: ポケット独和辞典（第三版）
-  ディレクトリ: GERMAN
+  ディレクトリ: german
   検索方式: メニュー
   フォントの大きさ: 16 24 30 48
   半角フォントの文字: 
@@ -558,9 +558,9 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @pxref{Invoking ebinfo, , @code{ebinfo} の実行, ebinfo-ja, ebinfo-ja})。
 @*
 この例では、3 つの副本が書籍には含まれており、それらのディレクトリ名は
-@code{ENGLISH}, @code{FRENCH}, @code{GERMAN} だということが分かります。
+@code{english}, @code{french}, @code{german} だということが分かります。
 
-@code{ENGLISH} と @code{GERMAN} だけを圧縮するには、次のようにします。
+@code{english} と @code{german} だけを圧縮するには、次のようにします。
 
 @example
 % ebzip --subbook english,french /dict
@@ -575,7 +575,7 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @end example
 
 @noindent
-残りの副本 (この例では @code{GERMAN}) のファイルは圧縮されることもコピー
+残りの副本 (この例では @code{german}) のファイルは圧縮されることもコピー
 されることもありませんので、この時点ではまだこの書籍に対する圧縮の作業は
 完了していません。
 この書籍を使用するためには、さらなる操作を行って残りの副本を圧縮するか、
@@ -584,8 +584,8 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @pxref{Combination with ebzip, , @code{ebzip} との連携, ebrefile-ja, ebrefile-ja})。
 
 副本同士で、異なる圧縮レベルを設定することは可能です
-(たとえば、@code{EJDICT} と @code{HOWTO} はレベル 0 で圧縮し、@code{TOUR}
-はレベル 2 で圧縮する)。
+(たとえば、@code{english} と @code{french} はレベル 0 で圧縮し、
+@code{german} はレベル 2 で圧縮する)。
 
 @samp{--subbook} オプションの有無にかかわらず、@file{LANGUAGE} ファイ
 ルは常に圧縮されます。
