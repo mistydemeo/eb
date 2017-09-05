@@ -810,7 +810,6 @@ text_max_length=%ld, forward=%d)",
 		break;
 
 	    case 0x1a: case 0x1b: case 0x1c: case 0x1d: case 0x1e: case 0x1f:
-	    case 0xe0:
 		/* emphasis; described in JIS X 4081-1996 */
 		in_step = 4;
 		if (cache_rest_length < in_step) {
@@ -1104,8 +1103,28 @@ text_max_length=%ld, forward=%d)",
 		context->skip_code = eb_uint1(cache_p + 1) + 0x20;
 		break;
 
+	    case 0xe0:
+		/* character modification */
+		in_step = 4;
+		if (cache_rest_length < in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		argc = 2;
+		argv[1] = eb_uint2(cache_p + 2);
+		hook = hookset->hooks + EB_HOOK_BEGIN_DECORATION;
+
+		/* Some old EB books don't take an argument. */
+		if (book->disc_code != EB_DISC_EPWING
+		    && eb_uint1(cache_p + 2) >= 0x1f) {
+		    in_step = 2;
+		    hook = &null_hook;
+		}
+		break;
+
 	    case 0xe1:
 		in_step = 2;
+		hook = hookset->hooks + EB_HOOK_END_DECORATION;
 		break;
 
 	    case 0xe4: case 0xe6: case 0xe8: case 0xea: case 0xec: case 0xee:

@@ -567,6 +567,7 @@ eb_set_binary_wave(book, start_position, end_position)
     EB_Binary_Context *context;
     off_t start_location;
     off_t end_location;
+    char temporary_buffer[4];
 
     eb_lock(&book->lock);
     LOG(("in: eb_set_binary_wave(book=%d, start_position={%d,%d}, \
@@ -616,19 +617,8 @@ end_position={%d,%d})",
     /*
      * Read 4bytes from the sound file to check whether the sound
      * data contains a header part or not.
-     */
-    if (zio_lseek(context->zio, context->location, SEEK_SET) < 0) {
-	error_code = EB_ERR_FAIL_SEEK_BINARY;
-	goto failed;
-    }
-
-    if (zio_read(context->zio, context->cache_buffer, 4) != 4) {
-	error_code = EB_ERR_FAIL_READ_BINARY;
-	goto failed;
-    }
-
-    /*
-     * If the read data is "RIFF", the wave has a header part.
+     *
+     * If the read data is "fmt ", the wave data has a header part.
      * Otherwise, we must read a header in another location.
      *
      * The wave data consists of:
@@ -637,29 +627,23 @@ end_position={%d,%d})",
      *     data-part-size(4bytes) data
      *
      * wave-size      = "WAVE" + header-fragment + data-part-size + data
-     *                = 4 + 28 + data + 4
-     *                = data + 36
-     * data-part-size = data
+     *                = 4 + 28 + 4 + data
+     *                = 36 + data
+     * data-part-size = length(data)
      */
-    if (memcmp(context->cache_buffer, "RIFF", 4) == 0) {
-	context->cache_length = 4;
+    if (zio_lseek(context->zio, context->location, SEEK_SET) < 0) {
+	error_code = EB_ERR_FAIL_SEEK_BINARY;
+	goto failed;
+    }
+    if (zio_read(context->zio, temporary_buffer, 4) != 4) {
+	error_code = EB_ERR_FAIL_READ_BINARY;
+	goto failed;
+    }
+
+    if (memcmp(temporary_buffer, "fmt ", 4) == 0) {
+	memcpy(context->cache_buffer + 12, temporary_buffer, 4);
+	context->cache_length = 16;
     } else {
-	/*
-	 * Read and compose a WAVE header.
-	 */
-	memcpy(context->cache_buffer, "RIFF", 4);
-
-	*(unsigned char *)(context->cache_buffer + 4)
-	    = (context->size + 36)         & 0xff;
-	*(unsigned char *)(context->cache_buffer + 5)
-	    = ((context->size + 36) >> 8)  & 0xff;
-	*(unsigned char *)(context->cache_buffer + 6)
-	    = ((context->size + 36) >> 16) & 0xff;
-	*(unsigned char *)(context->cache_buffer + 7)
-	    = ((context->size + 36) >> 24) & 0xff;
-
-	memcpy(context->cache_buffer + 8, "WAVE", 4);
-
 	if (zio_lseek(context->zio,
 	    (off_t)(book->subbook_current->sound.start_page - 1)
 	    * EB_SIZE_PAGE + 32, SEEK_SET) < 0) {
@@ -690,6 +674,22 @@ end_position={%d,%d})",
 	    goto failed;
 	}
     }
+
+    /*
+     * Read and compose a WAVE header.
+     */
+    memcpy(context->cache_buffer, "RIFF", 4);
+
+    *(unsigned char *)(context->cache_buffer + 4)
+	= (context->size + 36)         & 0xff;
+    *(unsigned char *)(context->cache_buffer + 5)
+	= ((context->size + 36) >> 8)  & 0xff;
+    *(unsigned char *)(context->cache_buffer + 6)
+	= ((context->size + 36) >> 16) & 0xff;
+    *(unsigned char *)(context->cache_buffer + 7)
+	= ((context->size + 36) >> 24) & 0xff;
+
+    memcpy(context->cache_buffer + 8, "WAVE", 4);
 
     LOG(("out: eb_set_binary_wave() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);

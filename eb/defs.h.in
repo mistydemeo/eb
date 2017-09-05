@@ -180,7 +180,7 @@ extern "C" {
 /*
  * The number of text hooks.
  */
-#define EB_NUMBER_OF_HOOKS		41
+#define EB_NUMBER_OF_HOOKS		43
 
 /*
  * The number of search contexts required by a book.

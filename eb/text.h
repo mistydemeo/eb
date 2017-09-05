@@ -82,6 +82,8 @@ extern "C" {
 #define EB_HOOK_END_GRAPHIC_REFERENCE	39
 
 #define EB_HOOK_GRAPHIC_REFERENCE	40
+#define EB_HOOK_BEGIN_DECORATION	41
+#define EB_HOOK_END_DECORATION		42
 
 /*
  * Function declarations.

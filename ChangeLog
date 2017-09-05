@@ -1,3 +1,15 @@
+2002-08-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.2.3.
+
+	* eb/subbook.c (eb_set_subbook_epwing): Open `honmon2' for
+	sound or graphic file if `honmong' or `honmons' doesn't exist.
+	* eb/binary.c (eb_set_binary_wave): Fix a bug that the function
+	composes broken WAVE header.
+
+	* eb/text.h, eb/readtext.c: Define `EB_HOOK_BEGIN_DECORATION' and
+	`EB_HOOK_END_DECORATION', requested from Kenichi SUTO.
+
 2002-06-10  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.2.2.

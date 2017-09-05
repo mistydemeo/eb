@@ -1034,6 +1034,7 @@ eb_set_subbook_epwing(book, subbook_code)
 	    error_code = EB_ERR_FAIL_OPEN_TEXT;
 	    goto failed;
 	}
+	text_zio_code = zio_mode(&subbook->text_zio);
     }
 
     /*
@@ -1045,13 +1046,12 @@ eb_set_subbook_epwing(book, subbook_code)
 	if (zio_mode(&subbook->graphic_zio) != ZIO_INVALID)
 	    graphic_zio_code = ZIO_REOPEN;
     } else {
-	if (strncasecmp(subbook->text_file_name, "honmon2", 7)  == 0) {
-	    if (eb_find_file_name3(book->path, subbook->directory_name,
+	if (strncasecmp(subbook->text_file_name, "honmon2", 7) == 0
+	    && eb_find_file_name3(book->path, subbook->directory_name,
 		subbook->data_directory_name, "honmong",
 		subbook->graphic_file_name) == EB_SUCCESS) {
-		eb_path_name_zio_code(subbook->graphic_file_name, ZIO_PLAIN,
-		    &graphic_zio_code);
-	    }
+	    eb_path_name_zio_code(subbook->graphic_file_name, ZIO_PLAIN,
+		&graphic_zio_code);
 	} else {
 	    strcpy(subbook->graphic_file_name, subbook->text_file_name);
 	    graphic_zio_code = text_zio_code;
@@ -1067,6 +1067,7 @@ eb_set_subbook_epwing(book, subbook_code)
 	    error_code = EB_ERR_FAIL_OPEN_BINARY;
 	    goto failed;
 	}
+	graphic_zio_code = zio_mode(&subbook->graphic_zio);
     }
 
     /*
@@ -1078,17 +1079,16 @@ eb_set_subbook_epwing(book, subbook_code)
 	if (zio_mode(&subbook->sound_zio) != ZIO_INVALID)
 	    sound_zio_code = ZIO_REOPEN;
     } else {
-	if (strncasecmp(subbook->text_file_name, "honmon2", 7)  == 0) {
-	    if (eb_find_file_name3(book->path, subbook->directory_name,
+	if (strncasecmp(subbook->text_file_name, "honmon2", 7)  == 0
+	    && eb_find_file_name3(book->path, subbook->directory_name,
 		subbook->data_directory_name, "honmons",
 		subbook->sound_file_name) == EB_SUCCESS) {
-		if (book->version < 6)
-		    default_zio_code = ZIO_PLAIN;
-		else
-		    default_zio_code = ZIO_EPWING6;
-		eb_path_name_zio_code(subbook->sound_file_name,
-		    default_zio_code, &sound_zio_code);
-	    }
+	    if (book->version < 6)
+		default_zio_code = ZIO_PLAIN;
+	    else
+		default_zio_code = ZIO_EPWING6;
+	    eb_path_name_zio_code(subbook->sound_file_name, default_zio_code,
+		&sound_zio_code);
 	} else {
 	    strcpy(subbook->sound_file_name, subbook->text_file_name);
 	    sound_zio_code = text_zio_code;
@@ -1104,6 +1104,7 @@ eb_set_subbook_epwing(book, subbook_code)
 	    error_code = EB_ERR_FAIL_OPEN_BINARY;
 	    goto failed;
 	}
+	sound_zio_code = zio_mode(&subbook->sound_zio);
     }
 
     LOG(("out: eb_set_subbook_epwing() = %s", eb_error_string(EB_SUCCESS)));

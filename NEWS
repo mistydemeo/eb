@@ -1,3 +1,8 @@
+Major changes in release 3.2.3.
+
+* Fix bug in handling of PCM sound data.
+* Add two text hooks.
+
 Major changes in release 3.2.2.
 
 * Fix bug in handling of appendix.

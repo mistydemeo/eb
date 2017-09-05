@@ -26,7 +26,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.2.2 版です。
+   この文書は第 3.2.3 版です。
 
 * Menu:
 
@@ -158,9 +158,9 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 3.2.2 に対応しています。 本書の
+   この文書は、EB ライブラリバージョン 3.2.3 に対応しています。 本書の
 内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成する
-には、お使用いのシステムに EB ライブラリバージョン 3.2.2 と C コンパイ
+には、お使用いのシステムに EB ライブラリバージョン 3.2.3 と C コンパイ
 ラをインストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
@@ -513,7 +513,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 3.2.2 のソースードを展開します。
+  1. EB ライブラリ 3.2.3 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -2688,7 +2688,7 @@ File: eb-ja.info,  Node: Text Data Format,  Next: Hook,  Prev: Seek and Read Tex
 すべて列挙すると、次のようになります。
 
 `1f09 0001'
-     字下げ (インデント) の量を指定。 (引数が 0010 なので、字下げ量は 1
+     字下げ (インデント) の量を指定。 (引数が 0001 なので、字下げ量は 1
      。)
 
 `1f41 0100'
@@ -3728,7 +3728,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_GRAY_GRAPHIC:
  - EB_HOOK_END_GRAY_GRAPHIC:
      これらのフック名称は、グレースケール図版のために予約されていますが、
-     EB ライブラリ 3.2.2 ではまだ対応していません。
+     EB ライブラリ 3.2.3 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_COLOR_BMP:
  - EB_HOOK_BEGIN_COLOR_JPEG:
@@ -3761,7 +3761,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_IN_COLOR_JPEG:
  - EB_HOOK_END_IN_COLOR_GRAPHIC:
      これらのフック名称は、インラインカラー図版のために予約されています
-     が、 EB ライブラリ 3.2.2 ではまだ対応していません。
+     が、 EB ライブラリ 3.2.3 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_WAVE:
  - EB_HOOK_END_WAVE:
@@ -4243,8 +4243,8 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
           *APPENDIX)
      関数 `eb_forward_text()' と `eb_backward_text()' は、 BOOK が選択
      している副本の本文のアクセス位置を前後に移動させ、 本文の区切りコ
-     ードを単位とした頭出しを行います。 ちょうど、音楽 CD-ROM の曲の頭
-     出しと同じです。
+     ードを単位とした頭出しを行います。 ちょうど、音楽 CD の曲の頭出し
+     と同じです。
 
      `eb_forward_text()'
      は本文の末尾方向に向かってアクセス位置を進め、 `eb_backward_text()'
@@ -5438,19 +5438,19 @@ Node: Hook Code List127019
 Node: Hookset Access Functions141963
 Node: Builtin Hook Functions145039
 Node: Text Data Functions148215
-Node: Local Character164602
-Node: Narrow & Wide Font166333
-Node: Font Size and Font Code168470
-Node: Current Font Height170031
-Node: Get Font172603
-Node: Convert Font175231
-Node: Local Character in Text176394
-Node: Font Data Types177050
-Node: Font Constants177793
-Node: Font Data Functions181856
-Node: Index195927
-Node: Data Type Index196155
-Node: Function Index197004
-Node: Variable Index203243
+Node: Local Character164598
+Node: Narrow & Wide Font166329
+Node: Font Size and Font Code168466
+Node: Current Font Height170027
+Node: Get Font172599
+Node: Convert Font175227
+Node: Local Character in Text176390
+Node: Font Data Types177046
+Node: Font Constants177789
+Node: Font Data Functions181852
+Node: Index195923
+Node: Data Type Index196151
+Node: Function Index197000
+Node: Variable Index203239
 
 End Tag Table
