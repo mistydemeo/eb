@@ -3004,7 +3004,7 @@ struct EB_Position_Struct {
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-<h4><a name="type:Muti_Search_Code"><code>EB_Muti_Search_Code</code> 型</a></h4>
+<h4><a name="type:Multi_Search_Code"><code>EB_Multi_Search_Code</code> 型</a></h4>
 
 <p>
 データ型 <code>EB_Multi_Search_Code</code> は複合検索コードを表します。
@@ -4293,7 +4293,22 @@ candidate = eb_current_candidate(book);
 
 <p>
 一般に、アプリケーションプログラムがある単語を検索した際は、本文の中から
-その語を説明した部分だけを抜き出して出力することになるでしょう。
+その単語を説明した部分だけを抜き出して出力することになるでしょう。
+たとえば、`dictionary' という単語を引いた場合、次のような文章が出力される
+事が期待されます。
+その次や、次の次の単語の説明まで延々と表示されることを、おそらく大半の
+ユーザは望まない筈です。
+</p>
+
+<blockquote>
+<pre>
+dictionary [名] (複: dictionaries)
+辞典、事典
+[類義] lexicon, glossary (用語辞典), encyclopedia (百科事典)
+</pre>
+</blockquote>
+
+<p>
 しかし、困ったことに CD-ROM 書籍には、単語の説明の終わりを示す印
 (エスケープシーケンス) が定義されていません。
 つまり、ある語の説明部分を正確に抜き出すことは、電子ブックや EPWING では
@@ -4342,8 +4357,8 @@ EB ライブラリは区切りコードを自動判定する機能を持っていますが、判定は
 <p>
 本文以外のテキストデータにも区切りコードの概念は存在しますので、
 <code>eb_is_text_stopped()</code> を使って区切りコードを検出できます。
-本文以外では EB ライブラリが確実に区切りを判別できますので、誤判定の
-問題は起きません。
+しかし、本文以外では EB ライブラリが確実に区切りを判別できますので、
+誤判定の問題は起きません。
 </p>
 
 <p>

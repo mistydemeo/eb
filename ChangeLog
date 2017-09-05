@@ -1,6 +1,12 @@
-2004-06-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+2004-07-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.1
+
+	* doc/Makefile.am (uninstall-hook): Defined.
+	* doc/Makefile.am: Fix bugs that `make all' fails when $(srcdir)
+	!= `.'.
+
+2004-06-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* doc/Makefile.am (pkgdoc_DATA): Do not use meta characters to
 	specify splitted HTML files.  Use `install-data-hook' instead.

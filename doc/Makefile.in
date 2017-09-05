@@ -365,6 +365,8 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-info-am uninstall-pkgdocDATA
+	@$(NORMAL_INSTALL)
+	$(MAKE) $(AM_MAKEFLAGS) uninstall-hook
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
 	distclean distclean-generic distclean-libtool distdir dvi \
@@ -387,6 +389,12 @@ install-data-hook:
 	    done; \
 	done
 
+uninstall-hook:
+	for i in $(pkgdoc_DATA); do \
+	    base="`echo $$i | sed -e 's/\.html//'`"; \
+	    rm -f "$(DESTDIR)$(pkgdocdir)"/$$base-*.html; \
+	done
+
 version.html:
 	rm -f $@
 	echo $(VERSION) > version.html
@@ -396,31 +404,31 @@ splitted: eb-splitted ebappendix-splitted ebfont-splitted ebinfo-splitted \
 
 eb.html: eb-cat.html
 	rm -f $@
-	$(PERL) html-split -Z -p eb -w 2 eb-cat.html
+	$(PERL) $(srcdir)/html-split -Z -p eb -w 2 eb-cat.html
 
 ebappendix.html: ebappendix-cat.html
 	rm -f $@
-	$(PERL) html-split -Z -p ebappendix -w 2 ebappendix-cat.html
+	$(PERL) $(srcdir)/html-split -Z -p ebappendix -w 2 ebappendix-cat.html
 
 ebfont.html: ebfont-cat.html
 	rm -f $@
-	$(PERL) html-split -Z -p ebfont -w 2 ebfont-cat.html
+	$(PERL) $(srcdir)/html-split -Z -p ebfont -w 2 ebfont-cat.html
 
 ebinfo.html: ebinfo-cat.html
 	rm -f $@
-	$(PERL) html-split -Z -p ebinfo -w 2 ebinfo-cat.html
+	$(PERL) $(srcdir)/html-split -Z -p ebinfo -w 2 ebinfo-cat.html
 
 ebrefile.html: ebrefile-cat.html
 	rm -f $@
-	$(PERL) html-split -Z -p ebrefile -w 2 ebrefile-cat.html
+	$(PERL) $(srcdir)/html-split -Z -p ebrefile -w 2 ebrefile-cat.html
 
 ebstopcode.html: ebstopcode-cat.html
 	rm -f $@
-	$(PERL) html-split -Z -p ebstopcode -w 2 ebstopcode-cat.html
+	$(PERL) $(srcdir)/html-split -Z -p ebstopcode -w 2 ebstopcode-cat.html
 
 ebzip.html: ebzip-cat.html
 	rm -f $@
-	$(PERL) html-split -Z -p ebzip -w 2 ebzip-cat.html
+	$(PERL) $(srcdir)/html-split -Z -p ebzip -w 2 ebzip-cat.html
 
 eb-cat.html: eb.html.in version.html eb-toc.html eb-sample-appendix.html \
 	eb-sample-booklist.html eb-sample-disctype.html eb-sample-font.html \
@@ -428,97 +436,97 @@ eb-cat.html: eb.html.in version.html eb-toc.html eb-sample-appendix.html \
 	eb-sample-word.html eb-index-type.html eb-index-func.html \
 	eb-index-const.html
 	rm -f $@
-	$(PERL) html-include -o $@ $(srcdir)/eb.html.in
+	$(PERL) $(srcdir)/html-include -o $@ $(srcdir)/eb.html.in
 
 ebappendix-cat.html: $(srcdir)/ebappendix.html.in version.html \
 ebappendix-toc.html
 	rm -f $@
-	$(PERL) html-include -o $@ $(srcdir)/ebappendix.html.in
+	$(PERL) $(srcdir)/html-include -o $@ $(srcdir)/ebappendix.html.in
 
 ebfont-cat.html: $(srcdir)/ebfont.html.in version.html ebfont-toc.html
 	rm -f $@
-	$(PERL) html-include -o $@ $(srcdir)/ebfont.html.in
+	$(PERL) $(srcdir)/html-include -o $@ $(srcdir)/ebfont.html.in
 
 ebinfo-cat.html: $(srcdir)/ebinfo.html.in version.html ebinfo-toc.html
 	rm -f $@
-	$(PERL) html-include -o $@ $(srcdir)/ebinfo.html.in
+	$(PERL) $(srcdir)/html-include -o $@ $(srcdir)/ebinfo.html.in
 
 ebrefile-cat.html: $(srcdir)/ebrefile.html.in version.html ebrefile-toc.html
 	rm -f $@
-	$(PERL) html-include -o $@ $(srcdir)/ebrefile.html.in
+	$(PERL) $(srcdir)/html-include -o $@ $(srcdir)/ebrefile.html.in
 
 ebstopcode-cat.html: $(srcdir)/ebstopcode.html.in version.html \
 ebstopcode-toc.html
 	rm -f $@
-	$(PERL) html-include -o $@ $(srcdir)/ebstopcode.html.in
+	$(PERL) $(srcdir)/html-include -o $@ $(srcdir)/ebstopcode.html.in
 
 ebzip-cat.html: $(srcdir)/ebzip.html.in version.html ebzip-toc.html
 	rm -f $@
-	$(PERL) html-include -o $@ $(srcdir)/ebzip.html.in
+	$(PERL) $(srcdir)/html-include -o $@ $(srcdir)/ebzip.html.in
 
 eb-toc.html: $(srcdir)/eb.html.in
 	rm -f $@
-	$(PERL) html-toc -m h2 -M h3 $(srcdir)/eb.html.in > $@
+	$(PERL) $(srcdir)/html-toc -m h2 -M h3 $(srcdir)/eb.html.in > $@
 
 ebappendix-toc.html: $(srcdir)/ebappendix.html.in
 	rm -f $@
-	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebappendix.html.in > $@
+	$(PERL) $(srcdir)/html-toc -m h2 -M h3 $(srcdir)/ebappendix.html.in > $@
 
 ebfont-toc.html: $(srcdir)/ebfont.html.in
 	rm -f $@
-	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebfont.html.in > $@
+	$(PERL) $(srcdir)/html-toc -m h2 -M h3 $(srcdir)/ebfont.html.in > $@
 
 ebinfo-toc.html: $(srcdir)/ebinfo.html.in
 	rm -f $@
-	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebinfo.html.in > $@
+	$(PERL) $(srcdir)/html-toc -m h2 -M h3 $(srcdir)/ebinfo.html.in > $@
 
 ebrefile-toc.html: $(srcdir)/ebrefile.html.in
 	rm -f $@
-	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebrefile.html.in > $@
+	$(PERL) $(srcdir)/html-toc -m h2 -M h3 $(srcdir)/ebrefile.html.in > $@
 
 ebstopcode-toc.html: $(srcdir)/ebstopcode.html.in
 	rm -f $@
-	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebstopcode.html.in > $@
+	$(PERL) $(srcdir)/html-toc -m h2 -M h3 $(srcdir)/ebstopcode.html.in > $@
 
 ebzip-toc.html: $(srcdir)/ebzip.html.in
 	rm -f $@
-	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebzip.html.in > $@
+	$(PERL) $(srcdir)/html-toc -m h2 -M h3 $(srcdir)/ebzip.html.in > $@
 
 eb-sample-appendix.html: $(top_srcdir)/samples/appendix.c
 	rm -f $@
-	$(PERL) c2html $(top_srcdir)/samples/appendix.c > $@
+	$(PERL) $(srcdir)/c2html $(top_srcdir)/samples/appendix.c > $@
 
 eb-sample-booklist.html: $(top_srcdir)/samples/booklist.c
 	rm -f $@
-	$(PERL) c2html $(top_srcdir)/samples/booklist.c > $@
+	$(PERL) $(srcdir)/c2html $(top_srcdir)/samples/booklist.c > $@
 
 eb-sample-disctype.html: $(top_srcdir)/samples/disctype.c
 	rm -f $@
-	$(PERL) c2html $(top_srcdir)/samples/disctype.c > $@
+	$(PERL) $(srcdir)/c2html $(top_srcdir)/samples/disctype.c > $@
 
 eb-sample-font.html: $(top_srcdir)/samples/font.c
 	rm -f $@
-	$(PERL) c2html $(top_srcdir)/samples/font.c > $@
+	$(PERL) $(srcdir)/c2html $(top_srcdir)/samples/font.c > $@
 
 eb-sample-initexit.html: $(top_srcdir)/samples/initexit.c
 	rm -f $@
-	$(PERL) c2html $(top_srcdir)/samples/initexit.c > $@
+	$(PERL) $(srcdir)/c2html $(top_srcdir)/samples/initexit.c > $@
 
 eb-sample-subbook.html: $(top_srcdir)/samples/subbook.c
 	rm -f $@
-	$(PERL) c2html $(top_srcdir)/samples/subbook.c > $@
+	$(PERL) $(srcdir)/c2html $(top_srcdir)/samples/subbook.c > $@
 
 eb-sample-text.html: $(top_srcdir)/samples/text.c
 	rm -f $@
-	$(PERL) c2html $(top_srcdir)/samples/text.c > $@
+	$(PERL) $(srcdir)/c2html $(top_srcdir)/samples/text.c > $@
 
 eb-sample-word.html: $(top_srcdir)/samples/word.c
 	rm -f $@
-	$(PERL) c2html $(top_srcdir)/samples/word.c > $@
+	$(PERL) $(srcdir)/c2html $(top_srcdir)/samples/word.c > $@
 
 eb-index-type.html eb-index-func.html eb-index-const.html: \
 $(srcdir)/eb.html.in
-	$(PERL) html-index -h -p eb-index $(srcdir)/eb.html.in
+	$(PERL) $(srcdir)/html-index -h -p eb-index $(srcdir)/eb.html.in
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -1,7 +1,8 @@
 バージョン 4.1 における主な変更点
 
 * BSD ライセンスを採用するようにした。
-* ebfont の --image-format オプションに `png' を指定できるようにした。
+* ebfont が PNG 形式の画像ファイルを生成できるようにした。
+  ebfont の --image-format オプションに `png' を指定できるようにした。
 * ライブラリに eb_narrow_font_png_size(), eb_wide_font_png_size(),
   eb_bitmap_to_png() を加えた。
 * eb_bitmap_to_xbm(), eb_bitmap_to_xpm(), eb_bitmap_to_gif(),
