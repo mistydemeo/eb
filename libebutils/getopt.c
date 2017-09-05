@@ -59,6 +59,10 @@
 #include <strings.h>
 #endif /* not STDC_HEADERS and not HAVE_STRING_H */
 
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+
 #ifdef ENABLE_NLS
 #include <libintl.h>
 #endif
@@ -108,7 +112,7 @@ char *optarg;		/* argument associated with option */
 
 extern char *getenv();
 
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 static int getopt_internal(int, char * const *, const char *);
 static int gcd(int, int);
 static void permute_args(int, int, int, char * const *);

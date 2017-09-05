@@ -24,10 +24,10 @@
 /*
  * Function declarations.
  */
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 int make_missing_directory(const char *, int);
-#else /* not __STDC__ */
+#else
 int make_missing_directory();
-#endif  /* not __STDC__ */
+#endif
 
 #endif /* not MAKEDIR_H */

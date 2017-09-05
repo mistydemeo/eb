@@ -1,3 +1,10 @@
+Major changes in release 4.0beta3.
+
+* Support for Japanese encodings other than EUC-JP.
+* Add some Windows support codes.
+  Use `eb-win32' package to build EB Library on Windows.
+* Add `--text-position' (-p) option to `ebstopcode'.
+
 Major changes in release 4.0beta2.
 
 * Fix serious bugs in search methods.

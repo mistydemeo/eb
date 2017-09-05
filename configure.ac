@@ -1,7 +1,7 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT(eb, 4.0beta2)
+AC_INIT(eb, 4.0beta3)
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.54)
 AM_INIT_AUTOMAKE
@@ -228,8 +228,8 @@ AC_HEADER_STDC
 AC_HEADER_STAT
 AC_HEADER_TIME
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(direct.h fcntl.h limits.h memory.h pthread.h stdlib.h \
-	string.h syslog.h unistd.h utime.h sys/utime.h)
+AC_CHECK_HEADERS(direct.h fcntl.h langinfo.h limits.h memory.h pthread.h \
+	stdlib.h string.h unistd.h utime.h sys/utime.h)
 
 dnl * 
 dnl * Structures.
@@ -250,7 +250,7 @@ dnl *
 dnl * Library Functions.
 dnl * 
 AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(memcpy memmove getcwd strchr syslog utime vsyslog _getdcwd)
+AC_CHECK_FUNCS(dup2 memcpy memmove getcwd nl_langinfo strchr utime _getdcwd)
 AC_REPLACE_FUNCS(memset strcasecmp strerror strtol)
 
 dnl * 

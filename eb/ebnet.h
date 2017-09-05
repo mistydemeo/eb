@@ -24,17 +24,6 @@
 #include "eb.h"
 
 /*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#if defined(__STDC__) || defined(__cplusplus) || defined(WIN32)
-#define EB_P(p) p
-#else /* not (__STDC__ && __cplusplus && WIN32) */
-#define EB_P(p) ()
-#endif /* not (__STDC__ && __cplusplus && WIN32) */
-#endif /* EB_P */
-
-/*
  * Service name.
  */
 #define EBNET_SERVICE_NAME		"ebnet"
@@ -97,7 +86,7 @@ void ebnet_finalize_appendix EB_P((EB_Appendix *));
 int ebnet_open EB_P((const char *));
 int ebnet_close EB_P((int));
 off_t ebnet_lseek EB_P((int, off_t, int));
-ssize_t ebnet_read EB_P((int, char *, size_t));
+ssize_t ebnet_read EB_P((int *, char *, size_t));
 EB_Error_Code ebnet_fix_directory_name EB_P((const char *, char *));
 EB_Error_Code ebnet_find_file_name EB_P((const char *, const char *, char *));
 EB_Error_Code ebnet_canonicalize_url EB_P((char *));

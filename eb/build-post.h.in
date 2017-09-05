@@ -26,7 +26,11 @@
 /*
  * Locale directory.
  */
-#define LOCALEDIR		"@localedir@"
+#ifndef WIN32
+#define EB_LOCALEDIR		"@localedir@"
+#else
+#define EB_LOCALEDIR		localedir()
+#endif
 
 /*
  * Data size of a book entry in a catalog file.
@@ -166,7 +170,13 @@
 /*
  * Test whether the path is URL with the `ebnet' scheme.
  */
-#define is_ebnet_url(path) (strncasecmp((path), "ebnet://", 8) == 0)
+#define is_ebnet_url(p) \
+	(   ((p)[0] == 'E' || (p)[0] == 'e') \
+	 && ((p)[1] == 'B' || (p)[1] == 'b') \
+	 && ((p)[2] == 'N' || (p)[2] == 'n') \
+	 && ((p)[3] == 'E' || (p)[3] == 'e') \
+	 && ((p)[4] == 'T' || (p)[4] == 't') \
+	 && (p)[5] == ':' && (p)[6] == '/' && (p)[7] == '/')
 
 /*
  * External variable declarations.

@@ -34,7 +34,7 @@
 #include <sys/types.h>
 
 #ifndef VOID
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 #define VOID void
 #else
 #define VOID char

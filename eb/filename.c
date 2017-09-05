@@ -23,11 +23,9 @@
 
 #ifdef WIN32
 /* a path may contain double-byte chars in SJIS. */
-#ifdef HAVE_MBSTRING_H /* keep Cygwin out. */
 #include <mbstring.h>
 #define strchr	_mbschr
 #define strrchr	_mbsrchr
-#endif /* HAVE_MBSTRING_H */
 #endif /* WIN32 */
 
 
@@ -111,7 +109,7 @@ eb_canonicalize_path_name(path_name)
 	/*
 	 * `path_name' is UNC path.  Nothing to be done.
 	 */
-    } else if (isalpha(*path_name) && *(path_name + 1) == ':') {
+    } else if (ASCII_ISALPHA(*path_name) && *(path_name + 1) == ':') {
 	/*
 	 * `path_name' has a drive letter.
 	 * Nothing to be done if it is an absolute path.
@@ -121,7 +119,7 @@ eb_canonicalize_path_name(path_name)
 	     * `path_name' is a relative path.
 	     * Covert the path name to an absolute path.
 	     */
-	    if (getdcwd(toupper(*path_name) - 'A' + 1, cwd,
+	    if (getdcwd(ASCII_TOUPPER(*path_name) - 'A' + 1, cwd,
 		EB_MAX_PATH_LENGTH + 1) == NULL) {
 		return EB_ERR_FAIL_GETCWD;
 	    }
@@ -132,7 +130,7 @@ eb_canonicalize_path_name(path_name)
 	}
     } else if (*path_name == '\\') {
 	/*
-	 * `path_name' is has no drive letter and is an absolute path.
+	 * `path_name' has no drive letter and is an absolute path.
 	 * Add a drive letter to the path name.
 	 */
 	if (getcwd(cwd, EB_MAX_PATH_LENGTH + 1) == NULL)
@@ -145,7 +143,7 @@ eb_canonicalize_path_name(path_name)
 
     } else {
 	/*
-	 * `path_name' is has no drive letter and is a relative path.
+	 * `path_name' has no drive letter and is a relative path.
 	 * Add a drive letter and convert it to an absolute path.
 	 */
 	if (getcwd(cwd, EB_MAX_PATH_LENGTH + 1) == NULL)
@@ -163,7 +161,7 @@ eb_canonicalize_path_name(path_name)
      * Unless it is "X:\", eliminate `\' in the tail of the path name.
      */
     last_backslash = strrchr(path_name, '\\');
-    if (isalpha(*path_name)) {
+    if (ASCII_ISALPHA(*path_name)) {
 	if (last_backslash != path_name + 2 && *(last_backslash + 1) == '\0')
 	    *last_backslash = '\0';
     } else {
@@ -194,9 +192,8 @@ eb_canonicalize_file_name(file_name)
 {
     char *p;
 
-    for (p = file_name; *p != '\0' && *p != '.' && *p != ';'; p++) {
-	*p = toupper(*p);
-    }
+    for (p = file_name; *p != '\0' && *p != '.' && *p != ';'; p++)
+	*p = ASCII_TOUPPER(*p);
     *p = '\0';
 }
 
@@ -293,7 +290,10 @@ eb_fix_path_name_suffix(path_name, suffix)
 #ifndef DOS_FILE_PATH
     base_name = strrchr(path_name, '/');
 #else
-    base_name = strrchr(path_name, '\\');
+    if (is_ebnet_url(path_name))
+	base_name = strrchr(path_name, '/');
+    else
+	base_name = strrchr(path_name, '\\');
 #endif
     if (base_name == NULL)
 	base_name = path_name;
@@ -419,7 +419,7 @@ eb_find_file_name(path_name, target_file_name, found_file_name)
 	d_namlen = NAMLEN(entry);
 	if (2 < d_namlen
 	    && *(entry->d_name + d_namlen - 2) == ';'
-	    && isdigit(*(entry->d_name + d_namlen - 1))) {
+	    && ASCII_ISDIGIT(*(entry->d_name + d_namlen - 1))) {
 	    d_namlen -= 2;
 	}
 	if (1 < d_namlen && *(entry->d_name + d_namlen - 1) == '.')
@@ -517,17 +517,17 @@ eb_compose_path_name(path_name, file_name, composed_path_name)
     char *composed_path_name;
 {
 #ifndef DOS_FILE_PATH
-    if (strcmp(path_name, "/") == 0) {
+    if (strcmp(path_name, "/") == 0)
 	sprintf(composed_path_name, "%s%s", path_name, file_name);
-    } else {
+    else
 	sprintf(composed_path_name, "%s/%s", path_name, file_name);
-    }
 #else
-    if (isalpha(*path_name) && strcmp(path_name + 1, ":\\") == 0) {
+    if (is_ebnet_url(path_name))
+	sprintf(composed_path_name, "%s/%s", path_name, file_name);
+    else if (ASCII_ISALPHA(*path_name) && strcmp(path_name + 1, ":\\") == 0)
 	sprintf(composed_path_name, "%s%s", path_name, file_name);
-    } else {
+    else
 	sprintf(composed_path_name, "%s\\%s", path_name, file_name);
-    }
 #endif
 }
 
@@ -554,7 +554,11 @@ eb_compose_path_name2(path_name, sub_directory_name, file_name,
 	    path_name, sub_directory_name, file_name);
     }
 #else
-    if (isalpha(*path_name) && strcmp(path_name + 1, ":\\") == 0) {
+    if (is_ebnet_url(path_name)) {
+	sprintf(composed_path_name, "%s/%s/%s", 
+	    path_name, sub_directory_name, file_name);
+    } else if (ASCII_ISALPHA(*path_name)
+	&& strcmp(path_name + 1, ":\\") == 0) {
 	sprintf(composed_path_name, "%s%s\\%s", 
 	    path_name, sub_directory_name, file_name);
     } else {
@@ -588,7 +592,11 @@ eb_compose_path_name3(path_name, sub_directory_name, sub2_directory_name,
 	    path_name, sub_directory_name, sub2_directory_name, file_name);
     }
 #else
-    if (isalpha(*path_name) && strcmp(path_name + 1, ":\\") == 0) {
+    if (is_ebnet_url(path_name)) {
+	sprintf(composed_path_name, "%s/%s/%s/%s", 
+	    path_name, sub_directory_name, sub2_directory_name, file_name);
+    } else if (ASCII_ISALPHA(*path_name)
+	&& strcmp(path_name + 1, ":\\") == 0) {
 	sprintf(composed_path_name, "%s%s\\%s\\%s", 
 	    path_name, sub_directory_name, sub2_directory_name, file_name);
     } else {
@@ -717,7 +725,14 @@ eb_path_name_zio_code(path_name, default_zio_code, zio_code)
     const char *base_name;
     const char *dot;
 
+#ifndef DOS_FILE_PATH 
     base_name = strrchr(path_name, '/');
+#else
+    if (is_ebnet_url(path_name))
+	base_name = strrchr(path_name, '/');
+    else
+	base_name = strrchr(path_name, '\\');
+#endif
     if (base_name != NULL)
 	base_name++;
     else

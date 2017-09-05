@@ -25,10 +25,10 @@
 /*
  * Function declarations.
  */
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 mode_t get_umask(void);
-#else /* not __STDC__ */
+#else
 mode_t get_umask();
-#endif  /* not __STDC__ */
+#endif
 
 #endif /* not GETUMASK_H */

@@ -82,6 +82,7 @@ eb_initialize_search_contexts(book)
     for (i = 0, context = book->search_contexts;
 	 i < EB_NUMBER_OF_SEARCH_CONTEXTS; i++, context++) {
 	context->code = EB_SEARCH_NONE;
+	context->compare_pre = NULL;
 	context->compare_single = NULL;
 	context->compare_group = NULL;
 	context->comparison_result = -1;

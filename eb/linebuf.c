@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <sys/socket.h>
 
 #if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
@@ -67,17 +68,17 @@
 
 #ifndef HAVE_MEMCPY
 #define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 void *memchr(const void *, int, size_t);
 int memcmp(const void *, const void *, size_t);
 void *memmove(void *, const void *, size_t);
 void *memset(void *, int, size_t);
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 char *memchr();
 int memcmp();
 char *memmove();
 char *memset();
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 #endif /* not HAVE_MEMCPY */
 
 
@@ -289,8 +290,8 @@ read_line_buffer(line_buffer, line, max_line_length)
 	 * Read from a file.  (No cache data are remaind.)
 	 */
 	errno = 0;
-	read_result = read(line_buffer->file, line_buffer->buffer,
-	    LINEBUF_BUFFER_SIZE);
+	read_result = recv(line_buffer->file, line_buffer->buffer,
+	    LINEBUF_BUFFER_SIZE, 0);
 	if (read_result < 0) {
 	    if (errno == EINTR)
 		continue;
@@ -413,8 +414,8 @@ binary_read_line_buffer(line_buffer, stream, stream_length)
 	 * Read from a file.
 	 */
 	errno = 0;
-	read_result = read(line_buffer->file, stream_p,
-	    stream_length - done_length);
+	read_result = recv(line_buffer->file, stream_p,
+	    stream_length - done_length, 0);
 	if (read_result < 0) {
 	    if (errno == EINTR)
 		continue;

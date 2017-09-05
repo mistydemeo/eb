@@ -23,10 +23,10 @@
 /*
  * Function declarations.
  */
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 int is_same_file(const char *, const char *);
-#else /* not __STDC__ */
+#else
 int is_same_file();
-#endif  /* not __STDC__ */
+#endif
 
 #endif /* not SAMEFILE_H */

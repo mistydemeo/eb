@@ -40,7 +40,7 @@ typedef struct {
 /*
  * Function Declarations.
  */
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 void url_parts_initialize(URL_Parts *);
 void url_parts_finalize(URL_Parts *);
 const char *url_parts_url(URL_Parts *);
@@ -55,7 +55,7 @@ const char *url_parts_query(URL_Parts *);
 const char *url_parts_fragment(URL_Parts *);
 int url_parts_parse(URL_Parts *, const char *);
 void url_parts_print(URL_Parts *);
-#else /* not __STDC__ */
+#else
 void url_parts_initialize();
 void url_parts_finalize();
 const char *url_parts_url();
@@ -70,6 +70,6 @@ const char *url_parts_query();
 const char *url_parts_fragment();
 int url_parts_parse();
 void url_parts_print();
-#endif /* not __STDC__ */
+#endif
 
 #endif /* not URLPARTS_H */

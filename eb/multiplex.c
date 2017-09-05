@@ -53,6 +53,10 @@
 #define NI_WITHSCOPEID		0
 #endif
 
+#ifdef WIN32
+#define close closesocket
+#endif
+
 /*
  * Maximum length (including NUL) of a TCP/UDP port number string.
  */
@@ -280,7 +284,19 @@ ebnet_connect_socket(host, port, family)
 	 * There is an IPv6 or IPv4 socket with the server.
 	 * Duplicate the socket entry.
 	 */
+#ifndef WIN32
 	new_file = dup(multiplex_entry->file);
+#else /* WIN32 */
+	{
+	    WSAPROTOCOL_INFO info;
+
+	    if (WSADuplicateSocket(multiplex_entry->file,
+		GetCurrentProcessId(), &info) != 0)
+		goto failed;
+	    new_file = WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO,
+		FROM_PROTOCOL_INFO, &info, 0, 0);
+	}
+#endif /* WIN32 */
 	if (new_file < 0)
 	    goto failed;
 
@@ -723,6 +739,7 @@ ebnet_reconnect_socket(file)
 
     ebnet_delete_socket_entry(old_entry);
 
+#ifdef HAVE_DUP2
     if (dup2(new_entry->file, file) < 0)
 	goto failed;
     close(new_entry->file);
@@ -730,8 +747,11 @@ ebnet_reconnect_socket(file)
     if (new_entry->reference_id == new_entry->file)
 	new_entry->reference_id = file;
     new_entry->file = file;
+#else
+    close(file);
+#endif
 
-    return file;
+    return new_entry->file;
 
     /*
      * An error occurs...

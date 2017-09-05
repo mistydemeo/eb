@@ -26,7 +26,7 @@ extern "C" {
 #include <eb/defs.h>
 #endif
 
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 #include <stdarg.h>
 #endif
 

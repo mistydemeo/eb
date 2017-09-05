@@ -90,6 +90,11 @@ static int write_string_all EB_P((int, int, const char *));
 void
 ebnet_initialize()
 {
+#ifdef WIN32
+    WSADATA wsa_data;
+
+    WSAStartup(MAKEWORD(2, 2), &wsa_data);
+#endif
     ebnet_initialize_multiplex();
     ebnet_set_bye_hook(ebnet_send_quit);
 }
@@ -184,7 +189,7 @@ ebnet_get_booklist(booklist, url)
 	    goto failed;
     }
 
-    close(ebnet_file);
+    ebnet_disconnect_socket(ebnet_file);
     finalize_line_buffer(&line_buffer);
     LOG(("out: ebnet_booklist() = %s", eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
@@ -241,7 +246,7 @@ ebnet_parse_booklist_entry(line, book_name, book_title)
     *(book_title + book_title_length) = '\0';
 
     for (p = book_name; *p != '\0'; p++) {
-	if (!islower(*p) && !isdigit(*p)
+	if (!ASCII_ISLOWER(*p) && !ASCII_ISDIGIT(*p)
 	    && *p != '_' && *p != '-' && *p != '.')
 	    return -1;
     }
@@ -644,7 +649,7 @@ ebnet_lseek(file, offset, whence)
  */
 ssize_t
 ebnet_read(file, buffer, length)
-    int file;
+    int *file;
     char *buffer;
     size_t length;
 {
@@ -659,7 +664,7 @@ ebnet_read(file, buffer, length)
     int lost_sync;
     int retry_count = 0;
 
-    LOG(("in: ebnet_read(file=%d, length=%ld)", file, (long)length));
+    LOG(("in: ebnet_read(*file=%d, length=%ld)", *file, (long)length));
 
     if (length == 0) {
 	LOG(("out: ebnet_read() = %ld", (long)0));
@@ -673,16 +678,16 @@ ebnet_read(file, buffer, length)
     /*
      * Request READ.
      */
-    book_name = ebnet_get_book_name(file);
-    url_path = ebnet_get_file_path(file);
-    offset = ebnet_get_offset(file);
+    book_name = ebnet_get_book_name(*file);
+    url_path = ebnet_get_file_path(*file);
+    offset = ebnet_get_offset(*file);
     if (book_name == NULL || url_path == NULL || offset < 0)
 	goto failed;
 
-    bind_file_to_line_buffer(&line_buffer, file);
+    bind_file_to_line_buffer(&line_buffer, *file);
     sprintf(line, "READ %s /%s %ld %ld\r\n", book_name, url_path,
 	(long)offset, (long)length);
-    if (write_string_all(file, EBNET_TIMEOUT_SECONDS, line) <= 0) {
+    if (write_string_all(*file, EBNET_TIMEOUT_SECONDS, line) <= 0) {
 	lost_sync = 1;
 	goto failed;
     }
@@ -706,7 +711,7 @@ ebnet_read(file, buffer, length)
 	    lost_sync = 1;
 	    goto failed;
 	} else if (strcmp(line + 1, "-1") == 0) {
-	    ebnet_set_offset(file, offset + received_length);
+	    ebnet_set_offset(*file, offset + received_length);
 	    goto failed;
 	} else if (strcmp(line + 1, "0") == 0) {
 	    break;
@@ -726,9 +731,9 @@ ebnet_read(file, buffer, length)
 	received_length += chunk_length;
     }
 
-    ebnet_set_offset(file, offset + received_length);
+    ebnet_set_offset(*file, offset + received_length);
     finalize_line_buffer(&line_buffer);
-    LOG(("out: ebnet_read() = %ld", (long)received_length));
+    LOG(("out: ebnet_read(*file=%d) = %ld", *file, (long)received_length));
     return received_length;
 
     /*
@@ -737,15 +742,18 @@ ebnet_read(file, buffer, length)
   failed:
     finalize_line_buffer(&line_buffer);
     if (lost_sync) {
-	shutdown(file, SHUT_RDWR);
-	ebnet_set_lost_sync(file);
-	if (retry_count < EBNET_MAX_RETRY_COUNT
-	    && 0 <= ebnet_reconnect_socket(file)) {
-	    retry_count++;
-	    goto retry;
+	shutdown(*file, SHUT_RDWR);
+	ebnet_set_lost_sync(*file);
+	if (retry_count < EBNET_MAX_RETRY_COUNT) {
+	    int new_file = ebnet_reconnect_socket(*file);
+	    if (0 <= new_file) {
+		*file = new_file;
+		retry_count++;
+		goto retry;
+	    }
 	}
     }
-    LOG(("out: ebnet_read() = %ld", (long)-1));
+    LOG(("out: ebnet_read(*file=%d) = %ld", *file, (long)-1));
     return -1;
 }
 
@@ -1041,7 +1049,7 @@ ebnet_parse_url(url, host, port, book_name, file_path)
 	port_part = EBNET_DEFAULT_PORT;
 
     for (port_part_p = port_part; *port_part_p != '\0'; port_part_p++) {
-	if (!isdigit(*port_part_p))
+	if (!ASCII_ISDIGIT(*port_part_p))
 	    goto failed;
     }
     *port = atoi(port_part);
@@ -1103,12 +1111,12 @@ is_integer(string)
 
     if (*s == '-')
 	s++;
-    if (!isdigit(*s))
+    if (!ASCII_ISDIGIT(*s))
 	return 0;
     s++;
 
     while (*s != '\0') {
-	if (!isdigit(*s))
+	if (!ASCII_ISDIGIT(*s))
 	    return 0;
 	s++;
     }

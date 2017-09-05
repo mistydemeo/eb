@@ -90,7 +90,7 @@ main(argc, argv)
     for (;;) @{
         /* 残っているヒットエントリを取得。*/
         error_code = eb_hit_list(&book, MAX_HITS, hits, &hit_count);
-	if (error_code != EB_SUCCESS) @{
+        if (error_code != EB_SUCCESS) @{
             fprintf(stderr, "%s: failed to get hit entries, %s\n",
                 argv[0], eb_error_message(error_code));
             goto die;
@@ -100,7 +100,7 @@ main(argc, argv)
 
         for (i = 0; i < hit_count; i++) @{
             /* 見出しの位置へ移動。*/
-	    error_code = eb_seek_text(&book, &(hits[i].heading));
+            error_code = eb_seek_text(&book, &(hits[i].heading));
             if (error_code != EB_SUCCESS) @{
                 fprintf(stderr, "%s: failed to seek the subbook, %s\n",
                     argv[0], eb_error_message(error_code));
@@ -109,7 +109,7 @@ main(argc, argv)
 
             /* 見出しを取得して表示。*/
             error_code = eb_read_heading(&book, NULL, NULL, NULL,
-		MAXLEN_HEADING, heading, &heading_length);
+                MAXLEN_HEADING, heading, &heading_length);
             if (error_code != EB_SUCCESS) @{
                 fprintf(stderr, "%s: failed to read the subbook, %s\n",
                     argv[0], eb_error_message(error_code));

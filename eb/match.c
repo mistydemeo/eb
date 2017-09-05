@@ -351,7 +351,7 @@ eb_match_word_jis_kana(word, pattern, length)
 
     for (;;) {
 	if (length <= i) {
-	    result = *word;
+	    result = *word_p;
 	    break;
 	}
 	if (*word_p == '\0') {

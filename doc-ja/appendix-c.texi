@@ -59,7 +59,7 @@ main(argc, argv)
 
     /* 副本の一覧を取得。*/
     error_code = eb_appendix_subbook_list(&app, subbook_list,
-	&subbook_count);
+        &subbook_count);
     if (error_code != EB_SUCCESS) @{
         fprintf(stderr, "%s: failed to get the subbook list, %s\n",
             argv[0], eb_error_message(error_code));
@@ -71,7 +71,7 @@ main(argc, argv)
 
     /*「現在の副本 (current subbook)」を設定。*/
     if (eb_set_appendix_subbook(&app, subbook_list[subbook_index])
-	< 0) @{
+        < 0) @{
         fprintf(stderr, "%s: failed to set the current subbook, %s\n",
             argv[0], eb_error_message(error_code));
         goto die;
@@ -88,20 +88,20 @@ main(argc, argv)
     i = alt_start;
     for (;;) @{
         /* 外字の代替文字列を取得。*/
-	error_code = eb_narrow_alt_character_text(&app, i, text);
-	if (error_code != EB_SUCCESS) @{
+        error_code = eb_narrow_alt_character_text(&app, i, text);
+        if (error_code != EB_SUCCESS) @{
             fprintf(stderr, "%s: failed to get font data, %s\n",
                 argv[0], eb_error_message(error_code));
             goto die;
         @}
 
-	/* 取得した代替文字列を出力。*/
-	printf("%04x: %s\n", i, text);
+        /* 取得した代替文字列を出力。*/
+        printf("%04x: %s\n", i, text);
 
         /* 外字の文字番号を一つ進める。*/
-	error_code = eb_forward_narrow_alt_character(&app, 1, &i);
-	if (error_code != EB_SUCCESS)
-	    break;
+        error_code = eb_forward_narrow_alt_character(&app, 1, &i);
+        if (error_code != EB_SUCCESS)
+            break;
     @}
         
     /* appendix と EB ライブラリの利用を終了。*/

@@ -57,11 +57,11 @@
  * Trick for function protypes.
  */
 #ifndef EB_P
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 #define EB_P(p) p
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 #define EB_P(p) ()
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 #endif /* EB_P */
 
 /*
@@ -236,6 +236,12 @@ output_booklist(url)
     size_t name_length;
     int i;
 
+    error_code = eb_initialize_library();
+    if (error_code != EB_SUCCESS) {
+	output_error_message(error_code);
+	return error_code;
+    }
+
     eb_initialize_booklist(&booklist);
 
     error_code = eb_get_booklist(&booklist, url);
@@ -251,13 +257,16 @@ output_booklist(url)
 	name = eb_booklist_book_name(&booklist, i);
 	title = eb_booklist_book_title(&booklist, i);
 	name_length = strlen(name);
+
+	printf("%-20s  ", name);
+	fputs_eucjp_to_locale(title, stdout);
 	if (4 < name_length && strcmp(name + name_length - 4, ".app") == 0)
-	    printf("%-20s  %s (appendix)\n", name, title);
-	else
-	    printf("%-20s  %s\n", name, title);
+	    fputs(" (appendix)", stdout);
+	fputc('\n', stdout);
     }
 
     eb_finalize_booklist(&booklist);
+    eb_finalize_library();
 
     return EB_SUCCESS;
 }
@@ -368,7 +377,9 @@ output_information(book_path, multi_flag)
 	    return_code = error_code;
 	    continue;
 	}
-	printf(_("  title: %s\n"), title);
+	printf(_("  title: "), title);
+	fputs_eucjp_to_locale(title, stdout);
+	fputc('\n', stdout);
 
 	/*
 	 * Output a directory name of the subbook.
@@ -559,7 +570,9 @@ output_multi_information(book)
 	    return_code = error_code;
 	    continue;
 	}
-	printf(_("    title: %s\n"), search_title);
+	printf(_("    title: "), search_title);
+	fputs_eucjp_to_locale(search_title, stdout);
+	fputc('\n', stdout);
 
 	for (j = 0; j < entry_count; j++) {
 	    error_code = eb_multi_entry_label(book, multi_list[i], j,
@@ -570,7 +583,10 @@ output_multi_information(book)
 		continue;
 	    }
 
-	    printf(_("    label %d: %s\n"), j + 1, entry_label);
+	    printf(_("    label %d: "), j + 1);
+	    fputs_eucjp_to_locale(entry_label, stdout);
+	    fputc('\n', stdout);
+
 	    fputs(_("      candidates: "), stdout);
 	    if (eb_multi_entry_have_candidates(book, multi_list[i], j))
 		fputs(_("exist\n"), stdout);

@@ -30,11 +30,16 @@
 /*
  * Path to the locale directory.
  */
+#ifndef WIN32
 #define LOCALEDIR		"@localedir@"
+#else
+#define LOCALEDIR		localedir()
+#endif
 
 /*
  * Function declarations.
  */
+/* ebutils.c */
 void output_try_help EB_P((const char *));
 void output_version EB_P((const char *, const char *));
 int parse_subbook_name_argument EB_P((const char *, const char *,
@@ -42,5 +47,9 @@ int parse_subbook_name_argument EB_P((const char *, const char *,
 EB_Subbook_Code find_subbook EB_P((EB_Book *, const char *,
     EB_Subbook_Code *));
 void canonicalize_path EB_P((char *));
+
+/* puts_eucjp.c */
+int fputs_eucjp_to_locale EB_P((const char *, FILE *));
+int puts_eucjp_to_locale EB_P((const char *));
 
 #endif /* not EBUTILS_H */

@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebstopcode.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 4.0beta2, for EB Library version 4.0beta2.
+   This is edition 4.0beta3, for EB Library version 4.0beta3.
 
 * Menu:
 
@@ -57,7 +57,7 @@ In that case, you have to tell EB Library a correct stop code using
    The `ebstopcode' command is a utility to analyze text stop code in a
 CD-ROM book.
 
-   This is edition 4.0beta2, for EB Library version 4.0beta2.
+   This is edition 4.0beta3, for EB Library version 4.0beta3.
 
 
 File: ebstopcode.info,  Node: Invoke ebstopcode,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -163,7 +163,7 @@ allowed as long as they are unique.
      Output help message to standard out, then exit.
 
 `-l LENGTH'
-`--length LENGTH'
+`--text-length LENGTH'
      Outputs text data LENGTH bytes maximum.  If LENGTH is set to 0,
      `ebstopcode' outputs the whole text.  By default, the length is
      set to 2048.
@@ -171,6 +171,14 @@ allowed as long as they are unique.
 `-n'
 `--no-candidates'
      Suppress stop code candidates on output.
+
+`-p PAGE:OFFSET'
+`--text-position PAGE:OFFSET'
+     Start outputting text data at this position.  PAGE must be a
+     hexadecimal integer greater than 0, and OFFSET must be a
+     hexadecimal integer between 0 and 0x7FF.  If the option is not
+     specified, `ebstopcode' starts outputting at the beginning of text
+     data.
 
 `-v'
 `--version'

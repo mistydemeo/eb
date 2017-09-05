@@ -32,11 +32,11 @@
 #endif
 
 #ifndef HAVE_STRTOL
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 long strtol(const char *, char **, int);
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 long strtol();
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 #endif /* not HAVE_STRTOL */
 
 /*
@@ -62,11 +62,11 @@ long strtol();
  * Trick for function protypes.
  */
 #ifndef EB_P
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 #define EB_P(p) p
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 #define EB_P(p) ()
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 #endif /* EB_P */
 
 /*
@@ -87,9 +87,17 @@ long strtol();
 /*
  * Character type tests and conversions.
  */
-#define isdigit(c) ('0' <= (c) && (c) <= '9')
-#define isxdigit(c) \
- (isdigit(c) || ('A' <= (c) && (c) <= 'F') || ('a' <= (c) && (c) <= 'f'))
+#define ASCII_ISDIGIT(c) ('0' <= (c) && (c) <= '9')
+#define ASCII_ISUPPER(c) ('A' <= (c) && (c) <= 'Z')
+#define ASCII_ISLOWER(c) ('a' <= (c) && (c) <= 'z')
+#define ASCII_ISALPHA(c) \
+ (ASCII_ISUPPER(c) || ASCII_ISLOWER(c))
+#define ASCII_ISALNUM(c) \
+ (ASCII_ISUPPER(c) || ASCII_ISLOWER(c) || ASCII_ISDIGIT(c))
+#define ASCII_ISXDIGIT(c) \
+ (ASCII_ISDIGIT(c) || ('A' <= (c) && (c) <= 'F') || ('a' <= (c) && (c) <= 'f'))
+#define ASCII_TOUPPER(c) (('a' <= (c) && (c) <= 'z') ? (c) - 0x20 : (c))
+#define ASCII_TOLOWER(c) (('A' <= (c) && (c) <= 'Z') ? (c) + 0x20 : (c))
 
 /*
  * Default maximum length of text.
@@ -117,13 +125,14 @@ long strtol();
 /*
  * Command line options.
  */
-static const char *short_options = "c:hl:nv";
+static const char *short_options = "c:hl:np:v";
 static struct option long_options[] = {
-    {"code",              required_argument, NULL, 'c'},
-    {"help",              no_argument,       NULL, 'h'},
-    {"text-length",       required_argument, NULL, 'l'},
-    {"--no-candidates",   no_argument,       NULL, 'n'},
-    {"version",           no_argument,       NULL, 'v'},
+    {"code",          required_argument, NULL, 'c'},
+    {"help",          no_argument,       NULL, 'h'},
+    {"text-length",   required_argument, NULL, 'l'},
+    {"no-candidates", no_argument,       NULL, 'n'},
+    {"text-position", required_argument, NULL, 'p'},
+    {"version",       no_argument,       NULL, 'v'},
     {NULL, 0, NULL, 0}
 };
 
@@ -140,9 +149,10 @@ static const char *invoked_name;
 static int parse_stop_code_argument EB_P((const char *, unsigned int *,
     unsigned int *));
 static int parse_text_length_argument EB_P((const char *, ssize_t *));
+static int parse_text_position_argument EB_P((const char *, EB_Position *));
 static void output_help EB_P((void));
-static int scan_subbook_text EB_P((const char *, const char *, ssize_t,
-    int, unsigned int, unsigned int));
+static int scan_subbook_text EB_P((const char *, const char *, EB_Position *,
+    ssize_t, int, unsigned int, unsigned int));
 static EB_Error_Code hook_stop_code EB_P((EB_Book *, EB_Appendix *,
     void *, EB_Hook_Code, int, const unsigned int *));
 
@@ -156,6 +166,7 @@ main(argc, argv)
     ssize_t max_text_length;
     const char *subbook_name;
     int show_stop_code_flag;
+    EB_Position text_position;
     unsigned int stop_code0, stop_code1;
     int ch;
 
@@ -164,6 +175,8 @@ main(argc, argv)
     show_stop_code_flag = 1;
     stop_code0 = DUMMY_STOP_CODE0;
     stop_code1 = DUMMY_STOP_CODE1;
+    text_position.page = 0;
+    text_position.offset = 0;
 
     /*
      * Initialize locale data.
@@ -218,6 +231,14 @@ main(argc, argv)
 	    show_stop_code_flag = 0;
 	    break;
 
+	case 'p':
+	    /*
+	     * Option `-p'.  Specify text position.
+	     */
+	    if (parse_text_position_argument(optarg, &text_position) < 0)
+		goto die;
+	    break;
+
 	case 'v':
 	    /*
 	     * Option `-v'.  Display version number, then exit.
@@ -255,8 +276,8 @@ main(argc, argv)
     /*
      * Scan stop code in text.
      */
-    if (scan_subbook_text(book_directory, subbook_name, max_text_length,
-	show_stop_code_flag, stop_code0, stop_code1) < 0)
+    if (scan_subbook_text(book_directory, subbook_name, &text_position,
+	max_text_length, show_stop_code_flag, stop_code0, stop_code1) < 0)
 	goto die;
 
     return 0;
@@ -288,7 +309,7 @@ parse_stop_code_argument(argument, stop_code0, stop_code1)
 	p += 2;
 
     foundp = p;
-    while (isxdigit(*p))
+    while (ASCII_ISXDIGIT(*p))
 	p++;
 
     if (p == foundp || (*p != ' ' && *p != '\t'))
@@ -306,7 +327,7 @@ parse_stop_code_argument(argument, stop_code0, stop_code1)
 	p += 2;
 
     foundp = p;
-    while (isxdigit(*p))
+    while (ASCII_ISXDIGIT(*p))
 	p++;
 
     if (p == foundp || (*p != ' ' && *p != '\t' && *p != '\0'))
@@ -347,7 +368,7 @@ parse_text_length_argument(argument, text_length)
 	p++;
 
     foundp = p;
-    while (isdigit(*p))
+    while (ASCII_ISDIGIT(*p))
 	p++;
     if (p == foundp)
 	goto failed;
@@ -370,6 +391,65 @@ parse_text_length_argument(argument, text_length)
 
 
 /*
+ * Parse text position given as argument of the `-p' option.
+ */
+static int
+parse_text_position_argument(argument, text_position)
+    const char *argument;
+    EB_Position *text_position;
+{
+    const char *p = argument;
+    const char *end_p;
+    int page;
+    int offset;
+
+    /*
+     * Parse page.
+     */
+    while (*p == ' ' || *p == '\t')
+	p++;
+
+    if (*p == '0' && (*(p + 1) == 'x' || *(p + 1) == 'X'))
+	p += 2;
+    page = strtol(p, (char **)&end_p, 16);
+    if (end_p == p || *end_p != ':')
+	goto failed;
+    if (page <= 0)
+	goto failed;
+
+    /*
+     * Parse offset.
+     */
+    p = end_p + 1;
+
+    if (*p == '0' && (*(p + 1) == 'x' || *(p + 1) == 'X'))
+	p += 2;
+    offset = strtol(p, (char **)&end_p, 16);
+    if (end_p == p)
+	goto failed;
+    while (*end_p == ' ' || *end_p == '\t')
+	end_p++;
+    if (*end_p != '\0')
+	goto failed;
+    if (offset < 0 || EB_SIZE_PAGE <= offset)
+	goto failed;
+
+    text_position->page = page;
+    text_position->offset = offset;
+
+    return 0;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    fprintf(stderr, _("%s: invalid text position `%s'\n"), invoked_name,
+	argument);
+    return -1;
+}
+
+
+/*
  * Output help message to standard out, then exit.
  */
 static void
@@ -386,6 +466,8 @@ output_help()
     printf(_("                             (default: %d)\n"),
 	DEFAULT_MAX_TEXT_LENGTH);
     printf(_("  -n  --no-candidates        suppress stop code candidates\n"));
+    printf(_("  -p PAGE:OFFSET, --text-position PAGE:OFFSET\n"));
+    printf(_("                             start position of text\n"));
     printf(_("  -v  --version              display version number, then exit\n"));
     printf(_("\nArgument:\n"));
     printf(_("  book-directory             top directory of a CD-ROM book\n"));
@@ -400,10 +482,11 @@ output_help()
  * Scan stop code in text.
  */
 static int
-scan_subbook_text(book_directory, subbook_name, max_text_length,
+scan_subbook_text(book_directory, subbook_name, text_position, max_text_length,
     show_stop_code_flag, stop_code0, stop_code1)
     const char *book_directory;
     const char *subbook_name;
+    EB_Position *text_position;
     ssize_t max_text_length;
     int show_stop_code_flag;
     unsigned int stop_code0;
@@ -416,7 +499,6 @@ scan_subbook_text(book_directory, subbook_name, max_text_length,
     EB_Appendix appendix;
     EB_Appendix_Subbook appendix_subbook;
     EB_Subbook_Code subbook_code;
-    EB_Position text_position;
     char text[EB_SIZE_PAGE];
     ssize_t text_length;
 
@@ -461,8 +543,8 @@ scan_subbook_text(book_directory, subbook_name, max_text_length,
      * Set stop-code manually.
      * (we hack `appendix' directly.)
      */
-    appendix.code            = subbook_code;
-    appendix.subbook_current = &appendix_subbook;
+    appendix.code               = subbook_code;
+    appendix.subbook_current    = &appendix_subbook;
     appendix_subbook.code       = subbook_code;
     appendix_subbook.stop_code0 = stop_code0;
     appendix_subbook.stop_code1 = stop_code1;
@@ -481,19 +563,22 @@ scan_subbook_text(book_directory, subbook_name, max_text_length,
     }
 
     /*
-     * Get a position where the text data starts.
+     * Get a position where the text data starts, if text_position
+     * is {page=0, offset=0}.
      */
-    error_code = eb_text(&book, &text_position);
-    if (error_code != EB_SUCCESS) {
-        fprintf(stderr, _("%s: failed to get text information, %s\n"),
-            program_name, eb_error_message(error_code));
-        goto die;
+    if (text_position->page == 0 && text_position->offset == 0) {
+	error_code = eb_text(&book, text_position);
+	if (error_code != EB_SUCCESS) {
+	    fprintf(stderr, _("%s: failed to get text information, %s\n"),
+		program_name, eb_error_message(error_code));
+	    goto die;
+	}
     }
 
     /*
      * Read text.
      */
-    error_code = eb_seek_text(&book, &text_position);
+    error_code = eb_seek_text(&book, text_position);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: %s\n",
 	    program_name, eb_error_message(error_code));
@@ -520,7 +605,7 @@ scan_subbook_text(book_directory, subbook_name, max_text_length,
         }
 	if (result_length <= 0)
 	    break;
-	fputs(text, stdout);
+	fputs_eucjp_to_locale(text, stdout);
 	text_length += result_length;
     }
         
@@ -560,7 +645,7 @@ hook_stop_code(book, appendix, container, code, argc, argv)
     char string[EB_SIZE_PAGE];
 
     if (0 < book->text_context.printable_count) {
-	sprintf(string, _("\n=== stop-code?: 0x%04x 0x%04x ===\n"),
+	sprintf(string, "\n=== stop-code?: 0x%04x 0x%04x ===\n",
 	    argv[0], argv[1]);
 	eb_write_text_string(book, string);
     }

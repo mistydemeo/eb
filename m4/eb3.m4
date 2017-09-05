@@ -1,7 +1,7 @@
 dnl *
-dnl * Make ready to link EB Library 3.x.
+dnl * Make ready to link EB Library 3.x or 4.x.
 dnl *
-dnl * Copyright (c) 2000, 01
+dnl * Copyright (c) 2000 - 2003
 dnl *    Motoyuki Kasahara
 dnl *
 dnl * This program is free software; you can redistribute it and/or modify

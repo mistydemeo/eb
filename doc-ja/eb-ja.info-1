@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta2 版です。
+   この文書は第 4.0beta3 版です。
 
 * Menu:
 
@@ -43,7 +43,7 @@ File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 * Local Character::             外字
 * Binary Data::                 バイナリデータ
 * Appendix Data::               appendix データ
-* Index::                       索引
+* Indice::                      索引
 
  --- The Detailed Node Listing ---
 
@@ -150,6 +150,7 @@ appendix データ
 * Appendix Subbook::            副本
 * Appendix Stop Code::          本文の区切りコード
 * Appendix Alternation Text::   外字の代替文字列
+* Appendix Data Types::
 * Appendix Functions::          関数の詳細
 * Appendix Sample::             サンプルプログラム
 
@@ -182,9 +183,9 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 4.0beta2 に対応しています。 本書
+   この文書は、EB ライブラリバージョン 4.0beta3 に対応しています。 本書
 の内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成す
-るには、お使用いのシステムに EB ライブラリバージョン 4.0beta2 と C コン
+るには、お使用いのシステムに EB ライブラリバージョン 4.0beta3 と C コン
 パイラをインストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
@@ -555,7 +556,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 4.0beta2 のソースードを展開します。
+  1. EB ライブラリ 4.0beta3 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -796,9 +797,9 @@ File: eb-ja.info,  Node: Init and Exit Sample,  Next: Init and Exit Functions,  
          /* EB ライブラリを初期化。*/
          error_code = eb_initialize_library();
          if (error_code != EB_SUCCESS) {
-     	fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
-     	    argv[0], eb_error_message(error_code), argv[1]);
-     	exit(1);
+             fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+                 argv[0], eb_error_message(error_code), argv[1]);
+             exit(1);
          }
      
          /* EB ライブラリの利用を終了。*/
@@ -994,41 +995,41 @@ File: eb-ja.info,  Node: EB_Book Sample,  Next: EB_Book Data Types,  Prev: eb_bi
      
          /* コマンド行引数をチェック。*/
          if (argc != 2) {
-     	fprintf(stderr, "Usage: %s book-path\n", argv[0]);
-     	exit(1);
+             fprintf(stderr, "Usage: %s book-path\n", argv[0]);
+             exit(1);
          }
      
          /* EB ライブラリと `book' を初期化。*/
          error_code = eb_initialize_library();
          if (error_code != EB_SUCCESS) {
-     	fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
-     	    argv[0], eb_error_message(error_code), argv[1]);
-     	goto die;
+             fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+                 argv[0], eb_error_message(error_code), argv[1]);
+             goto die;
          }
          eb_initialize_book(&book);
      
          /* `book' を書籍に結び付ける。失敗したら終了。*/
          error_code = eb_bind(&book, argv[1]);
          if (error_code != EB_SUCCESS) {
-     	fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
-     	    argv[0], eb_error_message(error_code), argv[1]);
-     	goto die;
+             fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+                 argv[0], eb_error_message(error_code), argv[1]);
+             goto die;
          }
      
          /* 書籍の種類を調べて表示。*/
          error_code = eb_disc_type(&book, &disc_code);
          if (error_code != EB_SUCCESS) {
-     	fprintf(stderr, "%s: failed to get disc type, %s: %s\n",
-     	    argv[0], eb_error_message(error_code), argv[1]);
-     	goto die;
+             fprintf(stderr, "%s: failed to get disc type, %s: %s\n",
+                 argv[0], eb_error_message(error_code), argv[1]);
+             goto die;
          }
      
          if (disc_code == EB_DISC_EB) {
-     	fputs("EB\n", stdout);
+             fputs("EB\n", stdout);
          } else if (disc_code == EB_DISC_EPWING) {
-     	fputs("EPWING\n", stdout);
+             fputs("EPWING\n", stdout);
          } else {
-     	fputs("unknown\n", stdout);
+             fputs("unknown\n", stdout);
          }
      
          /* 書籍と EB ライブラリの利用を終了。*/

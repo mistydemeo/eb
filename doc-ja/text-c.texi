@@ -96,30 +96,30 @@ main(argc, argv)
     i = 0;
     while (i < text_count) @{
         /* テキストを取得。*/
-	error_code = eb_read_text(&book, NULL, NULL, NULL, MAXLEN_TEXT,
-	    text, &text_length);
-	if (error_code != EB_SUCCESS) @{
+        error_code = eb_read_text(&book, NULL, NULL, NULL, MAXLEN_TEXT,
+            text, &text_length);
+        if (error_code != EB_SUCCESS) @{
             fprintf(stderr, "%s: failed to read text, %s\n",
                 argv[0], eb_error_message(error_code));
             goto die;
         @}
-	fputs(text, stdout);
+        fputs(text, stdout);
 
         if (!eb_is_text_stopped(&book))
-	    continue;
+            continue;
 
-	fputs("\n----------------------------------------\n", stdout);
+        fputs("\n----------------------------------------\n", stdout);
 
         /* 次の単語の説明へ移動。*/
-	error_code = eb_forward_text(&book, NULL);
-	if (error_code == EB_ERR_END_OF_CONTENT)
-	    fputs("\n[END]\n", stdout);
-	else if (error_code != EB_SUCCESS) @{
-	    fprintf(stderr, "%s: failed to read text, %s\n",
-		argv[0], eb_error_message(error_code));
-	    goto die;
-	@}
-	i++;
+        error_code = eb_forward_text(&book, NULL);
+        if (error_code == EB_ERR_END_OF_CONTENT)
+            fputs("\n[END]\n", stdout);
+        else if (error_code != EB_SUCCESS) @{
+            fprintf(stderr, "%s: failed to read text, %s\n",
+                argv[0], eb_error_message(error_code));
+            goto die;
+        @}
+        i++;
     @}
         
     /* 書籍と EB ライブラリの利用を終了。*/

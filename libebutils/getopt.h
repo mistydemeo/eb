@@ -75,7 +75,7 @@ struct option {
 	int val;
 };
 
-#if defined(__STDC__) || defined(__cplusplus)
+#if defined(__STDC__) || defined(__cplusplus) || defined(WIN32)
 int getopt_long (int, char * const *, const char *,
     const struct option *, int *);
 #else

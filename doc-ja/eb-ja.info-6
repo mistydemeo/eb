@@ -173,7 +173,7 @@ Issue.)。 これは、本文の区切りコードの推測を EB ライブラリが誤ったため
 その区切りコードを使用します。
 
 
-File: eb-ja.info,  Node: Appendix Alternation Text,  Next: Appendix Functions,  Prev: Appendix Stop Code,  Up: Appendix Data
+File: eb-ja.info,  Node: Appendix Alternation Text,  Next: Appendix Data Types,  Prev: Appendix Stop Code,  Up: Appendix Data
 
 外字の代替文字列
 ================
@@ -218,7 +218,32 @@ File: eb-ja.info,  Node: Appendix Alternation Text,  Next: Appendix Functions,  
 `buffer' はもう 1 バイト分余裕を持たせています。
 
 
-File: eb-ja.info,  Node: Appendix Functions,  Next: Appendix Sample,  Prev: Appendix Alternation Text,  Up: Appendix Data
+File: eb-ja.info,  Node: Appendix Data Types,  Next: Appendix Functions,  Prev: Appendix Alternation Text,  Up: Appendix Data
+
+データ型の詳細
+==============
+
+   この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+
+     #include <eb/appendix.h>
+
+ - Data type: EB_Appendix
+     `EB_Appendix' 型は、一冊の CD-ROM 書籍を表します。 CD-ROM 書籍への
+     アクセスは、すべてこの型のオブジェクトを介して行います。 同時に複
+     数の CD-ROM 書籍にアクセスする際は、書籍一冊毎にオブジェクトを作
+     る必要があります。
+
+     `EB_Appendix' オブジェクトの操作は、すべて EB ライブラリが用意して
+     いる関数で行います。 アプリケーションプログラムは、直接
+     `EB_Appendix' オブジェクトのメンバを参照したり、セットしたりすべ
+     きではありません。
+
+     `EB_Appendix' オブジェクトを使用する際は、まずそのオブジェクトに対
+     して `eb_initialize_book()' を呼んで初期化しなくてはなりません。
+
+
+File: eb-ja.info,  Node: Appendix Functions,  Next: Appendix Sample,  Prev: Appendix Data Types,  Up: Appendix Data
 
 関数の詳細
 ==========
@@ -592,7 +617,7 @@ File: eb-ja.info,  Node: Appendix Sample,  Prev: Appendix Functions,  Up: Append
      
          /* 副本の一覧を取得。*/
          error_code = eb_appendix_subbook_list(&app, subbook_list,
-     	&subbook_count);
+             &subbook_count);
          if (error_code != EB_SUCCESS) {
              fprintf(stderr, "%s: failed to get the subbook list, %s\n",
                  argv[0], eb_error_message(error_code));
@@ -604,7 +629,7 @@ File: eb-ja.info,  Node: Appendix Sample,  Prev: Appendix Functions,  Up: Append
      
          /*「現在の副本 (current subbook)」を設定。*/
          if (eb_set_appendix_subbook(&app, subbook_list[subbook_index])
-     	< 0) {
+             < 0) {
              fprintf(stderr, "%s: failed to set the current subbook, %s\n",
                  argv[0], eb_error_message(error_code));
              goto die;
@@ -621,20 +646,20 @@ File: eb-ja.info,  Node: Appendix Sample,  Prev: Appendix Functions,  Up: Append
          i = alt_start;
          for (;;) {
              /* 外字の代替文字列を取得。*/
-     	error_code = eb_narrow_alt_character_text(&app, i, text);
-     	if (error_code != EB_SUCCESS) {
+             error_code = eb_narrow_alt_character_text(&app, i, text);
+             if (error_code != EB_SUCCESS) {
                  fprintf(stderr, "%s: failed to get font data, %s\n",
                      argv[0], eb_error_message(error_code));
                  goto die;
              }
      
-     	/* 取得した代替文字列を出力。*/
-     	printf("%04x: %s\n", i, text);
+             /* 取得した代替文字列を出力。*/
+             printf("%04x: %s\n", i, text);
      
              /* 外字の文字番号を一つ進める。*/
-     	error_code = eb_forward_narrow_alt_character(&app, 1, &i);
-     	if (error_code != EB_SUCCESS)
-     	    break;
+             error_code = eb_forward_narrow_alt_character(&app, 1, &i);
+             if (error_code != EB_SUCCESS)
+                 break;
          }
      
          /* appendix と EB ライブラリの利用を終了。*/
@@ -650,7 +675,7 @@ File: eb-ja.info,  Node: Appendix Sample,  Prev: Appendix Functions,  Up: Append
      }
 
 
-File: eb-ja.info,  Node: Index,  Prev: Appendix Data,  Up: Top
+File: eb-ja.info,  Node: Indice,  Prev: Appendix Data,  Up: Top
 
 索引
 ****
@@ -662,13 +687,14 @@ File: eb-ja.info,  Node: Index,  Prev: Appendix Data,  Up: Top
 * Variable Index::              変数と定数の索引
 
 
-File: eb-ja.info,  Node: Data Type Index,  Next: Function Index,  Prev: Index,  Up: Index
+File: eb-ja.info,  Node: Data Type Index,  Next: Function Index,  Prev: Indice,  Up: Indice
 
 データ型の索引
 ==============
 
 * Menu:
 
+* Book <1>:                              Appendix Data Types.
 * Book:                                  EB_Book Data Types.
 * Character_Code:                        EB_Book Data Types.
 * Disc_Code:                             EB_Book Data Types.
@@ -683,7 +709,7 @@ File: eb-ja.info,  Node: Data Type Index,  Next: Function Index,  Prev: Index,  
 * Subbook_Code:                          Subbook Data Types.
 
 
-File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type Index,  Up: Index
+File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type Index,  Up: Indice
 
 関数の索引
 ==========
@@ -821,7 +847,7 @@ File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type
 * write_text_string:                     Text Data Functions.
 
 
-File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Index
+File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Indice
 
 変数と定数の索引
 ================

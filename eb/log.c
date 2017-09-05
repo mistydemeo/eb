@@ -98,23 +98,23 @@ eb_disable_log()
 /*
  * Log a message.
  */
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 void
 eb_log(const char *message, ...)
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 void
 eb_log(message, va_alist)
     const char *message;
     va_dcl 
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 {
     va_list ap;
 
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
     va_start(ap, message);
-#else /* not __STDC__ */
+#else
     va_start(ap);
-#endif /* not __STDC__ */
+#endif
 
     if (eb_log_flag && eb_log_function != NULL)
 	eb_log_function(message, ap);

@@ -684,33 +684,33 @@ File: eb-ja.info,  Node: Font Sample,  Prev: Font Functions,  Up: Local Characte
          i = font_start;
          for (;;) {
              /* 外字のビットマップデータを取得。*/
-     	error_code = eb_narrow_font_character_bitmap(&book, i,
-     	    (char *)bitmap);
-     	if (error_code != EB_SUCCESS) {
+             error_code = eb_narrow_font_character_bitmap(&book, i,
+                 (char *)bitmap);
+             if (error_code != EB_SUCCESS) {
                  fprintf(stderr, "%s: failed to get font data, %s\n",
                      argv[0], eb_error_message(error_code));
                  goto die;
              }
      
-     	/* ビットマップをアスキーアートにして出力。*/
-     	printf("code point=%04x\n", i);
-     	for (j = 0; j < 16; j++) {
-     	    fputc((bitmap[j] & 0x80) ? '*' : ' ', stdout);
-     	    fputc((bitmap[j] & 0x40) ? '*' : ' ', stdout);
-     	    fputc((bitmap[j] & 0x20) ? '*' : ' ', stdout);
-     	    fputc((bitmap[j] & 0x10) ? '*' : ' ', stdout);
-     	    fputc((bitmap[j] & 0x08) ? '*' : ' ', stdout);
-     	    fputc((bitmap[j] & 0x04) ? '*' : ' ', stdout);
-     	    fputc((bitmap[j] & 0x02) ? '*' : ' ', stdout);
-     	    fputc((bitmap[j] & 0x01) ? '*' : ' ', stdout);
-     	    fputc('\n', stdout);
-     	}
-     	fputs("--------\n", stdout);
+             /* ビットマップをアスキーアートにして出力。*/
+             printf("code point=%04x\n", i);
+             for (j = 0; j < 16; j++) {
+                 fputc((bitmap[j] & 0x80) ? '*' : ' ', stdout);
+                 fputc((bitmap[j] & 0x40) ? '*' : ' ', stdout);
+                 fputc((bitmap[j] & 0x20) ? '*' : ' ', stdout);
+                 fputc((bitmap[j] & 0x10) ? '*' : ' ', stdout);
+                 fputc((bitmap[j] & 0x08) ? '*' : ' ', stdout);
+                 fputc((bitmap[j] & 0x04) ? '*' : ' ', stdout);
+                 fputc((bitmap[j] & 0x02) ? '*' : ' ', stdout);
+                 fputc((bitmap[j] & 0x01) ? '*' : ' ', stdout);
+                 fputc('\n', stdout);
+             }
+             fputs("--------\n", stdout);
      
              /* 外字の文字番号を一つ進める。*/
-     	error_code = eb_forward_narrow_font_character(&book, 1, &i);
-     	if (error_code != EB_SUCCESS)
-     	    break;
+             error_code = eb_forward_narrow_font_character(&book, 1, &i);
+             if (error_code != EB_SUCCESS)
+                 break;
          }
      
          /* 書籍と EB ライブラリの利用を終了。*/
@@ -1170,7 +1170,7 @@ File: eb-ja.info,  Node: Binary Data Functions,  Prev: MPEG Movie,  Up: Binary D
      成功すると、関数は `EB_SUCCESS' を返します。
 
 
-File: eb-ja.info,  Node: Appendix Data,  Next: Index,  Prev: Binary Data,  Up: Top
+File: eb-ja.info,  Node: Appendix Data,  Next: Indice,  Prev: Binary Data,  Up: Top
 
 appendix データ
 ***************
@@ -1203,6 +1203,7 @@ Issue.)。
 * Appendix Subbook::            副本
 * Appendix Stop Code::          本文の区切りコード
 * Appendix Alternation Text::   外字の代替文字列
+* Appendix Data Types::
 * Appendix Functions::          関数の詳細
 * Appendix Sample::             サンプルプログラム
 

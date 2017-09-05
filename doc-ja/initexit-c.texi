@@ -26,9 +26,9 @@ main(argc, argv)
     /* EB ライブラリを初期化。*/
     error_code = eb_initialize_library();
     if (error_code != EB_SUCCESS) @{
-	fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
-	    argv[0], eb_error_message(error_code), argv[1]);
-	exit(1);
+        fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+            argv[0], eb_error_message(error_code), argv[1]);
+        exit(1);
     @}
 
     /* EB ライブラリの利用を終了。*/

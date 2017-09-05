@@ -226,7 +226,7 @@ Specify @var{code} as text stop code (e.g. "0x1f09 0x0001").
 Output help message to standard out, then exit.
 
 @item -l @var{length}
-@itemx --length @var{length}
+@itemx --text-length @var{length}
 Outputs text data @var{length} bytes maximum.
 If @var{length} is set to 0, @code{ebstopcode} outputs the whole text.
 By default, the length is set to 2048.
@@ -234,6 +234,14 @@ By default, the length is set to 2048.
 @item -n
 @itemx --no-candidates
 Suppress stop code candidates on output.
+
+@item -p @var{page:offset}
+@itemx --text-position @var{page:offset}
+Start outputting text data at this position.
+@var{page} must be a hexadecimal integer greater than 0, and @var{offset}
+must be a hexadecimal integer between 0 and 0x7FF.
+If the option is not specified, @code{ebstopcode} starts outputting at
+the beginning of text data.
 
 @item -v
 @itemx --version

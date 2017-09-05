@@ -27,100 +27,101 @@ translation approved by Free Software Foundation, Inc.
 
 Indirect:
 eb-ja.info-1: 1027
-eb-ja.info-2: 48651
-eb-ja.info-3: 98162
-eb-ja.info-4: 132938
-eb-ja.info-5: 180650
-eb-ja.info-6: 228198
+eb-ja.info-2: 48794
+eb-ja.info-3: 98438
+eb-ja.info-4: 133326
+eb-ja.info-5: 181038
+eb-ja.info-6: 228751
 
 Tag Table:
 (Indirect)
 Node: Top1027
-Node: Introduction5671
-Node: Electronic Book and EPWING7518
-Node: Construction of This Book8634
-Node: Features9775
-Node: Header Files10810
-Node: Character Code11749
-Node: Compressed Book15793
-Node: Remote Access16761
-Node: Traditional System17392
-Node: Compilation18391
-Node: Compilation Simple Way19804
-Node: Compilation with Autoconf23191
-Node: Debug EB Library25296
-Node: Init and Exit27472
-Node: Init and Exit Sample28260
-Node: Init and Exit Functions29304
-Node: EB_Book30960
-Node: EB_Book Explanation31691
-Node: eb_bind to Remote Host33954
-Node: EB_Book Sample34839
-Node: EB_Book Data Types37309
-Node: EB_Book Functions39574
-Node: Error Handling43986
-Node: Error Code and Message44823
-Node: Tolerance to Error46577
-Node: Error Data Types47930
-Node: Error Code List48651
-Node: Error Functions57306
-Node: Subbook58956
-Node: Subbook Code60228
-Node: Current Subbook61838
-Node: Subbook Sample63873
-Node: Subbook Data Types66443
-Node: Subbook Functions67182
-Node: Search72941
-Node: Word Search74033
-Node: Keyword Search76924
-Node: Multi Search78380
-Node: EB_Hit81896
-Node: Get Remained Entries83482
-Node: Search Data Types84776
-Node: Search Functions86709
-Node: Text Data98162
-Node: Seek and Read Text Data99619
-Node: Text Data Format103744
-Node: Hook106431
-Node: Hook and Character Code110588
-Node: Copyright Notice112692
-Node: Menu113837
-Node: Multi Candidates117749
-Node: Stop Code Issue121688
-Node: Text Data Sample124178
-Node: Text Data Types128609
-Node: Hook Function Details130462
-Node: Hook Code List132938
-Node: Hookset Access Functions149675
-Node: Builtin Hook Functions152739
-Node: Text Data Functions155888
-Node: Local Character172589
-Node: Narrow & Wide Font174378
-Node: Font Size and Font Code176515
-Node: Current Font Height178076
-Node: Get Font180650
-Node: Convert Font183279
-Node: Local Character in Text184442
-Node: Font Data Types185100
-Node: Font Constants185843
-Node: Font Functions189901
-Node: Font Sample203788
-Node: Binary Data208481
-Node: Monochrome Image210657
-Node: Color Image213474
-Node: WAVE Sound215891
-Node: MPEG Movie217077
-Node: Binary Data Functions218284
-Node: Appendix Data226824
-Node: EB_Appendix228198
-Node: Appendix Subbook230679
-Node: Appendix Stop Code232548
-Node: Appendix Alternation Text233755
-Node: Appendix Functions235701
-Node: Appendix Sample249836
-Node: Index253685
-Node: Data Type Index253911
-Node: Function Index254760
-Node: Variable Index262655
+Node: Introduction5695
+Node: Electronic Book and EPWING7542
+Node: Construction of This Book8658
+Node: Features9799
+Node: Header Files10834
+Node: Character Code11773
+Node: Compressed Book15817
+Node: Remote Access16785
+Node: Traditional System17416
+Node: Compilation18415
+Node: Compilation Simple Way19828
+Node: Compilation with Autoconf23215
+Node: Debug EB Library25320
+Node: Init and Exit27496
+Node: Init and Exit Sample28284
+Node: Init and Exit Functions29349
+Node: EB_Book31005
+Node: EB_Book Explanation31736
+Node: eb_bind to Remote Host33999
+Node: EB_Book Sample34884
+Node: EB_Book Data Types37452
+Node: EB_Book Functions39717
+Node: Error Handling44129
+Node: Error Code and Message44966
+Node: Tolerance to Error46720
+Node: Error Data Types48073
+Node: Error Code List48794
+Node: Error Functions57449
+Node: Subbook59099
+Node: Subbook Code60371
+Node: Current Subbook61981
+Node: Subbook Sample64016
+Node: Subbook Data Types66719
+Node: Subbook Functions67458
+Node: Search73217
+Node: Word Search74309
+Node: Keyword Search77200
+Node: Multi Search78656
+Node: EB_Hit82172
+Node: Get Remained Entries83758
+Node: Search Data Types85052
+Node: Search Functions86985
+Node: Text Data98438
+Node: Seek and Read Text Data99895
+Node: Text Data Format104020
+Node: Hook106707
+Node: Hook and Character Code110864
+Node: Copyright Notice112968
+Node: Menu114113
+Node: Multi Candidates118025
+Node: Stop Code Issue121964
+Node: Text Data Sample124454
+Node: Text Data Types128997
+Node: Hook Function Details130850
+Node: Hook Code List133326
+Node: Hookset Access Functions150063
+Node: Builtin Hook Functions153127
+Node: Text Data Functions156276
+Node: Local Character172977
+Node: Narrow & Wide Font174766
+Node: Font Size and Font Code176903
+Node: Current Font Height178464
+Node: Get Font181038
+Node: Convert Font183667
+Node: Local Character in Text184830
+Node: Font Data Types185488
+Node: Font Constants186231
+Node: Font Functions190289
+Node: Font Sample204176
+Node: Binary Data209009
+Node: Monochrome Image211185
+Node: Color Image214002
+Node: WAVE Sound216419
+Node: MPEG Movie217605
+Node: Binary Data Functions218812
+Node: Appendix Data227352
+Node: EB_Appendix228751
+Node: Appendix Subbook231232
+Node: Appendix Stop Code233101
+Node: Appendix Alternation Text234308
+Node: Appendix Data Types236255
+Node: Appendix Functions237171
+Node: Appendix Sample251300
+Node: Indice255212
+Node: Data Type Index255439
+Node: Function Index256352
+Node: Variable Index264248
 
 End Tag Table

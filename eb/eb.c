@@ -35,7 +35,7 @@ eb_initialize_library()
 
     eb_initialize_default_hookset();
 #ifdef ENABLE_NLS
-    bindtextdomain(EB_TEXT_DOMAIN_NAME, LOCALEDIR);
+    bindtextdomain(EB_TEXT_DOMAIN_NAME, EB_LOCALEDIR);
 #endif
 #ifdef ENABLE_EBNET
     ebnet_initialize();

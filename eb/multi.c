@@ -830,14 +830,26 @@ eb_search_multi(book, multi_id, input_words)
 	 */
 	context = book->search_contexts + word_count;
 	context->code = EB_SEARCH_MULTI;
-	if (book->character_code == EB_CHARCODE_ISO8859_1) {
-	    context->compare_pre    = eb_exact_pre_match_word_latin;
-	    context->compare_single = eb_exact_match_word_latin;
-	    context->compare_group  = eb_exact_match_word_latin;
+	if (entry->candidates_page == 0) {
+	    if (book->character_code == EB_CHARCODE_ISO8859_1) {
+		context->compare_pre    = eb_pre_match_word;
+		context->compare_single = eb_match_word;
+		context->compare_group  = eb_match_word;
+	    } else {
+		context->compare_pre    = eb_pre_match_word;
+		context->compare_single = eb_match_word;
+		context->compare_group  = eb_match_word_jis_kana;
+	    }
 	} else {
-	    context->compare_pre    = eb_exact_pre_match_word_jis;
-	    context->compare_single = eb_exact_match_word_jis;
-	    context->compare_group  = eb_exact_match_word_jis_kana;
+	    if (book->character_code == EB_CHARCODE_ISO8859_1) {
+		context->compare_pre    = eb_exact_pre_match_word_latin;
+		context->compare_single = eb_exact_match_word_latin;
+		context->compare_group  = eb_exact_match_word_latin;
+	    } else {
+		context->compare_pre    = eb_exact_pre_match_word_jis;
+		context->compare_single = eb_exact_match_word_jis;
+		context->compare_group  = eb_exact_match_word_jis_kana;
+	    }
 	}
 	context->page = entry->start_page;
 	if (context->page == 0)

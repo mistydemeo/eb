@@ -23,10 +23,10 @@
 /*
  * Function declarations.
  */
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 int query_y_or_n(const char *);
-#else /* not __STDC__ */
+#else
 int query_y_or_n();
-#endif  /* not __STDC__ */
+#endif
 
 #endif /* not YESNO_H */

@@ -3,5 +3,5 @@
 echo "@example"
 sed -e '/^#if/d' -e '/^#endif/d' -e '1,/^$/d' \
     -e 's/@/@@/g' -e 's/{/@{/g' -e 's/}/@}/g' \
-    ${1+"$@"}
+    ${1+"$@"} | expand
 echo "@end example"

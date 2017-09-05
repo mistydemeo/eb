@@ -52,7 +52,7 @@ strdup __argz_count __argz_stringify __argz_next])
   AC_ARG_WITH(gettext-libraries,
     AC_HELP_STRING([--with-gettext-libraries=DIR],
       [gettext library files are in DIR]),
-  [gettext_libraries="-L${withval}"], [gettext_libraries=''])
+  [gettext_libraries="-L${withval} -lintl"], [gettext_libraries=''])
 
   dnl * 
   dnl * --with-iconv-includes option
@@ -68,9 +68,32 @@ strdup __argz_count __argz_stringify __argz_next])
   AC_ARG_WITH(iconv-libraries,
     AC_HELP_STRING([--with-iconv-libraries=DIR],
       [iconv library files are in DIR]),
-  [iconv_libraries="-L${withval}"], [iconv_libraries=''])
+  [iconv_libraries="-L${withval} -liconv"], [iconv_libraries=''])
 
-  AC_MSG_CHECKING([for NLS support])
+  dnl *
+  dnl * Check iconv(), iconv.h and -liconv.
+  dnl *
+  ICONVINCS=
+  ICONVLIBS=
+  save_CPPFLAGS=$CPPFLAGS
+  save_LIBS=$LIBS
+  CPPFLAGS="$save_CPPFLAGS $iconv_includes"
+  LIBS="$save_LIBS $iconv_libraries"
+  AC_CHECK_LIB(iconv, iconv_open)
+  AC_CHECK_LIB(iconv, libiconv_open)
+  AC_CHECK_FUNCS(iconv_open libiconv_open locale_charset)
+  AC_CHECK_HEADERS(iconv.h libcharset.h)
+  if test "$ac_cv_func_iconv_open$ac_cv_func_libiconv_open" != nono; then
+    ICONVINCS="$iconv_includes"
+    ICONVLIBS="$iconv_libraries"
+  else
+    iconv_includes=
+    iconv_libraries=
+  fi
+  CPPFLAGS=$save_CPPFLAGS
+  LIBS=$save_LIBS
+  AC_SUBST(ICONVINCS)
+  AC_SUBST(ICONVLIBS)
 
   dnl *
   dnl * Check gettext().
@@ -79,6 +102,8 @@ strdup __argz_count __argz_stringify __argz_next])
   INTLINCS=
   INTLLIBS=
   try_nls=no
+
+  AC_MSG_CHECKING([for NLS support])
 
   if test $ENABLE_NLS != no; then
     rm -rf .locale
@@ -99,8 +124,8 @@ strdup __argz_count __argz_stringify __argz_next])
     dnl *
     dnl * Test 1: Try to link both libintl and libiconv.
     dnl *
-    CPPFLAGS="$save_CPPFLAGS $gettext_includes $iconv_includes"
-    LIBS="$save_LIBS $gettext_libraries -lintl $iconv_libraries -liconv"
+    CPPFLAGS="$save_CPPFLAGS $gettext_includes"
+    LIBS="$save_LIBS $gettext_libraries $iconv_libraries"
     AC_TRY_RUN([
 #include <stdio.h>
 #ifdef ENABLE_NLS
@@ -131,8 +156,8 @@ main()
     try_nls=yes, try_nls=no, try_nls=yes)
 
     if test "$try_nls" = yes; then
-      INTLINCS="$gettext_includes $iconv_includes"
-      INTLLIBS="$gettext_libraries -lintl $iconv_libraries -liconv"
+      INTLINCS="$gettext_includes"
+      INTLLIBS="$gettext_libraries $iconv_libraries"
     fi
 
     dnl *
@@ -140,7 +165,7 @@ main()
     dnl * 
     if test "$try_nls" = no; then
       CPPFLAGS="$save_CPPFLAGS $gettext_includes"
-      LIBS="$save_LIBS $gettext_libraries -lintl"
+      LIBS="$save_LIBS $gettext_libraries"
       AC_TRY_RUN([
 #include <stdio.h>
 #ifdef ENABLE_NLS
@@ -172,7 +197,7 @@ main()
 
       if test "$try_nls" = yes; then
         INTLINCS="$gettext_includes"
-        INTLLIBS="$gettext_libraries -lintl"
+        INTLLIBS="$gettext_libraries"
       fi
     fi
 
@@ -180,8 +205,8 @@ main()
     dnl * Test 3: Try to link libiconv.
     dnl * 
     if test "$try_nls" = no; then
-      CPPFLAGS="$save_CPPFLAGS $iconv_includes"
-      LIBS="$save_LIBS $iconv_libraries -liconv"
+      CPPFLAGS="$save_CPPFLAGS"
+      LIBS="$save_LIBS $iconv_libraries"
       AC_TRY_RUN([
 #include <stdio.h>
 #ifdef ENABLE_NLS
@@ -212,8 +237,8 @@ main()
       try_nls=yes, try_nls=no, try_nls=yes)
 
       if test "$try_nls" = yes; then
-        INTLINCS="$iconv_includes"
-        INTLLIBS="$iconv_libraries -liconv"
+        INTLINCS=
+        INTLLIBS="$iconv_libraries"
       fi
     fi
 
@@ -272,8 +297,8 @@ main()
 
   AC_MSG_RESULT($try_nls)
 
-  if test $ENABLE_NLS = yes ; then
-    if test $try_nls = no ; then
+  if test $ENABLE_NLS = yes; then
+    if test $try_nls = no; then
       AC_MSG_ERROR(gettext not available)
     fi
   fi

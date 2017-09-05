@@ -97,28 +97,28 @@
 #endif /* HAVE_STRCHR */
 
 #ifndef HAVE_STRCASECMP
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 int strcasecmp()
 int strncasecmp();
-#endif /* not __STDC__ */
-#endif /* not HAVE_STRCASECMP */
+#endif /* not __STDC__ or WIN32 */
+#endif /* not HAVE_STRCASECMP or WIN32 */
 
 #ifndef HAVE_MEMCPY
 #define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 void *memchr(const void *, int, size_t);
 int memcmp(const void *, const void *, size_t);
 void *memmove(void *, const void *, size_t);
 void *memset(void *, int, size_t);
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 char *memchr();
 int memcmp();
 char *memmove();
 char *memset();
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 #endif
 
 /*
@@ -182,11 +182,11 @@ char *memset();
  * Trick for function protypes.
  */
 #ifndef EB_P
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 #define EB_P(p) p
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 #define EB_P(p) ()
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 #endif /* EB_P */
 
 /*
@@ -207,15 +207,17 @@ char *memset();
 /*
  * Character type tests and conversions.
  */
-#define isdigit(c) ('0' <= (c) && (c) <= '9')
-#define isupper(c) ('A' <= (c) && (c) <= 'Z')
-#define islower(c) ('a' <= (c) && (c) <= 'z')
-#define isalpha(c) (isupper(c) || islower(c))
-#define isalnum(c) (isupper(c) || islower(c) || isdigit(c))
-#define isxdigit(c) \
- (isdigit(c) || ('A' <= (c) && (c) <= 'F') || ('a' <= (c) && (c) <= 'f'))
-#define toupper(c) (('a' <= (c) && (c) <= 'z') ? (c) - 0x20 : (c))
-#define tolower(c) (('A' <= (c) && (c) <= 'Z') ? (c) + 0x20 : (c))
+#define ASCII_ISDIGIT(c) ('0' <= (c) && (c) <= '9')
+#define ASCII_ISUPPER(c) ('A' <= (c) && (c) <= 'Z')
+#define ASCII_ISLOWER(c) ('a' <= (c) && (c) <= 'z')
+#define ASCII_ISALPHA(c) \
+ (ASCII_ISUPPER(c) || ASCII_ISLOWER(c))
+#define ASCII_ISALNUM(c) \
+ (ASCII_ISUPPER(c) || ASCII_ISLOWER(c) || ASCII_ISDIGIT(c))
+#define ASCII_ISXDIGIT(c) \
+ (ASCII_ISDIGIT(c) || ('A' <= (c) && (c) <= 'F') || ('a' <= (c) && (c) <= 'f'))
+#define ASCII_TOUPPER(c) (('a' <= (c) && (c) <= 'z') ? (c) - 0x20 : (c))
+#define ASCII_TOLOWER(c) (('A' <= (c) && (c) <= 'Z') ? (c) + 0x20 : (c))
 
 /*
  * File name suffixes.

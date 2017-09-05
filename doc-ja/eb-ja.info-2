@@ -487,44 +487,44 @@ File: eb-ja.info,  Node: Subbook Sample,  Next: Subbook Data Types,  Prev: Curre
      
          /* コマンド行引数をチェック。*/
          if (argc != 2) {
-     	fprintf(stderr, "Usage: %s book-path\n", argv[0]);
-     	exit(1);
+             fprintf(stderr, "Usage: %s book-path\n", argv[0]);
+             exit(1);
          }
      
          /* EB ライブラリと `book' を初期化。*/
          error_code = eb_initialize_library();
          if (error_code != EB_SUCCESS) {
-     	fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
-     	    argv[0], eb_error_message(error_code), argv[1]);
-     	goto die;
+             fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
+                 argv[0], eb_error_message(error_code), argv[1]);
+             goto die;
          }
          eb_initialize_book(&book);
      
          /* 書籍を `book' に結び付ける。*/
          error_code = eb_bind(&book, argv[1]);
          if (error_code != EB_SUCCESS) {
-     	fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
-     	    argv[0], eb_error_message(error_code), argv[1]);
-     	goto die;
+             fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
+                 argv[0], eb_error_message(error_code), argv[1]);
+             goto die;
          }
      
          /* 副本の一覧を取得。*/
          error_code = eb_subbook_list(&book, subbook_list, &subbook_count);
          if (error_code != EB_SUCCESS) {
-     	fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
-     	    argv[0], eb_error_message(error_code));
-     	goto die;
+             fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
+                 argv[0], eb_error_message(error_code));
+             goto die;
          }
      
          /* 書籍に含まれている副本の題名を出力。*/
          for (i = 0; i < subbook_count; i++) {
-     	error_code = eb_subbook_title2(&book, subbook_list[i], title);
-     	if (error_code != EB_SUCCESS) {
-     	    fprintf(stderr, "%s: failed to get the title, %s\n",
-     		argv[0], eb_error_message(error_code));
-     	    continue;
-     	}
-     	printf("%d: %s\n", i, title);
+             error_code = eb_subbook_title2(&book, subbook_list[i], title);
+             if (error_code != EB_SUCCESS) {
+                 fprintf(stderr, "%s: failed to get the title, %s\n",
+                     argv[0], eb_error_message(error_code));
+                 continue;
+             }
+             printf("%d: %s\n", i, title);
          }
      
          /* 書籍と EB ライブラリの利用を終了。*/

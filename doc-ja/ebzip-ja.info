@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta2 版です。 EB ライブラリバージョン 4.0beta2 に対
+   この文書は第 4.0beta3 版です。 EB ライブラリバージョン 4.0beta3 に対
 応しています。
 
 * Menu:
@@ -138,8 +138,8 @@ File: ebzip-ja.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Pre
      38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzipinfo
 
 `ebunzip' という名前で起動された場合は、伸長を行います。 `ebzipinfo' と
-いう名前で起動された場合、情報出力を行います。 それ以外の場合は、オプシ
-ョンで動作モードを指定しないと圧縮を行います。
+いう名前で起動された場合、情報出力を行います。 それ以外の場合は、圧縮を
+行います。
 
    コマンドラインオプションでも、動作モードを決定することができます。
 `--compress' (`-z') で圧縮、`--uncompress' (`-u') で伸長、
@@ -832,7 +832,7 @@ File: ebzip-ja.info,  Node: Format Overview,  Next: Data Part,  Prev: Compressed
    * 非損失圧縮です。
      圧縮ファイルを伸長することによって、元のファイルを復元できます。
 
-   * 4 つの圧縮レベルがあります。
+   * 6 つの圧縮レベルがあります。
      伸長の速さか圧縮率の良さの、いずれかを選ぶことができます。
 
 圧縮されたファイルは、ヘッダ部、インデックス部、およびデータ部から構成
@@ -867,8 +867,8 @@ File: ebzip-ja.info,  Node: Data Part,  Next: Index Part,  Prev: Format Overview
 1                                    4096 バイト
 2                                    8192 バイト
 3                                    16384 バイト
-3                                    32768 バイト
-3                                    65536 バイト
+4                                    32768 バイト
+5                                    65536 バイト
 
 次に、末尾のスライスがスライス・サイズよりも短かった場合、 `ebzip' はス
 ライス・サイズと同じになるまで伸ばし、伸ばした部分に 0x00 を埋めます。
@@ -984,7 +984,7 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 4.0beta2 では、 1 (2
+     圧縮モードを表します。 EB ライブラリバージョン 4.0beta3 では、 1 (2
      進数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
@@ -1025,29 +1025,29 @@ Tag Table:
 Node: Top1033
 Node: Introduction2547
 Node: Action and Command Name3900
-Node: Invoking ebzip5795
-Node: Compression6428
-Node: Compression Example 16976
-Node: Compression Example 28597
-Node: Compression Level10187
-Node: Test10682
-Node: Partial Compression11032
-Node: Overwrite Old Files13880
-Node: Compress Compressed Book14674
-Node: Uncompression15370
-Node: Uncompression Example15751
-Node: Options for Uncompression17276
-Node: Uncompress Compressed Book18450
-Node: Information19123
-Node: Information Example19462
-Node: Options for Information20151
-Node: Delete a Book20650
-Node: Summary of Options20946
-Node: Comparision Result24588
-Node: Compressed File Format26906
-Node: Format Overview27310
-Node: Data Part28164
-Node: Index Part30840
-Node: Header Part33510
+Node: Invoking ebzip5759
+Node: Compression6392
+Node: Compression Example 16940
+Node: Compression Example 28561
+Node: Compression Level10151
+Node: Test10646
+Node: Partial Compression10996
+Node: Overwrite Old Files13844
+Node: Compress Compressed Book14638
+Node: Uncompression15334
+Node: Uncompression Example15715
+Node: Options for Uncompression17240
+Node: Uncompress Compressed Book18414
+Node: Information19087
+Node: Information Example19426
+Node: Options for Information20115
+Node: Delete a Book20614
+Node: Summary of Options20910
+Node: Comparision Result24552
+Node: Compressed File Format26870
+Node: Format Overview27274
+Node: Data Part28128
+Node: Index Part30804
+Node: Header Part33474
 
 End Tag Table

@@ -66,13 +66,13 @@
 #include "ebutils.h"
 
 #ifndef HAVE_STRCASECMP
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 int strcasecmp()
 int strncasecmp();
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 #endif /* not HAVE_STRCASECMP */
 
 #ifndef HAVE_STRCHR
@@ -85,11 +85,11 @@ int strncasecmp();
 #endif
 
 #ifndef HAVE_STRERROR
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 char *strerror(int);
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 char *strerror();
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 #endif /* HAVE_STRERROR */
 
 /*
@@ -107,11 +107,11 @@ char *strerror();
  * Trick for function protypes.
  */
 #ifndef EB_P
-#ifdef __STDC__
+#if defined(__STDC__) || defined(WIN32)
 #define EB_P(p) p
-#else /* not __STDC__ */
+#else /* not __STDC__ or WIN32 */
 #define EB_P(p) ()
-#endif /* not __STDC__ */
+#endif /* not __STDC__ or WIN32 */
 #endif /* EB_P */
 
 /*
@@ -223,19 +223,6 @@ static int image_count = 0;
 
 #define MAX_LENGTH_FONT_NAME		2
 #define MAX_LENGTH_STRING		255
-
-/*
- * Character type tests and conversions.
- */
-#define isdigit(c) ('0' <= (c) && (c) <= '9')
-#define isupper(c) ('A' <= (c) && (c) <= 'Z')
-#define islower(c) ('a' <= (c) && (c) <= 'z')
-#define isalpha(c) (isupper(c) || islower(c))
-#define isalnum(c) (isupper(c) || islower(c) || isdigit(c))
-#define isxdigit(c) \
- (isdigit(c) || ('A' <= (c) && (c) <= 'F') || ('a' <= (c) && (c) <= 'f'))
-#define toupper(c) (('a' <= (c) && (c) <= 'z') ? (c) - 0x20 : (c))
-#define tolower(c) (('A' <= (c) && (c) <= 'Z') ? (c) + 0x20 : (c))
 
 /*
  * Unexported functions.

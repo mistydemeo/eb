@@ -94,33 +94,33 @@ main(argc, argv)
     i = font_start;
     for (;;) @{
         /* 外字のビットマップデータを取得。*/
-	error_code = eb_narrow_font_character_bitmap(&book, i,
-	    (char *)bitmap);
-	if (error_code != EB_SUCCESS) @{
+        error_code = eb_narrow_font_character_bitmap(&book, i,
+            (char *)bitmap);
+        if (error_code != EB_SUCCESS) @{
             fprintf(stderr, "%s: failed to get font data, %s\n",
                 argv[0], eb_error_message(error_code));
             goto die;
         @}
 
-	/* ビットマップをアスキーアートにして出力。*/
-	printf("code point=%04x\n", i);
-	for (j = 0; j < 16; j++) @{
-	    fputc((bitmap[j] & 0x80) ? '*' : ' ', stdout);
-	    fputc((bitmap[j] & 0x40) ? '*' : ' ', stdout);
-	    fputc((bitmap[j] & 0x20) ? '*' : ' ', stdout);
-	    fputc((bitmap[j] & 0x10) ? '*' : ' ', stdout);
-	    fputc((bitmap[j] & 0x08) ? '*' : ' ', stdout);
-	    fputc((bitmap[j] & 0x04) ? '*' : ' ', stdout);
-	    fputc((bitmap[j] & 0x02) ? '*' : ' ', stdout);
-	    fputc((bitmap[j] & 0x01) ? '*' : ' ', stdout);
-	    fputc('\n', stdout);
-	@}
-	fputs("--------\n", stdout);
+        /* ビットマップをアスキーアートにして出力。*/
+        printf("code point=%04x\n", i);
+        for (j = 0; j < 16; j++) @{
+            fputc((bitmap[j] & 0x80) ? '*' : ' ', stdout);
+            fputc((bitmap[j] & 0x40) ? '*' : ' ', stdout);
+            fputc((bitmap[j] & 0x20) ? '*' : ' ', stdout);
+            fputc((bitmap[j] & 0x10) ? '*' : ' ', stdout);
+            fputc((bitmap[j] & 0x08) ? '*' : ' ', stdout);
+            fputc((bitmap[j] & 0x04) ? '*' : ' ', stdout);
+            fputc((bitmap[j] & 0x02) ? '*' : ' ', stdout);
+            fputc((bitmap[j] & 0x01) ? '*' : ' ', stdout);
+            fputc('\n', stdout);
+        @}
+        fputs("--------\n", stdout);
 
         /* 外字の文字番号を一つ進める。*/
-	error_code = eb_forward_narrow_font_character(&book, 1, &i);
-	if (error_code != EB_SUCCESS)
-	    break;
+        error_code = eb_forward_narrow_font_character(&book, 1, &i);
+        if (error_code != EB_SUCCESS)
+            break;
     @}
         
     /* 書籍と EB ライブラリの利用を終了。*/

@@ -89,7 +89,7 @@ by Free Software Foundation, Inc.
 * Local Character::             外字
 * Binary Data::                 バイナリデータ
 * Appendix Data::               appendix データ
-* Index::                       索引
+* Indice::                      索引
 
 @detailmenu
  --- The Detailed Node Listing ---
@@ -197,6 +197,7 @@ appendix データ
 * Appendix Subbook::            副本
 * Appendix Stop Code::          本文の区切りコード
 * Appendix Alternation Text::   外字の代替文字列
+* Appendix Data Types::         
 * Appendix Functions::          関数の詳細
 * Appendix Sample::             サンプルプログラム
 
@@ -6716,7 +6717,7 @@ EB ライブラリでは、動画データのファイル名はフック関数
 @end deftypefun
 
 @c ===================================================================
-@node Appendix Data, Index, Binary Data, Top
+@node Appendix Data, Indice, Binary Data, Top
 @chapter appendix データ
 
 @dfn{appendix} (@dfn{付録}) とは CD-ROM 書籍の補助データのことです。
@@ -6749,6 +6750,7 @@ appendix のレイアウトは CD-ROM 書籍のものとよく似ています。
 * Appendix Subbook::            副本
 * Appendix Stop Code::          本文の区切りコード
 * Appendix Alternation Text::   外字の代替文字列
+* Appendix Data Types::         
 * Appendix Functions::          関数の詳細
 * Appendix Sample::             サンプルプログラム
 @end menu
@@ -6943,7 +6945,7 @@ if (eb_read_text(&book, &app, NULL, NULL, MAX_LENGTH,
 で、かつ区切りコードの情報を持っていれば、その区切りコードを使用します。
 
 @c -------------------------------------------------------------------
-@node Appendix Alternation Text, Appendix Functions, Appendix Stop Code, Appendix Data
+@node Appendix Alternation Text, Appendix Data Types, Appendix Stop Code, Appendix Data
 @section 外字の代替文字列
 
 CD-ROM 書籍は、定義している外字の情報としてフォントのデータしか用意して
@@ -6995,7 +6997,37 @@ if (eb_narrow_alt_character_text(&app, buffer, 0xa121)
 もう 1 バイト分余裕を持たせています。
 
 @c -------------------------------------------------------------------
-@node Appendix Functions, Appendix Sample, Appendix Alternation Text, Appendix Data
+@node Appendix Data Types, Appendix Functions, Appendix Alternation Text, Appendix Data
+@section データ型の詳細
+
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+
+@example
+#include <eb/appendix.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_Appendix
+@xtindex Book
+
+@code{EB_Appendix} 型は、一冊の CD-ROM 書籍を表します。
+CD-ROM 書籍へのアクセスは、すべてこの型のオブジェクトを介して行います。
+同時に複数の CD-ROM 書籍にアクセスする際は、書籍一冊毎にオブジェクトを
+作る必要があります。
+
+@noindent
+@code{EB_Appendix} オブジェクトの操作は、すべて EB ライブラリが用意している
+関数で行います。
+アプリケーションプログラムは、直接 @code{EB_Appendix} オブジェクトのメンバ
+を参照したり、セットしたりすべきではありません。
+
+@code{EB_Appendix} オブジェクトを使用する際は、まずそのオブジェクトに対して
+@code{eb_initialize_book()} を呼んで初期化しなくてはなりません。
+@end deftp
+
+@c -------------------------------------------------------------------
+@node Appendix Functions, Appendix Sample, Appendix Data Types, Appendix Data
 @section 関数の詳細
 
 この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
@@ -7400,7 +7432,7 @@ eb_backward_narrow_font_character (book, -n, character_number);
 @include appendix-c.texi
 
 @c ===================================================================
-@node Index,  , Appendix Data, Top
+@node Indice,  , Appendix Data, Top
 @appendix 索引
 
 @menu
@@ -7410,19 +7442,19 @@ eb_backward_narrow_font_character (book, -n, character_number);
 @end menu
 
 @c -------------------------------------------------------------------
-@node Data Type Index, Function Index, Index, Index
+@node Data Type Index, Function Index, Indice, Indice
 @section データ型の索引
 
 @printindex xt
 
 @c -------------------------------------------------------------------
-@node Function Index, Variable Index, Data Type Index, Index
+@node Function Index, Variable Index, Data Type Index, Indice
 @section 関数の索引
 
 @printindex xf
 
 @c -------------------------------------------------------------------
-@node Variable Index,  , Function Index, Index
+@node Variable Index,  , Function Index, Indice
 @section 変数と定数の索引
 
 @printindex xv
