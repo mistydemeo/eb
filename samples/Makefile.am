@@ -36,6 +36,6 @@ booklist_SOURCES = booklist.c
 booklist_LDADD = $(LIBEB) $(ZLIBLIBS) $(INTLLIBS)
 booklist_DEPENDENCIES = $(LIBEB) $(ZLIBDEPS) $(INTLDEPS)
 
-EXTRA_DIST = README README-ja
+EXTRA_DIST = README
 
 INCLUDES = -I$(srcdir)/..

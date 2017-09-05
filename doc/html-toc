@@ -27,13 +27,39 @@
 # SUCH DAMAGE.
 #
 
+#
+# html-toc -- make `table of contents' of HTML files.
+#
+# Usage:
+#     html-index [option...] input-file...
+#
+# `html-toc' reads HTML files, and generates `table of contents' (TOC)
+# of the HTML files. The TOC is created from <h1>...<h6> tags and
+# <a name="..."> tag in the HTML files.  Since `html-toc' doesn't parse
+# HTML precisely, the tags must be the following form:
+# 
+#      <h?><a name="...">heading</a></h?>
+#
+# where `?' is 1..6.  Note that <h?> and </h?> above must be in the same
+# line.
+#
+# `html-toc' outputs TOC to standard out by default.
+#
+# Options:
+#     -o file               specify output file.
+#     -h                    do not output file name in <a href="....">.
+#     -m level              minimum target heading level
+#                           (default: h1)
+#     -M level              maximum target heading level
+#                           (default: h6)
+
 require 5.005;
 use Getopt::Std;
 
 #
 # Usage
 #
-my $usage = "Usage: $0 [-o output-file] [-h] input-file...\n";
+my $usage = "Usage: $0 [option...] input-file...\n";
 
 #
 # Variables
@@ -53,8 +79,14 @@ die $usage if (@ARGV == 0);
 
 $fragment_only = 1 if (defined($options{h}) || @ARGV == 1);
 $out_file = $options{o} if (defined($options{o}));
-$min_level = $options{m} if (defined($options{m}));
-$max_level = $options{M} if (defined($options{M}));
+if (defined($options{m})) {
+    $options{m} =~ s/^h//;
+    $min_level = $options{m};
+}
+if (defined($options{M})) {
+    $options{M} =~ s/^h//;
+    $max_level = $options{M};
+}
 
 #
 # Read an HTML file.

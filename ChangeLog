@@ -1,6 +1,11 @@
-2004-05-27  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+2004-06-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
-	* Version 4.1.
+	* Version 4.1
+
+	* doc/Makefile.am (pkgdoc_DATA): Do not use meta characters to
+	specify splitted HTML files.  Use `install-data-hook' instead.
+
+2004-05-27  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* README-ja, INSTALL-ja: Removed.
 	* README, INSTALL: These documents are now written in Japanese.

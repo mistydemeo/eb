@@ -64,7 +64,7 @@
 #                           (default: `index-')
 #     -s suffix             set suffix of index files.
 #                           (default: `html')
-#     -h                    do not output file name in href="....".
+#     -h                    do not output file name in <a href="....">.
 #
 
 require 5.005;

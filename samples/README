@@ -1,14 +1,17 @@
-Some sample programs of EB Library are placed at this directory.
+このディレクトリには EB ライブラリのサンプルプログラムが幾つか置かれて
+います。
 
-The sample programs aren't compiled together with EB Library, unless
-you invoke `configure' with the `--enable-samples' option.  If you
-have not configured with `--enable-samples' (or configured with
-`--disable-samples' or `--enable-samples=no'), and you want to complie
-the sample programs, then please do the following procedure: 
+`configure' を `--enable-samples' オプション無しで実行しない限り、これ
+らのサンプルプログラムは EB ライブラリと一緒にはコンパイルされません。
+`--enable-samples' を指定せずに (あるいは `--disable-samples' か
+`--enable-samples=no' を指定して) `configure' を指定して起動したけれど
+もサンプルプログラムをコンパイルしたいという場合は、次の手順をとって下
+さい。
 
-	1. Compile EB Library.
-	2. Change directory (`cd') to this directory.
-	3. Type `make all'.
-	(`make install' target is not provided.)
+    1. EB ライブラリをコンパイルします。
+    2. このディレクトリに移動 (`cd') します。
+    3. `make all' とタイプします。
+    (`make install' ターゲットは提供していません。)
 
-Usage of the sample programs are explained at the top of source files.
+サンプルプログラムの使用方法は、各ソースファイルの先頭部分で説明して
+います。

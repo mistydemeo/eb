@@ -27,6 +27,29 @@
 # SUCH DAMAGE.
 #
 
+#
+# html-split -- split an HTML file.
+#
+# Usage:
+#     html-split [option...] input-file
+#
+# `html-split' splits an HTML file with heading tags (<h1>...<h6>).
+# Suppose that `input-file' is `foo.html', HTML files splitted by
+# `html-split' are `foo-0.html', `foo-1.html', and so on.
+#
+# Options:
+#     -Z                    do not add `-0' to the first split.
+#     -l LEVEL              split with this heading level
+#                           (default: h2)
+#     -p PREFIX             prefix of splitted HTML files.
+#     -s SUFFIX             suffix of splitted HTML files.
+#                           (default: html)
+#     -w WIDTH              minimum width of split number.
+#                           (default: 1)
+#     -t TOC                fragment name of `Table of Contents'.
+#                           (default: toc)
+#
+
 require 5.005;
 use Getopt::Std;
 use File::Basename;
@@ -45,6 +68,7 @@ my $out_suffix;
 my $counter_width = 1;
 my $split_level = 2;
 my $toc_tag = 'toc';
+my $supress_zero_flag = 0;
 
 my @toc = ();
 my @indice = ();
@@ -55,12 +79,16 @@ my $toc_page = 0;
 # Parse command line arguments.
 #
 my %options;
-getopts('l:w:p:s:t:', \%options) or die $usage;
+getopts('Zl:w:p:s:t:', \%options) or die $usage;
 die $usage if (@ARGV != 1);
 
 $in_file = $ARGV[0];
-$split_level = $options{l} if (defined($options{l}));
+if (defined($options{l})) {
+    $options{l} =~ s/^h//;
+    $split_level = $options{l};
+}
 $counter_width = $options{w} if (defined($options{w}));
+$supress_zero_flag = defined($options{Z});
 $toc_tag = $options{t} if (defined($options{t}));
 
 if (defined($options{p})) {
@@ -184,7 +212,7 @@ close(IN_FILE);
 sub splitted_file_name ($) {
     my ($n) = @_;
 
-    if ($n == 0) {
+    if ($n == 0 && $supress_zero_flag) {
 	return sprintf("%s.%s", $out_prefix, $out_suffix);
     } else {
 	return sprintf("%s-%0${counter_width}d.%s",

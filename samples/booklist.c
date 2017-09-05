@@ -35,10 +35,6 @@
  *     <remote-access-ideintifier> で指定した EBNET サーバに接続し
  *     て、サーバの提供する書籍、appendix の一覧を表示します。
  */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -91,7 +87,6 @@ main(int argc, char *argv[])
             goto die;
         }
 
-            }
         /* 書籍、appendix の題名を取得。*/
         error_code = eb_booklist_book_name(&bl, i, &title);
 	if (error_code != EB_SUCCESS) {

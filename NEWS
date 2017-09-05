@@ -1,6 +1,7 @@
 バージョン 4.1 における主な変更点
 
 * BSD ライセンスを採用するようにした。
+* ebfont の --image-format オプションに `png' を指定できるようにした。
 * ライブラリに eb_narrow_font_png_size(), eb_wide_font_png_size(),
   eb_bitmap_to_png() を加えた。
 * eb_bitmap_to_xbm(), eb_bitmap_to_xpm(), eb_bitmap_to_gif(),
@@ -397,6 +398,10 @@
 
 バージョン 1.0.1 における主な変更点:
 
+* JIS X 4081-1996 に記されている表示制御記述子を認識するようにした。
+* いくつかの EPWING 書籍で、漢字による前方一致検索ができるようにした。
+* EPWING 版リーダーズ英和辞典に対応した。
+* 不具合を修正した。
 
 バージョン 1.0 における主な変更点:
 

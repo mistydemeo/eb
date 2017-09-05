@@ -35,10 +35,6 @@
  *     <boook-path> で指定され CD-ROM 書籍に含まれているすべての副本の
  *     題名を表示します。
  */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 

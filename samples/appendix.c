@@ -42,10 +42,6 @@
  *     す。インデックスは、書籍の最初の副本から順に 0、1、2 ... に
  *     なります。
  */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 

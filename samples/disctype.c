@@ -35,10 +35,6 @@
  *     <book-path> で指定された CD-ROM 書籍の種類が、EB か EPWING か
  *     を調べて表示します。
  */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 

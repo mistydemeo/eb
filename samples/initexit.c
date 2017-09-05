@@ -35,10 +35,6 @@
  *     EB ライブラリの初期化、後始末をしてみます。
  *     プログラムの外側から見れば、これは何の意味もない動作です。
  */
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 

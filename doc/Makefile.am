@@ -1,16 +1,21 @@
-pkgdoc_DATA = eb.html eb-[0-9][0-9].html \
-	ebappendix.html ebappendix-[0-9][0-9].html \
-	ebfont.html ebfont-[0-9][0-9].html \
-	ebinfo.html ebinfo-[0-9][0-9].html \
-	ebrefile.html ebrefile-[0-9][0-9].html \
-	ebstopcode.html ebstopcode-[0-9][0-9].html \
-	ebzip.html ebzip-[0-9][0-9].html
+pkgdoc_DATA = eb.html ebappendix.html ebfont.html ebinfo.html ebrefile.html \
+	ebstopcode.html ebzip.html 
 
 EXTRA_DIST = eb.html.in ebappendix.html.in ebfont.html.in ebinfo.html.in \
 	ebrefile.html.in ebstopcode.html.in ebzip.html.in c2html \
 	html-include html-index html-split html-toc
 
 CLEANFILES = *.html
+
+install-data-hook:
+	for i in $(pkgdoc_DATA); do \
+	    base="`echo $$i | sed -e 's/\.html//'`"; \
+	    for j in $$base-[0-9][0-9].html; do \
+		test -r $$j || continue; \
+		echo " $(INSTALL_DATA) '$$j' '$(DESTDIR)$(pkgdocdir)/$$j'"; \
+		$(INSTALL_DATA) "$$j" "$(DESTDIR)$(pkgdocdir)/$$j"; \
+	    done; \
+	done
 
 version.html:
 	rm -f $@
@@ -21,31 +26,31 @@ splitted: eb-splitted ebappendix-splitted ebfont-splitted ebinfo-splitted \
 
 eb.html: eb-cat.html
 	rm -f $@
-	$(PERL) html-split -p eb -w 2 eb-cat.html
+	$(PERL) html-split -Z -p eb -w 2 eb-cat.html
 
 ebappendix.html: ebappendix-cat.html
 	rm -f $@
-	$(PERL) html-split -p ebappendix -w 2 ebappendix-cat.html
+	$(PERL) html-split -Z -p ebappendix -w 2 ebappendix-cat.html
 
 ebfont.html: ebfont-cat.html
 	rm -f $@
-	$(PERL) html-split -p ebfont -w 2 ebfont-cat.html
+	$(PERL) html-split -Z -p ebfont -w 2 ebfont-cat.html
 
 ebinfo.html: ebinfo-cat.html
 	rm -f $@
-	$(PERL) html-split -p ebinfo -w 2 ebinfo-cat.html
+	$(PERL) html-split -Z -p ebinfo -w 2 ebinfo-cat.html
 
 ebrefile.html: ebrefile-cat.html
 	rm -f $@
-	$(PERL) html-split -p ebrefile -w 2 ebrefile-cat.html
+	$(PERL) html-split -Z -p ebrefile -w 2 ebrefile-cat.html
 
 ebstopcode.html: ebstopcode-cat.html
 	rm -f $@
-	$(PERL) html-split -p ebstopcode -w 2 ebstopcode-cat.html
+	$(PERL) html-split -Z -p ebstopcode -w 2 ebstopcode-cat.html
 
 ebzip.html: ebzip-cat.html
 	rm -f $@
-	$(PERL) html-split -p ebzip -w 2 ebzip-cat.html
+	$(PERL) html-split -Z -p ebzip -w 2 ebzip-cat.html
 
 
 eb-cat.html: eb.html.in version.html eb-toc.html eb-sample-appendix.html \
@@ -85,31 +90,31 @@ ebzip-cat.html: $(srcdir)/ebzip.html.in version.html ebzip-toc.html
 
 eb-toc.html: $(srcdir)/eb.html.in
 	rm -f $@
-	$(PERL) html-toc -m 2 -M 3 $(srcdir)/eb.html.in > $@
+	$(PERL) html-toc -m h2 -M h3 $(srcdir)/eb.html.in > $@
 
 ebappendix-toc.html: $(srcdir)/ebappendix.html.in
 	rm -f $@
-	$(PERL) html-toc -m 2 -M 3 $(srcdir)/ebappendix.html.in > $@
+	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebappendix.html.in > $@
 
 ebfont-toc.html: $(srcdir)/ebfont.html.in
 	rm -f $@
-	$(PERL) html-toc -m 2 -M 3 $(srcdir)/ebfont.html.in > $@
+	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebfont.html.in > $@
 
 ebinfo-toc.html: $(srcdir)/ebinfo.html.in
 	rm -f $@
-	$(PERL) html-toc -m 2 -M 3 $(srcdir)/ebinfo.html.in > $@
+	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebinfo.html.in > $@
 
 ebrefile-toc.html: $(srcdir)/ebrefile.html.in
 	rm -f $@
-	$(PERL) html-toc -m 2 -M 3 $(srcdir)/ebrefile.html.in > $@
+	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebrefile.html.in > $@
 
 ebstopcode-toc.html: $(srcdir)/ebstopcode.html.in
 	rm -f $@
-	$(PERL) html-toc -m 2 -M 3 $(srcdir)/ebstopcode.html.in > $@
+	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebstopcode.html.in > $@
 
 ebzip-toc.html: $(srcdir)/ebzip.html.in
 	rm -f $@
-	$(PERL) html-toc -m 2 -M 3 $(srcdir)/ebzip.html.in > $@
+	$(PERL) html-toc -m h2 -M h3 $(srcdir)/ebzip.html.in > $@
 
 eb-sample-appendix.html: $(top_srcdir)/samples/appendix.c
 	rm -f $@
