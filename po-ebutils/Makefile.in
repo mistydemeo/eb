@@ -48,7 +48,8 @@ localedir = @localedir@
 mkdir_p = @mkdir_p@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(install_sh) -d
+install_sh = @install_sh@
 
 MSGFMT = @MSGFMT@
 XGETTEXT = @XGETTEXT@
