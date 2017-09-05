@@ -32,7 +32,12 @@ static pthread_mutex_t log_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
 /*
- * Debug Log flag.
+ * Initialization flag.
+ */
+int eb_log_initialized = 0;
+
+/*
+ * Debug log flag.
  */
 int eb_log_flag = 0;
 
@@ -41,6 +46,21 @@ int eb_log_flag = 0;
  */
 static void (*eb_log_function) EB_P((const char *, va_list)) = eb_log_stderr;
 
+
+/*
+ * Initialize logging sub-system.
+ */
+void
+eb_initialize_log()
+{
+    if (eb_log_initialized)
+	return;
+
+    eb_log_flag = (getenv(EB_DEBUG_ENVIRONMENT_VARIABLE) != NULL);
+    eb_log_function = eb_log_stderr;
+    eb_log_initialized = 1;
+}
+
 /*
  * Set log function.
  */
@@ -48,8 +68,9 @@ void
 eb_set_log_function(function)
     void (*function) EB_P((const char *, va_list));
 {
+    if (!eb_log_initialized)
+	eb_initialize_log();
     eb_log_function = function;
-    zio_set_log_function(function);
 }
 
 /*
@@ -58,8 +79,9 @@ eb_set_log_function(function)
 void
 eb_enable_log()
 {
+    if (!eb_log_initialized)
+	eb_initialize_log();
     eb_log_flag = 1;
-    zio_enable_log();
 }
 
 /*
@@ -68,8 +90,9 @@ eb_enable_log()
 void
 eb_disable_log()
 {
+    if (!eb_log_initialized)
+	eb_initialize_log();
     eb_log_flag = 0;
-    zio_disable_log();
 }
 
 /*
@@ -102,18 +125,14 @@ eb_log(message, va_alist)
 /*
  * Output a log message to standard error.
  * This is the default log handler.
+ *
+ * Currently, this function doesn't work if the system lacks vprintf()
+ * and dopront().
  */
-#if defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)
 void
 eb_log_stderr(message, ap)
     const char *message;
     va_list ap;
-#else /* not defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT) */
-void
-eb_log_stderr(message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
-    const char *message;
-    char *a0, *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9;
-#endif /* not defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT) */
 {
     pthread_mutex_lock(&log_mutex);
 
@@ -121,9 +140,9 @@ eb_log_stderr(message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
 
 #if defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)
     vfprintf(stderr, message, ap);
-#else /* not defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT) */
-    fprintf(stderr, message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
-#endif /* not defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT) */
+#else
+    fprintf(stderr, "eb_log_stderr() doesn't work on the system.");
+#endif
     fputc('\n', stderr);
     fflush(stderr);
 

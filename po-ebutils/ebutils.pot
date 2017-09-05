@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2002-01-19 23:27+0900\n"
+"POT-Creation-Date: 2002-01-19 23:11+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,37 +29,37 @@ msgstr ""
 msgid "%s: invalid subbook name `%s...'\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:131
+#: ../libebutils/getopt.c:119
 #, c-format
 msgid "%s: option requires an argument -- %c\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:133
+#: ../libebutils/getopt.c:121
 #, c-format
 msgid "%s: option `%.*s' requires an argument\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:135
+#: ../libebutils/getopt.c:123
 #, c-format
 msgid "%s: option `--%.*s' is ambiguous\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:137
+#: ../libebutils/getopt.c:125
 #, c-format
 msgid "%s: option `--%.*s' doesn't allow an argument\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:139
+#: ../libebutils/getopt.c:127
 #, c-format
 msgid "%s: illegal option -- %c\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:141
+#: ../libebutils/getopt.c:129
 #, c-format
 msgid "%s: invalid option -- %c\n"
 msgstr ""
 
-#: ../libebutils/getopt.c:143
+#: ../libebutils/getopt.c:131
 #, c-format
 msgid "%s: unrecognized option `--%.*s'\n"
 msgstr ""

@@ -22,12 +22,6 @@ extern "C" {
 
 #include <sys/types.h>
 
-#if defined(__STDC__) || defined(WIN32)
-#include <stdarg.h>
-#else
-#include <varargs.h>
-#endif
-
 #if TIME_WITH_SYS_TIME
 # include <sys/time.h>
 # include <time.h>
@@ -216,46 +210,29 @@ struct Zio_Struct {
 };
 
 /*
- * Function declarations.
+ * Trick for function protypes.
  */
 #if defined(__STDC__) || defined(__cplusplus) || defined(WIN32)
+#define ZIO_P(p) p
+#else /* not (__STDC__ && __cplusplus && WIN32) */
+#define ZIO_P(p) ()
+#endif /* not (__STDC__ && __cplusplus && WIN32) */
+
+/*
+ * Function declarations.
+ */
 /* zio.c */
-void zio_set_log_function(void (*)(const char *, va_list));
-void eb_log(const char *, ...);
-void zio_enable_log(void);
-void zio_disable_log(void);
-int zio_initialize_library(void);
-void zio_finalize_library(void);
-void zio_initialize(Zio *);
-void zio_finalize(Zio *);
-int zio_set_sebxa_mode(Zio *, off_t, off_t, off_t, off_t);
-int zio_open(Zio *, const char *, Zio_Code);
-void zio_close(Zio *);
-int zio_file(Zio *);
-Zio_Code zio_mode(Zio *);
-off_t zio_lseek(Zio *, off_t, int);
-ssize_t zio_read(Zio *, char *, size_t);
-
-#else /* !defined(__STDC__) && !defined(__cplusplus) && ... */
-
-/* zio.c */
-void zio_set_log_function();
-void eb_log();
-void zio_enable_log();
-void zio_disable_log();
-int zio_initialize_library();
-void zio_finalize_library();
-void zio_initialize();
-void zio_finalize();
-int zio_set_sebxa_mode();
-int zio_open();
-void zio_close();
-int zio_file();
-Zio_Code zio_mode();
-off_t zio_lseek();
-ssize_t zio_read();
-
-#endif  /* !defined(__STDC__) && !defined(__cplusplus) && ... */
+int zio_initialize_library ZIO_P((void));
+void zio_finalize_library ZIO_P((void));
+void zio_initialize ZIO_P((Zio *));
+void zio_finalize ZIO_P((Zio *));
+int zio_set_sebxa_mode ZIO_P((Zio *, off_t, off_t, off_t, off_t));
+int zio_open ZIO_P((Zio *, const char *, Zio_Code));
+void zio_close ZIO_P((Zio *));
+int zio_file ZIO_P((Zio *));
+Zio_Code zio_mode ZIO_P((Zio *));
+off_t zio_lseek ZIO_P((Zio *, off_t, int));
+ssize_t zio_read ZIO_P((Zio *, char *, size_t));
 
 #ifdef __cplusplus
 }

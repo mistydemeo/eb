@@ -25,6 +25,12 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#if defined(__STDC__) || defined(WIN32)
+#include <stdarg.h>
+#else
+#include <varargs.h>
+#endif
+
 #if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
 #if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)

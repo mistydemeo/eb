@@ -26,7 +26,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.2beta2 版です。
+   この文書は第 3.2beta3 版です。
 
 * Menu:
 
@@ -158,9 +158,9 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 3.2beta2 に対応しています。 本書
+   この文書は、EB ライブラリバージョン 3.2beta3 に対応しています。 本書
 の内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成す
-るには、お使用いのシステムに EB ライブラリバージョン 3.2beta2 と C コン
+るには、お使用いのシステムに EB ライブラリバージョン 3.2beta3 と C コン
 パイラをインストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
@@ -511,7 +511,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 3.2beta2 のソースードを展開します。
+  1. EB ライブラリ 3.2beta3 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -3285,7 +3285,6 @@ File: eb-ja.info,  Node: Text Data Sample,  Next: Text Data Types,  Prev: Stop C
      
      	fputs("\n----------------------------------------\n", stdout);
      
-             /* 次の単語の説明へ移動。*/
      	error_code = eb_forward_text(&book, NULL);
      	if (error_code == EB_ERR_END_OF_CONTENT)
      	    fputs("\n[END]\n", stdout);
@@ -3726,7 +3725,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_GRAY_GRAPHIC:
  - EB_HOOK_END_GRAY_GRAPHIC:
      これらのフック名称は、グレースケール図版のために予約されていますが、
-     EB ライブラリ 3.2beta2 ではまだ対応していません。
+     EB ライブラリ 3.2beta3 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_COLOR_BMP:
  - EB_HOOK_BEGIN_COLOR_JPEG:
@@ -3759,7 +3758,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_IN_COLOR_JPEG:
  - EB_HOOK_END_IN_COLOR_GRAPHIC:
      これらのフック名称は、インラインカラー図版のために予約されています
-     が、 EB ライブラリ 3.2beta2 ではまだ対応していません。
+     が、 EB ライブラリ 3.2beta3 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_WAVE:
  - EB_HOOK_END_WAVE:
@@ -5430,25 +5429,25 @@ Node: Menu107975
 Node: Multi Candidates111884
 Node: Stop Code Issue115821
 Node: Text Data Sample118245
-Node: Text Data Types122676
-Node: Hook Function Details124529
-Node: Hook Code List126903
-Node: Hookset Access Functions141853
-Node: Builtin Hook Functions144929
-Node: Text Data Functions148105
-Node: Local Character164492
-Node: Narrow & Wide Font166223
-Node: Font Size and Font Code168360
-Node: Current Font Height169921
-Node: Get Font172493
-Node: Convert Font175121
-Node: Local Character in Text176284
-Node: Font Data Types176940
-Node: Font Constants177683
-Node: Font Data Functions181746
-Node: Index195817
-Node: Data Type Index196045
-Node: Function Index196894
-Node: Variable Index203133
+Node: Text Data Types122635
+Node: Hook Function Details124488
+Node: Hook Code List126862
+Node: Hookset Access Functions141812
+Node: Builtin Hook Functions144888
+Node: Text Data Functions148064
+Node: Local Character164451
+Node: Narrow & Wide Font166182
+Node: Font Size and Font Code168319
+Node: Current Font Height169880
+Node: Get Font172452
+Node: Convert Font175080
+Node: Local Character in Text176243
+Node: Font Data Types176899
+Node: Font Constants177642
+Node: Font Data Functions181705
+Node: Index195776
+Node: Data Type Index196004
+Node: Function Index196853
+Node: Variable Index203092
 
 End Tag Table

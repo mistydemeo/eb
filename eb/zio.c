@@ -30,12 +30,6 @@
 #include <strings.h>
 #endif /* not STDC_HEADERS and not HAVE_STRING_H */
 
-#if defined(__STDC__) || defined(WIN32)
-#include <stdarg.h>
-#else
-#include <varargs.h>
-#endif
-
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
@@ -129,7 +123,13 @@ char *memset();
 /*
  * Debug message handler.
  */
-#define LOG(x) do {if (zio_log_flag) zio_log x;} while (0)
+#ifdef EB_BUILD_LIBRARY
+extern int eb_log_flag;
+extern void eb_log ZIO_P((const char *, ...));
+#define LOG(x) do {if (eb_log_flag) eb_log x;} while (0)
+#else
+#define LOG(x)
+#endif
 
 /*
  * Get an unsigned value from an octet stream buffer.
@@ -168,20 +168,6 @@ char *memset();
 #define ZIO_ID_NONE			-1
 
 /*
- * Debug log flag.
- */
-static int zio_log_flag = 0;
-
-/*
- * Debug log handler.
- */
-#ifdef __STDC__
-static void (*zio_log_function)(const char *, va_list) = NULL;
-#else
-static void (*zio_log_function)() = NULL;
-#endif
-
-/*
  * Buffer for caching uncompressed data.
  */
 static char *cache_buffer = NULL;
@@ -211,96 +197,20 @@ static pthread_mutex_t zio_mutex = PTHREAD_MUTEX_INITIALIZER;
 /*
  * Unexported function.
  */
-#ifdef __STDC__
-static int zio_reopen(Zio *, const char *);
-static int zio_open_plain(Zio *, const char *);
-static int zio_open_ebzip(Zio *, const char *);
-static int zio_open_epwing(Zio *, const char *);
-static int zio_open_epwing6(Zio *, const char *);
-static int zio_make_epwing_huffman_tree(Zio *, int);
-static ssize_t zio_read_ebzip(Zio *, char *, size_t);
-static ssize_t zio_read_epwing(Zio *, char *, size_t);
-static ssize_t zio_read_raw(int, void *, size_t nbyte);
-static ssize_t zio_read_sebxa(Zio *, char *, size_t);
-static int zio_unzip_slice_ebzip1(char *, int, int, size_t, size_t);
-static int zio_unzip_slice_epwing(char *, int, Zio_Huffman_Node *);
-static int zio_unzip_slice_epwing6(char *, int, Zio_Huffman_Node *);
-static int zio_unzip_slice_sebxa(char *, int);
-#else /* not __STDC__ */
-static int zio_reopen();
-static int zio_open_plain();
-static int zio_open_ebzip();
-static int zio_open_epwing();
-static int zio_open_epwing6();
-static int zio_make_epwing_huffman_tree();
-static ssize_t zio_read_ebzip();
-static ssize_t zio_read_epwing();
-static ssize_t zio_read_raw();
-static ssize_t zio_read_sebxa();
-static int zio_unzip_slice_ebzip1();
-static int zio_unzip_slice_epwing();
-static int zio_unzip_slice_epwing6();
-static int zio_unzip_slice_sebxa();
-#endif /* not __STDC__ */
-
-/*
- * Set log function.
- */
-void
-zio_set_log_function(function)
-#ifdef __STDC__
-    void (*function)(const char *, va_list);
-#else
-    void (*function)();
-#endif
-{
-    zio_log_function = function;
-}
-
-/*
- * Enable logging.
- */
-void
-zio_enable_log()
-{
-    zio_log_flag = 1;
-}
-
-/*
- * Disable logging.
- */
-void
-zio_disable_log()
-{
-    zio_log_flag = 0;
-}
-
-/*
- * Log a message.
- */
-#ifdef __STDC__
-void
-zio_log(const char *message, ...)
-#else /* not __STDC__ */
-void
-zio_log(message, va_alist)
-    const char *message;
-    va_dcl 
-#endif /* not __STDC__ */
-{
-    va_list ap;
-
-#ifdef __STDC__
-    va_start(ap, message);
-#else /* not __STDC__ */
-    va_start(ap);
-#endif /* not __STDC__ */
-
-    if (zio_log_flag && zio_log_function != NULL)
-	zio_log_function(message, ap);
-
-    va_end(ap);
-}
+static int zio_reopen ZIO_P((Zio *, const char *));
+static int zio_open_plain ZIO_P((Zio *, const char *));
+static int zio_open_ebzip ZIO_P((Zio *, const char *));
+static int zio_open_epwing ZIO_P((Zio *, const char *));
+static int zio_open_epwing6 ZIO_P((Zio *, const char *));
+static int zio_make_epwing_huffman_tree ZIO_P((Zio *, int));
+static ssize_t zio_read_ebzip ZIO_P((Zio *, char *, size_t));
+static ssize_t zio_read_epwing ZIO_P((Zio *, char *, size_t));
+static ssize_t zio_read_raw ZIO_P((int, void *, size_t nbyte));
+static ssize_t zio_read_sebxa ZIO_P((Zio *, char *, size_t));
+static int zio_unzip_slice_ebzip1 ZIO_P((char *, int, int, size_t, size_t));
+static int zio_unzip_slice_epwing ZIO_P((char *, int, Zio_Huffman_Node *));
+static int zio_unzip_slice_epwing6 ZIO_P((char *, int, Zio_Huffman_Node *));
+static int zio_unzip_slice_sebxa ZIO_P((char *, int));
 
 /*
  * Initialize cache buffer.

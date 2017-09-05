@@ -604,7 +604,7 @@ text_max_length=%ld, forward=%d)",
 	    if (context->out_rest_length < context->unprocessed_size)
 		goto succeeded;
 	    memcpy(context->out, context->unprocessed,
-		context->unprocessed_size);
+		(size_t)context->unprocessed_size);
 	    context->out += context->unprocessed_size;
 	    context->out_rest_length -= context->unprocessed_size;
 	}
@@ -1541,7 +1541,7 @@ eb_write_text_string(book, string)
 	if (error_code != EB_SUCCESS)
 	    goto failed;
     } else {
-	memcpy(book->text_context.out, string, string_length);
+	memcpy(book->text_context.out, string, (size_t)string_length);
 	book->text_context.out += string_length;
 	book->text_context.out_rest_length -= string_length;
 	book->text_context.out_step += string_length;
@@ -1590,7 +1590,7 @@ eb_write_text(book, stream, stream_length)
 	    goto failed;
 	}
 	memcpy(reallocated + book->text_context.unprocessed_size, stream,
-	    stream_length);
+	    (size_t)stream_length);
 	book->text_context.unprocessed = reallocated;
 	book->text_context.unprocessed_size += stream_length;
 	    
@@ -1605,14 +1605,14 @@ eb_write_text(book, stream, stream_length)
 	    = book->text_context.out_step + stream_length;
 	memcpy(book->text_context.unprocessed, 
 	    book->text_context.out - book->text_context.out_step,
-	    book->text_context.out_step);
+	    (size_t)book->text_context.out_step);
 	memcpy(book->text_context.unprocessed + book->text_context.out_step,
-	    stream, stream_length);
+	    stream, (size_t)stream_length);
 	book->text_context.out -= book->text_context.out_step;
 	book->text_context.out_step = 0;
 
     } else {
-	memcpy(book->text_context.out, stream, stream_length);
+	memcpy(book->text_context.out, stream, (size_t)stream_length);
 	book->text_context.out += stream_length;
 	book->text_context.out_rest_length -= stream_length;
 	book->text_context.out_step += stream_length;

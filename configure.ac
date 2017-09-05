@@ -4,7 +4,7 @@ dnl *
 AC_INIT
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.52)
-AM_INIT_AUTOMAKE(eb, 3.2beta2)
+AM_INIT_AUTOMAKE(eb, 3.2beta3)
 
 dnl *
 dnl * Library version info.

@@ -46,7 +46,7 @@
  * memmove() described in ISO 9899: 1990.
  */
 VOID *
-memmove(destination, source, length)
+eb_memmove(destination, source, length)
     VOID *destination;
     const VOID *source;
     size_t length;

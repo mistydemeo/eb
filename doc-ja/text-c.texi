@@ -110,7 +110,6 @@ main(argc, argv)
 
 	fputs("\n----------------------------------------\n", stdout);
 
-        /* 次の単語の説明へ移動。*/
 	error_code = eb_forward_text(&book, NULL);
 	if (error_code == EB_ERR_END_OF_CONTENT)
 	    fputs("\n[END]\n", stdout);

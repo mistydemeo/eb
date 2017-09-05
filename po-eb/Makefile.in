@@ -29,8 +29,6 @@ prefix = @prefix@
 datadir = @datadir@
 localedir = @localedir@
 
-DESTDIR = 
-
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs

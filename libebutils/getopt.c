@@ -84,13 +84,11 @@
 #endif /* !HAVE_STRCHR */
 
 #ifdef REPLACE_GETOPT
-int	opterr = 1;		/* if error message should be printed */
-int	optind = 1;		/* index into parent argv vector */
-int	optopt = '?';		/* character checked for validity */
-int	optreset;		/* reset getopt */
-char    *optarg;		/* argument associated with option */
+int opterr = 1;		/* if error message should be printed */
+int optind = 1;		/* index into parent argv vector */
+int optopt = '?';		/* character checked for validity */
+char *optarg;		/* argument associated with option */
 #endif
-
 
 #define IGNORE_FIRST	(*options == '-' || *options == '+')
 #define PRINT_ERROR	((opterr) && ((*options != ':') \
@@ -122,7 +120,6 @@ static void permute_args();
 
 static char *place = EMSG; /* option letter processing */
 
-/* XXX: set optreset to 1 rather than these two */
 static int nonopt_start = -1; /* first non option argument (for permute) */
 static int nonopt_end = -1; /* first option after non options (for permute) */
 
@@ -227,11 +224,8 @@ getopt_internal(nargc, nargv, options)
 	if (optind == 0)
 		optind = 1;
 
-	if (optreset)
-		nonopt_start = nonopt_end = -1;
 start:
-	if (optreset || !*place) {		/* update scanning pointer */
-		optreset = 0;
+	if (!*place) {				/* update scanning pointer */
 		if (optind >= nargc) {          /* end of argument vector */
 			place = EMSG;
 			if (nonopt_end != -1) {

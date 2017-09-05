@@ -1,4 +1,49 @@
+2002-01-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.2beta3.
+
+	* po-eb/Makefile.in, po-ebutil/Makefile.in (DESTDIR):
+	Don't set DESTDIR in those files.
+
+	* eb/filename.c (eb_find_file_name): Return a filename with highest
+	preference.
+
+	* eb/zio.h (ZIO_P): Defined.
+	* eb/zio.c (LOG): Generate log codes if EB_BUILD_LIBRARY is defined.
+
+	* eb/bitmap.c, eb/binary.c, eb/readtest.c: Supress warnings by
+	"gcc -Wconversion".
+
+2002-01-22  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* m4/eb3.m4 (AC_REQUIRE): Also AC_FUNC_VPRINTF is required.
+
+	* eb/memmove.c (memmove): The function name should be eb_memmove().
+	* eb/strcasecmp.c (eb_strcasecmp, eb_strncasecmp): Revised.
+	* libebutils/strcasecmp.c (strcasecmp, strncasecmp): Revised.
+
+	* eb/build-post.h.in, eb/eb.h: Move declation of eb_enable_log()
+	and eb_disable_log() from `eb/build-post.h.in' to `eb/eb.h'.
+	* eb/log.c (eb_log_stderr): Do noting if the system doesn't have
+	vprintf() or dopront().
+	* eb/log.c (eb_initialize_log): New function.
+	Definition of the EB_DEBUG environment variable is checked here.
+	* eb/log.c (eb_set_log_function, eb_enable_log, eb_disable_log):
+	Call eb_initialize_log() if not initialized yet.
+
+	* config.guess: Use "2002-01-02".
+	* config.sub: Use "2002-01-10".
+	* depcomp, missing, mkinstalldirs: Import from Automake-1.5b.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to 3.2beta3.
+
+	* filename.c (eb_canonicalze_path_name): Delete "./" and "."
+	at the beginning of a given path name.
+
 2002-01-19  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* libebutils/getopt.c, libebutils/getopt.h: Delete `optreset' support
+	that is local extension to POSIX2.
 
 	* Version 3.2beta2.
 

@@ -836,7 +836,8 @@ eb_bitmap_to_bmp(bitmap, width, height, bmp, bmp_length)
     bitmap_line_length = (width + 7) / 8;
 
     for (i = height - 1; 0 <= i; i--) {
-	memcpy(bmp_p, bitmap + bitmap_line_length * i, bitmap_line_length);
+	memcpy(bmp_p, bitmap + bitmap_line_length * i,
+	    (size_t)bitmap_line_length);
 	bmp_p += bitmap_line_length;
 	for (j = 0; j < line_pad_length; j++, bmp_p++)
 	    *bmp_p = 0x00;

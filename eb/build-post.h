@@ -102,11 +102,7 @@
 /*
  * Trace log macro.
  */
-#ifdef ENABLE_DEBUG
-#define LOG(x) do {eb_log x;} while (0)
-#else
 #define LOG(x) do {if (eb_log_flag) eb_log x;} while (0)
-#endif
 
 /*
  * Get an unsigned value from an octet stream buffer.
@@ -199,8 +195,7 @@ void eb_unlock EB_P((EB_Lock *));
 #endif /* not ENABLE_PTHREAD */
 
 /* log.c */
-void eb_enable_log EB_P((void));
-void eb_disable_log EB_P((void));
+void eb_initialize_log EB_P((void));
 const char *eb_quoted_stream EB_P((const char *, size_t));
 const char *eb_quoted_string EB_P((const char *));
 

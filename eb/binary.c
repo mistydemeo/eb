@@ -1064,7 +1064,7 @@ eb_read_binary_wave(book, binary_max_length, binary, binary_length)
 	    copy_length = context->cache_length - context->cache_offset;
 
 	memcpy(binary_p, context->cache_buffer + context->cache_offset,
-	    copy_length);
+	    (size_t)copy_length);
 	binary_p += copy_length;
 	context->cache_offset += copy_length;
 
@@ -1152,7 +1152,7 @@ eb_read_binary_mono_graphic(book, binary_max_length, binary, binary_length)
 		copy_length = context->cache_length - context->cache_offset;
 
 	    memcpy(binary_p, context->cache_buffer + context->cache_offset,
-		copy_length);
+		(size_t)copy_length);
 	    binary_p += copy_length;
 	    *binary_length += copy_length;
 	    context->cache_offset += copy_length;
@@ -1202,11 +1202,11 @@ eb_read_binary_mono_graphic(book, binary_max_length, binary, binary_length)
 	if (context->offset % line_length == 0) {
 	    if (0 < line_pad_length) {
 		if (binary_max_length - *binary_length < line_pad_length) {
-		    memset(context->cache_buffer, 0, line_pad_length);
+		    memset(context->cache_buffer, 0, (size_t)line_pad_length);
 		    context->cache_length = line_pad_length;
 		    context->cache_offset = 0;
 		} else {
-		    memset(binary_p, 0, line_pad_length);
+		    memset(binary_p, 0, (size_t)line_pad_length);
 		    binary_p += line_pad_length;
 		    *binary_length += line_pad_length;
 		}
@@ -1286,7 +1286,7 @@ eb_read_binary_gray_graphic(book, binary_max_length, binary, binary_length)
 		copy_length = context->cache_length - context->cache_offset;
 
 	    memcpy(binary_p, context->cache_buffer + context->cache_offset,
-		copy_length);
+		(size_t)copy_length);
 	    binary_p += copy_length;
 	    *binary_length += copy_length;
 	    context->cache_offset += copy_length;
@@ -1336,11 +1336,11 @@ eb_read_binary_gray_graphic(book, binary_max_length, binary, binary_length)
 	if (context->offset % line_length == 0) {
 	    if (0 < line_pad_length) {
 		if (binary_max_length - *binary_length < line_pad_length) {
-		    memset(context->cache_buffer, 0, line_pad_length);
+		    memset(context->cache_buffer, 0, (size_t)line_pad_length);
 		    context->cache_length = line_pad_length;
 		    context->cache_offset = 0;
 		} else {
-		    memset(binary_p, 0, line_pad_length);
+		    memset(binary_p, 0, (size_t)line_pad_length);
 		    binary_p += line_pad_length;
 		    *binary_length += line_pad_length;
 		}

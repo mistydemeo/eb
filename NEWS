@@ -1,3 +1,7 @@
+Major changes in release 3.2beta3.
+
+* Fix some installation problems.
+
 Major changes in release 3.2beta2.
 
 * If the EB_DEBUG environment variable is defined, EB Library outputs
