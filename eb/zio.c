@@ -389,6 +389,11 @@ eb_zopen2(zip, filename)
 
 #endif /* DOS_FILE_PATH */
 
+    if (is_epwzipped) {
+        file = eb_zopen_epwzipped(zip, filename);
+        return file;
+    }
+
     /*
      * Try to open a normal file.
      * If succeed, return immediately.
