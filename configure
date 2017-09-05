@@ -1431,7 +1431,7 @@ fi
 
 # Define the identity of the package.
 PACKAGE=eb
-VERSION=3.2
+VERSION=3.2.1
 
 cat >>confdefs.h <<EOF
 #define PACKAGE "$PACKAGE"
@@ -1462,7 +1462,7 @@ INSTALL_STRIP_PROGRAM="\${SHELL} \$(install_sh) -c -s"
 # We need awk for the "check" target.  The system "awk" is bad on
 # some platforms.
 
-LIBEB_VERSION_INFO=6:0:0
+LIBEB_VERSION_INFO=6:1:0
 
 EB_VERSION_MAJOR=3
 EB_VERSION_MINOR=2

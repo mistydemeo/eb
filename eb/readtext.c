@@ -1391,7 +1391,7 @@ eb_is_stop_code(book, appendix, code0, code1)
 	    && code1 == book->text_context.auto_stop_code);
     } else {
 	result = (code0 == appendix->subbook_current->stop_code0
-	    && code0 == appendix->subbook_current->stop_code1);
+	    && code1 == appendix->subbook_current->stop_code1);
     }
 
     return result;

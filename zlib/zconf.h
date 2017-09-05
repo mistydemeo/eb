@@ -1,9 +1,9 @@
 /* zconf.h -- configuration of the zlib compression library
- * Copyright (C) 1995-1998 Jean-loup Gailly.
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
-/* @(#) $Id: zconf.h,v 1.1.1.1 2000/10/20 02:10:17 m-kasahr Exp $ */
+/* @(#) $Id$ */
 
 #ifndef _ZCONF_H
 #define _ZCONF_H
@@ -77,6 +77,12 @@
 #if defined(__STDC__) || defined(__cplusplus) || defined(__OS2__)
 #  ifndef STDC
 #    define STDC
+#  endif
+#endif
+
+#ifndef STDC
+#  ifndef const /* cannot use !defined(STDC) && !defined(const) on Mac */
+#    define const
 #  endif
 #endif
 

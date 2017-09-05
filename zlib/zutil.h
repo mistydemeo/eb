@@ -1,5 +1,5 @@
 /* zutil.h -- internal interface and configuration of the compression library
- * Copyright (C) 1995-1998 Jean-loup Gailly.
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
@@ -8,34 +8,22 @@
    subject to change. Applications should only use zlib.h.
  */
 
-/* @(#) $Id: zutil.h,v 1.1.1.1 2000/10/20 02:10:18 m-kasahr Exp $ */
+/* @(#) $Id$ */
 
 #ifndef _Z_UTIL_H
 #define _Z_UTIL_H
 
 #include "zlib.h"
 
-#ifdef HAVE_STDDEF_H
+#ifdef STDC
 #  include <stddef.h>
-#endif
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
-#include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
+#  include <string.h>
 #  include <stdlib.h>
 #endif
-
-#ifdef HAVE_ERRNO_H
-#   include <errno.h>
-#else
+#ifdef NO_ERRNO_H
     extern int errno;
+#else
+#   include <errno.h>
 #endif
 
 #ifndef local
@@ -162,21 +150,25 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 
          /* functions */
 
-#ifndef HAVE_STRERROR
+#ifdef HAVE_STRERROR
+   extern char *strerror OF((int));
 #  define zstrerror(errnum) strerror(errnum)
 #else
 #  define zstrerror(errnum) ""
 #endif
 
-#if defined(pyr) && defined(HAVE_MEMCPY)
-#  undef HAVE_MEMCPY
+#if defined(pyr)
+#  define NO_MEMCPY
 #endif
-#if defined(SMALL_MEDIUM) && !defined(_MSC_VER) && !defined(__SC__) && defined(HAVE_MEMCPY)
+#if defined(SMALL_MEDIUM) && !defined(_MSC_VER) && !defined(__SC__)
  /* Use our own functions for small and medium model with MSC <= 5.0.
   * You may have to use the same strategy for Borland C (untested).
   * The __SC__ check is for Symantec.
   */
-#  undef HAVE_MEMCPY
+#  define NO_MEMCPY
+#endif
+#if defined(STDC) && !defined(HAVE_MEMCPY) && !defined(NO_MEMCPY)
+#  define HAVE_MEMCPY
 #endif
 #ifdef HAVE_MEMCPY
 #  ifdef SMALL_MEDIUM /* MSDOS small or medium model */
@@ -197,7 +189,6 @@ extern const char *z_errmsg[10]; /* indexed by 2-zlib_error */
 /* Diagnostic functions */
 #ifdef DEBUG
 #  include <stdio.h>
-#  include <sys/types.h>
    extern int z_verbose;
    extern void z_error    OF((char *m));
 #  define Assert(cond,msg) {if(!(cond)) z_error(msg);}

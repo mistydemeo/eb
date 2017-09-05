@@ -1,24 +1,15 @@
 /* gzio.c -- IO on .gz files
- * Copyright (C) 1995-1998 Jean-loup Gailly.
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  *
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
  */
 
-/* @(#) $Id: gzio.c,v 1.1.1.1 2000/10/20 02:10:17 m-kasahr Exp $ */
+/* @(#) $Id$ */
 
 #include <stdio.h>
-#include <sys/types.h>
 
 #include "zutil.h"
-
-#ifdef HAVE_VSPRINTF
-#ifdef STDC
-#include <stdarg.h>
-#else /* not STDC */
-#include <varargs.h>
-#endif /* not STDC */
-#endif /* HAVE_VSPRINTF */
 
 struct internal_state {int dummy;}; /* for buggy compilers */
 
@@ -528,61 +519,52 @@ int ZEXPORT gzwrite (file, buf, len)
    control of the format string, as in fprintf. gzprintf returns the number of
    uncompressed bytes actually written (0 in case of error).
 */
-#ifdef HAVE_VSPRINTF
 #ifdef STDC
+#include <stdarg.h>
+
 int ZEXPORTVA gzprintf (gzFile file, const char *format, /* args */ ...)
-#else /* not STDC */
-int ZEXPORTVA gzprintf (file, format, va_alist)
-    gzFile file;
-    const char *format;
-    va_dcl 
-#endif /* nost STDC */
-#else /* not HAVE_VSPRINTF */
+{
+    char buf[Z_PRINTF_BUFSIZE];
+    va_list va;
+    int len;
+
+    va_start(va, format);
+#ifdef HAS_vsnprintf
+    (void)vsnprintf(buf, sizeof(buf), format, va);
+#else
+    (void)vsprintf(buf, format, va);
+#endif
+    va_end(va);
+    len = strlen(buf); /* some *sprintf don't return the nb of bytes written */
+    if (len <= 0) return 0;
+
+    return gzwrite(file, buf, (unsigned)len);
+}
+#else /* not ANSI C */
+
 int ZEXPORTVA gzprintf (file, format, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
 	               a11, a12, a13, a14, a15, a16, a17, a18, a19, a20)
     gzFile file;
     const char *format;
     int a1, a2, a3, a4, a5, a6, a7, a8, a9, a10,
 	a11, a12, a13, a14, a15, a16, a17, a18, a19, a20;
-#endif /* not HAVE_VSPRINTF */
 {
     char buf[Z_PRINTF_BUFSIZE];
-    va_list va;
     int len;
 
-#ifdef HAVE_VSPRINTF
-#ifdef STDC
-    va_start(va, format);
-#else /* not STDC */
-    va_start(va);
-#endif /* not STDC */
-#endif /* not VSPRINTF */
-
-#ifdef HAVE_VSPRINTF
-#ifdef HAVE_VSNPRINTF
-    (void)vsnprintf(buf, sizeof(buf), format, va);
-#else /* not HAVE_VSNPRINTF */
-    (void)vsprintf(buf, format, va);
-#endif /* not HAVE_VSNPRINTF */
-#else /* not HAVE_VSPRINTF */
-#ifdef HAVE_SNPRINTF
+#ifdef HAS_snprintf
     snprintf(buf, sizeof(buf), format, a1, a2, a3, a4, a5, a6, a7, a8,
 	     a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20);
-#else /* not HAVE_SNPRINTF */
+#else
     sprintf(buf, format, a1, a2, a3, a4, a5, a6, a7, a8,
 	    a9, a10, a11, a12, a13, a14, a15, a16, a17, a18, a19, a20);
-#endif /* not HAVE_SNPRINTF */
-#endif /* not HAVE_VSPRINTF */
-
-#ifdef HAVE_VSPRINTF
-    va_end(va);
 #endif
-
-    len = strlen(buf); /* some *sprintf don't return the nb of bytes written */
+    len = strlen(buf); /* old sprintf doesn't return the nb of bytes written */
     if (len <= 0) return 0;
 
-    return gzwrite(file, buf, (unsigned)len);
+    return gzwrite(file, buf, len);
 }
+#endif
 
 /* ===========================================================================
       Writes c, converted to an unsigned char, into the compressed file.

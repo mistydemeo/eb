@@ -4,12 +4,12 @@ dnl *
 AC_INIT
 AC_CONFIG_SRCDIR(zlib.h)
 AC_PREREQ(2.52)
-AM_INIT_AUTOMAKE(zlib, 1.1.3-lt)
+AM_INIT_AUTOMAKE(zlib, 1.1.4-lt)
 
 dnl *
 dnl * Library version info.
 dnl *
-dnl LIBZ_VERSION_INFO=1:1:0
+dnl LIBZ_VERSION_INFO=1:2:0
 dnl AC_SUBST(LIBZ_VERSION_INFO)
 
 dnl *

@@ -1,3 +1,15 @@
+2002-03-13  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.2.1.
+
+	* Import zlib-1.1.4.
+
+	* eb/readtext.c (eb_is_stop_code): Fix a bug that it cannot
+	find stop-code when using appendix.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to 3.2.1.
+	* configure.ac (LIBEB_VERSION_INFO): Change it from 6:0:0 to 6:1:0.
+
 2002-02-09  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.2.

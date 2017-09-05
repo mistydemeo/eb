@@ -1,17 +1,17 @@
 /* zutil.c -- target dependent utility functions for the compression library
- * Copyright (C) 1995-1998 Jean-loup Gailly.
+ * Copyright (C) 1995-2002 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
-/* @(#) $Id: zutil.c,v 1.1.1.1 2000/10/20 02:10:17 m-kasahr Exp $ */
+/* @(#) $Id$ */
 
 #include "zutil.h"
 
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-
 struct internal_state      {int dummy;}; /* for buggy compilers */
+
+#ifndef STDC
+extern void exit OF((int));
+#endif
 
 const char *z_errmsg[10] = {
 "need dictionary",     /* Z_NEED_DICT       2  */
@@ -199,6 +199,11 @@ void  zcfree (voidpf opaque, voidpf ptr)
 
 
 #ifndef MY_ZCALLOC /* Any system without a special alloc function */
+
+#ifndef STDC
+extern voidp  calloc OF((uInt items, uInt size));
+extern void   free   OF((voidpf ptr));
+#endif
 
 voidpf zcalloc (opaque, items, size)
     voidpf opaque;

@@ -1,5 +1,5 @@
 /* deflate.h -- internal compression state
- * Copyright (C) 1995-1998 Jean-loup Gailly
+ * Copyright (C) 1995-2002 Jean-loup Gailly
  * For conditions of distribution and use, see copyright notice in zlib.h 
  */
 
@@ -8,7 +8,7 @@
    subject to change. Applications should only use zlib.h.
  */
 
-/* @(#) $Id: deflate.h,v 1.1.1.1 2000/10/20 02:10:17 m-kasahr Exp $ */
+/* @(#) $Id$ */
 
 #ifndef _DEFLATE_H
 #define _DEFLATE_H
@@ -284,7 +284,7 @@ void _tr_stored_block OF((deflate_state *s, charf *buf, ulg stored_len,
 #ifndef DEBUG
 /* Inline versions of _tr_tally for speed: */
 
-#if defined(GEN_TREES_H)
+#if defined(GEN_TREES_H) || !defined(STDC)
   extern uch _length_code[];
   extern uch _dist_code[];
 #else

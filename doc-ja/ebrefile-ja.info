@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.2 版です。 EB ライブラリバージョン 3.2 に対応していま
-す。
+   この文書は第 3.2.1 版です。 EB ライブラリバージョン 3.2.1 に対応して
+います。
 
 * Menu:
 
@@ -91,8 +91,8 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 使えるものであるとは限りません。 `ebrefile' は、CD-ROM 書籍のあるファ
 イルの内容に変更を加えます。 ご注意下さい。
 
-   この文書は第 3.2 版です。 EB ライブラリバージョン 3.2 に対応していま
-す。
+   この文書は第 3.2.1 版です。 EB ライブラリバージョン 3.2.1 に対応して
+います。
 
 
 File: ebrefile-ja.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -279,10 +279,10 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 
 Tag Table:
 Node: Top1034
-Node: Introduction1506
-Node: Invoking ebrefile3649
-Node: Select Subbooks4294
-Node: Combination with ebzip7686
-Node: Summary of Options8649
+Node: Introduction1510
+Node: Invoking ebrefile3657
+Node: Select Subbooks4302
+Node: Combination with ebzip7694
+Node: Summary of Options8657
 
 End Tag Table
