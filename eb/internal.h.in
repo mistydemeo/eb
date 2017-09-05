@@ -132,22 +132,22 @@ void eb_initialize_binary EB_P((EB_Book *));
 
 /* filename.c */
 EB_Error_Code eb_canonicalize_path_name EB_P((char *));
-void eb_canonicalize_font_file_name EB_P((char *));
+void eb_canonicalize_file_name EB_P((char *));
 EB_Error_Code eb_fix_directory_name EB_P((const char *, char *));
 EB_Error_Code eb_fix_directory_name2 EB_P((const char *, const char *,
     char *));
 void eb_fix_path_name_suffix EB_P((char *, const char *suffix));
-EB_Error_Code eb_find_file_name EB_P((const char *, const char *[],
-    char *, int *));
+EB_Error_Code eb_find_file_name EB_P((const char *, const char *, char *));
 EB_Error_Code eb_find_file_name2 EB_P((const char *, const char *,
-    const char *[], char *, int *));
+    const char *, char *));
 EB_Error_Code eb_find_file_name3 EB_P((const char *, const char *,
-    const char *, const char *[], char *, int *));
+    const char *, const char *, char *));
 void eb_compose_path_name EB_P((const char *, const char *, char *));
 void eb_compose_path_name2 EB_P((const char *, const char *, const char *,
     char *));
 void eb_compose_path_name3 EB_P((const char *, const char *, const char *,
     const char *, char *));
+void eb_path_name_zio_code EB_P((const char *, Zio_Code, Zio_Code *));
 
 /* font.c */
 EB_Error_Code eb_initialize_font EB_P((EB_Book *));
@@ -173,8 +173,13 @@ void eb_unlock EB_P((EB_Lock *));
 #endif /* not ENABLE_PTHREAD */
 
 /* match.c */
-int eb_match_word EB_P((const char *, const char *, size_t));
-int eb_match_exactword EB_P((const char *, const char *, size_t));
+int eb_match_canonicalized_word EB_P((const char *, const char *, size_t));
+int eb_exact_match_canonicalized_word EB_P((const char *, const char *,
+    size_t));
+int eb_match_word_latin EB_P((const char *, const char *, size_t));
+int eb_match_word_jis EB_P((const char *, const char *, size_t));
+int eb_exact_match_word_latin EB_P((const char *, const char *, size_t));
+int eb_exact_match_word_jis EB_P((const char *, const char *, size_t));
 
 /* message.c */
 EB_Error_Code eb_initialize_messages EB_P((EB_Book *));

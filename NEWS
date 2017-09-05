@@ -1,3 +1,8 @@
+Major changes in release 3.1.0beta0:
+
+* Support S-EBXA compressed text.
+  Support Nippon daihyakka zensho, accessories to Sony DataDiscMan DP-S1000.
+
 Major changes in release 3.0.1:
 
 * Fix some bugs.

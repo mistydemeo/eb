@@ -247,16 +247,6 @@ eb_fix_misleaded_book(book)
 }
 
 /*
- * Hints of catalog file name in book.
- */
-#define EB_HINT_INDEX_CATALOG		0
-#define EB_HINT_INDEX_CATALOGS		1
-
-static const char *catalog_hint_list[] = {
-    "catalog", "catalogs", NULL
-};
-
-/*
  * Read information from the `CATALOG(S)' file in 'book'.
  * Return EB_SUCCESS if it succeeds, error-code otherwise.
  */
@@ -272,8 +262,8 @@ eb_initialize_catalog(book)
     EB_Subbook *subbook;
     size_t catalog_size;
     size_t title_size;
-    int hint_index;
     Zio zio;
+    Zio_Code zio_code;
     int i;
 
     zio_initialize(&zio);
@@ -281,33 +271,28 @@ eb_initialize_catalog(book)
     /*
      * Find a catalog file.
      */
-    eb_find_file_name(book->path, catalog_hint_list, catalog_file_name,
-	&hint_index);
-
-    switch (hint_index) {
-    case EB_HINT_INDEX_CATALOG:
+    if (eb_find_file_name(book->path, "catalog", catalog_file_name)
+	== EB_SUCCESS) {
 	book->disc_code = EB_DISC_EB;
 	catalog_size = EB_SIZE_EB_CATALOG;
 	title_size = EB_MAX_EB_TITLE_LENGTH;
-	break;
-
-    case EB_HINT_INDEX_CATALOGS:
+    } else if (eb_find_file_name(book->path, "catalogs", catalog_file_name)
+	== EB_SUCCESS) {
 	book->disc_code = EB_DISC_EPWING;
 	catalog_size = EB_SIZE_EPWING_CATALOG;
 	title_size = EB_MAX_EPWING_TITLE_LENGTH;
-	break;
-
-    default:
+    } else {
 	error_code = EB_ERR_FAIL_OPEN_CAT;
 	goto failed;
     }
 
     eb_compose_path_name(book->path, catalog_file_name, catalog_path_name);
+    eb_path_name_zio_code(catalog_path_name, ZIO_PLAIN, &zio_code);
 
     /*
      * Open a catalog file.
      */
-    if (zio_open(&zio, catalog_path_name, ZIO_NONE) < 0) {
+    if (zio_open(&zio, catalog_path_name, zio_code) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_CAT;
 	goto failed;
     }
@@ -504,16 +489,6 @@ eb_initialize_catalog(book)
 
 
 /*
- * Hints of language file names.
- */
-#define EB_HINT_INDEX_LANGUAGE		0
-#define EB_HINT_INDEX_LANGUAGE_EBZ	1
-
-static const char *language_hint_list[] = {
-    "language", "language.ebz", NULL
-};
-
-/*
  * Read information from the `LANGUAGE' file in `book'.
  */
 static void
@@ -525,7 +500,6 @@ eb_initialize_language(book)
     char language_path_name[PATH_MAX + 1];
     char language_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char buffer[16];
-    int hint_index;
 
     zio_initialize(&zio);
     book->character_code = EB_CHARCODE_JISX0208;
@@ -533,20 +507,12 @@ eb_initialize_language(book)
     /*
      * Open the language file.
      */
-    eb_find_file_name(book->path, language_hint_list, language_file_name,
-	&hint_index);
-
-    switch (hint_index) {
-    case EB_HINT_INDEX_LANGUAGE:
-	zio_code = ZIO_NONE;
-	break;
-    case EB_HINT_INDEX_LANGUAGE_EBZ:
-	zio_code = ZIO_EBZIP1;
-	break;
-    default:
+    if (eb_find_file_name(book->path, "language", language_file_name)
+	!= EB_SUCCESS)
 	goto failed;
-    }
+
     eb_compose_path_name(book->path, language_file_name, language_path_name);
+    eb_path_name_zio_code(language_path_name, ZIO_PLAIN, &zio_code);
 
     if (zio_open(&zio, language_path_name, zio_code) < 0)
 	goto failed;

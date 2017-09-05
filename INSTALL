@@ -191,7 +191,9 @@ Optional Feature List
      EB Library is compiled with pthread support codes.
      The default value is `no'.  `configure' reports an error if you
      specify `yes' but `configure' failed to compile or run a sample
-     program which uses pthread.
+     program which uses pthread.  
+
+     WARNING: The pthread support is still incomplete and experimental.
 
 `--with-pthread-cppflags=FLAGS'
 `--with-pthread-cflags=FLAGS'

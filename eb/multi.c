@@ -539,7 +539,11 @@ eb_search_multi(book, multi_id, input_words)
 	 */
 	context = book->search_contexts + word_count;
 	context->code = EB_SEARCH_MULTI;
-	context->compare = eb_match_exactword;
+	context->compare_pre = eb_exact_match_canonicalized_word;
+	if (book->character_code == EB_CHARCODE_ISO8859_1)
+	    context->compare_hit = eb_exact_match_word_latin;
+	else
+	    context->compare_hit = eb_exact_match_word_jis;
 	context->page = entry->start_page;
 	if (context->page == 0)
 	    continue;

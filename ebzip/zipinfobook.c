@@ -185,9 +185,6 @@ ebzip_zipinfo_book(book_path, subbook_name_list, subbook_name_count)
  * Internal function for `zipinfo_book'.
  * This is used to list files in an EB book.
  */
-static const char *catalog_hint_list[] = {"catalog", NULL};
-static const char *language_hint_list[] = {"language", "language.ebz", NULL};
-
 static int
 ebzip_zipinfo_book_eb(book, book_path, subbook_list, subbook_count)
     EB_Book *book;
@@ -200,7 +197,6 @@ ebzip_zipinfo_book_eb(book, book_path, subbook_list, subbook_count)
     char catalog_file_name[EB_MAX_FILE_NAME_LENGTH];
     char language_file_name[EB_MAX_FILE_NAME_LENGTH];
     Zio_Code in_zio_code;
-    int hint_index;
     int i;
 
     /*
@@ -231,20 +227,20 @@ ebzip_zipinfo_book_eb(book, book_path, subbook_list, subbook_count)
     /*
      * Inspect a language file.
      */
-    if (eb_find_file_name(book->path, language_hint_list, language_file_name,
-	&hint_index) == EB_SUCCESS) {
-	in_zio_code = (hint_index == 0) ? ZIO_NONE : ZIO_EBZIP1;
+    if (eb_find_file_name(book->path, "language", language_file_name)
+	== EB_SUCCESS) {
 	eb_compose_path_name(book->path, language_file_name, in_path_name);
+	eb_path_name_zio_code(in_path_name, ZIO_PLAIN, &in_zio_code);
 	ebzip_zipinfo_file(in_path_name, in_zio_code);
     }
 
     /*
      * Inspect CATALOG file.
      */
-    if (eb_find_file_name(book->path, catalog_hint_list, catalog_file_name,
-	NULL) == EB_SUCCESS) {
+    if (eb_find_file_name(book->path, "catalog", catalog_file_name)
+	== EB_SUCCESS) {
 	eb_compose_path_name(book->path, catalog_file_name, in_path_name);
-	ebzip_zipinfo_file(in_path_name, ZIO_NONE);
+	ebzip_zipinfo_file(in_path_name, ZIO_PLAIN);
     }
 
     return 0;
@@ -255,8 +251,6 @@ ebzip_zipinfo_book_eb(book, book_path, subbook_list, subbook_count)
  * Internal function for `zipinfo_book'.
  * This is used to list files in an EPWING book.
  */
-static const char *catalogs_hint_list[] = {"catalogs", NULL};
-
 static int
 ebzip_zipinfo_book_epwing(book, book_path, subbook_list, subbook_count)
     EB_Book *book;
@@ -364,10 +358,11 @@ ebzip_zipinfo_book_epwing(book, book_path, subbook_list, subbook_count)
     /*
      * Inspect CATALOGS file.
      */
-    if (eb_find_file_name(book->path, catalogs_hint_list, catalogs_file_name,
-	NULL) == EB_SUCCESS) {
+    if (eb_find_file_name(book->path, "catalogs", catalogs_file_name)
+	== EB_SUCCESS) {
 	eb_compose_path_name(book->path, catalogs_file_name, in_path_name);
-	ebzip_zipinfo_file(in_path_name, ZIO_NONE);
+	eb_path_name_zio_code(in_path_name, ZIO_PLAIN, &in_zio_code);
+	ebzip_zipinfo_file(in_path_name, in_zio_code);
     }
 
     return 0;

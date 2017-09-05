@@ -564,6 +564,7 @@ struct EB_Subbook_Struct {
     EB_Search keyword;
     EB_Search menu;
     EB_Search copyright;
+    EB_Search text;
     EB_Search sound;
 
     /*
@@ -749,7 +750,8 @@ struct EB_Search_Context_Struct {
     /*
      * Function which compares word to search and pattern in an index page.
      */
-    int (*compare) EB_P((const char *, const char *, size_t));
+    int (*compare_pre) EB_P((const char *, const char *, size_t));
+    int (*compare_hit) EB_P((const char *, const char *, size_t));
 
     /*
      * Result of comparison by `compare'.

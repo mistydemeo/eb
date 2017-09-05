@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2001-06-12 23:04+0900\n"
+"POT-Creation-Date: 2001-07-17 17:21+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -216,8 +216,8 @@ msgid ""
 "Report bugs to %s.\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:1081 ../ebrefile/ebrefile.c:486
-#: ../ebrefile/ebrefile.c:502 ../ebzip/copyfile.c:265 ../ebzip/copyfile.c:289
+#: ../ebfont/ebfont.c:1081 ../ebrefile/ebrefile.c:469
+#: ../ebrefile/ebrefile.c:485 ../ebzip/copyfile.c:265 ../ebzip/copyfile.c:289
 #: ../ebzip/unzipfile.c:260 ../ebzip/unzipfile.c:284 ../ebzip/zipfile.c:278
 #: ../ebzip/zipfile.c:302 ../ebzip/zipinfofile.c:170
 #, c-format
@@ -356,30 +356,30 @@ msgstr ""
 msgid "                             ouput files under DIRECTORY\n"
 msgstr ""
 
-#: ../ebrefile/ebrefile.c:422
+#: ../ebrefile/ebrefile.c:405
 #, c-format
 msgid "%s: no catalog file: %s\n"
 msgstr ""
 
-#: ../ebrefile/ebrefile.c:514 ../ebrefile/ebrefile.c:540
-#: ../ebrefile/ebrefile.c:594
+#: ../ebrefile/ebrefile.c:497 ../ebrefile/ebrefile.c:523
+#: ../ebrefile/ebrefile.c:577
 #, c-format
 msgid "%s: failed to read the file, %s: %s\n"
 msgstr ""
 
-#: ../ebrefile/ebrefile.c:524 ../ebrefile/ebrefile.c:565
-#: ../ebrefile/ebrefile.c:599 ../ebrefile/ebrefile.c:614
-#: ../ebrefile/ebrefile.c:631
+#: ../ebrefile/ebrefile.c:507 ../ebrefile/ebrefile.c:548
+#: ../ebrefile/ebrefile.c:582 ../ebrefile/ebrefile.c:597
+#: ../ebrefile/ebrefile.c:614
 #, c-format
 msgid "%s: failed to write the file, %s: %s\n"
 msgstr ""
 
-#: ../ebrefile/ebrefile.c:579
+#: ../ebrefile/ebrefile.c:562
 #, c-format
 msgid "%s: warning: no such subbook: %s\n"
 msgstr ""
 
-#: ../ebrefile/ebrefile.c:626 ../ebzip/unzipfile.c:306 ../ebzip/zipfile.c:384
+#: ../ebrefile/ebrefile.c:609 ../ebzip/unzipfile.c:306 ../ebzip/zipfile.c:384
 #: ../ebzip/zipfile.c:441 ../ebzip/zipfile.c:487 ../ebzip/zipfile.c:546
 #, c-format
 msgid "%s: failed to seek the file, %s: %s\n"

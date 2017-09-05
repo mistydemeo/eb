@@ -66,7 +66,7 @@ extern "C" {
 /*
  * Compression type codes.
  */
-#define ZIO_NONE			0
+#define ZIO_PLAIN			0
 #define ZIO_EBZIP1			1
 #define ZIO_EPWING			2
 #define ZIO_EPWING6			3
@@ -118,7 +118,7 @@ typedef struct Zio_Struct Zio;
 
 struct Zio_Struct {
     /*
-     * Zio type. (NONE, EPWING or EBZIP)
+     * Zio type. (PLAIN, EPWING or EBZIP)
      */
     Zio_Code code;
 
@@ -213,6 +213,7 @@ int zio_initialize_library(void);
 void zio_finalize_library(void);
 void zio_initialize(Zio *);
 void zio_finalize(Zio *);
+int zio_set_sebxa_mode(Zio *, off_t, off_t, off_t, off_t);
 int zio_open(Zio *, const char *, Zio_Code);
 void zio_close(Zio *);
 int zio_file(Zio *);
@@ -226,6 +227,7 @@ int zio_initialize_library();
 void zio_finalize_library();
 void zio_initialize();
 void zio_finalize();
+int zio_set_sebxa_mode();
 int zio_open();
 void zio_close();
 int zio_file();

@@ -764,11 +764,11 @@ eb_set_binary_mpeg(book, argv)
      * `movie_file_name' is base name, and `movie_path_name' is absolute
      * path of the movie.
      */
-    const char *hint_list[2];
     char movie_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char movie_path_name[PATH_MAX + 1];
     EB_Error_Code error_code;
     EB_Subbook *subbook;
+    Zio_Code zio_code;
 
     /*
      * Lock the book.
@@ -793,18 +793,17 @@ eb_set_binary_mpeg(book, argv)
     /*
      * Open the movie file and set binary context.
      */
-    hint_list[0] = movie_file_name;
-    hint_list[1] = NULL;
-
-    if (!eb_find_file_name3(book->path, subbook->directory_name, 
-	subbook->movie_directory_name, hint_list, movie_file_name, NULL)) {
+    if (eb_find_file_name3(book->path, subbook->directory_name, 
+	subbook->movie_directory_name, movie_file_name, movie_file_name)
+	!= EB_SUCCESS) {
 	error_code = EB_ERR_NO_SUCH_BINARY;
 	goto failed;
     }
     eb_compose_path_name3(book->path, subbook->directory_name, 
 	subbook->movie_directory_name, movie_file_name, movie_path_name);
+    eb_path_name_zio_code(movie_path_name, ZIO_PLAIN, &zio_code);
 
-    if (zio_open(&subbook->movie_zio, movie_path_name, ZIO_NONE) < 0) {
+    if (zio_open(&subbook->movie_zio, movie_path_name, zio_code) < 0) {
 	subbook = NULL;
 	error_code = EB_ERR_FAIL_OPEN_BINARY;
 	goto failed;

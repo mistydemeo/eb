@@ -1242,7 +1242,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		    if (error_code != EB_SUCCESS)
 			goto failed;
 		}
-	    } else {
+	    } else if (0xa0 < c1 && c1 < 0xff && 0x20 < c2 && c2 < 0x7f) {
 		/*
 		 * This is a local character.
 		 */

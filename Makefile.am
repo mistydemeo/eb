@@ -9,8 +9,8 @@ endif
 SUBDIRS = $(ZLIB_SUBDIR) eb libebutils ebappendix ebfont ebinfo \
    ebrefile ebzip doc doc-ja po-eb po-ebutils m4
 
-EXTRA_DIST = ChangeLog.0 INSTALL-ja README-ja move-if-change eb.conf.in \
-   gttest.mo gttest.po
+EXTRA_DIST = ChangeLog.0 ChangeLog.1 INSTALL-ja README-ja move-if-change \
+   eb.conf.in gttest.mo gttest.po
 CLEANFILES = eb.conf
 
 appendixdir = $(pkgdatadir)/appendix

@@ -213,6 +213,8 @@ distclean' を実行してください。
     が pthread を使ったサンプルプログラムのコンパイルや実行に失敗する
     と、エラーが報告されます。
 
+    注意: pthread への対応は、まだ不完全で実験的なものです。
+
 `--with-pthread-cppflags=FLAGS'
 `--with-pthread-cflags=FLAGS'
 `--with-pthread-ldflags=FLAGS'

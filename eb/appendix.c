@@ -180,16 +180,6 @@ eb_bind_appendix(appendix, path)
 
 
 /*
- * Hints of catalog file name in appendix package.
- */
-#define EB_HINT_INDEX_CATALOG		0
-#define EB_HINT_INDEX_CATALOGS		1
-
-static const char *catalog_hint_list[] = {
-    "catalog", "catalogs", NULL
-};
-
-/*
  * Read information from the `CATALOG(S)' file in `appendix'.
  * Return EB_SUCCESS, if it succeeds, error-code ohtherwise.
  */
@@ -205,8 +195,8 @@ eb_initialize_appendix_catalog(appendix)
     EB_Appendix_Subbook *subbook;
     size_t catalog_size;
     size_t title_size;
-    int hint_index;
     Zio zio;
+    Zio_Code zio_code;
     int i;
 
     zio_initialize(&zio);
@@ -214,33 +204,28 @@ eb_initialize_appendix_catalog(appendix)
     /*
      * Find a catalog file.
      */
-    eb_find_file_name(appendix->path, catalog_hint_list, catalog_file_name,
-	&hint_index);
-
-    switch (hint_index) {
-    case EB_HINT_INDEX_CATALOG:
+    if (eb_find_file_name(appendix->path, "catalog", catalog_file_name)
+	== EB_SUCCESS) {
 	appendix->disc_code = EB_DISC_EB;
 	catalog_size = EB_SIZE_EB_CATALOG;
 	title_size = EB_MAX_EB_TITLE_LENGTH;
-	break;
-
-    case EB_HINT_INDEX_CATALOGS:
+    } else if (eb_find_file_name(appendix->path, "catalogs", catalog_file_name)
+	== EB_SUCCESS) {
 	appendix->disc_code = EB_DISC_EPWING;
 	catalog_size = EB_SIZE_EPWING_CATALOG;
 	title_size = EB_MAX_EPWING_TITLE_LENGTH;
-	break;
-
-    default:
+    } else {
 	error_code = EB_ERR_FAIL_OPEN_CATAPP;
 	goto failed;
     }
 
     eb_compose_path_name(appendix->path, catalog_file_name, catalog_path_name);
+    eb_path_name_zio_code(catalog_path_name, ZIO_PLAIN, &zio_code);
 
     /*
      * Open the catalog file.
      */
-    if (zio_open(&zio, catalog_path_name, ZIO_NONE) < 0) {
+    if (zio_open(&zio, catalog_path_name, zio_code) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_CATAPP;
 	goto failed;
     }

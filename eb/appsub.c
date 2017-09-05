@@ -497,16 +497,6 @@ eb_set_appendix_subbook(appendix, subbook_code)
 
 
 /*
- * Hints of appendix file name.
- */
-#define EB_HINT_INDEX_APPENDIX		0
-#define EB_HINT_INDEX_APPENDIX_EBZ	1
-
-static const char *appendix_hint_list[] = {
-    "appendix", "appendix.ebz", NULL
-};
-
-/*
  * EB* specific section of eb_set_appendix_subbook().
  */
 static EB_Error_Code
@@ -518,7 +508,6 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
     EB_Appendix_Subbook *subbook;
     char appendix_path_name[PATH_MAX + 1];
     Zio_Code zio_code;
-    int hint_index;
 
     /*
      * Set the current subbook.
@@ -529,25 +518,15 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
     /*
      * Open an appendix file.
      */
-    eb_find_file_name2(appendix->path, subbook->directory_name,
-	appendix_hint_list, subbook->file_name, &hint_index);
-
-    switch (hint_index) {
-    case EB_HINT_INDEX_APPENDIX:
-	zio_code = ZIO_NONE;
-	break;
-
-    case EB_HINT_INDEX_APPENDIX_EBZ:
-	zio_code = ZIO_EBZIP1;
-	break;
-
-    default:
+    if (eb_find_file_name2(appendix->path, subbook->directory_name,
+	"appendix", subbook->file_name) != EB_SUCCESS) {
 	error_code = EB_ERR_FAIL_OPEN_APP;
 	goto failed;
     }
 
     eb_compose_path_name2(appendix->path, subbook->directory_name,
 	subbook->file_name, appendix_path_name);
+    eb_path_name_zio_code(appendix_path_name, ZIO_PLAIN, &zio_code);
 
     if (zio_open(&subbook->zio, appendix_path_name, zio_code) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_APP;
@@ -566,16 +545,6 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
 
 
 /*
- * Hints of furoku file name.
- */
-#define EB_HINT_INDEX_FUROKU		0
-#define EB_HINT_INDEX_FUROKU_EBZ	1
-
-static const char *furoku_hint_list[] = {
-    "furoku", "furoku.ebz", NULL
-};
-
-/*
  * EPWING specific section of eb_set_appendix_subbook().
  */
 static EB_Error_Code
@@ -587,7 +556,6 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
     EB_Appendix_Subbook *subbook;
     char appendix_path_name[PATH_MAX + 1];
     Zio_Code zio_code;
-    int hint_index;
 
     /*
      * Set the current subbook.
@@ -607,20 +575,9 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
     /*
      * Open an appendix file.
      */
-    eb_find_file_name3(appendix->path, subbook->directory_name,
-	subbook->data_directory_name, furoku_hint_list,
-	subbook->file_name, &hint_index);
-
-    switch (hint_index) {
-    case EB_HINT_INDEX_FUROKU:
-	zio_code = ZIO_NONE;
-	break;
-
-    case EB_HINT_INDEX_FUROKU_EBZ:
-	zio_code = ZIO_EBZIP1;
-	break;
-
-    default:
+    if (eb_find_file_name3(appendix->path, subbook->directory_name,
+	subbook->data_directory_name, "furoku", subbook->file_name)
+	!= EB_SUCCESS) {
 	error_code = EB_ERR_FAIL_OPEN_APP;
 	goto failed;
     }
@@ -628,6 +585,7 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
     eb_compose_path_name3(appendix->path, subbook->directory_name,
 	subbook->data_directory_name, subbook->file_name, 
 	appendix_path_name);
+    eb_path_name_zio_code(appendix_path_name, ZIO_PLAIN, &zio_code);
 
     if (zio_open(&subbook->zio, appendix_path_name, zio_code) < 0) {
 	subbook = NULL;

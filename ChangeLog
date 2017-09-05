@@ -1,3 +1,82 @@
+2001-07-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.1beta0.
+
+	* eb/text.c (eb_read_text_internal): Suppose that area of user
+	defined characters in EPWING and EB* is 0xa121 ... 0xfe7f.
+
+	* eb/configure.ac (LIBEB_VERSION_INFO): Set the varaible to 4:2:0.
+	* eb/configure.ac (AM_INIT_AUTOMAKE): Set version to 3.1.0beta0.
+
+	* Makefile.am (EXTRA_DIST): Add `ChangeLog.1'.
+
+2001-07-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/filename.c (eb_canonicalize_font_file_name): Renamed to
+	eb_canonicalize_file_name().
+
+	* eb/zio.h (ZIO_NONE): Renamed to ZIO_PLAIN.
+	* eb/zio.c (zio_open_none): Renamed to zio_open_plain().
+
+2001-07-13  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/match.c (eb_match_word, eb_match_exactword):
+	Renamed to eb_match_canonicalized_word() and 
+	eb_exact_match_canonicalized_word().
+	* eb/match.c (eb_match_word_latin, eb_match_word_jis, 
+	eb_exact_match_word_latin, eb_exact_match_word_jis): New functions.
+	* eb/defs.h (EB_Search_Context_Struct): split `compare' into
+	`compare_pre' and `compare_hit'.
+	* eb/word.c (eb_search_word): Change policy of choosing search
+	function.
+	* eb/exactword.c (eb_search_exactword): Ditto.
+	* eb/endword.c (eb_search_endword): Ditto.
+	* eb/keyword.c (eb_search_keyword): Ditto.
+	* eb/multi.c (eb_search_multi): Ditto.
+
+2001-07-12  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h (EB_Subbook_Struct): Add the member `text'.
+	* eb/subbook.c (eb_initialize_indexes): Revise S-EBXA compression
+	support code.
+	* eb/zio.c (zio_set_sebxa_mode): New function.
+	* eb/zio.c (zio_read_sebxa, zio_unzip_slice_sebxa): Revised and
+	Enabled.
+	* eb/zio.c (zio_read): Enable S-EBXA support code.
+
+2001-07-09  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/filename.c (eb_find_file_name, eb_find_file_name2,
+	eb_find_file_name3): Change API of the internal functions.
+	* eb/filename.c (eb_path_name_zio_code): New function.
+
+	* eb/appendix.c (EB_HINT_INDEX_CATALOG, EB_HINT_INDEX_CATALOGS,
+	catalog_hint_list): Deleted.
+	* eb/appsub.c (EB_HINT_INDEX_APPENDIX, EB_HINT_INDEX_APPENDIX_EBZ,
+	appendix_hint_list, EB_HINT_INDEX_FUROKU, EB_HINT_INDEX_FUROKU_EBZ,
+	furoku_hint_list): Deleted.
+	* eb/book.c (EB_HINT_INDEX_CATALOG, EB_HINT_INDEX_CATALOGS, 
+	catalog_hint_list, EB_HINT_INDEX_LANGUAGE, EB_HINT_INDEX_LANGUAGE_EBZ,
+	language_hint_list): Deleted.
+	* eb/subbook.c (EB_HINT_INDEX_START, EB_HINT_INDEX_START_EBZ,
+	start_hint_list): Deleted.
+	* eb/subbook.c (EB_HINT_INDEX_HONMON_EBZ, EB_HINT_INDEX_HONMON2,
+	EB_HINT_INDEX_HONMON2_EBZ, EB_HINT_INDEX_HONMON2_ORG,
+	honmon_hint_list, EB_HINT_INDEX_HONMONG, EB_HINT_INDEX_HONMONG_EBZ,
+	EB_HINT_INDEX_HONMONG_ORG, honmong_hint_list, EB_HINT_INDEX_HONMONS,
+	EB_HINT_INDEX_HONMONS_EBZ, EB_HINT_INDEX_HONMONS_ORG, 
+	honmons_hint_list): Deleted.
+
+	* ebrefile/ebrefile.c (HINT_INDEX_CATALOG, HINT_INDEX_CATALOGS,
+	catalog_hint_list): Deleted.
+
+	* ebzip/unzipbook.c (catalog_hint_list, language_hint_list,
+	catalogs_hint_list): Deleted.
+	* ebzip/zipbook.c (catalog_hint_list, language_hint_list,
+	catalogs_hint_list): Deleted.
+	* ebzip/zipinfobook.c (catalog_hint_list, language_hint_list,
+	catalogs_hint_list): Deleted.
+	
 2001-06-25  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.0.1.

@@ -380,16 +380,6 @@ output_help()
 }
 
 
-/*
- * Hints of catalog file name in book.
- */
-#define HINT_INDEX_CATALOG           0
-#define HINT_INDEX_CATALOGS          1
-
-static const char *catalog_hint_list[] = {
-    "catalog", "catalogs", NULL
-};
-
 static int
 refile_book(out_path, in_path, subbook_name_list, subbook_name_count)
     const char *out_path;
@@ -401,24 +391,17 @@ refile_book(out_path, in_path, subbook_name_list, subbook_name_count)
     char out_path_name[PATH_MAX + 1];
     char in_base_name[EB_MAX_FILE_NAME_LENGTH + 1];
     EB_Disc_Code disc_code;
-    int hint_index;
 
     /*
      * Find a catalog file.
      */
-    eb_find_file_name(in_path, catalog_hint_list, in_base_name,
-        &hint_index);
-
-    switch (hint_index) {
-    case HINT_INDEX_CATALOG:
+    if (eb_find_file_name(in_path, "catalog", in_base_name)
+	== EB_SUCCESS) {
 	disc_code = EB_DISC_EB;
-        break;
-
-    case HINT_INDEX_CATALOGS:
+    } else if (eb_find_file_name(in_path, "catalogs", in_base_name)
+	== EB_SUCCESS) {
 	disc_code = EB_DISC_EPWING;
-        break;
-
-    default:
+    } else {
 	fprintf(stderr, _("%s: no catalog file: %s\n"), invoked_name, in_path);
         return -1;
     }

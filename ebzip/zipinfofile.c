@@ -180,7 +180,7 @@ ebzip_zipinfo_file(in_file_name, in_zio_code)
     /*
      * Output information.
      */
-    if (in_zio.code == ZIO_NONE) {
+    if (in_zio.code == ZIO_PLAIN) {
 	printf(_("%lu bytes (not compressed)\n"),
 	    (unsigned long)in_status.st_size);
     } else {

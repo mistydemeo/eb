@@ -182,7 +182,7 @@ ebzip_unzip_file(out_file_name, in_file_name, in_zio_code)
     /*
      * Simply copy a file, when an input file is not compressed.
      */
-    if (in_zio_code == ZIO_NONE)
+    if (in_zio_code == ZIO_PLAIN)
 	return ebzip_copy_file(out_file_name, in_file_name);
 
     /*

@@ -89,7 +89,11 @@ eb_search_word(book, input_word)
      */
     context = book->search_contexts;
     context->code = EB_SEARCH_WORD;
-    context->compare = eb_match_word;
+    context->compare_pre = eb_match_canonicalized_word;
+    if (book->character_code == EB_CHARCODE_ISO8859_1)
+	context->compare_hit = eb_match_word_latin;
+    else
+	context->compare_hit = eb_match_word_jis;
 
     /*
      * Make a fixed word and a canonicalized word to search from

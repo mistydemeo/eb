@@ -1401,7 +1401,7 @@ fi
 
 # Define the identity of the package.
 PACKAGE=eb
-VERSION=3.0.1
+VERSION=3.1beta0
 
 cat >>confdefs.h <<EOF
 #define PACKAGE "$PACKAGE"
@@ -1446,7 +1446,7 @@ INSTALL_STRIP_PROGRAM="\${SHELL} \`CDPATH=: && cd $_am_dirpart && pwd\`/install-
 # We need awk for the "check" target.  The system "awk" is bad on
 # some platforms.
 
-LIBEB_VERSION_INFO=4:1:0
+LIBEB_VERSION_INFO=4:2:0
 
 MAILING_ADDRESS='m-kasahr@sra.co.jp'
 
