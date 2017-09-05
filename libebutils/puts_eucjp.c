@@ -53,7 +53,7 @@
 int
 fputs_eucjp_to_locale(const char *string, FILE *stream)
 {
-#if defined(HAVE_ICONV_OPEN) || defined(HAVE_LIBICONV_OPEN)
+#if defined(HAVE_ICONV_OPEN)
     size_t string_length;
     const char *locale_encoding;
     char *buffer = NULL;
@@ -133,9 +133,9 @@ fputs_eucjp_to_locale(const char *string, FILE *stream)
 	free(buffer);
     return fputs(string, stream);
 
-#else /* not HAVE_ICONV_OPEN && not HAVE_LIBICONV_OPEN */
+#else /* not HAVE_ICONV_OPEN */
     return fputs(string, stream);
-#endif /* not HAVE_ICONV_OPEN && not HAVE_LIBICONV_OPEN */
+#endif /* not HAVE_ICONV_OPEN */
 }
 
 

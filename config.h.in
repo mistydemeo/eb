@@ -51,12 +51,6 @@
 /* Define to 1 if you have the <libcharset.h> header file. */
 #undef HAVE_LIBCHARSET_H
 
-/* Define to 1 if you have the `iconv' library (-liconv). */
-#undef HAVE_LIBICONV
-
-/* Define to 1 if you have the `libiconv_open' function. */
-#undef HAVE_LIBICONV_OPEN
-
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 #undef HAVE_LIBNSL
 
