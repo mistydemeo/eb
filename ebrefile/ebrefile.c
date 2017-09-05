@@ -338,7 +338,7 @@ main(argc, argv)
     /*
      * Refile a catalog.
      */
-    refile_book(book_path, out_path, subbook_name_list, subbook_name_count);
+    refile_book(out_path, book_path, subbook_name_list, subbook_name_count);
 
     eb_finalize_library();
 
