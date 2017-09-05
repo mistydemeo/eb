@@ -3,7 +3,7 @@ dnl * Process this file with autoconf to produce a configure script.
 dnl *
 AC_INIT(eb/eb.c)
 AC_PREREQ(2.49)
-AM_INIT_AUTOMAKE(eb, 3.0alpha4)
+AM_INIT_AUTOMAKE(eb, 3.0beta0)
 
 dnl *
 dnl * Library version info.
@@ -18,11 +18,15 @@ MAILING_ADDRESS='m-kasahr@sra.co.jp'
 AC_SUBST(MAILING_ADDRESS)
 AC_DEFINE_UNQUOTED(MAILING_ADDRESS, "$MAILING_ADDRESS", [Mailing address])
 
+dnl *
+dnl * C Compiler
+dnl *
+AC_PROG_CC
+
 dnl * 
 dnl * GNU gettext
 dnl * 
-ALL_LINGUAS="ja"
-AM_GNU_GETTEXT_HACKED(po eb/po)
+eb_GNU_GETTEXT(po eb/po)
 
 dnl * 
 dnl * GNU libtool
@@ -33,7 +37,7 @@ dnl *
 dnl * --enable-pthread option.
 dnl *
 AC_ARG_ENABLE(pthread,
-[  --enable-pthread       build pthread safe libraries \[no\]],
+[  --enable-pthread       build pthread safe libraries [[no]]],
 [case "${enableval}" in
    yes) ENABLE_PTHREAD=yes  ;;
    no)  ENABLE_PTHREAD=no ;;
@@ -98,8 +102,6 @@ if test $ENABLE_PTHREAD = yes ; then
    CPPFLAGS="$CPPFLAGS $PTHREAD_CPPFLAGS"
    CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
    LDFLAGS="$LDFLAGS $PTHREAD_LDFLAGS"
-fi
-if test $ENABLE_PTHREAD = yes ; then
    AC_DEFINE(EBCONF_ENABLE_PTHREAD, 1, 
       [Define if EB Library is built with pthread support.])
 fi
@@ -188,7 +190,6 @@ AC_CONFIG_SUBDIRS(zlib)
 dnl * 
 dnl * Alternative Programs.
 dnl * 
-AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_LN_S
 AC_PROG_INSTALL
@@ -269,13 +270,8 @@ AC_SUBST(PTHREAD_CPPFLAGS)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LDFLAGS)
 
-if test $INCLUDED_GETTEXT = yes ; then
-   EBCONF_INTLINCS='-I$(includedir)'
-   EBCONF_INTLLIBS='-L$(libdir) -lintl'
-else
-   EBCONF_INTLINCS=$INTLINCS
-   EBCONF_INTLLIBS=$INTLLIBS
-fi
+EBCONF_INTLINCS=$INTLINCS
+EBCONF_INTLLIBS=$INTLLIBS
 AC_SUBST(EBCONF_INTLINCS)
 AC_SUBST(EBCONF_INTLLIBS)
 
@@ -288,8 +284,6 @@ dnl *
 dnl * Output Files.
 dnl * 
 AM_CONFIG_HEADER(config.h)
-AC_OUTPUT(Makefile intl/Makefile eb/Makefile libebutils/Makefile \
-	ebappendix/Makefile ebfont/Makefile ebinfo/Makefile \
-	ebrefile/Makefile ebzip/Makefile doc/Makefile doc-ja/Makefile \
-	eb/po/Makefile po/Makefile m4/Makefile)
-
+AC_OUTPUT(Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile \
+	ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebzip/Makefile \
+	doc/Makefile doc-ja/Makefile eb/po/Makefile po/Makefile m4/Makefile)

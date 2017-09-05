@@ -1,3 +1,18 @@
+Major changes in release 3.0beta0:
+
+* Support linintl of GNU gettext 0.10.36.
+  Now utility tools in this package link libiconv, if available.
+  `--with-iconv-includes' and `--with-iconv-libraries' options are added
+  to `configure'.
+* libintl source is deleted.
+  Also `--with-included-gettext' option is deleted from configure.
+  If libintl is not found on the system, NLS support is disabled.
+* Support monochrome graphic data of EPWING and EB.
+* ebzip supports movie, graphic, and sound data files.
+  `-s' and `--skip-content' option is added.
+
+* Fix many minor bugs.
+
 Major changes in release 3.0alpha4:
 
 * Support EPWING movie, and color graphic, data.

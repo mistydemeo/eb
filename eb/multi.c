@@ -45,7 +45,7 @@ eb_initialize_multi_search(book)
 	 * Read the index table page of the multi search.
 	 */
 	if (zio_lseek(&subbook->text_zio, 
-	    (off_t)(multi->search.index_page - 1) * EB_SIZE_PAGE, SEEK_SET)
+	    (off_t)(multi->search.start_page - 1) * EB_SIZE_PAGE, SEEK_SET)
 	    < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
@@ -81,7 +81,7 @@ eb_initialize_multi_search(book)
 	    /*
 	     * Initialize index page information of the entry.
 	     */
-	    entry->index_page = 0;
+	    entry->start_page = 0;
 	    entry->candidates_page = 0;
 
 	    for (k = 0; k < index_count; k++) {
@@ -92,15 +92,18 @@ eb_initialize_multi_search(book)
 		page = eb_uint4(bufp + 2);
 		switch (index_id) {
 		case 0x71:
-		    if (entry->index_page == 0)
-			entry->index_page = page;
+		    if (entry->start_page == 0)
+			entry->start_page = page;
+		    entry->index_id = index_id;
 		    break;
 		case 0x91:
 		case 0xa1:
-		    entry->index_page = page;
+		    entry->start_page = page;
+		    entry->index_id = index_id;
 		    break;
 		case 0x01:
 		    entry->candidates_page = page;
+		    entry->index_id = index_id;
 		    break;
 		}
 		bufp += 16;
@@ -537,7 +540,7 @@ eb_search_multi(book, multi_id, input_words)
 	context = book->search_contexts + word_count;
 	context->code = EB_SEARCH_MULTI;
 	context->compare = eb_match_exactword;
-	context->page = entry->index_page;
+	context->page = entry->start_page;
 	if (context->page == 0)
 	    continue;
 

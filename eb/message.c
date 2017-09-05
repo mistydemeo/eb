@@ -31,8 +31,6 @@ eb_initialize_messages(book)
 {
     EB_Error_Code error_code;
     EB_Language *language;
-    Zio zio;
-    Zio_Code zio_code;
     ssize_t read_length;
     off_t location;
     int max_messages;
@@ -41,22 +39,12 @@ eb_initialize_messages(book)
     char *buffer_p;
     int i;
 
-    zio_initialize(&zio);
-
     /*
-     * Open the language file.
+     * Open the language file again.
      */
-    if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
-	EB_SUFFIX_NONE, language_path_name) == 0) {
-	zio_code = ZIO_NONE;
-    } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
-	EB_SUFFIX_EBZ, language_path_name) == 0) {
-	zio_code = ZIO_EBZIP1;
-    } else {
-	error_code = EB_ERR_FAIL_OPEN_LANG;
-	goto failed;
-    }
-    if (zio_open(&zio, language_path_name, zio_code) < 0) {
+    eb_compose_path_name(book->path, book->language_file_name,
+	language_path_name);
+    if (zio_open(&book->language_zio, language_path_name, ZIO_REOPEN) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;
     }
@@ -65,8 +53,9 @@ eb_initialize_messages(book)
      * Get a character code of the book, and get the number of langueages
      * in the file.
      */
-    if (zio_lseek(&zio, (off_t)(EB_MAX_LANGUAGE_NAME_LENGTH + 1)
-	* book->language_count + 16, SEEK_SET) < 0) {
+    if (zio_lseek(&book->language_zio,
+	(off_t)(EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count + 16,
+	SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_LANG;
 	goto failed;
     }
@@ -74,7 +63,7 @@ eb_initialize_messages(book)
     /*
      * Get offset and size of each language.
      */
-    read_length = zio_read(&zio, buffer, EB_SIZE_PAGE);
+    read_length = zio_read(&book->language_zio, buffer, EB_SIZE_PAGE);
     if (read_length < EB_MAX_MESSAGE_LENGTH + 1) {
 	error_code = EB_ERR_UNEXP_LANG;
 	goto failed;
@@ -106,7 +95,7 @@ eb_initialize_messages(book)
 	    int n;
 
             memmove(buffer, buffer_p, rest_length);
-            n = zio_read(&zio, buffer + rest_length, 
+            n = zio_read(&book->language_zio, buffer + rest_length, 
 		EB_SIZE_PAGE - rest_length);
             if (n < 0 || rest_length + n < EB_MAX_MESSAGE_LENGTH + 1)
                 break;
@@ -174,8 +163,7 @@ eb_initialize_messages(book)
     /*
      * Close the language file.
      */
-    zio_close(&zio);
-    zio_finalize(&zio);
+    zio_close(&book->language_zio);
 
     return EB_SUCCESS;
 
@@ -183,8 +171,7 @@ eb_initialize_messages(book)
      * An error occurs...
      */
   failed:
-    zio_close(&zio);
-    zio_finalize(&zio);
+    zio_close(&book->language_zio);
 
     if (book->messages != NULL) {
 	free(book->messages);

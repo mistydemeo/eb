@@ -26,10 +26,8 @@
  */
 #ifdef __STDC__
 int make_missing_directory(const char *, int);
-int make_missing_directory_chain(const char *, int);
 #else /* not __STDC__ */
 int make_missing_directory();
-int make_missing_directory_chain();
 #endif  /* not __STDC__ */
 
 #endif /* not MAKEDIR_H */

@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4b from Makefile.am
+# Makefile.in generated automatically by automake 1.4d from Makefile.am
 
-# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000
+# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -48,6 +48,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_FLAG =
+INSTALL_HEADER = $(INSTALL_DATA)
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -65,9 +66,6 @@ AMTAR = @AMTAR@
 AS = @AS@
 AWK = @AWK@
 CC = @CC@
-CPP = @CPP@
-CXX = @CXX@
-CXXCPP = @CXXCPP@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 EBCONF_EBINCS = @EBCONF_EBINCS@
@@ -80,7 +78,6 @@ ECHO = @ECHO@
 ENABLE_NLS = @ENABLE_NLS@
 ENABLE_PTHREAD = @ENABLE_PTHREAD@
 EXEEXT = @EXEEXT@
-INTLDEPS = @INTLDEPS@
 INTLINCS = @INTLINCS@
 INTLLIBS = @INTLLIBS@
 LIBEB_VERSION_INFO = @LIBEB_VERSION_INFO@
@@ -104,22 +101,23 @@ XGETTEXT = @XGETTEXT@
 ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
+_am_include = @_am_include@
 install_sh = @install_sh@
 localedir = @localedir@
 
 
 noinst_LIBRARIES = libebutils.a
-libebutils_a_SOURCES = ebutils.c fakelog.c getopt.c getopt1.c getumask.c \
-	makedir.c samefile.c yesno.c
+libebutils_a_SOURCES = ebutils.c getopt.c getopt1.c getumask.c makedir.c \
+	samefile.c yesno.c
 
 libebutils_a_LIBADD = @LIBOBJS@
 
 EXTRA_DIST = getopt_long.pl ebutils.h.in
 CLEANFILES = stamp-ebutils-h ebutils.h
 BUILT_SOURCES = ebutils.h
-noinst_HEADERS = fakelog.h getopt.h getumask.h makedir.h samefile.h yesno.h
+noinst_HEADERS = getopt.h getumask.h makedir.h samefile.h yesno.h
 
-INCLUDES = -I$(top_srcdir) -I../intl -DUSE_FAKELOG
+INCLUDES = -I$(top_srcdir) @INTLINCS@
 subdir = libebutils
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
@@ -133,8 +131,8 @@ LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libebutils_a_AR = $(AR) cru
 libebutils_a_DEPENDENCIES =  @LIBOBJS@
-am_libebutils_a_OBJECTS =  ebutils.$(OBJEXT) fakelog.$(OBJEXT) \
-getopt.$(OBJEXT) getopt1.$(OBJEXT) getumask.$(OBJEXT) makedir.$(OBJEXT) \
+am_libebutils_a_OBJECTS =  ebutils.$(OBJEXT) getopt.$(OBJEXT) \
+getopt1.$(OBJEXT) getumask.$(OBJEXT) makedir.$(OBJEXT) \
 samefile.$(OBJEXT) yesno.$(OBJEXT)
 libebutils_a_OBJECTS =  $(am_libebutils_a_OBJECTS)
 AR = ar
@@ -165,7 +163,7 @@ $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
-	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 
 
 mostlyclean-noinstLIBRARIES:
@@ -181,12 +179,8 @@ mostlyclean-compile:
 	-rm -f *.o core *.core
 	-rm -f *.$(OBJEXT)
 
-clean-compile:
-
 distclean-compile:
 	-rm -f *.tab.c
-
-maintainer-clean-compile:
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -195,8 +189,7 @@ clean-libtool:
 	-rm -rf .libs _libs
 
 distclean-libtool:
-
-maintainer-clean-libtool:
+	-rm -f libtool
 
 libebutils.a: $(libebutils_a_OBJECTS) $(libebutils_a_DEPENDENCIES)
 	-rm -f libebutils.a
@@ -220,7 +213,7 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	       END { for (i in files) print i; }'`; \
 	mkid -fID $$unique $(LISP)
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS: $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
@@ -238,16 +231,11 @@ GTAGS:
 	  && cd $(top_srcdir) \
 	  && gtags -i $$here
 
-mostlyclean-tags:
-
-clean-tags:
-
 distclean-tags:
 	-rm -f TAGS ID
 
-maintainer-clean-tags:
-
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
 
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
@@ -269,8 +257,8 @@ check-am: all-am
 check: check-am
 installcheck-am:
 installcheck: installcheck-am
-all-recursive-am: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+all-redirect: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
 
 install-exec-am:
 install-exec: install-exec-am
@@ -284,7 +272,6 @@ install: install-am
 uninstall-am:
 uninstall: uninstall-am
 all-am: Makefile $(LIBRARIES) $(HEADERS)
-all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs:
@@ -300,46 +287,40 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
+	@echo "This command is intended for maintainers to use"
+	@echo "it deletes files that may require special tools to rebuild."
 	-rm -f Makefile.in
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
-mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-tags \
-		mostlyclean-generic
-
-mostlyclean: mostlyclean-am
-
-clean-am:  clean-noinstLIBRARIES clean-compile clean-libtool clean-tags \
-		clean-generic mostlyclean-am
-
 clean: clean-am
 
-distclean-am:  distclean-noinstLIBRARIES distclean-compile \
-		distclean-libtool distclean-tags distclean-generic \
-		clean-am
-	-rm -f libtool
+clean-am: clean-generic clean-libtool clean-noinstLIBRARIES \
+	mostlyclean-am
 
 distclean: distclean-am
 
-maintainer-clean-am:  maintainer-clean-noinstLIBRARIES \
-		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-generic \
-		distclean-am
-	@echo "This command is intended for maintainers to use;"
-	@echo "it deletes files that may require special tools to rebuild."
+distclean-am: clean-am distclean-compile distclean-generic \
+	distclean-libtool distclean-noinstLIBRARIES distclean-tags
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: mostlyclean-noinstLIBRARIES distclean-noinstLIBRARIES \
-clean-noinstLIBRARIES maintainer-clean-noinstLIBRARIES \
-mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile mostlyclean-libtool distclean-libtool \
-clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
-dvi-am dvi check check-am installcheck-am installcheck all-recursive-am \
-install-exec-am install-exec install-data-am install-data install-am \
-install uninstall-am uninstall all-redirect all-am all install-strip \
-installdirs mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+maintainer-clean-am: distclean-am maintainer-clean-generic \
+	maintainer-clean-noinstLIBRARIES
+
+mostlyclean: mostlyclean-am
+
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool mostlyclean-noinstLIBRARIES
+
+.PHONY: all-redirect check check-am clean clean-generic clean-libtool \
+	clean-noinstLIBRARIES distclean distclean-compile \
+	distclean-generic distclean-libtool distclean-noinstLIBRARIES \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-data install-data-am install-exec \
+	install-exec-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	maintainer-clean-noinstLIBRARIES mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	mostlyclean-noinstLIBRARIES tags uninstall uninstall-am
 
 
 ebutils.h: stamp-ebutils-h
@@ -353,7 +334,6 @@ stamp-ebutils-h: ebutils.h.in Makefile
 ### *.o dependencies ###
 ebutils.o: ebutils.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
  ../eb/error.h ebutils.h
-fakelog.o: fakelog.c ../config.h fakelog.h
 getopt.o: getopt.c getopt.h
 getopt1.o: getopt1.c getopt.h
 getumask.o: getumask.c ../config.h

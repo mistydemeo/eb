@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.0alpha4 版です。 EB ライブラリバージョン 3.0alpha4 に
-対応しています。
+   この文書は第 3.0beta0 版です。 EB ライブラリバージョン 3.0beta0
+に対応しています。
 
 * Menu:
 
@@ -81,28 +81,29 @@ File: ebzip-ja.info,  Node: Introduction,  Next: Action and Command Name,  Prev:
 ********
 
    `ebzip' は EB ライブラリのアプリケーション用に、CD-ROM 書籍の圧縮・
-伸長を行います。 EB ライブラリのアプリケーションは、機能的には何の制限
-もなく圧縮された CD-ROM 書籍にアクセスできます (ただし、処理速度はもと
-の書籍に比べて遅くなるかも知れません)。 圧縮データ形式は、 CPU
-の種類や、OS、ファイルシステムには依存していませんので、`ebzip' で圧縮
-したファイルは共用が可能です。 `ebzip' は EB ライブラリと一緒に配布され
-ています。
+伸長を行います。 EB
+ライブラリのアプリケーションは、機能的には何の制限もなく圧縮された
+CD-ROM 書籍にアクセスできます (ただし、処理速度はもとの書籍に比べて遅
+くなるかも知れません)。 圧縮データ形式は、CPU
+の種類や、OS、ファイルシステムには依存していませ んので、`ebzip'
+で圧縮したファイルは共用が可能です。 `ebzip' は EB
+ライブラリと一緒に配布されています。
 
-   `ebzip' はフリーソフトウェアです。あなたは、 Free Software Foundation
+   `ebzip' はフリーソフトウェアです。あなたは、Free Software Foundation
 が公表した GNU General Public License (GNU 一般公有使用許諾) バージョン
 2 あるいはそれ以降の各バージョンの中からいずれかを選択し、そのバージョ
 ンが定める条項に従って本プログラムを再頒布または変更することができます。
 
    `ebzip' は有用とは思いますが、頒布にあたっては、市場性及び特定目的
-適合性についての暗黙の保証を含めて、いかなる保証も行ないません。 詳細に
-ついては GNU General Public License をお読み下さい。
+適合性についての暗黙の保証を含めて、いかなる保証も行ないません。
+詳細については GNU General Public License をお読み下さい。
 
-   加えて、あなたは自分の所有する CD-ROM 書籍の使用許諾も守らなくてはい
-けません。 `ebzip' はフリーソフトウェアですが、あなたの書籍が自由に使
-えるものであるとは限りません。 CD-ROM 書籍の出版社がハードディスク (お
-よび他の補助記憶装置)
-に書籍をコピーすることを許可していないのであれば、その書籍の圧縮は諦め
-て下さい。
+   加えて、あなたは自分の所有する CD-ROM
+書籍の使用許諾も守らなくてはいけ ません。 `ebzip'
+はフリーソフトウェアですが、あなたの書籍が自由に使えるも
+のであるとは限りません。 CD-ROM 書籍の出版社がハードディスク
+(および他の補助記憶装置) に書籍を
+コピーすることを許可していないのであれば、その書籍の圧縮は諦めて下さい。
 
 
 File: ebzip-ja.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -124,30 +125,29 @@ File: ebzip-ja.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Pre
      出力します。
 
 
-`ebzip' は起動時に、起動時に使用されたコマンド名とコマンドラインオプシ
-ョンから動作を決定します。 `ebzip' の一回の実行の間で、動作が変わること
-はありません。
+`ebzip' は起動時に、起動時に使用されたコマンド名とコマンドライン
+オプションから動作を決定します。 `ebzip'
+の一回の実行の間で、動作が変わることはありません。
 
-   `ebzip' は `ebzip'、`ebunzip', `ebzipinfo' という異なる 3 つのコマ
-ンド名でインストールされます。 (DOS および Windows システム環境では、
-`ebzipinfo' は `ebzipinf' に改名されています)。 一般に、これらは次のよ
-うにハードリンクされています。
+   `ebzip' は `ebzip'、`ebunzip', `ebzipinfo' という 異なる 3
+つのコマンド名でインストールされます。 (DOS および Windows
+システム環境では、`ebzipinfo' は `ebzipinf' に改名されています)。
+一般に、これらは次のようにハードリンクされています。
 
      % ls -li ebzip ebunzip ebzipinfo
      38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebunzip
      38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzip
      38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzipinfo
 
-`ebunzip'
-という名前で起動された場合、デフォルトの動作は伸長になります。
-`ebzipinfo' という名前で起動された場合、デフォルトの動作は情報出力にな
-ります。 それ以外の場合、デフォルトの動作は圧縮になります。
+`ebunzip' という名前で起動された場合、デフォルトの動作は伸長にな
+ります。 `ebzipinfo'
+という名前で起動された場合、デフォルトの動作は情報出 力になります。
+それ以外の場合、デフォルトの動作は圧縮になります。
 
    加えて、コマンドラインオプションでも動作を決定することができます。
 そのオプションとは `--compress'(`-z') および `--uncompress'(`-u') と
-`--information'(`-i') です。
-オプションは、起動時の名前より優先します。 次の例では、いずれの行も動作
-モードは「伸長」になります。
+`--information'(`-i') で す。 オプションは、起動時の名前より優先します。
+次の例では、いずれの行も動作モードは「伸長」になります。
 
      ebunzip
      ebzip --uncompress
@@ -159,23 +159,22 @@ File: ebzip-ja.info,  Node: Invoking ebzip,  Next: Compression,  Prev: Action an
 `ebzip' の実行
 **************
 
-   `ebinfo'、`ebunzip'、`ebzipinfo' の一般的な起動方法は次の通りです。
+   `ebinfo'、`ebunzip'、`ebzipinfo' の一般的な起動方法は次 の通りです。
 
      % ebzip 書籍へのパス
      % ebunzip 書籍へのパス
      % ebzipinfo 書籍へのパス
 
-書籍へのパスには、CD-ROM 書籍のトップディレクトリ、つまり `CATALOG' ま
-たは `CATALOGS' ファイルが存在するディレクトリを指定します。 複数のパ
-スを書くことはできませんが、以下のように、パスの指定を省くことはできま
-す。
+書籍へのパス には、CD-ROM 書籍のトップディレクトリ、つまり `CATALOG'
+または `CATALOGS' ファイルが存在するディレクトリを 指定します。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
 
      % ebzip
      % ebunzip
      % ebzipinfo
 
-この場合は、カレントディレクトリ (`.')
-が指定されたものと判断されます。
+この場合は、カレントディレクトリ (`.') が指定されたものと判断され ます。
 
 
 File: ebzip-ja.info,  Node: Compression,  Next: Uncompression,  Prev: Invoking ebzip,  Up: Top
@@ -183,7 +182,7 @@ File: ebzip-ja.info,  Node: Compression,  Next: Uncompression,  Prev: Invoking e
 圧縮
 ****
 
-   `ebzip' (`ebunzip --compress'、 `ebzipinfo --compress' と等価) は
+   `ebzip' (`ebunzip --compress'、`ebzipinfo --compress' と等価) は
 CD-ROM 書籍の圧縮を行います。
 
 * Menu:
@@ -203,9 +202,9 @@ File: ebzip-ja.info,  Node: Compression Example 1,  Next: Compression Example 2,
 圧縮の実行例 (1)
 ================
 
-   この節では、ハードディスクにすでにコピーしてある CD-ROM
-書籍を圧縮するにはどうしたらいいかを説明します。 CD-ROM 書籍がすでに
-`/dict' にコピーされているものの、まだ圧縮されていないと仮定します。
+   この節では、ハードディスクにすでにコピーしてある CD-ROM 書籍を圧縮す
+るにはどうしたらいいかを説明します。 CD-ROM 書籍がすでに `/dict'
+にコピーされているものの、まだ圧縮 されていないと仮定します。
 この書籍は `/dict' の下に、次のようなファイルを持っています。
 
      /dict/catalog
@@ -222,8 +221,8 @@ File: ebzip-ja.info,  Node: Compression Example 1,  Next: Compression Example 2,
 
      % ebzip --output-directory /dict /dict
 
-圧縮には、しばらくかかることがあります。 圧縮の間、`ebzip' は、次のよう
-に状況を知らせるメッセージを出力します。
+圧縮には、しばらくかかることがあります。 圧縮の間、`ebzip'
+は、次のように状況を知らせるメッセージを出力 します。
 
      ==> /dict/kanji/start を圧縮 <==
      ./dict/kanji/start.ebz に出力
@@ -234,7 +233,7 @@ File: ebzip-ja.info,  Node: Compression Example 1,  Next: Compression Example 2,
      完了 (220069888 / 220069888 バイト)
      220069888 -> 78163751 バイト (35.5%)
 
-圧縮が完了すると、`/dict' の下のディレクトリ構成は少し変化しています。
+圧縮が完了すると、`/dict' の下のディレクトリ構成は少し変化して います。
 
      /dict/catalog
      /dict/language.ebz
@@ -242,11 +241,11 @@ File: ebzip-ja.info,  Node: Compression Example 1,  Next: Compression Example 2,
      /dict/english/start.ebz
 
 拡張子 `.ebz' がいくつかのファイル (`/dict/language.ebz'、
-`/dict/kanji/start.ebz'、`/dict/english/start.ebz') に付いています。
+`/dict/kanji/start.ebz'、`/dict/english/start.ebz') に 付いています。
 これらは圧縮されたファイルです。 他のファイルは変化していません。
 
-   `ebzip' が圧縮するファイルは、 `START'、`HONMON'、`LANGUAGE' ファイ
-ルと `GAIJI' ディレクトリにある外字ファイルです。
+   `ebzip' が圧縮するファイルは、 `START'、`HONMON'、`LANGUAGE'
+ファイルと `GAIJI' ディレクトリにある外字ファイルです。
 
 
 File: ebzip-ja.info,  Node: Compression Example 2,  Next: Compression Level,  Prev: Compression Example 1,  Up: Compression
@@ -254,10 +253,11 @@ File: ebzip-ja.info,  Node: Compression Example 2,  Next: Compression Level,  Pr
 圧縮の実行例 (2)
 ================
 
-   この節では、もう一つ別の例を採り上げます。 この節では、CD-ROM ディス
-クのファイルを圧縮し、それをハードディスクに置く方法について説明します。
-元の CD-ROM 書籍が `/cdrom' にマウントされ、書籍は `/cdrom' の下に次の
-ようなファイルを持っていると仮定します。
+   この節では、もう一つ別の例を採り上げます。 この節では、CD-ROM
+ディスクのファイルを圧縮し、それをハードディスクに
+置く方法について説明します。 元の CD-ROM 書籍が `/cdrom'
+にマウントされ、書籍は `/cdrom'
+の下に次のようなファイルを持っていると仮定します。
 
      /cdrom/catalog
      /cdrom/language
@@ -265,8 +265,8 @@ File: ebzip-ja.info,  Node: Compression Example 2,  Next: Compression Level,  Pr
      /cdrom/french/start
      /cdrom/italian/start
 
-この書籍を圧縮し、 `/dict'
-の下に置くためには、次のコマンドを実行します。
+この書籍を圧縮し、`/dict' の下に置くためには、次のコマンドを実
+行します。
 
      % cd /dict
      % ebzip --keep /cdrom
@@ -275,13 +275,14 @@ File: ebzip-ja.info,  Node: Compression Example 2,  Next: Compression Level,  Pr
 
      % ebzip --keep --output-directory /dict /cdrom
 
-出力側のディレクトリ `/dict' は空でも構いませんが、圧縮前にあらかじめ
-作っておかなければならないので、注意して下さい。 この例では、`--keep'
-オプションを使っています。 デフォルトでは、`ebzip' は、圧縮後に元のファ
-イルを削除しますが、 `--keep' オプションはこの振る舞いを抑制します。
+出力側のディレクトリ `/dict' は空でも構いませんが、圧縮前にあらか
+じめ作っておかなければならないので、注意して下さい。
+この例では、`--keep' オプションを使っています。 デフォルトでは、`ebzip'
+は、圧縮後に元のファイルを削除しますが、 `--keep'
+オプションはこの振る舞いを抑制します。
 
    `/dict' と `/cdrom' のディレクトリ構成はほとんど同じですが、 `/dict'
-の下の圧縮されたファイルには拡張子 `.ebz' が付いています。
+の下の圧縮されたファイルには拡張子 `.ebz' が付いて います。
 
      /dict/catalog
      /dict/language.ebz
@@ -289,10 +290,11 @@ File: ebzip-ja.info,  Node: Compression Example 2,  Next: Compression Level,  Pr
      /dict/french/start.ebz
      /dict/italian/start.ebz
 
-中間のディレクトリ `/dict/german'、 `/dict/french'、 `/dict/italian'
+中間のディレクトリ `/dict/german'、`/dict/french'、 `/dict/italian'
 は、もし無ければ `ebzip' によって作成されます。 `CATALOG' と `CATALOGS'
-は、出力側のディレクトリにコピーされます。 EB ライブラリが対応していな
-いファイル、ディレクトリについては、 `ebzip' は無視します。
+は、出力側のディレクトリにコピー されます。 EB
+ライブラリが対応していないファイル、ディレクトリについては、 `ebzip'
+は無視します。
 
 
 File: ebzip-ja.info,  Node: Compression Level,  Next: Adjust Filenames,  Prev: Compression Example 2,  Up: Compression
@@ -300,10 +302,10 @@ File: ebzip-ja.info,  Node: Compression Level,  Next: Adjust Filenames,  Prev: C
 圧縮レベル
 ==========
 
-   `ebzip' は、0、1、2、3 という 4 つの圧縮レベルを持っています。 圧縮
-レベル 0 は、圧縮・伸長が最も速いですが、圧縮率が最悪です。 圧縮レベル
-3 は、圧縮率が最良ですが、圧縮・伸長が最も遅くなります。 圧縮レベルは、
-`--level' (`-l') オプションで設定します。
+   `ebzip' は、0、1、2、3 という 4 つの圧縮レベルを持っています。
+圧縮レベル 0 は、圧縮・伸長が最も速いですが、圧縮率が最悪です。
+圧縮レベル 3 は、圧縮率が最良ですが、圧縮・伸長が最も遅くなります。
+圧縮レベルは、`--level' (`-l') オプションで設定します。
 
      % ebzip --level 2 --output-directory /dict /dict
 
@@ -316,9 +318,10 @@ File: ebzip-ja.info,  Node: Adjust Filenames,  Next: Test,  Prev: Compression Le
 ================
 
    以前の例に戻ってみましょう。 ここでもう一度、CD-ROM 書籍を `/dict'
-の下にコピーしたものの、まだ圧縮していないと仮定します。 ただし、以前
-の例と違って、`/dict' の下のファイルのファイル名とディレクトリ名には大
-文字が使われ、ファイル名にはバージョン番号 `;1' が付いています。
+の下にコピーしたものの、ま だ圧縮していないと仮定します。
+ただし、以前の例と違って、`/dict' の下のファイルのファイル名と
+ディレクトリ名には大文字が使われ、ファイル名にはバージョン番号 `;1'
+が付いています。
 
      /dict/CATALOG;1
      /dict/LANGUAGE;1
@@ -334,9 +337,9 @@ File: ebzip-ja.info,  Node: Adjust Filenames,  Next: Test,  Prev: Compression Le
      /dict/FRENCH/START.EBZ;1
      /dict/ITALIAN/START.EBZ;1
 
-`ebzip' は、"大文字・小文字の違い" ("case") と "拡張子" ("suffix") につ
-いて、元と同じになるようにします。 次の表は、`start' ファイルのファイル
-名がどのように変化するのかを示しています。
+`ebzip' は、"大文字・小文字の違い" ("case") と "拡張子" ("suffix")
+について、元と同じになるようにします。 次の表は、`start'
+ファイルのファイル名がどのように変化するのかを 示しています。
 
 大文字・小文字/拡張子         圧縮前                 圧縮後
 小文字/なし                   start                  start.ebz
@@ -348,15 +351,17 @@ File: ebzip-ja.info,  Node: Adjust Filenames,  Next: Test,  Prev: Compression Le
 大文字/バージョン             START;1                START.EBZ;1
 大文字/点とバージョン         START.;1               START.EBZ;1
 
-   `--case' と `--suffix' オプションによって、出力側のファイル名の大文
-字・小文字の違いと拡張子を変えることができます。 `--case' オプションは
-引数を一つ取り、それは `upper' か `lower' でなくてはいけません。 このオ
-プションは、出力側のファイル名を大文字あるいは小文字になるようにします。
+   `--case' と `--suffix' オプションによって、出力側のファイ
+ル名の大文字・小文字の違いと拡張子を変えることができます。 `--case'
+オプションは引数を一つ取り、それは `upper' か `lower'
+でなくてはいけません。
+このオプションは、出力側のファイル名を大文字あるいは小文字になるよ
+うにします。
 
-   同様に `--suffix' オプションも引数を一つとり、それは `none'、`dot'、
-`version'、`both' のいずれかでなくてはいけません。 このオプションは出
-力側のファイル名の拡張子を、「なし」「点」「バージョン」 「両方」(点 +
-バージョン) になるようにします。
+   同様に `--suffix' オプションも引数を一つとり、それは
+`none'、`dot'、`version'、`both' のいずれかでなく てはいけません。
+このオプションは出力側のファイル名の拡張子を、「なし」「点」「バージョン」
+「両方」(点 + バージョン) になるようにします。
 
 
 File: ebzip-ja.info,  Node: Test,  Next: Partial Compression,  Prev: Adjust Filenames,  Up: Compression
@@ -364,9 +369,9 @@ File: ebzip-ja.info,  Node: Test,  Next: Partial Compression,  Prev: Adjust File
 テスト
 ======
 
-   `ebzip' を `--test' (`-t') オプション付きで実行すると、 `ebzip' は圧
-縮したデータを実際のファイルには書き込まなくなります。 圧縮する前に圧縮
-後のファイルの大きさを知りたいときに、便利です。
+   `ebzip' を `--test' (`-t') オプション付きで実行すると、 `ebzip'
+は圧縮したデータを実際のファイルには書き込まなくなります。
+圧縮する前に圧縮後のファイルの大きさを知りたいときに、便利です。
 
      % ebzip --test /dict /dict
 
@@ -376,14 +381,14 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
 一部だけの圧縮
 ==============
 
-   なにも設定しないと、 `ebzip' は書籍一冊の全体を圧縮しますが、
-`--subbook' (`-S') オプションを使うと指定した副本 (subbook) だけを圧縮
-できます。
+   なにも設定しないと、`ebzip' は書籍一冊の全体を圧縮しますが、
+`--subbook' (`-S') オプションを使うと指定した副本 (subbook)
+だけを圧縮できます。
 
-   `--subbook' オプションは引数を一つ取り、そこにカンマ (`,') で区切っ
-て、圧縮したい副本のディレクトリ名を並べて書きます。 `ebinfo' コマンド
-を用いると、あなたの所有している書籍にどのような副本が含まれているのか
-を知ることができます。
+   `--subbook' オプションは引数を一つ取り、そこにカンマ (`,')
+で区切って、圧縮したい副本のディレクトリ名を並べて書きます。 `ebinfo'
+コマンドを用いると、あなたの所有している書籍にどのよう
+な副本が含まれているのかを知ることができます。
 
      % ebinfo /mnt/cdrom
      ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
@@ -392,14 +397,14 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
      副本 1:
        題名: 新英和辞典（第四版）
        ディレクトリ: english
-       検索方式: 前方一致後方一致条件メニュー
+       検索方式: 前方一致 後方一致 条件 メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字: 0xa121 -- 0xa24e
        全角フォントの文字: 0xa321 -- 0xa27e
      副本 2:
        題名: CD-ROM 仏和辞典（第三版）
        ディレクトリ: french
-       検索方式: 前方一致後方一致条件メニュー
+       検索方式: 前方一致 後方一致 条件 メニュー
        フォントの大きさ: 16 24 30 48
        半角フォントの文字:
        全角フォントの文字: 0xa321 -- 0xa27e
@@ -411,33 +416,34 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
        半角フォントの文字:
        全角フォントの文字: 0xa321 -- 0xa27e
 
-(`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行 :
+(`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行:
 (ebinfo-ja)Invoking ebinfo.)。
-この例では、 3 つの副本が書籍には含まれており、それらのディレクトリ名は
+この例では、3 つの副本が書籍には含まれており、それらのディレクトリ名は
 `english', `french', `german' だということが分かります。
 
    `english' と `german' だけを圧縮するには、次のようにします。
 
      % ebzip --subbook english,french /dict
 
-ディレクトリ名の大文字、小文字の違いは無視されます。 `--subbook' の引数
-は、次のように分けて書くこともできます。
+ディレクトリ名の大文字、小文字の違いは無視されます。 `--subbook'
+の引数は、次のように分けて書くこともできます。
 
      % ebzip --subbook english --subbook french /dict
 
-残りの副本 (この例では `german') のファイルは圧縮されることもコピーさ
-れることもありませんので、この時点ではまだこの書籍に対する圧縮の作業は
-完了していません。 この書籍を使用するためには、さらなる操作を行って残り
-の副本を圧縮するか、 `ebrefile' コマンドを使って残りの副本を
-`CATALOG(S)' ファイルの副本登録リストから削除しなくてはなりません (詳
-しくは *note `ebzip' との連携: (ebrefile-ja)Combination with ebzip.)。
+残りの副本 (この例では `german') のファイルは圧縮されることもコピー
+されることもありませんので、この時点ではまだこの書籍に対する圧縮の作業は
+完了していません。
+この書籍を使用するためには、さらなる操作を行って残りの副本を圧縮するか、
+`ebrefile' コマンドを使って残りの副本を `CATALOG(S)' ファイル
+の副本登録リストから削除しなくてはなりません (詳しくは *note `ebzip'
+との連携: (ebrefile-ja)Combination with ebzip.)。
 
-   副本同士で、異なる圧縮レベルを設定することは可能です (たとえば、
-`english' と `french' はレベル 0 で圧縮し、 `german' はレベル 2 で圧縮
-する)。
+   副本同士で、異なる圧縮レベルを設定することは可能です
+(たとえば、`english' と `french' はレベル 0 で圧縮し、 `german'
+はレベル 2 で圧縮する)。
 
-   `--subbook' オプションの有無にかかわらず、`LANGUAGE' ファイルは常に
-圧縮されます。
+   `--subbook' オプションの有無にかかわらず、`LANGUAGE' ファイ
+ルは常に圧縮されます。
 
 
 File: ebzip-ja.info,  Node: Overwrite Old Files,  Next: Compress Compressed EPWING,  Prev: Partial Compression,  Up: Compression
@@ -445,8 +451,8 @@ File: ebzip-ja.info,  Node: Overwrite Old Files,  Next: Compress Compressed EPWI
 古いファイルの上書き
 ====================
 
-   書き込もうとしたファイルがすでに存在するとき、`ebzip' は上書きして
-良いかどうかの確認を求めてきます。
+   書き込もうとしたファイルがすでに存在するとき、`ebzip' は上書きし
+て良いかどうかの確認を求めてきます。
 
      ==> /dict/science/data/honmon を圧縮 <==
      /dict/science/data/honmon.ebz に出力
@@ -454,13 +460,13 @@ File: ebzip-ja.info,  Node: Overwrite Old Files,  Next: Compress Compressed EPWI
      ファイルがすでに存在します: /dict/science/data/honmon.ebz
      上書きしますか (はい:y, いいえ:n)?
 
-`y' か `n' で答えて下さい。 `n' と答えると、`ebzip' はそのファイルを飛
-ばして、次に進みます。
+`y' か `n' で答えて下さい。 `n' と答えると、`ebzip'
+はそのファイルを飛ばして、次に進みます。
 
-   `--force-overwrite' オプションを指定すると、`ebzip' はすでに存在し
-ているファイルを、確認なしに上書きします。 同様に、`--no-overwrite' オ
-プションを指定すると、`ebzip' は確認なしにそのファイルを飛ばして次に進
-みます。
+   `--force-overwrite' オプションを指定すると、`ebzip' はすで
+に存在しているファイルを、確認なしに上書きします。
+同様に、`--no-overwrite' オプションを指定すると、`ebzip' は
+確認なしにそのファイルを飛ばして次に進みます。
 
 
 File: ebzip-ja.info,  Node: Compress Compressed EPWING,  Prev: Overwrite Old Files,  Up: Compression
@@ -468,10 +474,11 @@ File: ebzip-ja.info,  Node: Compress Compressed EPWING,  Prev: Overwrite Old Fil
 圧縮された EPWING 書籍の圧縮
 ============================
 
-   `ebzip' は EPWING 圧縮形式で圧縮された CD-ROM 書籍を圧縮することが
-できます。 `ebzip' は書籍を伸長してから、ebzip の圧縮形式で圧縮し直しま
-す。 一般に ebzip の圧縮形式の方が EPWING 圧縮形式よりも良好なので、
-`ebzip' によって圧縮された書籍は元のものよりも小さくなります。
+   `ebzip' は EPWING 圧縮形式で圧縮された CD-ROM 書籍を圧縮すること
+ができます。 `ebzip' は書籍を伸長してから、ebzip
+の圧縮形式で圧縮し直します。 一般に ebzip の圧縮形式の方が EPWING
+圧縮形式よりも良好なので、 `ebzip'
+によって圧縮された書籍は元のものよりも小さくなります。
 
 
 File: ebzip-ja.info,  Node: Uncompression,  Next: Information,  Prev: Compression,  Up: Top
@@ -479,7 +486,7 @@ File: ebzip-ja.info,  Node: Uncompression,  Next: Information,  Prev: Compressio
 伸長
 ****
 
-   `ebunzip' (`ebzip --uncompress'、 `ebzipinfo --uncompress' と同じ)
+   `ebunzip' (`ebzip --uncompress'、`ebzipinfo --uncompress' と同じ)
 は、`ebzip' で圧縮した CD-ROM 書籍を伸長します。
 
 * Menu:
@@ -494,9 +501,9 @@ File: ebzip-ja.info,  Node: Uncompression Example,  Next: Options for Uncompress
 伸長の実行例
 ============
 
-   伸長の処理手順は、圧縮とかなり似ています。 `/dict' の下に圧縮された
-書籍が置かれているものと仮定します。 この書籍には、`/dict' の下に次のよ
-うなファイルを持っています。
+   伸長の処理手順は、圧縮とかなり似ています。 `/dict'
+の下に圧縮された書籍が置かれているものと仮定します。
+この書籍には、`/dict' の下に次のようなファイルを持っています。
 
      /dict/catalog
      /dict/language.ebz
@@ -512,8 +519,8 @@ File: ebzip-ja.info,  Node: Uncompression Example,  Next: Options for Uncompress
 
      % ebunzip --output-directory /dict /dict
 
-伸長には、しばらくかかることがあります。 伸長の間、`ebunzip' は、次のよ
-うに状況を知らせるメッセージを出力します。
+伸長には、しばらくかかることがあります。 伸長の間、`ebunzip'
+は、次のように状況を知らせるメッセージを出力 します。
 
      ==> /dict/kanji/start.ebz を伸長 <==
      ./kanji/start.ebz に出力
@@ -524,8 +531,8 @@ File: ebzip-ja.info,  Node: Uncompression Example,  Next: Options for Uncompress
      完了 (82460672 / 82460672 バイト)
      25681439 -> 82460672 バイト
 
-伸長の間、`ebunzip' は、すでに存在するファイルを上書きしても良いかどう
-か確認を求めてきます。
+伸長の間、`ebunzip' は、すでに存在するファイルを上書きしても良いか
+どうか確認を求めてきます。
 
      ==> /dict/kanji/start.ebz を伸長 <==
      /dict/kanji/start に出力
@@ -533,15 +540,15 @@ File: ebzip-ja.info,  Node: Uncompression Example,  Next: Options for Uncompress
      ファイルがすでに存在します: /dict/kanji/start
      上書きしますか (はい:y, いいえ:n)?
 
-伸長が完了すると、`/dict' の下のディレクトリ構成は少し変化しています。
+伸長が完了すると、`/dict' の下のディレクトリ構成は少し変化して います。
 
      /dict/catalog
      /dict/language
      /dict/kanji/start
      /dict/english/start
 
-伸長されたファイルはファイル名が変化し、 拡張子 `.ebz' が取り除かれてい
-ます。
+伸長されたファイルはファイル名が変化し、 拡張子 `.ebz'
+が取り除かれています。
 
 
 File: ebzip-ja.info,  Node: Options for Uncompression,  Next: Uncompress Compressed EPWING,  Prev: Uncompression Example,  Up: Uncompression
@@ -551,30 +558,30 @@ File: ebzip-ja.info,  Node: Options for Uncompression,  Next: Uncompress Compres
 
    多くのオプションは、圧縮時と伸長時とで同じ意味を持っています。
 
-   `--keep' オプションを指定すると、`ebunzip' は、伸長した後に圧縮ファ
-イルを削除しなくなります。
+   `--keep' オプションを指定すると、`ebunzip' は、伸長した後に
+圧縮ファイルを削除しなくなります。
 
-   `--test' オプションを指定すると、`ebunzip' は伸長したデータを実際の
-ファイルには書き込みません。 このオプションは、ファイルが正しく圧縮され
-ているのかを確認するときに便利です (`--test' オプションについての詳細
-は、*note テスト: Test.)。
+   `--test' オプションを指定すると、`ebunzip' は伸長したデータ
+を実際のファイルには書き込みません。
+このオプションは、ファイルが正しく圧縮されているのかを確認するときに便
+利です (`--test' オプションについての詳細は、*note テスト: Test.)。
 
-   `--subbook' オプションを指定すると、指定した副本および `LANGUAGE' フ
-ァイルだけしか伸長しません (`--subbook' オプションについての詳細は、
+   `--subbook' オプションを指定すると、指定した副本および `LANGUAGE'
+ファイルだけしか伸長しません (`--subbook' オプションについての詳細は、
 *note 一部だけの圧縮: Partial Compression.)。
 
-   `--force-overwrite' や `--no-overwrite' オプションを指定すると、
-`ebunzip' は上書きしても良いかどうかの確認なしに、ファイルを上書きした
-り飛ばして次に進んだりします (`--force-overwrite' と `--no-overwrite'
-オプションについての詳細は、*note 古いファイルの上書き : Overwrite Old
-Files.)。
+   `--force-overwrite' や `--no-overwrite' オプションを指定する
+と、`ebunzip' は上書きしても良いかどうかの確認なしに、ファイルを
+上書きしたり飛ばして次に進んだりします (`--force-overwrite' と
+`--no-overwrite' オプションについての 詳細は、*note
+古いファイルの上書き: Overwrite Old Files.)。
 
-   何も設定しないと、伸長されたファイルのファイル名の大文字・小文字の違
-いや拡張子のスタイルは、圧縮ファイルのものと同じになります。 `--case'
-と `--suffix' オプションによって、伸長されたファイルのファイル名の大文
-字・小文字の違いや拡張子のスタイルを修正することができます (`--case'
-と `--suffix' オプションについての詳細は、 *note ファイル名の調整 :
-Adjust Filenames.)。
+何も設定しないと、伸長されたファイルのファイル名の大文字・小文字の違い
+や拡張子のスタイルは、圧縮ファイルのものと同じになります。 `--case' と
+`--suffix' オプションによって、伸長されたファイ
+ルのファイル名の大文字・小文字の違いや拡張子のスタイルを修正することが
+できます (`--case' と `--suffix' オプションについての詳細は、 *note
+ファイル名の調整: Adjust Filenames.)。
 
    `ebunzip' は、`--level' オプションを無視します。 伸長時に `--level'
 オプションを指定する必要はありません。
@@ -585,10 +592,11 @@ File: ebzip-ja.info,  Node: Uncompress Compressed EPWING,  Prev: Options for Unc
 圧縮された EPWING CD-ROM 書籍の伸長
 ===================================
 
-   `ebzip' は EPWING 圧縮形式で圧縮された CD-ROM 書籍を伸長することが
-できます。 しかしながら、伸長した書籍を圧縮し直して、元の書籍を復元する
-ことはできません。 言い換えると、`ebzip' は EPWING 圧縮形式の伸長には
-対応していますが、圧縮には対応していません。
+   `ebzip' は EPWING 圧縮形式で圧縮された CD-ROM 書籍を伸長すること
+ができます。
+しかしながら、伸長した書籍を圧縮し直して、元の書籍を復元することはでき
+ません。 言い換えると、`ebzip' は EPWING
+圧縮形式の伸長には対応しています が、圧縮には対応していません。
 
 
 File: ebzip-ja.info,  Node: Information,  Next: Delete a Book,  Prev: Uncompression,  Up: Top
@@ -610,9 +618,9 @@ File: ebzip-ja.info,  Node: Information Example,  Next: Options for Information,
 情報出力の実行例
 ================
 
-   `/dict' にある、圧縮された CD-ROM 書籍の情報を出力するには次のコマ
-ンドを実行します。 `/dict' に置かれている、圧縮された CD-ROM 書籍の情報
-を出力するには、次のようにします。
+   `/dict' にある、圧縮された CD-ROM 書籍の情報を出力するには次のコ
+マンドを実行します。 `/dict' に置かれている、圧縮された CD-ROM
+書籍の情報を出力するに は、次のようにします。
 
      % ebzipifo /dict
 
@@ -632,13 +640,15 @@ File: ebzip-ja.info,  Node: Options for Information,  Prev: Information Example,
 ====================
 
    `--subbook' オプション付きで `ebzipinfo' を実行すると、 `ebzipinfo'
-は `LANGUAGE'、`CATALOG'、`CATALOGS' ファイルと、指定した副本のファイル
-の情報だけを出力します (`--subbook' オプションについての詳細は、 *note
-一部だけの圧縮: Partial Compression.)。
+は `LANGUAGE'、`CATALOG'、`CATALOGS'
+ファイルと、指定した副本のファイルの情報だけを出力します (`--subbook'
+オプションについての詳細は、 *note 一部だけの圧縮: Partial
+Compression.)。
 
-   `ebzipinfo' は `--force-overwrite'、 `--keep'、`--level'、
-`--no-overwrite'、 `--output-directory'、`--quiet'、 `--silence'、
-`--suffix'、`--test' オプションを無視します。
+   `ebzipinfo' は `--force-overwrite'、
+`--keep'、`--level'、`--no-overwrite'、
+`--output-directory'、`--quiet'、`--silence'、 `--suffix'、`--test'
+オプションを無視します。
 
 
 File: ebzip-ja.info,  Node: Delete a Book,  Next: Summary of Options,  Prev: Information,  Up: Top
@@ -646,8 +656,8 @@ File: ebzip-ja.info,  Node: Delete a Book,  Next: Summary of Options,  Prev: Inf
 書籍の削除
 **********
 
-   `ebzip' は、ハードディスク上に圧縮した辞書の削除機能は持っていませ
-ん。 代わりに `rm' コマンドを使って下さい。
+   `ebzip' は、ハードディスク上に圧縮した辞書の削除機能は持っていま
+せん。 代わりに `rm' コマンドを使って下さい。
 
      % rm -r /dict
 
@@ -659,27 +669,28 @@ File: ebzip-ja.info,  Node: Summary of Options,  Next: Comparision Result,  Prev
 `ebzip' のオプション一覧
 ************************
 
-   `ebzip' コマンドは、伝統的な一文字オプション名と覚えやすい長いオプ
-ション名の両方を扱うことができます。 長いオプション名を表すには、`-' で
-はなく `--' を用います。 オプション名が一意に決まる範囲内で、名前の後方
-部分を省略することができます。
+   `ebzip' コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、`-' ではなく `--' を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
 
 `-c CASE'
 `--case CASE'
-     出力するファイル名に大文字・小文字のどちらを使用するのかを指定しま
-     す。 CASE は、`upper' or `lower' でなくてはいけません。 このオプシ
-     ョンを指定しなければ、出力側のファイルにおけるファイル名の大文字・
-     小文字の使用は、入力側の書籍のファイルのファイル名と同じになりま
-     すこのオプションは、情報出力の動作のときや、`--test' (`-t') オプ
-     ションを指定したときは無視されます
+     出力するファイル名に大文字・小文字のどちらを使用するのかを指定します。
+     CASE は、`upper' or `lower' でなくてはいけません。
+     このオプションを指定しなければ、出力側のファイルにおけるファイル名の
+     大文字・小文字の使用は、入力側の書籍のファイルのファイル名と同じになり
+     ます このオプションは、情報出力の動作のときや、`--test' (`-t')
+     オプションを指定したときは無視されます
 
      (詳しくは、*note ファイル名の調整: Adjust Filenames.)。
 
 `-f'
 `--force-overwrite'
-     確認を求めずに、既に存在しているファイルを上書きします。 このオプ
-     ションは、情報出力の動作のときや、`--test' (`-t') オプションを指定
-     したときは無視されます
+     確認を求めずに、既に存在しているファイルを上書きします。
+     このオプションは、情報出力の動作のときや、`--test' (`-t')
+     オプションを指定したときは無視されます
 
      (詳しくは、*note 古いファイルの上書き: Overwrite Old Files.)。
 
@@ -695,74 +706,78 @@ File: ebzip-ja.info,  Node: Summary of Options,  Next: Comparision Result,  Prev
 
 `-k'
 `--keep'
-     出力側のファイルを書き込み終わっても、対応する入力側のファイルは削
-     除しません。 このオプションは、情報出力の動作のときや、 `--test'
-     (`-t') オプションを指定したときは無視されます
+     出力側のファイルを書き込み終わっても、対応する入力側のファイルは削除し
+     ません。 このオプションは、情報出力の動作のときや、`--test' (`-t')
+     オプションを指定したときは無視されます
 
      (詳しくは、*note 圧縮の実行例 (2): Compression Example 2.)。
 
 `-l 整数'
 `--level 整数'
-     圧縮レベルを指定します。 整数は、`0'、`1'、`2'、`3' のいずれかで
-     なくてはいけません。 レベル 0
-     は、最も速いものの圧縮率は最悪です。 レベル 3 は、最も遅いものの圧
-     縮率は最良です。 デフォルトのレベルは 0 です。 このオプションは、
-     圧縮以外の動作のときは無視されます。
+     圧縮レベルを指定します。 整数 は、`0'、`1'、`2'、`3'
+     のいずれかでなくて はいけません。 レベル 0
+     は、最も速いものの圧縮率は最悪です。 レベル 3
+     は、最も遅いものの圧縮率は最良です。 デフォルトのレベルは 0 です。
+     このオプションは、圧縮以外の動作のときは無視されます。
 
      (詳しくは、*note 圧縮レベル: Compression Level.)。
 
 `-n'
 `--no-overwrite'
-     既に存在するファイルがあった場合、上書きの確認を求めずに、そのファ
-     イルは飛ばして次のファイルに進みます。 このオプションは、情報出力
-     の動作のときや、`--test' (`-t') オプションを指定したときは無視され
-     ます
+     既に存在するファイルがあった場合、上書きの確認を求めずに、そのファイル
+     は飛ばして次のファイルに進みます。
+     このオプションは、情報出力の動作のときや、`--test' (`-t')
+     オプションを指定したときは無視されます
 
      (詳しくは、*note 古いファイルの上書き: Overwrite Old Files.)。
 
 `-o ディレクトリ'
 `--output-directory ディレクトリ'
-     出力側のファイルを置くディレクトリを指定します。 デフォルトでは、
-     カレントディレクトリ (`.') になります。 このオプションは、情報出力
-     の動作のときや、`--test' (`-t') オプションを指定したときは無視され
-     ます
+     出力側のファイルを置くディレクトリを指定します。
+     デフォルトでは、カレントディレクトリ (`.') になります。
+     このオプションは、情報出力の動作のときや、`--test' (`-t')
+     オプションを指定したときは無視されます
 
 `-q'
 `--quiet'
 `--silence'
-     情報、警告メッセージを出力しません。 ただし、圧縮・伸長時に出力側
-     のファイルが既に存在していると、 `ebzip' はその出力側のファイルを
-     上書きして良いかどうか訊いてきます。 この質問を抑制するには、
-     `--force-overwrite'(`-f') または `--no-overwrite'(`-n') を指定して
-     下さい。 このオプションは、情報出力の動作のときは、無視されます
+     情報、警告メッセージを出力しません。
+     ただし、圧縮・伸長時に出力側のファイルが既に存在していると、
+     `ebzip'
+     はその出力側のファイルを上書きして良いかどうか訊いてきます。
+     この質問を抑制するには、`--force-overwrite'(`-f') または
+     `--no-overwrite'(`-n') を指定して下さい。
+     このオプションは、情報出力の動作のときは、無視されます
 
 `-s 拡張子'
 `--suffix 拡張子'
      出力側のファイルにおける、ファイル名の拡張子のスタイルを指定します。
-     拡張子は、`none'、`dot'、`version'、`both' のいずれかでなくてはい
-     けません。 拡張子が `none' の場合、拡張子は付加されません。 拡張
-     子が `dot' のときは、点 (`.') が付加されます。 拡張子が
-     `version' のときは、バージョン番号 (`;1') が付加されます。 拡張子
-     が `both' のときは、点とバージョン番号 (`.;1') が付加されます。 こ
-     のオプションを指定しなければ、出力側のファイルにおけるファイル名の
-     拡張子は、入力側の書籍のファイルのファイル名と同じになります。 こ
-     のオプションは、情報出力の動作のときや、`--test' (`-t') オプション
-     を指定したときは無視されます
+     拡張子 は、`none'、`dot'、`version'、`both'
+     のいずれかでなくてはいけません。 拡張子 が `none'
+     の場合、拡張子は付加されません。 拡張子 が `dot' のときは、点
+     (`.') が付加されます。 拡張子 が `version'
+     のときは、バージョン番号 (`;1') が付加されます。 拡張子 が `both'
+     のときは、点とバージョン番号 (`.;1') が付加されます。
+     このオプションを指定しなければ、出力側のファイルにおけるファイル名の
+     拡張子は、入力側の書籍のファイルのファイル名と同じになります。
+     このオプションは、情報出力の動作のときや、`--test' (`-t')
+     オプションを指定したときは無視されます
 
      (詳しくは、*note ファイル名の調整: Adjust Filenames.)。
 
 `-S 副本'
 `--subbook 副本'
-     圧縮・伸長・情報出力の対象とする副本を指定します。 副本は、副本の
-     ディレクトリ名をカンマ (`,') で区切って並べたものでなくてはいけま
-     せん。 デフォルトでは、すべての副本が対象になります。
+     圧縮・伸長・情報出力の対象とする副本を指定します。 副本
+     は、副本のディレクトリ名をカンマ (`,') で区切って
+     並べたものでなくてはいけません。
+     デフォルトでは、すべての副本が対象になります。
 
      (詳しくは、*note 一部だけの圧縮: Partial Compression.)。
 
 `-t'
 `--test'
-     圧縮・伸長したデータを、実際のファイルには書き込みません。 このオ
-     プションは、情報出力の動作のときは無視されます
+     圧縮・伸長したデータを、実際のファイルには書き込みません。
+     このオプションは、情報出力の動作のときは無視されます
 
      (詳しくは、*note テスト: Test.)。
 
@@ -788,8 +803,8 @@ File: ebzip-ja.info,  Node: Comparision Result,  Next: Compressed File Format,  
 圧縮結果の比較
 **************
 
-   次の表は、ある英和・和英辞典 (EBXA) の `START' ファイルを圧縮した結
-果:
+   次の表は、ある英和・和英辞典 (EBXA) の `START' ファイルを圧縮した
+結果:
 
 圧縮レベル                    ファイルサイズ         圧縮率
 (元のファイル)                154476544 bytes        100.0%
@@ -833,8 +848,8 @@ File: ebzip-ja.info,  Node: Compressed File Format,  Prev: Comparision Result,  
 圧縮ファイルの形式
 ******************
 
-   この章では、`ebzip' が扱っている圧縮ファイル形式の詳細について説明
-します。
+   この章では、`ebzip' が扱っている圧縮ファイル形式の詳細について説
+明します。
 
 * Menu:
 
@@ -851,8 +866,8 @@ File: ebzip-ja.info,  Node: Format Overview,  Next: Data Part,  Prev: Compressed
 
    圧縮ファイル形式は次のような特徴を持っています。
 
-   * CPU の種類、オペレーティングシステム、ファイルシステムに依存しませ
-     ん。
+   * CPU
+     の種類、オペレーティングシステム、ファイルシステムに依存しません。
 
    * 非損失圧縮です。
      圧縮ファイルを伸長することによって、元のファイルを復元できます。
@@ -860,8 +875,8 @@ File: ebzip-ja.info,  Node: Format Overview,  Next: Data Part,  Prev: Compressed
    * 4 つの圧縮レベルがあります。
      伸長の速さか圧縮率の良さの、いずれかを選ぶことができます。
 
-圧縮されたファイルは、ヘッダ部、インデックス部、およびデータ部から構成
-され、この順でファイルに配置されます。
+   圧縮されたファイルは、ヘッダ部、インデックス部、およびデータ部から構
+成され、この順でファイルに配置されます。
 
      +--------+-------------+-----------------------------+
      | ヘッダ |インデックス |          データ             |
@@ -876,8 +891,8 @@ File: ebzip-ja.info,  Node: Data Part,  Next: Index Part,  Prev: Format Overview
 
    元のファイルは、次の行程で圧縮されます。
 
-   まず、 `ebzip' は元のファイルを分割します。 個々の "スライス"
-("slice") は、末尾のものを除けば、同じ大きさになっています。
+   まず、`ebzip' は元のファイルを分割します。 個々の "スライス"
+("slice") は、末尾のものを除けば、同じ 大きさになっています。
 
      +---------------+---------------+--   --+----------+
      |  スライス 1   |  スライス 2   |  ...  |スライス N|
@@ -893,8 +908,9 @@ File: ebzip-ja.info,  Node: Data Part,  Next: Index Part,  Prev: Format Overview
 2                                    8192 バイト
 3                                    16384 バイト
 
-次に、末尾のスライスがスライス・サイズよりも短かった場合、 `ebzip' はス
-ライス・サイズと同じになるまで伸ばし、伸ばした部分に 0x00 を埋めます。
+次に、末尾のスライスがスライス・サイズよりも短かった場合、 `ebzip'
+はスライス・サイズと同じになるまで伸ばし、伸ばした 部分に 0x00
+を埋めます。
 
                                                       伸した部分
      +---------------+---------------+--   --+---------+-----+
@@ -902,29 +918,30 @@ File: ebzip-ja.info,  Node: Data Part,  Next: Index Part,  Prev: Format Overview
      +---------------+---------------+--   --+---------+-----+
                                                              EOF
 
-最後に、`ebzip' は個々のスライスを、RFC 1951 に記されている DEFLATE 圧
-縮データ形式で圧縮します。 おのおののスライスは、他のスライスとは独立し
-て圧縮されます。 圧縮されたスライスのビット数が 8 の倍数でなければ、1
-〜 7 ビットを圧縮されたスライスの末尾に足し、8 の倍数になるようにしま
-す。 これにより、圧縮されたそれぞれのスライスはバイトの境界から開始され
-ます。 足されたビットの内容は未定義ですが、このビットは決して使用され
-ません。
+最後に、`ebzip' は個々のスライスを、RFC 1951 に記されている DEFLATE
+圧縮データ形式で圧縮します。
+おのおののスライスは、他のスライスとは独立して圧縮されます。
+圧縮されたスライスのビット数が 8 の倍数でなければ、1 〜 7 ビットを圧
+縮されたスライスの末尾に足し、8 の倍数になるようにします。
+これにより、圧縮されたそれぞれのスライスはバイトの境界から開始されま
+す。
+足されたビットの内容は未定義ですが、このビットは決して使用されません。
 
      +------------+----------+--   --+--------------+
      | 圧縮された |圧縮された|  ...  |  圧縮された  |
      | スライス 1 |スライス 2|  ...  |  スライス N  |
      +------------+----------+--   --+--------------+
 
-これが圧縮ファイル形式における "データ部" になり、圧縮されたスライスか
-ら構成されます。
+これが圧縮ファイル形式における "データ部" になり、圧縮されたスライ
+スから構成されます。
 
    末尾のスライスの伸ばした部分は、末尾のスライスの一部として圧縮され
 ます。 `ebunzip' が末尾のスライスを復元するときは、スライスを伸長して
 から伸ばした部分を取り除くという作業を行います。
 
-   圧縮したスライスの大きさが、スライス・サイズよりも大きいか等しいとき
-は、 `ebzip' はそのスライスの圧縮データを廃棄します。 この場合、 `ebzip'
-は元のデータをそのスライスの圧縮データとして代わりに記録します。
+圧縮したスライスの大きさが、スライス・サイズよりも大きいか等しいときは、
+`ebzip' はそのスライスの圧縮データを廃棄します。 この場合、`ebzip'
+は元のデータをそのスライスの圧縮データとして代わ りに記録します。
 
    元のファイルが空だったときは、圧縮ファイルのデータ部はありません。
 
@@ -934,9 +951,10 @@ File: ebzip-ja.info,  Node: Index Part,  Next: Header Part,  Prev: Data Part,  U
 インデックス部
 ==============
 
-   圧縮時に、 `ebzip' は圧縮した個々のスライスの "インデックス"
-("index") を記録します。 個々のインデックスは、圧縮ファイルの先頭から圧
-縮されたスライスの先頭までの距離を表します。 距離の単位はバイトです。
+   圧縮時に、`ebzip' は圧縮した個々のスライスの "インデックス"
+("index") を記録します。
+個々のインデックスは、圧縮ファイルの先頭から圧縮されたスライスの先頭
+までの距離を表します。 距離の単位はバイトです。
 
      +---------+---------+--           --+---------+---------+
      |インデッ |インデッ |  ...........  |インデッ |インデッ |
@@ -950,41 +968,42 @@ File: ebzip-ja.info,  Node: Index Part,  Next: Header Part,  Prev: Data Part,  U
      |    スライス 1    |    スライス 2    |  ...  |  スライス N  |
      +------------------+------------------+--   --+--------------+
 
-個々のインデックスは 2 〜 4 バイトの大きさを持ちます。 インデックスの大
-きさは、元のファイルの大きさで決まります。
+個々のインデックスは 2 〜 4 バイトの大きさを持ちます。
+インデックスの大きさは、元のファイルの大きさで決まります。
 
 元のファイルの大きさ                               インデックスの大きさ
 0 〜      65535 バイト                             2 バイト
 65535 〜   16777215 バイト                         3 バイト
 16777216 〜 4294967295 バイト                      4 バイト
 
-   インデックス内での、複数バイトからなる数値はすべて、値の大きい方の部
-分を表すバイト (most significant byte) が先に来た形で記録されます。 た
-とえば、0x1234 は次のように記録されます。 最初のバイトは 0x12 となり、
-次のバイトは 0x34 になります。
+インデックス内での、複数バイトからなる数値はすべて、値の大きい方の部分
+を表すバイト (most significant byte) が先に来た形で記録されます。
+たとえば、0x1234 は次のように記録されます。 最初のバイトは 0x12
+となり、次のバイトは 0x34 になります。
 
      +---------+---------+
      |0001 0010|0011 1000|
      +---------+---------+
        (0x12)    (0x34)
 
-   インデックス部は、圧縮されたスライス 1 のインデックスで始まり、その
-後ろに圧縮されたスライス 2 のインデックスが続きます。 圧縮されたスライ
-ス N のインデックスの後ろには、「終端」へのインデックスが置かれます。
-このインデックスは、圧縮されたスライス N
-の末尾の次のバイトへのインデックスになります。 また、圧縮されたファイル
-のサイズを示すことにもなります。
+   インデックス部は、圧縮されたスライス 1
+のインデックスで始まり、その後ろ に圧縮されたスライス 2
+のインデックスが続きます。 圧縮されたスライス N
+のインデックスの後ろには、「終端」へのインデックス が置かれます。
+このインデックスは、圧縮されたスライス N の末尾の次のバイトへのインデッ
+クスになります。
+また、圧縮されたファイルのサイズを示すことにもなります。
 
      +---------+---------+--           --+---------+---------+
      |インデッ |インデッ |  ...........  |インデッ |インデッ |
      |クス 1   |クス 2   |  ...........  |クス N   |クス END |
      +---------+---------+--           --+---------+---------+
 
-   圧縮されたスライスの大きさがスライスサイズに等しいときは、そのスライ
-スのデータは実際には圧縮されていないことを示します。
+圧縮されたスライスの大きさがスライスサイズに等しいときは、そのスライス
+のデータは実際には圧縮されていないことを示します。
 
-   元のファイルが空だったときは、インデックス部はインデックスを一つだけ
-持ちます。 このインデックスは圧縮されたファイルの大きさを表します。
+元のファイルが空だったときは、インデックス部はインデックスを一つだけ持
+ちます。 このインデックスは圧縮されたファイルの大きさを表します。
 
 
 File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File Format
@@ -1007,8 +1026,8 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 3.0alpha4 では、 1
-     (2 進数で 0001) だけが規定されています。
+     圧縮モードを表します。 EB ライブラリバージョン 3.0beta0 では、1 (2
+     進数で 0001) だけが 規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
      圧縮レベルを表します。
@@ -1020,18 +1039,19 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      元の (非圧縮時の) ファイルの大きさを記録しています。
 
 `Adler-32 (4 バイト)'
-     RFC 1950 に記されている Adler-32 というアルゴリズムを用いて計算し
-     た、 非圧縮データのチェックサムの値です。
+     RFC 1950 に記されている Adler-32
+     というアルゴリズムを用いて計算した、
+     非圧縮データのチェックサムの値です。
 
 `修正時刻 (4 バイト)'
      元のファイルの最終修正時刻です。 グリニッジ標準時の 1970 年 1 月 1
-     日 0 時 0 分 0 秒からの経過秒数で表します。
+     日 0 時 0 分 0 秒からの経過秒数で 表します。
 
-   `zip モード' と `圧縮レベル' は、両方ともヘッダの 5 バイト目に入り
-ます。 `zip モード' は、値の最も大きい部分を表すビット (most significant
-bit) を含み、 `圧縮レベル' は最も小さい部分を表すビット (least
-significant bit) を含んでいます。 `zip モード' が 1 で、 `圧縮レベル' が
-2 なら、ヘッダの 5 バイト目は 0x12 になります。
+   `zip モード' と `圧縮レベル' は、両方ともヘッダの 5 バイト目
+に入ります。 `zip モード' は、値の最も大きい部分を表すビット (most
+significant bit) を含み、`圧縮レベル' は最も小さい部分を表すビット
+(least significant bit) を含んでいます。 `zip モード' が 1
+で、`圧縮レベル' が 2 なら、ヘッダの 5 バ イト目は 0x12 になります。
 
       MSB                         LSB
      +---+---+---+---+---+---+---+---+
@@ -1039,39 +1059,39 @@ significant bit) を含んでいます。 `zip モード' が 1 で、 `圧縮レベル' が
      +---+---+---+---+---+---+---+---+
        (zip モード)  |  (圧縮レベル)
 
-   ヘッダ内での、複数バイトからなる数値はすべて、値の大きい方の部分を
-表すバイト (most significant byte) が先に来た形で記録されます。
+   ヘッダ内での、複数バイトからなる数値はすべて、値の大きい方の部分
+を表すバイト (most significant byte) が先に来た形で記録されます。
 
 
 
 Tag Table:
 Node: Top1010
-Node: Introduction2585
-Node: Action and Command Name3937
-Node: Invoking ebzip5664
-Node: Compression6297
-Node: Compression Example 16898
-Node: Compression Example 28482
-Node: Compression Level10042
-Node: Adjust Filenames10555
-Node: Test12576
-Node: Partial Compression12925
-Node: Overwrite Old Files15417
-Node: Compress Compressed EPWING16213
-Node: Uncompression16651
-Node: Uncompression Example17038
-Node: Options for Uncompression18563
-Node: Uncompress Compressed EPWING20111
-Node: Information20556
-Node: Information Example20895
-Node: Options for Information21584
-Node: Delete a Book22159
-Node: Summary of Options22455
-Node: Comparision Result26923
-Node: Compressed File Format28883
-Node: Format Overview29287
-Node: Data Part30141
-Node: Index Part32716
-Node: Header Part35383
+Node: Introduction2582
+Node: Action and Command Name3928
+Node: Invoking ebzip5653
+Node: Compression6288
+Node: Compression Example 16888
+Node: Compression Example 28475
+Node: Compression Level10033
+Node: Adjust Filenames10544
+Node: Test12562
+Node: Partial Compression12909
+Node: Overwrite Old Files15397
+Node: Compress Compressed EPWING16191
+Node: Uncompression16628
+Node: Uncompression Example17014
+Node: Options for Uncompression18537
+Node: Uncompress Compressed EPWING20080
+Node: Information20525
+Node: Information Example20864
+Node: Options for Information21553
+Node: Delete a Book22125
+Node: Summary of Options22421
+Node: Comparision Result26891
+Node: Compressed File Format28851
+Node: Format Overview29255
+Node: Data Part30111
+Node: Index Part32679
+Node: Header Part35333
 
 End Tag Table

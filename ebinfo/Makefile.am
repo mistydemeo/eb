@@ -14,5 +14,5 @@ INCLUDES = -I$(top_srcdir) -I../libebutils -I$(top_srcdir)/libebutils \
 
 ### *.o dependencies ###
 ebinfo.o: ebinfo.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
- ../eb/error.h ../eb/font.h ../libebutils/fakelog.h \
- ../libebutils/getopt.h ../libebutils/ebutils.h
+ ../eb/error.h ../eb/font.h ../libebutils/getopt.h \
+ ../libebutils/ebutils.h

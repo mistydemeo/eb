@@ -6,7 +6,7 @@ else
 ZLIB_SUBDIR = 
 endif
 
-SUBDIRS = $(ZLIB_SUBDIR) intl eb libebutils ebappendix ebfont ebinfo \
+SUBDIRS = $(ZLIB_SUBDIR) eb libebutils ebappendix ebfont ebinfo \
    ebrefile ebzip doc doc-ja po m4
 
 EXTRA_DIST = ChangeLog.0 INSTALL-ja README-ja move-if-change eb.conf.in \

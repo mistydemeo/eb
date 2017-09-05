@@ -59,6 +59,7 @@ eb_initialize_book(book)
     book->subbooks = NULL;
     book->languages = NULL;
     book->language_current = NULL;
+    zio_initialize(&book->language_zio);
     book->messages = NULL;
     book->text_context.unprocessed = NULL;
     book->text_context.unprocessed_size = 0;
@@ -185,7 +186,6 @@ eb_finalize_book(book)
 	    zio_finalize(&subbook->text_zio);
 	    zio_finalize(&subbook->graphic_zio);
 	    zio_finalize(&subbook->sound_zio);
-	    zio_finalize(&subbook->movie_zio);
 
 	    zio_finalize(&subbook->narrow_fonts[EB_FONT_16].zio);
 	    zio_finalize(&subbook->narrow_fonts[EB_FONT_24].zio);
@@ -217,6 +217,8 @@ eb_finalize_book(book)
     book->messages = NULL;
     book->text_context.unprocessed = NULL;
     book->text_context.unprocessed_size = 0;
+
+    zio_finalize(&book->language_zio);
 
     eb_finalize_lock(&book->lock);
 }
@@ -267,6 +269,16 @@ eb_fix_misleaded_book(book)
 }
 
 /*
+ * Hints of catalog file name in appendix package.
+ */
+#define EB_HINT_INDEX_CATALOG		0
+#define EB_HINT_INDEX_CATALOGS		1
+
+static const char *catalog_hint_list[] = {
+    "catalog", "catalogs", NULL
+};
+
+/*
  * Read information from the `CATALOG(S)' file in 'book'.
  * Return EB_SUCCESS if it succeeds, error-code otherwise.
  */
@@ -276,11 +288,13 @@ eb_initialize_catalog(book)
 {
     EB_Error_Code error_code;
     char buffer[EB_SIZE_PAGE];
+    char catalog_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char catalog_path_name[PATH_MAX + 1];
     char *space;
     EB_Subbook *subbook;
     size_t catalog_size;
     size_t title_size;
+    int hint_index;
     Zio zio;
     int i;
 
@@ -289,20 +303,28 @@ eb_initialize_catalog(book)
     /*
      * Find a catalog file.
      */
-    if (eb_compose_path_name(book->path, EB_FILE_NAME_CATALOG, EB_SUFFIX_NONE,
-	catalog_path_name) == 0) {
+    eb_find_file_name(book->path, catalog_hint_list, catalog_file_name,
+	&hint_index);
+
+    switch (hint_index) {
+    case EB_HINT_INDEX_CATALOG:
 	book->disc_code = EB_DISC_EB;
 	catalog_size = EB_SIZE_EB_CATALOG;
 	title_size = EB_MAX_EB_TITLE_LENGTH;
-    } else if (eb_compose_path_name(book->path, EB_FILE_NAME_CATALOGS,
-	EB_SUFFIX_NONE, catalog_path_name) == 0) {
+	break;
+
+    case EB_HINT_INDEX_CATALOGS:
 	book->disc_code = EB_DISC_EPWING;
 	catalog_size = EB_SIZE_EPWING_CATALOG;
 	title_size = EB_MAX_EPWING_TITLE_LENGTH;
-    } else {
+	break;
+
+    default:
 	error_code = EB_ERR_FAIL_OPEN_CAT;
 	goto failed;
     }
+
+    eb_compose_path_name(book->path, catalog_file_name, catalog_path_name);
 
     /*
      * Open a catalog file.

@@ -189,7 +189,9 @@ Optional Feature List
 
 `--enable-pthread'
      EB Library is compiled with pthread support codes.
-     The default value is `no'.
+     The default value is `no'.  `configure' reports an error if you
+     specify `yes' but `configure' failed to compile or run a sample
+     program which uses pthread.
 
 `--with-pthread-cppflags=FLAGS'
 `--with-pthread-cflags=FLAGS'
@@ -207,7 +209,7 @@ Optional Feature List
      regardless of existance of installed zlib.
 
      Please note that `configure' reports an error if you specify
-     this option but `configure' failed to find zlib.
+     `yes' but `configure' failed to find zlib.
 
 `--with-zlib-includes=DIR'
      Look for header files of zlib installed in directory DIR.  This
@@ -220,35 +222,37 @@ Optional Feature List
      package.
 
 `--enable-nls'
-     National language support.  The default value is `yes'.
-     EB Library is compiled with natioal language support codes, and
-     utilities (e.g. ebinfo) supports national language.
+     Native language support.  EB Library and utilities (e.g. ebinfo)
+     are compiled with native language support.
 
-     
-`--with-included-gettext'
-     Use gettext included in this package.  When this option is NOT
-     specified, `configure' checks whether gettext has been installed
-     on the system or not.  If found, the installed gettext is used.
-     Otherwise, gettext will be built from source codes in this
-     package.
+     To use this optional feature, GNU gettext is required.  If your
+     system doesn't have it, please install GNU gettext before 
+     building this package, or give up use this feature.  The package
+     doesn't support gettext not compatible with GNU gettext such as
+     one on Solaris.
 
-     When this option is specified, gettext is always built from
-     source regardless of existance of installed gettext.
+     The default value is `yes' if GNU gettext is available, `no'
+     otherwise.  `configure' reports an error if you specify `yes'
+     but `configure' failed to compile, or run a sample program which
+     uses gettext() function.
 
 `--with-gettext-includes=DIR'
      Look for header files of gettext installed in directory DIR.
-     This option is meaningless when gettext is built from source codes
-     in this package.
+     This option is meaningless when NLS support is disabled.
 
 `--with-gettext-libraries=DIR'
      Look for library files of gettext installed in directory DIR.
-     This option is meaningless when gettext is built from source codes
-     in this package.
+     This option is meaningless when NLS support is disabled.
 
-`--with-catgets'
-     Use catgets functions instead of gettext, if available.
+`--with-iconv-includes=DIR'
+     Look for header files of iconv installed in directory DIR.
+     This option is meaningless when NLS support is disabled. or
+     gettext() function on the system doesn't use iconv().
 
-     *Warning*: This option doesn't work correctly.
+`--with-iconv-libraries=DIR'
+     Look for library files of iconv installed in directory DIR.
+     This option is meaningless when NLS support is disabled. or
+     gettext() funtion on the system doesn't use iconv().
 
 `--enable-shared'
      Build shared library version of EB library.  The default value is

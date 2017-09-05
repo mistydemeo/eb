@@ -923,7 +923,7 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
 			goto failed;
 		    }
 		    context->comparison_result
-			= context->compare(context->canonicalized_word,
+			= context->compare(context->word,
 			    cache_p + 6, context->entry_length);
 		    context->keyword_heading.page
 			= eb_uint4(cache_p + context->entry_length + 6);
@@ -1250,7 +1250,7 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
 			goto failed;
 		    }
 		    context->comparison_result
-			= context->compare(context->canonicalized_word,
+			= context->compare(context->word,
 			    cache_p + 6, context->entry_length);
 		    context->in_group_entry = 1;
 		    cache_p += context->entry_length + 6;

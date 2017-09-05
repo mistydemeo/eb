@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4b from Makefile.am
+# Makefile.in generated automatically by automake 1.4d from Makefile.am
 
-# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000
+# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -48,6 +48,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_FLAG =
+INSTALL_HEADER = $(INSTALL_DATA)
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -65,9 +66,6 @@ AMTAR = @AMTAR@
 AS = @AS@
 AWK = @AWK@
 CC = @CC@
-CPP = @CPP@
-CXX = @CXX@
-CXXCPP = @CXXCPP@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
@@ -81,6 +79,7 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
+_am_include = @_am_include@
 install_sh = @install_sh@
 
 
@@ -125,11 +124,12 @@ DIST_SOURCES =  $(libz_la_SOURCES)
 HEADERS =  $(include_HEADERS) $(noinst_HEADERS)
 
 depcomp = $(SHELL) $(top_srcdir)/depcomp
-DEP_FILES =  @AMDEP@ $(DEPDIR)/adler32.Plo $(DEPDIR)/compress.Plo \
-$(DEPDIR)/crc32.Plo $(DEPDIR)/deflate.Plo $(DEPDIR)/gzio.Plo \
-$(DEPDIR)/infblock.Plo $(DEPDIR)/infcodes.Plo $(DEPDIR)/inffast.Plo \
-$(DEPDIR)/inflate.Plo $(DEPDIR)/inftrees.Plo $(DEPDIR)/infutil.Plo \
-$(DEPDIR)/trees.Plo $(DEPDIR)/uncompr.Plo $(DEPDIR)/zutil.Plo
+@AMDEP@DEP_FILES =  $(DEPDIR)/adler32.Plo $(DEPDIR)/compress.Plo \
+@AMDEP@$(DEPDIR)/crc32.Plo $(DEPDIR)/deflate.Plo $(DEPDIR)/gzio.Plo \
+@AMDEP@$(DEPDIR)/infblock.Plo $(DEPDIR)/infcodes.Plo \
+@AMDEP@$(DEPDIR)/inffast.Plo $(DEPDIR)/inflate.Plo \
+@AMDEP@$(DEPDIR)/inftrees.Plo $(DEPDIR)/infutil.Plo $(DEPDIR)/trees.Plo \
+@AMDEP@$(DEPDIR)/uncompr.Plo $(DEPDIR)/zutil.Plo
 DIST_COMMON =  README $(include_HEADERS) $(noinst_HEADERS) ChangeLog \
 Makefile.am Makefile.in aclocal.m4 config.guess config.sub configure \
 configure.in depcomp install-sh ltconfig ltmain.sh missing \
@@ -142,7 +142,7 @@ GZIP_ENV = --best
 SOURCES = $(libz_la_SOURCES)
 OBJECTS = $(am_libz_la_OBJECTS)
 
-all: all-redirect
+all: all-am
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
@@ -150,7 +150,7 @@ $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
-	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+	  && CONFIG_FILES=$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 
 $(ACLOCAL_M4):  configure.in 
 	cd $(srcdir) && $(ACLOCAL)
@@ -190,12 +190,8 @@ mostlyclean-compile:
 	-rm -f *.o core *.core
 	-rm -f *.$(OBJEXT)
 
-clean-compile:
-
 distclean-compile:
 	-rm -f *.tab.c
-
-maintainer-clean-compile:
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -204,8 +200,7 @@ clean-libtool:
 	-rm -rf .libs _libs
 
 distclean-libtool:
-
-maintainer-clean-libtool:
+	-rm -f libtool
 
 libz.la: $(libz_la_OBJECTS) $(libz_la_DEPENDENCIES)
 	$(LINK) -rpath $(libdir) $(libz_la_LDFLAGS) $(libz_la_OBJECTS) $(libz_la_LIBADD) $(LIBS)
@@ -214,10 +209,10 @@ install-includeHEADERS: $(include_HEADERS)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(includedir)
 	@list='$(include_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  f="`echo $$p | sed -e 's|^.*/||'`"; \
-	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$f"; \
-	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(includedir)/$$f; \
+	  echo " $(INSTALL_HEADER) $$d$$p $(DESTDIR)$(includedir)/$$f"; \
+	  $(INSTALL_HEADER) $$d$$p $(DESTDIR)$(includedir)/$$f; \
 	done
 
 uninstall-includeHEADERS:
@@ -239,7 +234,7 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	       END { for (i in files) print i; }'`; \
 	mkid -fID $$unique $(LISP)
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS: $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
@@ -257,38 +252,26 @@ GTAGS:
 	  && cd $(top_srcdir) \
 	  && gtags -i $$here
 
-mostlyclean-tags:
-
-clean-tags:
-
 distclean-tags:
 	-rm -f TAGS ID
 
-maintainer-clean-tags:
-
-@AMDEP@include $(DEPDIR)/adler32.Plo
-@AMDEP@include $(DEPDIR)/compress.Plo
-@AMDEP@include $(DEPDIR)/crc32.Plo
-@AMDEP@include $(DEPDIR)/deflate.Plo
-@AMDEP@include $(DEPDIR)/gzio.Plo
-@AMDEP@include $(DEPDIR)/infblock.Plo
-@AMDEP@include $(DEPDIR)/infcodes.Plo
-@AMDEP@include $(DEPDIR)/inffast.Plo
-@AMDEP@include $(DEPDIR)/inflate.Plo
-@AMDEP@include $(DEPDIR)/inftrees.Plo
-@AMDEP@include $(DEPDIR)/infutil.Plo
-@AMDEP@include $(DEPDIR)/trees.Plo
-@AMDEP@include $(DEPDIR)/uncompr.Plo
-@AMDEP@include $(DEPDIR)/zutil.Plo
-
-mostlyclean-depend:
-
-clean-depend:
+@AMDEP@@_am_include@ $(DEPDIR)/adler32.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/compress.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/crc32.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/deflate.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/gzio.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/infblock.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/infcodes.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/inffast.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/inflate.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/inftrees.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/infutil.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/trees.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/uncompr.Plo
+@AMDEP@@_am_include@ $(DEPDIR)/zutil.Plo
 
 distclean-depend:
 	-rm -rf $(DEPDIR)
-
-maintainer-clean-depend:
 
 @AMDEP@CCDEPMODE = @CCDEPMODE@
 
@@ -361,6 +344,7 @@ dist-all: distdir
 	|| chmod -R a+r $(distdir)
 	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c > $(distdir).tar.gz
 	-chmod -R a+w $(distdir) > /dev/null 2>&1; rm -rf $(distdir)
+
 distdir: $(DISTFILES)
 	-chmod -R a+w $(distdir) > /dev/null 2>&1; rm -rf $(distdir)
 	mkdir $(distdir)
@@ -395,7 +379,6 @@ install: install-am
 uninstall-am: uninstall-libLTLIBRARIES uninstall-includeHEADERS
 uninstall: uninstall-am
 all-am: Makefile $(LTLIBRARIES) $(HEADERS)
-all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs:
@@ -411,50 +394,44 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
+	@echo "This command is intended for maintainers to use"
+	@echo "it deletes files that may require special tools to rebuild."
 	-rm -f Makefile.in
-mostlyclean-am:  mostlyclean-libLTLIBRARIES mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-tags mostlyclean-depend \
-		mostlyclean-generic
-
-mostlyclean: mostlyclean-am
-
-clean-am:  clean-libLTLIBRARIES clean-compile clean-libtool clean-tags \
-		clean-depend clean-generic mostlyclean-am
-
 clean: clean-am
 
-distclean-am:  distclean-libLTLIBRARIES distclean-compile \
-		distclean-libtool distclean-tags distclean-depend \
-		distclean-generic clean-am
-	-rm -f libtool
+clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+	mostlyclean-am
 
 distclean: distclean-am
 	-rm -f config.status
 
-maintainer-clean-am:  maintainer-clean-libLTLIBRARIES \
-		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-depend \
-		maintainer-clean-generic distclean-am
-	@echo "This command is intended for maintainers to use;"
-	@echo "it deletes files that may require special tools to rebuild."
+distclean-am: clean-am distclean-compile distclean-depend \
+	distclean-generic distclean-libLTLIBRARIES distclean-libtool \
+	distclean-tags
 
 maintainer-clean: maintainer-clean-am
 	-rm -f config.status
 
-.PHONY: mostlyclean-libLTLIBRARIES distclean-libLTLIBRARIES \
-clean-libLTLIBRARIES maintainer-clean-libLTLIBRARIES \
-uninstall-libLTLIBRARIES install-libLTLIBRARIES mostlyclean-compile \
-distclean-compile clean-compile maintainer-clean-compile \
-mostlyclean-libtool distclean-libtool clean-libtool \
-maintainer-clean-libtool uninstall-includeHEADERS \
-install-includeHEADERS tags mostlyclean-tags distclean-tags clean-tags \
-maintainer-clean-tags mostlyclean-depend distclean-depend clean-depend \
-maintainer-clean-depend distdir info-am info dvi-am dvi check check-am \
-installcheck-am installcheck install-exec-am install-exec \
-install-data-am install-data install-am install uninstall-am uninstall \
-all-redirect all-am all install-strip installdirs mostlyclean-generic \
-distclean-generic clean-generic maintainer-clean-generic clean \
-mostlyclean distclean maintainer-clean
+maintainer-clean-am: distclean-am maintainer-clean-generic \
+	maintainer-clean-libLTLIBRARIES
+
+mostlyclean: mostlyclean-am
+
+mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libLTLIBRARIES mostlyclean-libtool
+
+.PHONY: check check-am clean clean-generic clean-libLTLIBRARIES \
+	clean-libtool distclean distclean-compile distclean-depend \
+	distclean-generic distclean-libLTLIBRARIES distclean-libtool \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-data install-data-am install-exec \
+	install-exec-am install-includeHEADERS install-libLTLIBRARIES \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic \
+	maintainer-clean-libLTLIBRARIES mostlyclean mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libLTLIBRARIES \
+	mostlyclean-libtool tags uninstall uninstall-am \
+	uninstall-includeHEADERS uninstall-libLTLIBRARIES
 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

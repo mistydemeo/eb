@@ -20,6 +20,15 @@
 #include "internal.h"
 #include "binary.h"
 
+static EB_Error_Code eb_read_binary_generic EB_P((EB_Book *, size_t,
+    char *, ssize_t *));
+static EB_Error_Code eb_read_binary_wave EB_P((EB_Book *, size_t,
+    char *, ssize_t *));
+static EB_Error_Code eb_read_binary_mono_graphic EB_P((EB_Book *, size_t,
+    char *, ssize_t *));
+static EB_Error_Code eb_read_binary_gray_graphic EB_P((EB_Book *, size_t,
+    char *, ssize_t *));
+
 /*
  * Initialize binary context of `book'.
  */
@@ -28,16 +37,72 @@ eb_initialize_binary(book)
     EB_Book *book;
 {
     eb_lock(&book->lock);
+    book->binary_context.code = EB_BINARY_INVALID;
     book->binary_context.zio = NULL;
     eb_unlock(&book->lock);
 }
 
 
 /*
+ * Template of BMP preamble for 2 colors monochrome graphic.
+ */
+#define MONO_BMP_PREAMBLE_LENGTH	62
+
+static const unsigned char mono_bmp_preamble[] = {
+    /* Type. */
+    'B', 'M',
+
+    /* File size. (set at run time) */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Reserved. */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Offset of bitmap bits part. */
+    0x3e, 0x00, 0x00, 0x00, 
+
+    /* Size of bitmap info part. */
+    0x28, 0x00, 0x00, 0x00, 
+
+    /* Width. (set at run time) */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Height. (set at run time) */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Planes. */
+    0x01, 0x00, 
+
+    /* Bits per pixels. */
+    0x01, 0x00,
+
+    /* Compression mode. */
+    0x00, 0x00, 0x00, 0x00,
+
+    /* Size of bitmap bits part. (set at run time) */
+    0x00, 0x00, 0x00, 0x00,
+
+    /* X Pixels per meter. */
+    0x6d, 0x0b, 0x00, 0x00,
+
+    /* Y Pixels per meter. */
+    0x6d, 0x0b, 0x00, 0x00,
+
+    /* Colors */
+    0x02, 0x00, 0x00, 0x00,
+
+    /* Important colors */
+    0x02, 0x00, 0x00, 0x00,
+
+    /* RGB quad of color 0   RGB quad of color 1 */
+    0xff, 0xff, 0xff, 0x00,  0x00, 0x00, 0x00, 0x00,
+};
+
+/*
  * Set monochrome bitmap picture as the current binary data.
  */
 EB_Error_Code
-eb_set_binary_bitmap(book, position, width, height)
+eb_set_binary_mono_graphic(book, position, width, height)
     EB_Book *book;
     const EB_Position *position;
     int width;
@@ -45,6 +110,11 @@ eb_set_binary_bitmap(book, position, width, height)
 {
     EB_Error_Code error_code;
     EB_Binary_Context *context;
+    EB_Position real_position;
+    unsigned char *buffer_p;
+    size_t line_pad_length;
+    size_t data_size;
+    size_t file_size;
 
     /*
      * Lock the book.
@@ -68,22 +138,349 @@ eb_set_binary_bitmap(book, position, width, height)
     }
 
     /*
-     * Set binary context.
+     * If both width and height are 0, 
+     * we get real width, height and position of the graphic data.
      */
+    if (width == 0 && height == 0) {
+	char buffer[22];
+
+	if (zio_lseek(&book->subbook_current->graphic_zio,
+	    (off_t)(position->page - 1) * EB_SIZE_PAGE + position->offset,
+	    SEEK_SET) < 0) {
+	    error_code = EB_ERR_FAIL_SEEK_BINARY;
+	    goto failed;
+	}
+
+	if (zio_read(&book->subbook_current->graphic_zio, buffer, 22) != 22) {
+	    error_code = EB_ERR_FAIL_READ_BINARY;
+	    goto failed;
+	}
+	if (eb_uint2(buffer) != 0x1f45
+	    || eb_uint2(buffer + 4) != 0x1f31
+	    || eb_uint2(buffer + 12) != 0x1f51
+	    || eb_uint2(buffer + 20) != 0x1f65) {
+	    error_code = EB_ERR_UNEXP_BINARY;
+	    goto failed;
+	}
+
+	width = eb_bcd2(buffer + 8);
+	height = eb_bcd2(buffer + 10);
+	real_position.page = eb_bcd4(buffer + 14);
+	real_position.offset = eb_bcd2(buffer + 18);
+	position = &real_position;
+    }
+
     if (width <= 0 || height <= 0) {
 	error_code = EB_ERR_NO_SUCH_BINARY;
 	goto failed;
     }
 
-    context = &book->binary_context;
+    /*
+     * BMP requires that the number of bytes in a line must be multiple
+     * of 4.  If not, 0x00 must be padded to end of each line.
+     * `line_pad_length' (0...3) is the number of bytes to be padded.
+     *
+     * In case of EB_BINARY_MONO_GRAPHIC, a pixel is represented with
+     * a bit.
+     */
+    if (width % 32 == 0)
+	line_pad_length = 0;
+    else if (width % 32 <= 8)
+	line_pad_length = 3;
+    else if (width % 32 <= 16)
+	line_pad_length = 2;
+    else if (width % 32 <= 24)
+	line_pad_length = 1;
+    else
+	line_pad_length = 0;
 
+    data_size = (width / 8 + line_pad_length) * height;
+    file_size = data_size + MONO_BMP_PREAMBLE_LENGTH;
+
+    /*
+     * Set binary context.
+     */
+    context = &book->binary_context;
+    context->code = EB_BINARY_MONO_GRAPHIC;
     context->zio = &book->subbook_current->graphic_zio;
     context->location = (off_t)(position->page - 1) * EB_SIZE_PAGE
-	+ position->offset;
+	+ position->offset + (width + 7) / 8 * (height - 1);
     context->size = (width + 7) / 8 * height;
     context->offset = 0;
-    context->cache_length = 0;
     context->cache_offset = 0;
+    context->width = width;
+
+    /*
+     * Set BMP preamble.
+     */
+    context->cache_length = MONO_BMP_PREAMBLE_LENGTH;
+    memcpy(context->cache_buffer, mono_bmp_preamble, MONO_BMP_PREAMBLE_LENGTH);
+
+    buffer_p = (unsigned char *)context->cache_buffer + 2;
+    *buffer_p++ =  file_size        & 0xff;
+    *buffer_p++ = (file_size >> 8)  & 0xff;
+    *buffer_p++ = (file_size >> 16) & 0xff;
+    *buffer_p++ = (file_size >> 24) & 0xff;
+
+    buffer_p = (unsigned char *)context->cache_buffer + 18;
+    *buffer_p++ =  width        & 0xff;
+    *buffer_p++ = (width >> 8)  & 0xff;
+    *buffer_p++ = (width >> 16) & 0xff;
+    *buffer_p++ = (width >> 24) & 0xff;
+
+    *buffer_p++ =  height        & 0xff;
+    *buffer_p++ = (height >> 8)  & 0xff;
+    *buffer_p++ = (height >> 16) & 0xff;
+    *buffer_p++ = (height >> 24) & 0xff;
+
+    buffer_p = (unsigned char *)context->cache_buffer + 34;
+    *buffer_p++ =  data_size        & 0xff;
+    *buffer_p++ = (data_size >> 8)  & 0xff;
+    *buffer_p++ = (data_size >> 16) & 0xff;
+    *buffer_p++ = (data_size >> 24) & 0xff;
+
+    /*
+     * Seek graphic file.
+     */
+    if (zio_lseek(context->zio, context->location, SEEK_SET) < 0) {
+	error_code = EB_ERR_FAIL_SEEK_BINARY;
+	goto failed;
+    }
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unset_binary(book);
+    eb_unlock(&book->lock);
+    return error_code;
+}
+
+
+/*
+ * Template of BMP preamble for gray scale graphic.
+ */
+#define GRAY_BMP_PREAMBLE_LENGTH	118
+
+static const unsigned char gray_bmp_preamble[] = {
+    /* Type. */
+    'B', 'M',
+
+    /* File size. (set at run time) */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Reserved. */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Offset of bitmap bits part. */
+    0x3e, 0x00, 0x00, 0x00, 
+
+    /* Size of bitmap info part. */
+    0x28, 0x00, 0x00, 0x00, 
+
+    /* Width. (set at run time) */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Height. (set at run time) */
+    0x00, 0x00, 0x00, 0x00, 
+
+    /* Planes. */
+    0x01, 0x00, 
+
+    /* Bits per pixels. */
+    0x04, 0x00,
+
+    /* Compression mode. */
+    0x00, 0x00, 0x00, 0x00,
+
+    /* Size of bitmap bits part. (set at run time) */
+    0x00, 0x00, 0x00, 0x00,
+
+    /* X Pixels per meter. */
+    0x6d, 0x0b, 0x00, 0x00,
+
+    /* Y Pixels per meter. */
+    0x6d, 0x0b, 0x00, 0x00,
+
+    /* Colors */
+    0x10, 0x00, 0x00, 0x00,
+
+    /* Important colors */
+    0x10, 0x00, 0x00, 0x00,
+
+    /* RGB quad of color 0x0   RGB quad of color 0x1 */
+    0x00, 0x00, 0x00, 0x00,    0x11, 0x11, 0x11, 0x00,
+
+    /* RGB quad of color 0x2   RGB quad of color 0x3 */
+    0x22, 0x22, 0x22, 0x00,    0x33, 0x33, 0x33, 0x00,
+
+    /* RGB quad of color 0x4   RGB quad of color 0x5 */
+    0x44, 0x44, 0x44, 0x00,    0x55, 0x55, 0x55, 0x00,
+
+    /* RGB quad of color 0x6   RGB quad of color 0x7 */
+    0x66, 0x66, 0x66, 0x00,    0x77, 0x77, 0x77, 0x00,
+
+    /* RGB quad of color 0x8   RGB quad of color 0x9 */
+    0x88, 0x88, 0x88, 0x00,    0x99, 0x99, 0x99, 0x00,
+
+    /* RGB quad of color 0xa   RGB quad of color 0xb */
+    0xaa, 0xaa, 0xaa, 0x00,    0xbb, 0xbb, 0xbb, 0x00,
+
+    /* RGB quad of color 0xc   RGB quad of color 0xd */
+    0xcc, 0xcc, 0xcc, 0x00,    0xdd, 0xdd, 0xdd, 0x00,
+
+    /* RGB quad of color 0xe   RGB quad of color 0xf */
+    0xee, 0xee, 0xee, 0x00,    0xff, 0xff, 0xff, 0x00,
+};
+
+/*
+ * Set monochrome bitmap picture as the current binary data.
+ */
+EB_Error_Code
+eb_set_binary_gray_graphic(book, position, width, height)
+    EB_Book *book;
+    const EB_Position *position;
+    int width;
+    int height;
+{
+    EB_Error_Code error_code;
+    EB_Binary_Context *context;
+    EB_Position real_position;
+    unsigned char *buffer_p;
+    size_t line_pad_length;
+    size_t data_size;
+    size_t file_size;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
+    /*
+     * Current subbook must have been set.
+     */
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
+    }
+
+    /*
+     * Current subbook must have a graphic file.
+     */
+    if (zio_file(&book->subbook_current->graphic_zio) < 0) {
+	error_code = EB_ERR_NO_SUCH_BINARY;
+	goto failed;
+    }
+
+    /*
+     * If both width and height are 0, 
+     * we get real width, height and position of the graphic data.
+     */
+    if (width == 0 && height == 0) {
+	char buffer[22];
+
+	if (zio_lseek(&book->subbook_current->graphic_zio,
+	    (off_t)(position->page - 1) * EB_SIZE_PAGE + position->offset,
+	    SEEK_SET) < 0) {
+	    error_code = EB_ERR_FAIL_SEEK_BINARY;
+	    goto failed;
+	}
+
+	if (zio_read(&book->subbook_current->graphic_zio, buffer, 22) != 22) {
+	    error_code = EB_ERR_FAIL_READ_BINARY;
+	    goto failed;
+	}
+	if (eb_uint2(buffer) != 0x1f45
+	    || eb_uint2(buffer + 4) != 0x1f31
+	    || eb_uint2(buffer + 12) != 0x1f51
+	    || eb_uint2(buffer + 20) != 0x1f65) {
+	    error_code = EB_ERR_UNEXP_BINARY;
+	    goto failed;
+	}
+
+	width = eb_bcd2(buffer + 8);
+	height = eb_bcd2(buffer + 10);
+	real_position.page = eb_bcd4(buffer + 14);
+	real_position.offset = eb_bcd2(buffer + 18);
+	position = &real_position;
+    }
+
+    if (width <= 0 || height <= 0) {
+	error_code = EB_ERR_NO_SUCH_BINARY;
+	goto failed;
+    }
+
+    /*
+     * BMP requires that the number of bytes in a line must be multiple
+     * of 4.  If not, 0x00 must be padded to end of each line.
+     * `line_pad_length' (0...3) is the number of bytes to be padded.
+     *
+     * In case of EB_BINARY_GRAY_GRAPHIC, a pixel is represented with
+     * 4 bits.
+     */
+    if (width % 8 == 0)
+	line_pad_length = 0;
+    else if (width % 8 <= 2)
+	line_pad_length = 3;
+    else if (width % 8 <= 4)
+	line_pad_length = 2;
+    else if (width % 8 <= 6)
+	line_pad_length = 1;
+    else
+	line_pad_length = 0;
+
+    data_size = (width / 2 + line_pad_length) * height;
+    file_size = data_size + MONO_BMP_PREAMBLE_LENGTH;
+
+    /*
+     * Set binary context.
+     */
+    context = &book->binary_context;
+
+    context->code = EB_BINARY_GRAY_GRAPHIC;
+    context->zio = &book->subbook_current->graphic_zio;
+    context->location = (off_t)(position->page - 1) * EB_SIZE_PAGE
+	+ position->offset + (width + 1) / 2 * (height - 1);
+    context->size = (width + 1) / 2 * height;
+    context->offset = 0;
+    context->cache_offset = 0;
+    context->width = width;
+
+    /*
+     * Set BMP preamble.
+     */
+    context->cache_length = GRAY_BMP_PREAMBLE_LENGTH;
+    memcpy(context->cache_buffer, gray_bmp_preamble,
+	GRAY_BMP_PREAMBLE_LENGTH);
+
+    buffer_p = (unsigned char *)context->cache_buffer + 2;
+    *buffer_p++ =  file_size        & 0xff;
+    *buffer_p++ = (file_size >> 8)  & 0xff;
+    *buffer_p++ = (file_size >> 16) & 0xff;
+    *buffer_p++ = (file_size >> 24) & 0xff;
+
+    buffer_p = (unsigned char *)context->cache_buffer + 18;
+    *buffer_p++ =  width        & 0xff;
+    *buffer_p++ = (width >> 8)  & 0xff;
+    *buffer_p++ = (width >> 16) & 0xff;
+    *buffer_p++ = (width >> 24) & 0xff;
+
+    *buffer_p++ =  height        & 0xff;
+    *buffer_p++ = (height >> 8)  & 0xff;
+    *buffer_p++ = (height >> 16) & 0xff;
+    *buffer_p++ = (height >> 24) & 0xff;
+
+    buffer_p = (unsigned char *)context->cache_buffer + 34;
+    *buffer_p++ =  data_size        & 0xff;
+    *buffer_p++ = (data_size >> 8)  & 0xff;
+    *buffer_p++ = (data_size >> 16) & 0xff;
+    *buffer_p++ = (data_size >> 24) & 0xff;
 
     /*
      * Seek graphic file.
@@ -154,6 +551,7 @@ eb_set_binary_wave(book, start_position, end_position)
 
     context = &book->binary_context;
 
+    context->code = EB_BINARY_WAVE;
     context->zio = &book->subbook_current->sound_zio;
     context->location = start_location;
     if (start_location < end_location)
@@ -211,9 +609,9 @@ eb_set_binary_wave(book, start_position, end_position)
 
 	memcpy(context->cache_buffer + 8, "WAVE", 4);
 
-	if (zio_lseek(context->zio, 
-	    (book->subbook_current->sound.index_page - 1) * EB_SIZE_PAGE + 32,
-	    SEEK_SET) < 0) {
+	if (zio_lseek(context->zio,
+	    (off_t)(book->subbook_current->sound.start_page - 1)
+	    * EB_SIZE_PAGE + 32, SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
 	}
@@ -301,6 +699,7 @@ eb_set_binary_color_graphic(book, position)
      */
     context = &book->binary_context;
 
+    context->code = EB_BINARY_COLOR_GRAPHIC;
     context->zio = &book->subbook_current->graphic_zio;
     context->location = (off_t)(position->page - 1) * EB_SIZE_PAGE
 	+ position->offset;
@@ -365,6 +764,7 @@ eb_set_binary_mpeg(book, argv)
      * `movie_file_name' is base name, and `movie_path_name' is absolute
      * path of the movie.
      */
+    const char *hint_list[2];
     char movie_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char movie_path_name[PATH_MAX + 1];
     EB_Error_Code error_code;
@@ -393,17 +793,16 @@ eb_set_binary_mpeg(book, argv)
     /*
      * Open the movie file and set binary context.
      */
-    if (eb_compose_movie_file_name(argv, movie_file_name) < 0) {
-	error_code = EB_ERR_NO_SUCH_BINARY;
-	goto failed;
-    }
+    hint_list[0] = movie_file_name;
+    hint_list[1] = NULL;
 
-    if (eb_compose_path_name3(book->path, subbook->directory_name, 
-	subbook->movie_directory_name, movie_file_name, EB_SUFFIX_NONE,
-	movie_path_name) != 0) {
+    if (!eb_find_file_name3(book->path, subbook->directory_name, 
+	subbook->movie_directory_name, hint_list, movie_file_name, NULL)) {
 	error_code = EB_ERR_NO_SUCH_BINARY;
 	goto failed;
     }
+    eb_compose_path_name3(book->path, subbook->directory_name, 
+	subbook->movie_directory_name, movie_file_name, movie_path_name);
 
     if (zio_open(&subbook->movie_zio, movie_path_name, ZIO_NONE) < 0) {
 	subbook = NULL;
@@ -411,6 +810,7 @@ eb_set_binary_mpeg(book, argv)
 	goto failed;
     }
 
+    book->binary_context.code = EB_BINARY_MPEG;
     book->binary_context.zio = &book->subbook_current->movie_zio;
     book->binary_context.location = 0;
     book->binary_context.size = 0;
@@ -446,10 +846,6 @@ eb_read_binary(book, binary_max_length, binary, binary_length)
 
 {
     EB_Error_Code error_code;
-    EB_Binary_Context *context;
-    size_t copy_length = 0;
-    size_t read_length = 0;
-    ssize_t read_result;
 
     /*
      * Lock the book.
@@ -465,72 +861,40 @@ eb_read_binary(book, binary_max_length, binary, binary_length)
     }
 
     /*
-     * Binary context must have been set.
-     */
-    context = &book->binary_context;
-
-    if (context->zio == NULL) {
-	error_code = EB_ERR_NO_CUR_BINARY;
-	goto failed;
-    }
-
-    /*
      * Return immediately if `binary_max_length' is 0.
      */
     *binary_length = 0;
 
-    if (binary_max_length <= 0)
-	goto succeeded;
-
-    /*
-     * Copy cached data to `binary' if exists.
-     */
-    if (0 < context->cache_length) {
-	if (binary_max_length < context->cache_length - context->cache_offset)
-	    copy_length = binary_max_length;
-	else
-	    copy_length = context->cache_length - context->cache_offset;
-
-	memcpy(binary, context->cache_buffer + context->cache_offset,
-	    copy_length);
-	*binary_length += copy_length;
-	context->cache_offset += copy_length;
-
-	if (context->cache_length <= context->cache_offset)
-	    context->cache_length = 0;	
-
-	if (binary_max_length <= copy_length)
-	    goto succeeded;
-    }
-
-    /*
-     * Read binary data if it is remained.
-     * If context->size is 0, the binary data size is unknown.
-     */
-    if (0 < context->size && context->size <= context->offset)
-	goto succeeded;
-
-    if (context->size == 0)
-	read_length = binary_max_length - copy_length;
-    else if (binary_max_length - copy_length < context->size - context->offset)
-	read_length = binary_max_length - copy_length;
-    else
-	read_length = context->size - context->offset;
-
-    read_result = zio_read(context->zio, binary + copy_length, read_length);
-    if (read_result != read_length) {
-	error_code = EB_ERR_FAIL_READ_BINARY;
+    switch (book->binary_context.code) {
+    case EB_BINARY_COLOR_GRAPHIC:
+    case EB_BINARY_MPEG:
+	error_code = eb_read_binary_generic(book, binary_max_length, binary,
+	    binary_length);
+	break;
+    case EB_BINARY_WAVE:
+	error_code = eb_read_binary_wave(book, binary_max_length,
+	    binary, binary_length);
+	break;
+    case EB_BINARY_MONO_GRAPHIC:
+	error_code = eb_read_binary_mono_graphic(book, binary_max_length,
+	    binary, binary_length);
+	break;
+    case EB_BINARY_GRAY_GRAPHIC:
+	error_code = eb_read_binary_gray_graphic(book, binary_max_length,
+	    binary, binary_length);
+	break;
+    default:
+	error_code = EB_ERR_NO_CUR_BINARY;
 	goto failed;
     }
-
-    *binary_length += read_result;
-    context->offset += read_result;
+    if (error_code != EB_SUCCESS)
+	goto failed;
 
     /*
      * Unlock the book.
      */
-  succeeded:
     eb_unlock(&book->lock);
+
     return EB_SUCCESS;
 
     /*
@@ -538,7 +902,344 @@ eb_read_binary(book, binary_max_length, binary, binary_length)
      */
   failed:
     eb_unset_binary(book);
+    eb_unlock(&book->lock);
+    *binary_length = -1;
     return error_code;
+}
+
+
+/*
+ * Read generic binary data.
+ * This function is used for reading JPEG or BMP picture, and data part
+ * of WAVE sound.
+ */
+static EB_Error_Code
+eb_read_binary_generic(book, binary_max_length, binary, binary_length)
+    EB_Book *book;
+    size_t binary_max_length;
+    char *binary;
+    ssize_t *binary_length;
+{
+    EB_Binary_Context *context;
+    char *binary_p = binary;
+    size_t read_length = 0;
+
+    *binary_length = 0;
+    context = &book->binary_context;
+
+    /*
+     * Return immediately if `binary_max_length' is 0.
+     */
+    if (binary_max_length == 0)
+	return EB_SUCCESS;
+
+    /*
+     * Read binary data if it is remained.
+     * If context->size is 0, the binary data size is unknown.
+     */
+    if (0 < context->size && context->size <= context->offset)
+	return EB_SUCCESS;
+
+    if (context->size == 0)
+	read_length = binary_max_length - *binary_length;
+    else if (binary_max_length - *binary_length
+	< context->size - context->offset)
+	read_length = binary_max_length - *binary_length;
+    else
+	read_length = context->size - context->offset;
+
+    if (zio_read(context->zio, binary_p, read_length) != read_length)
+	return EB_ERR_FAIL_READ_BINARY;
+
+    *binary_length += read_length;
+    context->offset += read_length;
+
+    return EB_SUCCESS;
+}
+
+
+/*
+ * Read WAVE sound data.
+ */
+static EB_Error_Code
+eb_read_binary_wave(book, binary_max_length, binary, binary_length)
+    EB_Book *book;
+    size_t binary_max_length;
+    char *binary;
+    ssize_t *binary_length;
+{
+    EB_Error_Code error_code;
+    EB_Binary_Context *context;
+    char *binary_p = binary;
+    size_t copy_length = 0;
+
+    *binary_length = 0;
+    context = &book->binary_context;
+
+    /*
+     * Return immediately if `binary_max_length' is 0.
+     */
+    if (binary_max_length == 0)
+	return EB_SUCCESS;
+
+    /*
+     * Copy cached data (header part) to `binary' if exists.
+     */
+    if (0 < context->cache_length) {
+	if (binary_max_length < context->cache_length - context->cache_offset)
+	    copy_length = binary_max_length;
+	else
+	    copy_length = context->cache_length - context->cache_offset;
+
+	memcpy(binary_p, context->cache_buffer + context->cache_offset,
+	    copy_length);
+	binary_p += copy_length;
+	context->cache_offset += copy_length;
+
+	if (context->cache_length <= context->cache_offset)
+	    context->cache_length = 0;	
+
+	if (binary_max_length <= *binary_length)
+	    return EB_SUCCESS;
+    }
+
+    error_code = eb_read_binary_generic(book, binary_max_length - copy_length,
+	binary_p, binary_length);
+    *binary_length += copy_length;
+
+    return error_code;
+}
+
+
+/*
+ * Read monochrome graphic data.
+ * The function also convert the graphic data to BMP.
+ */
+static EB_Error_Code
+eb_read_binary_mono_graphic(book, binary_max_length, binary, binary_length)
+    EB_Book *book;
+    size_t binary_max_length;
+    char *binary;
+    ssize_t *binary_length;
+{
+    EB_Binary_Context *context;
+    unsigned char *binary_p = (unsigned char *)binary;
+    size_t copy_length = 0;
+    size_t read_length = 0;
+    size_t line_length;
+    size_t line_pad_length;
+
+    *binary_length = 0;
+    context = &book->binary_context;
+
+    line_length = (context->width + 7) / 8;
+
+    if (context->width % 32 == 0)
+	line_pad_length = 0;
+    else if (context->width % 32 <= 8)
+	line_pad_length = 3;
+    else if (context->width % 32 <= 16)
+	line_pad_length = 2;
+    else if (context->width % 32 <= 24)
+	line_pad_length = 1;
+    else
+	line_pad_length = 0;
+
+    /*
+     * Return immediately if `binary_max_length' is 0.
+     */
+    if (binary_max_length == 0)
+	return EB_SUCCESS;
+
+    for (;;) {
+	/*
+	 * Copy cached data to `binary' if exists.
+	 */
+	if (0 < context->cache_length) {
+	    if (binary_max_length - *binary_length
+		< context->cache_length - context->cache_offset)
+		copy_length = binary_max_length - *binary_length;
+	    else 
+		copy_length = context->cache_length - context->cache_offset;
+
+	    memcpy(binary_p, context->cache_buffer + context->cache_offset,
+		copy_length);
+	    binary_p += copy_length;
+	    *binary_length += copy_length;
+	    context->cache_offset += copy_length;
+
+	    if (context->cache_length <= context->cache_offset)
+		context->cache_length = 0;
+
+	    if (binary_max_length <= *binary_length)
+		return EB_SUCCESS;
+	}
+
+	/*
+	 * Read binary data if it is remained.
+	 * If padding is needed, read each line.
+	 */
+	read_length = line_length - context->offset % line_length;
+	if (context->size - context->offset < read_length)
+	    read_length = context->size - context->offset;
+	if (binary_max_length - *binary_length < read_length)
+	    read_length = binary_max_length - *binary_length;
+	if (read_length == 0)
+	    return EB_SUCCESS;
+
+	/*
+	 * Read binary data.
+	 */
+	if (context->offset != 0
+	    && context->offset % line_length == 0
+	    && zio_lseek(context->zio, (off_t)line_length * -2, SEEK_CUR) < 0)
+		return EB_ERR_FAIL_SEEK_BINARY;
+	if (zio_read(context->zio, (char *)binary_p, read_length)
+	    != read_length)
+	    return EB_ERR_FAIL_READ_BINARY;
+
+	*binary_length += read_length;
+	context->offset += read_length;
+	binary_p += read_length;
+
+	/*
+	 * Pad 0x00 to BMP if needed.
+	 */
+	if (context->offset % line_length == 0) {
+	    if (0 < line_pad_length) {
+		if (binary_max_length - *binary_length < line_pad_length) {
+		    memset(context->cache_buffer, 0, line_pad_length);
+		    context->cache_length = line_pad_length;
+		    context->cache_offset = 0;
+		} else {
+		    memset(binary_p, 0, line_pad_length);
+		    binary_p += line_pad_length;
+		    *binary_length += line_pad_length;
+		}
+	    }
+	}
+    }
+
+    /*
+     * Unlock the book.
+     */
+    return EB_SUCCESS;
+}
+
+
+/*
+ * Read gray scale graphic data.
+ * The function also convert the graphic data to BMP.
+ */
+static EB_Error_Code
+eb_read_binary_gray_graphic(book, binary_max_length, binary, binary_length)
+    EB_Book *book;
+    size_t binary_max_length;
+    char *binary;
+    ssize_t *binary_length;
+{
+    EB_Binary_Context *context;
+    unsigned char *binary_p = (unsigned char *)binary;
+    size_t copy_length = 0;
+    size_t read_length = 0;
+    size_t line_length;
+    size_t line_pad_length;
+
+    *binary_length = 0;
+    context = &book->binary_context;
+
+    line_length = (context->width + 1) / 2;
+
+    if (context->width % 8 == 0)
+	line_pad_length = 0;
+    else if (context->width % 8 <= 2)
+	line_pad_length = 3;
+    else if (context->width % 8 <= 4)
+	line_pad_length = 2;
+    else if (context->width % 8 <= 6)
+	line_pad_length = 1;
+    else
+	line_pad_length = 0;
+
+    /*
+     * Return immediately if `binary_max_length' is 0.
+     */
+    if (binary_max_length == 0)
+	return EB_SUCCESS;
+
+    for (;;) {
+	/*
+	 * Copy cached data to `binary' if exists.
+	 */
+	if (0 < context->cache_length) {
+	    if (binary_max_length - *binary_length
+		< context->cache_length - context->cache_offset)
+		copy_length = binary_max_length - *binary_length;
+	    else 
+		copy_length = context->cache_length - context->cache_offset;
+
+	    memcpy(binary_p, context->cache_buffer + context->cache_offset,
+		copy_length);
+	    binary_p += copy_length;
+	    *binary_length += copy_length;
+	    context->cache_offset += copy_length;
+
+	    if (context->cache_length <= context->cache_offset)
+		context->cache_length = 0;
+
+	    if (binary_max_length <= *binary_length)
+		return EB_SUCCESS;
+	}
+
+	/*
+	 * Read binary data if it is remained.
+	 * If padding is needed, read each line.
+	 */
+	read_length = line_length - context->offset % line_length;
+	if (context->size - context->offset < read_length)
+	    read_length = context->size - context->offset;
+	if (binary_max_length - *binary_length < read_length)
+	    read_length = binary_max_length - *binary_length;
+	if (read_length == 0)
+	    return EB_SUCCESS;
+
+	/*
+	 * Read binary data.
+	 */
+	if (context->offset != 0
+	    && context->offset % line_length == 0
+	    && zio_lseek(context->zio, (off_t)line_length * -2, SEEK_CUR) < 0)
+		return EB_ERR_FAIL_SEEK_BINARY;
+	if (zio_read(context->zio, (char *)binary_p, read_length)
+	    != read_length)
+	    return EB_ERR_FAIL_READ_BINARY;
+
+	*binary_length += read_length;
+	context->offset += read_length;
+	binary_p += read_length;
+
+	/*
+	 * Pad 0x00 to BMP if needed.
+	 */
+	if (context->offset % line_length == 0) {
+	    if (0 < line_pad_length) {
+		if (binary_max_length - *binary_length < line_pad_length) {
+		    memset(context->cache_buffer, 0, line_pad_length);
+		    context->cache_length = line_pad_length;
+		    context->cache_offset = 0;
+		} else {
+		    memset(binary_p, 0, line_pad_length);
+		    binary_p += line_pad_length;
+		    *binary_length += line_pad_length;
+		}
+	    }
+	}
+    }
+
+    /*
+     * Unlock the book.
+     */
+    return EB_SUCCESS;
 }
 
 
@@ -550,6 +1251,7 @@ eb_unset_binary(book)
     EB_Book *book;
 {
     eb_lock(&book->lock);
+    book->binary_context.code = EB_BINARY_INVALID;
     book->binary_context.zio = NULL;
     eb_unlock(&book->lock);
 }

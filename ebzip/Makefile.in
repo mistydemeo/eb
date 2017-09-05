@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.4b from Makefile.am
+# Makefile.in generated automatically by automake 1.4d from Makefile.am
 
-# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000
+# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -48,6 +48,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_FLAG =
+INSTALL_HEADER = $(INSTALL_DATA)
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -65,9 +66,6 @@ AMTAR = @AMTAR@
 AS = @AS@
 AWK = @AWK@
 CC = @CC@
-CPP = @CPP@
-CXX = @CXX@
-CXXCPP = @CXXCPP@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 EBCONF_EBINCS = @EBCONF_EBINCS@
@@ -80,7 +78,6 @@ ECHO = @ECHO@
 ENABLE_NLS = @ENABLE_NLS@
 ENABLE_PTHREAD = @ENABLE_PTHREAD@
 EXEEXT = @EXEEXT@
-INTLDEPS = @INTLDEPS@
 INTLINCS = @INTLINCS@
 INTLLIBS = @INTLLIBS@
 LIBEB_VERSION_INFO = @LIBEB_VERSION_INFO@
@@ -104,6 +101,7 @@ XGETTEXT = @XGETTEXT@
 ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
+_am_include = @_am_include@
 install_sh = @install_sh@
 
 
@@ -113,8 +111,11 @@ LIBEB = $(top_builddir)/eb/libeb.la
 LIBEBUTILS = $(top_builddir)/libebutils/libebutils.a
 
 bin_PROGRAMS = ebzip
+noinst_HEADERS = ebzip.h
 
-ebzip_SOURCES = ebzip.c ebzip1.c filename.c
+ebzip_SOURCES = ebzip.c ebzip1.c copyfile.c filename.c unzipbook.c \
+	unzipfile.c zipbook.c zipfile.c zipinfobook.c zipinfofile.c
+
 ebzip_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS)
 ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS)
 
@@ -135,7 +136,10 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-am_ebzip_OBJECTS =  ebzip.$(OBJEXT) ebzip1.$(OBJEXT) filename.$(OBJEXT)
+am_ebzip_OBJECTS =  ebzip.$(OBJEXT) ebzip1.$(OBJEXT) copyfile.$(OBJEXT) \
+filename.$(OBJEXT) unzipbook.$(OBJEXT) unzipfile.$(OBJEXT) \
+zipbook.$(OBJEXT) zipfile.$(OBJEXT) zipinfobook.$(OBJEXT) \
+zipinfofile.$(OBJEXT)
 ebzip_OBJECTS =  $(am_ebzip_OBJECTS)
 ebzip_LDFLAGS = 
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -144,8 +148,10 @@ CFLAGS = @CFLAGS@
 CCLD = $(CC)
 LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DIST_SOURCES =  $(ebzip_SOURCES)
+HEADERS =  $(noinst_HEADERS)
+
 depcomp = 
-DIST_COMMON =  Makefile.am Makefile.in
+DIST_COMMON =  $(noinst_HEADERS) Makefile.am Makefile.in
 
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -154,7 +160,7 @@ GZIP_ENV = --best
 SOURCES = $(ebzip_SOURCES)
 OBJECTS = $(am_ebzip_OBJECTS)
 
-all: all-redirect
+all: all-am
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
@@ -162,7 +168,7 @@ $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
-	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
 
 
 mostlyclean-binPROGRAMS:
@@ -197,12 +203,8 @@ mostlyclean-compile:
 	-rm -f *.o core *.core
 	-rm -f *.$(OBJEXT)
 
-clean-compile:
-
 distclean-compile:
 	-rm -f *.tab.c
-
-maintainer-clean-compile:
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -211,8 +213,7 @@ clean-libtool:
 	-rm -rf .libs _libs
 
 distclean-libtool:
-
-maintainer-clean-libtool:
+	-rm -f libtool
 
 ebzip$(EXEEXT): $(ebzip_OBJECTS) $(ebzip_DEPENDENCIES)
 	@rm -f ebzip$(EXEEXT)
@@ -235,7 +236,7 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	       END { for (i in files) print i; }'`; \
 	mkid -fID $$unique $(LISP)
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS: $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
@@ -253,16 +254,11 @@ GTAGS:
 	  && cd $(top_srcdir) \
 	  && gtags -i $$here
 
-mostlyclean-tags:
-
-clean-tags:
-
 distclean-tags:
 	-rm -f TAGS ID
 
-maintainer-clean-tags:
-
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
 
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
@@ -297,8 +293,7 @@ install-am: all-am
 install: install-am
 uninstall-am: uninstall-binPROGRAMS
 uninstall: uninstall-am
-all-am: Makefile $(PROGRAMS)
-all-redirect: all-am
+all-am: Makefile $(PROGRAMS) $(HEADERS)
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs:
@@ -314,44 +309,38 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
+	@echo "This command is intended for maintainers to use"
+	@echo "it deletes files that may require special tools to rebuild."
 	-rm -f Makefile.in
-mostlyclean-am:  mostlyclean-binPROGRAMS mostlyclean-compile \
-		mostlyclean-libtool mostlyclean-tags \
-		mostlyclean-generic
-
-mostlyclean: mostlyclean-am
-
-clean-am:  clean-binPROGRAMS clean-compile clean-libtool clean-tags \
-		clean-generic mostlyclean-am
-
 clean: clean-am
 
-distclean-am:  distclean-binPROGRAMS distclean-compile distclean-libtool \
-		distclean-tags distclean-generic clean-am
-	-rm -f libtool
+clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 
-maintainer-clean-am:  maintainer-clean-binPROGRAMS \
-		maintainer-clean-compile maintainer-clean-libtool \
-		maintainer-clean-tags maintainer-clean-generic \
-		distclean-am
-	@echo "This command is intended for maintainers to use;"
-	@echo "it deletes files that may require special tools to rebuild."
+distclean-am: clean-am distclean-binPROGRAMS distclean-compile \
+	distclean-generic distclean-libtool distclean-tags
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: mostlyclean-binPROGRAMS distclean-binPROGRAMS clean-binPROGRAMS \
-maintainer-clean-binPROGRAMS uninstall-binPROGRAMS install-binPROGRAMS \
-mostlyclean-compile distclean-compile clean-compile \
-maintainer-clean-compile mostlyclean-libtool distclean-libtool \
-clean-libtool maintainer-clean-libtool tags mostlyclean-tags \
-distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
-dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all install-strip \
-installdirs mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+maintainer-clean-am: distclean-am maintainer-clean-binPROGRAMS \
+	maintainer-clean-generic
+
+mostlyclean: mostlyclean-am
+
+mostlyclean-am: mostlyclean-binPROGRAMS mostlyclean-compile \
+	mostlyclean-generic mostlyclean-libtool
+
+.PHONY: check check-am clean clean-binPROGRAMS clean-generic \
+	clean-libtool distclean distclean-binPROGRAMS distclean-compile \
+	distclean-generic distclean-libtool distclean-tags distdir dvi \
+	dvi-am info info-am install install-am install-binPROGRAMS \
+	install-data install-data-am install-exec install-exec-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-binPROGRAMS \
+	maintainer-clean-generic mostlyclean mostlyclean-binPROGRAMS \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	tags uninstall uninstall-am uninstall-binPROGRAMS
 
 
 install-exec-hook:
@@ -371,13 +360,38 @@ uninstall-hook:
 	rm -f $(DESTDIR)$(bindir)/`echo $(ebzipinfo)|sed '$(transform)'`$(EXEEXT)
 
 ### *.o dependencies ###
+copyfile.o: copyfile.c ../config.h ../libebutils/ebutils.h ../eb/eb.h \
+ ../eb/defs.h ../eb/zio.h ../libebutils/getumask.h \
+ ../libebutils/makedir.h ../libebutils/samefile.h \
+ ../libebutils/yesno.h ../eb/error.h ../eb/internal.h ebzip.h
 ebzip.o: ebzip.c ../config.h ../libebutils/ebutils.h ../eb/eb.h \
  ../eb/defs.h ../eb/zio.h ../eb/error.h ../eb/internal.h ../eb/font.h \
- ../libebutils/fakelog.h ../libebutils/getopt.h \
- ../libebutils/getumask.h ../libebutils/makedir.h \
- ../libebutils/samefile.h ../libebutils/yesno.h
+ ../libebutils/getopt.h ../libebutils/getumask.h \
+ ../libebutils/makedir.h ../libebutils/samefile.h \
+ ../libebutils/yesno.h ebzip.h
 ebzip1.o: ebzip1.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h
 filename.o: filename.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h
+unzipbook.o: unzipbook.c ../config.h ../eb/eb.h ../eb/defs.h \
+ ../eb/zio.h ../eb/error.h ../eb/internal.h ../eb/font.h \
+ ../libebutils/getumask.h ../libebutils/makedir.h \
+ ../libebutils/ebutils.h ebzip.h
+unzipfile.o: unzipfile.c ../config.h ../eb/eb.h ../eb/defs.h \
+ ../eb/zio.h ../eb/internal.h ../libebutils/getumask.h \
+ ../libebutils/makedir.h ../libebutils/samefile.h \
+ ../libebutils/yesno.h ebzip.h ../libebutils/ebutils.h
+zipbook.o: zipbook.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
+ ../eb/error.h ../eb/internal.h ../eb/font.h ../libebutils/getumask.h \
+ ../libebutils/makedir.h ../libebutils/ebutils.h ebzip.h
+zipfile.o: zipfile.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
+ ../eb/internal.h ../libebutils/getumask.h ../libebutils/makedir.h \
+ ../libebutils/samefile.h ../libebutils/yesno.h ebzip.h \
+ ../libebutils/ebutils.h
+zipinfobook.o: zipinfobook.c ../config.h ../eb/eb.h ../eb/defs.h \
+ ../eb/zio.h ../eb/error.h ../eb/internal.h ../eb/font.h \
+ ../libebutils/ebutils.h ebzip.h
+zipinfofile.o: zipinfofile.c ../config.h ../eb/eb.h ../eb/defs.h \
+ ../eb/zio.h ../eb/internal.h ../libebutils/ebutils.h \
+ ../libebutils/samefile.h ../libebutils/yesno.h ebzip.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

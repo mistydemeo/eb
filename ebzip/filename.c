@@ -33,6 +33,11 @@
 #include <limits.h>
 #endif
 
+#ifndef HAVE_STRCHR
+#define strchr index
+#define strrchr rindex
+#endif /* HAVE_STRCHR */
+
 /*
  * The maximum length of path name.
  */
@@ -56,19 +61,22 @@
 #include "eb/eb.h"
 
 void
-compose_out_path_name(path_name, file_name, suffix, out_path_name)
-    const char *path_name;
-    const char *file_name;
+fix_path_name_suffix(path_name, suffix)
+    char *path_name;
     const char *suffix;
-    char *out_path_name;
 {
-    char fixed_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+    char *base_name;
     char *dot;
     char *semicolon;
 
-    strcpy(fixed_file_name, file_name);
-    dot = strchr(fixed_file_name, '.');
-    semicolon = strchr(fixed_file_name, ';');
+    base_name = strrchr(path_name, F_('/', '\\'));
+    if (base_name == NULL)
+	base_name = path_name;
+    else
+	base_name++;
+
+    dot = strchr(base_name, '.');
+    semicolon = strchr(base_name, ';');
 
     if (*suffix == '\0') {
 	/*
@@ -80,7 +88,7 @@ compose_out_path_name(path_name, file_name, suffix, out_path_name)
 	 */
 	if (dot != NULL && *(dot + 1) != '\0' && *(dot + 1) != ';') {
 	    if (semicolon != NULL)
-		strcpy(dot, ";1");
+		sprintf(dot, ";%c", *(semicolon + 1));
 	    else
 		*dot = '\0';
 	}
@@ -93,85 +101,16 @@ compose_out_path_name(path_name, file_name, suffix, out_path_name)
 	 *   foo.;1    -->  foo.ebz;1
 	 *   foo.ebz   -->  foo.ebz    (unchanged)
 	 */
-	if (dot == NULL) {
+	if (dot != NULL) {
 	    if (semicolon != NULL)
-		strcpy(semicolon, ".ebz;1");
+		sprintf(dot, "%s;%c", suffix, *(semicolon + 1));
 	    else
-		strcat(fixed_file_name, ".ebz");
-	} else if (*(dot + 1) == '\0' || *(dot + 1) == ';') {
+		strcpy(dot, suffix);
+	} else {
 	    if (semicolon != NULL)
-		strcpy(dot, ".ebz;1");
+		sprintf(semicolon, "%s;%c", suffix, *(semicolon + 1));
 	    else
-		strcpy(dot, ".ebz");
+		strcat(base_name, suffix);
 	}
     }
-
-    sprintf(out_path_name, F_("%s/%s", "%s\\%s"), path_name, fixed_file_name);
 }
-
-void
-compose_out_path_name2(path_name, sub_directory_name, file_name, suffix,
-    out_path_name)
-    const char *path_name;
-    const char *sub_directory_name;
-    const char *file_name;
-    const char *suffix;
-    char *out_path_name;
-{
-    char sub_path_name[PATH_MAX + 1];
-
-    sprintf(sub_path_name, "%s/%s", path_name, sub_directory_name);
-    compose_out_path_name(sub_path_name, file_name, suffix, out_path_name);
-}
-
-void
-compose_out_path_name3(path_name, sub_directory_name, sub2_directory_name,
-    file_name, suffix, out_path_name)
-    const char *path_name;
-    const char *sub_directory_name;
-    const char *sub2_directory_name;
-    const char *file_name;
-    const char *suffix;
-    char *out_path_name;
-{
-    char sub2_path_name[PATH_MAX + 1];
-
-    sprintf(sub2_path_name, F_("%s/%s/%s", "%s\\%s\\%s"), 
-	path_name, sub_directory_name, sub2_directory_name);
-    compose_out_path_name(sub2_path_name, file_name, suffix, out_path_name);
-}
-
-void
-compose_existent_path_name(path_name, leaf_name, out_path_name)
-    const char *path_name;
-    const char *leaf_name;
-    char *out_path_name;
-{
-    sprintf(out_path_name, F_("%s/%s", "%s\\%s"), path_name, leaf_name);
-}
-
-void
-compose_existent_path_name2(path_name, directory_name, leaf_name,
-    out_path_name)
-    const char *path_name;
-    const char *directory_name;
-    const char *leaf_name;
-    char *out_path_name;
-{
-    sprintf(out_path_name, F_("%s/%s/%s", "%s\\%s\\%s"),
-	path_name, directory_name, leaf_name);
-}
-
-void
-compose_existent_path_name3(path_name, directory_name, sub_directory_name,
-    leaf_name, out_path_name)
-    const char *path_name;
-    const char *directory_name;
-    const char *sub_directory_name;
-    const char *leaf_name;
-    char *out_path_name;
-{
-    sprintf(out_path_name, F_("%s/%s/%s/%s", "%s\\%s\\%s\\%s"), 
-	path_name, directory_name, sub_directory_name, leaf_name);
-}
-

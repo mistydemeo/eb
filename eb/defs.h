@@ -187,7 +187,7 @@ extern "C" {
 /*
  * The number of text hooks.
  */
-#define EB_NUMBER_OF_HOOKS		39
+#define EB_NUMBER_OF_HOOKS		41
 
 /*
  * The number of search contexts required by a book.
@@ -225,6 +225,7 @@ typedef int EB_Text_Code;
 typedef int EB_Multi_Search_Code;
 typedef int EB_Multi_Entry_Code;
 typedef int EB_Hook_Code;
+typedef int EB_Binary_Code;
 
 /*
  * Typedef for Structures.
@@ -327,6 +328,11 @@ struct EB_Appendix_Subbook_Struct {
     char data_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
 
     /*
+     * File name.
+     */
+    char file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+
+    /*
      * Character code of the book.
      */
     EB_Character_Code character_code;
@@ -415,13 +421,9 @@ struct EB_Appendix_Struct {
 struct EB_Font_Struct {
     /*
      * Font Code.
+     * This font is not available, if the code is EB_FONT_INVALID.
      */
     EB_Font_Code font_code;
-
-    /*
-     * Avaiable or not.
-     */
-    int available;
 
     /*
      * Character numbers of the start and end of the font.
@@ -438,7 +440,7 @@ struct EB_Font_Struct {
     /*
      * File name of the font. (EPWING only)
      */
-    char file_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+    char file_name[EB_MAX_FILE_NAME_LENGTH + 1];
 
     /*
      * Compression Information.
@@ -476,13 +478,20 @@ struct EB_Language_Struct {
  */
 struct EB_Search_Struct {
     /*
-     * Page number of the start page of an index.
+     * Index ID.
      */
-    int index_page;
+    int index_id;
+
+    /*
+     * Page number of the start page of an index.
+     * This search method is not available, if `start_page' is 0,
+     */
+    int start_page;
+    int end_page;
 
     /*
      * Page number of the start page of candidates.
-     * (for an entry in multi search)
+     * (for multi search entry)
      */
     int candidates_page;
 
@@ -543,6 +552,7 @@ struct EB_Subbook_Struct {
 
     /*
      * Subbook ID.
+     * This subbook is not available, if the code is EB_SUBBOOK_INVALID.
      */
     EB_Subbook_Code code;
 
@@ -631,13 +641,20 @@ struct EB_Subbook_Struct {
  * Length of cache buffer in a binary context.
  * It must be greater than 38, size of GIF preamble.
  * It must be greater than 44, size of WAVE sound header.
+ * It must be greater than 118, size of BMP header + info + 16 rgbquads.
  */
-#define EB_SIZE_BINARY_CACHE_BUFFER	64
+#define EB_SIZE_BINARY_CACHE_BUFFER	128
 
 /*
  * Context parameters for binary data.
  */
 struct EB_Binary_Context_Struct {
+    /*
+     * Binary type ID.
+     * The context is not active, if this code is EB_BINARY_INVALID.
+     */
+    EB_Binary_Code code;
+
     /*
      * Compress information.
      */
@@ -673,6 +690,11 @@ struct EB_Binary_Context_Struct {
      * Current offset of cached data.
      */
     size_t cache_offset;
+
+    /*
+     * Width of Image. (monochrome graphic only)
+     */
+    int width;
 };
 
 /*
@@ -680,7 +702,8 @@ struct EB_Binary_Context_Struct {
  */
 struct EB_Text_Context_Struct {
     /*
-     * Current text content type (text, heading, rawtext or none).
+     * Current text content type.
+     * The context is not active, if this code is EB_TEXT_INVALID.
      */
     EB_Text_Code code;
 
@@ -767,7 +790,7 @@ struct EB_Text_Context_Struct {
 struct EB_Search_Context_Struct {
     /*
      * Current search method type.
-     * (exactword, word, endword, keyword or none).
+     * The context is not active, if this code is EB_SEARCH_NONE.
      */
     EB_Search_Code code;
 
@@ -885,6 +908,16 @@ struct EB_Book_Struct {
      * Current subbook.
      */
     EB_Subbook *subbook_current;
+
+    /*
+     * Language file name.
+     */
+    char language_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+
+    /*
+     * File descriptor and compression information for language file.
+     */
+    Zio language_zio;
 
     /*
      * The number of languages the book supports.

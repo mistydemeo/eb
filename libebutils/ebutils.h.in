@@ -33,18 +33,11 @@
 #define LOCALEDIR		"@localedir@"
 
 /*
- * Global variables.
- */
-extern const char *program_name;
-extern const char *program_version;
-extern const char *invoked_name;
-
-/*
  * Function declarations.
  */
-void output_try_help EB_P((void));
-void output_version EB_P((void));
-int parse_subbook_name_argument EB_P((const char *,
+void output_try_help EB_P((const char *));
+void output_version EB_P((const char *, const char *));
+int parse_subbook_name_argument EB_P((const char *, const char *,
     char [][EB_MAX_DIRECTORY_NAME_LENGTH  + 1], int *));
 EB_Subbook_Code find_subbook EB_P((EB_Book *, const char *,
     EB_Subbook_Code *));

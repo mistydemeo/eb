@@ -41,7 +41,7 @@ eb_have_menu(book)
     /*
      * Check for the index page of menu search.
      */
-    if (book->subbook_current->menu.index_page == 0)
+    if (book->subbook_current->menu.start_page == 0)
 	goto failed;
 
     /*
@@ -87,7 +87,7 @@ eb_menu(book, position)
     /*
      * Check for the page number of menu search.
      */
-    page = book->subbook_current->menu.index_page;
+    page = book->subbook_current->menu.start_page;
     if (page == 0) {
 	error_code = EB_ERR_NO_SUCH_SEARCH;
 	goto failed;

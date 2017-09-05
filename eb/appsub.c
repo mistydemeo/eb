@@ -24,6 +24,10 @@
  * Unexported functions.
  */
 static EB_Error_Code eb_initialize_appendix_subbook EB_P((EB_Appendix *));
+static EB_Error_Code eb_set_appendix_subbook_eb EB_P((EB_Appendix *,
+    EB_Subbook_Code));
+static EB_Error_Code eb_set_appendix_subbook_epwing EB_P((EB_Appendix *,
+    EB_Subbook_Code));
 
 /*
  * Initialize all subbooks in `appendix'.
@@ -55,18 +59,9 @@ eb_initialize_appendix_subbook(appendix)
 	goto succeeded;
 
     /*
-     * Adjust a directory name.
-     */
-    if (appendix->disc_code == EB_DISC_EPWING) {
-	strcpy(subbook->data_directory_name, EB_DIRECTORY_NAME_DATA);
-	eb_fix_directory_name2(appendix->path, subbook->directory_name,
-	    subbook->data_directory_name);
-    }
-
-    /*
      * Rewind the APPENDIX file.
      */
-    if (zio_lseek(&subbook->zio, 0, SEEK_SET) < 0) {
+    if (zio_lseek(&subbook->zio, (off_t)0, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
@@ -138,7 +133,7 @@ eb_initialize_appendix_subbook(appendix)
     /*
      * Rewind the file descriptor, again.
      */
-    if (zio_lseek(&subbook->zio, 0, SEEK_SET) < 0) {
+    if (zio_lseek(&subbook->zio, (off_t)0, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
@@ -433,9 +428,6 @@ eb_set_appendix_subbook(appendix, subbook_code)
     EB_Subbook_Code subbook_code;
 {
     EB_Error_Code error_code;
-    EB_Appendix_Subbook *subbook;
-    char appendix_path_name[PATH_MAX + 1];
-    Zio_Code zio_code;
 
     /*
      * Lock the appendix.
@@ -469,41 +461,15 @@ eb_set_appendix_subbook(appendix, subbook_code)
     }
 
     /*
-     * Set the current subbook.
+     * Disc type specific section.
      */
-    appendix->subbook_current = appendix->subbooks + subbook_code;
-    subbook = appendix->subbook_current;
+    if (appendix->disc_code == EB_DISC_EB)
+	error_code = eb_set_appendix_subbook_eb(appendix, subbook_code);
+    else
+	error_code = eb_set_appendix_subbook_epwing(appendix, subbook_code);
 
-    /*
-     * Open an appendix file.
-     */
-    zio_code = ZIO_INVALID;
-    if (appendix->disc_code == EB_DISC_EB) {
-	if (eb_compose_path_name2(appendix->path, subbook->directory_name, 
-	    EB_FILE_NAME_APPENDIX, EB_SUFFIX_NONE, appendix_path_name) == 0) {
-	    zio_code = ZIO_NONE;
-	} else if (eb_compose_path_name2(appendix->path,
-	    subbook->directory_name, EB_FILE_NAME_APPENDIX, EB_SUFFIX_EBZ,
-	    appendix_path_name) == 0) {
-	    zio_code = ZIO_EBZIP1;
-	}
-    } else {
-	if (eb_compose_path_name3(appendix->path, subbook->directory_name,
-	    subbook->data_directory_name, EB_FILE_NAME_FUROKU, EB_SUFFIX_NONE,
-	    appendix_path_name) == 0) {
-	    zio_code = ZIO_NONE;
-	} else if (eb_compose_path_name3(appendix->path,
-	    subbook->directory_name, subbook->data_directory_name,
-	    EB_FILE_NAME_FUROKU, EB_SUFFIX_EBZ, appendix_path_name) == 0) {
-	    zio_code = ZIO_EBZIP1;
-	}
-    }
-
-    if (zio_open(&subbook->zio, appendix_path_name, zio_code) < 0) {
-	subbook = NULL;
-	error_code = EB_ERR_FAIL_OPEN_APP;
+    if (error_code != EB_SUCCESS)
 	goto failed;
-    }
 
     /*
      * Initialize the subbook.
@@ -526,6 +492,156 @@ eb_set_appendix_subbook(appendix, subbook_code)
   failed:
     eb_unset_appendix_subbook(appendix);
     eb_unlock(&appendix->lock);
+    return error_code;
+}
+
+
+/*
+ * Hints of appendix file name.
+ */
+#define EB_HINT_INDEX_APPENDIX		0
+#define EB_HINT_INDEX_APPENDIX_EBZ	1
+
+static const char *appendix_hint_list[] = {
+    "appendix", "appendix.ebz", NULL
+};
+
+/*
+ * EB* specific section of eb_set_appendix_subbook().
+ */
+static EB_Error_Code
+eb_set_appendix_subbook_eb(appendix, subbook_code)
+    EB_Appendix *appendix;
+    EB_Subbook_Code subbook_code;
+{
+    EB_Error_Code error_code;
+    EB_Appendix_Subbook *subbook;
+    char appendix_path_name[PATH_MAX + 1];
+    Zio_Code zio_code;
+    int hint_index;
+
+    /*
+     * Set the current subbook.
+     */
+    appendix->subbook_current = appendix->subbooks + subbook_code;
+    subbook = appendix->subbook_current;
+
+    /*
+     * Open an appendix file.
+     */
+    eb_find_file_name2(appendix->path, subbook->directory_name,
+	appendix_hint_list, subbook->file_name, &hint_index);
+
+    switch (hint_index) {
+    case EB_HINT_INDEX_APPENDIX:
+	zio_code = ZIO_NONE;
+	break;
+
+    case EB_HINT_INDEX_APPENDIX_EBZ:
+	zio_code = ZIO_EBZIP1;
+	break;
+
+    default:
+	error_code = EB_ERR_FAIL_OPEN_APP;
+	goto failed;
+    }
+
+    eb_compose_path_name2(appendix->path, subbook->directory_name,
+	subbook->file_name, appendix_path_name);
+
+    if (zio_open(&subbook->zio, appendix_path_name, zio_code) < 0) {
+	error_code = EB_ERR_FAIL_OPEN_APP;
+	goto failed;
+    }
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unset_appendix_subbook(appendix);
+    return error_code;
+}
+
+
+/*
+ * Hints of furoku file name.
+ */
+#define EB_HINT_INDEX_FUROKU		0
+#define EB_HINT_INDEX_FUROKU_EBZ	1
+
+static const char *furoku_hint_list[] = {
+    "furoku", "furoku.ebz", NULL
+};
+
+/*
+ * EPWING specific section of eb_set_appendix_subbook().
+ */
+static EB_Error_Code
+eb_set_appendix_subbook_epwing(appendix, subbook_code)
+    EB_Appendix *appendix;
+    EB_Subbook_Code subbook_code;
+{
+    EB_Error_Code error_code;
+    EB_Appendix_Subbook *subbook;
+    char appendix_path_name[PATH_MAX + 1];
+    Zio_Code zio_code;
+    int hint_index;
+
+    /*
+     * Set the current subbook.
+     */
+    appendix->subbook_current = appendix->subbooks + subbook_code;
+    subbook = appendix->subbook_current;
+
+    zio_initialize(&subbook->zio);
+
+    /*
+     * Adjust a directory name.
+     */
+    strcpy(subbook->data_directory_name, EB_DIRECTORY_NAME_DATA);
+    eb_fix_directory_name2(appendix->path, subbook->directory_name,
+	subbook->data_directory_name);
+
+    /*
+     * Open an appendix file.
+     */
+    eb_find_file_name3(appendix->path, subbook->directory_name,
+	subbook->data_directory_name, furoku_hint_list,
+	subbook->file_name, &hint_index);
+
+    switch (hint_index) {
+    case EB_HINT_INDEX_FUROKU:
+	zio_code = ZIO_NONE;
+	break;
+
+    case EB_HINT_INDEX_FUROKU_EBZ:
+	zio_code = ZIO_EBZIP1;
+	break;
+
+    default:
+	error_code = EB_ERR_FAIL_OPEN_APP;
+	goto failed;
+    }
+
+    eb_compose_path_name3(appendix->path, subbook->directory_name,
+	subbook->data_directory_name, subbook->file_name, 
+	appendix_path_name);
+
+    if (zio_open(&subbook->zio, appendix_path_name, zio_code) < 0) {
+	subbook = NULL;
+	error_code = EB_ERR_FAIL_OPEN_APP;
+	goto failed;
+    }
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unset_appendix_subbook(appendix);
     return error_code;
 }
 

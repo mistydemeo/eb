@@ -92,7 +92,6 @@
 
 #ifdef ENABLE_NLS
 #include <libintl.h>
-#include "libintl_r.h"
 #endif
 
 #ifndef HAVE_STRCHR

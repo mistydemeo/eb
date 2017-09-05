@@ -21,6 +21,16 @@
 #include "language.h"
 
 /*
+ * Hints of appendix and furoku file names in appendix package.
+ */
+#define EB_HINT_INDEX_LANGUAGE		0
+#define EB_HINT_INDEX_LANGUAGE_EBZ	1
+
+static const char *language_hint_list[] = {
+    "language", "language.ebz", NULL
+};
+
+/*
  * Read information from the `LANGUAGE' file in `book'.
  *
  * If succeeded, the number of languages in the book is returned.
@@ -32,30 +42,36 @@ eb_initialize_languages(book)
 {
     EB_Error_Code error_code;
     EB_Language *language;
-    Zio zio;
     Zio_Code zio_code;
     char language_path_name[PATH_MAX + 1];
     char buffer[EB_SIZE_PAGE];
     char *buffer_p;
+    int hint_index;
     int i;
 
-    zio_initialize(&zio);
+    zio_initialize(&book->language_zio);
 
     /*
      * Open the language file.
      */
-    if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
-	EB_SUFFIX_NONE, language_path_name) == 0) {
+    eb_find_file_name(book->path, language_hint_list, book->language_file_name,
+	&hint_index);
+
+    switch (hint_index) {
+    case EB_HINT_INDEX_LANGUAGE:
 	zio_code = ZIO_NONE;
-    } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
-	EB_SUFFIX_EBZ, language_path_name) == 0) {
+	break;
+    case EB_HINT_INDEX_LANGUAGE_EBZ:
 	zio_code = ZIO_EBZIP1;
-    } else {
+	break;
+    default:
 	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;
     }
+    eb_compose_path_name(book->path, book->language_file_name,
+	language_path_name);
 
-    if (zio_open(&zio, language_path_name, zio_code) < 0) {
+    if (zio_open(&book->language_zio, language_path_name, zio_code) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;
     }
@@ -64,7 +80,7 @@ eb_initialize_languages(book)
      * Get a character code of the book, and get the number of langueages
      * in the file.
      */
-    if (zio_read(&zio, buffer, 16) != 16) {
+    if (zio_read(&book->language_zio, buffer, 16) != 16) {
 	error_code = EB_ERR_FAIL_READ_LANG;
 	goto failed;
     }
@@ -98,7 +114,7 @@ eb_initialize_languages(book)
     /*
      * Get languege names.
      */
-    if (zio_read(&zio, buffer,
+    if (zio_read(&book->language_zio, buffer,
 	(EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count)
 	!= (EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count) {
 	error_code = EB_ERR_FAIL_READ_LANG;
@@ -114,16 +130,14 @@ eb_initialize_languages(book)
 	*(language->name + EB_MAX_LANGUAGE_NAME_LENGTH) = '\0';
     }
 
-    zio_finalize(&zio);
-
+    zio_close(&book->language_zio);
     return EB_SUCCESS;
 
     /*
      * An error occurs...
      */
   failed:
-    zio_close(&zio);
-    zio_finalize(&zio);
+    zio_close(&book->language_zio);
     if (book->languages != NULL) {
 	free(book->languages);
 	book->languages = NULL;
@@ -393,14 +407,10 @@ eb_set_language(book, language_code)
     EB_Language_Code language_code;
 {
     EB_Error_Code error_code;
-    Zio zio;
-    Zio_Code zio_code;
     EB_Language *language;
     char language_path_name[PATH_MAX + 1];
     char *message;
     int i;
-
-    zio_initialize(&zio);
 
     /*
      * Lock the book.
@@ -451,18 +461,10 @@ eb_set_language(book, language_code)
     /*
      * Open the language file.
      */
-    if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
-	EB_SUFFIX_NONE, language_path_name) == 0) {
-	zio_code = ZIO_NONE;
-    } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
-	EB_SUFFIX_EBZ, language_path_name) == 0) {
-	zio_code = ZIO_EBZIP1;
-    } else {
-	error_code = EB_ERR_FAIL_OPEN_LANG;
-	goto failed;
-    }
+    eb_compose_path_name(book->path, book->language_file_name,
+	language_path_name);
 
-    if (zio_open(&zio, language_path_name, zio_code) < 0) {
+    if (zio_open(&book->language_zio, language_path_name, ZIO_REOPEN) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;
     }
@@ -471,14 +473,14 @@ eb_set_language(book, language_code)
      * Read messages.
      * Appends '\0' to each message.
      */
-    if (zio_lseek(&zio, language->location, SEEK_SET) < 0) {
+    if (zio_lseek(&book->language_zio, language->location, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_LANG;
 	goto failed;
     }
     for (i = 0, message = book->messages;
 	 i < language->message_count;
 	 i++, message += EB_MAX_MESSAGE_LENGTH + 2) {
-	if (zio_read(&zio, message, EB_MAX_MESSAGE_LENGTH + 1)
+	if (zio_read(&book->language_zio, message, EB_MAX_MESSAGE_LENGTH + 1)
 	    != EB_MAX_MESSAGE_LENGTH + 1) {
 	    error_code = EB_ERR_FAIL_READ_LANG;
 	    goto failed;
@@ -499,22 +501,21 @@ eb_set_language(book, language_code)
     /*
      * Close the language file.
      */
-    zio_close(&zio);
+    zio_close(&book->language_zio);
 
     /*
      * Unlock the book.
      */
   succeeded:
+    zio_close(&book->language_zio);
     eb_unlock(&book->lock);
-    zio_finalize(&zio);
     return EB_SUCCESS;
 
     /*
      * An error occurs...
      */
   failed:
-    zio_close(&zio);
-    zio_finalize(&zio);
+    zio_close(&book->language_zio);
     book->language_current = NULL;
     eb_unlock(&book->lock);
     return error_code;

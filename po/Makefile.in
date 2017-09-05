@@ -17,8 +17,16 @@ POTFILES = \
 	$(top_srcdir)/libebutils/getopt.c \
 	$(top_srcdir)/ebfont/ebfont.c \
 	$(top_srcdir)/ebinfo/ebinfo.c \
+	$(top_srcdir)/ebzip/copyfile.c \
 	$(top_srcdir)/ebzip/ebzip.c \
-	$(top_srcdir)/ebzip/ebzip1.c 
+	$(top_srcdir)/ebzip/ebzip1.c \
+	$(top_srcdir)/ebzip/filename.c \
+	$(top_srcdir)/ebzip/unzipbook.c \
+	$(top_srcdir)/ebzip/unzipfile.c \
+	$(top_srcdir)/ebzip/zipbook.c \
+	$(top_srcdir)/ebzip/zipfile.c \
+	$(top_srcdir)/ebzip/zipinfobook.c \
+	$(top_srcdir)/ebzip/zipinfofile.c
 ## end
 
 PACKAGE = @PACKAGE@

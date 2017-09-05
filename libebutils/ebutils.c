@@ -95,26 +95,11 @@ int strncasecmp();
 #define tolower(c) (('A' <= (c) && (c) <= 'Z') ? (c) + 0x20 : (c))
 
 /*
- * Generic name of the program.
- */
-const char *program_name;
-
-/*
- * Program version.
- */
-const char *program_version = VERSION;
-
-/*
- * Actual program name. (argv[0])
- */
-const char *invoked_name;
-
-
-/*
  * Output ``try ...'' message to standard error.
  */
 void
-output_try_help()
+output_try_help(invoked_name)
+    const char *invoked_name;
 {
     fprintf(stderr, _("try `%s --help' for more information\n"), invoked_name);
     fflush(stderr);
@@ -125,7 +110,9 @@ output_try_help()
  * Output version number to stdandard out.
  */
 void
-output_version()
+output_version(program_name, program_version)
+    const char *program_name;
+    const char *program_version;
 {
     printf("%s (EB Library) version %s\n", program_name, program_version);
     printf("Copyright (c) 1997, 98, 99, 2000, 01\n");
@@ -148,7 +135,8 @@ output_version()
  * Otherwise -1 is returned.
  */
 int
-parse_subbook_name_argument(argument, name_list, name_count)
+parse_subbook_name_argument(invoked_name, argument, name_list, name_count)
+    const char *invoked_name;
     const char *argument;
     char name_list[][EB_MAX_DIRECTORY_NAME_LENGTH + 1];
     int *name_count;
@@ -191,8 +179,8 @@ parse_subbook_name_argument(argument, name_list, name_count)
 	}
 
 	/*
-	 * If the font name is not found in `font_list', it is added to
-	 * the list.
+	 * If the subbook name is not found in the subbook name list,
+	 * it is added to the list.
 	 */
 	for (i = 0; i < *name_count; i++) {
 	    if (strcmp(name, name_list[i]) == 0)
@@ -209,9 +197,8 @@ parse_subbook_name_argument(argument, name_list, name_count)
 
 
 /*
- * Return a subbook-code of the subbook which contains the directory
- * name `directory'.
- * When no sub-book is matched to `directory', -1 is returned.
+ * Find a subbook-code of the subbook whose directory name is `directory'.
+ * When no sub-book is matched', EB_ERR_NO_SUCH_SUB is returned.
  */
 EB_Subbook_Code
 find_subbook(book, directory, subbook_code)
@@ -230,10 +217,8 @@ find_subbook(book, directory, subbook_code)
      */
     error_code = eb_subbook_list(book, subbook_list, &subbook_count);
     if (error_code != EB_SUCCESS) {
-	fprintf(stderr, "%s: %s\n", invoked_name,
-	    eb_error_message(error_code));
-	fflush(stderr);
-	return EB_SUBBOOK_INVALID;
+	*subbook_code = EB_SUBBOOK_INVALID;
+	return EB_ERR_NO_SUCH_SUB;
     }
     for (i = 0; i < subbook_count; i++) {
         error_code = eb_subbook_directory2(book, subbook_list[i], directory2);
@@ -245,10 +230,8 @@ find_subbook(book, directory, subbook_code)
 	}
     }
 
-    fprintf(stderr, _("%s: no such subbook `%s'\n"), invoked_name, directory);
-    fflush(stderr);
-
-    return EB_SUBBOOK_INVALID;
+    *subbook_code = EB_SUBBOOK_INVALID;
+    return EB_ERR_NO_SUCH_SUB;
 }
 
 

@@ -79,9 +79,9 @@ eb_set_word(book, input_word, word, canonicalized_word, word_code)
      */
     switch (*word_code) {
     case EB_WORD_ALPHABET:
-	if (book->subbook_current->word_alphabet.index_page != 0)
+	if (book->subbook_current->word_alphabet.start_page != 0)
 	    search = &book->subbook_current->word_alphabet;
-	else if (book->subbook_current->word_asis.index_page != 0)
+	else if (book->subbook_current->word_asis.start_page != 0)
 	    search = &book->subbook_current->word_asis;
 	else {
 	    error_code = EB_ERR_NO_SUCH_SEARCH;
@@ -90,9 +90,9 @@ eb_set_word(book, input_word, word, canonicalized_word, word_code)
 	break;
 
     case EB_WORD_KANA:
-	if (book->subbook_current->word_kana.index_page != 0)
+	if (book->subbook_current->word_kana.start_page != 0)
 	    search = &book->subbook_current->word_kana;
-	else if (book->subbook_current->word_asis.index_page != 0)
+	else if (book->subbook_current->word_asis.start_page != 0)
 	    search = &book->subbook_current->word_asis;
 	else {
 	    error_code = EB_ERR_NO_SUCH_SEARCH;
@@ -101,7 +101,7 @@ eb_set_word(book, input_word, word, canonicalized_word, word_code)
 	break;
 
     case EB_WORD_OTHER:
-	if (book->subbook_current->word_asis.index_page != 0)
+	if (book->subbook_current->word_asis.start_page != 0)
 	    search = &book->subbook_current->word_asis;
 	else {
 	    error_code = EB_ERR_NO_SUCH_SEARCH;
@@ -166,9 +166,9 @@ eb_set_endword(book, input_word, word, canonicalized_word, word_code)
      */
     switch (*word_code) {
     case EB_WORD_ALPHABET:
-	if (book->subbook_current->endword_alphabet.index_page != 0)
+	if (book->subbook_current->endword_alphabet.start_page != 0)
 	    search = &book->subbook_current->endword_alphabet;
-	else if (book->subbook_current->endword_asis.index_page != 0)
+	else if (book->subbook_current->endword_asis.start_page != 0)
 	    search = &book->subbook_current->endword_asis;
 	else {
 	    error_code = EB_ERR_NO_SUCH_SEARCH;
@@ -177,9 +177,9 @@ eb_set_endword(book, input_word, word, canonicalized_word, word_code)
 	break;
 
     case EB_WORD_KANA:
-	if (book->subbook_current->endword_kana.index_page != 0)
+	if (book->subbook_current->endword_kana.start_page != 0)
 	    search = &book->subbook_current->endword_kana;
-	else if (book->subbook_current->endword_asis.index_page != 0)
+	else if (book->subbook_current->endword_asis.start_page != 0)
 	    search = &book->subbook_current->endword_asis;
 	else {
 	    error_code = EB_ERR_NO_SUCH_SEARCH;
@@ -188,7 +188,7 @@ eb_set_endword(book, input_word, word, canonicalized_word, word_code)
 	break;
 
     case EB_WORD_OTHER:
-	if (book->subbook_current->endword_asis.index_page != 0)
+	if (book->subbook_current->endword_asis.start_page != 0)
 	    search = &book->subbook_current->endword_asis;
 	else {
 	    error_code = EB_ERR_NO_SUCH_SEARCH;
@@ -296,6 +296,7 @@ eb_set_multiword(book, multi_id, entry_id, input_word, word,
     EB_Word_Code *word_code;
 {
     EB_Error_Code error_code;
+    EB_Search *search;
 
     /*
      * Make a fixed word and a canonicalized word from `input_word'.
@@ -311,8 +312,8 @@ eb_set_multiword(book, multi_id, entry_id, input_word, word,
     /*
      * Fix the word.
      */
-    eb_fix_word(book, &book->subbook_current->multis[multi_id].search,
-	canonicalized_word, word);
+    search = &book->subbook_current->multis[multi_id].entries[entry_id];
+    eb_fix_word(book, search, canonicalized_word, word);
 
     return EB_SUCCESS;
 
@@ -338,50 +339,54 @@ eb_fix_word(book, search, canonicalized_word, word)
     char *word;
     char *canonicalized_word;
 {
-    /*
-     * Canonicalize the word.
-     */
+    if (search->index_id == 0x80 || search->index_id == 0xa1)
+	return;
+
     if (book->character_code == EB_CHARCODE_ISO8859_1) {
-	if (search->space == EB_INDEX_STYLE_DELETE) {
-	    eb_delete_spaces_latin(word);
+	if (search->space == EB_INDEX_STYLE_DELETE)
 	    eb_delete_spaces_latin(canonicalized_word);
-	}
-	if (search->lower == EB_INDEX_STYLE_CONVERT) {
-	    eb_convert_lower_latin(word);
+
+	if (search->lower == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_lower_latin(canonicalized_word);
-	}
+
     } else {
-	if (search->space == EB_INDEX_STYLE_DELETE) {
-	    eb_delete_spaces_jis(word);
+	if (search->space == EB_INDEX_STYLE_DELETE)
 	    eb_delete_spaces_jis(canonicalized_word);
-	}
+
 	if (search->katakana == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_katakana_jis(canonicalized_word);
 	else if (search->katakana == EB_INDEX_STYLE_REVERSED_CONVERT)
 	    eb_convert_hiragana_jis(canonicalized_word);
-	if (search->lower == EB_INDEX_STYLE_CONVERT) {
-	    eb_convert_lower_jis(word);
+
+	if (search->lower == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_lower_jis(canonicalized_word);
-	}
-	if (search->mark == EB_INDEX_STYLE_DELETE) {
-	    eb_delete_marks_jis(word);
+
+	if (search->mark == EB_INDEX_STYLE_DELETE)
 	    eb_delete_marks_jis(canonicalized_word);
-	}
+
 	if (search->long_vowel == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_long_vowels_jis(canonicalized_word);
 	else if (search->long_vowel == EB_INDEX_STYLE_DELETE)
 	    eb_delete_long_vowels_jis(canonicalized_word);
+
 	if (search->double_consonant == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_double_consonants_jis(canonicalized_word);
+
 	if (search->contracted_sound == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_contracted_sounds_jis(canonicalized_word);
+
 	if (search->small_vowel == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_small_vowels_jis(canonicalized_word);
+
 	if (search->voiced_consonant == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_voiced_consonants_jis(canonicalized_word);
+
 	if (search->p_sound == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_p_sounds_jis(canonicalized_word);
     }
+
+    if (search->index_id != 0x70 && search->index_id != 0x90)
+	strcpy(word, canonicalized_word);
 }
 
 

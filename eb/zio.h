@@ -68,10 +68,11 @@ extern "C" {
  */
 #define ZIO_NONE			0
 #define ZIO_EBZIP1			1
-#define ZIO_EPWING			100
-#define ZIO_EPWING6			101
-#define ZIO_SEBXA			200
+#define ZIO_EPWING			2
+#define ZIO_EPWING6			3
+#define ZIO_SEBXA			4
 #define ZIO_INVALID        		-1
+#define ZIO_REOPEN			-2
 
 /*
  * Compression type.
@@ -215,6 +216,7 @@ void zio_finalize(Zio *);
 int zio_open(Zio *, const char *, Zio_Code);
 void zio_close(Zio *);
 int zio_file(Zio *);
+Zio_Code zio_mode(Zio *);
 off_t zio_lseek(Zio *, off_t, int);
 ssize_t zio_read(Zio *, char *, size_t);
 
@@ -227,6 +229,7 @@ void zio_finalize();
 int zio_open();
 void zio_close();
 int zio_file();
+Zio_Code zio_mode();
 off_t zio_lseek();
 ssize_t zio_read();
 

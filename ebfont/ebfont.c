@@ -60,7 +60,6 @@
 #include "eb/error.h"
 #include "eb/font.h"
 
-#include "fakelog.h"
 #include "getopt.h"
 #include "getumask.h"
 #include "makedir.h"
@@ -182,6 +181,13 @@ static Image_Format image_formats[] = {
 #define MAX_LENGTH_IMAGE_SUFFIX	3
 
 /*
+ * Program name and version.
+ */
+static const char *program_name = "ebfont";
+static const char *program_version = VERSION;
+static const char *invoked_name;
+
+/*
  * Debug flag.
  */
 static int debug_flag;
@@ -195,20 +201,20 @@ int subbook_name_count = 0;
 /*
  * List of target subbook codes.
  */
-EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
-int subbook_count = 0;
+static EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
+static int subbook_count = 0;
 
 /*
  * List of target font heights.
  */
-EB_Font_Code font_list[EB_MAX_FONTS];
-int font_count = 0;
+static EB_Font_Code font_list[EB_MAX_FONTS];
+static int font_count = 0;
 
 /*
  * Target Image formats.
  */
-Image_Format_Code image_list[MAX_IMAGE_FORMATS];
-int image_count = 0;
+static Image_Format_Code image_list[MAX_IMAGE_FORMATS];
+static int image_count = 0;
 
 /*
  * Defaults and limitations.
@@ -237,9 +243,9 @@ int image_count = 0;
 /*
  * Unexported functions.
  */
-static int parse_image_argument EB_P((const char *, int *,
-    Image_Format_Code *));
-static int parse_font_argument EB_P((const char *, int *, EB_Font_Code *));
+static int parse_image_argument EB_P((const char *, Image_Format_Code *,
+    int *));
+static int parse_font_argument EB_P((const char *, EB_Font_Code *, int *));
 static void output_help EB_P((void));
 static int make_book_fonts EB_P((EB_Book *, const char *, EB_Subbook_Code *,
     int, EB_Font_Code *, int, Image_Format_Code *, int));
@@ -263,7 +269,6 @@ main(argc, argv)
     EB_Book book;
     int ch;
     
-    program_name = "ebfont";
     invoked_name = argv[0];
     debug_flag = 0;
     strcpy(out_path, DEFAULT_OUTPUT_DIRECTORY);
@@ -286,13 +291,6 @@ main(argc, argv)
     eb_initialize_book(&book);
 
     /*
-     * Set fakelog behavior.
-     */
-    set_fakelog_name(invoked_name);
-    set_fakelog_mode(FAKELOG_TO_STDERR);
-    set_fakelog_level(FAKELOG_ERR);
-
-    /*
      * Parse command line options.
      */
     for (;;) {
@@ -305,15 +303,14 @@ main(argc, argv)
 	     * Option `-d'.  Debug mode.
 	     */
 	    debug_flag = 1;
-	    set_fakelog_level(FAKELOG_DEBUG);
 	    break;
 
 	case 'f':
 	    /*
 	     * Option `-f'.  Generate fonts with HEIGHT.
 	     */
-	    if (parse_font_argument(optarg, &font_count, font_list) < 0) {
-		output_try_help();
+	    if (parse_font_argument(optarg, font_list, &font_count) < 0) {
+		output_try_help(invoked_name);
 		goto die;
 	    }
 	    break;
@@ -329,8 +326,8 @@ main(argc, argv)
 	    /*
 	     * Option `-i'.  Generate fonts as FORMAT.
 	     */
-	    if (parse_image_argument(optarg, &image_count, image_list) < 0) {
-		output_try_help();
+	    if (parse_image_argument(optarg, image_list, &image_count) < 0) {
+		output_try_help(invoked_name);
 		goto die;
 	    }
 	    break;
@@ -371,9 +368,9 @@ main(argc, argv)
             /*
              * Option `-S'.  Specify target subbooks.
              */
-            if (parse_subbook_name_argument(optarg, subbook_name_list,
-		&subbook_name_count) < 0) {
-		output_try_help();
+            if (parse_subbook_name_argument(invoked_name, optarg,
+		subbook_name_list, &subbook_name_count) < 0) {
+		output_try_help(invoked_name);
 		goto die;
 	    }
             break;
@@ -382,11 +379,11 @@ main(argc, argv)
 	    /*
 	     * Option `-v'.  Display version number, then exit.
 	     */
-	    output_version();
+	    output_version(program_name, program_version);
 	    exit(0);
 
 	default:
-	    output_try_help();
+	    output_try_help(invoked_name);
 	    goto die;
 	}
     }
@@ -396,15 +393,15 @@ main(argc, argv)
      */
     if (1 < argc - optind) {
 	fprintf(stderr, _("%s: too many arguments\n"), invoked_name);
-	output_try_help();
+	output_try_help(invoked_name);
 	goto die;
     }
 
     if (image_count == 0)
-	parse_image_argument(DEFAULT_IMAGE_FORMAT, &image_count, image_list);
+	parse_image_argument(DEFAULT_IMAGE_FORMAT, image_list, &image_count);
 
     if (font_count == 0)
-	parse_font_argument(DEFAULT_FONT_HEIGHT, &font_count, font_list);
+	parse_font_argument(DEFAULT_FONT_HEIGHT, font_list, &font_count);
 
     /*
      * Set a book path.
@@ -480,10 +477,10 @@ main(argc, argv)
  * Parse an argument to option `--font-height (-f)'
  */
 static int
-parse_font_argument(argument, font_count, font_list)
+parse_font_argument(argument, font_list, font_count)
     const char *argument;
-    int *font_count;
     EB_Font_Code *font_list;
+    int *font_count;
 {
     const char *argument_p = argument;
     char font_name[MAX_LENGTH_FONT_NAME + 1];
@@ -560,10 +557,10 @@ parse_font_argument(argument, font_count, font_list)
  * Parse an argument to option `--font-image-format (-i)'
  */
 static int
-parse_image_argument(argument, image_count, image_list)
+parse_image_argument(argument, image_list, image_count)
     const char *argument;
-    int *image_count;
     Image_Format_Code *image_list;
+    int *image_count;
 {
     const char *argument_p = argument;
     char image_name[MAX_LENGTH_IMAGE_NAME + 1];

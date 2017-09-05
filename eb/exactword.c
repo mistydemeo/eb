@@ -41,9 +41,9 @@ eb_have_exactword_search(book)
     /*
      * Check for the index page of word search.
      */
-    if (book->subbook_current->word_alphabet.index_page == 0
-	&& book->subbook_current->word_asis.index_page == 0
-	&& book->subbook_current->word_kana.index_page == 0)
+    if (book->subbook_current->word_alphabet.start_page == 0
+	&& book->subbook_current->word_asis.start_page == 0
+	&& book->subbook_current->word_kana.start_page == 0)
 	goto failed;
 
     /*
@@ -108,10 +108,10 @@ eb_search_exactword(book, input_word)
      */
     switch (word_code) {
     case EB_WORD_ALPHABET:
-	if (book->subbook_current->word_alphabet.index_page != 0)
-	    context->page = book->subbook_current->word_alphabet.index_page;
-	else if (book->subbook_current->word_asis.index_page != 0)
-	    context->page = book->subbook_current->word_asis.index_page;
+	if (book->subbook_current->word_alphabet.start_page != 0)
+	    context->page = book->subbook_current->word_alphabet.start_page;
+	else if (book->subbook_current->word_asis.start_page != 0)
+	    context->page = book->subbook_current->word_asis.start_page;
 	else {
 	    error_code = EB_ERR_NO_SUCH_SEARCH;
 	    goto failed;
@@ -119,10 +119,10 @@ eb_search_exactword(book, input_word)
 	break;
 
     case EB_WORD_KANA:
-	if (book->subbook_current->word_kana.index_page != 0)
-	    context->page = book->subbook_current->word_kana.index_page;
-	else if (book->subbook_current->word_asis.index_page != 0)
-	    context->page = book->subbook_current->word_asis.index_page;
+	if (book->subbook_current->word_kana.start_page != 0)
+	    context->page = book->subbook_current->word_kana.start_page;
+	else if (book->subbook_current->word_asis.start_page != 0)
+	    context->page = book->subbook_current->word_asis.start_page;
 	else {
 	    error_code = EB_ERR_NO_SUCH_SEARCH;
 	    goto failed;
@@ -130,8 +130,8 @@ eb_search_exactword(book, input_word)
 	break;
 
     case EB_WORD_OTHER:
-	if (book->subbook_current->word_asis.index_page != 0)
-	    context->page = book->subbook_current->word_asis.index_page;
+	if (book->subbook_current->word_asis.start_page != 0)
+	    context->page = book->subbook_current->word_asis.start_page;
 	else {
 	    error_code = EB_ERR_NO_SUCH_SEARCH;
 	    goto failed;

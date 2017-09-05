@@ -154,6 +154,7 @@ static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
  * Unexported function.
  */
 #ifdef __STDC__
+static int zio_reopen(Zio *, const char *);
 static int zio_open_none(Zio *, const char *);
 static int zio_open_ebzip(Zio *, const char *);
 static int zio_open_epwing(Zio *, const char *);
@@ -166,6 +167,7 @@ static int zio_unzip_slice_ebzip1(char *, size_t, char *, size_t);
 static int zio_unzip_slice_epwing(char *, int, Zio_Huffman_Node *);
 static int zio_unzip_slice_epwing6(char *, int, Zio_Huffman_Node *);
 #else /* not __STDC__ */
+static int zio_reopen();
 static int zio_open_none();
 static int zio_open_ebzip();
 static int zio_open_epwing();
@@ -269,7 +271,9 @@ zio_open(zio, file_name, zio_code)
     if (0 <= zio->file)
 	zio_close(zio);
 
-    if (zio_code == ZIO_NONE)
+    if (zio_code == ZIO_REOPEN)
+	return zio_reopen(zio, file_name);
+    else if (zio_code == ZIO_NONE)
 	return zio_open_none(zio, file_name);
     else if (zio_code == ZIO_EBZIP1)
 	return zio_open_ebzip(zio, file_name);
@@ -283,6 +287,29 @@ zio_open(zio, file_name, zio_code)
 #endif
 
     return -1;
+}
+
+
+/*
+ * Reopen a file.
+ */
+static int
+zio_reopen(zio, file_name)
+    Zio *zio;
+    const char *file_name;
+{
+    if (zio->code == ZIO_INVALID)
+	return -1;
+
+    zio->file = open(file_name, O_RDONLY | O_BINARY);
+    if (zio->file < 0) {
+	zio->code = ZIO_INVALID;
+	return -1;
+    }
+
+    zio->location = 0;
+
+    return zio->file;
 }
 
 
@@ -822,33 +849,6 @@ zio_make_epwing_huffman_tree(zio, leaf_count)
 
 
 /*
- * Reopen a file.
- */
-int
-zio_reopen(zio, file_name, zio_code)
-    Zio *zio;
-    const char *file_name;
-    Zio_Code zio_code;
-{
-    if (zio->code == ZIO_INVALID)
-	return zio_open(zio, file_name, zio_code);
-
-    if (0 <= zio->file)
-	zio_close(zio);
-
-    zio->file = open(file_name, O_RDONLY | O_BINARY);
-    if (zio->file < 0) {
-	zio->code = ZIO_INVALID;
-	return -1;
-    }
-
-    zio->location = 0;
-
-    return zio->file;
-}
-
-
-/*
  * Close `zio'.
  */
 void
@@ -879,6 +879,17 @@ zio_file(zio)
     Zio *zio;
 {
     return zio->file;
+}
+
+
+/*
+ * Return compression mode of `zio'.
+ */
+Zio_Code
+zio_mode(zio)
+    Zio *zio;
+{
+    return zio->code;
 }
 
 

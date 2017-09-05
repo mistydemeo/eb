@@ -42,7 +42,7 @@ eb_have_copyright(book)
     /*
      * Check for the index page of copyright notice.
      */
-    if (book->subbook_current->copyright.index_page == 0)
+    if (book->subbook_current->copyright.start_page == 0)
 	goto failed;
 
     /*
@@ -88,7 +88,7 @@ eb_copyright(book, position)
     /*
      * Check for the page number of COPYRIGHT NOTICE.
      */
-    page = book->subbook_current->copyright.index_page;
+    page = book->subbook_current->copyright.start_page;
     if (page == 0) {
 	error_code = EB_ERR_NO_SUCH_SEARCH;
 	goto failed;

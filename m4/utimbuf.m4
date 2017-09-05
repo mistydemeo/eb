@@ -4,7 +4,7 @@
 AC_DEFUN(AC_STRUCT_UTIMBUF,
 [AC_HEADER_TIME
 AC_CHECK_HEADERS(utime.h)
-AC_CACHE_CHECK(for struct utimbuf, ax_cv_have_struct_utimbuf,
+AC_CACHE_CHECK(for struct utimbuf, ac_cv_have_struct_utimbuf,
 [AC_TRY_COMPILE([#ifdef TIME_WITH_SYS_TIME
 #include <sys/time.h>
 #include <time.h>
@@ -18,8 +18,8 @@ AC_CACHE_CHECK(for struct utimbuf, ax_cv_have_struct_utimbuf,
 #ifdef HAVE_UTIME_H
 #include <utime.h>
 #endif], [static struct utimbuf x; x.actime = x.modtime;
-], [ax_cv_have_struct_utimbuf=yes], [ax_cv_have_struct_utimbuf=no])])
-if test $ax_cv_have_struct_utimbuf = yes; then
+], [ac_cv_have_struct_utimbuf=yes], [ac_cv_have_struct_utimbuf=no])])
+if test $ac_cv_have_struct_utimbuf = yes; then
    AC_DEFINE(HAVE_STRUCT_UTIMBUF, 1,
 [Define if \`struct utimbuf' is declared -- usually in <utime.h>.])
 fi

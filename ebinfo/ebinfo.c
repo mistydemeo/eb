@@ -37,7 +37,6 @@
 #include "eb/error.h"
 #include "eb/font.h"
 
-#include "fakelog.h"
 #include "getopt.h"
 #include "ebutils.h"
 
@@ -88,6 +87,13 @@ static void output_help EB_P((void));
 static void output_multi_information EB_P((EB_Book *));
 
 /*
+ * Program name and version.
+ */
+static const char *program_name = "ebinfo";
+static const char *program_version = VERSION;
+static const char *invoked_name;
+
+/*
  * Command line options.
  */
 static const char *short_options = "hmv";
@@ -112,7 +118,6 @@ main(argc, argv)
     char *book_path;
     int multi_flag;
 
-    program_name = "ebinfo";
     invoked_name = argv[0];
 
     /*
@@ -125,13 +130,6 @@ main(argc, argv)
        bindtextdomain(TEXT_DOMAIN_NAME, LOCALEDIR);
        textdomain(TEXT_DOMAIN_NAME);
 #endif
-
-    /*
-     * Set fakelog behavior.
-     */
-    set_fakelog_name(invoked_name);
-    set_fakelog_mode(FAKELOG_TO_STDERR);
-    set_fakelog_level(FAKELOG_ERR);
 
     /*
      * Parse command line options.
@@ -160,11 +158,11 @@ main(argc, argv)
 	    /*
 	     * Option `-v'.  Display version number, then exit.
 	     */
-	    output_version();
+	    output_version(program_name, program_version);
 	    exit(0);
 
 	default:
-	    output_try_help();
+	    output_try_help(invoked_name);
 	    exit(1);
 	}
     }
@@ -174,7 +172,7 @@ main(argc, argv)
      */
     if (1 < argc - optind) {
 	fprintf(stderr, _("%s: too many arguments\n"), invoked_name);
-	output_try_help();
+	output_try_help(invoked_name);
 	exit(1);
     }
 

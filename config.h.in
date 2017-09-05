@@ -11,7 +11,7 @@
 /* Define if EB Library is built with pthread support. */
 #undef EBCONF_ENABLE_PTHREAD
 
-/* Define if NLS is requeste */
+/* Define if NLS is requested */
 #undef ENABLE_NLS
 
 /* Define if pthread support is enabled. */
@@ -49,6 +49,9 @@
 
 /* Define if you have the `getpagesize' function. */
 #undef HAVE_GETPAGESIZE
+
+/* Define if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
 
 /* Define if you have the `LC_MESSAGES' locale category */
 #undef HAVE_LC_MESSAGES
@@ -109,6 +112,9 @@
 
 /* Define if you have the `strerror' function. */
 #undef HAVE_STRERROR
+
+/* Define if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
 
 /* Define if you have the <string.h> header file. */
 #undef HAVE_STRING_H

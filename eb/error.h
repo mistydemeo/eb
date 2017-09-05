@@ -127,7 +127,6 @@ extern "C" {
  */
 /* error.c */
 const char *eb_error_message EB_P((EB_Error_Code));
-const char *eb_error_message_r EB_P((EB_Error_Code, char *));
 
 #ifdef __cplusplus
 }

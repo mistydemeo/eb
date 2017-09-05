@@ -225,6 +225,7 @@ eb_read_text(book, appendix, hookset, container, text_max_length, text,
 {
     EB_Error_Code error_code;
     const EB_Hook *hook;
+    EB_Position position;
 
     /*
      * Lock the book, appendix and hookset.
@@ -257,12 +258,23 @@ eb_read_text(book, appendix, hookset, container, text_max_length, text,
      * Set text mode to `text'.
      */
     if (book->text_context.code != EB_TEXT_NONE) {
-	if (book->text_context.code != EB_TEXT_TEXT) {
+	if (book->text_context.code != EB_TEXT_TEXT
+	    && book->text_context.code != EB_TEXT_OPTIONAL_TEXT) {
 	    error_code = EB_ERR_DIFF_CONTENT;
 	    goto failed;
 	}
     } else {
-	book->text_context.code = EB_TEXT_TEXT;
+	eb_tell_text(book, &position);
+
+	if (book->subbook_current->menu.start_page <= position.page
+	    && position.page <= book->subbook_current->menu.end_page)
+	    book->text_context.code = EB_TEXT_OPTIONAL_TEXT;
+	else if (book->subbook_current->copyright.start_page <= position.page
+	    && position.page <= book->subbook_current->copyright.end_page)
+	    book->text_context.code = EB_TEXT_OPTIONAL_TEXT;
+	else
+	    book->text_context.code = EB_TEXT_TEXT;
+	    
 	if (book->text_context.unprocessed != NULL) {
 	    free(book->text_context.unprocessed);
 	    book->text_context.unprocessed = NULL;
@@ -799,9 +811,13 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		break;
 
 	    case 0x32:
-		/* beginning of monochrome graphic */
+		/* beginning of reference to monochrome graphic */
 		context->in_step = 2;
-		hook = hookset->hooks + EB_HOOK_BEGIN_BITMAP;
+		argc = 4;
+		argv[1] = 0;
+		argv[2] = 0;
+		argv[3] = 0;
+		hook = hookset->hooks + EB_HOOK_BEGIN_MONO_GRAPHIC;
 		break;
 
 	    case 0x39:
@@ -886,7 +902,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		argv[2] = eb_bcd4(cache_p + 4);
 		argv[3] = eb_bcd4(cache_p + 8);
 		if (0 < argv[2] && 0 < argv[3])
-		    hook = hookset->hooks + EB_HOOK_BEGIN_BITMAP;
+		    hook = hookset->hooks + EB_HOOK_BEGIN_MONO_GRAPHIC;
 		break;
 
 	    case 0x45:
@@ -930,9 +946,9 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		argv[2] = eb_bcd4(cache_p + 14);
 		argv[3] = eb_bcd2(cache_p + 18);
 		if (argv[1] >> 8 == 0x00)
-		    hook = hookset->hooks + EB_HOOK_BEGIN_BMP;
+		    hook = hookset->hooks + EB_HOOK_BEGIN_COLOR_BMP;
 		else
-		    hook = hookset->hooks + EB_HOOK_BEGIN_JPEG;
+		    hook = hookset->hooks + EB_HOOK_BEGIN_COLOR_JPEG;
 		break;
 
 	    case 0x49: case 0x4b: case 0x4c: case 0x4e: case 0x4f:
@@ -941,7 +957,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		break;
 
 	    case 0x52:
-		/* end of monochrome graphic */
+		/* end of reference to monochrome graphic */
 		context->in_step = 8;
 		if (cache_rest_length < context->in_step) {
 		    error_code = EB_ERR_UNEXP_TEXT;
@@ -950,7 +966,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		argc = 3;
 		argv[1] = eb_bcd4(cache_p + 2);
 		argv[2] = eb_bcd2(cache_p + 6);
-		hook = hookset->hooks + EB_HOOK_END_BITMAP;
+		hook = hookset->hooks + EB_HOOK_END_MONO_GRAPHIC;
 		break;
 
 	    case 0x59:
@@ -1009,7 +1025,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		argv[1] = eb_bcd4(cache_p + 2);
 		argv[2] = eb_bcd2(cache_p + 6);
 		if (0 < argv[1] && 0 < argv[2])
-		    hook = hookset->hooks + EB_HOOK_END_BITMAP;
+		    hook = hookset->hooks + EB_HOOK_END_MONO_GRAPHIC;
 		break;
 
 	    case 0x6a:
@@ -1082,7 +1098,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 	     */
 	    context->printable_count++;
 
-	    if ((0x20 <= c1 && c1 < 0x7f) || (0xa0 <= c1 && c1 < 0xff)) {
+	    if ((0x20 <= c1 && c1 < 0x7f) || (0xa0 <= c1 && c1 <= 0xff)) {
 		/*
 		 * This is an ISO 8859 1 character.
 		 */

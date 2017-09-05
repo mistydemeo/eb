@@ -29,29 +29,12 @@
 #define LOCALEDIR		"@localedir@"
 
 /*
- * File and directory names.
+ * Directory names.
  */
-#define EB_FILE_NAME_START		"start"
-#define EB_FILE_NAME_SOUND		"sound"
-#define EB_FILE_NAME_CATALOG		"catalog"
-#define EB_FILE_NAME_LANGUAGE		"language"
-#define EB_FILE_NAME_VTOC		"vtoc"
-#define EB_FILE_NAME_WELCOME		"welcome"
-#define EB_FILE_NAME_CATALOGS		"catalogs"
-#define EB_FILE_NAME_HONMON		"honmon"
-#define EB_FILE_NAME_HONMON2		"honmon2"
-#define EB_FILE_NAME_HONMONG		"honmong"
-#define EB_FILE_NAME_HONMONS		"honmons"
-#define EB_FILE_NAME_APPENDIX		"appendix"
-#define EB_FILE_NAME_FUROKU		"furoku"
-
 #define EB_DIRECTORY_NAME_DATA		"data"
 #define EB_DIRECTORY_NAME_GAIJI		"gaiji"
 #define EB_DIRECTORY_NAME_STREAM	"stream"
 #define EB_DIRECTORY_NAME_MOVIE		"movie"
-
-#define EB_SUFFIX_NONE			""
-#define EB_SUFFIX_EBZ			".ebz"
 
 /*
  * Search word types.
@@ -72,27 +55,38 @@
 /*
  * Text content currently read.
  */
-#define EB_TEXT_TEXT            	1
-#define EB_TEXT_HEADING         	2
-#define EB_TEXT_RAWTEXT         	3
-#define EB_TEXT_NONE           		0
-#define EB_TEXT_INVALID        		-1
+#define EB_TEXT_TEXT			1
+#define EB_TEXT_HEADING			2
+#define EB_TEXT_RAWTEXT			3
+#define EB_TEXT_OPTIONAL_TEXT		4
+#define EB_TEXT_NONE			0
+#define EB_TEXT_INVALID			-1
 
 /*
  * Search method currently processed.
  */
-#define EB_SEARCH_EXACTWORD            	0
-#define EB_SEARCH_WORD         		1
-#define EB_SEARCH_ENDWORD         	2
-#define EB_SEARCH_KEYWORD         	3
-#define EB_SEARCH_MULTI         	4
-#define EB_SEARCH_NONE           	-1
+#define EB_SEARCH_EXACTWORD		0
+#define EB_SEARCH_WORD			1
+#define EB_SEARCH_ENDWORD		2
+#define EB_SEARCH_KEYWORD		3
+#define EB_SEARCH_MULTI			4
+#define EB_SEARCH_NONE			-1
 
 /*
  * Arrangement style of entries in a search index page.
  */
 #define EB_ARRANGE_FIXED		0
 #define EB_ARRANGE_VARIABLE		1
+
+/*
+ * Binary data types.
+ */
+#define EB_BINARY_MONO_GRAPHIC		0
+#define EB_BINARY_COLOR_GRAPHIC		1
+#define EB_BINARY_WAVE			2
+#define EB_BINARY_MPEG			3
+#define EB_BINARY_GRAY_GRAPHIC		4
+#define EB_BINARY_INVALID		-1
 
 /*
  * The maximum index depth of search indexes.
@@ -141,16 +135,17 @@ EB_Error_Code eb_canonicalize_path_name EB_P((char *));
 EB_Error_Code eb_fix_directory_name EB_P((const char *, char *));
 EB_Error_Code eb_fix_directory_name2 EB_P((const char *, const char *,
     char *));
-EB_Error_Code eb_fix_file_name EB_P((const char *, char *));
-EB_Error_Code eb_fix_file_name2 EB_P((const char *, const char *, char *));
-EB_Error_Code eb_fix_file_name3 EB_P((const char *, const char *,
+EB_Error_Code eb_find_file_name EB_P((const char *, const char *[],
+    char *, int *));
+EB_Error_Code eb_find_file_name2 EB_P((const char *, const char *,
+    const char *[], char *, int *));
+EB_Error_Code eb_find_file_name3 EB_P((const char *, const char *,
+    const char *, const char *[], char *, int *));
+void eb_compose_path_name EB_P((const char *, const char *, char *));
+void eb_compose_path_name2 EB_P((const char *, const char *, const char *,
+    char *));
+void eb_compose_path_name3 EB_P((const char *, const char *, const char *,
     const char *, char *));
-EB_Error_Code eb_compose_path_name EB_P((const char *, const char *,
-    const char *, char *));
-EB_Error_Code eb_compose_path_name2 EB_P((const char *, const char *,
-    const char *, const char *, char *));
-EB_Error_Code eb_compose_path_name3 EB_P((const char *, const char *,
-    const char *, const char *, const char *, char *));
 
 /* font.c */
 EB_Error_Code eb_initialize_font EB_P((EB_Book *));

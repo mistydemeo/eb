@@ -132,7 +132,7 @@ eb_canonicalize_path_name(path_name)
      * path name.
      */
     path_name_length = strlen(path_name);
-    if (3 < path_name_length && *(path_name + path_name_length - 1) = '\\')
+    if (3 < path_name_length && *(path_name + path_name_length - 1) == '\\')
 	*(path_name + path_name_length - 1) = '\0';
 
     return EB_SUCCESS;
@@ -218,66 +218,69 @@ eb_fix_directory_name2(path, directory_name, sub_directory_name)
  * is returned.
  */
 EB_Error_Code
-eb_fix_file_name(path_name, file_name)
+eb_find_file_name(path_name, file_hint_list, found_file_name, found_hint_index)
     const char *path_name;
-    char *file_name;
+    char *found_file_name;
+    const char *file_hint_list[];
+    int *found_hint_index;
 {
-    struct dirent *entry;
     DIR *dir;
-    size_t file_name_length;
-    const char *suffix;
-    int have_dot;
-
-    file_name_length = strlen(file_name);
-
-    /*
-     * Check whether `file_name' contains a dot.
-     */
-    have_dot = (strchr(file_name, '.') != NULL);
+    struct dirent *entry;
+    size_t d_namlen;
+    int is_found;
+    int i;
 
     /*
      * Open the directory `path_name'.
      */
     dir = opendir(path_name);
     if (dir == NULL)
-        goto failed;
+	goto failed;
 
-    for (;;) {
-        /*
-         * Read the directory entry.
-         */
-        entry = readdir(dir);
-        if (entry == NULL)
-            goto failed;
+    is_found = 0;
 
-	if (EB_MAX_FILE_NAME_LENGTH < NAMLEN(entry))
-	    continue;
+    while (!is_found) {
+	/*
+	 * Read the directory entry.
+	 */
+	entry = readdir(dir);
+	if (entry == NULL)
+	    goto failed;
 
 	/*
-	 * Compare the given file name and the entry file name.
-	 * We consider they are matched when:
-	 *      <given name>       == <entry name>,
-	 *   or <given name>+";1'  == <entry name>,
-	 *   or <given name>+"."   == <entry name> if no "." in <given name>,
-	 *   or <given name>+".;1" == <entry name> if no "." in <given name>.
+	 * Compare the given file names and the current entry name.
+	 * We consider they are matched when one of the followings
+	 * is true:
+	 *
+	 *   <given name>       == <entry name>
+	 *   <given name>+";1'  == <entry name>,
+	 *   <given name>+"."   == <entry name> if no "." in <given name>
+	 *   <given name>+".;1" == <entry name> if no "." in <given name>
 	 *
 	 * All the comparisons are done without case sensitivity.
 	 * We support version number ";1" only.
 	 */
-	if (strncasecmp(entry->d_name, file_name, file_name_length) == 0) {
-	    suffix = entry->d_name + file_name_length;
-	    if (*suffix == '\0')
+	d_namlen = NAMLEN(entry);
+	if (2 < d_namlen
+	    && *(entry->d_name + d_namlen - 2) == ';'
+	    && isdigit(*(entry->d_name + d_namlen - 1))) {
+	    d_namlen -= 2;
+	}
+	if (1 < d_namlen && *(entry->d_name + d_namlen - 1) == '.')
+	    d_namlen--;
+
+	for (i = 0; file_hint_list[i] != NULL; i++) {
+	    if (strncasecmp(entry->d_name, file_hint_list[i], d_namlen) == 0
+		&& *(file_hint_list[i] + d_namlen) == '\0') {
+		strcpy(found_file_name, entry->d_name);
+		if (found_hint_index != NULL)
+		    *found_hint_index = i;
+		is_found = 1;
 		break;
-	    else if (strcmp(suffix, ";1") == 0)
-		break;
-	    else if (!have_dot && strcmp(suffix, ".") == 0)
-		break;
-	    else if (!have_dot && strcmp(suffix, ".;1") == 0)
-		break;
+	    }
 	}
     }
 
-    strcpy(file_name, entry->d_name);
     closedir(dir);
     return EB_SUCCESS;
 
@@ -287,6 +290,8 @@ eb_fix_file_name(path_name, file_name)
   failed:
     if (dir != NULL)
 	closedir(dir);
+    if (found_hint_index != NULL)
+	*found_hint_index = -1;
     return EB_ERR_BAD_FILE_NAME;
 }
 
@@ -300,138 +305,94 @@ eb_fix_file_name(path_name, file_name)
  * is returned.
  */
 EB_Error_Code
-eb_fix_file_name2(path_name, sub_directory_name, file_name)
+eb_find_file_name2(path_name, sub_directory_name, file_hint_list,
+    found_file_name, found_hint_index)
     const char *path_name;
     const char *sub_directory_name;
-    char *file_name;
+    const char *file_hint_list[];
+    char *found_file_name;
+    int *found_hint_index;
 {
     char sub_path_name[PATH_MAX + 1];
 
     sprintf(sub_path_name, F_("%s/%s", "%s\\%s"),
 	path_name, sub_directory_name);
 
-    return eb_fix_file_name(sub_path_name, file_name);
+    return eb_find_file_name(sub_path_name, file_hint_list, found_file_name,
+	found_hint_index);
 }
 
 
-/*
- * Rewrite `file_name' to a real file name. in the directory
- *    `path_name/sub_directory_name/sub2_directory_name'
- *
- * If a file matched to `file_name' exists, then EB_SUCCESS is returned,
- * and `file_name' is rewritten to that name.  Otherwise EB_ERR_BAD_FILE_NAME
- * is returned.
- */
 EB_Error_Code
-eb_fix_file_name3(path_name, sub_directory_name, sub2_directory_name,
-    file_name)
+eb_find_file_name3(path_name, sub_directory_name, sub2_directory_name,
+    file_hint_list, found_file_name, found_hint_index)
     const char *path_name;
     const char *sub_directory_name;
     const char *sub2_directory_name;
-    char *file_name;
+    const char *file_hint_list[];
+    char *found_file_name;
+    int *found_hint_index;
 {
     char sub2_path_name[PATH_MAX + 1];
 
     sprintf(sub2_path_name, F_("%s/%s/%s", "%s\\%s\\%s"),
 	path_name, sub_directory_name, sub2_directory_name);
-    return eb_fix_file_name(sub2_path_name, file_name);
+
+    return eb_find_file_name(sub2_path_name, file_hint_list, found_file_name,
+	found_hint_index);
 }
 
 
 /*
  * Compose a file name
- *     `path_name/file_name.suffix'
+ *     `path_name/file_name'
  * and copy it into `composed_path_name'.
- *
- * If a file `composed_path_name' exists, then EB_SUCCESS is returned.
- * Otherwise EB_ERR_BAD_FILE_NAME is returned.
  */
-EB_Error_Code
-eb_compose_path_name(path_name, file_name, suffix, composed_path_name)
+void
+eb_compose_path_name(path_name, file_name, composed_path_name)
     const char *path_name;
     const char *file_name;
-    const char *suffix;
     char *composed_path_name;
 {
-    char fixed_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
-
-    sprintf(fixed_file_name, "%s%s", file_name, suffix);
-    if (eb_fix_file_name(path_name, fixed_file_name) == EB_SUCCESS) {
-	sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
-	    path_name, fixed_file_name);
-	return EB_SUCCESS;
-    }
-
-    return EB_ERR_BAD_FILE_NAME;
+    sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
+	path_name, file_name);
 }
 
 
 /*
  * Compose a file name
- *     `path_name/sub_directory/file_name.suffix'
+ *     `path_name/sub_directory/file_name'
  * and copy it into `composed_path_name'.
- *
- * If a file `composed_path_name' exists, then EB_SUCCESS is returned.
- * Otherwise EB_ERR_BAD_FILE_NAME is returned.
  */
-EB_Error_Code
-eb_compose_path_name2(path_name, sub_directory_name, file_name, suffix,
+void
+eb_compose_path_name2(path_name, sub_directory_name, file_name, 
     composed_path_name)
     const char *path_name;
     const char *sub_directory_name;
     const char *file_name;
-    const char *suffix;
     char *composed_path_name;
 {
-    char fixed_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
-    char sub_path_name[PATH_MAX + 1];
-
-    sprintf(fixed_file_name, "%s%s", file_name, suffix);
-    sprintf(sub_path_name, F_("%s/%s", "%s\\%s"),
-	path_name, sub_directory_name);
-
-    if (eb_fix_file_name(sub_path_name, fixed_file_name) == EB_SUCCESS) {
-	sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
-	    sub_path_name, fixed_file_name);
-	return EB_SUCCESS;
-    }
-
-    return EB_ERR_BAD_FILE_NAME;
+    sprintf(composed_path_name, F_("%s/%s/%s", "%s\\%s\\%s"),
+	path_name, sub_directory_name, file_name);
 }
 
 
 /*
  * Compose a file name
- *     `path_name/sub_directory/sub2_directory/file_name.suffix'
+ *     `path_name/sub_directory/sub2_directory/file_name'
  * and copy it into `composed_path_name'.
- *
- * If a file `composed_path_name' exists, then EB_SUCCESS is returned.
- * Otherwise EB_ERR_BAD_FILE_NAME is returned.
  */
-EB_Error_Code
+void
 eb_compose_path_name3(path_name, sub_directory_name, sub2_directory_name,
-    file_name, suffix, composed_path_name)
+    file_name, composed_path_name)
     const char *path_name;
     const char *sub_directory_name;
     const char *sub2_directory_name;
     const char *file_name;
-    const char *suffix;
     char *composed_path_name;
 {
-    char fixed_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
-    char sub2_path_name[PATH_MAX + 1];
-
-    sprintf(fixed_file_name, "%s%s", file_name, suffix);
-    sprintf(sub2_path_name, F_("%s/%s/%s", "%s\\%s\\%s"),
-	path_name, sub_directory_name, sub2_directory_name);
-
-    if (eb_fix_file_name(sub2_path_name, fixed_file_name) == EB_SUCCESS) {
-	sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
-	    sub2_path_name, fixed_file_name);
-	return EB_SUCCESS;
-    }
-
-    return EB_ERR_BAD_FILE_NAME;
+    sprintf(composed_path_name, F_("%s/%s/%s/%s", "%s\\%s\\%s\\%s"),
+	path_name, sub_directory_name, sub2_directory_name, file_name);
 }
 
 

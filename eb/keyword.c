@@ -38,7 +38,7 @@ eb_have_keyword_search(book)
     if (book->subbook_current == NULL)
 	goto failed;
 
-    if (book->subbook_current->keyword.index_page == 0)
+    if (book->subbook_current->keyword.start_page == 0)
 	goto failed;
 
     /*
@@ -87,7 +87,7 @@ eb_search_keyword(book, input_words)
     /*
      * Check whether the current subbook has keyword search.
      */
-    if (book->subbook_current->keyword.index_page == 0) {
+    if (book->subbook_current->keyword.start_page == 0) {
 	error_code = EB_ERR_NO_SUCH_SEARCH;
 	goto failed;
     }
@@ -107,7 +107,7 @@ eb_search_keyword(book, input_words)
 	context = book->search_contexts + word_count;
 	context->code = EB_SEARCH_KEYWORD;
 	context->compare = eb_match_exactword;
-	context->page = book->subbook_current->keyword.index_page;
+	context->page = book->subbook_current->keyword.start_page;
 
 	/*
 	 * Make a fixed word and a canonicalized word to search from

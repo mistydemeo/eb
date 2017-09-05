@@ -40,8 +40,11 @@ eb_initialize_wide_font(book)
 {
     EB_Error_Code error_code;
     EB_Subbook *subbook;
+    char ebz_hint_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char font_path_name[PATH_MAX + 1];
     char buffer[16];
+    const char *hint_list[3];
+    int hint_index;
     int character_count;
     Zio *zio;
     Zio_Code zio_code;
@@ -52,38 +55,52 @@ eb_initialize_wide_font(book)
      * If the book is EBWING, open the wide font file.
      * (In EB books, font data are stored in the `START' file.)
      */
-    if (book->disc_code == EB_DISC_EPWING) {
-	if (eb_compose_path_name3(book->path, subbook->directory_name, 
-	    subbook->gaiji_directory_name, subbook->wide_current->file_name,
-	    EB_SUFFIX_NONE, font_path_name) == 0) {
+    if (zio_mode(&subbook->wide_current->zio) != ZIO_INVALID) {
+	zio_code = ZIO_REOPEN;
+    } else if (book->disc_code == EB_DISC_EB) {
+	zio_code = zio_mode(&subbook->text_zio);
+	eb_compose_path_name2(book->path, subbook->directory_name, 
+	    subbook->text_file_name, font_path_name);
+    } else {
+	strcpy(ebz_hint_name, subbook->wide_current->file_name);
+	strcat(ebz_hint_name, ".ebz");
+
+	hint_list[0] = subbook->wide_current->file_name;
+	hint_list[1] = ebz_hint_name;
+	hint_list[2] = NULL;
+
+	eb_find_file_name3(book->path, subbook->directory_name, 
+	    subbook->gaiji_directory_name, hint_list,
+	    subbook->wide_current->file_name, &hint_index);
+
+	switch (hint_index) {
+	case 0:
 	    zio_code = ZIO_NONE;
-	} else if (eb_compose_path_name3(book->path, subbook->directory_name,
-	    subbook->gaiji_directory_name, subbook->wide_current->file_name,
-	    EB_SUFFIX_EBZ, font_path_name) == 0) {
+	    break;
+	case 1:
 	    zio_code = ZIO_EBZIP1;
-	} else {
+	    break;
+	default:
 	    error_code = EB_ERR_FAIL_OPEN_FONT;
 	    goto failed;
 	}
 
-	if (zio_open(&subbook->wide_current->zio, font_path_name,
-	    zio_code) < 0) {
-	    error_code = EB_ERR_FAIL_OPEN_FONT;
-	    goto failed;
-	}
+	eb_compose_path_name3(book->path, subbook->directory_name,
+	    subbook->gaiji_directory_name, subbook->wide_current->file_name,
+	    font_path_name);
     }
 
-    /*
-     * Set `zio' accroding with disc type.
-     */
-    if (book->disc_code == EB_DISC_EB)
-	zio = &book->subbook_current->text_zio;
-    else
-	zio = &book->subbook_current->wide_current->zio;
+    if (zio_open(&subbook->wide_current->zio, font_path_name,
+	zio_code) < 0) {
+	error_code = EB_ERR_FAIL_OPEN_FONT;
+	goto failed;
+    }
 
     /*
      * Read information from the text file.
      */
+    zio = &subbook->wide_current->zio;
+
     if (zio_lseek(zio, 
 	(off_t)(subbook->wide_current->page - 1) * EB_SIZE_PAGE,
 	SEEK_SET) < 0) {

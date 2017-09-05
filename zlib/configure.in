@@ -11,6 +11,11 @@ dnl *
 dnl LIBZ_VERSION_INFO=1:1:0
 dnl AC_SUBST(LIBZ_VERSION_INFO)
 
+dnl *
+dnl * C Compiler
+dnl *
+AC_PROG_CC
+
 dnl * 
 dnl * GNU libtool
 dnl * 
@@ -19,7 +24,6 @@ AC_PROG_LIBTOOL
 dnl * 
 dnl * Alternative Programs.
 dnl * 
-AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_LN_S
 AC_PROG_INSTALL
@@ -38,7 +42,7 @@ AC_CHECK_HEADERS(string.h unistd.h string.h stddef.h stdlib.h errno.h)
 dnl * 
 dnl * Library Functions.
 dnl * 
-AC_CHECK_FUNCS(memcpy strerror snprintf vsprintf vnsprintf)
+AC_CHECK_FUNCS(memcpy strerror snprintf vsprintf vsnprintf)
 
 dnl * 
 dnl * Typedefs.
