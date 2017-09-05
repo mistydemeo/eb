@@ -1,3 +1,15 @@
+2003-03-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.3.2.
+
+	* configure.ac (LIBEB_VERSION_INFO): Change LIBEB_VERSION_INFO from
+	7:0:2 to 7:2:1.  The previous version 7:0:2 is wrong.
+
+	* configure.ac (AC_INIT): Set version to 3.3.2.
+
+	* eb/book.c (misleaded_book_table): Add `Nichi-Ei-Futsu Jiten'
+	YRRS-059.
+
 2003-03-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.3.1.

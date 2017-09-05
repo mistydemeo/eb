@@ -1,3 +1,8 @@
+Major changes in release 3.3.2.
+
+* Fix version number of the shared library.
+* Support for Nichi-Ei-Futsu Jiten (YRRS-059).
+
 Major changes in release 3.3.1.
 
 * Support for EPWING Geinus Eiwa Daijiten.

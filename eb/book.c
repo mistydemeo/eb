@@ -210,6 +210,8 @@ static const char * const misleaded_book_table[] = {
     /* EB Kagakugijutsu Yougo Daijiten (YRRS-048) */
     "#E#B2J3X5;=QMQ8lBg<-E5",
 
+    /* Nichi-Ei-Futsu Jiten (YRRS-059) */
+    "#E#N#G!?#J#A#N!J!\\#F#R#E!K",
     NULL
 };
 
@@ -227,7 +229,7 @@ eb_fix_misleaded_book(book)
     LOG(("in: eb_fix_misleaded_book(book=%d)", (int)book->code));
 
     for (misleaded = misleaded_book_table; *misleaded != NULL; misleaded++) {
-	if (strcmp(book->subbooks->title, *misleaded) == 0) {
+	if (strcmp(book->subbooks[0].title, *misleaded) == 0) {
 	    book->character_code = EB_CHARCODE_JISX0208;
 	    for (i = 0, subbook = book->subbooks; i < book->subbook_count;
 		 i++, subbook++) {
