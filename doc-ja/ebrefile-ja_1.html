@@ -36,66 +36,66 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <A NAME="Introduction"></A>
-<H1> 1. �Ϥ���� </H1>
+<H1> 1. はじめに </H1>
 <!--docid::SEC1::-->
 <P>
 
-����� CD-ROM ���Ҥϡ�����ʣ���� <EM>����</EM> (<EM>subbook</EM>) ����äƤ�
-�ޤ���
-���Ȥ��Ф��� CD-ROM ���ҤϹ�켭ŵ�����¼�ŵ���±Ѽ�ŵ�� 3 �Ĥ����ܤ�
-����Ƥ��ޤ���
-�ġ������ܤϡ����켫�Τ���Ω�����ֽ��ҡפˤʤäƤ��ޤ���
+一冊の CD-ROM 書籍は、大抵複数の <EM>副本</EM> (<EM>subbook</EM>) を持ってい
+ます。
+たとえばある CD-ROM 書籍は国語辞典、英和辞典、和英辞典の 3 つの副本を
+収めています。
+個々の副本は、それ自体が独立した「書籍」になっています。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>     (CD-ROM ����)
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>     (CD-ROM 書籍)
 +-----------------------+
-|   [��켭ŵ] (����)   |
-|   [���¼�ŵ] (����)   |
-|   [�±Ѽ�ŵ] (����)   |
+|   [国語辞典] (副本)   |
+|   [英和辞典] (副本)   |
+|   [和英辞典] (副本)   |
 +-----------------------+
 </pre></td></tr></table></P><P>
 
-EB/EBG/EBXA/EBXA-C/S-EBXA ������ CD-ROM ���Ҥ� <TT>`catalog'</TT> �Ȥ���
-�ե������EPWING ������ CD-ROM ���Ҥ� <TT>`catalogs'</TT> �Ȥ����ե�����
-����äƤ��ޤ���
-�����Υե�����ϡ����� CD-ROM ���ҤˤϤɤ�����ܤ�������Ƥ���Τ�
-��������Ƥ��ޤ���
-�����Υե�����ϡ�CD-ROM ���ҤΥȥåץǥ��쥯�ȥ���֤���Ƥ��ޤ���
+EB/EBG/EBXA/EBXA-C/S-EBXA 形式の CD-ROM 書籍は <TT>`catalog'</TT> という
+ファイルを、EPWING 形式の CD-ROM 書籍は <TT>`catalogs'</TT> というファイル
+を持っています。
+これらのファイルは、その CD-ROM 書籍にはどんな副本が収められているのか
+を定義しています。
+これらのファイルは、CD-ROM 書籍のトップディレクトリに置かれています。
 </P><P>
 
-<CODE>ebrefile</CODE> �ϸ��Υ��������ե�������ɤߡ��桼��������ꤵ�줿����
-���������������������������ե�������������ޤ���
-����������С�<CODE>ebrefile</CODE> ����������ܤ�����򡢥��������ե����뤫
-�������ޤ���
-CD-ROM ���Ҥ� 3 �Ĥ����ܤ���äƤ����硢<CODE>ebrefile</CODE> �Ϥ��Τ�����
-Ǥ�դ� 1 �Ĥޤ��� 2 �Ĥ����ܤ򡢿��������������ե�����˼����ळ�Ȥ�
-�Ǥ��ޤ���
-�ϡ��ɥǥ������� CD-ROM ���Ҥΰ��������򥳥ԡ��������Ȥ��ˡ�
-<CODE>ebrefile</CODE> �������Ǥ���
-<CODE>ebrefile</CODE> �� EB �饤�֥��Ȱ������ۤ���Ƥ��ޤ���
+<CODE>ebrefile</CODE> は元のカタログファイルを読み、ユーザから指定された副本
+だけを取り込んだ新しいカタログファイルを生成します。
+言い換えれば、<CODE>ebrefile</CODE> は特定の副本の定義を、カタログファイルか
+ら削除します。
+CD-ROM 書籍が 3 つの副本を持っている場合、<CODE>ebrefile</CODE> はそのうちの
+任意の 1 つまたは 2 つの副本を、新しいカタログファイルに取り込むことが
+できます。
+ハードディスクに CD-ROM 書籍の一部だけをコピーしたいときに、
+<CODE>ebrefile</CODE> は便利です。
+<CODE>ebrefile</CODE> は EB ライブラリと一緒に配布されています。
 </P><P>
 
-<CODE>ebrefile</CODE> �ϥե꡼���եȥ������Ǥ������ʤ��ϡ�Free Software Foundation
-����ɽ���� GNU General Public License (GNU ���̸�ͭ���ѵ���) �С������ 
-2 ���뤤�Ϥ���ʹߤγƥС��������椫�餤���줫�����򤷡����ΥС�����
-��������˽��ä��ܥץ�����������ۤޤ����ѹ����뤳�Ȥ��Ǥ��ޤ���
+<CODE>ebrefile</CODE> はフリーソフトウェアです。あなたは、Free Software Foundation
+が公表した GNU General Public License (GNU 一般公有使用許諾) バージョン 
+2 あるいはそれ以降の各バージョンの中からいずれかを選択し、そのバージョ
+ンが定める条項に従って本プログラムを再頒布または変更することができます。
 </P><P>
 
-<CODE>ebrefile</CODE> ��ͭ�ѤȤϻפ��ޤ��������ۤˤ����äƤϡ��Ծ����ڤ�������Ū
-Ŭ�����ˤĤ��Ƥΰ��ۤ��ݾڤ�ޤ�ơ������ʤ��ݾڤ�Ԥʤ��ޤ���
-�ܺ٤ˤĤ��Ƥ� GNU General Public License ���ɤ߲�������
+<CODE>ebrefile</CODE> は有用とは思いますが、頒布にあたっては、市場性及び特定目的
+適合性についての暗黙の保証を含めて、いかなる保証も行ないません。
+詳細については GNU General Public License をお読み下さい。
 </P><P>
 
-�ä��ơ����ʤ��ϼ�ʬ�ν�ͭ���� CD-ROM ���Ҥλ��ѵ�������ʤ��ƤϤ���
-�ޤ���
-<CODE>ebrefile</CODE> �ϥե꡼���եȥ������Ǥ��������ʤ��ν��Ҥ���ͳ�˻Ȥ����
-�ΤǤ���Ȥϸ¤�ޤ���
-<CODE>ebrefile</CODE> �ϡ�CD-ROM ���ҤΤ���ե���������Ƥ��ѹ���ä��ޤ���
-�����ղ�������
+加えて、あなたは自分の所有する CD-ROM 書籍の使用許諾も守らなくてはいけ
+ません。
+<CODE>ebrefile</CODE> はフリーソフトウェアですが、あなたの書籍が自由に使えるも
+のであるとは限りません。
+<CODE>ebrefile</CODE> は、CD-ROM 書籍のあるファイルの内容に変更を加えます。
+ご注意下さい。
 </P><P>
 
-����ʸ����� 4.0 �ǤǤ���
-EB �饤�֥��С������ 4.0 ���б����Ƥ��ޤ���
+この文書は第 4.0 版です。
+EB ライブラリバージョン 4.0 に対応しています。
 </P><P>
 
 <A NAME="Invoke ebrefile"></A>

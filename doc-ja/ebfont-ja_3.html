@@ -35,64 +35,64 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 3. <CODE>ebfont</CODE> �μ¹� </H1>
+<H1> 3. <CODE>ebfont</CODE> の実行 </H1>
 <!--docid::SEC3::-->
 <P>
 
-<CODE>ebfont</CODE> �ΰ���Ū�ʵ�ư��ˡ�ϼ����̤�Ǥ���
+<CODE>ebfont</CODE> の一般的な起動方法は次の通りです。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont <VAR>���ҤؤΥѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont <VAR>書籍へのパス</VAR>
 </pre></td></tr></table></P><P>
 
-<VAR>���ҤؤΥѥ�</VAR> �ˤϡ�CD-ROM ���ҤΥȥåץǥ��쥯�ȥꡢ�Ĥޤ� 
-<TT>`catalog'</TT> �ޤ��� <TT>`catalogs'</TT> �ե����뤬¸�ߤ���ǥ��쥯�ȥ��
-���ꤷ�ޤ���
-�ѥ��ϡ���������ʥѥ� (��: <SAMP>`/mnt/dict'</SAMP>) �Ǥ��֥����������̻�
-(��: <SAMP>`ebnet://localhost/dict'</SAMP>) �Ǥ⹽���ޤ���
-ʣ���Υѥ���񤯤��ȤϤǤ��ޤ��󤬡��ʲ��Τ褦�ˡ��ѥ��λ����ʤ����Ȥ�
-�Ǥ��ޤ���
+<VAR>書籍へのパス</VAR> には、CD-ROM 書籍のトップディレクトリ、つまり 
+<TT>`catalog'</TT> または <TT>`catalogs'</TT> ファイルが存在するディレクトリを
+指定します。
+パスは、ローカルなパス (例: <SAMP>`/mnt/dict'</SAMP>) でも遠隔アクセス識別子
+(例: <SAMP>`ebnet://localhost/dict'</SAMP>) でも構いません。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont
 </pre></td></tr></table></P><P>
 
-���ξ�硢<CODE>ebfont</CODE> �ϥ����ȥǥ��쥯�ȥ�β��˲����ե��������
-�����ޤ���
-���ΤȤ����ե�����̾�ΰ��̷����ϼ����̤�Ǥ���
+この場合、<CODE>ebfont</CODE> はカレントディレクトリの下に画像ファイルを生
+成します。
+このとき、ファイル名の一般形式は次の通りです。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre><VAR>����</VAR>/<VAR>�⤵</VAR>/narrow/<VAR>ʸ���ֹ�</VAR>.<VAR>��ĥ��</VAR>
-<VAR>����</VAR>/<VAR>�⤵</VAR>/wide/<VAR>ʸ���ֹ�</VAR>.<VAR>��ĥ��</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre><VAR>副本</VAR>/<VAR>高さ</VAR>/narrow/<VAR>文字番号</VAR>.<VAR>拡張子</VAR>
+<VAR>副本</VAR>/<VAR>高さ</VAR>/wide/<VAR>文字番号</VAR>.<VAR>拡張子</VAR>
 </pre></td></tr></table></P><P>
 
-<VAR>��ĥ��</VAR> �� <SAMP>`xbm'</SAMP>��<SAMP>`xpm'</SAMP>��<SAMP>`gif'</SAMP>��<SAMP>`bmp'</SAMP> ��
-�����줫�ǡ�<VAR>ʸ���ֹ�</VAR> �� 16 �ʿ� 4 �� (<SAMP>`0'</SAMP> ���� <SAMP>`9'</SAMP>
-�� <SAMP>`a'</SAMP> ���� <SAMP>`f'</SAMP>) �ǡ����Τ褦�ˤʤ�ޤ���
+<VAR>拡張子</VAR> は <SAMP>`xbm'</SAMP>、<SAMP>`xpm'</SAMP>、<SAMP>`gif'</SAMP>、<SAMP>`bmp'</SAMP> の
+いずれかで、<VAR>文字番号</VAR> は 16 進数 4 桁 (<SAMP>`0'</SAMP> から <SAMP>`9'</SAMP>
+と <SAMP>`a'</SAMP> から <SAMP>`f'</SAMP>) で、次のようになります。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>ejdict/16/narrow/a121.xbm
 ejdict/16/wide/a321.xbm
 </pre></td></tr></table></P><P>
 
-<TT>`ejdict/16/xbm/narrow'</TT> �ʤɤ���֤Υǥ��쥯�ȥ�ϡ��⤷̵����
-�� <CODE>ebfont</CODE> ���������ޤ���
+<TT>`ejdict/16/xbm/narrow'</TT> などの中間のディレクトリは、もし無けれ
+ば <CODE>ebfont</CODE> が生成します。
 </P><P>
 
-<SAMP>`--output-directory'</SAMP> ���ץ�������ꤹ�뤳�Ȥǡ�<CODE>ebfont</CODE>
-�ϥ����ȥǥ��쥯�ȥ�ʳ��Υǥ��쥯�ȥ�˲����ե��������Ϥ��뤳��
-���Ǥ��ޤ���
-���Υȥåץǥ��쥯�ȥ�ϡ�<CODE>ebfont</CODE> ��¹Ԥ������˺�������Ƥ�
-�ʤ���Фʤ�ޤ���
+<SAMP>`--output-directory'</SAMP> オプションを指定することで、<CODE>ebfont</CODE>
+はカレントディレクトリ以外のディレクトリに画像ファイルを出力すること
+ができます。
+そのトップディレクトリは、<CODE>ebfont</CODE> を実行する前に作成されてい
+なければなりません。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --output-directory <VAR>�ǥ��쥯�ȥ�</VAR> <VAR>���ҤؤΥѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --output-directory <VAR>ディレクトリ</VAR> <VAR>書籍へのパス</VAR>
 </pre></td></tr></table></P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebfont-ja_3.html#SEC4">3.1 ��������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebfont-ja_3.html#SEC5">3.2 �⤵</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebfont-ja_3.html#SEC6">3.3 ����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebfont-ja_3.html#SEC4">3.1 画像形式</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebfont-ja_3.html#SEC5">3.2 高さ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebfont-ja_3.html#SEC6">3.3 副本</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -110,36 +110,36 @@ ejdict/16/wide/a321.xbm
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 3.1 �������� </H2>
+<H2> 3.1 画像形式 </H2>
 <!--docid::SEC4::-->
 <P>
 
-<CODE>ebfont</CODE> �� XBM, XPM, GIF89a, BMP �����β����ե�������������뤳��
-���Ǥ��ޤ���
-���������� <SAMP>`--image-format'</SAMP> (<SAMP>`-i'</SAMP>) ���ץ����ǻ��ꤷ�ޤ���
-<SAMP>`--image-format'</SAMP> ���ץ����ϰ������ļ�ꡢ�����˥���� (<SAMP>`,'</SAMP>)
-�Ƕ��ڤäơ�����������̾�����¤٤ƽ񤭤ޤ���
-���Ȥ��С��ʲ��Υ��ޥ�ɤ�¹Ԥ���ȡ�<CODE>ebfont</CODE> �� XPM ������ GIF
-�����β����ե�������������ޤ���
+<CODE>ebfont</CODE> は XBM, XPM, GIF89a, BMP 形式の画像ファイルを生成すること
+ができます。
+画像形式は <SAMP>`--image-format'</SAMP> (<SAMP>`-i'</SAMP>) オプションで指定します。
+<SAMP>`--image-format'</SAMP> オプションは引数を一つ取り、そこにカンマ (<SAMP>`,'</SAMP>)
+で区切って、画像形式の名前を並べて書きます。
+たとえば、以下のコマンドを実行すると、<CODE>ebfont</CODE> は XPM 形式と GIF
+形式の画像ファイルを生成します。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --image-format xpm,gif <VAR>���ҤؤΥѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --image-format xpm,gif <VAR>書籍へのパス</VAR>
 </pre></td></tr></table></P><P>
 
-<SAMP>`--image-format'</SAMP> �ΰ����ϡ����Τ褦��ʬ���ƽ񤯤��Ȥ�Ǥ��ޤ���
+<SAMP>`--image-format'</SAMP> の引数は、次のように分けて書くこともできます。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --image-format xpm --image-format gif <VAR>���ҤؤΥѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --image-format xpm --image-format gif <VAR>書籍へのパス</VAR>
 </pre></td></tr></table></P><P>
 
-XPM �� GIF �����Ǥϡ����ʿ��Ϲ� (RGB �� <SAMP>`#000000'</SAMP>) �ˡ��طʿ���
-Ʃ���ˤʤ�ޤ���
-BMP �����Ǥϡ����ʿ��Ϲ��ˡ��طʿ����� (RGB �� <SAMP>`#ffffff'</SAMP>) ��
-�ʤ�ޤ���
+XPM と GIF 形式では、前景色は黒 (RGB の <SAMP>`#000000'</SAMP>) に、背景色は
+透明になります。
+BMP 形式では、前景色は黒に、背景色は白 (RGB の <SAMP>`#ffffff'</SAMP>) に
+なります。
 </P><P>
 
-<CODE>ebzip</CODE> �� GIF �β�������������ݤ� LZW ���̥��르�ꥺ���Ȥ�
-�ʤ����ᡢ�ե�����Υ������������礭���ʤ�ޤ���
+<CODE>ebzip</CODE> は GIF の画像を生成する際に LZW 圧縮アルゴリズムを使わ
+ないため、ファイルのサイズは相当大きくなります。
 </P><P>
 
 <A NAME="Heights"></A>
@@ -156,29 +156,29 @@ BMP �����Ǥϡ����ʿ��Ϲ��ˡ��طʿ����� (RGB �� <SAMP>`#ffffff'</SAMP>) ��
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 3.2 �⤵ </H2>
+<H2> 3.2 高さ </H2>
 <!--docid::SEC5::-->
 <P>
 
-�ä˻��꤬�ʤ���С�<CODE>ebfont</CODE> �ϡ�Ⱦ�Ѥ����Ѥ��줾��ˤĤ��ơ��⤵
-16 �ԥ�����Υե���Ȥβ����ե�������������ޤ���
-<SAMP>`--font-height'</SAMP> (<SAMP>`-f'</SAMP>) ���ץ�������Ѥ��뤳�Ȥǡ�¾�ι⤵
-�Υե���Ȥβ����ե�������������뤳�Ȥ��Ǥ��ޤ���
-<SAMP>`--font-height'</SAMP> ���ץ����ϰ������ļ�ꡢ�����˥���� (<SAMP>`,'</SAMP>)
-�Ƕ��ڤäơ��ե���Ȥι⤵���¤٤ƽ񤭤ޤ���
-�ե���Ȥι⤵�ϡ�<SAMP>`16'</SAMP>��<SAMP>`24'</SAMP>��<SAMP>`30'</SAMP>��<SAMP>`48'</SAMP> �Τ�����
-���Ǥʤ��ƤϤ����ޤ���
-���Ȥ��С��ʲ��Υ��ޥ�ɤ�¹Ԥ���ȡ�<CODE>ebfont</CODE> �Ϲ⤵ 16 �ԥ�����
-�� 24 �ԥ�����Υե���Ȥβ����ե�������������ޤ���
+特に指定がなければ、<CODE>ebfont</CODE> は、半角と全角それぞれについて、高さ
+16 ピクセルのフォントの画像ファイルを生成します。
+<SAMP>`--font-height'</SAMP> (<SAMP>`-f'</SAMP>) オプションを使用することで、他の高さ
+のフォントの画像ファイルを生成することができます。
+<SAMP>`--font-height'</SAMP> オプションは引数を一つ取り、そこにカンマ (<SAMP>`,'</SAMP>)
+で区切って、フォントの高さを並べて書きます。
+フォントの高さは、<SAMP>`16'</SAMP>、<SAMP>`24'</SAMP>、<SAMP>`30'</SAMP>、<SAMP>`48'</SAMP> のいずれ
+かでなくてはいけません。
+たとえば、以下のコマンドを実行すると、<CODE>ebfont</CODE> は高さ 16 ピクセル
+と 24 ピクセルのフォントの画像ファイルを生成します。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --font-height 16,24 <VAR>���ҤؤΥѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --font-height 16,24 <VAR>書籍へのパス</VAR>
 </pre></td></tr></table></P><P>
 
-<SAMP>`--font-height'</SAMP> �ΰ����ϡ����Τ褦��ʬ���ƽ񤯤��Ȥ�Ǥ��ޤ���
+<SAMP>`--font-height'</SAMP> の引数は、次のように分けて書くこともできます。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --font-height 16 --font-height 24 <VAR>���ҤؤΥѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --font-height 16 --font-height 24 <VAR>書籍へのパス</VAR>
 </pre></td></tr></table></P><P>
 
 <A NAME="Subbooks"></A>
@@ -195,67 +195,67 @@ BMP �����Ǥϡ����ʿ��Ϲ��ˡ��طʿ����� (RGB �� <SAMP>`#ffffff'</SAMP>) ��
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 3.3 ���� </H2>
+<H2> 3.3 副本 </H2>
 <!--docid::SEC6::-->
 <P>
 
-�ʤˤ����ꤷ�ʤ��ȡ�<CODE>ebzip</CODE> �Ϥ��٤Ƥ����� (subbook) ���оݤˤ���
-�����ե�������������ޤ�����<SAMP>`--subbook'</SAMP> (<SAMP>`-S'</SAMP>) ���ץ�����
-�Ȥ��ȡ����ꤷ�����ܤβ����ե�����������������뤳�Ȥ��Ǥ��ޤ���
+なにも設定しないと、<CODE>ebzip</CODE> はすべての副本 (subbook) を対象にして
+画像ファイルを生成しますが、<SAMP>`--subbook'</SAMP> (<SAMP>`-S'</SAMP>) オプションを
+使うと、指定した副本の画像ファイルだけを生成することができます。
 </P><P>
 
-<SAMP>`--subbook'</SAMP> ���ץ����ϰ������ļ�ꡢ�����˥���� (<SAMP>`,'</SAMP>) 
-�Ƕ��ڤäơ����ܤΥǥ��쥯�ȥ�̾���¤٤ƽ񤭤ޤ���
-<CODE>ebinfo</CODE> ���ޥ�ɤ��Ѥ���ȡ����ʤ��ν�ͭ���Ƥ�����ҤˤɤΤ褦��
-���ܤ��ޤޤ�Ƥ���Τ����Τ뤳�Ȥ��Ǥ��ޤ���
+<SAMP>`--subbook'</SAMP> オプションは引数を一つ取り、そこにカンマ (<SAMP>`,'</SAMP>) 
+で区切って、副本のディレクトリ名を並べて書きます。
+<CODE>ebinfo</CODE> コマンドを用いると、あなたの所有している書籍にどのような
+副本が含まれているのかを知ることができます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo /mnt/cdrom
-�ǥ������η���: EB/EBG/EBXA/EBXA-C/S-EBXA
-ʸ��������: JIS X 0208
-���ܤο�: 3
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 3
 
-���� 1:
-  ��̾: �����¼�ŵ������ǡ�
-  �ǥ��쥯�ȥ�: english
-  ��������: �������� �������� ��� ��˥塼
-  �ե���Ȥ��礭��: 16 24 30 48
-  Ⱦ�ѥե���Ȥ�ʸ��: 0xa121 -- 0xa24e
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa27e
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: english
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
 
-���� 2:
-  ��̾: CD-ROM ʩ�¼�ŵ���軰�ǡ�
-  �ǥ��쥯�ȥ�: french
-  ��������: �������� �������� ��� ��˥塼
-  �ե���Ȥ��礭��: 16 24 30 48
-  Ⱦ�ѥե���Ȥ�ʸ��: 
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa27e
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: french
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
 
-���� 3:
-  ��̾: �ݥ��å����¼�ŵ���軰�ǡ�
-  �ǥ��쥯�ȥ�: german
-  ��������: ��˥塼
-  �ե���Ȥ��礭��: 16 24 30 48
-  Ⱦ�ѥե���Ȥ�ʸ��: 
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa27e
+副本 3:
+  題名: ポケット独和辞典（第三版）
+  ディレクトリ: german
+  検索方式: メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
 </pre></td></tr></table></P><P>
 
-(<CODE>ebinfo</CODE> ���ޥ�ɤ˴ؤ��Ƥξܺ٤ϡ�
-<CITE>ebinfo-ja</CITE> �Ρ�<CODE>ebinfo</CODE> �μ¹ԡ���򻲾�)��
+(<CODE>ebinfo</CODE> コマンドに関しての詳細は、
+<CITE>ebinfo-ja</CITE> の「<CODE>ebinfo</CODE> の実行」節を参照)。
 <BR>
-������Ǥϡ�3 �Ĥ����ܤ����Ҥˤϴޤޤ�Ƥ��ꡢ���Υǥ��쥯�ȥ�̾��
-<CODE>english</CODE>, <CODE>french</CODE>, <CODE>german</CODE> ���Ȥ������Ȥ�ʬ����ޤ���
+この例では、3 つの副本が書籍には含まれており、そのディレクトリ名は
+<CODE>english</CODE>, <CODE>french</CODE>, <CODE>german</CODE> だということが分かります。
 </P><P>
 
-���Υ��ޥ�ɤ�¹Ԥ����, <CODE>ebfont</CODE> �� <CODE>english</CODE> ��
-<CODE>french</CODE> �β����ե�����������������ޤ���
+次のコマンドを実行すると, <CODE>ebfont</CODE> は <CODE>english</CODE> と
+<CODE>french</CODE> の画像ファイルだけを生成します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --subbook english,french /mnt/cdrom
 </pre></td></tr></table></P><P>
 
-�ǥ��쥯�ȥ�̾����ʸ������ʸ���ΰ㤤�ϡ����̤���ޤ���
-<SAMP>`--subbook'</SAMP> �ΰ����ϡ����Τ褦��ʬ���ƽ񤯤��Ȥ�Ǥ��ޤ���
+ディレクトリ名の大文字・小文字の違いは、区別されません。
+<SAMP>`--subbook'</SAMP> の引数は、次のように分けて書くこともできます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebfont --subbook english --subbook french /mnt/cdrom

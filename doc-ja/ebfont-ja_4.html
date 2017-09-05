@@ -35,72 +35,72 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 4. <CODE>ebfont</CODE> �Υ��ץ������� </H1>
+<H1> 4. <CODE>ebfont</CODE> のオプション一覧 </H1>
 <!--docid::SEC7::-->
 <P>
 
-<CODE>ebzip</CODE> ���ޥ�ɤϡ�����Ū�ʰ�ʸ�����ץ����̾�ȳФ��䤹��Ĺ��
-���ץ����̾��ξ���򰷤����Ȥ��Ǥ��ޤ���
-Ĺ�����ץ����̾��ɽ���ˤϡ�<SAMP>`-'</SAMP> �ǤϤʤ� <SAMP>`--'</SAMP> ���Ѥ��ޤ���
-���ץ����̾����դ˷�ޤ��ϰ���ǡ�̾���θ�����ʬ���ά���뤳�Ȥ��Ǥ���
-����
+<CODE>ebzip</CODE> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<SAMP>`-'</SAMP> ではなく <SAMP>`--'</SAMP> を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
 </P><P>
 
 <DL COMPACT>
 <DT><CODE>-d</CODE>
 <DD><DT><CODE>--debug</CODE>
-<DD>�ǥХå��Ѥξ����ɸ�२�顼���Ϥ˽��Ϥ��ޤ���
+<DD>デバッグ用の情報を、標準エラー出力に出力します。
 <P>
 
-<DT><CODE>-f <VAR>�⤵</VAR></CODE>
-<DD><DT><CODE>--font-height <VAR>�⤵</VAR></CODE>
-<DD>�⤵�� <VAR>�⤵</VAR> �γ����β����ե�������������ޤ���
-<VAR>�⤵</VAR> �ϡ��⤵�򥫥�� (<SAMP>`,'</SAMP>) �Ƕ��ڤä��¤٤���Τ�
-�ʤ��ƤϤʤ�ޤ���
-�⤵�λ���Ȥ��Ƶ������Τϡ�<SAMP>`16'</SAMP>��<SAMP>`24'</SAMP>��<SAMP>`30'</SAMP>��<SAMP>`48'</SAMP>
-�Ǥ���
-���꤬�ʤ���С�<CODE>ebfont</CODE> �Ϲ⤵�� 16 �ԥ�����Υե���ȤΤ�Τ�
-�������ޤ���
-(�ܤ����ϡ���<A HREF="ebfont-ja_3.html#SEC5">�⤵</A>����򻲾�)��
+<DT><CODE>-f <VAR>高さ</VAR></CODE>
+<DD><DT><CODE>--font-height <VAR>高さ</VAR></CODE>
+<DD>高さが <VAR>高さ</VAR> の外字の画像ファイルを生成します。
+<VAR>高さ</VAR> は、高さをカンマ (<SAMP>`,'</SAMP>) で区切って並べたもので
+なくてはなりません。
+高さの指定として許されるのは、<SAMP>`16'</SAMP>、<SAMP>`24'</SAMP>、<SAMP>`30'</SAMP>、<SAMP>`48'</SAMP>
+です。
+指定がなければ、<CODE>ebfont</CODE> は高さが 16 ピクセルのフォントのものを
+生成します。
+(詳しくは、「<A HREF="ebfont-ja_3.html#SEC5">高さ</A>」節を参照)。
 <P>
 
 <DT><CODE>-h</CODE>
 <DD><DT><CODE>--help</CODE>
-<DD>�إ�ץ�å�������ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+<DD>ヘルプメッセージを標準出力に出力して、終了します。
 <P>
 
-<DT><CODE>-i <VAR>��������</VAR></CODE>
-<DD><DT><CODE>--image-format <VAR>��������</VAR></CODE>
-<DD><VAR>��������</VAR> �����β����ե�������������ޤ���
-<VAR>��������</VAR> �ϡ���������̾�򥫥�� (<SAMP>`,'</SAMP>) �Ƕ��ڤä��¤٤���
-�ΤǤʤ��ƤϤʤ�ޤ���
-�б����Ƥ������������̾���� <SAMP>`xbm'</SAMP>��<SAMP>`xpm'</SAMP>��<SAMP>`gif'</SAMP>��
-<SAMP>`bmp'</SAMP> �Ǥ���
-���ꤷ�ʤ��ä��Ȥ��ϡ�<SAMP>`ebfont'</SAMP> �� XBM �����β����ե������������
-�ޤ���
-(�ܤ����ϡ���<A HREF="ebfont-ja_3.html#SEC4">��������</A>����򻲾�)��
+<DT><CODE>-i <VAR>画像形式</VAR></CODE>
+<DD><DT><CODE>--image-format <VAR>画像形式</VAR></CODE>
+<DD><VAR>画像形式</VAR> 形式の画像ファイルを生成します。
+<VAR>画像形式</VAR> は、画像形式名をカンマ (<SAMP>`,'</SAMP>) で区切って並べたも
+のでなくてはなりません。
+対応している画像形式の名前は <SAMP>`xbm'</SAMP>、<SAMP>`xpm'</SAMP>、<SAMP>`gif'</SAMP>、
+<SAMP>`bmp'</SAMP> です。
+指定しなかったときは、<SAMP>`ebfont'</SAMP> は XBM 形式の画像ファイルを生成し
+ます。
+(詳しくは、「<A HREF="ebfont-ja_3.html#SEC4">画像形式</A>」節を参照)。
 <P>
 
-<DT><CODE>-o <VAR>�ǥ��쥯�ȥ�</VAR></CODE>
-<DD><DT><CODE>--output-directory <VAR>�ǥ��쥯�ȥ�</VAR></CODE>
-<DD>�����ե������ <VAR>�ǥ��쥯�ȥ�</VAR> �ʲ��˽��Ϥ��ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ�<CODE>ebfont</CODE> �ϥ����ȥǥ��쥯�ȥ� (<CODE>.</CODE>)
-�β��˲����ե�������������ޤ���
-(�ܤ����ϡ���<A HREF="ebfont-ja_3.html#SEC3"><CODE>ebfont</CODE> �μ¹�</A>����򻲾�)��
+<DT><CODE>-o <VAR>ディレクトリ</VAR></CODE>
+<DD><DT><CODE>--output-directory <VAR>ディレクトリ</VAR></CODE>
+<DD>画像ファイルを <VAR>ディレクトリ</VAR> 以下に出力します。
+指定しなかったときは、<CODE>ebfont</CODE> はカレントディレクトリ (<CODE>.</CODE>)
+の下に画像ファイルを生成します。
+(詳しくは、「<A HREF="ebfont-ja_3.html#SEC3"><CODE>ebfont</CODE> の実行</A>」節を参照)。
 <P>
 
-<DT><CODE>-S <VAR>����</VAR></CODE>
-<DD><DT><CODE>--subbook <VAR>����</VAR></CODE>
-<DD><CODE>ebfont</CODE> �ˡ��ɤ����ܤγ���������������Τ�����ꤷ�ޤ���
-<VAR>����</VAR> �ϡ����ܤΥǥ��쥯�ȥ�̾�򥫥�� (<SAMP>`,'</SAMP>) �Ƕ��ڤä�
-�¤٤���ΤǤʤ��ƤϤʤ�ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ����٤Ƥ����ܤ��������оݤˤʤ�ޤ���
-(�ܤ����ϡ���<A HREF="ebfont-ja_3.html#SEC6">����</A>����򻲾�)��
+<DT><CODE>-S <VAR>副本</VAR></CODE>
+<DD><DT><CODE>--subbook <VAR>副本</VAR></CODE>
+<DD><CODE>ebfont</CODE> に、どの副本の外字を生成させるのかを指定します。
+<VAR>副本</VAR> は、副本のディレクトリ名をカンマ (<SAMP>`,'</SAMP>) で区切って
+並べたものでなくてはなりません。
+指定しなかったときは、すべての副本が生成の対象になります。
+(詳しくは、「<A HREF="ebfont-ja_3.html#SEC6">副本</A>」節を参照)。
 <P>
 
 <DT><CODE>-v</CODE>
 <DD><DT><CODE>--version</CODE>
-<DD>�С�������ֹ��ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+<DD>バージョン番号を標準出力に出力して、終了します。
 </DL>
 <P>
 

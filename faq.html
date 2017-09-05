@@ -9,98 +9,98 @@
 <body>
 
 <p class="header">
-<img src="eb_s.png" alt="$B%m%4(B">
+<img src="eb_s.png" alt="ロゴ">
 </p>
 
 <!-- ############################################################# -->
-<h1>EB $B%i%$%V%i%j$N$h$/$"$k<ALd(B</h1>
+<h1>EB ライブラリのよくある質問</h1>
 
 <p>
-EB $B%i%$%V%i%jK\BN$d!"(BEB $B%i%$%V%i%j$r;HMQ$7$?%"%W%j%1!<%7%g%s$K4X$7$F!"(B
-$B$h$/$"$k<ALd$H2sEz$r$^$H$a$^$7$?!#(B
+EB ライブラリ本体や、EB ライブラリを使用したアプリケーションに関して、
+よくある質問と回答をまとめました。
 </p>
 
 <!-- ############################################################# -->
-<h2>EB $B%i%$%V%i%j$r;HMQ$7$?%"%W%j%1!<%7%g%s$K4X$9$k<ALd(B</h2>
+<h2>EB ライブラリを使用したアプリケーションに関する質問</h2>
 
 <h3>
-Q: CD-ROM $B=q@R$K$h$C$F$O!"1\Mw$9$k:]$KK\J8$,ESCf$G@Z$l$F$7$^$C$?$j!"(B
-$B5U$K@Z$l$:$K<!$N9`L\$NK\J8$^$GI=<($5$l$F$7$^$C$?$j$9$k$N$G$9$,(B?
+Q: CD-ROM 書籍によっては、閲覧する際に本文が途中で切れてしまったり、
+逆に切れずに次の項目の本文まで表示されてしまったりするのですが?
 </h3>
 
 <p>
-A: EPWING $B$*$h$SEE;R%V%C%/$N;EMM$G$O!"K\J8$N3F9`L\$N@Z$lL\$rL@<(E*(B
-$B$K<($90u$OB8:_$7$^$;$s!#(B
-EB $B%i%$%V%i%j$O!"=q@RFb$NB>$N>pJs$r;H$C$F3F9`L\$N@Z$lL\$rH=Dj$9$k(B
-$B$h$&$K$J$C$F$$$^$9$,!"H=Dj$O40`z$G$O$J$$$?$a!"JQ$J0LCV$G@Z$l$?$j!"(B
-$B1d!9$H@Z$l$J$+$C$?$j$9$k>l9g$,$"$j$^$9!#(B
+A: EPWING および電子ブックの仕様では、本文の各項目の切れ目を明示的
+に示す印は存在しません。
+EB ライブラリは、書籍内の他の情報を使って各項目の切れ目を判定する
+ようになっていますが、判定は完璧ではないため、変な位置で切れたり、
+延々と切れなかったりする場合があります。
 </p>
 
 <p>
-$B$3$N>I>u$KBP=h$9$k$?$a!"(BEB $B%i%$%V%i%j$G$O(B
-<a href="appendix.html">appendix $B%Q%C%1!<%8(B</a>
-$B$H$$$&;EAH$_$rMQ0U$7$F$$$^$9!#>\$7$/$O$=$A$i$r;2>H$7$F2<$5$$!#(B
+この症状に対処するため、EB ライブラリでは
+<a href="appendix.html">appendix パッケージ</a>
+という仕組みを用意しています。詳しくはそちらを参照して下さい。
 </p>
 
 <hr>
 <h3>
-Q: appendix $B%Q%C%1!<%8$O!"$I$&$d$C$FF3F~$9$l$P$$$$$N$G$9$+(B?
+Q: appendix パッケージは、どうやって導入すればいいのですか?
 </h3>
 
 <p>
-A: $B$3$l$O!"(BEB $B%i%$%V%i%j$r;HMQ$7$?%"%W%j%1!<%7%g%s<!Bh$G$9!#(B
-$B%"%W%j%1!<%7%g%s$,(B appendix $B$KBP1~$7$F$$$J$$2DG=@-$b$"$j$^$9$N$G!"(B
-$B$^$:$OBP1~$7$F$$$k$+3NG'$7$F2<$5$$!#(B
-appendix $B$KBP1~$7$F$$$l$P!"2?$i$+$NJ}K!$G!"(Bappendix $B%Q%C%1!<%8$N%Q%9(B
-$B$r;XDj$G$-$k$h$&$K$J$C$F$$$k$H;W$$$^$9!#(B
+A: これは、EB ライブラリを使用したアプリケーション次第です。
+アプリケーションが appendix に対応していない可能性もありますので、
+まずは対応しているか確認して下さい。
+appendix に対応していれば、何らかの方法で、appendix パッケージのパス
+を指定できるようになっていると思います。
 </p>
 
 <!-- ############################################################# -->
-<h2>ebzip $B$K4X$9$k<ALd(B</h2>
+<h2>ebzip に関する質問</h2>
 
 <h3>
-Q: $B:G=i$+$i(B EPWING $B7A<0$d(B S-EBXA $B7A<0$G05=L$5$l$F$$$k=q@R$r(B ebzip
-$B7A<0$G05=L$7D>$9>l9g!"$$$C$?$s?-D9$7$F$+$i05=L$9$kI,MW$,$"$j$^$9$+(B?
+Q: 最初から EPWING 形式や S-EBXA 形式で圧縮されている書籍を ebzip
+形式で圧縮し直す場合、いったん伸長してから圧縮する必要がありますか?
 </h3>
 
 <p>
-A: $B4{$K05=L$5$l$F$$$k=q@R$KBP$7$F(B ebzip $B$G05=L$r9T$&$H!"$$$C$?$s(B
-$B?-D9$7$F$+$i05=L$7D>$7$^$9!#?-D9$7$F$+$i05=L$9$kI,MW$O$"$j$^$;$s!#(B
+A: 既に圧縮されている書籍に対して ebzip で圧縮を行うと、いったん
+伸長してから圧縮し直します。伸長してから圧縮する必要はありません。
 </p>
 
 <p>
-$B2a5n$K!"0lIt$N(BCD-ROM $B=q@R$G!V?-D9$7$F$+$i05=L$7D>$5$J$$$H!"$&$^$/(B
-$B$$$+$J$+$C$?!W$H$$$&Js9p$,$"$j$^$7$?$,!"%P!<%8%g%s(B 4.2.2 $B$*$h$S0J9_(B
-$B$N%P!<%8%g%s$G$OLdBj$J$$H&$G$9!#(B
-($B$d$C$Q$j%@%a$J$h$&$J$i!"$4O"Mm$/$@$5$$!#(B)
+過去に、一部のCD-ROM 書籍で「伸長してから圧縮し直さないと、うまく
+いかなかった」という報告がありましたが、バージョン 4.2.2 および以降
+のバージョンでは問題ない筈です。
+(やっぱりダメなようなら、ご連絡ください。)
 </p>
 
 <hr>
 <h3>
-Q: $B%3%^%s%IF~NO$OBgJQ$G$9(B...$B!#%&%#%s%I%&$+$iA`:n$G$-$k%D!<%k$O$J$$$G$9$+(B?
+Q: コマンド入力は大変です...。ウィンドウから操作できるツールはないですか?
 
 
 </h3>
 
 <p>
-Windows$BMQ!"(BMac OS X $BMQ$J$i$"$j$^$9!#(B
+Windows用、Mac OS X 用ならあります。
 </p>
 
 <dl>
 <dt><a href="http://homepage.mac.com/kzseki/SA/palm/ws/dcj.html">DicCompressorJ</a>
-<dd>Windows $BMQ$H(B Mac OS X $BMQ%Q%C%1!<%8$,8x3+$5$l$F$$$^$9!#(B
-Java$B$G=q$+$l$F$$$k$N$G!"B>$N%7%9%F%`$G$bF0$/$+$bCN$l$^$;$s!#(B
+<dd>Windows 用と Mac OS X 用パッケージが公開されています。
+Javaで書かれているので、他のシステムでも動くかも知れません。
 <dt><a href="../winebzip/">WinEBZip</a>
-<dd>Windows $BMQ!#(B
+<dd>Windows 用。
 <dt>Buckingham EB Compressor
-<dd>Windows $BMQ!#:n<T<+?H$,8x3+$r;_$a$F$7$^$C$?$h$&$G$9!#(B
+<dd>Windows 用。作者自身が公開を止めてしまったようです。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <p class="footer">
 <a href="index.html"><img class="banner" src="eb_b.png" alt="banner"></a>
-<a href="index.html">$B%[!<%`%Z!<%8(B</a>$B$KLa$k!#(B
+<a href="index.html">ホームページ</a>に戻る。
 </p>
 
 </body>

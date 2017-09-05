@@ -35,24 +35,24 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 3. <CODE>ebzip</CODE> �μ¹� </H1>
+<H1> 3. <CODE>ebzip</CODE> の実行 </H1>
 <!--docid::SEC3::-->
 <P>
 
-<CODE>ebinfo</CODE>��<CODE>ebunzip</CODE>��<CODE>ebzipinfo</CODE> �ΰ���Ū�ʵ�ư��ˡ�ϼ�
-���̤�Ǥ���
+<CODE>ebinfo</CODE>、<CODE>ebunzip</CODE>、<CODE>ebzipinfo</CODE> の一般的な起動方法は次
+の通りです。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip <VAR>���ҤؤΥѥ�</VAR>
-% ebunzip <VAR>���ҤؤΥѥ�</VAR>
-% ebzipinfo <VAR>���ҤؤΥѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip <VAR>書籍へのパス</VAR>
+% ebunzip <VAR>書籍へのパス</VAR>
+% ebzipinfo <VAR>書籍へのパス</VAR>
 </pre></td></tr></table></P><P>
 
-<VAR>���ҤؤΥѥ�</VAR> �ˤϡ�CD-ROM ���ҤΥȥåץǥ��쥯�ȥꡢ�Ĥޤ� 
-<TT>`catalog'</TT> �ޤ��� <TT>`catalogs'</TT> �ե����뤬¸�ߤ���ǥ��쥯�ȥ��
-���ꤷ�ޤ���
-ʣ���Υѥ���񤯤��ȤϤǤ��ޤ��󤬡��ʲ��Τ褦�ˡ��ѥ��λ����ʤ����Ȥ�
-�Ǥ��ޤ���
+<VAR>書籍へのパス</VAR> には、CD-ROM 書籍のトップディレクトリ、つまり 
+<TT>`catalog'</TT> または <TT>`catalogs'</TT> ファイルが存在するディレクトリを
+指定します。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebzip
@@ -60,8 +60,8 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 % ebzipinfo
 </pre></td></tr></table></P><P>
 
-���ξ��ϡ������ȥǥ��쥯�ȥ� (<TT>`.'</TT>) �����ꤵ�줿��Τ�Ƚ�Ǥ���
-�ޤ���
+この場合は、カレントディレクトリ (<TT>`.'</TT>) が指定されたものと判断され
+ます。
 </P><P>
 
 <A NAME="Compression"></A>

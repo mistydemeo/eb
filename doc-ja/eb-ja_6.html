@@ -35,29 +35,29 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 6. ���顼���� </H1>
+<H1> 6. エラー処理 </H1>
 <!--docid::SEC23::-->
 <P>
 
-EB �饤�֥��δؿ��θƤӽФ��ϡ������������Ȥϸ¤�ޤ���
-���Ȥ��С�<CODE>EB_Book</CODE> ���֥������Ȥ���Ҥ˷�ӤĤ���ؿ�
-<CODE>eb_bind()</CODE> �ˤϡ������Ȥ��ƽ��ҤΥȥåץǥ��쥯�ȥ���Ϥ��ޤ�����
-¸�ߤ��ʤ��ǥ��쥯�ȥ����ꤷ����硢�����ϼ��Ԥ˽����ޤ���
+EB ライブラリの関数の呼び出しは、常に成功するとは限りません。
+たとえば、<CODE>EB_Book</CODE> オブジェクトを書籍に結びつける関数
+<CODE>eb_bind()</CODE> には、引数として書籍のトップディレクトリを渡しますが、
+存在しないディレクトリを指定した場合、処理は失敗に終わります。
 </P><P>
 
-���̤ˤ����������ݤϡ��桼�������ä��ѥ�����ꤷ���Ȥ��˵�����ޤ�����
-������­�Τ褦�ˡ��桼���Υߥ��������ǤϤʤ����Ԥⵯ���ꤨ�ޤ���
+一般にこうした事象は、ユーザが誤ったパスを指定したときに起こりますが、
+メモリ不足のように、ユーザのミスが原因ではない失敗も起こりえます。
 </P><P>
 
-�ܾϤǤϡ��ؿ��θƤӽФ������Ԥ������ν����ˤĤ����������ޤ���
+本章では、関数の呼び出しが失敗した場合の処理について説明します。
 </P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC24">6.1 ���顼�����ɤȥ��顼��å�����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC25">6.2 ���顼���Ф��봲�Ƥ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC26">6.3 �ǡ������ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC27">6.4 ���顼�����ɤΰ���</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC28">6.5 �ؿ��ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC24">6.1 エラーコードとエラーメッセージ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC25">6.2 エラーに対する寛容さ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC26">6.3 データ型の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC27">6.4 エラーコードの一覧</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_6.html#SEC28">6.5 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -75,16 +75,16 @@ EB �饤�֥��δؿ��θƤӽФ��ϡ������������Ȥϸ¤�ޤ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 6.1 ���顼�����ɤȥ��顼��å����� </H2>
+<H2> 6.1 エラーコードとエラーメッセージ </H2>
 <!--docid::SEC24::-->
 <P>
 
-EB �饤�֥��δؿ���¿���ϡ�����ͤȤ��� <CODE>EB_Error_Code</CODE>
-�����ͤ��֤��ޤ���
-���������������Ȥ����֤��ͤ� <CODE>EB_SUCCESS</CODE> �Ǥ��������Ԥ����Ȥ���
-���顼�θ����˱������͡����ͤ��֤��ޤ���
-���Τ��ᡢEB �饤�֥��Ǥϼ��Τ褦�� <CODE>EB_SUCCESS</CODE> �Ȥ���ӽ���
-���褯�Ԥ��ޤ���
+EB ライブラリの関数の多くは、戻り値として <CODE>EB_Error_Code</CODE>
+型の値を返します。
+処理が成功したときに返す値は <CODE>EB_SUCCESS</CODE> ですが、失敗したときは
+エラーの原因に応じて様々な値を返します。
+このため、EB ライブラリでは次のような <CODE>EB_SUCCESS</CODE> との比較処理
+がよく行われます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Error_Code error_code;
@@ -96,10 +96,10 @@ if (error_code != EB_SUCCESS) {
 }
 </pre></td></tr></table></P><P>
 
-���顼�����ɤ��ͤϡ��ؿ� <CODE>eb_error_message()</CODE> �ˤ�ä�
-���顼��å��������Ѵ����뤳�Ȥ�Ǥ��ޤ���
-�������뤳�Ȥǡ����顼�θ����򥢥ץꥱ�������ץ������Υ桼����
-�⤦����ʬ����䤹�������뤳�Ȥ��Ǥ��ޤ���
+エラーコードの値は、関数 <CODE>eb_error_message()</CODE> によって
+エラーメッセージに変換することもできます。
+こうすることで、エラーの原因をアプリケーションプログラムのユーザに
+もう少し分かりやすく伝えることができます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>error_code = eb_bind(&#38;book, "/mnt/cdrom");
@@ -110,30 +110,30 @@ if (error_code != EB_SUCCESS) {
 }
 </pre></td></tr></table></P><P>
 
-<CODE>error_code</CODE> �� <CODE>EB_ERR_TOO_LONG_FILENAME</CODE> �˥��åȤ����
-����С����Τ褦�ʥ��顼��å����������Ϥ���ޤ���
+<CODE>error_code</CODE> が <CODE>EB_ERR_TOO_LONG_FILENAME</CODE> にセットされて
+いれば、次のようなエラーメッセージが出力されます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>too long filename
 </pre></td></tr></table></P><P>
 
-���뤤�ϡ����Τ褦�����ܸ�Υ�å����������Τ�ޤ���
+あるいは、次のように日本語のメッセージかも知れません。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>�ե�����̾��Ĺ�����ޤ�
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ファイル名が長すぎます
 </pre></td></tr></table></P><P>
 
-��å������ι�ݲ���ǽ (NLS) ��̵���ˤ��� EB �饤�֥��򥳥�ѥ���
-�������ϡ���˱Ѹ�Υ�å��������֤�ޤ���
-ͭ���ˤ������ϡ��������������ˤ�äƤɤ���θ���Υ�å�������
-�֤뤫����ޤ�ޤ���
+メッセージの国際化機能 (NLS) を無効にして EB ライブラリをコンパイル
+した場合は、常に英語のメッセージが返ります。
+有効にした場合は、ロケールの設定によってどちらの言語のメッセージが
+返るかが決まります。
 </P><P>
 
-�ܽ�Ǥϥץ�������ʷ�ˤ��뤿��ˡ����顼�����Ϻ���¤����Ԥä�
-���ޤ���
-����ɤ���̤Υ��ץꥱ�������ץ������Ǥϡ��ؿ��θƤӽФ�������
-�������ɤ������˥����å��������������Ԥ����ݤϥ��顼��å����������
-���ơ��桼���˥��顼�θ�����������Τ�˾�ޤ����Ȥ����ޤ���
+本書ではプログラムを簡潔にするために、エラー処理は最低限しか行って
+いません。
+けれども一般のアプリケーションプログラムでは、関数の呼び出しが成功
+したかどうかを常にチェックし、処理が失敗した際はエラーメッセージを出力
+して、ユーザにエラーの原因を伝えるのが望ましいといえます。
 </P><P>
 
 <A NAME="Tolerance to Error"></A>
@@ -150,23 +150,23 @@ if (error_code != EB_SUCCESS) {
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 6.2 ���顼���Ф��봲�Ƥ� </H2>
+<H2> 6.2 エラーに対する寛容さ </H2>
 <!--docid::SEC25::-->
 <P>
 
-<CODE>EB_Book</CODE> ���֥������Ȥϡ����֤˴ؤ���ѥ�᥿�򤤤��Ĥ����ä�
-���ޤ���
-���֥������Ȥ� CD-ROM ���Ҥ˷���դ��Ƥ��뤫�ɤ����⡢���������ѥ�᥿
-�Τ����ΰ�ĤǤ���
+<CODE>EB_Book</CODE> オブジェクトは、状態に関するパラメタをいくつか持って
+います。
+オブジェクトが CD-ROM 書籍に結び付いているかどうかも、こうしたパラメタ
+のうちの一つです。
 </P><P>
 
-������ <CODE>EB_Book</CODE> ���֥������ȤؤΥݥ��󥿤���ؿ��ˤϡ����餫����
-���֥������Ȥ�����Υѥ�᥿�����åȤ���Ƥ��뤳�Ȥ�����Ȥ��Ƥ�����
-�⤢��ޤ���
-���Ȥ��С�<CODE>eb_path()</CODE> �ϡ����֥������Ȥ����Ҥ˷���դ��Ƥ��뤳��
-������Ȥ��Ƥ��ޤ���
-�Ǥϡ��⤷����Ҥ˷���դ��Ƥ��ʤ����֥������Ȥ� <CODE>eb_path()</CODE> ��
-�Ϥ�����ɤ��ʤ�Ǥ��礦����
+引数に <CODE>EB_Book</CODE> オブジェクトへのポインタを取る関数には、あらかじめ
+オブジェクトの特定のパラメタがセットされていることを前提としているもの
+もあります。
+たとえば、<CODE>eb_path()</CODE> は、オブジェクトが書籍に結び付いていること
+を前提としています。
+では、もしも書籍に結び付いていないオブジェクトを <CODE>eb_path()</CODE> に
+渡したらどうなるでしょうか。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Book book;
@@ -175,21 +175,21 @@ char path[EB_MAX_PATH_LENGTH + 1];
 
 eb_initialize_library();
 eb_initialize(&#38;book);
-error_code = eb_path(&#38;book, path);    /* �ɤ��ʤ�? */
+error_code = eb_path(&#38;book, path);    /* どうなる? */
 </pre></td></tr></table></P><P>
 
-���ξ�硢<CODE>eb_path()</CODE> �� <CODE>EB_ERR_UNBOUND_BOOK</CODE> ���֤��ޤ���
-EB �饤�֥��δؿ��ϡ�ɬ�פʥѥ�᥿�����åȤ���Ƥ��ʤ����֥������Ȥ�
-���Τ��Ƶ��䤷�ޤ���
+この場合、<CODE>eb_path()</CODE> は <CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
+EB ライブラリの関数は、必要なパラメタがセットされていないオブジェクトを
+検知して拒絶します。
 </P><P>
 
-�������ʤ��顢���ȥޥ˥奢�����������Ƥ����������ơ�EB �饤�֥��
-�δؿ��ϡ�Ϳ����줿�ݥ��󥿤� <CODE>NULL</CODE> ���ɤ����ޤǤ�Ĵ�٤ޤ���
-���Τ褦�ʤ��Ȥ򤹤�ȡ��ץ�������۾ｪλ�����Ƥ��ޤ��ޤ���
+しかしながら、参照マニュアルで明示されている場合を除いて、EB ライブラリ
+の関数は、与えられたポインタが <CODE>NULL</CODE> かどうかまでは調べません。
+次のようなことをすると、プログラムを異常終了させてしまいます。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_bind(NULL, "/mnt/cdrom");    /* �۾ｪλ! */
-eb_bind(&#38;book, NULL);           /* �����۾ｪλ! */
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_bind(NULL, "/mnt/cdrom");    /* 異常終了! */
+eb_bind(&#38;book, NULL);           /* これも異常終了! */
 </pre></td></tr></table></P><P>
 
 <A NAME="Error Data Types"></A>
@@ -206,12 +206,12 @@ eb_bind(&#38;book, NULL);           /* �����۾ｪλ! */
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 6.3 �ǡ������ξܺ� </H2>
+<H2> 6.3 データ型の詳細 </H2>
 <!--docid::SEC26::-->
 <P>
 
-��������������Ƥ���ǡ�������Ȥ��ˤϡ����Τ褦�˥إå��ե������
-�ɤ߹���ǲ�������
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
@@ -224,16 +224,16 @@ eb_bind(&#38;book, NULL);           /* �����۾ｪλ! */
 <A NAME="IDX38"></A>
 </P><P>
 
-�ǡ����� <CODE>EB_Error_Code</CODE> �ϡ�EB �饤�֥��Υ��顼�����ɤ�ɽ���ޤ���
-���η�������դ�����������̾�Ȥ����������Ƥ��ޤ��Τǡ�2 �ĤΥ����ɤ�
-2 ��黻�� <CODE>==</CODE> �� <CODE>!=</CODE> �ǰ�����Ӥ��뤳�Ȥ��Ǥ��ޤ���
+データ型 <CODE>EB_Error_Code</CODE> は、EB ライブラリのエラーコードを表します。
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <CODE>==</CODE> と <CODE>!=</CODE> で一致比較することができます。
 </P><P>
 
-EB �饤�֥��Ǥϡ������� <CODE>EB_NUMBER_OF_ERRORS</CODE> �ĤΥեå������ɤ�
-������Ƥ��ޤ���
-���顼�����ɤΰ����ˤĤ��Ƥϡ�
-������ (��<A HREF="eb-ja_6.html#SEC27">���顼�����ɤΰ���</A>����򻲾�)
-�򻲾Ȥ��Ʋ�������
+EB ライブラリでは、全部で <CODE>EB_NUMBER_OF_ERRORS</CODE> 個のフックコードを
+定義しています。
+エラーコードの一覧については、
+次の節 (「<A HREF="eb-ja_6.html#SEC27">エラーコードの一覧</A>」節を参照)
+を参照して下さい。
 </DL>
 </P><P>
 
@@ -251,12 +251,12 @@ EB �饤�֥��Ǥϡ������� <CODE>EB_NUMBER_OF_ERRORS</CODE> �ĤΥեå������ɤ�
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 6.4 ���顼�����ɤΰ��� </H2>
+<H2> 6.4 エラーコードの一覧 </H2>
 <!--docid::SEC27::-->
 <P>
 
-��������������Ƥ��륨�顼�����ɤ�Ȥ��ˤϡ����Τ褦�˥إå��ե������
-�ɤ߹���ǲ�������
+この節で説明しているエラーコードを使うには、次のようにヘッダファイルを
+読み込んで下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
@@ -268,8 +268,8 @@ EB �饤�֥��Ǥϡ������� <CODE>EB_NUMBER_OF_ERRORS</CODE> �ĤΥեå������ɤ�
 <DD><A NAME="IDX40"></A>
 </P><P>
 
-������
-���顼�ϵ����Ƥ��ʤ���
+成功。
+エラーは起きていない。
 </DL>
 </P><P>
 
@@ -279,7 +279,7 @@ EB �饤�֥��Ǥϡ������� <CODE>EB_NUMBER_OF_ERRORS</CODE> �ĤΥեå������ɤ�
 <DD><A NAME="IDX42"></A>
 </P><P>
 
-EB �饤�֥�꤬ <CODE>malloc()</CODE> ��ƤӽФ�������<CODE>NULL</CODE> ���֤äƤ�����
+EB ライブラリが <CODE>malloc()</CODE> を呼び出したが、<CODE>NULL</CODE> が返ってきた。
 </DL>
 </P><P>
 
@@ -289,7 +289,7 @@ EB �饤�֥�꤬ <CODE>malloc()</CODE> ��ƤӽФ�������<CODE>NULL</CODE> ���֤ä�
 <DD><A NAME="IDX44"></A>
 </P><P>
 
-Ϳ����줿���ҤΥѥ�̾��Ĺ�����롣
+与えられた書籍のパス名が長すぎる。
 </DL>
 </P><P>
 
@@ -299,7 +299,7 @@ EB �饤�֥�꤬ <CODE>malloc()</CODE> ��ƤӽФ�������<CODE>NULL</CODE> ���֤ä�
 <DD><A NAME="IDX46"></A>
 </P><P>
 
-���ҤΥѥ�̾�������Ǥ��롣
+書籍のパス名が不正である。
 </DL>
 </P><P>
 
@@ -309,9 +309,9 @@ EB �饤�֥�꤬ <CODE>malloc()</CODE> ��ƤӽФ�������<CODE>NULL</CODE> ���֤ä�
 <DD><A NAME="IDX48"></A>
 </P><P>
 
-�ǥ��쥯�ȥ�̾�������Ǥ��롣
-(EB �饤�֥������������ѤʤΤǡ�
-���Υ��顼�����ɤ����ץꥱ�������ץ��������֤뤳�ȤϤ���ޤ���)
+ディレクトリ名が不正である。
+(EB ライブラリの内部処理用なので、
+このエラーコードがアプリケーションプログラムに返ることはありません。)
 </DL>
 </P><P>
 
@@ -321,7 +321,7 @@ EB �饤�֥�꤬ <CODE>malloc()</CODE> ��ƤӽФ�������<CODE>NULL</CODE> ���֤ä�
 <DD><A NAME="IDX50"></A>
 </P><P>
 
-Ϳ����줿�������Ĺ�����롣
+与えられた検索語は長すぎる。
 </DL>
 </P><P>
 
@@ -331,7 +331,7 @@ EB �饤�֥�꤬ <CODE>malloc()</CODE> ��ƤӽФ�������<CODE>NULL</CODE> ���֤ä�
 <DD><A NAME="IDX52"></A>
 </P><P>
 
-Ϳ����줿�������������ʸ�����ޤޤ�Ƥ��롣
+与えられた検索語に不正な文字が含まれている。
 </DL>
 </P><P>
 
@@ -341,7 +341,7 @@ EB �饤�֥�꤬ <CODE>malloc()</CODE> ��ƤӽФ�������<CODE>NULL</CODE> ���֤ä�
 <DD><A NAME="IDX54"></A>
 </P><P>
 
-Ϳ����줿������϶��Ǥ��롣
+与えられた検索語は空である。
 </DL>
 </P><P>
 
@@ -351,7 +351,7 @@ EB �饤�֥�꤬ <CODE>malloc()</CODE> ��ƤӽФ�������<CODE>NULL</CODE> ���֤ä�
 <DD><A NAME="IDX56"></A>
 </P><P>
 
-<CODE>getcwd()</CODE> �⤷���� <CODE>getwd()</CODE> �����Ԥ�����
+<CODE>getcwd()</CODE> もしくは <CODE>getwd()</CODE> が失敗した。
 </DL>
 </P><P>
 
@@ -361,7 +361,7 @@ EB �饤�֥�꤬ <CODE>malloc()</CODE> ��ƤӽФ�������<CODE>NULL</CODE> ���֤ä�
 <DD><A NAME="IDX58"></A>
 </P><P>
 
-EB �饤�֥�꤬�����ҤΥ��������ե�����򳫤����Ȥ˼��Ԥ�����
+EB ライブラリが、書籍のカタログファイルを開くことに失敗した。
 </DL>
 </P><P>
 
@@ -371,7 +371,7 @@ EB �饤�֥�꤬�����ҤΥ��������ե�����򳫤����Ȥ˼��Ԥ�����
 <DD><A NAME="IDX60"></A>
 </P><P>
 
-EB �饤�֥�꤬��appendix �Υ��������ե�����򳫤����Ȥ˼��Ԥ�����
+EB ライブラリが、appendix のカタログファイルを開くことに失敗した。
 </DL>
 </P><P>
 
@@ -381,7 +381,7 @@ EB �饤�֥�꤬��appendix �Υ��������ե�����򳫤����Ȥ˼��Ԥ�����
 <DD><A NAME="IDX62"></A>
 </P><P>
 
-EB �饤�֥�꤬�����Ҥ���ʸ�ե�����򳫤����Ȥ˼��Ԥ�����
+EB ライブラリが、書籍の本文ファイルを開くことに失敗した。
 </DL>
 </P><P>
 
@@ -391,7 +391,7 @@ EB �饤�֥�꤬�����Ҥ���ʸ�ե�����򳫤����Ȥ˼��Ԥ�����
 <DD><A NAME="IDX64"></A>
 </P><P>
 
-EB �饤�֥�꤬�����Ҥγ����ե�����򳫤����Ȥ˼��Ԥ�����
+EB ライブラリが、書籍の外字ファイルを開くことに失敗した。
 </DL>
 </P><P>
 
@@ -401,7 +401,7 @@ EB �饤�֥�꤬�����Ҥγ����ե�����򳫤����Ȥ˼��Ԥ�����
 <DD><A NAME="IDX66"></A>
 </P><P>
 
-EB �饤�֥�꤬��appendix �ե�����򳫤����Ȥ˼��Ԥ�����
+EB ライブラリが、appendix ファイルを開くことに失敗した。
 </DL>
 </P><P>
 
@@ -411,7 +411,7 @@ EB �饤�֥�꤬��appendix �ե�����򳫤����Ȥ˼��Ԥ�����
 <DD><A NAME="IDX68"></A>
 </P><P>
 
-EB �饤�֥�꤬���Х��ʥ�ǡ����ե�����򳫤����Ȥ˼��Ԥ�����
+EB ライブラリが、バイナリデータファイルを開くことに失敗した。
 </DL>
 </P><P>
 
@@ -421,7 +421,7 @@ EB �饤�֥�꤬���Х��ʥ�ǡ����ե�����򳫤����Ȥ˼��Ԥ�����
 <DD><A NAME="IDX70"></A>
 </P><P>
 
-EB �饤�֥�꤬�����ҤΥ��������ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
+EB ライブラリが、書籍のカタログファイルを読み込むことに失敗した。
 </DL>
 </P><P>
 
@@ -431,7 +431,7 @@ EB �饤�֥�꤬�����ҤΥ��������ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
 <DD><A NAME="IDX72"></A>
 </P><P>
 
-EB �饤�֥�꤬��appendix �Υ��������ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
+EB ライブラリが、appendix のカタログファイルを読み込むことに失敗した。
 </DL>
 </P><P>
 
@@ -441,7 +441,7 @@ EB �饤�֥�꤬��appendix �Υ��������ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
 <DD><A NAME="IDX74"></A>
 </P><P>
 
-EB �饤�֥�꤬�����Ҥ���ʸ�ե�������ɤळ�Ȥ˼��Ԥ�����
+EB ライブラリが、書籍の本文ファイルを読むことに失敗した。
 </DL>
 </P><P>
 
@@ -451,7 +451,7 @@ EB �饤�֥�꤬�����Ҥ���ʸ�ե�������ɤळ�Ȥ˼��Ԥ�����
 <DD><A NAME="IDX76"></A>
 </P><P>
 
-EB �饤�֥�꤬�����Ҥγ����ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
+EB ライブラリが、書籍の外字ファイルを読み込むことに失敗した。
 </DL>
 </P><P>
 
@@ -461,7 +461,7 @@ EB �饤�֥�꤬�����Ҥγ����ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
 <DD><A NAME="IDX78"></A>
 </P><P>
 
-EB �饤�֥�꤬��appendix �Υᥤ��ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
+EB ライブラリが、appendix のメインファイルを読み込むことに失敗した。
 </DL>
 </P><P>
 
@@ -471,7 +471,7 @@ EB �饤�֥�꤬��appendix �Υᥤ��ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
 <DD><A NAME="IDX80"></A>
 </P><P>
 
-EB �饤�֥�꤬�����ҤΥХ��ʥ�ǡ����ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
+EB ライブラリが、書籍のバイナリデータファイルを読み込むことに失敗した。
 </DL>
 </P><P>
 
@@ -481,7 +481,7 @@ EB �饤�֥�꤬�����ҤΥХ��ʥ�ǡ����ե�������ɤ߹��ळ�Ȥ˼��Ԥ�����
 <DD><A NAME="IDX82"></A>
 </P><P>
 
-EB �饤�֥�꤬�����ҤΥ��������ե�����Υ������˼��Ԥ�����
+EB ライブラリが、書籍のカタログファイルのシークに失敗した。
 </DL>
 </P><P>
 
@@ -491,7 +491,7 @@ EB �饤�֥�꤬�����ҤΥ��������ե�����Υ������˼��Ԥ�����
 <DD><A NAME="IDX84"></A>
 </P><P>
 
-EB �饤�֥�꤬��appendix �Υ��������ե�����Υ������˼��Ԥ�����
+EB ライブラリが、appendix のカタログファイルのシークに失敗した。
 </DL>
 </P><P>
 
@@ -501,7 +501,7 @@ EB �饤�֥�꤬��appendix �Υ��������ե�����Υ������˼��Ԥ�����
 <DD><A NAME="IDX86"></A>
 </P><P>
 
-EB �饤�֥�꤬�����Ҥ���ʸ�ե�����Υ������˼��Ԥ�����
+EB ライブラリが、書籍の本文ファイルのシークに失敗した。
 </DL>
 </P><P>
 
@@ -511,7 +511,7 @@ EB �饤�֥�꤬�����Ҥ���ʸ�ե�����Υ������˼��Ԥ�����
 <DD><A NAME="IDX88"></A>
 </P><P>
 
-EB �饤�֥�꤬�����Ҥγ����ե�����Υ������˼��Ԥ�����
+EB ライブラリが、書籍の外字ファイルのシークに失敗した。
 </DL>
 </P><P>
 
@@ -521,7 +521,7 @@ EB �饤�֥�꤬�����Ҥγ����ե�����Υ������˼��Ԥ�����
 <DD><A NAME="IDX90"></A>
 </P><P>
 
-EB �饤�֥�꤬��appendix �Υᥤ��ե�����Υ������˼��Ԥ�����
+EB ライブラリが、appendix のメインファイルのシークに失敗した。
 </DL>
 </P><P>
 
@@ -531,7 +531,7 @@ EB �饤�֥�꤬��appendix �Υᥤ��ե�����Υ������˼��Ԥ�����
 <DD><A NAME="IDX92"></A>
 </P><P>
 
-EB �饤�֥�꤬�����ҤΥХ��ʥ�ǡ����ե�����Υ������˼��Ԥ�����
+EB ライブラリが、書籍のバイナリデータファイルのシークに失敗した。
 </DL>
 </P><P>
 
@@ -541,8 +541,8 @@ EB �饤�֥�꤬�����ҤΥХ��ʥ�ǡ����ե�����Υ������˼��Ԥ�����
 <DD><A NAME="IDX94"></A>
 </P><P>
 
-EB �饤�֥�꤬�����ҤΥ��������ե�������ǡ����ԤȤϰۤʤ�ǡ������
-���Ĥ�����
+EB ライブラリが、書籍のカタログファイル内で、期待とは異なるデータ列を
+見つけた。
 </DL>
 </P><P>
 
@@ -552,8 +552,8 @@ EB �饤�֥�꤬�����ҤΥ��������ե�������ǡ����ԤȤϰۤʤ�ǡ������
 <DD><A NAME="IDX96"></A>
 </P><P>
 
-EB �饤�֥�꤬��appendix �Υ��������ե�������ǡ����곰�Υǡ������
-���Ĥ�����
+EB ライブラリが、appendix のカタログファイル内で、想定外のデータ列を
+見つけた。
 </DL>
 </P><P>
 
@@ -563,7 +563,7 @@ EB �饤�֥�꤬��appendix �Υ��������ե�������ǡ����곰�Υǡ������
 <DD><A NAME="IDX98"></A>
 </P><P>
 
-EB �饤�֥�꤬�����Ҥ���ʸ�ե�������ǡ����곰�Υǡ�����򸫤Ĥ�����
+EB ライブラリが、書籍の本文ファイル内で、想定外のデータ列を見つけた。
 </DL>
 </P><P>
 
@@ -573,7 +573,7 @@ EB �饤�֥�꤬�����Ҥ���ʸ�ե�������ǡ����곰�Υǡ�����򸫤Ĥ�����
 <DD><A NAME="IDX100"></A>
 </P><P>
 
-EB �饤�֥�꤬�����Ҥγ����ե�������ǡ����곰�Υǡ�����򸫤Ĥ�����
+EB ライブラリが、書籍の外字ファイル内で、想定外のデータ列を見つけた。
 </DL>
 </P><P>
 
@@ -583,8 +583,8 @@ EB �饤�֥�꤬�����Ҥγ����ե�������ǡ����곰�Υǡ�����򸫤Ĥ�����
 <DD><A NAME="IDX102"></A>
 </P><P>
 
-EB �饤�֥�꤬��appendix �Υᥤ��ե�������ǡ����곰�Υǡ������
-���Ĥ�����
+EB ライブラリが、appendix のメインファイル内で、想定外のデータ列を
+見つけた。
 </DL>
 </P><P>
 
@@ -594,8 +594,8 @@ EB �饤�֥�꤬��appendix �Υᥤ��ե�������ǡ����곰�Υǡ������
 <DD><A NAME="IDX104"></A>
 </P><P>
 
-EB �饤�֥�꤬�����ҤΥХ��ʥ�ǡ����ե�������ǡ����곰�Υǡ������
-���Ĥ�����
+EB ライブラリが、書籍のバイナリデータファイル内で、想定外のデータ列を
+見つけた。
 </DL>
 </P><P>
 
@@ -605,9 +605,9 @@ EB �饤�֥�꤬�����ҤΥХ��ʥ�ǡ����ե�������ǡ����곰�Υǡ������
 <DD><A NAME="IDX106"></A>
 </P><P>
 
-�ƤӽФ��줿 EB �饤�֥��δؿ��ϡ����Ҥ˷���դ���줿 <CODE>EB_Book</CODE> 
-���֥������Ȥ�����ˤȤ뤬��Ϳ����줿���֥������ȤϽ��Ҥ˷���դ���
-��Ƥ��ʤ��ä���
+呼び出された EB ライブラリの関数は、書籍に結び付けられた <CODE>EB_Book</CODE> 
+オブジェクトを引数にとるが、与えられたオブジェクトは書籍に結び付けら
+れていなかった。
 </DL>
 </P><P>
 
@@ -617,10 +617,10 @@ EB �饤�֥�꤬�����ҤΥХ��ʥ�ǡ����ե�������ǡ����곰�Υǡ������
 <DD><A NAME="IDX108"></A>
 </P><P>
 
-�ƤӽФ��줿 EB �饤�֥��δؿ��ϡ�appendix �˷���դ���줿
-<CODE>EB_Appendix</CODE> ���֥������Ȥ�����ˤȤ뤬��Ϳ����줿���֥������Ȥ�
-appendix �˷���դ�����
-���ʤ��ä���
+呼び出された EB ライブラリの関数は、appendix に結び付けられた
+<CODE>EB_Appendix</CODE> オブジェクトを引数にとるが、与えられたオブジェクトは
+appendix に結び付けられて
+いなかった。
 </DL>
 </P><P>
 
@@ -630,7 +630,7 @@ appendix �˷���դ�����
 <DD><A NAME="IDX110"></A>
 </P><P>
 
-���Ҥ����ܤ��Ĥ���äƤ��ʤ���
+書籍は副本を一つも持っていない。
 </DL>
 </P><P>
 
@@ -640,7 +640,7 @@ appendix �˷���դ�����
 <DD><A NAME="IDX112"></A>
 </P><P>
 
-appendix �����ܤ��Ĥ���äƤ��ʤ���
+appendix は副本を一つも持っていない。
 </DL>
 </P><P>
 
@@ -650,7 +650,7 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX114"></A>
 </P><P>
 
-����������ܤϡ��������������äƤ��ʤ���
+選択中の副本は、外字を一種類も持っていない。
 </DL>
 </P><P>
 
@@ -660,7 +660,7 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX116"></A>
 </P><P>
 
-����������ܤϡ���ʸ�ǡ�������äƤ��ʤ���
+選択中の副本は、本文データを持っていない。
 </DL>
 </P><P>
 
@@ -670,8 +670,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX118"></A>
 </P><P>
 
-�ƤӽФ��줿�ؿ��ϡ����ܤ����򤵤�Ƥ��� <CODE>EB_Book</CODE> ���֥������Ȥ�
-�����Ȥ��ƤȤ뤬��Ϳ����줿���֥������ȤǤ����򤵤�Ƥ��ʤ��ä���
+呼び出された関数は、副本が選択されている <CODE>EB_Book</CODE> オブジェクトを
+引数としてとるが、与えられたオブジェクトでは選択されていなかった。
 </DL>
 </P><P>
 
@@ -681,8 +681,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX120"></A>
 </P><P>
 
-�ƤӽФ��줿�ؿ��ϡ����ܤ����򤵤�Ƥ��� <CODE>EB_Appendix</CODE> ���֥�������
-������ˤȤ뤬��Ϳ����줿���֥������ȤǤ����򤵤�Ƥ��ʤ��ä���
+呼び出された関数は、副本が選択されている <CODE>EB_Appendix</CODE> オブジェクト
+を引数にとるが、与えられたオブジェクトでは選択されていなかった。
 </DL>
 </P><P>
 
@@ -692,8 +692,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX122"></A>
 </P><P>
 
-�ƤӽФ��줿�ؿ��ϡ����������򤵤�Ƥ��� <CODE>EB_Book</CODE> ���֥������Ȥ�
-�����ˤȤ뤬��Ϳ����줿���֥������ȤǤ����򤵤�Ƥ��ʤ��ä���
+呼び出された関数は、外字が選択されている <CODE>EB_Book</CODE> オブジェクトを
+引数にとるが、与えられたオブジェクトでは選択されていなかった。
 </DL>
 </P><P>
 
@@ -703,9 +703,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX124"></A>
 </P><P>
 
-�ƤӽФ��줿�ؿ��ϡ��Х��ʥ�ǡ������ɤ߹����׵�򥻥åȤ��Ƥ���
-<CODE>EB_Book</CODE> ���֥������Ȥ�����ˤȤ뤬��Ϳ����줿���֥������ȤǤ�
-���åȤ���Ƥ��ʤ��ä���
+呼び出された関数は、バイナリデータの読み込み要求をセットしている
+<CODE>EB_Book</CODE> オブジェクトを引数にとるが、与えられたオブジェクトでは
+セットされていなかった。
 </DL>
 </P><P>
 
@@ -715,9 +715,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX126"></A>
 </P><P>
 
-<CODE>EB_Book</CODE> ���֥������Ȥ����ܥ����ɤ��ؿ���Ϳ����줿����
-<CODE>EB_Book</CODE> ���֥������Ȥ˷���դ����Ƥ�����Ҥϡ��������ܥ�����
-�˰��פ������ܤ���äƤ��ʤ���
+<CODE>EB_Book</CODE> オブジェクトと副本コードが関数に与えられたが、
+<CODE>EB_Book</CODE> オブジェクトに結び付けられている書籍は、その副本コード
+に一致する副本を持っていない。
 </DL>
 </P><P>
 
@@ -727,9 +727,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX128"></A>
 </P><P>
 
-<CODE>EB_Appendix</CODE> ���֥������Ȥ����ܥ����ɤ��ؿ���Ϳ����줿����
-<CODE>EB_Appendix</CODE> ���֥������Ȥ˷���դ����Ƥ��� appendix �ϡ�����
-���ܥ����ɤ˰��פ������ܤ���äƤ��ʤ���
+<CODE>EB_Appendix</CODE> オブジェクトと副本コードが関数に与えられたが、
+<CODE>EB_Appendix</CODE> オブジェクトに結び付けられている appendix は、その
+副本コードに一致する副本を持っていない。
 </DL>
 </P><P>
 
@@ -739,9 +739,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX130"></A>
 </P><P>
 
-<CODE>EB_Book</CODE> ���֥������Ȥȳ����νĤΥ��������ؿ���Ϳ����줿����
-<CODE>EB_Book</CODE> ���֥������Ȥ˷�ӤĤ����Ƥ������Ҥ�����������ܤϡ�
-���Υ������γ�������äƤ��ʤ���
+<CODE>EB_Book</CODE> オブジェクトと外字の縦のサイズが関数に与えられたが、
+<CODE>EB_Book</CODE> オブジェクトに結びつけられていた書籍で選択中の副本は、
+そのサイズの外字を持っていない。
 </DL>
 </P><P>
 
@@ -751,9 +751,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX132"></A>
 </P><P>
 
-<CODE>EB_Book</CODE> ���֥������Ȥ�ʸ���ֹ椬�ؿ���Ϳ����줿����<CODE>EB_Book</CODE>
-���֥������Ȥ˷���դ����Ƥ������Ҥ�����������ܤϡ������ֹ�γ�����
-�ӥåȥޥåץǡ�������äƤ��ʤ���
+<CODE>EB_Book</CODE> オブジェクトと文字番号が関数に与えられたが、<CODE>EB_Book</CODE>
+オブジェクトに結び付けられていた書籍で選択中の副本は、その番号の外字の
+ビットマップデータを持っていない。
 </DL>
 </P><P>
 
@@ -763,9 +763,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX134"></A>
 </P><P>
 
-<CODE>EB_Appendix</CODE> ���֥������Ȥ�ʸ���ֹ椬�ؿ���Ϳ����줿����
-<CODE>EB_Appendix</CODE> ���֥������Ȥ˷���դ����Ƥ��� appendix ���������
-���ܤϡ������ֹ�γ���������ʸ�������äƤ��ʤ���
+<CODE>EB_Appendix</CODE> オブジェクトと文字番号が関数に与えられたが、
+<CODE>EB_Appendix</CODE> オブジェクトに結び付けられている appendix で選択中の
+副本は、その番号の外字の代替文字列を持っていない。
 </DL>
 </P><P>
 
@@ -775,7 +775,7 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX136"></A>
 </P><P>
 
-����������ܤϡ����ꤵ�줿�����᥽�åɤ���äƤ��ʤ��Τǡ������ϹԤ��ʤ���
+選択中の副本は、指定された検索メソッドを持っていないので、検索は行えない。
 </DL>
 </P><P>
 
@@ -785,7 +785,7 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX138"></A>
 </P><P>
 
-�����ʥեå������ɤ��ؿ����Ϥ��줿��
+不正なフックコードが関数に渡された。
 </DL>
 </P><P>
 
@@ -795,7 +795,7 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX140"></A>
 </P><P>
 
-���ꤵ�줿���֤ˡ����ꤵ�줿�����ΥХ��ʥ�ǡ�����¸�ߤ��ʤ���
+指定された位置に、指定された形式のバイナリデータは存在しない。
 </DL>
 </P><P>
 
@@ -805,8 +805,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX142"></A>
 </P><P>
 
-���ץꥱ�������ץ�����फ��ƥ����ȥǡ����μ������׵ᤵ�줿��������
-���줿�ƥ����ȥǡ����μ��ब������ꥯ�����Ȥ��줿�Ȥ��Ȱ��פ��Ƥ��ʤ���
+アプリケーションプログラムからテキストデータの取得を要求されたが、指定
+されたテキストデータの種類が、前回リクエストされたときと一致していない。
 </DL>
 </P><P>
 
@@ -816,8 +816,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX144"></A>
 </P><P>
 
-<CODE>eb_hit_list()</CODE> ���ƤӽФ��줿�������ץꥱ�������ץ�����फ��
-����äƸ����Υꥯ�����Ȥ��ʤ���Ƥ��ʤ���
+<CODE>eb_hit_list()</CODE> が呼び出されたが、アプリケーションプログラムから
+前もって検索のリクエストがなされていない。
 </DL>
 </P><P>
 
@@ -827,8 +827,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX146"></A>
 </P><P>
 
-<CODE>EB_Book</CODE> ���֥������Ȥ�ʣ�縡�������ɤ��ؿ����Ϥ��줿��������դ�
-��줿���Ҥ�����������ܤϡ����Υ����ɤ˰��פ���ʣ�縡������äƤ��ʤ���
+<CODE>EB_Book</CODE> オブジェクトと複合検索コードが関数に渡されたが、結び付け
+られた書籍で選択中の副本は、そのコードに一致する複合検索を持っていない。
 </DL>
 </P><P>
 
@@ -838,9 +838,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX148"></A>
 </P><P>
 
-<CODE>EB_Book</CODE> ���֥������Ȥ�ʣ�縡������ȥꥳ���ɤ��ؿ����Ϥ��줿����
-����դ���줿���Ҥ�����������ܤϡ����Υ���ȥꥳ���ɤ˰��פ���
-ʣ�縡������ȥ����äƤ��ʤ���
+<CODE>EB_Book</CODE> オブジェクトと複合検索エントリコードが関数に渡されたが、
+結び付けられた書籍で選択中の副本は、そのエントリコードに一致する
+複合検索エントリを持っていない。
 </DL>
 </P><P>
 
@@ -850,8 +850,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX150"></A>
 </P><P>
 
-���ץꥱ�������ץ�����फ���︡���⤷����ʣ�縡���θ�����ꥯ������
-���줿����������θĿ���¿�����롣
+アプリケーションプログラムから条件検索もしくは複合検索の検索をリクエスト
+されたが、検索語の個数が多すぎる。
 </DL>
 </P><P>
 
@@ -861,8 +861,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX152"></A>
 </P><P>
 
-���ץꥱ�������ץ�����फ���︡���⤷����ʣ�縡���θ�����ꥯ������
-���줿���������줬���٤ƶ��Ǥ��롣
+アプリケーションプログラムから条件検索もしくは複合検索の検索をリクエスト
+されたが、検索語がすべて空である。
 </DL>
 </P><P>
 
@@ -872,8 +872,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX154"></A>
 </P><P>
 
-<CODE>eb_multi_entry_candidates()</CODE> ���ƤӽФ��줿����
-���ꤵ�줿ʣ�縡������ȥ�ϡ�������θ�������ǡ�������äƤ��ʤ���
+<CODE>eb_multi_entry_candidates()</CODE> が呼び出されたが、
+指定された複合検索エントリは、検索語の候補一覧データを持っていない。
 </DL>
 </P><P>
 
@@ -883,9 +883,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX156"></A>
 </P><P>
 
-<CODE>eb_forward_text()</CODE> ���뤤�� <CODE>eb_backward_text()</CODE> ����ʸ��
-Ƭ�Ф���Ԥ����Ȥ����������Ǥ���ʸ�������ʤ�����Ƭ��ã���Ƥ��ơ�����
-�ʾ���˿ʤळ�Ȥ��Ǥ��ʤ��ä���
+<CODE>eb_forward_text()</CODE> あるいは <CODE>eb_backward_text()</CODE> で本文の
+頭出しを行おうとしたが、すでに本文の末尾ないし先頭に達していて、それ
+以上先に進むことができなかった。
 </DL>
 </P><P>
 
@@ -895,8 +895,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX158"></A>
 </P><P>
 
-���餫���� <CODE>eb_seek_text()</CODE> �ǥ�������ԤäƤ��ʤ����֤ǡ�
-�ƥ����ȥǡ������ɤ߹��ߤ�Ƭ�Ф���Ԥ����Ȥ�����
+あらかじめ <CODE>eb_seek_text()</CODE> でシークを行っていない状態で、
+テキストデータの読み込みや頭出しを行おうとした。
 </DL>
 </P><P>
 
@@ -906,7 +906,7 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX160"></A>
 </P><P>
 
-���� EB �饤�֥��ϡ���֥ۥ��ȤؤΥ��������ˤ��б����Ƥ��ʤ���
+この EB ライブラリは、遠隔ホストへのアクセスには対応していない。
 </DL>
 </P><P>
 
@@ -916,7 +916,7 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX162"></A>
 </P><P>
 
-��֥ۥ��ȤؤΥ����������ߤ����������� (EBNETD) ����³�Ǥ��ʤ��ä���
+遠隔ホストへのアクセスを試みたが、サーバ (EBNETD) に接続できなかった。
 </DL>
 </P><P>
 
@@ -926,8 +926,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX164"></A>
 </P><P>
 
-��֥ۥ��Ȥؤ���³��Ԥä��������Ҥ˥����������Ƥ��륯�饤����Ȥο���
-���Ǥ˾�¤�ã���Ƥ��뤿�ᡢ���ν��Ҥ����ѤǤ��ʤ��ä���
+遠隔ホストへの接続を行ったが、書籍にアクセスしているクライアントの数が
+すでに上限に達しているため、その書籍を利用できなかった。
 </DL>
 </P><P>
 
@@ -937,8 +937,8 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX166"></A>
 </P><P>
 
-��֥ۥ��Ȥؤ���³��Ԥä��������ν��Ҥؤ����Ѹ��¤��ʤ����ᡢ������
-���饢����������ݤ��줿��
+遠隔ホストへの接続を行ったが、その書籍への利用権限がないため、サーバ
+からアクセスを拒否された。
 </DL>
 </P><P>
 
@@ -948,9 +948,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX168"></A>
 </P><P>
 
-�ƤӽФ��줿 EB �饤�֥��δؿ��ϡ���֥ۥ��Ȥ˷���դ���줿
-<CODE>EB_BookList</CODE> ���֥������Ȥ�����ˤȤ뤬��Ϳ����줿���֥������Ȥ�
-��֥ۥ��Ȥ˷���դ����Ƥ��ʤ��ä���
+呼び出された EB ライブラリの関数は、遠隔ホストに結び付けられた
+<CODE>EB_BookList</CODE> オブジェクトを引数にとるが、与えられたオブジェクトは
+遠隔ホストに結び付けられていなかった。
 </DL>
 </P><P>
 
@@ -960,9 +960,9 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX170"></A>
 </P><P>
 
-<CODE>EB_BookList</CODE> ���֥������ȤȽ��Ҥ������ֹ��ؿ����Ϥ��줿����
-<CODE>EB_BookList</CODE> �˷���դ���줿��֥ۥ��Ⱦ�ˤϡ����������ֹ�˳���
-������Ҥ�¸�ߤ��ʤ���
+<CODE>EB_BookList</CODE> オブジェクトと書籍の要素番号を関数に渡されたが、
+<CODE>EB_BookList</CODE> に結び付けられた遠隔ホスト上には、その要素番号に該当
+する書籍は存在しない。
 </DL>
 </P><P>
 
@@ -980,12 +980,12 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 6.5 �ؿ��ξܺ� </H2>
+<H2> 6.5 関数の詳細 </H2>
 <!--docid::SEC28::-->
 <P>
 
-��������������Ƥ���ؿ���Ȥ��ˤϡ����Τ褦�˥إå��ե�������ɤ߹����
-��������
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/error.h&#62;
@@ -997,12 +997,12 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX172"></A>
 </P><P>
 
-�ؿ� <CODE>eb_error_string()</CODE> �ϡ����顼������ <VAR>error_code</VAR> ��ʸ����
-���Ѵ�������Τ��֤��ޤ���
-ʸ�����ʸ�������ɤϡ�ASCII �ˤʤ�ޤ���
-���Ȥ��С����顼�������� <CODE>EB_SUCCESS</CODE> ���Ϥ���ʸ����
-<SAMP>`"EB_SUCCESS"'</SAMP> ���֤��ޤ���
-̤�ΤΥ��顼�����ɤ��Ϥ����Ȥ��ϡ�<SAMP>`"EB_ERR_UNKNOWN"'</SAMP> ���֤��ޤ���
+関数 <CODE>eb_error_string()</CODE> は、エラーコード <VAR>error_code</VAR> を文字列
+に変換したものを返します。
+文字列の文字コードは、ASCII になります。
+たとえば、エラーコード値 <CODE>EB_SUCCESS</CODE> を渡すと文字列
+<SAMP>`"EB_SUCCESS"'</SAMP> を返します。
+未知のエラーコードを渡したときは、<SAMP>`"EB_ERR_UNKNOWN"'</SAMP> を返します。
 </DL>
 </P><P>
 
@@ -1012,30 +1012,30 @@ appendix �����ܤ��Ĥ���äƤ��ʤ���
 <DD><A NAME="IDX174"></A>
 </P><P>
 
-�ؿ� <CODE>eb_error_message()</CODE> �ϡ����顼������ <VAR>error_code</VAR> ���б�
-������å�������ʸ����ˤ����֤��ޤ���
-�ؿ����֤���å������ϡ��Ѹ줫���ܸ�ˤʤ�ޤ���
+関数 <CODE>eb_error_message()</CODE> は、エラーコード <VAR>error_code</VAR> に対応
+したメッセージを文字列にして返します。
+関数の返すメッセージは、英語か日本語になります。
 </P><P>
 
-��ݲ���ǽ��ͭ���ˤ��� EB �饤�֥��򥳥�ѥ��뤷�Ƥ��ʤ����ϡ����
-�Ѹ�Υ�å��������֤��ޤ���
-���ΤȤ��Υ�å�������ʸ�������ɤϡ�ASCII �ˤʤ�ޤ���
+国際化機能を有効にして EB ライブラリをコンパイルしていない場合は、常に
+英語のメッセージを返します。
+このときのメッセージの文字コードは、ASCII になります。
 </P><P>
 
-��å������ι�ݲ���ǽ (NLS) ��ͭ���ˤ��� EB �饤�֥��򥳥�ѥ���
-�������ϡ��������������˱����Ƥɤ���θ���Υ�å��������֤��Τ�
-����ޤ�ޤ���
-�ޤ���GNU gettext �С������ 0.36 �ʹߤǤ� iconv() ��Ϣ�Ȥ��뤳�Ȥˤ�ꡢ
-��å�������ʸ�������ɤ��������˱������Ѳ����ޤ���
-gettext �� iconv() �Ȥ�Ϣ�Ȥ�Ԥ�ʤ���С��Ѹ�Υ�å������� ASCII��
-���ܸ�Υ�å����������ܸ� EUC �ˤʤ�ޤ���
-���δؿ��θƤӽФ��ˤ�äơ�gettext �Υƥ����ȥɥᥤ���������Ѳ�
-���ޤ���
+メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイル
+した場合は、ロケールの設定に応じてどちらの言語のメッセージを返すのか
+が決まります。
+また、GNU gettext バージョン 0.36 以降では iconv() と連携することにより、
+メッセージの文字コードもロケールに応じて変化します。
+gettext が iconv() との連携を行わなければ、英語のメッセージは ASCII、
+日本語のメッセージは日本語 EUC になります。
+この関数の呼び出しによって、gettext のテキストドメインの設定は変化
+しません。
 </P><P>
 
-̤�ΤΥ��顼�����ɤ��Ϥ����Ȥ����֤���å������ϡ�
-�Ѹ�Ǥ� <SAMP>`"unknown error"'</SAMP>�����ܸ�Ǥ� <SAMP>`"̤�ΤΥ��顼�Ǥ�"'</SAMP>
-�ˤʤ�ޤ���
+未知のエラーコードを渡したときに返すメッセージは、
+英語では <SAMP>`"unknown error"'</SAMP>、日本語では <SAMP>`"未知のエラーです"'</SAMP>
+になります。
 </DL>
 </P><P>
 

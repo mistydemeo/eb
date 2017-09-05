@@ -5,28 +5,28 @@
 <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
 <link rel="stylesheet" type="text/css" href="eb.css">
 <link rev="made" href="mailto:m-kasahr@sra.co.jp">
-<title>EB �饤�֥��</title>
+<title>EB ライブラリ</title>
 </head>
 
 <body>
 <p>
-[<a href="eb-03.html">����</a>] [<a href="eb-05.html">����</a>] [<a href="eb.html#toc">�ܼ�</a>] 
+[<a href="eb-03.html">前へ</a>] [<a href="eb-05.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
 </p>
 <hr>
-<h2><a name="init-and-exit">�饤�֥��ν�����ȸ����</a></h2>
+<h2><a name="init-and-exit">ライブラリの初期化と後始末</a></h2>
 
 <p>
-���ξϤ���ϡ�EB �饤�֥��Υץ�����ߥ󥰤ˤĤ��Ƥβ���ˤʤ�ޤ���
+この章からは、EB ライブラリのプログラミングについての解説になります。
 </p>
 
 <p>
-�ޤ������ץꥱ�������ץ�����फ�� EB �饤�֥������Ѥ���ˤϡ�
-�ǽ�˥饤�֥�����������ɬ�פ�����ޤ���
+まず、アプリケーションプログラムから EB ライブラリを利用するには、
+最初にライブラリを初期化する必要があります。
 </p>
 
 <p>
-�饤�֥��ν������Ԥ��ˤϡ�<code>eb_initialize_library()</code>
-�Ȥ����ؿ���ƤӽФ��ޤ���
+ライブラリの初期化を行うには、<code>eb_initialize_library()</code>
+という関数を呼び出します。
 </p>
 
 <blockquote class="program">
@@ -39,8 +39,8 @@ if (eb_initialize_library() != EB_SUCCESS) {
 </blockquote>
 
 <p>
-Ʊ�ͤˡ��饤�֥���Ȥ�����ä��顢<code>eb_finalize_library()</code>
-�Ȥ����ؿ���ƤӽФ��Ƹ�����򤷤ޤ���
+同様に、ライブラリを使い終わったら、<code>eb_finalize_library()</code>
+という関数を呼び出して後始末をします。
 </p>
 
 <blockquote class="program">
@@ -51,7 +51,7 @@ eb_finalize_library();
 
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="init-and-exit-sample">����ץ�ץ������</a></h3>
+<h3><a name="init-and-exit-sample">サンプルプログラム</a></h3>
 
 <blockquote>
 <pre>
@@ -84,13 +84,13 @@ eb_finalize_library();
  */
 
 /*
- * ������ˡ:
+ * 使用方法:
  *     initexit
- * ��:
+ * 例:
  *     initexit
- * ����:
- *     EB �饤�֥��ν������������򤷤Ƥߤޤ���
- *     �ץ������γ�¦���鸫��С�����ϲ��ΰ�̣��ʤ�ư��Ǥ���
+ * 説明:
+ *     EB ライブラリの初期化、後始末をしてみます。
+ *     プログラムの外側から見れば、これは何の意味もない動作です。
  */
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -103,7 +103,7 @@ main(int argc, char *argv[])
 {
     EB_Error_Code error_code;
 
-    /* EB �饤�֥���������*/
+    /* EB ライブラリを初期化。*/
     error_code = eb_initialize_library();
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
@@ -111,7 +111,7 @@ main(int argc, char *argv[])
         exit(1);
     }
 
-    /* EB �饤�֥������Ѥ�λ��*/
+    /* EB ライブラリの利用を終了。*/
     eb_finalize_library();
     exit(0);
 }
@@ -119,10 +119,10 @@ main(int argc, char *argv[])
 </blockquote>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="init-and-exit-functions">�ؿ��ξܺ�</a></h3>
+<h3><a name="init-and-exit-functions">関数の詳細</a></h3>
 
 <p>
-���ι���������Ƥ���ؿ���Ȥ��ˤϡ�<code>eb/eb.h</code> ���ɤ߹���ǲ�������
+この項で説明している関数を使うには、<code>eb/eb.h</code> を読み込んで下さい。
 </p>
 
 <blockquote class="program">
@@ -135,56 +135,56 @@ main(int argc, char *argv[])
 <h4><a name="func:initialize_library"><code>EB_Error_Code eb_initialize_library ()</code></a></h4>
 
 <p>
-�ؿ� <code>eb_initialize_library()</code> �ϡ�EB �饤�֥����������ޤ���
-���ץꥱ�������ץ������ϡ�EB �饤�֥���¾�δؿ���Ƥ����ˡ�ɬ��
-���������δؿ���Ƥ�ɬ�פ�����ޤ���
+関数 <code>eb_initialize_library()</code> は、EB ライブラリを初期化します。
+アプリケーションプログラムは、EB ライブラリの他の関数を呼ぶ前に、必ず
+一回だけこの関数を呼ぶ必要があります。
 </p>
 
 <p>
-��å������ι�ݲ���ǽ (NLS) ��ͭ���ˤ��� EB �饤�֥��򥳥�ѥ���
-������硢<code>eb_initialize_library()</code> �� <code>bindtextdomain()</code> ��
-�ƤӽФ��ޤ���
-�������äơ����ץꥱ�������ץ�����ब <code>setlocale()</code> ��
-�ƤӽФ��Τϡ����δؿ���ƤӽФ����Ǥ���ɬ�פ�����ޤ���
+メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイル
+した場合、<code>eb_initialize_library()</code> は <code>bindtextdomain()</code> を
+呼び出します。
+したがって、アプリケーションプログラムが <code>setlocale()</code> を
+呼び出すのは、この関数を呼び出す前である必要があります。
 </p>
 
 <p>
-��������ȡ��ؿ��� <code>EB_SUCCESS</code> ���֤��ޤ���
-���Ԥ���ȡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、原因を示すエラーコードを返します。
 </p>
 
 <p>
-�饤�֥������������ˡ�EB �饤�֥���¾�δؿ���Ƥ������ư���
-̤����Ǥ���
-�ޤ������Ǥ˽������Ѥޤ������֤ǡ����� <code>eb_initialize_library()</code>
-��Ƥ�Ǥ⤤���ޤ���
-�Ƥ������ư���̤����Ǥ���
+ライブラリを初期化せずに、EB ライブラリの他の関数を呼んだ場合の動作は
+未定義です。
+また、すでに初期化を済ませた状態で、再度 <code>eb_initialize_library()</code>
+を呼んでもいけません。
+呼んだ場合の動作は未定義です。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:finalize_library"><code>void eb_finalize_library ()</code></a></h4>
 
 <p>
-�ؿ� <code>eb_finalize_library()</code> �ϡ�EB �饤�֥���Ȥ�����ä�
-�ݤθ������Ԥ��ޤ���
-�����������ץꥱ�������ץ������¦�ǻ��Ѥ���
-<code>EB_Book</code>��<code>EB_Hookset</code>��<code>EB_Appendix</code> ���֥������Ȥθ�����ϹԤ��ޤ���
-���֥������Ȥ���������ˤϡ����줾�����Ѥδؿ�
-<code>eb_finalize_book()</code>��<code>eb_finalize_hookset()</code>��
-<code>eb_finalize_appendix()</code> ��ƥ��֥������Ȥ��Ф�������
-�Ƥ�Ǥ��ɬ�פ�����ޤ���
+関数 <code>eb_finalize_library()</code> は、EB ライブラリを使い終わった
+際の後始末を行います。
+ただし、アプリケーションプログラム側で使用した
+<code>EB_Book</code>、<code>EB_Hookset</code>、<code>EB_Appendix</code> オブジェクトの後始末は行いません。
+オブジェクトを後始末するには、それぞれ専用の関数
+<code>eb_finalize_book()</code>、<code>eb_finalize_hookset()</code>、
+<code>eb_finalize_appendix()</code> を各オブジェクトに対して別途
+呼んでやる必要があります。
 </p>
 
 <p>
-�饤�֥��θ�����򤷤���ϡ�EB �饤�֥��Τ����ʤ�ؿ���Ƥ�Ǥ�
-�����ޤ���
-�Ƥ������ư���̤����Ǥ���
+ライブラリの後始末をした後は、EB ライブラリのいかなる関数も呼んでは
+いけません。
+呼んだ場合の動作は未定義です。
 </p>
 
 <!-- ================================================================ -->
 <hr>
 <p>
-[<a href="eb-03.html">����</a>] [<a href="eb-05.html">����</a>] [<a href="eb.html#toc">�ܼ�</a>] 
+[<a href="eb-03.html">前へ</a>] [<a href="eb-05.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
 </p>
 </body>
 </html>

@@ -35,21 +35,21 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebappendix-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 3. appendix ������ </H1>
+<H1> 3. appendix の生成 </H1>
 <!--docid::SEC11::-->
 <P>
 
-appendix �Υ������ǡ������񤱤��顢<CODE>ebappendix</CODE> ���ޥ�ɤ��Ѥ���
-�ºݤ� (�Х��ʥ������) appendix ���������ޤ���
+appendix のソースデータが書けたら、<CODE>ebappendix</CODE> コマンドを用いて
+実際の (バイナリ形式の) appendix を生成します。
 </P><P>
 
-�ʲ������ξϤǤ� <CODE>ebappendix</CODE> �μ¹���ˡ�ˤĤ��ƾܤ����������ޤ���
+以下、この章では <CODE>ebappendix</CODE> の実行方法について詳しく説明します。
 </P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebappendix-ja_3.html#SEC12">3.1 <CODE>ebappendix</CODE> �μ¹�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebappendix-ja_3.html#SEC13">3.2 appendix �� CD-ROM ���ҤνŤ͹�碌</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebappendix-ja_3.html#SEC14">3.3 <CODE>ebappendix</CODE> �Υ��ץ����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebappendix-ja_3.html#SEC12">3.1 <CODE>ebappendix</CODE> の実行</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebappendix-ja_3.html#SEC13">3.2 appendix と CD-ROM 書籍の重ね合わせ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebappendix-ja_3.html#SEC14">3.3 <CODE>ebappendix</CODE> のオプション</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -67,39 +67,39 @@ appendix �Υ������ǡ������񤱤��顢<CODE>ebappendix</CODE> ���ޥ�ɤ��Ѥ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebappendix-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 3.1 <CODE>ebappendix</CODE> �μ¹� </H2>
+<H2> 3.1 <CODE>ebappendix</CODE> の実行 </H2>
 <!--docid::SEC12::-->
 <P>
 
-<CODE>ebappendix</CODE> �ΰ���Ū�ʵ�ư��ˡ�ϼ����̤�Ǥ���
+<CODE>ebappendix</CODE> の一般的な起動方法は次の通りです。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebappendix <VAR>���ϥǥ��쥯�ȥ�Υѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebappendix <VAR>入力ディレクトリのパス</VAR>
 </pre></td></tr></table></P><P>
 
-<VAR>���ϥǥ��쥯�ȥ�Υѥ�</VAR> �ˤϡ��ɤ߹��� appendix �������ǡ�����
-�ǥ��쥯�ȥꡢ�Ĥޤ� <TT>`catalog.app'</TT> �ޤ��� <TT>`catalogs.app'</TT> 
-�ե����뤬¸�ߤ���ǥ��쥯�ȥ����ꤷ�ޤ���
-��ά�������ϡ������ȥǥ��쥯�ȥ����ꤷ���Ȥߤʤ���ޤ���
+<VAR>入力ディレクトリのパス</VAR> には、読み込む appendix ソースデータの
+ディレクトリ、つまり <TT>`catalog.app'</TT> または <TT>`catalogs.app'</TT> 
+ファイルが存在するディレクトリを指定します。
+省略した場合は、カレントディレクトリを指定したとみなされます。
 </P><P>
 
-ɸ��Ǥϡ����ϥե�����ϥ����ȥǥ��쥯�ȥ�˺�������ޤ���
+標準では、出力ファイルはカレントディレクトリに作成されます。
 </P><P>
 
-<SAMP>`--output-directory'</SAMP> ���ץ�������ꤹ�뤳�Ȥǡ�<CODE>ebappendix</CODE>
-�ϥ����ȥǥ��쥯�ȥ�ʳ��ξ��˽��Ϥ��뤳�Ȥ��Ǥ��ޤ���
+<SAMP>`--output-directory'</SAMP> オプションを指定することで、<CODE>ebappendix</CODE>
+はカレントディレクトリ以外の場所に出力することができます。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebappendix --output-directory <VAR>���ϥǥ��쥯�ȥ�Υѥ�</VAR> \
-  <VAR>���ϥǥ��쥯�ȥ�Υѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebappendix --output-directory <VAR>出力ディレクトリのパス</VAR> \
+  <VAR>入力ディレクトリのパス</VAR>
 </pre></td></tr></table></P><P>
 
-�⤷���ϥǥ��쥯�ȥ꤬¸�ߤ��Ƥ��ʤ���С���ưŪ�� <CODE>ebappendix</CODE>
-���������ޤ���
+もし出力ディレクトリが存在していなければ、自動的に <CODE>ebappendix</CODE>
+が生成します。
 </P><P>
 
-�¹Ԥ���ȡ�<CODE>ebappendix</CODE> �Ͻ��ϥǥ��쥯�ȥ�β��˥��֥ǥ��쥯�ȥ�
-���ꡢ�����Ĥ��Υե�������������ޤ���
+実行すると、<CODE>ebappendix</CODE> は出力ディレクトリの下にサブディレクトリ
+を作り、いくつかのファイルを生成します。
 </P><P>
 
 <A NAME="Merge Appendix"></A>
@@ -116,33 +116,33 @@ appendix �Υ������ǡ������񤱤��顢<CODE>ebappendix</CODE> ���ޥ�ɤ��Ѥ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebappendix-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 3.2 appendix �� CD-ROM ���ҤνŤ͹�碌 </H2>
+<H2> 3.2 appendix と CD-ROM 書籍の重ね合わせ </H2>
 <!--docid::SEC13::-->
 <P>
 
-HDD ��˥��ԡ����� CD-ROM ���Ҥ�Ʊ���ǥ��쥯�ȥ�ˡ�appendix ��Ťͤ�
-�֤����Ȥ��Ǥ��ޤ���
+HDD 上にコピーした CD-ROM 書籍と同じディレクトリに、appendix を重ねて
+置くことができます。
 </P><P>
 
-����ˤϡ�<CODE>ebappendix</CODE> �� <SAMP>`--output-directory'</SAMP> ��
-<SAMP>`--no-catalog'</SAMP> ���ץ�����Ȥ��ޤ���
-<SAMP>`--output-directory'</SAMP> ���ץ����ˤϡ�CD-ROM ���ҤΥȥåץǥ��쥯�ȥ�
-����ꤷ�ޤ���
+これには、<CODE>ebappendix</CODE> の <SAMP>`--output-directory'</SAMP> と
+<SAMP>`--no-catalog'</SAMP> オプションを使います。
+<SAMP>`--output-directory'</SAMP> オプションには、CD-ROM 書籍のトップディレクトリ
+を指定します。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebappendix --no-catalog --output-directory <VAR>���ϥǥ��쥯�ȥ�Υѥ�</VAR> \
-  <VAR>���ϥǥ��쥯�ȥ�Υѥ�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebappendix --no-catalog --output-directory <VAR>出力ディレクトリのパス</VAR> \
+  <VAR>入力ディレクトリのパス</VAR>
 </pre></td></tr></table></P><P>
 
-�ʤ���appendix �η��� (�Żҥ֥å��� EPWING ��) �� CD-ROM ���Ҥ˹�碌��
-�褦�ˤ��ޤ�
-(�ܤ����� ��<A HREF="ebappendix-ja_2.html#SEC6"><CODE>catalog(s).app</CODE> �ν���</A>����򻲾�)��
+なお、appendix の形式 (電子ブックか EPWING か) は CD-ROM 書籍に合わせる
+ようにします
+(詳しくは 「<A HREF="ebappendix-ja_2.html#SEC6"><CODE>catalog(s).app</CODE> の書き方</A>」節を参照)。
 </P><P>
 
-<CODE>ebappendix</CODE> �μ¹������ CD-ROM ���ҤΥǥ��쥯�ȥ깽�����ɤΤ褦��
-�Ѳ�����Τ�����򵭤��Ƥߤޤ���
-�ޤ��Żҥ֥å��ξ��Ǥ������¹����Υǥ��쥯�ȥ깽�������Τ褦��
-�ʤäƤ����Ȥ��ޤ���
+<CODE>ebappendix</CODE> の実行前後で CD-ROM 書籍のディレクトリ構成がどのように
+変化するのか、例を記してみます。
+まず電子ブックの場合ですが、実行前のディレクトリ構成が次のように
+なっていたとします。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>catalog
@@ -150,19 +150,19 @@ ejdict/start
 howto/start
 </pre></td></tr></table></P><P>
 
-<CODE>ebappendix</CODE> �� appendix ��Ť͹�碌��ȡ����Τ褦�ʹ�����
-�ʤ�ޤ���
+<CODE>ebappendix</CODE> で appendix を重ね合わせると、次のような構成に
+なります。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>catalog
 ejdict/start
-ejdict/appendix  �� appendix �Υե�����
+ejdict/appendix  ← appendix のファイル
 howto/start
-howto/appendix   �� appendix �Υե�����
+howto/appendix   ← appendix のファイル
 </pre></td></tr></table></P><P>
 
-Ʊ�ͤˡ�EPWING �Ǽ¹����Υǥ��쥯�ȥ깽�������Τ褦�ˤʤäƤ�����
-����ȡ�
+同様に、EPWING で実行前のディレクトリ構成が次のようになっていたと
+すると、
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>catalogs
@@ -170,34 +170,34 @@ ejdict/data/honmon
 howto/data/honmon
 </pre></td></tr></table></P><P>
 
-�¹Ը�ϡ����Τ褦�ʹ����ˤʤ�ޤ���
+実行後は、次のような構成になります。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>catalogs
 ejdict/data/honmon
-ejdict/data/furoku  �� appendix �Υե�����
+ejdict/data/furoku  ← appendix のファイル
 howto/data/honmon
-howto/data/furoku   �� appendix �Υե�����
+howto/data/furoku   ← appendix のファイル
 </pre></td></tr></table></P><P>
 
-CD-ROM ���Ҥˤ�äƤϡ��ǥ��쥯�ȥ�̾����ʸ���������äƤ��뤳�Ȥ�
-����ޤ�����<CODE>ebappendix</CODE> �Ϥ���򸡽Ф��ޤ��Τǡ�̾����ʸ����
-�Ѥ����ǥ��쥯�ȥ�����Ӻ�äƤ��ޤ����ȤϤ���ޤ���
+CD-ROM 書籍によっては、ディレクトリ名に大文字が混じっていることが
+ありますが、<CODE>ebappendix</CODE> はそれを検出しますので、名前を小文字に
+変えたディレクトリを別途作ってしまうことはありません。
 </P><P>
 
-<SAMP>`--no-catalog'</SAMP> ���ץ�������ꤹ��ȡ�<CODE>ebappendix</CODE> ��
-���������ե����� <TT>`catalog'</TT> �� <TT>`catalogs'</TT> �ե�������������ʤ�
-�ʤ�ޤ���
-���� appendix �� EB �饤�֥��Υ��ץꥱ������󤫤�Ȥ��ݤϡ�
-CD-ROM ���Ҥ˺ǽ餫���Ѱդ���Ƥ��� <TT>`catalog'</TT> �� <TT>`catalogs'</TT>
-�ե������ CD-ROM ���ҡ�appendix ���ѤΥ��������ե�����Ȥ���ή�Ѥ���
-���Ȥˤʤ�ޤ���
+<SAMP>`--no-catalog'</SAMP> オプションを指定すると、<CODE>ebappendix</CODE> は
+カタログファイル <TT>`catalog'</TT> や <TT>`catalogs'</TT> ファイルを生成しなく
+なります。
+この appendix を EB ライブラリのアプリケーションから使う際は、
+CD-ROM 書籍に最初から用意されている <TT>`catalog'</TT> や <TT>`catalogs'</TT>
+ファイルを CD-ROM 書籍、appendix 共用のカタログファイルとして流用する
+ことになります。
 </P><P>
 
-appendix �Υ��������ե�����ϡ�CD-ROM ���ҤΥ��������ե��������ʬ����
-�ȤʤäƤ��뤿�ᡢ��������������ǽ�ȤʤäƤ��ޤ���
-<SAMP>`--no-catalog'</SAMP> ���ץ�������ꤷ˺���ȡ�<CODE>ebappendix</CODE> ��
-CD-ROM ���ҤΥ��������ե�������񤭤��Ƥ��ޤ��ޤ��Τǡ����դ��Ʋ�������
+appendix のカタログファイルは、CD-ROM 書籍のカタログファイルの部分集合
+となっているため、こうした事が可能となっています。
+<SAMP>`--no-catalog'</SAMP> オプションを指定し忘れると、<CODE>ebappendix</CODE> は
+CD-ROM 書籍のカタログファイルを上書きしてしまいますので、注意して下さい。
 </P><P>
 
 <A NAME="Options to ebappendix"></A>
@@ -214,68 +214,68 @@ CD-ROM ���ҤΥ��������ե�������񤭤��Ƥ��ޤ��ޤ��Τǡ����դ��Ʋ�������
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebappendix-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 3.3 <CODE>ebappendix</CODE> �Υ��ץ���� </H2>
+<H2> 3.3 <CODE>ebappendix</CODE> のオプション </H2>
 <!--docid::SEC14::-->
 <P>
 
-<CODE>ebappendix</CODE> ���ޥ�ɤϡ�����Ū�ʰ�ʸ�����ץ����̾�ȳФ��䤹��Ĺ��
-���ץ����̾��ξ���򰷤����Ȥ��Ǥ��ޤ���
-Ĺ�����ץ����̾��ɽ���ˤϡ�<SAMP>`-'</SAMP> �ǤϤʤ� <SAMP>`--'</SAMP> ���Ѥ��ޤ���
-���ץ����̾����դ˷�ޤ��ϰ���ǡ�̾���θ�����ʬ���ά���뤳�Ȥ��Ǥ���
-����
+<CODE>ebappendix</CODE> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<SAMP>`-'</SAMP> ではなく <SAMP>`--'</SAMP> を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
 </P><P>
 
 <DL COMPACT>
-<DT><CODE>-b <VAR>���Ҥη���</VAR></CODE>
+<DT><CODE>-b <VAR>書籍の形式</VAR></CODE>
 <DD><DT><CODE>--book-type</CODE>
-<DD>appendix ���Żҥ֥å���EPWING �Τɤ���η����Υ쥤�����Ȥ˻����ƺ��
-�Τ�����ꤷ�ޤ���
-�Żҥ֥å������ʤ� <CODE>eb</CODE>��EPWING �����ʤ� <CODE>epwing</CODE> �Ȼ��ꤷ�ޤ���
+<DD>appendix を電子ブック、EPWING のどちらの形式のレイアウトに似せて作る
+のかを指定します。
+電子ブック形式なら <CODE>eb</CODE>、EPWING 形式なら <CODE>epwing</CODE> と指定します。
 <P>
 
-���Υ��ץ�������ꤷ�ʤ��ä���硢�������ΤǤɤ���η�������������
-�Τ��������ꤵ��ޤ���
-�ޤ������ϥǥ��쥯�ȥ�� <CODE>catalog.app</CODE> �ե����뤬¸�ߤ���Ф��줬
-�ɤ߹��ޤ졢�Żҥ֥å������� appendix ����������ޤ���
-<CODE>catalog.app</CODE> ���ʤ�������� <CODE>catalogs.app</CODE> ��¸�ߤ����
-���줬�ɤ߹��ޤ졢EPWING ������ appendix ����������ޤ���
-(<CODE>catalogs.app</CODE> �� <CODE>catalog.app</CODE> �ʤ���С����顼�ˤʤ�ޤ���)
+このオプションを指定しなかった場合、次の要領でどちらの形式で生成する
+のかがが決定されます。
+まず、入力ディレクトリに <CODE>catalog.app</CODE> ファイルが存在すればそれが
+読み込まれ、電子ブック形式の appendix が生成されます。
+<CODE>catalog.app</CODE> がなく、代わりに <CODE>catalogs.app</CODE> が存在すれば
+それが読み込まれ、EPWING 形式の appendix が生成されます。
+(<CODE>catalogs.app</CODE> も <CODE>catalog.app</CODE> なければ、エラーになります。)
 </P><P>
 
 <DT><CODE>-d</CODE>
 <DD><DT><CODE>--debug</CODE>
-<DD>�ǥХå��ѤΥ�å�������ɸ�२�顼���Ϥ˽��Ϥ��ޤ���
+<DD>デバッグ用のメッセージを、標準エラー出力に出力します。
 <P>
 
 <DT><CODE>-h</CODE>
 <DD><DT><CODE>--help</CODE>
-<DD>�إ�ץ�å�������ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+<DD>ヘルプメッセージを標準出力に出力して、終了します。
 <P>
 
 <DT><CODE>-n</CODE>
 <DD><DT><CODE>--no-catalog</CODE>
-<DD>���������ե����� (<CODE>catalog</CODE> ����� <CODE>catalogs</CODE>) ���������ޤ���
-���Υ��ץ����ϡ����Ҥ� appendix ��Ʊ���ǥ��쥯�ȥ�˽Ť͹�碌��ݤ�
-ͭ���Ǥ�
-(�ܤ����� ��<A HREF="ebappendix-ja_3.html#SEC13">appendix �� CD-ROM ���ҤνŤ͹�碌</A>����򻲾�)��
+<DD>カタログファイル (<CODE>catalog</CODE> および <CODE>catalogs</CODE>) を生成しません。
+このオプションは、書籍と appendix を同じディレクトリに重ね合わせる際に
+有効です
+(詳しくは 「<A HREF="ebappendix-ja_3.html#SEC13">appendix と CD-ROM 書籍の重ね合わせ</A>」節を参照)。
 <P>
 
-<DT><CODE>-o <VAR>�ǥ��쥯�ȥ�</VAR></CODE>
-<DD><DT><CODE>--output-directory <VAR>�ǥ��쥯�ȥ�</VAR></CODE>
-<DD>������Υǥ��쥯�ȥ����ꤷ�ޤ���
-���Υ��ץ������ά����ȡ������ȥǥ��쥯�ȥ� (<CODE>.</CODE>) �˽��Ϥ��ޤ���
-�ǥ��쥯�ȥ꤬¸�ߤ��ʤ���С���ưŪ����������ޤ���
+<DT><CODE>-o <VAR>ディレクトリ</VAR></CODE>
+<DD><DT><CODE>--output-directory <VAR>ディレクトリ</VAR></CODE>
+<DD>出力先のディレクトリを指定します。
+このオプションを省略すると、カレントディレクトリ (<CODE>.</CODE>) に出力します。
+ディレクトリが存在しなければ、自動的に生成されます。
 <P>
 
 <DT><CODE>-t</CODE>
 <DD><DT><CODE>--test</CODE>
-<DD>�ե��������Ϥ��ޤ���
-���ϥե�������ɤ߹���ǡ����ƤΥ����å�������Ԥ��ޤ���
+<DD>ファイルを出力しません。
+入力ファイルを読み込んで、内容のチェックだけを行います。
 <P>
 
 <DT><CODE>-v</CODE>
 <DD><DT><CODE>--version</CODE>
-<DD>�С�������ֹ��ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+<DD>バージョン番号を標準出力に出力して、終了します。
 </DL>
 <P>
 

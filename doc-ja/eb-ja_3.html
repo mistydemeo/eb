@@ -35,44 +35,44 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 3. �ץ������Υ���ѥ�����ˡ </H1>
+<H1> 3. プログラムのコンパイル方法 </H1>
 <!--docid::SEC10::-->
 <P>
 
-�ܾϤǤϡ�EB �饤�֥������Ѥ����ץ������Υ���ѥ�����ˡ���������ޤ���
+本章では、EB ライブラリを利用したプログラムのコンパイル方法を説明します。
 </P><P>
 
-EB �饤�֥��� <TT>`/usr/local'</TT> �˥��󥹥ȡ��뤷���ġ��Υե������
-���󥹥ȡ�������ѹ����Ƥ��ʤ���С��إå��ե������
-<TT>`/usr/local/include/eb'</TT> �˥��󥹥ȡ��뤵�졢�饤�֥��ե������
-<TT>`/usr/local/lib'</TT> �˥��󥹥ȡ��뤵��ޤ���
-EB �饤�֥������Ѥ������ץꥱ�������ץ��������������ݤϡ�
-�����Υե��������Ѥ��뤳�Ȥˤʤ�ޤ���
+EB ライブラリを <TT>`/usr/local'</TT> にインストールし、個々のファイルの
+インストール先を変更していなければ、ヘッダファイルは
+<TT>`/usr/local/include/eb'</TT> にインストールされ、ライブラリファイルは
+<TT>`/usr/local/lib'</TT> にインストールされます。
+EB ライブラリを利用したアプリケーションプログラムを作成する際は、
+これらのファイルを使用することになります。
 </P><P>
 
-EB �饤�֥��Υإå��ե�����ΰ����ˤϡ�GNU Autoconf �λ��Ѥ�����
-�Ȥ������Ҥ��ޤޤ�Ƥ��ꡢAutoconf ��ʻ�Ѥ��ʤ��ȥץ�����ब������
-����ѥ���Ǥ��ޤ���
+EB ライブラリのヘッダファイルの一部には、GNU Autoconf の使用を前提
+とした記述が含まれており、Autoconf を併用しないとプログラムが正しく
+コンパイルできません。
 </P><P>
 
-��������EB �饤�֥��γ��פ����򤹤뤿��Υץ������ˡ��虜�虜
-Autoconf ����Ѥ���Τ����ѤǤ���
-�����Ǥޤ���Autoconf ��Ȥ鷺�ˤƤäȤ��᤯����ѥ��뤹����ˡ��Ҳ�
-���ޤ���
+しかし、EB ライブラリの概要を理解するためのプログラムに、わざわざ
+Autoconf を使用するのは大変です。
+そこでまず、Autoconf を使わずにてっとり早くコンパイルする方法を紹介
+します。
 </P><P>
 
-���θ�ǡ�Autoconf ��ʻ�Ѥ�����ˡ�ˤĤ��Ƥ��������ޤ���
-�ե꡼���եȥ������Ȥ��ƥ��ץꥱ���������������ʤ顢���������ˡ
-��Ȥ뤳�Ȥ����ᤷ�ޤ���
-Autoconf ��ñ�Τǻ��Ѥ��Ƥ�إå��ե����������ϲ��Ǥ��ޤ�����
-�ܽ�Ǥ� GNU Automake, ����� GNU Libtool �����ʻ�Ѥ�����ˡ�ˤĤ�
-���������Ƥ��ޤ���
+その後で、Autoconf を併用する方法についても説明します。
+フリーソフトウェアとしてアプリケーションを公開するなら、こちらの方法
+をとることをお薦めします。
+Autoconf を単体で使用してもヘッダファイルの問題は解決できますが、
+本書では GNU Automake, および GNU Libtool も一緒に併用した方法につい
+て説明しています。
 </P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_3.html#SEC11">3.1 �ƤäȤ��ᤤ����ѥ�����ˡ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_3.html#SEC12">3.2 Autoconf ��ʻ�Ѥ�������ѥ�����ˡ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_3.html#SEC13">3.3 EB �饤�֥�����ΤΥǥХå�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_3.html#SEC11">3.1 てっとり早いコンパイル方法</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_3.html#SEC12">3.2 Autoconf を併用したコンパイル方法</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_3.html#SEC13">3.3 EB ライブラリ本体のデバッグ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -90,111 +90,111 @@ Autoconf ��ñ�Τǻ��Ѥ��Ƥ�إå��ե����������ϲ��Ǥ��ޤ�����
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 3.1 �ƤäȤ��ᤤ����ѥ�����ˡ </H2>
+<H2> 3.1 てっとり早いコンパイル方法 </H2>
 <!--docid::SEC11::-->
 <P>
 
-���ץꥱ�������ץ������򥳥�ѥ��뤹��ݤϡ��إå��ե������
-�ǥ��쥯�ȥ���֤� C ����ѥ���˶����Ƥ��ɬ�פ����뤫���Τ�ޤ���
-���̤� UNIX �� C ����ѥ���Ǥϡ�<SAMP>`-I'</SAMP> ���ץ����ǰ��֤���ꤷ�ޤ���
+アプリケーションプログラムをコンパイルする際は、ヘッダファイルの
+ディレクトリ位置を C コンパイラに教えてやる必要があるかも知れません。
+一般に UNIX の C コンパイラでは、<SAMP>`-I'</SAMP> オプションで位置を指定します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>cc -I/usr/local/include -c sample.c
 </pre></td></tr></table></P><P>
 
-<TT>`/usr/local/include/eb'</TT> �ǤϤʤ������ΰ�ľ����ꤷ�ޤ�
-(��<A HREF="eb-ja_2.html#SEC5">�إå��ե�����</A>����򻲾�)��
+<TT>`/usr/local/include/eb'</TT> ではなく、その一つ上を指定します
+(「<A HREF="eb-ja_2.html#SEC5">ヘッダファイル</A>」節を参照)。
 </P><P>
 
-��������EB �饤�֥��� Autoconf ��ʻ�Ѥ��뤳�Ȥ�����Ȥ��Ƥ��뤿�ᡢ
-���ΤޤޤǤϥ���ѥ��륨�顼��ȯ�����Ƥ��ޤ��ޤ���
-�����ǡ�������Ǥ� Autoconf ��ʻ�Ѥ�������ˡ����μ��ǲ��򤷤ޤ���
+ただし、EB ライブラリは Autoconf を併用することを前提としているため、
+そのままではコンパイルエラーが発生してしまいます。
+そこで、この節では Autoconf を併用する代わりに、次の手順で回避します。
 </P><P>
 
 <OL>
-<LI>EB �饤�֥�� 4.0 �Υ��������ɤ�Ÿ�����ޤ���
-<LI>�����������ɤ���°���Ƥ��� <CODE>configure</CODE> ������ץȤ�¹Ԥ��ޤ���
-<CODE>configure</CODE> �Υ��ޥ�ɹ԰����ϡ����󥹥ȡ������Ʊ����Τ����
-���ޤ���
-<LI><TT>`config.h'</TT> �Ȥ����ե����뤬���������Τǡ����ץꥱ�������
-�ץ������Υǥ��쥯�ȥ�˥��ԡ����ޤ���
+<LI>EB ライブラリ 4.0 のソースードを展開します。
+<LI>ソースコードに付属している <CODE>configure</CODE> スクリプトを実行します。
+<CODE>configure</CODE> のコマンド行引数は、インストール時と同じものを指定
+します。
+<LI><TT>`config.h'</TT> というファイルが生成されるので、アプリケーション
+プログラムのディレクトリにコピーします。
 </OL>
 <P>
 
-���ץꥱ�������ץ������Υ������ե�����Ǥϡ����� <TT>`config.h'</TT> 
-���ɤ߹���褦�ˤ��ޤ���
-ɬ���ե�����ΰ�����Ƭ���ɤ߹���ǲ�������
+アプリケーションプログラムのソースファイルでは、この <TT>`config.h'</TT> 
+を読み込むようにします。
+必ずファイルの一番先頭で読み込んで下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include "config.h"
 </pre></td></tr></table></P><P>
 
-�ޤ������ȼ����<TT>`config.h'</TT> �Υǥ��쥯�ȥ���֤���ꤹ�뤿��ˡ�
-C ����ѥ���Υ��ץ����򤵤���ɲä���ɬ�פ����뤫���Τ�ޤ���
+またこれに伴い、<TT>`config.h'</TT> のディレクトリ位置を指定するために、
+C コンパイラのオプションをさらに追加する必要があるかも知れません。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>cc -I. -I/usr/local/include -c sample.c
 </pre></td></tr></table></P><P>
 
-���ˡ���󥯤��Ƽ¹ԥХ��ʥ���������빩���Ǥ�����
-�ʲ��˵������饤�֥��ΰ������⤷�����������󥯤��ޤ���
-�����ϡ��饤�֥��Υե�����̾�Ǥ� (��������<CODE>.a</CODE> �� <CODE>.so</CODE>
-�Ȥ��ä������ҤϾ�ά)��
+次に、リンクして実行バイナリを生成する工程ですが、
+以下に記したライブラリの一部、もしくは全部をリンクします。
+括弧内は、ライブラリのファイル名です (ただし、<CODE>.a</CODE> や <CODE>.so</CODE>
+といった接尾子は省略)。
 </P><P>
 
 <DL COMPACT>
-<DT>EB �饤�֥�� (libeb)
-<DD>EB �饤�֥������ΤǤ������Υ饤�֥���ɬ�ܤǤ���
+<DT>EB ライブラリ (libeb)
+<DD>EB ライブラリの本体です。このライブラリは必須です。
 <P>
 
 <DT>zlib (libz)
-<DD>���̤ȿ�Ĺ��Ԥ��饤�֥��Ǥ�
-(�ܤ����� <A HREF="http://www.gzip.org/zlib/">http://www.gzip.org/zlib/</A>)��
-<CODE>ebzip</CODE> ���ޥ�ɤǰ��̤�������򰷤�����˻Ȥ��ޤ���
-���Υ饤�֥���ɬ�ܤǤ���
-EB �饤�֥��Υ����������ɤˤ� zlib ���Ͽ����Ƥ��ޤ���
-�����ƥ�� zlib �� ���󥹥ȡ��뤵��Ƥ��ʤ���С�EB �饤�֥���
-���󥹥ȡ��뤹��ݤˡ�zlib �⼫ưŪ�˥��󥹥ȡ��뤵��ޤ���
+<DD>圧縮と伸長を行うライブラリです
+(詳しくは <A HREF="http://www.gzip.org/zlib/">http://www.gzip.org/zlib/</A>)。
+<CODE>ebzip</CODE> コマンドで圧縮した辞書を扱うために使います。
+このライブラリは必須です。
+EB ライブラリのソースコードには zlib も収録されています。
+システムに zlib が インストールされていなければ、EB ライブラリを
+インストールする際に、zlib も自動的にインストールされます。
 <P>
 
-<DT>gettext �饤�֥�� (libintl)
-<DD>��å������ι�ݲ���ǽ (NLS) ���󶡤���饤�֥��Ǥ�
-��å������ι�ݲ���ǽ��ͭ���ˤ��� EB �饤�֥��򥳥�ѥ��뤷�Ƥ���
-���ϡ�ɬ�פˤʤ뤫���Τ�ޤ���
-gettext �μ����ϲ����फ����ޤ�����EB �饤�֥��ǻ��ѤǤ���Τ�
-��å��������������η����� GNU gettext �ߴ��Τ�Τ����Ǥ���
+<DT>gettext ライブラリ (libintl)
+<DD>メッセージの国際化機能 (NLS) を提供するライブラリです
+メッセージの国際化機能を有効にして EB ライブラリをコンパイルしている
+場合は、必要になるかも知れません。
+gettext の実装は何種類かありますが、EB ライブラリで使用できるのは
+メッセージカタログの形式が GNU gettext 互換のものだけです。
 <P>
 
-��å������ι�ݲ���ǽ��ͭ���ˤ��Ƥ�����Ǥ⡢OS ��ɸ�� C �饤�֥��
-�Ȥ��� glibc ����Ѥ��Ƥ��륷���ƥ�Ǥϡ����ꤹ��ɬ�פϤ���ޤ���
+メッセージの国際化機能を有効にしている場合でも、OS の標準 C ライブラリ
+として glibc を採用しているシステムでは、指定する必要はありません。
 </P><P>
 
-<DT>iconv �饤�֥��
-<DD>ʸ���������Ѵ��Υ饤�֥��Ǥ���
-gettext �饤�֥����󥯤����硢����ɬ�פȤʤ뤫���Τ�ޤ���
-iconv �μ����ⲿ���फ���ꡢOS �ˤ�äƤϺǽ餫��ź�դ���Ƥ��ޤ���
+<DT>iconv ライブラリ
+<DD>文字コード変換のライブラリです。
+gettext ライブラリをリンクする場合、一緒に必要となるかも知れません。
+iconv の実装も何種類かあり、OS によっては最初から添付されています。
 </DL>
 <P>
 
-ɬ�פʥ饤�֥��ե������̾�Τ�C ����ѥ���˻��ꤷ�Ƥ��ޤ���
-�ä��ơ��ե�������֤���Ƥ���ǥ��쥯�ȥ���֤�C ����ѥ���˶�����
-ɬ�פ����뤫���Τ�ޤ���
-���̤� UNIX �� C ����ѥ���Ǥϡ�<SAMP>`-L'</SAMP> ���ץ����ǥǥ��쥯�ȥ�
-���֤���ꤷ��<SAMP>`-l'</SAMP> ���ץ����ǥ饤�֥��Υե�����̾����ꤷ�ޤ���
+必要なライブラリファイルの名称を、C コンパイラに指定してやります。
+加えて、ファイルの置かれているディレクトリ位置を、C コンパイラに教える
+必要があるかも知れません。
+一般に UNIX の C コンパイラでは、<SAMP>`-L'</SAMP> オプションでディレクトリ
+位置を指定し、<SAMP>`-l'</SAMP> オプションでライブラリのファイル名を指定します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>cc sample.o -L/usr/local/lib -leb -lz -lintl -liconv
 </pre></td></tr></table></P><P>
 
-����������ͭ�饤�֥����󥯤�����ϡ��¹Ի��ˤ�����饤�֥���
-�����ѥ����碌�ƻ��ꤹ��ɬ�פ����뤫���Τ�ޤ���
+ただし、共有ライブラリをリンクする場合は、実行時におけるライブラリの
+検索パスも合わせて指定する必要があるかも知れません。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>cc sample.o -R/usr/local/lib -L/usr/local/lib -leb -lz -lintl -liconv
 </pre></td></tr></table></P><P>
 
-C ����ѥ���λȤ����˴ؤ��Ƥξܺ٤ϡ�C ����ѥ���Υޥ˥奢��򻲾�
-���Ʋ�������
+C コンパイラの使い方に関しての詳細は、C コンパイラのマニュアルを参照
+して下さい。
 </P><P>
 
 <A NAME="Compilation with Autoconf"></A>
@@ -211,79 +211,79 @@ C ����ѥ���λȤ����˴ؤ��Ƥξܺ٤ϡ�C ����ѥ���Υޥ˥奢��򻲾�
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 3.2 Autoconf ��ʻ�Ѥ�������ѥ�����ˡ </H2>
+<H2> 3.2 Autoconf を併用したコンパイル方法 </H2>
 <!--docid::SEC12::-->
 <P>
 
-��Ȥ����ˡ�Autoconf, Automake, Libtool �ϡ����餫���ᥤ�󥹥ȡ��뤷��
-�����Ʋ�������
-Autoconf �ϥС������ 2.50 �ʹߤ�ɬ�פǤ���
+作業の前に、Autoconf, Automake, Libtool は、あらかじめインストールして
+おいて下さい。
+Autoconf はバージョン 2.50 以降が必要です。
 </P><P>
 
-�ޤ������ץꥱ�������ץ������� <TT>`configure.ac'</TT>
-(�⤷���� <TT>`configure.in'</TT>) �ˡ����ιԤ�ä��ޤ���
+まず、アプリケーションプログラムの <TT>`configure.ac'</TT>
+(もしくは <TT>`configure.in'</TT>) に、次の行を加えます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_LIB_EB4
 </pre></td></tr></table></P><P>
 
-�ޥ��� <CODE>eb_LIB_EB4</CODE> �ϡ�EB �饤�֥��λ��Ѥ�ɬ�פʰ��ڤΥ����å�
-��Ԥ�������� <TT>`configure'</TT> �˼��Υ��ץ������ɲä��ޤ���
+マクロ <CODE>eb_LIB_EB4</CODE> は、EB ライブラリの使用に必要な一切のチェック
+を行い、さらに <TT>`configure'</TT> に次のオプションを追加します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>  --with-eb-conf=FILE     eb.conf file is FILE [SYSCONFDIR/eb.conf]
 </pre></td></tr></table></P><P>
 
-<TT>`eb.conf'</TT> �ϡ�EB �饤�֥��򥤥󥹥ȡ��뤷���Ȥ��ξ����Ͽ����
-�ե�����ǡ��饤�֥��Ȱ��˥��󥹥ȡ��뤵��ޤ���
-<CODE>eb_LIB_EB4</CODE> �Ϥ��Υե�������ɤ߹���ǡ�C ����ѥ�����Ϥ��ʤ����
-�����ʤ����ץ����ʤɤξ�������ޤ���
-<SAMP>`--eb-conf-file'</SAMP> �ϡ�<TT>`eb.conf'</TT> �Υե�����̾������Ū�˻��ꤹ��
-���ץ����Ǥ���
+<TT>`eb.conf'</TT> は、EB ライブラリをインストールしたときの情報を記録した
+ファイルで、ライブラリと一緒にインストールされます。
+<CODE>eb_LIB_EB4</CODE> はこのファイルを読み込んで、C コンパイラに渡さなければ
+いけないオプションなどの情報を得ます。
+<SAMP>`--eb-conf-file'</SAMP> は、<TT>`eb.conf'</TT> のファイル名を明示的に指定する
+オプションです。
 </P><P>
 
-�ޥ��� <CODE>eb_LIB_EB4</CODE> �ϡ�<TT>`eb4.m4'</TT> �Ȥ����ե�������󶡤����
-���ޤ���
-EB �饤�֥��� <TT>`/usr/local'</TT> �˥��󥹥ȡ��뤷���ġ��Υե������
-���󥹥ȡ�������ѹ����Ƥ��ʤ���С�<TT>`/usr/local/share/aclocal'</TT> ��
-���󥹥ȡ��뤵��ޤ���
-���� <TT>`eb4.m4'</TT> �򥽡��������ɤ�Ŭ���ʥǥ��쥯�ȥ�β� (���Ȥ���
-<TT>`m4'</TT>) �˥��ԡ����Ʋ�������
+マクロ <CODE>eb_LIB_EB4</CODE> は、<TT>`eb4.m4'</TT> というファイルで提供されて
+います。
+EB ライブラリを <TT>`/usr/local'</TT> にインストールし、個々のファイルの
+インストール先を変更していなければ、<TT>`/usr/local/share/aclocal'</TT> に
+インストールされます。
+この <TT>`eb4.m4'</TT> をソースコードの適当なディレクトリの下 (たとえば
+<TT>`m4'</TT>) にコピーして下さい。
 </P><P>
 
-<CODE>aclocal</CODE> ���ޥ�ɤ� <TT>`aclocal.m4'</TT> �����������ݤϡ�
-<SAMP>`-I'</SAMP> ���ץ����ǥޥ����ե�����Υǥ��쥯�ȥ����ꤷ�ޤ���
+<CODE>aclocal</CODE> コマンドで <TT>`aclocal.m4'</TT> を再生成する際は、
+<SAMP>`-I'</SAMP> オプションでマクロファイルのディレクトリを指定します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>aclocal -I m4
 </pre></td></tr></table></P><P>
 
-�ä��ơ��ȥåץǥ��쥯�ȥ�� <TT>`Makefile.am'</TT> ����ˤ�
-<CODE>aclocal</CODE> ���Ϥ����ץ�����񤤤Ƥ����ޤ���
+加えて、トップディレクトリの <TT>`Makefile.am'</TT> の中にも
+<CODE>aclocal</CODE> へ渡すオプションを書いておきます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>ACLOCAL_AMFLAGS = -I m4
 </pre></td></tr></table></P><P>
 
-�ޤ��������������ɤΥǥ��쥯�ȥ�� Libtool �ѥå��������ޤ��Ѱդ����
-���ʤ���С��Ѱդ��ޤ���
-<CODE>libtoolize</CODE> ���ޥ�ɤ�¹Ԥ��Ʋ�������
-Libtool �ѥå��������������������ɤΥǥ��쥯�ȥ�˥��ԡ�����ޤ���
+また、ソースコードのディレクトリに Libtool パッケージがまだ用意されて
+いなければ、用意します。
+<CODE>libtoolize</CODE> コマンドを実行して下さい。
+Libtool パッケージが、ソースコードのディレクトリにコピーされます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>libtoolize
 </pre></td></tr></table></P><P>
 
-�Ǹ�ˡ�����ѥ����Ԥ��ǥ��쥯�ȥ�� <TT>`Makefile.am'</TT> �ե������
-<CODE>_LDFLAGS</CODE> �� <CODE>INCLUDES</CODE> �ˡ����Τ褦���ͤ��ɲä��ޤ���
+最後に、コンパイルを行うディレクトリの <TT>`Makefile.am'</TT> ファイルの
+<CODE>_LDFLAGS</CODE> と <CODE>INCLUDES</CODE> に、次のような値を追加します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>program_LDFLAGS = $(EBCONF_EBLIBS) $(EBCONF_ZLIBLIBS) $(EBCONF_INTLLIBS)
 INCLUDES = $(EBCONF_EBINCS)
 </pre></td></tr></table></P><P>
 
-(<CODE>program_LDFLAGS</CODE> �� <CODE>program</CODE> �ΤȤ����ϡ�
-���ץꥱ�������ץ������μºݤΥ��ޥ��̾�ˤ��ޤ���)
+(<CODE>program_LDFLAGS</CODE> の <CODE>program</CODE> のところは、
+アプリケーションプログラムの実際のコマンド名にします。)
 </P><P>
 
 <A NAME="Debug EB Library"></A>
@@ -300,19 +300,19 @@ INCLUDES = $(EBCONF_EBINCS)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 3.3 EB �饤�֥�����ΤΥǥХå� </H2>
+<H2> 3.3 EB ライブラリ本体のデバッグ </H2>
 <!--docid::SEC13::-->
 <P>
 
-�ּ�ʬ����ä����ץꥱ�������������ư���ʤ��Τϡ��Ҥ�äȤ����
-EB �饤�֥��ΥХ��������ǤϤʤ���?�פȤ��������������EB �饤�֥��
-�ε�ư���ǧ�������Ȼפ����Ȥ����뤫���Τ�ޤ���
+「自分が作ったアプリケーションが正しく動かないのは、ひょっとすると
+EB ライブラリのバグが原因ではないか?」という疑問を抱き、EB ライブラリ
+の挙動を確認したいと思うことがあるかも知れません。
 </P><P>
 
-���Τ褦�ʾ��ϡ��Ķ��ѿ� <CODE>EB_DEBUG</CODE> �򥻥åȤ������֤�
-���ץꥱ��������¹Ԥ��ƤߤƲ�������
-EB �饤�֥���ɸ�२�顼���Ϥˡ����Τ褦�ʥ����� (���ʤ����̤Ǥ���)
-���Ϥ���褦�ˤʤ�ޤ���
+そのような場合は、環境変数 <CODE>EB_DEBUG</CODE> をセットした状態で
+アプリケーションを実行してみて下さい。
+EB ライブラリは標準エラー出力に、次のようなログを (かなり大量ですが)
+出力するようになります。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>[EB] in: eb_set_font(book=0, font_code=0)
@@ -323,17 +323,17 @@ EB �饤�֥���ɸ�२�顼���Ϥˡ����Τ褦�ʥ����� (���ʤ����̤Ǥ���)
 [EB] out: eb_set_font() = EB_SUCCESS
 </pre></td></tr></table></P><P>
 
-�����Υ����ϡ��ؿ��θƤӽФ����ΰ����󡢤���Ӵؿ����������ͤ�
-�����Ƥ��ޤ���
-<CODE>ebfixlog</CODE> �Ȥ��� Perl5 ������ץȤ�Ȥ��ȡ��������������뤳�Ȥ�
-�Ǥ��ޤ���
-���Υ�����ץȤϡ�EB �饤�֥��Υ����������ɤ� <CODE>misc</CODE> �ǥ��쥯�ȥ�
-�˼�����Ƥ��ޤ���
+これらのログは、関数の呼び出し時の引数列、および関数からの戻り値を
+示しています。
+<CODE>ebfixlog</CODE> という Perl5 スクリプトを使うと、ログを整形することが
+できます。
+このスクリプトは、EB ライブラリのソースコードの <CODE>misc</CODE> ディレクトリ
+に収められています。
 </P><P>
 
-<CODE>ebfixlog</CODE> �ϡ����ޥ�ɹԤΰ����Ȥ���Ϳ����줿�ե����� (������
-���ꤵ��ʤ����ɸ������) �����å������ǡ������ɤ߹��ߡ����Τ褦��
-���������ƽ��Ϥ��ޤ���
+<CODE>ebfixlog</CODE> は、コマンド行の引数として与えられたファイル (引数が
+指定されなければ標準入力) からメッセージデータを読み込み、次のように
+字下げして出力します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>[EB] in: eb_set_font(book=0, font_code=0)
@@ -344,28 +344,28 @@ EB �饤�֥���ɸ�२�顼���Ϥˡ����Τ褦�ʥ����� (���ʤ����̤Ǥ���)
 [EB] out: eb_set_font() = EB_SUCCESS
 </pre></td></tr></table></P><P>
 
-�̾� <CODE>ebfixlog</CODE> ������ץȤϡ�zio ����� ebnet �ȸƤФ�롢
-EB �饤�֥��ǥե����������Ϥ�������Ľ������Υ������ɤ߼ΤƤ�褦��
-�ʤäƤ��ޤ���
-����ˤ�ꡢ�������̤����ʤ긺��ޤ���
+通常 <CODE>ebfixlog</CODE> スクリプトは、zio および ebnet と呼ばれる、
+EB ライブラリでファイル入出力を受け持つ処理部のログは読み捨てるように
+なっています。
+これにより、ログの量がかなり減ります。
 </P><P>
 
-zio �� EB �饤�֥������٥������Ϥν������ǡ����ˤ˸ƤӽФ���ޤ���
-����θ�����Ĵ�٤�ݤ⡢�ޤ����ɤ߼ΤƤ������饤�֥�������ư�������
-���䤹���Ǥ��礦��
+zio は EB ライブラリの低レベル入出力の処理部で、頻繁に呼び出されます。
+問題の原因を調べる際も、まずは読み捨てた方がライブラリの内部動作を追跡
+しやすいでしょう。
 </P><P>
 
-<CODE>ebfixlog</CODE> �� <SAMP>`-z'</SAMP> ���ץ�����Ȥ��ȡ�zio �Υ�å�������
-�ɤ߼ΤƤ��˽��Ϥ���褦�ˤʤ�ޤ���
+<CODE>ebfixlog</CODE> の <SAMP>`-z'</SAMP> オプションを使うと、zio のメッセージを
+読み捨てずに出力するようになります。
 </P><P>
 
-ebnet �ϱ�֥��������������Ϥ����������ʬ�ǡ�zio ���⤵���
-���̥�٥�˰��֤��ޤ���
-��֥��������ε�ư�����פ���Ȥ��ʳ��ϡ��ɤ߼ΤƤ������ɤ��Ȼפ��ޤ���
+ebnet は遠隔アクセスの入出力を処理する部分で、zio よりもさらに
+下位レベルに位置します。
+遠隔アクセスの挙動を追跡するとき以外は、読み捨てた方が良いと思います。
 </P><P>
 
-<CODE>ebfixlog</CODE> �� <SAMP>`-n'</SAMP> ���ץ�����Ȥ��ȡ�ebnet, zio ξ����
-��å��������ɤ߼ΤƤ��˽��Ϥ���褦�ˤʤ�ޤ���
+<CODE>ebfixlog</CODE> の <SAMP>`-n'</SAMP> オプションを使うと、ebnet, zio 両方の
+メッセージを読み捨てずに出力するようになります。
 </P><P>
 
 <A NAME="Init and Exit"></A>

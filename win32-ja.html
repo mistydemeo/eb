@@ -15,52 +15,52 @@
 <!-- ############################################################# -->
 <pre>
 
-		       EB $B%i%$%V%i%j(B Windows $BHG(B
-	    CD-ROM $B=q@R$K%"%/%;%9$9$k$?$a$N(B C $B$N%i%$%V%i%j(B
+		       EB ライブラリ Windows 版
+	    CD-ROM 書籍にアクセスするための C のライブラリ
 
 
-1. $B$O$8$a$K(B
+1. はじめに
 
-EB $B%i%$%V%i%j$O(B CD-ROM $B=q@R$K%"%/%;%9$9$k$?$a$N(B C $B$N%i%$%V%i%j$G$9!#(B
-$B$3$N%=%U%H%&%'%"$O!"$b$H$b$H$O(B UNIX $B7O%7%9%F%`8~$1$K3+H/$5$l$^$7$?!#(B
-$BK\%Q%C%1!<%8$O!"(BEB $B%i%$%V%i%j$r(B Windows $B>e$G(B Visual Studio 6.0 $B$rMQ$$(B
-$B$F%S%k%I$5$;$k$?$a$N%U%!%$%k0l<0$rDs6!$7$^$9!#(B
+EB ライブラリは CD-ROM 書籍にアクセスするための C のライブラリです。
+このソフトウェアは、もともとは UNIX 系システム向けに開発されました。
+本パッケージは、EB ライブラリを Windows 上で Visual Studio 6.0 を用い
+てビルドさせるためのファイル一式を提供します。
 
-EB $B%i%$%V%i%j$O(B EB, EBG, EBXA, EBXA-C, S-EBXA $B$*$h$S(B EPWING $B7A<0$N(B
-CD-ROM $B=q@R$KBP1~$7$F$$$^$9!#$3$l$i$N7A<0$N(B CD-ROM $B=q@R$O!"F|K\$G0lHL(B
-$BE*$K;H$o$l$F$$$^$9!#(BCD-ROM $B=q@R<+BN$O(B ISO 9660 $B7A<0$K$J$C$F$$$^$9$N$G!"(B
-$BB>$N(B ISO 9660 $B7A<0$HF1$8MWNN$G%^%&%s%H$9$k$3$H$,$G$-$^$9!#(B
+EB ライブラリは EB, EBG, EBXA, EBXA-C, S-EBXA および EPWING 形式の
+CD-ROM 書籍に対応しています。これらの形式の CD-ROM 書籍は、日本で一般
+的に使われています。CD-ROM 書籍自体は ISO 9660 形式になっていますので、
+他の ISO 9660 形式と同じ要領でマウントすることができます。
 
-$B$^$?!"(BEB $B%i%$%V%i%j$O4v$D$+$N%f!<%F%j%F%#%3%^%s%I$bDs6!$7$F$$$^$9!#(B
+また、EB ライブラリは幾つかのユーテリティコマンドも提供しています。
 
-	ebfont		CD-ROM $B=q@RFb$N30;z$N%U%)%s%H%G!<%?$r<h$j=P$9(B
-	ebinfo		CD-ROM $B=q@R$K4X$9$k>pJs$r=PNO$9$k(B
-	ebrefile	CD-ROM $B=q@R$N%+%?%m%0%U%!%$%k$r9=@.$7D>$9(B
-	ebstopcode	CD-ROM $B=q@R$NK\J8$N6h@Z$j%3!<%I$r8!::$9$k(B
-	ebunzip		CD-ROM $B=q@R$r?-D9$9$k(B
-	ebzip		CD-ROM $B=q@R$r05=L$9$k(B
-	ebzipinfo	CD-ROM $B=q@R$N05=L>pJs$r=PNO$9$k(B
+	ebfont		CD-ROM 書籍内の外字のフォントデータを取り出す
+	ebinfo		CD-ROM 書籍に関する情報を出力する
+	ebrefile	CD-ROM 書籍のカタログファイルを構成し直す
+	ebstopcode	CD-ROM 書籍の本文の区切りコードを検査する
+	ebunzip		CD-ROM 書籍を伸長する
+	ebzip		CD-ROM 書籍を圧縮する
+	ebzipinfo	CD-ROM 書籍の圧縮情報を出力する
 
-ebappendix $B%3%^%s%I$O(B Perl $B%9%/%j%W%H$N$?$a!"K\%Q%C%1!<%8$G$ODs6!$7$F(B
-$B$$$^$;$s$N$G!"$4Cm0U2<$5$$!#(B
+ebappendix コマンドは Perl スクリプトのため、本パッケージでは提供して
+いませんので、ご注意下さい。
 
-$B%P!<%8%g%s(B 4.0 $B$+$i!"(BEB $B%i%$%V%i%j$OB>$N%[%9%H$N=q@R$K%"%/%;%9$G$-$k(B
-$B$h$&$K$J$j$^$7$?!#1s3V%"%/%;%9MQ$N<1JL;R$r;H$&$3$H$G!"B>%[%9%H>e$N(B
-CD-ROM $B=q@R$r;XDj$9$k$3$H$,$G$-$^$9!#$3$N<1JL;R$O!"<!$N$h$&$J7A<0$r$H(B
-$B$j$^$9!#(B
+バージョン 4.0 から、EB ライブラリは他のホストの書籍にアクセスできる
+ようになりました。遠隔アクセス用の識別子を使うことで、他ホスト上の
+CD-ROM 書籍を指定することができます。この識別子は、次のような形式をと
+ります。
 
-	ebnet://<$B%[%9%H(B>:<$B%]!<%H(B>/<$B=q@RL>(B>	  (CD-ROM $B=q@RK\BN(B)
-	ebnet://<$B%[%9%H(B>:<$B%]!<%H(B>/<$B=q@RL>(B>.app	  ($BIUO?%Q%C%1!<%8(B)
+	ebnet://<ホスト>:<ポート>/<書籍名>	  (CD-ROM 書籍本体)
+	ebnet://<ホスト>:<ポート>/<書籍名>.app	  (付録パッケージ)
 
-<$B%[%9%H(B> $B$O1s3V%[%9%H$N(B IP $B%"%I%l%9$b$7$/$O%[%9%HL>$G$9!#$?$@$7!"(BIPv6
-$B%"%I%l%9$r;XDj$9$k>l9g$O!"%"%I%l%9$r(B `[' $B$H(B `]' $B$G0O$`I,MW$,$"$j$^$9!#(B
-($BCm(B: $B%P%$%J%jG[I[HG$G$O(B IPv4 $B$G$7$+DL?.$G$-$^$;$s!#(B)
+<ホスト> は遠隔ホストの IP アドレスもしくはホスト名です。ただし、IPv6
+アドレスを指定する場合は、アドレスを `[' と `]' で囲む必要があります。
+(注: バイナリ配布版では IPv4 でしか通信できません。)
 
-<$B%]!<%H(B> $B$O!"$=$N%[%9%H$,BT$A<u$1$F$$$k%]!<%H$NHV9f$G$9!#%[%9%H$,BT$A(B
-$B<u$1$F$$$k%]!<%H$,I8=`$N(B 22010 $BHV$G$"$l$P!"(B`:<$B%]!<%H(B>' $B$NItJ,$O>JN,2D(B
-$BG=$G$9!#(B
+<ポート> は、そのホストが待ち受けているポートの番号です。ホストが待ち
+受けているポートが標準の 22010 番であれば、`:<ポート>' の部分は省略可
+能です。
 
-$B0J2<$KNc$r5-$7$^$9!#(B
+以下に例を記します。
 
 	ebnet://eb.example.com/dict
 	ebnet://eb.example.com:22010/dict.app
@@ -69,98 +69,98 @@ CD-ROM $B=q@R$r;XDj$9$k$3$H$,$G$-$^$9!#$3$N<1JL;R$O!"<!$N$h$&$J7A<0$r$H(B
 	ebnet://[fe80::290:27ff:fe3]/dict.app
 	ebnet://[fe80::290:27ff:fe3]:22010/dict
 
-$B1s3V%"%/%;%9$r9T$&$K$O!"(BEBNETD $B$r(B <$B%[%9%H(B> $B>e$K%$%s%9%H!<%k$9$kI,MW$,(B
-$B$"$j$^$9!#(BEBNETD $B$O!"(BEB Library $BMQ$N1s3V%"%/%;%9%5!<%P$N%=%U%H%&%'%"(B
-$B$G$9!#(B
+遠隔アクセスを行うには、EBNETD を <ホスト> 上にインストールする必要が
+あります。EBNETD は、EB Library 用の遠隔アクセスサーバのソフトウェア
+です。
 
 
-EB $B%i%$%V%i%j$O(B $B$O%U%j!<%=%U%H%&%'%"$G$9!#$"$J$?$O!"(BFree Software
-Foundation $B$,8xI=$7$?(B GNU General Public License (GNU $B0lHL8xM-;HMQ5vBz(B)
-$B%P!<%8%g%s(B 2 $B$"$k$$$O$=$l0J9_$N3F%P!<%8%g%s$NCf$+$i$$$:$l$+$rA*Br$7!"(B
-$B$=$N%P!<%8%g%s$,Dj$a$k>r9`$K=>$C$FK\%W%m%0%i%`$r:FHRI[$^$?$OJQ99$9$k$3(B
-$B$H$,$G$-$^$9!#(B
+EB ライブラリは はフリーソフトウェアです。あなたは、Free Software
+Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
+バージョン 2 あるいはそれ以降の各バージョンの中からいずれかを選択し、
+そのバージョンが定める条項に従って本プログラムを再頒布または変更するこ
+とができます。
 
-EB $B%i%$%V%i%j$OM-MQ$H$O;W$$$^$9$,!"HRI[$K$"$?$C$F$O!";T>l@-5Z$SFCDjL\(B
-$BE*E,9g@-$K$D$$$F$N0EL[$NJ]>Z$r4^$a$F!"$$$+$J$kJ]>Z$b9T$J$$$^$;$s!#>\:Y(B
-$B$K$D$$$F$O(B GNU General Public License $B$r$*FI$_$/$@$5$$!#(B
+EB ライブラリは有用とは思いますが、頒布にあたっては、市場性及び特定目
+的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細
+については GNU General Public License をお読みください。
 
-$B:G?7$N(B EB $B%i%$%V%i%j$O<!$N$H$3$m$+$iF~<j$G$-$^$9!#(B
+最新の EB ライブラリは次のところから入手できます。
 
 	ftp://ftp.sra.co.jp/pub/misc/eb/
 
-EB $B%i%$%V%i%j$K4X$9$k>pJs$O<!$N$H$3$m$+$iF@$k$3$H$,$G$-$^$9!#(B
+EB ライブラリに関する情報は次のところから得ることができます。
 
 	http://www.sra.co.jp/people/m-kasahr/eb/
 
-$B%3%a%s%H$d%P%0$NJs9p$O(B
+コメントやバグの報告は
 
 	m-kasahr@sra.co.jp
 
-$B08$K!"F|K\8l$+1Q8l$G$*Aw$j2<$5$$!#(B
+宛に、日本語か英語でお送り下さい。
 
 
-2. $B%=!<%9%3!<%I$+$i$N%S%k%I(B
+2. ソースコードからのビルド
 
-Windows $BMQ%=!<%9%3!<%IG[I[HG$rMQ$$$F(B EB $B%i%$%V%i%j$r%=!<%9%3!<%I$+$i%S(B
-$B%k%I$9$k$K$O!"(BVisual Studio 6.0 $B$,I,MW$G$9!#(BEB $B%i%$%V%i%j$N%=!<%9%3!<(B
-$B%IG[I[HG$H!"$=$l$KBP1~$9$k%P!<%8%g%s$N(B Windows $BMQ%=!<%9%3!<%IG[I[HG$r(B
-$BMQ0U$7!"F1$8%G%#%l%/%H%j$KE83+$7$^$9!#$D$^$j!"E83+8e$O:n6H%G%#%l%/%H%j(B
-$B>e$K(B
+Windows 用ソースコード配布版を用いて EB ライブラリをソースコードからビ
+ルドするには、Visual Studio 6.0 が必要です。EB ライブラリのソースコー
+ド配布版と、それに対応するバージョンの Windows 用ソースコード配布版を
+用意し、同じディレクトリに展開します。つまり、展開後は作業ディレクトリ
+上に
 
 	eb-<version>-win32\
 	eb-<version>\
 
-$B$H$$$&%5%V%G%#%l%/%H%j$,B8:_$9$k$h$&$K$7$^$9!#$3$N>uBV$G!"(BVisual
-Studio $B$K%o!<%/%9%Z!<%9%U%!%$%k(B
+というサブディレクトリが存在するようにします。この状態で、Visual
+Studio にワークスペースファイル
 
 	eb-<version>-win32\eb.dsw
 
-$B$rFI$_9~$^$;!"%o!<%/%9%Z!<%9Fb$NA4%W%m%8%'%/%H$N%S%k%I$r9T$C$F2<$5$$!#(B
+を読み込ませ、ワークスペース内の全プロジェクトのビルドを行って下さい。
 
 
-3. $B@8@.$5$l$k%P%$%J%j$K$D$$$F(B
+3. 生成されるバイナリについて
 
-$B2?$N=$@5$b$;$:$K$=$N$^$^%S%k%I$7$?>l9g!"$b$7$/$O%P%$%J%jG[I[HG$r;HMQ$9(B
-$B$k>l9g!"%P%$%J%j$O<!$N$h$&$JFCD'$r;}$A$^$9!#(B
+何の修正もせずにそのままビルドした場合、もしくはバイナリ配布版を使用す
+る場合、バイナリは次のような特徴を持ちます。
 
-    * $B1s3V%"%/%;%9(B
-      $BBP1~$7$F$$$^$9!#$?$@$7!"(BIPv6 $B$K$OBP1~$7$F$$$^$;$s!#(B
+    * 遠隔アクセス
+      対応しています。ただし、IPv6 には対応していません。
 
-    * $B%a%C%;!<%8$N9q:]2=(B
-      $BBP1~$7$F$$$^$9!#$?$@$7!";H$($kJ8;z%3!<%I$O%7%U%H(BJIS $B$@$1$G$9!#(B
+    * メッセージの国際化
+      対応しています。ただし、使える文字コードはシフトJIS だけです。
 
-    * $B%^%k%A%9%l%C%I(B
-      $BBP1~$7$F$$$^$;$s!#(B
+    * マルチスレッド
+      対応していません。
 
-$B$J$*!"%P%$%J%jG[I[HG$K<}$a$F$$$k%P%$%J%j$O!"(B`Release' $B%?!<%2%C%H$G%S%k(B
-$B%I$7$?$b$N$G$9!#(B
+なお、バイナリ配布版に収めているバイナリは、`Release' ターゲットでビル
+ドしたものです。
 
 
-4. $BB>$N%"%W%j%1!<%7%g%s$X$N%j%s%/(B
+4. 他のアプリケーションへのリンク
 
-EB $B%i%$%V%i%j$r%j%s%/$7$?%"%W%j%1!<%7%g%s$rG[I[$9$k>l9g$O!":GDc8B(B
-`eb.dll' $B$r0l=o$KG[I[$9$kI,MW$,$"$j$^$9!#$b$7!"%a%C%;!<%8$N9q:]2=5!G=(B
-(eb_error_message() $B$N9q:]2=(B) $B$r;H$$$?$$>l9g$O!"(B`locale/eb.mo' $B$b0l=o(B
-$B$KG[I[$7$^$9!#(B
+EB ライブラリをリンクしたアプリケーションを配布する場合は、最低限
+`eb.dll' を一緒に配布する必要があります。もし、メッセージの国際化機能
+(eb_error_message() の国際化) を使いたい場合は、`locale/eb.mo' も一緒
+に配布します。
 
-`eb.mo' $B$O!"5/F0$5$l$?%"%W%j%1!<%7%g%s$NB8:_$9$k%G%#%l%/%H%j$+$i8+$F(B
+`eb.mo' は、起動されたアプリケーションの存在するディレクトリから見て
 
 	locale\LC_MESSAGES\Japanese\eb.mo
 	..\locale\LC_MESSAGES\Japanese\eb.mo
 
-$B$N$I$A$i$+$N0LCV$KCV$$$F2<$5$$!#(B
+のどちらかの位置に置いて下さい。
 
 
-5. $B%"%s%$%s%9%H!<%k(B
+5. アンインストール
 
-$B%P%$%J%jG[I[HG$+$i%$%s%9%H!<%k$7$?(B EB $B%i%$%V%i%j$r>C5n$9$k$K$O!"%$%s%9(B
-$B%H!<%k$7$?%G%#%l%/%H%j$K$"$k(B `unins000.exe' $B$r<B9T$7$F2<$5$$!#(B
+バイナリ配布版からインストールした EB ライブラリを消去するには、インス
+トールしたディレクトリにある `unins000.exe' を実行して下さい。
 </pre>
 <!-- ############################################################# -->
 <hr>
 <p class="footer">
 <a href="index-ja.html"><img class="banner" src="eb_b.png" alt="banner"></a>
-<a href="index-ja.html">$B%[!<%`%Z!<%8(B ($BF|K\8lHG(B)</a>$B$KLa$k!#(B
+<a href="index-ja.html">ホームページ (日本語版)</a>に戻る。
 </p>
 
 </body>

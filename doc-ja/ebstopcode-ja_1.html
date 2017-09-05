@@ -36,33 +36,33 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebstopcode-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
 <A NAME="Introduction"></A>
-<H1> 1. �Ϥ���� </H1>
+<H1> 1. はじめに </H1>
 <!--docid::SEC1::-->
 <P>
 
-���ʤ��� EB �饤�֥��Υ��ץꥱ��������Ȥä� CD-ROM ���Ҥ���Τ���
-ñ�������ݡ�����ñ�����������λ����ս�ǡ����ץꥱ���������ʸ��
-���Ϥ�ߤ�뤳�Ȥ򤢤ʤ��ϴ��Ԥ���ΤǤϤʤ��Ǥ��礦����
-��������EB �饤�֥��Ϥ��Τ褦��ư����ݾڤ��뤳�Ȥ��Ǥ��ޤ���
-�ʤ��ʤ顢CD-ROM ���Ҥ���ʸ�ˤϡ����ܤν����򼨤�����¸�ߤ��ʤ�����
-�Ǥ���
+あなたが EB ライブラリのアプリケーションを使って CD-ROM 書籍の中のある
+単語を引く際、その単語の説明が終了する箇所で、アプリケーションが本文の
+出力を止めることをあなたは期待するのではないでしょうか。
+しかし、EB ライブラリはそのような動作を保証することができません。
+なぜなら、CD-ROM 書籍の本文には、項目の終わりを示す印が存在しないから
+です。
 </P><P>
 
-�����ˤ⡢¿���� CD-ROM ���Ҥˤϡ����ܤν����򼨤��������ؤȤ���
-�Ȥ��롢<EM>��ʸ�ζ��ڤꥳ���� (text stop code)</EM> �Ȥ�����Τ���ä�
-���ޤ���
-�̾EB �饤�֥��Ϥ��ζ��ڤꥳ���ɤ�ưŪ�˿�¬����褦�ˤʤä�
-����ΤǤ������������ä����ڤꥳ���ɤ�Ƴ���Ф����Ȥ�����ޤ���
-���ξ��ϡ�<EM>appendix (��Ͽ)</EM> �Ȥ�����Τ��Ѥ��ơ�EB �饤�֥���
-���������ڤꥳ���ɤ򶵤��Ƥ��ʤ��ƤϤʤ�ޤ���
+幸いにも、多くの CD-ROM 書籍には、項目の終わりを示す印の代替として
+使える、<EM>本文の区切りコード (text stop code)</EM> というものを持って
+います。
+通常、EB ライブラリはこの区切りコードを自動的に推測するようになって
+いるのですが、時々誤った区切りコードを導き出すことがあります。
+その場合は、<EM>appendix (付録)</EM> というものを用いて、EB ライブラリに
+正しい区切りコードを教えてやらなくてはなりません。
 </P><P>
 
-<CODE>ebstopcode</CODE> ���ޥ�ɤϡ�CD-ROM ���Ҥ���ʸ�ζ��ڤꥳ���ɤ����
-���뤿��Υġ���Ǥ���
+<CODE>ebstopcode</CODE> コマンドは、CD-ROM 書籍の本文の区切りコードを解析
+するためのツールです。
 </P><P>
 
-����ʸ����� 4.0 �ǤǤ���
-EB �饤�֥��С������ 4.0 ���б����Ƥ��ޤ���
+この文書は第 4.0 版です。
+EB ライブラリバージョン 4.0 に対応しています。
 </P><P>
 
 <A NAME="Invoking ebstopcode"></A>

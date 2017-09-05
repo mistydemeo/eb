@@ -35,53 +35,53 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 4. EBNET �����Фν��Ұ��� </H1>
+<H1> 4. EBNET サーバの書籍一覧 </H1>
 <!--docid::SEC4::-->
 <P>
 
-�̾�ν��Ϥ�����ˡ�<CODE>ebinfo</CODE> �� EBNET �����Ф��������Ƥ���
-���Ҥΰ�������Ϥ��뤳�Ȥ�Ǥ��ޤ���
-���ξ��Υ��ޥ�ɹԤγ��פϡ����Τ褦�ˤʤ�ޤ���
+通常の出力の代わりに、<CODE>ebinfo</CODE> は EBNET サーバが公開している
+書籍の一覧を出力することもできます。
+この場合のコマンド行の概要は、次のようになります。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo --book-list <VAR>��֥����м��̻�</VAR>
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo --book-list <VAR>遠隔サーバ識別子</VAR>
 </pre></td></tr></table></P><P>
 
-�����ǡ�<VAR>��֥����м��̻�</VAR> �ϡ�����̾��ޤޤʤ���֥����������̻�
-�ˤʤ�ޤ���
-���Ȥ��С�
+ここで、<VAR>遠隔サーバ識別子</VAR> は、書籍名を含まない遠隔アクセス識別子
+になります。
+たとえば、
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo --book-list ebnet://dict.example.com
-̾��             ��̾
-encycl           �֥饦�󥳥󥵥���ɴ�ʻ�ŵ
-encycl.app       �֥饦�󥳥󥵥���ɴ�ʻ�ŵ (appendix)
-crossword        ��������ɥѥ��뼭ŵ
-travel           ���ɥȥ�٥륬����
+名前             題名
+encycl           ブラウンコンサイス百科事典
+encycl.app       ブラウンコンサイス百科事典 (appendix)
+crossword        クロスワードパズル辞典
+travel           ワールドトラベルガイド
 </pre></td></tr></table></P><P>
 
-��̾���פ������� <SAMP>`.app'</SAMP> ���դ��Ƥ����Τ� appendix (��Ͽ)��
-����ʳ��Ͻ������ΤǤ���
-�����������Υ��饤����Ȥ��Ф��ƥ�����������Ĥ��ʤ����Ҥ� appendix ��
-���Ϥ���ޤ���
+「名前」の末尾に <SAMP>`.app'</SAMP> が付いているものは appendix (付録)、
+それ以外は書籍本体です。
+ただし、そのクライアントに対してアクセスを許可しない書籍や appendix は
+出力されません。
 </P><P>
 
-³���ơ�������� <SAMP>`encycl'</SAMP> �Ȥ������Ҥξ���򸫤�ˤϡ����Τ褦��
-���ޤ���
+続けて、この中の <SAMP>`encycl'</SAMP> という書籍の情報を見るには、次のように
+します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebinfo ebnet://dict.example.com/cncyclopedia
-�ǥ������η���: EB/EBG/EBXA/EBXA-C/S-EBXA
-ʸ��������: JIS X 0208
-���ܤο�: 1
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 1
 
-���� 1:
-  ��̾: �֥饦�󥳥󥵥���ɴ�ʻ�ŵ
-  �ǥ��쥯�ȥ�: brown
-  ��������: �������� �������� ��� ʣ�� ��˥塼
-  �ե���Ȥ��礭��: 16 24
-  Ⱦ�ѥե���Ȥ�ʸ��: 0xa121 -- 0xa452
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa452
+副本 1:
+  題名: ブラウンコンサイス百科事典
+  ディレクトリ: brown
+  検索方式: 前方一致 後方一致 条件 複合 メニュー
+  フォントの大きさ: 16 24
+  半角フォントの文字: 0xa121 -- 0xa452
+  全角フォントの文字: 0xa321 -- 0xa452
 </pre></td></tr></table></P><P>
 
 <A NAME="Options to ebinfo"></A>

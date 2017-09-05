@@ -4,22 +4,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
 <link rel="stylesheet" type="text/css" href="ebutils.css">
 <link rev="made" href="mailto:m-kasahr@sra.co.jp">
-<title>ebfont ���ޥ��</title>
+<title>ebfont コマンド</title>
 </head>
 
 <body>
 <p>
-[<a href="ebfont-03.html">����</a>] [<a href="ebfont.html#toc">�ܼ�</a>] 
+[<a href="ebfont-03.html">前へ</a>] [<a href="ebfont.html#toc">目次</a>] 
 </p>
 <hr>
-<h2><a name="summary-of-options"><code>ebfont</code> �Υ��ץ�������</a></h2>
+<h2><a name="summary-of-options"><code>ebfont</code> のオプション一覧</a></h2>
 
 <p>
-<code>ebzip</code> ���ޥ�ɤϡ�����Ū�ʰ�ʸ�����ץ����̾�ȳФ��䤹��Ĺ��
-���ץ����̾��ξ���򰷤����Ȥ��Ǥ��ޤ���
-Ĺ�����ץ����̾��ɽ���ˤϡ�<samp>-</samp> �ǤϤʤ� <samp>--</samp> ��
-�Ѥ��ޤ���
-���ץ����̾����դ˷�ޤ��ϰ���ǡ�̾���θ�����ʬ���ά���뤳�Ȥ��Ǥ��ޤ���
+<code>ebzip</code> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<samp>-</samp> ではなく <samp>--</samp> を
+用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができます。
 </p>
 
 <dl>
@@ -27,65 +27,65 @@
 <dt><code>--debug</code></dt>
 <dt><code>--verbose</code></dt>
 <dd>
-�ǥХå��Ѥξ����ɸ�२�顼���Ϥ˽��Ϥ��ޤ���
+デバッグ用の情報を、標準エラー出力に出力します。
 
-<dt><code>-f <var>�⤵</var></code></dt>
-<dt><code>--font-height <var>�⤵</var></code></dt>
+<dt><code>-f <var>高さ</var></code></dt>
+<dt><code>--font-height <var>高さ</var></code></dt>
 <dd>
-�⤵�� <var>�⤵</var> �γ����β����ե�������������ޤ���
-<var>�⤵</var> �ϡ��⤵�򥫥�� (<samp>,</samp>) �Ƕ��ڤä��¤٤���Τ�
-�ʤ��ƤϤʤ�ޤ���
-�⤵�λ���Ȥ��Ƶ������Τϡ�<samp>16</samp>��<samp>24</samp>��
-<samp>30</samp>��<samp>48</samp> �Ǥ���
-���꤬�ʤ���С�<code>ebfont</code> �Ϲ⤵�� 16 �ԥ�����Υե���ȤΤ�Τ�
-�������ޤ���
-(�ܤ����ϡ�<a href="ebfont-03.html#heights">�ֹ⤵��</a>�򻲾ȤΤ��ȡ�)
+高さが <var>高さ</var> の外字の画像ファイルを生成します。
+<var>高さ</var> は、高さをカンマ (<samp>,</samp>) で区切って並べたもので
+なくてはなりません。
+高さの指定として許されるのは、<samp>16</samp>、<samp>24</samp>、
+<samp>30</samp>、<samp>48</samp> です。
+指定がなければ、<code>ebfont</code> は高さが 16 ピクセルのフォントのものを
+生成します。
+(詳しくは、<a href="ebfont-03.html#heights">「高さ」</a>を参照のこと。)
 
 <dt><code>-h</code></dt>
 <dt><code>--help</code></dt>
 <dd>
-�إ�ץ�å�������ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+ヘルプメッセージを標準出力に出力して、終了します。
 
-<dt><code>-i <var>��������</var></code></dt>
-<dt><code>--image-format <var>��������</var></code></dt>
+<dt><code>-i <var>画像形式</var></code></dt>
+<dt><code>--image-format <var>画像形式</var></code></dt>
 <dd>
-<var>��������</var> �����β����ե�������������ޤ���
-<var>��������</var> �ϡ���������̾�򥫥�� (<samp>,</samp>) �Ƕ��ڤä�
-�¤٤���ΤǤʤ��ƤϤʤ�ޤ���
-�б����Ƥ������������̾���� <samp>xbm</samp>��<samp>xpm</samp>��
-<samp>gif</samp>��<samp>bmp</samp>��<samp>gif</samp>��<samp>png</samp>
-�Ǥ���
-���ꤷ�ʤ��ä��Ȥ��ϡ�<samp>ebfont</samp> �� XBM �����β����ե������
-�������ޤ���
-(�ܤ����ϡ�<a href="ebfont-03.html#image-formats">�ֲ���������</a>�򻲾ȤΤ��ȡ�)
+<var>画像形式</var> 形式の画像ファイルを生成します。
+<var>画像形式</var> は、画像形式名をカンマ (<samp>,</samp>) で区切って
+並べたものでなくてはなりません。
+対応している画像形式の名前は <samp>xbm</samp>、<samp>xpm</samp>、
+<samp>gif</samp>、<samp>bmp</samp>、<samp>gif</samp>、<samp>png</samp>
+です。
+指定しなかったときは、<samp>ebfont</samp> は XBM 形式の画像ファイルを
+生成します。
+(詳しくは、<a href="ebfont-03.html#image-formats">「画像形式」</a>を参照のこと。)
 
-<dt><code>-o <var>�ǥ��쥯�ȥ�</var></code></dt>
-<dt><code>--output-directory <var>�ǥ��쥯�ȥ�</var></code></dt>
+<dt><code>-o <var>ディレクトリ</var></code></dt>
+<dt><code>--output-directory <var>ディレクトリ</var></code></dt>
 <dd>
-�����ե������ <var>�ǥ��쥯�ȥ�</var> �ʲ��˽��Ϥ��ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ�<code>ebfont</code> �ϥ����ȥǥ��쥯�ȥ�
-(<code>.</code>) �β��˲����ե�������������ޤ���
-(�ܤ����ϡ�<a href="ebfont-03.html#invoke-ebfont">��<code>ebfont</code> �μ¹ԡ�</a>
-�򻲾ȤΤ��ȡ�)
+画像ファイルを <var>ディレクトリ</var> 以下に出力します。
+指定しなかったときは、<code>ebfont</code> はカレントディレクトリ
+(<code>.</code>) の下に画像ファイルを生成します。
+(詳しくは、<a href="ebfont-03.html#invoke-ebfont">「<code>ebfont</code> の実行」</a>
+を参照のこと。)
 
-<dt><code>-S <var>����</var></code></dt>
-<dt><code>--subbook <var>����</var></code></dt>
+<dt><code>-S <var>副本</var></code></dt>
+<dt><code>--subbook <var>副本</var></code></dt>
 <dd>
-<code>ebfont</code> �ˡ��ɤ����ܤγ���������������Τ�����ꤷ�ޤ���
-<var>����</var> �ϡ����ܤΥǥ��쥯�ȥ�̾�򥫥�� (<samp>,</samp>) ��
-���ڤä��¤٤���ΤǤʤ��ƤϤʤ�ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ����٤Ƥ����ܤ��������оݤˤʤ�ޤ���
-(�ܤ����ϡ�<a href="ebfont-03.html#subbooks">�����ܡ�</a>�򻲾ȤΤ��ȡ�)
+<code>ebfont</code> に、どの副本の外字を生成させるのかを指定します。
+<var>副本</var> は、副本のディレクトリ名をカンマ (<samp>,</samp>) で
+区切って並べたものでなくてはなりません。
+指定しなかったときは、すべての副本が生成の対象になります。
+(詳しくは、<a href="ebfont-03.html#subbooks">「副本」</a>を参照のこと。)
 
 <dt><code>-v</code></dt>
 <dt><code>--version</code></dt>
 <dd>
-�С�������ֹ��ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+バージョン番号を標準出力に出力して、終了します。
 </dl>
 
 <hr>
 <p>
-[<a href="ebfont-03.html">����</a>] [<a href="ebfont.html#toc">�ܼ�</a>] 
+[<a href="ebfont-03.html">前へ</a>] [<a href="ebfont.html#toc">目次</a>] 
 </p>
 </body>
 </html>

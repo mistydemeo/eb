@@ -35,48 +35,48 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 12. appendix �ǡ��� </H1>
+<H1> 12. appendix データ </H1>
 <!--docid::SEC77::-->
 <P>
 
-<EM>appendix</EM> (<EM>��Ͽ</EM>) �Ȥ� CD-ROM ���Ҥ�����ǡ����Τ��ȤǤ���
-appendix �� CD-ROM ���Ҥν��ǼҤ����󶡤���Ƥ����ΤǤϤʤ���
-EB �饤�֥��˸�ͭ�Τ�ΤǤ���
-<CODE>ebappendix</CODE> ���ޥ�ɤ��Ѥ����������ޤ�
-(�ܤ����� <CITE>ebappendix-ja</CITE> �Ρ�appendix (��Ͽ) �Ȥϡ���򻲾�)��
+<EM>appendix</EM> (<EM>付録</EM>) とは CD-ROM 書籍の補助データのことです。
+appendix は CD-ROM 書籍の出版社から提供されているものではなく、
+EB ライブラリに固有のものです。
+<CODE>ebappendix</CODE> コマンドを用いて生成します
+(詳しくは <CITE>ebappendix-ja</CITE> の「appendix (付録) とは」節を参照)。
 </P><P>
 
-appendix �ϰʲ��Υǡ����� CD-ROM ���Ҥ��Ф����󶡤��ޤ���
+appendix は以下のデータを CD-ROM 書籍に対して提供します。
 </P><P>
 
 <UL>
-<LI>��ʸ�ζ��ڤꥳ����
-<LI>����������ʸ����
+<LI>本文の区切りコード
+<LI>外字の代替文字列
 </UL>
 <P>
 
-appendix �Υ쥤�����Ȥ� CD-ROM ���ҤΤ�ΤȤ褯���Ƥ��ޤ���
-�ȥåץǥ��쥯�ȥ�ˤ� <CODE>catalog</CODE> �⤷���� <CODE>catalogs</CODE>
-�ե����뤬¸�ߤ��������ܤΥǡ������б����륵�֥ǥ��쥯�ȥ�����֤����
-���ޤ���
+appendix のレイアウトは CD-ROM 書籍のものとよく似ています。
+トップディレクトリには <CODE>catalog</CODE> もしくは <CODE>catalogs</CODE>
+ファイルが存在し、各副本のデータは対応するサブディレクトリに配置されて
+います。
 </P><P>
 
-���ץꥱ�������� appendix ���б�������ʸ�ζ��ڤꥳ���ɤξ����Ȥ���
-�褦�ˤ��뤳�Ȥ����ᤷ�ޤ���
-����������ʸ����ˤĤ��Ƥϡ������Υե���Ȥ򤽤Τޤ�ɽ���Ǥ���ΤǤ���С�
-�б�����ɬ�����Ϥ��ʤ�˳�����Ǥ�������ʸ�ζ��ڤꥳ���ɤϡ������ʤ���
-��������ʸ��ɽ���Ǥ��ʤ����Ҥ��б��Ǥ��ޤ���
-(���ڤꥳ���ɤˤĤ��Ƥϡ���<A HREF="eb-ja_9.html#SEC52">���ڤꥳ���ɤ�����</A>����򻲾�)��
+アプリケーションは appendix に対応し、本文の区切りコードの情報を使える
+ようにすることをお薦めします。
+外字の代替文字列については、外字のフォントをそのまま表示できるのであれば、
+対応する必要性はかなり乏しいですが、本文の区切りコードは、扱えないと
+正しく本文を表示できない書籍に対応できません
+(区切りコードについては、「<A HREF="eb-ja_9.html#SEC52">区切りコードの問題</A>」節を参照)。
 </P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC78">12.1 <CODE>EB_Appendix</CODE> ���֥�������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC79">12.2 ����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC80">12.3 ��ʸ�ζ��ڤꥳ����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC81">12.4 ����������ʸ����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC82">12.5 �ǡ������ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC83">12.6 �ؿ��ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC84">12.7 ����ץ�ץ������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC78">12.1 <CODE>EB_Appendix</CODE> オブジェクト</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC79">12.2 副本</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC80">12.3 本文の区切りコード</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC81">12.4 外字の代替文字列</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC82">12.5 データ型の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC83">12.6 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_12.html#SEC84">12.7 サンプルプログラム</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -94,24 +94,24 @@ appendix �Υ쥤�����Ȥ� CD-ROM ���ҤΤ�ΤȤ褯���Ƥ��ޤ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 12.1 <CODE>EB_Appendix</CODE> ���֥������� </H2>
+<H2> 12.1 <CODE>EB_Appendix</CODE> オブジェクト </H2>
 <!--docid::SEC78::-->
 <P>
 
-CD-ROM �������Τ򰷤��ˤ� <CODE>EB_Book</CODE> ���֥������Ȥ��Ѥ��ޤ�������
-appendix �򰷤��ˤ� <CODE>EB_Appendix</CODE> ���֥������Ȥ�Ȥ��ޤ���
-<CODE>EB_Appendix</CODE> ���֥������Ȥ����뤿��δؿ��ϡ�<CODE>EB_Book</CODE> 
-�Τ�ΤȤϰۤʤ�ޤ����������Ϥ褯���Ƥ��ޤ���
+CD-ROM 書籍本体を扱うには <CODE>EB_Book</CODE> オブジェクトを用いましたが、
+appendix を扱うには <CODE>EB_Appendix</CODE> オブジェクトを使います。
+<CODE>EB_Appendix</CODE> オブジェクトを操作するための関数は、<CODE>EB_Book</CODE> 
+のものとは異なりますが、操作手順はよく似ています。
 </P><P>
 
-<CODE>EB_Appendix</CODE> ���֥������Ȥϡ��ġ��� appendix ���Ф��� 1 �Ĥ���
-���ɬ�פ�����ޤ���
+<CODE>EB_Appendix</CODE> オブジェクトは、個々の appendix に対して 1 個ずつ
+作る必要があります。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Appendix app;
 </pre></td></tr></table></P><P>
 
-������󡢥��֥������Ȥ��ΰ�ϡ�<CODE>malloc()</CODE> �ǳ��ݤ��Ƥ⹽���ޤ���
+もちろん、オブジェクトの領域は、<CODE>malloc()</CODE> で確保しても構いません。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Appendix *app_pointer;
@@ -119,30 +119,30 @@ appendix �򰷤��ˤ� <CODE>EB_Appendix</CODE> ���֥������Ȥ�Ȥ��ޤ���
 app_pointer = (EB_Appendix *) malloc(sizeof(EB_Appendix));
 </pre></td></tr></table></P><P>
 
-���֥������Ȥϡ��Ȥ�����ɬ�� <CODE>eb_initialize_appendix()</CODE> �Ȥ����ؿ�
-����Ȥ��������ʤ��ƤϤʤ�ޤ���
-<CODE>EB_Book</CODE> ���֥������ȤǤ� <CODE>eb_initialize_book()</CODE> �ǽ����
-����ɬ�פ�����ޤ������������Ʊ���Ǥ���
+オブジェクトは、使う前に必ず <CODE>eb_initialize_appendix()</CODE> という関数
+で中身を初期化しなくてはなりません。
+<CODE>EB_Book</CODE> オブジェクトでも <CODE>eb_initialize_book()</CODE> で初期化
+する必要がありましたが、それと同じです。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_initialize_appendix(&#38;app);
 eb_initialize_appendix(app_pointer);
 </pre></td></tr></table></P><P>
 
-³���ơ����֥������Ȥ� appendix �μ��Τ˷���դ��뤿��ˡ�
-<CODE>eb_bind_appendix()</CODE> ��ƤӽФ��ޤ���
-����ϡ�<CODE>EB_Book</CODE> ���֥������Ȥ� <CODE>eb_bind()</CODE> ���������ޤ���
+続いて、オブジェクトを appendix の実体に結び付けるために、
+<CODE>eb_bind_appendix()</CODE> を呼び出します。
+これは、<CODE>EB_Book</CODE> オブジェクトの <CODE>eb_bind()</CODE> に相当します。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>�ţ¡����������������������������������������
-���֥������ȡ���������������������������������������������������
-����������������������������������������������������������������
-������������������������������������������������������������
-��������������⡲����䡡������������������������������������
-������������������������ʡˡ�����������������������������
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ＥＢ＿Ａｐｐｅｎｄｉｘ　　　　　　　　　　ａｐｐｅｎｄｉｘ
+オブジェクト　　　　　　　　　　　　┌────────────┐
+┌───┐　　　　　　　　　　　　　│　　　　　　　　　　　　│
+│　　　┝━━━━━━━━━━━━━┥　／ｍｎｔ／ｄｉｃｔ　　│
+└───┘　ｅｂ＿ｂｉｎｄ　　　　　│　　　　　　　　　　　　│
+　　　　　　＿ａｐｐｅｎｄｉｘ（）　└────────────┘
 </pre></td></tr></table></P><P>
 
-�ºݤΥץ������Ǥϡ����Τ褦�ˤ��ޤ���
+実際のプログラムでは、次のようにします。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_bind_appendix(&#38;app, "/mnt/dict") != EB_SUCCESS) {
@@ -151,28 +151,28 @@ eb_initialize_appendix(app_pointer);
 }
 </pre></td></tr></table></P><P>
 
-<CODE>eb_bind_appendix()</CODE> ���Ϥ� appendix �Υѥ�
-(������Ǥ� <TT>`/mnt/dict'</TT>) �� appendix �Υȥåץǥ��쥯�ȥꡢ�Ĥޤ�
-<TT>`catalog'</TT> �ޤ��� <TT>`catalogs'</TT> �ե�����Τ���ǥ��쥯�ȥ��
-���ꤷ�ޤ���
-�ѥ��ˤϡ���֥����������̻� (��: <SAMP>`ebnet://localhost/dict.app'</SAMP>)
-����ꤹ�뤳�Ȥ��ǽ�Ǥ���
+<CODE>eb_bind_appendix()</CODE> に渡す appendix のパス
+(この例では <TT>`/mnt/dict'</TT>) は appendix のトップディレクトリ、つまり
+<TT>`catalog'</TT> または <TT>`catalogs'</TT> ファイルのあるディレクトリを
+指定します。
+パスには、遠隔アクセス識別子 (例: <SAMP>`ebnet://localhost/dict.app'</SAMP>)
+を指定することも可能です。
 </P><P>
 
-<CODE>EB_Appendix</CODE> ���֥������Ȥ�Ȥ�����ä��顢
-<CODE>eb_finalize_appendix()</CODE> ��Ƥ�Ǹ�����򤷤ޤ���
-���֥������Ȥ� appendix �Ȥη���դ���򤫤줿���֤���ꡢ
-�����ǳ�����Ƥ�줿����ϲ������졢�����Ƥ����ե�����⤹�٤�
-�Ĥ����ޤ���
+<CODE>EB_Appendix</CODE> オブジェクトを使い終わったら、
+<CODE>eb_finalize_appendix()</CODE> を呼んで後始末をします。
+オブジェクトは appendix との結び付きを解かれた状態に戻り、
+内部で割り当てられたメモリは解放され、開いていたファイルもすべて
+閉じられます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_finalize_appendix(&#38;app);
 eb_finalize_appendix(app_pointer);
 </pre></td></tr></table></P><P>
 
-���֥������Ȥ��ΰ�� <CODE>malloc()</CODE> �ǳ��ݤ������ϡ�
-<CODE>eb_finalize_appendix()</CODE> ��Ƥ����ʤ�С����֥������Ȥ��ΰ��
-�����˲������뤳�Ȥ��Ǥ��ޤ���
+オブジェクトの領域を <CODE>malloc()</CODE> で確保した場合は、
+<CODE>eb_finalize_appendix()</CODE> を呼んだ後ならば、オブジェクトの領域を
+安全に解放することができます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>free(app_pointer);
@@ -192,22 +192,22 @@ eb_finalize_appendix(app_pointer);
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 12.2 ���� </H2>
+<H2> 12.2 副本 </H2>
 <!--docid::SEC79::-->
 <P>
 
-CD-ROM ��Ʊ�ͤˡ�appendix �ˤ����ܤ�¸�ߤ��ޤ���
-appendix �����ܤ⡢���ܥ����ɤ�ȤäƼ��̤��ޤ���
-�ġ������ܥ����ɤϡ�appendix ���Ʊ����Τ��ʤ��褦�ˤʤäƤ��ޤ���
+CD-ROM と同様に、appendix にも副本が存在します。
+appendix の副本も、副本コードを使って識別します。
+個々の副本コードは、appendix 内で同じものがないようになっています。
 </P><P>
 
-CD-ROM ������Τ��٤Ƥ����ܤ����ܥ����ɤ��������ؿ��Ȥ���
-<CODE>eb_subbook_list()</CODE> ������ޤ�������appendix �ˤ�
-<CODE>eb_appendix_subbook_list()</CODE> �Ȥ���Ʊ�ͤδؿ�������ޤ���
+CD-ROM 書籍内のすべての副本の副本コードを取得する関数として
+<CODE>eb_subbook_list()</CODE> がありましたが、appendix にも
+<CODE>eb_appendix_subbook_list()</CODE> という同様の関数があります。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>app</CODE> �� <CODE>EB_Appendix</CODE> �Υ��֥������Ȥǡ����Ǥ˽��Ҥ�
- * ����դ����Ƥ���Ȳ��ꤷ�Ƥ��ޤ���*/
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>app</CODE> が <CODE>EB_Appendix</CODE> のオブジェクトで、すでに書籍に
+ * 結び付けられていると仮定しています。*/
 EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
 int sub_count;
 
@@ -218,34 +218,34 @@ if (eb_appendix_subbook_list(&#38;app, sub_codes, &#38;sub_count)
 }
 </pre></td></tr></table></P><P>
 
-<CODE>eb_appendix_subbook_list()</CODE> ����������ȡ�������Τ��٤Ƥ�
-���ܥ����ɤ� ���� <CODE>sub_codes[]</CODE> �˳�Ǽ����ޤ���
-�������Ƭ�����ܥ����ɤ� <CODE>sub_codes[0]</CODE> ��ɽ���졢����
-�����ɤ� <CODE>sub_codes[1]</CODE>���Ȥ������ˤʤ�ޤ���
-���ܤθĿ��ϡ�<CODE>sub_count</CODE> �˳�Ǽ����ޤ���
+<CODE>eb_appendix_subbook_list()</CODE> が成功すると、書籍内のすべての
+副本コードが 配列 <CODE>sub_codes[]</CODE> に格納されます。
+配列の先頭の副本コードは <CODE>sub_codes[0]</CODE> と表され、次の
+コードは <CODE>sub_codes[1]</CODE>、という具合になります。
+副本の個数は、<CODE>sub_count</CODE> に格納されます。
 </P><P>
 
-<CODE>EB_Book</CODE> ��Ʊ�ͤ� <CODE>EB_Appendix</CODE> ���֥������ȤǤ⡢
-��ӤĤ���줿 CD-ROM ���Ҥ����Ǥ�դ����ܤ���������ǡ�
-<EM>����������� (current subbook)</EM> �Ȥ��ƻ��ꤹ�뤳�Ȥ��Ǥ��ޤ���
-ʣ�������ܤ�Ʊ�������򤹤뤳�ȤϤǤ��ޤ���
-���ڤꥳ���ɤ䳰��������ʸ����Ȥ��ä� appendix ��Υǡ����ؤΥ�������
-�ϡ�����������ܤ��Ф��Ƥ����Ԥ��ޤ���
+<CODE>EB_Book</CODE> と同様に <CODE>EB_Appendix</CODE> オブジェクトでも、
+結びつけられた CD-ROM 書籍の中の任意の副本から一つ選んで、
+<EM>選択中の副本 (current subbook)</EM> として指定することができます。
+複数の副本を、同時に選択することはできません。
+区切りコードや外字の代替文字列といった appendix 内のデータへのアクセス
+は、選択中の副本に対してだけ行えます。
 </P><P>
 
-�ʲ��ϡ���Ƭ������ (<CODE>sub_codes[0]</CODE>) �����򤹤������Ǥ���
+以下は、先頭の副本 (<CODE>sub_codes[0]</CODE>) を選択する場合の例です。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>app</CODE> �� <CODE>EB_Appendix</CODE> �Υ��֥������Ȥǡ����Ǥ˽��Ҥ�
- * ����դ����Ƥ���Ȳ��ꤷ�Ƥ��ޤ���*/
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>app</CODE> が <CODE>EB_Appendix</CODE> のオブジェクトで、すでに書籍に
+ * 結び付けられていると仮定しています。*/
 if (eb_set_appendix_subbook(&#38;app, sub_codes[0]) != EB_SUCCESS) {
     printf("eb_subbook_list() failed\n");
     return;
 }
 </pre></td></tr></table></P><P>
 
-<CODE>eb_bind_appendix()</CODE> �� <CODE>EB_Appendix</CODE> ���֥������Ȥ� appendix
-�˷���դ���ľ��ϡ�����������ܤ����򤵤�Ƥ��ʤ����֤ˤʤäƤ��ޤ���
+<CODE>eb_bind_appendix()</CODE> で <CODE>EB_Appendix</CODE> オブジェクトを appendix
+に結び付けた直後は、いずれの副本も選択されていない状態になっています。
 </P><P>
 
 <A NAME="Appendix Stop Code"></A>
@@ -262,26 +262,26 @@ if (eb_set_appendix_subbook(&#38;app, sub_codes[0]) != EB_SUCCESS) {
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 12.3 ��ʸ�ζ��ڤꥳ���� </H2>
+<H2> 12.3 本文の区切りコード </H2>
 <!--docid::SEC80::-->
 <P>
 
-CD-ROM ���Ҥˤ�äƤϡ�EB �饤�֥�꤬��ʸ��ɽ�������������֤ǻߤ���ʤ�
-���Ȥ�����ޤ� 
-(�ܤ����ϡ���<A HREF="eb-ja_9.html#SEC52">���ڤꥳ���ɤ�����</A>����򻲾�)��
-����ϡ���ʸ�ζ��ڤꥳ���ɤο�¬�� EB �饤�֥�꤬���ä�����˵�����
-�ΤǤ�����appendix �ǡ�����Ȥ����Ȥǡ����������ڤꥳ���ɤ� EB �饤�֥��
-�˶����Ƥ�뤳�Ȥ��Ǥ��ޤ���
+CD-ROM 書籍によっては、EB ライブラリが本文の表示を正しい位置で止められない
+ことがあります 
+(詳しくは、「<A HREF="eb-ja_9.html#SEC52">区切りコードの問題</A>」節を参照)。
+これは、本文の区切りコードの推測を EB ライブラリが誤ったために起こる
+のですが、appendix データを使うことで、正しい区切りコードを EB ライブラリ
+に教えてやることができます。
 </P><P>
 
-CD-ROM ���Ҥ���ʸ���������ؿ� <CODE>eb_read_text()</CODE> ���� 2 ������
-<CODE>EB_Appendix *</CODE> ��Ȥ�ΤǤ����������� appendix ���֥������Ȥ�
-�Ϥ��Ƥ��褦�ˤ��ޤ���
+CD-ROM 書籍の本文を取得する関数 <CODE>eb_read_text()</CODE> は第 2 引数に
+<CODE>EB_Appendix *</CODE> をとるのですが、ここに appendix オブジェクトを
+渡してやるようにします。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE>, <CODE>app</CODE> �ϡ����줾�� <CODE>EB_Book</CODE> �����
- * <CODE>EB_Appendix</CODE> �Υ��֥������Ȥǡ��ɤ���⤹�Ǥ����ܤ��������
- * ���ꤷ�Ƥ��ޤ���*/
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE>, <CODE>app</CODE> は、それぞれ <CODE>EB_Book</CODE> および
+ * <CODE>EB_Appendix</CODE> のオブジェクトで、どちらもすでに副本を選択中と
+ * 仮定しています。*/
 #define MAX_LENGTH 1000
 char buffer[MAX_LENGTH + 1];
 ssize_t text_length;
@@ -293,8 +293,8 @@ if (eb_read_text(&#38;book, &#38;app, NULL, NULL, MAX_LENGTH,
 }
 </pre></td></tr></table></P><P>
 
-<CODE>eb_read_text()</CODE> �ϡ��Ϥ��줿 appendix ���֥������Ȥ����ܤ�����Ѥ�
-�ǡ����Ķ��ڤꥳ���ɤξ������äƤ���С����ζ��ڤꥳ���ɤ���Ѥ��ޤ���
+<CODE>eb_read_text()</CODE> は、渡された appendix オブジェクトが副本を選択済み
+で、かつ区切りコードの情報を持っていれば、その区切りコードを使用します。
 </P><P>
 
 <A NAME="Appendix Alternation Text"></A>
@@ -311,39 +311,39 @@ if (eb_read_text(&#38;book, &#38;app, NULL, NULL, MAX_LENGTH,
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 12.4 ����������ʸ���� </H2>
+<H2> 12.4 外字の代替文字列 </H2>
 <!--docid::SEC81::-->
 <P>
 
-CD-ROM ���Ҥϡ�������Ƥ��볰���ξ���Ȥ��ƥե���ȤΥǡ��������Ѱդ���
-���ޤ���
-�Ĥޤꡢ���γ������ɤΤ褦��ʸ���ʤΤ���桼����ʬ����褦�ˤ���ˤϡ�
-���ץꥱ������󤬥ե���Ȥ�ɽ�����뤷������ޤ���
-����������Ǥϡ��ƥ����ȥ��󥿡��ե��������Ѥ������ץꥱ�������Ǥϡ�
-��ʸ��γ�������ʬ���ޤä���ʬ����ޤ���
-������¿�Ѥ��Ƥ�����ҤǤϡ���ʸ��������ǽ�˶ᤤ���֤ˤʤ뤫���Τ�ޤ���
+CD-ROM 書籍は、定義している外字の情報としてフォントのデータしか用意して
+いません。
+つまり、その外字がどのような文字なのかをユーザに分かるようにするには、
+アプリケーションがフォントを表示するしかありません。
+しかしこれでは、テキストインターフェースを用いたアプリケーションでは、
+本文中の外字の部分がまったく分かりません。
+外字を多用している書籍では、本文が解読不能に近い状態になるかも知れません。
 </P><P>
 
-������ EB �饤�֥��Ǥϡ����������ؤȤʤ�ʸ����� appendix ������
-�Ǥ���褦�ˤ��Ƥ��ޤ���
-appendix ���Ѱդ���Ƥ�����˸¤ꡢ���ץꥱ�������ϳ����Υե����
-�����褹������ˤ�������ʸ�������Ϥ��뤳�Ȥˤ���С�
-�ƥ����ȥ��󥿡��ե��������Ѥ������ץꥱ�������Ǥ���Ҥ��ɤ߰פ�
-�ʤ�ޤ���
+そこで EB ライブラリでは、外字の代替となる文字列を appendix 内で定義
+できるようにしています。
+appendix が用意されている場合に限り、アプリケーションは外字のフォント
+を描画する代わりにその代替文字列を出力することにすれば、
+テキストインターフェースを用いたアプリケーションでも書籍が読み易く
+なります。
 </P><P>
 
-appendix ���������Ƥ�������ʸ�������Ф��ؿ��ϡ�2 �Ĥ���ޤ���
-Ⱦ�ѳ����Ѥ� <CODE>eb_narrow_alt_character_text()</CODE> �����ѳ����Ѥ�
-<CODE>eb_wide_alt_character_text()</CODE> �Ǥ���
-�ɤ���⡢�Ȥ������Ѥ��ޤ���
+appendix に定義されている代替文字列を取り出す関数は、2 つあります。
+半角外字用の <CODE>eb_narrow_alt_character_text()</CODE> と全角外字用の
+<CODE>eb_wide_alt_character_text()</CODE> です。
+どちらも、使い方は変わりません。
 </P><P>
 
-�ʲ�����Ǥϡ�Ⱦ�ѳ�����ʸ���ֹ� 0xa121 ���Ф�������ʸ����� <SAMP>`buffer'</SAMP>
-�˳�Ǽ���Ƥ��ޤ���
+以下の例では、半角外字の文字番号 0xa121 に対する代替文字列を <SAMP>`buffer'</SAMP>
+に格納しています。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>app</CODE> �� <CODE>EB_Appendix</CODE> �Υ��֥������Ȥǡ����Ǥ����ܤ�
- * ������Ǥ���Ȳ��ꤷ�Ƥ��ޤ���*/
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>app</CODE> が <CODE>EB_Appendix</CODE> のオブジェクトで、すでに副本を
+ * 選択中であると仮定しています。*/
 char buffer[EB_MAX_ALTERNATION_TEXT_LENGTH + 1];
 
 if (eb_narrow_alt_character_text(&#38;app, buffer, 0xa121)
@@ -353,16 +353,16 @@ if (eb_narrow_alt_character_text(&#38;app, buffer, 0xa121)
 }
 </pre></td></tr></table></P><P>
 
-�����ϸġ������ܤ��Ф����������Ƥ���Τǡ�����ʸ�������Ф��ˤϡ�
-���餫�������ܤ����򤷤Ƥ���ɬ�פ�����ޤ���
-�����Υե���Ȥ���Ф��ݤϡ�����˲ä��Ƴ����Ρֹ⤵�פ����򤷤Ƥ���
-ɬ�פ�����ޤ�����������ʸ����ˤϹ⤵�γ�ǰ���ʤ��Τ�ɬ�פ���ޤ���
+外字は個々の副本に対して定義されているので、代替文字列を取り出すには、
+あらかじめ副本を選択しておく必要があります。
+外字のフォントを取り出す際は、これに加えて外字の「高さ」も選択しておく
+必要がありましたが、代替文字列には高さの概念がないので必要ありません。
 </P><P>
 
-����ʸ����Ϻ�Ĺ�� <CODE>EB_MAX_ALTERNATION_TEXT_LENGTH</CODE> �Х���
-(= 31 �Х���) �Ǥ���
-������������Ĺ���ˤϥʥ�ʸ����ʬ�ϴޤ�Ǥ��ʤ��Τǡ�<SAMP>`buffer'</SAMP> ��
-�⤦ 1 �Х���ʬ;͵��������Ƥ��ޤ���
+代替文字列は最長で <CODE>EB_MAX_ALTERNATION_TEXT_LENGTH</CODE> バイト
+(= 31 バイト) です。
+ただし、この長さにはナル文字の分は含んでいないので、<SAMP>`buffer'</SAMP> は
+もう 1 バイト分余裕を持たせています。
 </P><P>
 
 <A NAME="Appendix Data Types"></A>
@@ -379,12 +379,12 @@ if (eb_narrow_alt_character_text(&#38;app, buffer, 0xa121)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 12.5 �ǡ������ξܺ� </H2>
+<H2> 12.5 データ型の詳細 </H2>
 <!--docid::SEC82::-->
 <P>
 
-��������������Ƥ���ǡ�������Ȥ��ˤϡ����Τ褦�˥إå��ե������
-�ɤ߹���ǲ�������
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/appendix.h&#62;
@@ -396,20 +396,20 @@ if (eb_narrow_alt_character_text(&#38;app, buffer, 0xa121)
 <DD><A NAME="IDX608"></A>
 </P><P>
 
-<CODE>EB_Appendix</CODE> ���ϡ������ CD-ROM ���Ҥ�ɽ���ޤ���
-CD-ROM ���ҤؤΥ��������ϡ����٤Ƥ��η��Υ��֥������Ȥ�𤷤ƹԤ��ޤ���
-Ʊ����ʣ���� CD-ROM ���Ҥ˥�����������ݤϡ����Ұ����˥��֥������Ȥ�
-���ɬ�פ�����ޤ���
+<CODE>EB_Appendix</CODE> 型は、一冊の CD-ROM 書籍を表します。
+CD-ROM 書籍へのアクセスは、すべてこの型のオブジェクトを介して行います。
+同時に複数の CD-ROM 書籍にアクセスする際は、書籍一冊毎にオブジェクトを
+作る必要があります。
 </P><P>
 
-<CODE>EB_Appendix</CODE> ���֥������Ȥ����ϡ����٤� EB �饤�֥�꤬�Ѱդ��Ƥ���
-�ؿ��ǹԤ��ޤ���
-���ץꥱ�������ץ������ϡ�ľ�� <CODE>EB_Appendix</CODE> ���֥������ȤΥ���
-�򻲾Ȥ����ꡢ���åȤ����ꤹ�٤��ǤϤ���ޤ���
+<CODE>EB_Appendix</CODE> オブジェクトの操作は、すべて EB ライブラリが用意している
+関数で行います。
+アプリケーションプログラムは、直接 <CODE>EB_Appendix</CODE> オブジェクトのメンバ
+を参照したり、セットしたりすべきではありません。
 </P><P>
 
-<CODE>EB_Appendix</CODE> ���֥������Ȥ���Ѥ���ݤϡ��ޤ����Υ��֥������Ȥ��Ф���
-<CODE>eb_initialize_book()</CODE> ��Ƥ�ǽ�������ʤ��ƤϤʤ�ޤ���
+<CODE>EB_Appendix</CODE> オブジェクトを使用する際は、まずそのオブジェクトに対して
+<CODE>eb_initialize_book()</CODE> を呼んで初期化しなくてはなりません。
 </DL>
 </P><P>
 
@@ -427,12 +427,12 @@ CD-ROM ���ҤؤΥ��������ϡ����٤Ƥ��η��Υ��֥������Ȥ�𤷤ƹԤ��ޤ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 12.6 �ؿ��ξܺ� </H2>
+<H2> 12.6 関数の詳細 </H2>
 <!--docid::SEC83::-->
 <P>
 
-��������������Ƥ���ؿ���Ȥ��ˤϡ����Τ褦�˥إå��ե�������ɤ߹����
-��������
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/appendix.h&#62;
@@ -444,15 +444,15 @@ CD-ROM ���ҤؤΥ��������ϡ����٤Ƥ��η��Υ��֥������Ȥ�𤷤ƹԤ��ޤ���
 <DD><A NAME="IDX610"></A>
 </P><P>
 
-�ؿ� <CODE>eb_initialize_appendix()</CODE> �ϡ�<VAR>app</VAR> �λؤ�
-<CODE>EB_Appendix</CODE> ���֥������Ȥ��������ޤ���
-<CODE>EB_Appendix</CODE> ���֥������Ȥ��Ф��� EB �饤�֥���¾�δؿ���Ƥ����ˡ�
-ɬ�����Υ��֥������Ȥ��������ʤ��ƤϤʤ�ޤ���
-��������Ƥ��ʤ����֥������Ȥ��Ф��ơ�EB �饤�֥���¾�δؿ���Ƥ��
-����ư���̤����Ǥ���
-�ޤ������Ǥ˽�����������֥������Ȥ��Ф��ơ�
-���� <CODE>eb_initialize_appendix()</CODE> ��Ƥ�ǤϤ����ޤ���
-�Ƥ������ư���̤����Ǥ���
+関数 <CODE>eb_initialize_appendix()</CODE> は、<VAR>app</VAR> の指す
+<CODE>EB_Appendix</CODE> オブジェクトを初期化します。
+<CODE>EB_Appendix</CODE> オブジェクトに対して EB ライブラリの他の関数を呼ぶ前に、
+必ずそのオブジェクトを初期化しなくてはなりません。
+初期化していないオブジェクトに対して、EB ライブラリの他の関数を呼んだ
+場合の動作は未定義です。
+また、すでに初期化したオブジェクトに対して、
+再度 <CODE>eb_initialize_appendix()</CODE> を呼んではいけません。
+呼んだ場合の動作は未定義です。
 </DL>
 </P><P>
 
@@ -462,17 +462,17 @@ CD-ROM ���ҤؤΥ��������ϡ����٤Ƥ��η��Υ��֥������Ȥ�𤷤ƹԤ��ޤ���
 <DD><A NAME="IDX612"></A>
 </P><P>
 
-�ؿ� <CODE>eb_finalize_appendix()</CODE> �ϡ�<VAR>app</VAR> ���ؤ� <CODE>EB_Appendix</CODE>
-���֥������Ȥθ������Ԥ��ޤ���
+関数 <CODE>eb_finalize_appendix()</CODE> は、<VAR>app</VAR> が指す <CODE>EB_Appendix</CODE>
+オブジェクトの後始末を行います。
 </P><P>
 
-���֥������Ȥ�������Ƥƴ������Ƥ�������Ϥ��٤Ʋ������졢
-�ե�����ǥ�������ץ��⤹�٤��Ĥ����ޤ���
-���֥������Ȥ� appendix �ȷ���դ��Ƥ������ϡ�����դ����򤫤�ޤ���
+オブジェクトが割り当てて管理していたメモリはすべて解放され、
+ファイルディスクリプタもすべて閉じられます。
+オブジェクトが appendix と結び付いていた場合は、結び付きが解かれます。
 </P><P>
 
-������򤷤����֥������Ȥ��Ф��� <CODE>eb_bind_appendix()</CODE> ��Ƥ֤��Ȥǡ�
-���֥������Ȥ�����Ѥ��뤳�Ȥ��Ǥ��ޤ���
+後始末をしたオブジェクトに対して <CODE>eb_bind_appendix()</CODE> を呼ぶことで、
+オブジェクトを再利用することができます。
 </DL>
 </P><P>
 
@@ -482,29 +482,29 @@ CD-ROM ���ҤؤΥ��������ϡ����٤Ƥ��η��Υ��֥������Ȥ�𤷤ƹԤ��ޤ���
 <DD><A NAME="IDX614"></A>
 </P><P>
 
-�ؿ� <CODE>eb_bind_appendix()</CODE> �ϡ�<VAR>app</VAR> �λؤ�
-<CODE>EB_Appendix</CODE> ���֥������Ȥ򡢥ѥ� <VAR>path</VAR> �ˤ��� appendix ��
-����դ��ޤ���
-�ѥ��ˤϡ�appendix �Υȥåץǥ��쥯�ȥ꤫��֥����������̻Ҥ���ꤷ�ޤ���
-appendix �Υȥåץǥ��쥯�ȥ�Ȥϡ�<TT>`catalog'</TT> ���뤤�� <TT>`catalogs'</TT>
-�ե������¸�ߤ���ǥ��쥯�ȥ��ؤ��ޤ���
+関数 <CODE>eb_bind_appendix()</CODE> は、<VAR>app</VAR> の指す
+<CODE>EB_Appendix</CODE> オブジェクトを、パス <VAR>path</VAR> にある appendix に
+結び付けます。
+パスには、appendix のトップディレクトリか遠隔アクセス識別子を指定します。
+appendix のトップディレクトリとは、<TT>`catalog'</TT> あるいは <TT>`catalogs'</TT>
+ファイルの存在するディレクトリを指します。
 </P><P>
 
-���֥������Ȥ����Ǥ�appendix �˷���դ��Ƥ�����硢���� appendix �Ȥ�
-����դ���򤤤Ƥ��顢<VAR>path</VAR> �ˤ��� appendix �˷���դ��ޤ���
+オブジェクトがすでにappendix に結び付いていた場合、その appendix との
+結び付きを解いてから、<VAR>path</VAR> にある appendix に結び付けます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���ΤȤ������ܤ�̤����ξ��֤ˤʤ�ޤ���
-���Ԥ���ȡ����֥������Ȥ� appendix �Ȥη���դ���򤫤줿���֤ˤ��ơ�
-�����򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+このとき、副本は未選択の状態になります。
+失敗すると、オブジェクトを appendix との結び付きを解かれた状態にして、
+原因を示すエラーコードを返します。
 </P><P>
 
-<VAR>path</VAR> �ϡ�<CODE>EB_MAX_PATH_LENGTH</CODE> �Х��Ȥ˼��ޤƤ��ʤ��Ƥ�
-�ʤ�ޤ���
-����ˡ�<VAR>path</VAR> �����Хѥ��ΤȤ��ϡ����Хѥ����Ѵ�������̤�����Ĺ��
-�˼��ޤäƤ��ʤ��ƤϤʤ�ޤ���
-�����Ķ����ȡ�<CODE>EB_ERR_TOO_LONG_FILE_NAME</CODE> ���֤��ޤ���
+<VAR>path</VAR> は、<CODE>EB_MAX_PATH_LENGTH</CODE> バイトに収まていなくては
+なりません。
+さらに、<VAR>path</VAR> が相対パスのときは、絶対パスに変換した結果がこの長さ
+に収まっていなくてはなりません。
+これを超えると、<CODE>EB_ERR_TOO_LONG_FILE_NAME</CODE> を返します。
 </DL>
 </P><P>
 
@@ -514,9 +514,9 @@ appendix �Υȥåץǥ��쥯�ȥ�Ȥϡ�<TT>`catalog'</TT> ���뤤�� <TT>`catalogs'</T
 <DD><A NAME="IDX616"></A>
 </P><P>
 
-�ؿ� <CODE>eb_is_appendix_bound()</CODE> �ϡ�<VAR>app</VAR> �� appendix ��
-����դ��Ƥ��뤫�ɤ�����Ĵ�٤ޤ���
-����դ��Ƥ���� 1 ���֤��������Ǥʤ���� 0 ���֤��ޤ���
+関数 <CODE>eb_is_appendix_bound()</CODE> は、<VAR>app</VAR> が appendix に
+結び付いているかどうかを調べます。
+結び付いていれば 1 を返し、そうでなければ 0 を返します。
 </DL>
 </P><P>
 
@@ -526,25 +526,25 @@ appendix �Υȥåץǥ��쥯�ȥ�Ȥϡ�<TT>`catalog'</TT> ���뤤�� <TT>`catalogs'</T
 <DD><A NAME="IDX618"></A>
 </P><P>
 
-�ؿ� <CODE>eb_appendix_path()</CODE> �ϡ�<VAR>app</VAR> �˷���դ��Ƥ��� appendix 
-�Υѥ��⤷���ϱ�֥����������̻Ҥ�<VAR>path</VAR> �λؤ��ΰ�˽񤭹��ߤޤ���
+関数 <CODE>eb_appendix_path()</CODE> は、<VAR>app</VAR> に結び付いている appendix 
+のパスもしくは遠隔アクセス識別子を、<VAR>path</VAR> の指す領域に書き込みます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>path</VAR> �λؤ��ΰ�˶�ʸ�����񤭹��ߡ������򼨤�
-���顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>path</VAR> の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
 </P><P>
 
-<VAR>app</VAR> �ϡ����餫������Ҥ˷���դ��Ƥ���ɬ�פ�����ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_BOOK</CODE> ���֤��ޤ���
+<VAR>app</VAR> は、あらかじめ書籍に結び付いている必要があります。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
 </P><P>
 
-<VAR>path</VAR> �˽񤭹���ѥ�̾�ΥХ��ȿ��ϡ���Ĺ�� <CODE>EB_MAX_PATH_LENGTH</CODE>
-�ˤʤ�ޤ���
-����Ĺ���ϡ������Υʥ�ʸ����ޤߤޤ���
-�ؿ����֤��ѥ������������줿���ˤʤäƤ���Τǡ�<CODE>eb_bind_appendix()</CODE>
-���Ϥ����Ȥ��Τ�Τ�Ʊ���Ȥϸ¤�ޤ���
-���Ȥ��С����Хѥ����ä����ϡ����Хѥ����Ѵ�����ޤ���
+<VAR>path</VAR> に書き込むパス名のバイト数は、最長で <CODE>EB_MAX_PATH_LENGTH</CODE>
+になります。
+この長さは、末尾のナル文字を含みません。
+関数が返すパスは正規化された形になっているので、<CODE>eb_bind_appendix()</CODE>
+に渡したときのものと同じとは限りません。
+たとえば、相対パスだった場合は、絶対パスに変換されます。
 </DL>
 </P><P>
 
@@ -554,28 +554,28 @@ appendix �Υȥåץǥ��쥯�ȥ�Ȥϡ�<TT>`catalog'</TT> ���뤤�� <TT>`catalogs'</T
 <DD><A NAME="IDX620"></A>
 </P><P>
 
-�ؿ� <CODE>eb_load_all_appendix_subbooks()</CODE> �ϡ�<VAR>app</VAR> ��Τ��٤Ƥ�
-���ܤ��������ޤ���
-�̾���ܤν�����ϡ��������ܤ��������򤵤줿�Ȥ��˼�ưŪ�˹Ԥ��ޤ�����
-���δؿ��Ͻ���������ݤ��ǹԤ��ޤ���
-��������оݤȤʤ�Τϡ����δؿ���ƤӽФ��������Ǥޤ���������Ƥ��ʤ�
-���٤Ƥ����ܤǤ���
-���δؿ��ϡ�������ɥ������ư��륵���Х��ץꥱ�������ʤɤ�ͭ���Ǥ���
-���饤����Ȥ������³����������ˤ��δؿ���Ƥ֤��Ȥǡ����ܤν������
-����˥��饤����Ȥ��Ԥ����ʤ��ƺѤߤޤ���
+関数 <CODE>eb_load_all_appendix_subbooks()</CODE> は、<VAR>app</VAR> 内のすべての
+副本を初期化します。
+通常、副本の初期化は、その副本が初めて選択されたときに自動的に行われますが、
+この関数は初期化を前倒しで行います。
+初期化の対象となるのは、この関数を呼び出した時点でまだ初期化していない
+すべての副本です。
+この関数は、スタンドアロンで動作するサーバアプリケーションなどで有効です。
+クライアントからの接続を受ける前にこの関数を呼ぶことで、副本の初期化の
+ためにクライアントを待たせなくて済みます。
 </P><P>
 
-��������оݤȤʤä����٤Ƥ����ܤν��������������С��ؿ���
-<CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-����Ǥ������˼��Ԥ������ϡ��Ĥ�����ܤν���������ᡢ�����򼨤�
-���顼�����ɤ��֤��ޤ���
+初期化の対象となったすべての副本の初期化に成功すれば、関数は
+<CODE>EB_SUCCESS</CODE> を返します。
+一冊でも初期化に失敗した場合は、残りの副本の初期化を諦め、原因を示す
+エラーコードを返します。
 </P><P>
 
-<VAR>app</VAR> �ϡ����餫���� appendix �˷���դ����Ƥ��ʤ��ƤϤʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_APP</CODE> ���֤��ޤ���
+<VAR>app</VAR> は、あらかじめ appendix に結び付けられていなくてはなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_APP</CODE> を返します。
 </P><P>
 
-���δؿ���ƤӽФ��ȡ�<VAR>app</VAR> �ϡ����ܤ����򤷤Ƥ��ʤ����֤ˤʤ�ޤ���
+この関数を呼び出すと、<VAR>app</VAR> は、副本を選択していない状態になります。
 </DL>
 </P><P>
 
@@ -586,21 +586,21 @@ appendix �Υȥåץǥ��쥯�ȥ�Ȥϡ�<TT>`catalog'</TT> ���뤤�� <TT>`catalogs'</T
 <A NAME="IDX623"></A>
 </P><P>
 
-�ؿ� <CODE>eb_appendix_subbook_list()</CODE> �ϡ�<VAR>app</VAR> ��Τ��٤����ܤ�
-���ܥ����ɤ� <CODE>EB_Subbook_Code</CODE> ��������ˤ��ơ�<VAR>subbook_list</VAR> 
-�λؤ��ΰ�˽񤭹��ߤޤ���
-����ϡ������ <CODE>EB_MAX_SUBBOOKS</CODE> �Ĥ����Ǥ�����ޤ���
-�ä��ơ�appendix ����Ͽ���Ƥ������ܤθĿ��� <VAR>subbook_count</VAR> �λؤ�
-�ΰ�˽񤭹��ߤޤ���
+関数 <CODE>eb_appendix_subbook_list()</CODE> は、<VAR>app</VAR> 内のすべて副本の
+副本コードを <CODE>EB_Subbook_Code</CODE> 型の配列にして、<VAR>subbook_list</VAR> 
+の指す領域に書き込みます。
+配列は、最大で <CODE>EB_MAX_SUBBOOKS</CODE> 個の要素を持ちます。
+加えて、appendix が収録している副本の個数を <VAR>subbook_count</VAR> の指す
+領域に書き込みます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>subbook_count</VAR> �λؤ��ΰ�� 0 ��񤭹��ߡ������򼨤�
-���顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>subbook_count</VAR> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
 </P><P>
 
-<VAR>app</VAR> �ϡ����餫���� appendix �˷���դ����Ƥ��ʤ��ƤϤʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_APP</CODE> ���֤��ޤ���
+<VAR>app</VAR> は、あらかじめ appendix に結び付けられていなくてはなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_APP</CODE> を返します。
 </DL>
 </P><P>
 
@@ -610,17 +610,17 @@ appendix �Υȥåץǥ��쥯�ȥ�Ȥϡ�<TT>`catalog'</TT> ���뤤�� <TT>`catalogs'</T
 <DD><A NAME="IDX625"></A>
 </P><P>
 
-�ؿ� <CODE>eb_appendix_subbook()</CODE> �ϡ�<VAR>app</VAR> ������������ܤ�
-���ܥ����ɤ� <VAR>subbook_code</VAR> �λؤ��ΰ�˽񤭹��ߤޤ���
+関数 <CODE>eb_appendix_subbook()</CODE> は、<VAR>app</VAR> が選択中の副本の
+副本コードを <VAR>subbook_code</VAR> の指す領域に書き込みます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>subbook_code</VAR> �λؤ��ΰ�� <CODE>EB_SUBBOOK_INVALID</CODE> 
-��񤭹��ߡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>subbook_code</VAR> の指す領域に <CODE>EB_SUBBOOK_INVALID</CODE> 
+を書き込み、原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>app</VAR> �Ϥ����줫�����ܤ����򤷤Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_APPSUB</CODE> ���֤��ޤ���
+あらかじめ、<VAR>app</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_APPSUB</CODE> を返します。
 </DL>
 </P><P>
 
@@ -631,24 +631,24 @@ appendix �Υȥåץǥ��쥯�ȥ�Ȥϡ�<TT>`catalog'</TT> ���뤤�� <TT>`catalogs'</T
 <A NAME="IDX628"></A>
 </P><P>
 
-�ؿ� <CODE>eb_appendix_subbook_directory()</CODE> �ϡ�<VAR>app</VAR> ��Ǹ���������
-�����ܤΥǡ����ե��������᤿�ǥ��쥯�ȥ�̾��<VAR>directory</VAR> �λؤ�
-�ΰ�˽񤭹��ߤޤ���
+関数 <CODE>eb_appendix_subbook_directory()</CODE> は、<VAR>app</VAR> 内で現在選択中
+の副本のデータファイルを収めたディレクトリ名を、<VAR>directory</VAR> の指す
+領域に書き込みます。
 </P><P>
 
-�ǥ��쥯�ȥ�̾��ʸ�����Ĺ���ϡ���Ĺ�� <CODE>EB_MAX_DIRECTORY_NAME_LENGTH</CODE>
-�Х��ȤǤ���
-����Ĺ���ˡ������Υʥ�ʸ���ϴޤߤޤ���
-�ǥ��쥯�ȥ�̾�� ASCII �ο������Ѿ�ʸ������������������ǹ�������ޤ���
+ディレクトリ名の文字列の長さは、最長で <CODE>EB_MAX_DIRECTORY_NAME_LENGTH</CODE>
+バイトです。
+この長さに、末尾のナル文字は含みません。
+ディレクトリ名は ASCII の数字、英小文字、アンダースコアで構成されます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>directory</VAR> �λؤ��ΰ�˶�ʸ�����񤭹��ߡ�������
-�򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>directory</VAR> の指す領域に空文字列を書き込み、原因に
+を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>app</VAR> ��Τ����줫�����ܤ����򤵤�Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_APPSUB</CODE> ���֤��ޤ���
+あらかじめ、<VAR>app</VAR> 内のいずれかの副本が選択されていなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_APPSUB</CODE> を返します。
 </DL>
 </P><P>
 
@@ -658,14 +658,14 @@ appendix �Υȥåץǥ��쥯�ȥ�Ȥϡ�<TT>`catalog'</TT> ���뤤�� <TT>`catalogs'</T
 <DD><A NAME="IDX630"></A>
 </P><P>
 
-<CODE>eb_appendix_subbook_directory()</CODE> �Ȼ��Ƥ��ޤ���������������ܤǤ�
-�ʤ������� <VAR>subbook_code</VAR> �ǻ��ꤵ�줿���ܤΥǥ��쥯�ȥ�̾��񤭹���
-�����ۤʤ�ޤ���
+<CODE>eb_appendix_subbook_directory()</CODE> と似ていますが、選択中の副本では
+なく、引数 <VAR>subbook_code</VAR> で指定された副本のディレクトリ名を書き込む
+点が異なります。
 </P><P>
 
-<VAR>app</VAR> �����ܤ����򤷤Ƥ��ʤ��Ƥ⹽���ޤ��󤬡����餫����
-appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_APP</CODE> ���֤��ޤ���
+<VAR>app</VAR> は副本を選択していなくても構いませんが、あらかじめ
+appendix に結び付けられていなければなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_APP</CODE> を返します。
 </DL>
 </P><P>
 
@@ -675,20 +675,20 @@ appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
 <DD><A NAME="IDX632"></A>
 </P><P>
 
-�ؿ� <CODE>eb_set_appendix_subbook()</CODE> �ϡ�<VAR>app</VAR> ������ <VAR>code</VAR> 
-�����򤷤ޤ���
-���Ǥ����ܤ����򤷤Ƥ������ϡ����ä���̤����ξ��֤ˤ��Ƥ�������
-<VAR>subbook_code</VAR> �����򤷤ޤ���
+関数 <CODE>eb_set_appendix_subbook()</CODE> は、<VAR>app</VAR> の副本 <VAR>code</VAR> 
+を選択します。
+すでに副本を選択していた場合は、いったん未選択の状態にしてから副本
+<VAR>subbook_code</VAR> を選択します。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���ΤȤ���������̤����ξ��֤Ȥʤꡢ�������ƥ����ȥǡ������ɤ߹��ߡ�
-�Х��ʥ�ǡ������ɤ߹��ߤˤĤ��Ƥξ��ֵ�Ͽ�ϡ����٤ƥꥻ�åȤ���ޤ���
-���Ԥ���ȡ����ܤ�̤����ξ��֤ˤ��ơ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+このとき、外字は未選択の状態となり、検索、テキストデータの読み込み、
+バイナリデータの読み込みについての状態記録は、すべてリセットされます。
+失敗すると、副本を未選択の状態にして、原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>app</VAR> �� appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_APP</CODE> ���֤��ޤ���
+あらかじめ、<VAR>app</VAR> は appendix に結び付けられていなければなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_APP</CODE> を返します。
 </DL>
 </P><P>
 
@@ -698,10 +698,10 @@ appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
 <DD><A NAME="IDX634"></A>
 </P><P>
 
-�ؿ� <CODE>eb_unset_appendix_subbook()</CODE> �ϡ�<VAR>app</VAR> �����򤷤Ƥ�������
-��̤����ξ��֤ˤ��ޤ���
-<VAR>app</VAR> �� appendix �˷���դ��Ƥ��ʤ��������ܤ����򤵤�Ƥ��ʤ����ϡ�
-���⤷�ޤ���
+関数 <CODE>eb_unset_appendix_subbook()</CODE> は、<VAR>app</VAR> が選択している副本
+を未選択の状態にします。
+<VAR>app</VAR> が appendix に結び付いていないか、副本が選択されていない場合は、
+何もしません。
 </DL>
 </P><P>
 
@@ -711,12 +711,12 @@ appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
 <DD><A NAME="IDX636"></A>
 </P><P>
 
-�ؿ� <CODE>eb_have_stop_code()</CODE> �ϡ�<VAR>app</VAR> ������������ܤ�
-���ڤꥳ���ɤ��������Ƥ��뤫�ɤ�����Ĵ�٤ޤ���
+関数 <CODE>eb_have_stop_code()</CODE> は、<VAR>app</VAR> が選択中の副本で
+区切りコードが定義されているかどうかを調べます。
 </P><P>
 
-������Ƥ���� 1 ���֤��ޤ���
-������Ƥ��ʤ��������⤽�����ܤ����򤵤�Ƥ��ʤ����� 0 ���֤��ޤ���
+定義していれば 1 を返します。
+定義していないか、そもそも副本が選択されていない場合は 0 を返します。
 </DL>
 </P><P>
 
@@ -726,21 +726,21 @@ appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
 <DD><A NAME="IDX638"></A>
 </P><P>
 
-�ؿ� <CODE>eb_stop_code()</CODE> �ϡ�<VAR>app</VAR> ������������ܤ�������Ƥ���
-���ڤꥳ���ɤ� <VAR>stop_code</VAR> �λؤ��ΰ�˽񤭹��ߤޤ���
-<VAR>stop_code[0]</VAR>, <VAR>stop_code[1]</VAR> �ˡ����ڤꥳ���ɤ��ͤȤ���
-���줾�� <SAMP>`0x0000'</SAMP> �� <SAMP>`0xffff'</SAMP> ���񤭹��ޤ�ޤ���
+関数 <CODE>eb_stop_code()</CODE> は、<VAR>app</VAR> が選択中の副本で定義している
+区切りコードを <VAR>stop_code</VAR> の指す領域に書き込みます。
+<VAR>stop_code[0]</VAR>, <VAR>stop_code[1]</VAR> に、区切りコードの値として
+それぞれ <SAMP>`0x0000'</SAMP> 〜 <SAMP>`0xffff'</SAMP> が書き込まれます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ��ؿ��� <VAR>stop_code[0]</VAR> �� <VAR>stop_code[1]</VAR> �� <SAMP>`-1'</SAMP>
-��񤭹��ߡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、関数は <VAR>stop_code[0]</VAR> と <VAR>stop_code[1]</VAR> に <SAMP>`-1'</SAMP>
+を書き込み、原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>app</VAR> �����ܤ����򤷤Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_APPSUB</CODE> ���֤��ޤ���
-���ܤ����ڤꥳ���ɤ�������Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_STOPCODE</CODE> ��
-�֤��ޤ���
+あらかじめ、<VAR>app</VAR> は副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_APPSUB</CODE> を返します。
+副本が区切りコードを定義していない場合は、<CODE>EB_ERR_NO_STOPCODE</CODE> を
+返します。
 </DL>
 </P><P>
 
@@ -753,14 +753,14 @@ appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
 <A NAME="IDX642"></A>
 </P><P>
 
-�ؿ� <CODE>eb_have_narrow_alt()</CODE> �ϡ�����������ܤ�Ⱦ�ѳ������Ф���
-����ʸ�����������Ƥ��뤫�ɤ�����Ĵ�٤ޤ���
-Ʊ�ͤˡ��ؿ� <CODE>eb_have_wide_alt()</CODE> �ϡ����ѳ������Ф�������ʸ����
-��������Ƥ��뤫�ɤ�����Ĵ�٤ޤ���
+関数 <CODE>eb_have_narrow_alt()</CODE> は、選択中の副本が半角外字に対する
+代替文字列を定義しているかどうかを調べます。
+同様に、関数 <CODE>eb_have_wide_alt()</CODE> は、全角外字に対する代替文字列
+を定義しているかどうかを調べます。
 </P><P>
 
-������Ƥ���� 1 ��������Ƥ��ʤ���� 0 ���֤��ޤ���
-<VAR>app</VAR> �����ܤ����򤷤Ƥ��ʤ����� 0 ���֤��ޤ���
+定義していれば 1 を、定義していなければ 0 を返します。
+<VAR>app</VAR> が副本を選択していない場合も 0 を返します。
 </DL>
 </P><P>
 
@@ -773,23 +773,23 @@ appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
 <A NAME="IDX646"></A>
 </P><P>
 
-�ؿ� <CODE>eb_narrow_alt_start()</CODE> �ϡ�<VAR>app</VAR> ������������ܤˤ�����
-Ⱦ�ѳ������Ф�������ʸ���������ϰϤ�Ĵ�١���Ƭ��ʸ���ֹ� (Ⱦ�ѳ�����
-ʸ���ֹ����ǺǾ��Τ��) �� <VAR>start</VAR> �λؤ��ΰ�˽񤭹��ߤޤ���
+関数 <CODE>eb_narrow_alt_start()</CODE> は、<VAR>app</VAR> が選択中の副本における
+半角外字に対する代替文字列の定義範囲を調べ、先頭の文字番号 (半角外字の
+文字番号の中で最小のもの) を <VAR>start</VAR> の指す領域に書き込みます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>app</VAR> �����ܤ����򤷤Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_APPSUB</CODE> ���֤��ޤ���
-���ܤ�Ⱦ�ѳ������Ф�������ʸ�����������Ƥ��ʤ����ϡ�
-<CODE>EB_ERR_NO_ALT</CODE> ���֤��ޤ���
+あらかじめ、<VAR>app</VAR> は副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_APPSUB</CODE> を返します。
+副本が半角外字に対する代替文字列を定義していない場合は、
+<CODE>EB_ERR_NO_ALT</CODE> を返します。
 </P><P>
 
-�ؿ� <CODE>eb_wide_font_start()</CODE> �ϡ�Ⱦ�ѳ����ǤϤʤ����ѳ����ˤĤ���
-Ĵ�٤�Ȥ�����������ơ�<CODE>eb_narrow_font_start()</CODE> ��Ʊ���Ǥ���
+関数 <CODE>eb_wide_font_start()</CODE> は、半角外字ではなく全角外字について
+調べるという点を除いて、<CODE>eb_narrow_font_start()</CODE> と同じです。
 </DL>
 </P><P>
 
@@ -802,23 +802,23 @@ appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
 <A NAME="IDX650"></A>
 </P><P>
 
-�ؿ� <CODE>eb_narrow_alt_end()</CODE> �ϡ�<VAR>app</VAR> ������������ܤˤ�����
-Ⱦ�ѳ������Ф�������ʸ���������ϰϤ�Ĵ�١��Ǹ��ʸ���ֹ� (Ⱦ�ѳ�����
-ʸ���ֹ����Ǻ���Τ��) �� <VAR>start</VAR> �λؤ��ΰ�˽񤭹��ߤޤ���
+関数 <CODE>eb_narrow_alt_end()</CODE> は、<VAR>app</VAR> が選択中の副本における
+半角外字に対する代替文字列の定義範囲を調べ、最後の文字番号 (半角外字の
+文字番号の中で最大のもの) を <VAR>start</VAR> の指す領域に書き込みます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>app</VAR> �����ܤ����򤷤Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_APPSUB</CODE> ���֤��ޤ���
-���ܤ�Ⱦ�ѳ������Ф�������ʸ�����������Ƥ��ʤ����ϡ�
-<CODE>EB_ERR_NO_ALT</CODE> ���֤��ޤ���
+あらかじめ、<VAR>app</VAR> は副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_APPSUB</CODE> を返します。
+副本が半角外字に対する代替文字列を定義していない場合は、
+<CODE>EB_ERR_NO_ALT</CODE> を返します。
 </P><P>
 
-�ؿ� <CODE>eb_wide_font_start()</CODE> �ϡ�Ⱦ�ѳ����ǤϤʤ����ѳ����ˤĤ���
-Ĵ�٤�Ȥ�����������ơ�<CODE>eb_narrow_font_start()</CODE> ��Ʊ���Ǥ���
+関数 <CODE>eb_wide_font_start()</CODE> は、半角外字ではなく全角外字について
+調べるという点を除いて、<CODE>eb_narrow_font_start()</CODE> と同じです。
 </DL>
 </P><P>
 
@@ -831,52 +831,52 @@ appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
 <A NAME="IDX654"></A>
 </P><P>
 
-�ؿ� <CODE>eb_narrow_alt_character_text()</CODE> �ϡ�<VAR>book</VAR> ���������
-���ܤ�������Ƥ��롢Ⱦ�ѳ���������ʸ�������Ф��ޤ���
-������ʸ���ֹ��<VAR>character_number</VAR> �ǻ��ꤷ�ޤ���
+関数 <CODE>eb_narrow_alt_character_text()</CODE> は、<VAR>book</VAR> が選択中の
+副本で定義している、半角外字の代替文字列を取り出します。
+外字の文字番号を、<VAR>character_number</VAR> で指定します。
 </P><P>
 
-��������ȡ��ؿ�������ʸ����� <VAR>text</VAR> �λؤ��ΰ�˽񤭹��ߡ�
-<CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>text</VAR> �λؤ��ΰ�˶�ʸ�����񤭹��ߡ������򼨤�
-���顼�����ɤ��֤��ޤ���
+成功すると、関数は代替文字列を <VAR>text</VAR> の指す領域に書き込み、
+<CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>text</VAR> の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
 </P><P>
 
-����ʸ����Ϻ�Ĺ�� <CODE>EB_MAX_ALTERNATION_TEXT_LENGTH</CODE> �Х���
-(= 31 �Х���) �Ǥ���
-������������Ĺ���ˤϥʥ�ʸ����ʬ�ϴޤ�Ǥ��ʤ��Τǡ�<VAR>text</VAR> ���ΰ�
-�ˤϤ⤦ 1 �Х���ʬɬ�פǤ���
+代替文字列は最長で <CODE>EB_MAX_ALTERNATION_TEXT_LENGTH</CODE> バイト
+(= 31 バイト) です。
+ただし、この長さにはナル文字の分は含んでいないので、<VAR>text</VAR> の領域
+にはもう 1 バイト分必要です。
 </P><P>
 
-����ʸ���󤬤ɤ�ʸ�������ɤǽ񤫤�Ƥ��뤫�ϡ�appendix ����ˤ�
-��Ͽ����Ƥ��ޤ���
-��������appendix ��ɬ������ν��Ҥ��б����ƺ���������ΤʤΤǡ����Ҥ�
-ʸ�������ɤ��鼡�Τ褦��Ƚ�Ǥ���С�����ʤ��Ǥ��礦��
+代替文字列がどの文字コードで書かれているかは、appendix の中には
+記録されていません。
+しかし、appendix は必ず特定の書籍に対応して作成されるものなので、書籍の
+文字コードから次のように判断すれば、問題ないでしょう。
 </P><P>
 
 <UL>
-<LI>���Ҥ� ISO 8859-1 �ǽ񤫤�Ƥ�����ϡ�����ʸ����� ISO 8859-1
-<LI>����ʳ��ξ�硢����ʸ��������ܸ� EUC
+<LI>書籍が ISO 8859-1 で書かれている場合は、代替文字列も ISO 8859-1
+<LI>それ以外の場合、代替文字列は日本語 EUC
 </UL>
 <P>
 
-���餫���ᡢ<VAR>app</VAR> �����ܤ����򤷤Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_APPSUB</CODE> ���֤��ޤ���
-ʸ���ֹ� <VAR>character_number</VAR> ������������ϰϳ��ˤ�����ϡ�
-<CODE>EB_ERR_NO_SUCH_CHAR_TEXT</CODE> ���֤��ޤ���
+あらかじめ、<VAR>app</VAR> は副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_APPSUB</CODE> を返します。
+文字番号 <VAR>character_number</VAR> が外字の定義範囲外にある場合は、
+<CODE>EB_ERR_NO_SUCH_CHAR_TEXT</CODE> を返します。
 </P><P>
 
-���ܤ�Ⱦ�ѳ������Ф�������ʸ����� (<VAR>character_number</VAR> �˸¤餺
-�ޤä���) ������Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_ALT</CODE> ���֤��ޤ���
-�����ǤϤʤ���������ʸ���ֹ�ˤĤ��Ƥ�Ⱦ�ѳ������Ф�������ʸ�����
-������Ƥ����ΤΡ�<VAR>character_number</VAR> ���Ф�������ʸ�����¸�ߤ��ʤ�
-��硢�ؿ��� <CODE>EB_SUCCESS</CODE> ���֤���<VAR>text</VAR> �λؤ��ΰ�ˤ�
-��ʸ���󤬽񤭹��ޤ�ޤ���
+副本が半角外字に対する代替文字列を (<VAR>character_number</VAR> に限らず
+まったく) 定義していない場合は、<CODE>EB_ERR_NO_ALT</CODE> を返します。
+そうではなく、一部の文字番号については半角外字に対する代替文字列を
+定義しているものの、<VAR>character_number</VAR> に対する代替文字列は存在しない
+場合、関数は <CODE>EB_SUCCESS</CODE> を返し、<VAR>text</VAR> の指す領域には
+空文字列が書き込まれます。
 </P><P>
 
-�ؿ� <CODE>eb_wide_alt_character_text()</CODE> �ϡ�Ⱦ�ѳ����ǤϤʤ�
-���ѳ������Ф�������ʸ�������Ф��Ȥ�����������ơ�
-<CODE>eb_narrow_alt_character_text()</CODE> ��Ʊ���Ǥ���
+関数 <CODE>eb_wide_alt_character_text()</CODE> は、半角外字ではなく
+全角外字に対する代替文字列を取り出すという点を除いて、
+<CODE>eb_narrow_alt_character_text()</CODE> と同じです。
 </DL>
 </P><P>
 
@@ -889,44 +889,44 @@ appendix �˷���դ����Ƥ��ʤ���Фʤ�ޤ���
 <A NAME="IDX658"></A>
 </P><P>
 
-�ؿ� <CODE>eb_forward_narrow_alt_character()</CODE> �ϡ�<VAR>app</VAR> ��������
-�����ܤˤ������������Ƥ��롢Ⱦ�ѳ������Ф�������ʸ�����ʸ���ֹ�
-<VAR>character_number</VAR> �� <VAR>n</VAR> �ĸ���˰��֤���ʸ����ʸ���ֹ��
-�������ޤ���
+関数 <CODE>eb_forward_narrow_alt_character()</CODE> は、<VAR>app</VAR> が選択中
+の副本において定義されている、半角外字に対する代替文字列の文字番号
+<VAR>character_number</VAR> の <VAR>n</VAR> 個後ろに位置する文字の文字番号を
+取得します。
 </P><P>
 
-�ޤ����ؿ���ƤӽФ��ݤˡ�<VAR>character_number</VAR> �λؤ��ΰ��ʸ���ֹ��
-�񤭹���Ǥ����ޤ���
-�ؿ��ν�������������ȡ���ä��Ȥ��� <VAR>n</VAR> ��ʬ����������ʸ���ֹ��
-�񤭴���äƤ��ޤ���
+まず、関数を呼び出す際に、<VAR>character_number</VAR> の指す領域に文字番号を
+書き込んでおきます。
+関数の処理が成功すると、戻ったときに <VAR>n</VAR> 個分だけ後方の文字番号に
+書き換わっています。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>app</VAR> �����ܤ����򤷤Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_APPSUB</CODE> ���֤��ޤ���
-���ܤ�Ⱦ�ѳ������Ф�������ʸ�����������Ƥ��ʤ����ϡ�
-<CODE>EB_ERR_NO_ALT</CODE> ���֤��ޤ���
+あらかじめ、<VAR>app</VAR> は副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_APPSUB</CODE> を返します。
+副本が半角外字に対する代替文字列を定義していない場合は、
+<CODE>EB_ERR_NO_ALT</CODE> を返します。
 </P><P>
 
-<VAR>n</VAR> �ĸ���ˤ⤦�������ʤ����䡢�ƤӽФ����ݤ�
-<VAR>character_number</VAR> �λؤ��ΰ�˽񤭹���Ǥ��ä�ʸ���ֹ椬������
-����ϰϳ��ˤ������ <CODE>EB_ERR_NO_SUCH_CHAR_TEXT</CODE> ���֤��ޤ���
+<VAR>n</VAR> 個後ろにもう外字がない場合や、呼び出した際に
+<VAR>character_number</VAR> の指す領域に書き込んであった文字番号が外字の
+定義範囲外にある場合は <CODE>EB_ERR_NO_SUCH_CHAR_TEXT</CODE> を返します。
 </P><P>
 
-<VAR>n</VAR> �ˤ���ο�����ꤹ�뤳�Ȥ�Ǥ��ޤ���
-���ξ�硢���θƤӽФ��������ˤʤ�ޤ���
+<VAR>n</VAR> には負の数を指定することもできます。
+この場合、次の呼び出しと等価になります。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* n &#60; 0 �Ȥ��� */
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* n &#60; 0 とする */
 eb_backward_narrow_font_character (book, -n, character_number);
 </pre></td></tr></table></P><P>
 
-�ؿ� <CODE>eb_forward_wide_alt_character()</CODE> �ϡ�Ⱦ�ѳ����ǤϤʤ�
-���ѳ����ˤĤ�������Ȥ�����������ơ�
-<CODE>eb_forward_narrow_alt_character()</CODE> ��Ʊ���Ǥ���
+関数 <CODE>eb_forward_wide_alt_character()</CODE> は、半角外字ではなく
+全角外字について操作するという点を除いて、
+<CODE>eb_forward_narrow_alt_character()</CODE> と同じです。
 </DL>
 </P><P>
 
@@ -944,26 +944,26 @@ eb_backward_narrow_font_character (book, -n, character_number);
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 12.7 ����ץ�ץ������ </H2>
+<H2> 12.7 サンプルプログラム </H2>
 <!--docid::SEC84::-->
 <P>
 
 <A NAME="IDX659"></A>
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/*
- * ������ˡ:
+ * 使用方法:
  *     font &#60;appendix-path&#62; &#60;subbook-index&#62;
- * ��:
+ * 例:
  *     font /cdrom 0
- * ����:
- *     &#60;appendix-path&#62; �ǻ��ꤷ�� appendix ������������ܤ����ӡ���
- *     �����ܤ�������Ƥ���Ⱦ�ѳ���������ʸ����򤹤٤�ɽ�����ޤ���
+ * 説明:
+ *     &#60;appendix-path&#62; で指定した appendix から特定の副本を選び、そ
+ *     の副本が定義している半角外字の代替文字列をすべて表示します。
  *
- *     ���� appendix ����Ⱦ�ѳ���������ʸ�����������Ƥ��ʤ��ȡ���
- *     �顼�ˤʤ�ޤ���
+ *     その appendix が、半角外字の代替文字列を定義していないと、エ
+ *     ラーになります。
  *
- *     &#60;subbook-index&#62; �ˤϡ�����оݤ����ܤΥ���ǥå�������ꤷ��
- *     ��������ǥå����ϡ����Ҥκǽ�����ܤ����� 0��1��2 ... ��
- *     �ʤ�ޤ���
+ *     &#60;subbook-index&#62; には、操作対象の副本のインデックスを指定しま
+ *     す。インデックスは、書籍の最初の副本から順に 0、1、2 ... に
+ *     なります。
  */
 #include "config.h"
 
@@ -988,18 +988,18 @@ main(argc, argv)
     char text[EB_MAX_ALTERNATION_TEXT_LENGTH + 1];
     int i;
 
-    /* ���ޥ�ɹ԰���������å���*/
+    /* コマンド行引数をチェック。*/
     if (argc != 3) {
         fprintf(stderr, "Usage: %s appendix-path subbook-index\n",
             argv[0]);
         exit(1);
     }
 
-    /* EB �饤�֥��� `app' ��������*/
+    /* EB ライブラリと `app' を初期化。*/
     eb_initialize_library();
     eb_initialize_appendix(&#38;app);
 
-    /* appendix �� `app' �˷���դ��롣*/
+    /* appendix を `app' に結び付ける。*/
     error_code = eb_bind_appendix(&#38;app, argv[1]);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to bind the app, %s: %s\n",
@@ -1007,7 +1007,7 @@ main(argc, argv)
         goto die;
     }
 
-    /* ���ܤΰ����������*/
+    /* 副本の一覧を取得。*/
     error_code = eb_appendix_subbook_list(&#38;app, subbook_list,
         &#38;subbook_count);
     if (error_code != EB_SUCCESS) {
@@ -1016,10 +1016,10 @@ main(argc, argv)
         goto die;
     }
 
-    /* ���ܤΥ���ǥå����������*/
+    /* 副本のインデックスを取得。*/
     subbook_index = atoi(argv[2]);
 
-    /*�ָ��ߤ����� (current subbook)�פ����ꡣ*/
+    /*「現在の副本 (current subbook)」を設定。*/
     if (eb_set_appendix_subbook(&#38;app, subbook_list[subbook_index])
         &#60; 0) {
         fprintf(stderr, "%s: failed to set the current subbook, %s\n",
@@ -1027,7 +1027,7 @@ main(argc, argv)
         goto die;
     }
 
-    /* �����γ��ϰ��֤������*/
+    /* 外字の開始位置を取得。*/
     error_code = eb_narrow_alt_start(&#38;app, &#38;alt_start);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to get font information, %s\n",
@@ -1037,7 +1037,7 @@ main(argc, argv)
 
     i = alt_start;
     for (;;) {
-        /* ����������ʸ����������*/
+        /* 外字の代替文字列を取得。*/
         error_code = eb_narrow_alt_character_text(&#38;app, i, text);
         if (error_code != EB_SUCCESS) {
             fprintf(stderr, "%s: failed to get font data, %s\n",
@@ -1045,21 +1045,21 @@ main(argc, argv)
             goto die;
         }
 
-        /* ������������ʸ�������ϡ�*/
+        /* 取得した代替文字列を出力。*/
         printf("%04x: %s\n", i, text);
 
-        /* ������ʸ���ֹ���Ŀʤ�롣*/
+        /* 外字の文字番号を一つ進める。*/
         error_code = eb_forward_narrow_alt_character(&#38;app, 1, &#38;i);
         if (error_code != EB_SUCCESS)
             break;
     }
         
-    /* appendix �� EB �饤�֥������Ѥ�λ��*/
+    /* appendix と EB ライブラリの利用を終了。*/
     eb_finalize_appendix(&#38;app);
     eb_finalize_library();
     exit(0);
 
-    /* ���顼ȯ���ǽ�λ����Ȥ��ν�����*/
+    /* エラー発生で終了するときの処理。*/
   die:
     eb_finalize_appendix(&#38;app);
     eb_finalize_library();

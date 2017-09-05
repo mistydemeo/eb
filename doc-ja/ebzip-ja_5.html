@@ -35,18 +35,18 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 5. ��Ĺ </H1>
+<H1> 5. 伸長 </H1>
 <!--docid::SEC12::-->
 <P>
 
-<CODE>ebunzip</CODE> (<CODE>ebzip --uncompress</CODE>��<CODE>ebzipinfo --uncompress</CODE>
-��Ʊ��) �ϡ�<CODE>ebzip</CODE> �ǰ��̤��� CD-ROM ���Ҥ�Ĺ���ޤ���
+<CODE>ebunzip</CODE> (<CODE>ebzip --uncompress</CODE>、<CODE>ebzipinfo --uncompress</CODE>
+と同じ) は、<CODE>ebzip</CODE> で圧縮した CD-ROM 書籍を伸長します。
 </P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_5.html#SEC13">5.1 ��Ĺ�μ¹���</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_5.html#SEC14">5.2 ��Ĺ�Υ��ץ����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_5.html#SEC15">5.3 ���̤��줿���Ҥο�Ĺ</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_5.html#SEC13">5.1 伸長の実行例</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_5.html#SEC14">5.2 伸長のオプション</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="ebzip-ja_5.html#SEC15">5.3 圧縮された書籍の伸長</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -64,13 +64,13 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 5.1 ��Ĺ�μ¹��� </H2>
+<H2> 5.1 伸長の実行例 </H2>
 <!--docid::SEC13::-->
 <P>
 
-��Ĺ�ν������ϡ����̤Ȥ��ʤ���Ƥ��ޤ���
-<TT>`/dict'</TT> �β��˰��̤��줿���Ҥ��֤���Ƥ����ΤȲ��ꤷ�ޤ���
-���ν��Ҥˤϡ�<TT>`/dict'</TT> �β��˼��Τ褦�ʥե��������äƤ��ޤ���
+伸長の処理手順は、圧縮とかなり似ています。
+<TT>`/dict'</TT> の下に圧縮された書籍が置かれているものと仮定します。
+この書籍には、<TT>`/dict'</TT> の下に次のようなファイルを持っています。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/dict/catalog
@@ -79,47 +79,47 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 /dict/english/start.ebz
 </pre></td></tr></table></P><P>
 
-���ν��Ҥ�Ĺ����ˤϡ����Υ��ޥ�ɤ�¹Ԥ��ޤ���
+この書籍を伸長するには、次のコマンドを実行します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>% cd /dict
 % ebunzip
 </pre></td></tr></table></P><P>
 
-����ϼ��Τ褦�ˤ��Ƥ�Ʊ���Ǥ���
+これは次のようにしても同じです。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>% ebunzip --output-directory /dict /dict
 </pre></td></tr></table></P><P>
 
-��Ĺ�ˤϡ����Ф餯�����뤳�Ȥ�����ޤ���
-��Ĺ�δ֡�<CODE>ebunzip</CODE> �ϡ����Τ褦�˾������Τ餻���å����������
-���ޤ���
+伸長には、しばらくかかることがあります。
+伸長の間、<CODE>ebunzip</CODE> は、次のように状況を知らせるメッセージを出力
+します。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; /dict/kanji/start.ebz ��Ĺ &#60;==
-./kanji/start.ebz �˽���
- 5.1% �����Ѥ� (4194304 / 82460672 �Х���)
-10.2% �����Ѥ� (8388608 / 82460672 �Х���)
-15.3% �����Ѥ� (12582912 / 82460672 �Х���)
-        : (ά)
-��λ (82460672 / 82460672 �Х���)
-25681439 -&#62; 82460672 �Х���
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; /dict/kanji/start.ebz を伸長 &#60;==
+./kanji/start.ebz に出力
+ 5.1% 処理済み (4194304 / 82460672 バイト)
+10.2% 処理済み (8388608 / 82460672 バイト)
+15.3% 処理済み (12582912 / 82460672 バイト)
+        : (略)
+完了 (82460672 / 82460672 バイト)
+25681439 -&#62; 82460672 バイト
 </pre></td></tr></table></P><P>
 
-��Ĺ�δ֡�<CODE>ebunzip</CODE> �ϡ����Ǥ�¸�ߤ���ե�������񤭤��Ƥ��ɤ���
-�ɤ�����ǧ����Ƥ��ޤ���
+伸長の間、<CODE>ebunzip</CODE> は、すでに存在するファイルを上書きしても良いか
+どうか確認を求めてきます。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; /dict/kanji/start.ebz ��Ĺ &#60;==
-/dict/kanji/start �˽���
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>==&#62; /dict/kanji/start.ebz を伸長 &#60;==
+/dict/kanji/start に出力
 
-�ե����뤬���Ǥ�¸�ߤ��ޤ�: /dict/kanji/start
-��񤭤��ޤ��� (�Ϥ�:y, ������:n)?
+ファイルがすでに存在します: /dict/kanji/start
+上書きしますか (はい:y, いいえ:n)?
 </pre></td></tr></table></P><P>
 
-��Ĺ����λ����ȡ�<TT>`/dict'</TT> �β��Υǥ��쥯�ȥ깽���Ͼ����Ѳ�����
-���ޤ���
+伸長が完了すると、<TT>`/dict'</TT> の下のディレクトリ構成は少し変化して
+います。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/dict/catalog
@@ -128,8 +128,8 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 /dict/english/start
 </pre></td></tr></table></P><P>
 
-��Ĺ���줿�ե�����ϥե�����̾���Ѳ�����
-��ĥ�� <SAMP>`.ebz'</SAMP> ����������Ƥ��ޤ���
+伸長されたファイルはファイル名が変化し、
+拡張子 <SAMP>`.ebz'</SAMP> が取り除かれています。
 </P><P>
 
 <A NAME="Options for Uncompression"></A>
@@ -146,39 +146,39 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 5.2 ��Ĺ�Υ��ץ���� </H2>
+<H2> 5.2 伸長のオプション </H2>
 <!--docid::SEC14::-->
 <P>
 
-¿���Υ��ץ����ϡ����̻��ȿ�Ĺ���Ȥ�Ʊ����̣����äƤ��ޤ���
+多くのオプションは、圧縮時と伸長時とで同じ意味を持っています。
 </P><P>
 
-<SAMP>`--keep'</SAMP> ���ץ�������ꤹ��ȡ�<CODE>ebunzip</CODE> �ϡ���Ĺ�������
-���̥ե�����������ʤ��ʤ�ޤ���
+<SAMP>`--keep'</SAMP> オプションを指定すると、<CODE>ebunzip</CODE> は、伸長した後に
+圧縮ファイルを削除しなくなります。
 </P><P>
 
-<SAMP>`--test'</SAMP> ���ץ�������ꤹ��ȡ�<CODE>ebunzip</CODE> �Ͽ�Ĺ�����ǡ���
-��ºݤΥե�����ˤϽ񤭹��ߤޤ���
-���Υ��ץ����ϡ��ե����뤬���������̤���Ƥ���Τ����ǧ����Ȥ�����
-���Ǥ�
-(<SAMP>`--test'</SAMP> ���ץ����ˤĤ��Ƥξܺ٤ϡ���<A HREF="ebzip-ja_4.html#SEC8">�ƥ���</A>����򻲾�)��
+<SAMP>`--test'</SAMP> オプションを指定すると、<CODE>ebunzip</CODE> は伸長したデータ
+を実際のファイルには書き込みません。
+このオプションは、ファイルが正しく圧縮されているのかを確認するときに便
+利です
+(<SAMP>`--test'</SAMP> オプションについての詳細は、「<A HREF="ebzip-ja_4.html#SEC8">テスト</A>」節を参照)。
 </P><P>
 
-<SAMP>`--subbook'</SAMP> �� <SAMP>`--skip-content'</SAMP> ���ץ�������ꤹ��ȡ����
-�˹��פ����ե��������������Ĺ���ޤ���
-(�����Υ��ץ����ˤĤ��Ƥξܺ٤ϡ�
-��<A HREF="ebzip-ja_4.html#SEC9">���������ΰ���</A>����򻲾�)��
+<SAMP>`--subbook'</SAMP> や <SAMP>`--skip-content'</SAMP> オプションを指定すると、条件
+に合致したファイルだけしか伸長しません
+(これらのオプションについての詳細は、
+「<A HREF="ebzip-ja_4.html#SEC9">一部だけの圧縮</A>」節を参照)。
 </P><P>
 
-<SAMP>`--force-overwrite'</SAMP> �� <SAMP>`--no-overwrite'</SAMP> ���ץ�������ꤹ��
-�ȡ�<CODE>ebunzip</CODE> �Ͼ�񤭤��Ƥ��ɤ����ɤ����γ�ǧ�ʤ��ˡ��ե������
-��񤭤��������Ф��Ƽ��˿ʤ���ꤷ�ޤ�
-(<SAMP>`--force-overwrite'</SAMP> �� <SAMP>`--no-overwrite'</SAMP> ���ץ����ˤĤ��Ƥ�
-�ܺ٤ϡ���<A HREF="ebzip-ja_4.html#SEC10">�Ť��ե�����ξ��</A>����򻲾�)��
+<SAMP>`--force-overwrite'</SAMP> や <SAMP>`--no-overwrite'</SAMP> オプションを指定する
+と、<CODE>ebunzip</CODE> は上書きしても良いかどうかの確認なしに、ファイルを
+上書きしたり飛ばして次に進んだりします
+(<SAMP>`--force-overwrite'</SAMP> と <SAMP>`--no-overwrite'</SAMP> オプションについての
+詳細は、「<A HREF="ebzip-ja_4.html#SEC10">古いファイルの上書き</A>」節を参照)。
 </P><P>
 
-<CODE>ebunzip</CODE> �ϡ�<SAMP>`--level'</SAMP> ���ץ�����̵�뤷�ޤ���
-��Ĺ���� <SAMP>`--level'</SAMP> ���ץ�������ꤹ��ɬ�פϤ���ޤ���
+<CODE>ebunzip</CODE> は、<SAMP>`--level'</SAMP> オプションを無視します。
+伸長時に <SAMP>`--level'</SAMP> オプションを指定する必要はありません。
 </P><P>
 
 <A NAME="Uncompress Compressed Book"></A>
@@ -195,23 +195,23 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 5.3 ���̤��줿���Ҥο�Ĺ </H2>
+<H2> 5.3 圧縮された書籍の伸長 </H2>
 <!--docid::SEC15::-->
 <P>
 
-S-EBXA ����� EPWING ���ʤǤⰵ�̷�����������Ƥ��ꡢCD-ROM ���Ҥˤ�
-�����ΰ��̷�����ºݤ˺��Ѥ��Ƥ����Τ�����ޤ���
-��������S-EBXA �� EPWING�ΰ��̷����ϡ�ebzip �ΰ��̷����Ȥϰۤʤ�ޤ���
+S-EBXA および EPWING 規格でも圧縮形式を定義しており、CD-ROM 書籍には
+これらの圧縮形式を実際に採用しているものがあります。
+しかし、S-EBXA や EPWINGの圧縮形式は、ebzip の圧縮形式とは異なります。
 </P><P>
 
-<CODE>ebzip</CODE> �� S-EBXA �� EPWING ���̷����ǰ��̤��줿 CD-ROM ���Ҥ⿭Ĺ
-���뤳�Ȥ��Ǥ��ޤ��������̤��뤳�ȤϤǤ��ޤ���
+<CODE>ebzip</CODE> は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
+することができますが、圧縮することはできません。
 </P><P>
 
-S-EBXA �����ǰ��̤��줿 <CODE>START</CODE> �ե�����䡢EPWING �����ǰ��̤��줿
-<TT>`HONMON2'</TT>, <TT>`HONMONS'</TT> �ե������Ĺ����ȡ���Ĺ��Υե�����
-�ˤϳ�ĥ�� <SAMP>`.org'</SAMP> ���ղä���ޤ�
-(��: <TT>`honmon2'</TT> �� <TT>`honmon2.org'</TT>)��
+S-EBXA 形式で圧縮された <CODE>START</CODE> ファイルや、EPWING 形式で圧縮された
+<TT>`HONMON2'</TT>, <TT>`HONMONS'</TT> ファイルを伸長すると、伸長後のファイル
+には拡張子 <SAMP>`.org'</SAMP> が付加されます
+(例: <TT>`honmon2'</TT> → <TT>`honmon2.org'</TT>)。
 </P><P>
 
 <A NAME="Information"></A>

@@ -35,146 +35,146 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebzip-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 8. <CODE>ebzip</CODE> �Υ��ץ������� </H1>
+<H1> 8. <CODE>ebzip</CODE> のオプション一覧 </H1>
 <!--docid::SEC20::-->
 <P>
 
-<CODE>ebzip</CODE> ���ޥ�ɤϡ�����Ū�ʰ�ʸ�����ץ����̾�ȳФ��䤹��Ĺ��
-���ץ����̾��ξ���򰷤����Ȥ��Ǥ��ޤ���
-Ĺ�����ץ����̾��ɽ���ˤϡ�<SAMP>`-'</SAMP> �ǤϤʤ� <SAMP>`--'</SAMP> ���Ѥ��ޤ���
-���ץ����̾����դ˷�ޤ��ϰ���ǡ�̾���θ�����ʬ���ά���뤳�Ȥ��Ǥ���
-����
+<CODE>ebzip</CODE> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<SAMP>`-'</SAMP> ではなく <SAMP>`--'</SAMP> を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
 </P><P>
 
 <DL COMPACT>
 <DT><CODE>-f</CODE>
 <DD><DT><CODE>--force-overwrite</CODE>
-<DD>��ǧ���᤺�ˡ�����¸�ߤ��Ƥ���ե�������񤭤��ޤ���
-���Υ��ץ����ϡ�������Ϥ�ư��ΤȤ��䡢<SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>)
-���ץ�������ꤷ���Ȥ���̵�뤵��ޤ�
+<DD>確認を求めずに、既に存在しているファイルを上書きします。
+このオプションは、情報出力の動作のときや、<SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>)
+オプションを指定したときは無視されます
 <P>
 
-(�ܤ����ϡ���<A HREF="ebzip-ja_4.html#SEC10">�Ť��ե�����ξ��</A>����򻲾�)��
+(詳しくは、「<A HREF="ebzip-ja_4.html#SEC10">古いファイルの上書き</A>」節を参照)。
 </P><P>
 
 <DT><CODE>-h</CODE>
 <DD><DT><CODE>--help</CODE>
-<DD>�إ�ץ�å�������ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+<DD>ヘルプメッセージを標準出力に出力して、終了します。
 <P>
 
 <DT><CODE>-i</CODE>
 <DD><DT><CODE>--information</CODE>
-<DD>���ꤵ�줿 CD-ROM ���Ҥΰ��̾��֤���Ϥ��ޤ���
+<DD>指定された CD-ROM 書籍の圧縮状態を出力します。
 <P>
 
-(�ܤ����ϡ� ��<A HREF="ebzip-ja_6.html#SEC16">�������</A>����򻲾�)��
+(詳しくは、 「<A HREF="ebzip-ja_6.html#SEC16">情報出力</A>」節を参照)。
 </P><P>
 
 <DT><CODE>-k</CODE>
 <DD><DT><CODE>--keep</CODE>
-<DD>����¦�Υե������񤭹��߽���äƤ⡢�б���������¦�Υե�����Ϻ����
-�ޤ���
-���Υ��ץ����ϡ�������Ϥ�ư��ΤȤ��䡢<SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>)
-���ץ�������ꤷ���Ȥ���̵�뤵��ޤ�
+<DD>出力側のファイルを書き込み終わっても、対応する入力側のファイルは削除し
+ません。
+このオプションは、情報出力の動作のときや、<SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>)
+オプションを指定したときは無視されます
 <P>
 
-(�ܤ����ϡ���<A HREF="ebzip-ja_4.html#SEC6">���̤μ¹��� (2)</A>����򻲾�)��
+(詳しくは、「<A HREF="ebzip-ja_4.html#SEC6">圧縮の実行例 (2)</A>」節を参照)。
 </P><P>
 
-<DT><CODE>-l <VAR>����</VAR></CODE>
-<DD><DT><CODE>--level <VAR>����</VAR></CODE>
-<DD>���̥�٥����ꤷ�ޤ���
-<VAR>����</VAR> �ϡ�<SAMP>`0'</SAMP>��<SAMP>`1'</SAMP>��<SAMP>`2'</SAMP>��<SAMP>`3'</SAMP>��<SAMP>`4'</SAMP>��
-<SAMP>`5'</SAMP> �Τ����줫�Ǥʤ��ƤϤ����ޤ���
-��٥� 0 �ϡ��Ǥ�®����Τΰ���Ψ�Ϻǰ��Ǥ���
-��٥� 3 �ϡ��Ǥ��٤���Τΰ���Ψ�Ϻ��ɤǤ���
-���ꤷ�ʤ��ä��Ȥ��Υ�٥�� 0 �Ǥ���
-���Υ��ץ����ϡ����̰ʳ���ư��ΤȤ���̵�뤵��ޤ���
+<DT><CODE>-l <VAR>整数</VAR></CODE>
+<DD><DT><CODE>--level <VAR>整数</VAR></CODE>
+<DD>圧縮レベルを指定します。
+<VAR>整数</VAR> は、<SAMP>`0'</SAMP>、<SAMP>`1'</SAMP>、<SAMP>`2'</SAMP>、<SAMP>`3'</SAMP>、<SAMP>`4'</SAMP>、
+<SAMP>`5'</SAMP> のいずれかでなくてはいけません。
+レベル 0 は、最も速いものの圧縮率は最悪です。
+レベル 3 は、最も遅いものの圧縮率は最良です。
+指定しなかったときのレベルは 0 です。
+このオプションは、圧縮以外の動作のときは無視されます。
 <P>
 
-(�ܤ����ϡ���<A HREF="ebzip-ja_4.html#SEC7">���̥�٥�</A>����򻲾�)��
+(詳しくは、「<A HREF="ebzip-ja_4.html#SEC7">圧縮レベル</A>」節を参照)。
 </P><P>
 
 <DT><CODE>-n</CODE>
 <DD><DT><CODE>--no-overwrite</CODE>
-<DD>����¸�ߤ���ե����뤬���ä���硢��񤭤γ�ǧ���᤺�ˡ����Υե�����
-�����Ф��Ƽ��Υե�����˿ʤߤޤ���
-���Υ��ץ����ϡ�������Ϥ�ư��ΤȤ��䡢<SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>)
-���ץ�������ꤷ���Ȥ���̵�뤵��ޤ�
+<DD>既に存在するファイルがあった場合、上書きの確認を求めずに、そのファイル
+は飛ばして次のファイルに進みます。
+このオプションは、情報出力の動作のときや、<SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>)
+オプションを指定したときは無視されます
 <P>
 
-(�ܤ����ϡ���<A HREF="ebzip-ja_4.html#SEC10">�Ť��ե�����ξ��</A>����򻲾�)��
+(詳しくは、「<A HREF="ebzip-ja_4.html#SEC10">古いファイルの上書き</A>」節を参照)。
 </P><P>
 
-<DT><CODE>-o <VAR>�ǥ��쥯�ȥ�</VAR></CODE>
-<DD><DT><CODE>--output-directory <VAR>�ǥ��쥯�ȥ�</VAR></CODE>
-<DD>����¦�Υե�������֤��ǥ��쥯�ȥ����ꤷ�ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ������ȥǥ��쥯�ȥ� (<SAMP>`.'</SAMP>) �ˤʤ�ޤ���
-���Υ��ץ����ϡ�������Ϥ�ư��ΤȤ��䡢<SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>)
-���ץ�������ꤷ���Ȥ���̵�뤵��ޤ�
+<DT><CODE>-o <VAR>ディレクトリ</VAR></CODE>
+<DD><DT><CODE>--output-directory <VAR>ディレクトリ</VAR></CODE>
+<DD>出力側のファイルを置くディレクトリを指定します。
+指定しなかったときは、カレントディレクトリ (<SAMP>`.'</SAMP>) になります。
+このオプションは、情報出力の動作のときや、<SAMP>`--test'</SAMP> (<SAMP>`-t'</SAMP>)
+オプションを指定したときは無視されます
 <P>
 
 <DT><CODE>-q</CODE>
 <DD><DT><CODE>--quiet</CODE>
 <DD><DT><CODE>--silence</CODE>
-<DD>���󡢷ٹ��å���������Ϥ��ޤ���
-�����������̡���Ĺ���˽���¦�Υե����뤬����¸�ߤ��Ƥ���ȡ�
-<CODE>ebzip</CODE> �Ϥ��ν���¦�Υե�������񤭤����ɤ����ɤ����֤��Ƥ��ޤ���
-���μ������������ˤϡ�<SAMP>`--force-overwrite'</SAMP>(<SAMP>`-f'</SAMP>) �ޤ���
-<SAMP>`--no-overwrite'</SAMP>(<SAMP>`-n'</SAMP>) ����ꤷ�Ʋ�������
-���Υ��ץ����ϡ�������Ϥ�ư��ΤȤ��ϡ�̵�뤵��ޤ�
+<DD>情報、警告メッセージを出力しません。
+ただし、圧縮・伸長時に出力側のファイルが既に存在していると、
+<CODE>ebzip</CODE> はその出力側のファイルを上書きして良いかどうか訊いてきます。
+この質問を抑制するには、<SAMP>`--force-overwrite'</SAMP>(<SAMP>`-f'</SAMP>) または
+<SAMP>`--no-overwrite'</SAMP>(<SAMP>`-n'</SAMP>) を指定して下さい。
+このオプションは、情報出力の動作のときは、無視されます
 <P>
 
-<DT><CODE>-s <VAR>��</VAR></CODE>
-<DD><DT><CODE>--skip-content <VAR>��</VAR></CODE>
-<DD>̵�뤹��ե�����Υǡ���������ꤷ�ޤ���
-<VAR>��</VAR> �ϡ��ǡ�������̾���򥫥�� (<SAMP>`,'</SAMP>) �Ƕ��ڤä��¤٤���ΤǤ�
-���ƤϤ����ޤ���
-<CODE>ebzip</CODE> �����ߤΤȤ���ǧ������ǡ�������̾���ϡ�
-<CODE>font</CODE> (�����Υե����)��<CODE>graphic</CODE> (�����ǡ���)��
-<CODE>sound</CODE> (�����ǡ���)��<CODE>movie</CODE> (ư��ǡ���) �Ǥ���
-���ꤷ�ʤ��ä��Ȥ��ϡ��ɤΥե������̵�뤵��ޤ���
+<DT><CODE>-s <VAR>型</VAR></CODE>
+<DD><DT><CODE>--skip-content <VAR>型</VAR></CODE>
+<DD>無視するファイルのデータ型を指定します。
+<VAR>型</VAR> は、データ型の名前をカンマ (<SAMP>`,'</SAMP>) で区切って並べたものでな
+くてはいけません。
+<CODE>ebzip</CODE> が現在のところ認識するデータ型の名前は、
+<CODE>font</CODE> (外字のフォント)、<CODE>graphic</CODE> (画像データ)、
+<CODE>sound</CODE> (音声データ)、<CODE>movie</CODE> (動画データ) です。
+指定しなかったときは、どのファイルも無視されません。
 <P>
 
-<DT><CODE>-S <VAR>����</VAR></CODE>
-<DD><DT><CODE>--subbook <VAR>����</VAR></CODE>
-<DD>���̡���Ĺ��������Ϥ��оݤȤ������ܤ���ꤷ�ޤ���
-<VAR>����</VAR> �ϡ����ܤΥǥ��쥯�ȥ�̾�򥫥�� (<SAMP>`,'</SAMP>) �Ƕ��ڤä�
-�¤٤���ΤǤʤ��ƤϤ����ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ����٤Ƥ����ܤ��оݤˤʤ�ޤ���
+<DT><CODE>-S <VAR>副本</VAR></CODE>
+<DD><DT><CODE>--subbook <VAR>副本</VAR></CODE>
+<DD>圧縮・伸長・情報出力の対象とする副本を指定します。
+<VAR>副本</VAR> は、副本のディレクトリ名をカンマ (<SAMP>`,'</SAMP>) で区切って
+並べたものでなくてはいけません。
+指定しなかったときは、すべての副本が対象になります。
 <P>
 
-(�ܤ����ϡ���<A HREF="ebzip-ja_4.html#SEC9">���������ΰ���</A>����򻲾�)��
+(詳しくは、「<A HREF="ebzip-ja_4.html#SEC9">一部だけの圧縮</A>」節を参照)。
 </P><P>
 
 <DT><CODE>-t</CODE>
 <DD><DT><CODE>--test</CODE>
-<DD>���̡���Ĺ�����ǡ����򡢼ºݤΥե�����ˤϽ񤭹��ߤޤ���
-���Υ��ץ����ϡ�������Ϥ�ư��ΤȤ���̵�뤵��ޤ�
+<DD>圧縮・伸長したデータを、実際のファイルには書き込みません。
+このオプションは、情報出力の動作のときは無視されます
 <P>
 
-(�ܤ����ϡ���<A HREF="ebzip-ja_4.html#SEC8">�ƥ���</A>����򻲾�)��
+(詳しくは、「<A HREF="ebzip-ja_4.html#SEC8">テスト</A>」節を参照)。
 </P><P>
 
 <DT><CODE>-u</CODE>
 <DD><DT><CODE>--uncompress</CODE>
-<DD>CD-ROM ���Ҥ�Ĺ���ޤ���
+<DD>CD-ROM 書籍を伸長します。
 <P>
 
-(�ܤ����ϡ���<A HREF="ebzip-ja_5.html#SEC12">��Ĺ</A>����򻲾�)��
+(詳しくは、「<A HREF="ebzip-ja_5.html#SEC12">伸長</A>」節を参照)。
 </P><P>
 
 <DT><CODE>-v</CODE>
 <DD><DT><CODE>--version</CODE>
-<DD>�С�������ֹ��ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+<DD>バージョン番号を標準出力に出力して、終了します。
 <P>
 
 <DT><CODE>-z</CODE>
 <DD><DT><CODE>--compress</CODE>
-<DD>CD-ROM ���Ҥ򰵽̤��ޤ���
+<DD>CD-ROM 書籍を圧縮します。
 <P>
 
-(�ܤ����ϡ���<A HREF="ebzip-ja_4.html#SEC4">����</A>����򻲾�)��
+(詳しくは、「<A HREF="ebzip-ja_4.html#SEC4">圧縮</A>」節を参照)。
 </P><P>
 
 </DL>

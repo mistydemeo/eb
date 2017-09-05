@@ -4,31 +4,31 @@
 <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
 <link rel="stylesheet" type="text/css" href="ebutils.css">
 <link rev="made" href="mailto:m-kasahr@sra.co.jp">
-<title>ebzip ���ޥ��</title>
+<title>ebzip コマンド</title>
 </head>
 
 <body>
 <p>
-[<a href="ebzip-03.html">����</a>] [<a href="ebzip-05.html">����</a>] [<a href="ebzip.html#toc">�ܼ�</a>] 
+[<a href="ebzip-03.html">前へ</a>] [<a href="ebzip-05.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
 </p>
 <hr>
-<h2><a name="compression">����</a></h2>
+<h2><a name="compression">圧縮</a></h2>
 
 <p>
-<code>ebzip</code> (<code>ebunzip --compress</code>��
-<code>ebzipinfo --compress</code> ������) �� CD-ROM ���Ҥΰ��̤�Ԥ��ޤ���
+<code>ebzip</code> (<code>ebunzip --compress</code>、
+<code>ebzipinfo --compress</code> と等価) は CD-ROM 書籍の圧縮を行います。
 </p>
 
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="compression-example-1">���̤μ¹��� (1)</a></h3>
+<h3><a name="compression-example-1">圧縮の実行例 (1)</a></h3>
 
 <p>
-������Ǥϡ��ϡ��ɥǥ������ˤ��Ǥ˥��ԡ����Ƥ��� CD-ROM ���Ҥ򰵽̤���ˤ�
-�ɤ������餤�������������ޤ���
-CD-ROM ���Ҥ����Ǥ� <code>/dict</code> �˥��ԡ�����Ƥ����ΤΡ��ޤ�����
-����Ƥ��ʤ��Ȳ��ꤷ�ޤ���
-���ν��Ҥ� <code>/dict</code> �β��ˡ����Τ褦�ʥե��������äƤ��ޤ���
+この節では、ハードディスクにすでにコピーしてある CD-ROM 書籍を圧縮するには
+どうしたらいいかを説明します。
+CD-ROM 書籍がすでに <code>/dict</code> にコピーされているものの、まだ圧縮
+されていないと仮定します。
+この書籍は <code>/dict</code> の下に、次のようなファイルを持っています。
 </p>
 
 <blockquote>
@@ -41,7 +41,7 @@ CD-ROM ���Ҥ����Ǥ� <code>/dict</code> �˥��ԡ�����Ƥ����ΤΡ��ޤ�����
 </blockquote>
 
 <p>
-���ν��Ҥ򰵽̤���ˤϡ����Τ褦�ˤ��ޤ���
+この書籍を圧縮するには、次のようにします。
 </p>
 
 <blockquote>
@@ -52,7 +52,7 @@ CD-ROM ���Ҥ����Ǥ� <code>/dict</code> �˥��ԡ�����Ƥ����ΤΡ��ޤ�����
 </blockquote>
 
 <p>
-����ϼ��Τ褦�ˤ��Ƥ�Ʊ���Ǥ���
+これは次のようにしても同じです。
 </p>
 
 <blockquote>
@@ -62,27 +62,27 @@ CD-ROM ���Ҥ����Ǥ� <code>/dict</code> �˥��ԡ�����Ƥ����ΤΡ��ޤ�����
 </blockquote>
 
 <p>
-���̤ˤϡ����Ф餯�����뤳�Ȥ�����ޤ���
-���̤δ֡�<code>ebzip</code> �ϡ����Τ褦�˾������Τ餻���å����������
-���ޤ���
+圧縮には、しばらくかかることがあります。
+圧縮の間、<code>ebzip</code> は、次のように状況を知らせるメッセージを出力
+します。
 </p>
 
 <blockquote>
 <pre>
-==&gt; /dict/kanji/start �򰵽� &lt;==
-./dict/kanji/start.ebz �˽���
- 1.0% �����Ѥ� (2097152 / 220069888 �Х���)
- 1.9% �����Ѥ� (4194304 / 220069888 �Х���)
- 2.9% �����Ѥ� (6291456 / 220069888 �Х���)
-        : (ά)
-��λ (220069888 / 220069888 �Х���)
-220069888 -&gt; 78163751 �Х��� (35.5%)
+==&gt; /dict/kanji/start を圧縮 &lt;==
+./dict/kanji/start.ebz に出力
+ 1.0% 処理済み (2097152 / 220069888 バイト)
+ 1.9% 処理済み (4194304 / 220069888 バイト)
+ 2.9% 処理済み (6291456 / 220069888 バイト)
+        : (略)
+完了 (220069888 / 220069888 バイト)
+220069888 -&gt; 78163751 バイト (35.5%)
 </pre>
 </blockquote>
 
 <p>
-���̤���λ����ȡ�<code>/dict</code> �β��Υǥ��쥯�ȥ깽���������Ѳ�����
-����Τ�ʬ����ޤ���
+圧縮が完了すると、<code>/dict</code> の下のディレクトリ構成が少し変化して
+いるのが分かります。
 </p>
 
 <blockquote>
@@ -95,28 +95,28 @@ CD-ROM ���Ҥ����Ǥ� <code>/dict</code> �˥��ԡ�����Ƥ����ΤΡ��ޤ�����
 </blockquote>
 
 <p>
-��ĥ�� <samp>.ebz</samp> �������Ĥ��Υե�����
-(<code>/dict/language.ebz</code>��<code>/dict/kanji/start.ebz</code>��
-<code>/dict/english/start.ebz</code>) ���դ��Ƥ��ޤ���
-����餬���̤��줿�ե�����Ǥ���
-¾�Υե�������Ѳ����Ƥ��ޤ���
+拡張子 <samp>.ebz</samp> がいくつかのファイル
+(<code>/dict/language.ebz</code>、<code>/dict/kanji/start.ebz</code>、
+<code>/dict/english/start.ebz</code>) に付いています。
+これらが圧縮されたファイルです。
+他のファイルは変化していません。
 </p>
 
 <p>
-<code>ebzip</code> �����̤���ե�����ϡ�
-<code>START</code>��<code>HONMON</code>��<code>HONMON2</code>��
-<code>HONMONS</code>��<code>LANGUAGE</code> �ե������ <code>GAIJI</code>
-�ǥ��쥯�ȥ�ˤ��볰���ե�����Ǥ���
+<code>ebzip</code> が圧縮するファイルは、
+<code>START</code>、<code>HONMON</code>、<code>HONMON2</code>、
+<code>HONMONS</code>、<code>LANGUAGE</code> ファイルと <code>GAIJI</code>
+ディレクトリにある外字ファイルです。
 </p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="compression-example-2">���̤μ¹��� (2)</a></h3>
+<h3><a name="compression-example-2">圧縮の実行例 (2)</a></h3>
 
 <p>
-������ǤϤ⤦����̤���Ȥ��ơ�CD-ROM �ǥ������Υե�����򰵽̤�������
-��ϡ��ɥǥ��������֤���ˡ�ˤĤ����������ޤ���
-���� CD-ROM ���Ҥ� <code>/cdrom</code> �˥ޥ���Ȥ��졢���Ҥ�
-<code>/cdrom</code> �β��˼��Τ褦�ʥե��������äƤ���Ȳ��ꤷ�ޤ���
+この節ではもう一つ別の例として、CD-ROM ディスクのファイルを圧縮し、それ
+をハードディスクに置く方法について説明します。
+元の CD-ROM 書籍が <code>/cdrom</code> にマウントされ、書籍は
+<code>/cdrom</code> の下に次のようなファイルを持っていると仮定します。
 </p>
 
 <blockquote>
@@ -130,8 +130,8 @@ CD-ROM ���Ҥ����Ǥ� <code>/dict</code> �˥��ԡ�����Ƥ����ΤΡ��ޤ�����
 </blockquote>
 
 <p>
-���ν��Ҥ򰵽̤���<code>/dict</code> �β����֤�����ˤϡ����Υ��ޥ�ɤ�
-�¹Ԥ��ޤ���
+この書籍を圧縮し、<code>/dict</code> の下に置くためには、次のコマンドを
+実行します。
 </p>
 
 <blockquote>
@@ -142,7 +142,7 @@ CD-ROM ���Ҥ����Ǥ� <code>/dict</code> �˥��ԡ�����Ƥ����ΤΡ��ޤ�����
 </blockquote>
 
 <p>
-����ϼ��Τ褦�ˤ��Ƥ�Ʊ���Ǥ���
+これは次のようにしても同じです。
 </p>
 
 <blockquote>
@@ -152,17 +152,17 @@ CD-ROM ���Ҥ����Ǥ� <code>/dict</code> �˥��ԡ�����Ƥ����ΤΡ��ޤ�����
 </blockquote>
 
 <p>
-����¦�Υǥ��쥯�ȥ� <code>/dict</code> �϶��Ǥ⹽���ޤ��󤬡���������
-���餫�����äƤ����ʤ���Фʤ�ʤ��Τǡ����դ��Ʋ�������
-������Ǥϡ�<samp>--keep</samp> ���ץ�����ȤäƤ��ޤ���
-�ä˻��ꤷ�ʤ���С�<code>ebzip</code> �ϡ����̸�˸��Υե��������
-���ޤ�����<samp>--keep</samp> ���ץ����Ϥ��ο����񤤤��������ޤ���
+出力側のディレクトリ <code>/dict</code> は空でも構いませんが、圧縮前に
+あらかじめ作っておかなければならないので、注意して下さい。
+この例では、<samp>--keep</samp> オプションを使っています。
+特に指定しなければ、<code>ebzip</code> は、圧縮後に元のファイルを削除
+しますが、<samp>--keep</samp> オプションはこの振る舞いを抑制します。
 </p>
 
 <p>
-<code>/dict</code> �� <code>/cdrom</code> �Υǥ��쥯�ȥ깽���ϤۤȤ��
-Ʊ���Ǥ�����<code>/dict</code> �β��ΰ��̤��줿�ե�����ˤϳ�ĥ��
-<samp>.ebz</samp> ���դ��Ƥ��ޤ���
+<code>/dict</code> と <code>/cdrom</code> のディレクトリ構成はほとんど
+同じですが、<code>/dict</code> の下の圧縮されたファイルには拡張子
+<samp>.ebz</samp> が付いています。
 </p>
 
 <blockquote>
@@ -176,23 +176,23 @@ CD-ROM ���Ҥ����Ǥ� <code>/dict</code> �˥��ԡ�����Ƥ����ΤΡ��ޤ�����
 </blockquote>
 
 <p>
-��֤Υǥ��쥯�ȥ� <code>/dict/german</code>��<code>/dict/french</code>��
-<code>/dict/italian</code> �ϡ��⤷̵����� <code>ebzip</code> �ˤ�ä�
-��������ޤ���
-<code>catalog</code> �� <code>catalogs</code> �ϡ�����¦�Υǥ��쥯�ȥ�
-�˥��ԡ�����ޤ���
-EB �饤�֥�꤬�б����Ƥ��ʤ��ե����롢�ǥ��쥯�ȥ�ˤĤ��Ƥϡ�
-<code>ebzip</code> ��̵�뤷�ޤ� (���̤⥳�ԡ��⤷�ޤ���)��
+中間のディレクトリ <code>/dict/german</code>、<code>/dict/french</code>、
+<code>/dict/italian</code> は、もし無ければ <code>ebzip</code> によって
+作成されます。
+<code>catalog</code> と <code>catalogs</code> は、出力側のディレクトリ
+にコピーされます。
+EB ライブラリが対応していないファイル、ディレクトリについては、
+<code>ebzip</code> は無視します (圧縮もコピーもしません)。
 </p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="compression-level">���̥�٥�</a></h3>
+<h3><a name="compression-level">圧縮レベル</a></h3>
 
 <p>
-<code>ebzip</code> �ϡ�0 �� 5 �Ȥ��� 6 �Ĥΰ��̥�٥����äƤ��ޤ���
-���̥�٥� 0 �ϡ����̡���Ĺ���Ǥ�®���Ǥ���������Ψ�Ϻǰ��Ǥ���
-���̥�٥� 5 �ϡ�����Ψ�����ɤǤ��������̡���Ĺ�ϺǤ��٤��ʤ�ޤ���
-���̥�٥�ϡ�<samp>--level</samp> (<samp>-l</samp>) ���ץ��������ꤷ�ޤ���
+<code>ebzip</code> は、0 〜 5 という 6 つの圧縮レベルを持っています。
+圧縮レベル 0 は、圧縮・伸長が最も速いですが、圧縮率は最悪です。
+圧縮レベル 5 は、圧縮率が最良ですが、圧縮・伸長は最も遅くなります。
+圧縮レベルは、<samp>--level</samp> (<samp>-l</samp>) オプションで設定します。
 </p>
 
 <blockquote>
@@ -202,17 +202,17 @@ EB �饤�֥�꤬�б����Ƥ��ʤ��ե����롢�ǥ��쥯�ȥ�ˤĤ��Ƥϡ�
 </blockquote>
 
 <p>
-̵������Υ�٥�� 0 (��®��������Ψ�Ϻǰ�) �Ǥ���
+無指定時のレベルは 0 (最速だが圧縮率は最悪) です。
 </p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="test">�ƥ���</a></h3>
+<h3><a name="test">テスト</a></h3>
 
 <p>
-<code>ebzip</code> �� <code>--test</code> (<code>-t</code>) ���ץ�����դ�
-�Ǽ¹Ԥ���ȡ�<code>ebzip</code> �ϰ��̤����ǡ�����ºݤΥե�����ˤ�
-�񤭹��ޤʤ��ʤ�ޤ���
-���̤������˰��̸�Υե�������礭�����Τꤿ���Ȥ��ˡ������Ǥ���
+<code>ebzip</code> を <code>--test</code> (<code>-t</code>) オプション付き
+で実行すると、<code>ebzip</code> は圧縮したデータを実際のファイルには
+書き込まなくなります。
+圧縮する前に圧縮後のファイルの大きさを知りたいときに、便利です。
 </p>
 
 <blockquote>
@@ -222,66 +222,66 @@ EB �饤�֥�꤬�б����Ƥ��ʤ��ե����롢�ǥ��쥯�ȥ�ˤĤ��Ƥϡ�
 </blockquote>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="partial-compression">���������ΰ���</a></h3>
+<h3><a name="partial-compression">一部だけの圧縮</a></h3>
 
 <p>
-�ʤˤ����ꤷ�ʤ��ȡ�<code>ebzip</code> �Ͻ��Ұ�������Τ򰵽̤��ޤ�����
-<samp>--subbook</samp> (<samp>-S</samp>) �� <samp>--skip-content</samp>
-(<samp>-s</samp>) ���ץ�����Ȥ��Ȱ��������򰵽̤Ǥ��ޤ���
+なにも設定しないと、<code>ebzip</code> は書籍一冊の全体を圧縮しますが、
+<samp>--subbook</samp> (<samp>-S</samp>) や <samp>--skip-content</samp>
+(<samp>-s</samp>) オプションを使うと一部だけを圧縮できます。
 </p>
 
 <p>
-<samp>--subbook</samp> ���ץ����ϰ������ļ�ꡢ�����˥����
-(<samp>,</samp>) �Ƕ��ڤäơ����̤��������ܤΥǥ��쥯�ȥ�̾���¤٤�
-�񤭤ޤ���
-<code>ebinfo</code> ���ޥ�ɤ��Ѥ���ȡ����ʤ��ν�ͭ���Ƥ�����Ҥ�
-�ɤΤ褦�����ܤ��ޤޤ�Ƥ���Τ����Τ뤳�Ȥ��Ǥ��ޤ���
+<samp>--subbook</samp> オプションは引数を一つ取り、そこにカンマ
+(<samp>,</samp>) で区切って、圧縮したい副本のディレクトリ名を並べて
+書きます。
+<code>ebinfo</code> コマンドを用いると、あなたの所有している書籍に
+どのような副本が含まれているのかを知ることができます。
 </p>
 
 <blockquote>
 <pre>
 % ebinfo /mnt/cdrom
-�ǥ������η���: EB/EBG/EBXA/EBXA-C/S-EBXA
-ʸ��������: JIS X 0208
-���ܤο�: 3
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 3
 
-���� 1:
-  ��̾: �����¼�ŵ������ǡ�
-  �ǥ��쥯�ȥ�: english
-  ��������: �������� �������� ��� ��˥塼
-  �ե���Ȥ��礭��: 16 24 30 48
-  Ⱦ�ѥե���Ȥ�ʸ��: 0xa121 -- 0xa24e
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa27e
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: english
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
 
-���� 2:
-  ��̾: CD-ROM ʩ�¼�ŵ���軰�ǡ�
-  �ǥ��쥯�ȥ�: french
-  ��������: �������� �������� ��� ��˥塼
-  �ե���Ȥ��礭��: 16 24 30 48
-  Ⱦ�ѥե���Ȥ�ʸ��: 
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa27e
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: french
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
 
-���� 3:
-  ��̾: �ݥ��å����¼�ŵ���軰�ǡ�
-  �ǥ��쥯�ȥ�: german
-  ��������: ��˥塼
-  �ե���Ȥ��礭��: 16 24 30 48
-  Ⱦ�ѥե���Ȥ�ʸ��: 
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa27e
+副本 3:
+  題名: ポケット独和辞典（第三版）
+  ディレクトリ: german
+  検索方式: メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
 </pre>
 </blockquote>
 
 <p>
-(<code>ebinfo</code> ���ޥ�ɤ˴ؤ��Ƥξܺ٤ϡ�
-<a href="ebinfo.html">ebinfo ���ޥ�ɤΥޥ˥奢��</a> �򻲾ȤΤ��ȡ�)
-������Ǥϡ�3 �Ĥ����ܤ����Ҥˤϴޤޤ�Ƥ��ꡢ�����Υǥ��쥯�ȥ�̾��
+(<code>ebinfo</code> コマンドに関しての詳細は、
+<a href="ebinfo.html">ebinfo コマンドのマニュアル</a> を参照のこと。)
+この例では、3 つの副本が書籍には含まれており、それらのディレクトリ名は
 <code>english</code>, <code>french</code>, <code>german</code> 
-���Ȥ������Ȥ�ʬ����ޤ���
+だということが分かります。
 </p>
 
 <p>
-<code>english</code> �� <code>german</code> �����򰵽̤���ˤϡ�����
-�褦�ˤ��ޤ���
+<code>english</code> と <code>german</code> だけを圧縮するには、次の
+ようにします。
 </p>
 
 <blockquote>
@@ -291,8 +291,8 @@ EB �饤�֥�꤬�б����Ƥ��ʤ��ե����롢�ǥ��쥯�ȥ�ˤĤ��Ƥϡ�
 </blockquote>
 
 <p>
-�ǥ��쥯�ȥ�̾����ʸ������ʸ���ΰ㤤��̵�뤵��ޤ���
-<samp>--subbook</samp> �ΰ����ϡ����Τ褦��ʬ���ƽ񤯤��Ȥ�Ǥ��ޤ���
+ディレクトリ名の大文字、小文字の違いは無視されます。
+<samp>--subbook</samp> の引数は、次のように分けて書くこともできます。
 </p>
 
 <blockquote>
@@ -302,28 +302,28 @@ EB �饤�֥�꤬�б����Ƥ��ʤ��ե����롢�ǥ��쥯�ȥ�ˤĤ��Ƥϡ�
 </blockquote>
 
 <p>
-�Ĥ������ (������Ǥ� <code>german</code>) �Υե�����ϰ��̤���뤳�Ȥ�
-���ԡ�����뤳�Ȥ⤢��ޤ���Τǡ����λ����ǤϤޤ����ν��Ҥ��Ф��밵�̤�
-��Ȥϴ�λ���Ƥ��ޤ���
-���ν��Ҥ���Ѥ��뤿��ˤϡ�����ʤ�����ԤäƻĤ�����ܤ򰵽̤��뤫��
-<code>ebrefile</code> ���ޥ�ɤ�ȤäƻĤ�����ܤ� <code>catalog(s)</code>
-�ե������������Ͽ�ꥹ�Ȥ��������ʤ��ƤϤʤ�ޤ���
-(<code>ebrefile</code> ���ޥ�ɤˤĤ��ƾܤ����ϡ�
-<a href="ebrefile.html">ebrefile ���ޥ�� �Υޥ˥奢��</a>
-�Ρ�<code>ebzip</code> �Ȥ�Ϣ�ȡ׹�򻲾ȤΤ���)��
+残りの副本 (この例では <code>german</code>) のファイルは圧縮されることも
+コピーされることもありませんので、この時点ではまだこの書籍に対する圧縮の
+作業は完了していません。
+この書籍を使用するためには、さらなる操作を行って残りの副本を圧縮するか、
+<code>ebrefile</code> コマンドを使って残りの副本を <code>catalog(s)</code>
+ファイルの副本登録リストから削除しなくてはなりません
+(<code>ebrefile</code> コマンドについて詳しくは、
+<a href="ebrefile.html">ebrefile コマンド のマニュアル</a>
+の「<code>ebzip</code> との連携」項を参照のこと)。
 </p>
 
 <p>
-���ܤΰ������Ĥ�ʣ�����ʬ���ư��̤����硢���٤Ƥ����ܤ�Ʊ�����̥�٥�
-����ꤹ��ɬ�פϤ���ޤ���
-(���Ȥ��С�<code>english</code> �� <code>french</code> �ϥ�٥� 0 �ǰ��̤���
-<code>german</code> �ϥ�٥� 2 �ǰ��̤���)��
+副本の一部ずつを複数回に分けて圧縮する場合、すべての副本で同じ圧縮レベル
+を指定する必要はありません。
+(たとえば、<code>english</code> と <code>french</code> はレベル 0 で圧縮し、
+<code>german</code> はレベル 2 で圧縮する)。
 </p>
 
 <p>
-<samp>--skip-content</samp> (<samp>-s</samp>) �� <samp>--subbook</samp>
-�˻��Ƥ��ޤ�����<samp>--skip-content</samp> �Ǥ�̵�뤹��ե������
-�ǡ���������ꤷ�ޤ���
+<samp>--skip-content</samp> (<samp>-s</samp>) は <samp>--subbook</samp>
+に似ていますが、<samp>--skip-content</samp> では無視するファイルの
+データ型を指定します。
 </p>
 
 <blockquote>
@@ -333,82 +333,82 @@ EB �饤�֥�꤬�б����Ƥ��ʤ��ե����롢�ǥ��쥯�ȥ�ˤĤ��Ƥϡ�
 </blockquote>
 
 <p>
-������Ǥϡ�<code>ebzip</code> �ϲ�����ư��ե���������Ф��ޤ���
-���ߤΤȤ�����<code>ebzip</code> �ˤ�ä�ǧ�������ǡ������ϡ�
-�����̤�Ǥ���
+この例では、<code>ebzip</code> は音声と動画ファイルを飛ばします。
+現在のところ、<code>ebzip</code> によって認識されるデータ型は、
+次の通りです。
 </p>
 
 <ul>
 <li><code>font</code><br>
-�����Υե����
+外字のフォント
 <li><code>graphic</code><br>
-�����ǡ���
+画像データ
 <li><code>sound</code><br>
-�����ǡ���
+音声データ
 <li><code>movie</code><br>
-ư��ǡ���
+動画データ
 </ul>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="overwrite-old-files">�Ť��ե�����ξ��</a></h3>
+<h3><a name="overwrite-old-files">古いファイルの上書き</a></h3>
 
 <p>
-�񤭹��⤦�Ȥ����ե����뤬���Ǥ�¸�ߤ���Ȥ���<code>ebzip</code> ��
-��񤭤����ɤ����ɤ����γ�ǧ����Ƥ��ޤ���
+書き込もうとしたファイルがすでに存在するとき、<code>ebzip</code> は
+上書きして良いかどうかの確認を求めてきます。
 </p>
 
 <blockquote>
 <pre>
-==&gt; /dict/science/data/honmon �򰵽� &lt;==
-/dict/science/data/honmon.ebz �˽���
+==&gt; /dict/science/data/honmon を圧縮 &lt;==
+/dict/science/data/honmon.ebz に出力
 
-�ե����뤬���Ǥ�¸�ߤ��ޤ�: /dict/science/data/honmon.ebz
-��񤭤��ޤ��� (�Ϥ�:y, ������:n)?
+ファイルがすでに存在します: /dict/science/data/honmon.ebz
+上書きしますか (はい:y, いいえ:n)?
 </pre>
 </blockquote>
 
 <p>
-<samp>y</samp> �� <samp>n</samp> �������Ʋ�������
-<samp>n</samp> ��������ȡ�<code>ebzip</code> �Ϥ��Υե���������Ф��ơ�
-���˿ʤߤޤ���
+<samp>y</samp> か <samp>n</samp> で答えて下さい。
+<samp>n</samp> と答えると、<code>ebzip</code> はそのファイルを飛ばして、
+次に進みます。
 </p>
 
 <p>
-<samp>--force-overwrite</samp> ���ץ�������ꤹ��ȡ�<code>ebzip</code>
-�Ϥ��Ǥ�¸�ߤ��Ƥ���ե�����򡢳�ǧ�ʤ��˾�񤭤��ޤ���
-Ʊ�ͤˡ�<samp>--no-overwrite</samp> ���ץ�������ꤹ��ȡ�
-<code>ebzip</code> �ϳ�ǧ�ʤ��ˤ��Υե���������Ф��Ƽ��˿ʤߤޤ���
+<samp>--force-overwrite</samp> オプションを指定すると、<code>ebzip</code>
+はすでに存在しているファイルを、確認なしに上書きします。
+同様に、<samp>--no-overwrite</samp> オプションを指定すると、
+<code>ebzip</code> は確認なしにそのファイルを飛ばして次に進みます。
 </p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="compress-compressed-book">���̤��줿���Ҥΰ���</a></h3>
+<h3><a name="compress-compressed-book">圧縮された書籍の圧縮</a></h3>
 
 <p>
-S-EBXA ����� EPWING ���ʤˤ����Ƥⰵ�̷�����������Ƥ��ꡢCD-ROM ����
-�ˤϤ����ΰ��̷�����ºݤ˺��Ѥ��Ƥ����Τ�����ޤ���
-�����ΰ��̷����ϡ�ebzip �ΰ��̷����Ȥϰۤʤ��ΤǤ���
+S-EBXA および EPWING 規格においても圧縮形式を定義しており、CD-ROM 書籍
+にはこれらの圧縮形式を実際に採用しているものがあります。
+これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
 </p>
 
 <p>
-<code>ebzip</code> �� S-EBXA �� EPWING ���̷����ǰ��̤��줿 CD-ROM ���Ҥ�
-��Ĺ���뤳�Ȥ��Ǥ��ޤ��������̤��뤳�ȤϤǤ��ޤ���
+<code>ebzip</code> は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も
+伸長することができますが、圧縮することはできません。
 </p>
 
 <p>
-<code>ebzip</code> ���Ф��ơ����˰��̤���Ƥ��� CD-ROM ���Ҥ򰵽̤���褦��
-̿����ȡ�<code>ebzip</code> �Ϥ��ä�����Ҥ�Ĺ���Ƥ��顢ebzip �ΰ��̷�����
-���̤�ľ���ޤ���
+<code>ebzip</code> に対して、既に圧縮されている CD-ROM 書籍を圧縮するように
+命じると、<code>ebzip</code> はいったん書籍を伸長してから、ebzip の圧縮形式で
+圧縮し直します。
 </p>
 
 <p>
-���̤� ebzip �ΰ��̷��������� S-EBXA �� EPWING �ΰ��̷������ⰵ��Ψ��
-�ɹ��Ǥ���
+一般に ebzip の圧縮形式の方が S-EBXA や EPWING の圧縮形式よりも圧縮率が
+良好です。
 </p>
 
 <!-- ================================================================ -->
 <hr>
 <p>
-[<a href="ebzip-03.html">����</a>] [<a href="ebzip-05.html">����</a>] [<a href="ebzip.html#toc">�ܼ�</a>] 
+[<a href="ebzip-03.html">前へ</a>] [<a href="ebzip-05.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
 </p>
 </body>
 </html>

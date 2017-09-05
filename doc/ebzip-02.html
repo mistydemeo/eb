@@ -4,62 +4,62 @@
 <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
 <link rel="stylesheet" type="text/css" href="ebutils.css">
 <link rev="made" href="mailto:m-kasahr@sra.co.jp">
-<title>ebzip ���ޥ��</title>
+<title>ebzip コマンド</title>
 </head>
 
 <body>
 <p>
-[<a href="ebzip-01.html">����</a>] [<a href="ebzip-03.html">����</a>] [<a href="ebzip.html#toc">�ܼ�</a>] 
+[<a href="ebzip-01.html">前へ</a>] [<a href="ebzip-03.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
 </p>
 <hr>
-<h2><a name="action-and-command-name">ư��ȥ��ޥ��̾</a></h2>
+<h2><a name="action-and-command-name">動作とコマンド名</a></h2>
 
 <p>
-<code>ebzip</code> �ϻ��Ĥ� <dfn>ư��</dfn> (<dfn>action</dfn>) �⡼�ɤ�
-�����Ƥ��ޤ���
-���� (compression)����Ĺ (uncompression) �Ⱦ������ (information) �Ǥ���
+<code>ebzip</code> は三つの <dfn>動作</dfn> (<dfn>action</dfn>) モードを
+備えています。
+圧縮 (compression)、伸長 (uncompression) と情報出力 (information) です。
 </p>
 
 <ul>
-<li>���� (compression)<br>
-����� CD-ROM ���Ҥ򰵽̤��ޤ���
+<li>圧縮 (compression)<br>
+一冊の CD-ROM 書籍を圧縮します。
 
-<li>��Ĺ (uncompression)<br>
-<code>ebzip</code> �ǰ��̤��줿������� CD-ROM ���Ҥ�Ĺ���ޤ���
+<li>伸長 (uncompression)<br>
+<code>ebzip</code> で圧縮された、一冊の CD-ROM 書籍を伸長します。
 
-<li>������� (information)<br>
-<code>ebzip</code> �ǰ��̤��줿������� CD-ROM ���Ҥΰ��̾��֤˴ؤ���
-�������Ϥ��ޤ���
+<li>情報出力 (information)<br>
+<code>ebzip</code> で圧縮された、一冊の CD-ROM 書籍の圧縮状態に関する
+情報を出力します。
 
 </ul>
 
 <p>
-<code>ebzip</code> �ϵ�ư���ˡ���ư���˻��Ѥ��줿���ޥ��̾��
-���ޥ�ɥ饤�󥪥ץ���󤫤�ư��⡼�ɤ���ꤷ�ޤ���
-<code>ebzip</code> �ΰ��μ¹Ԥδ֤ǡ�ư��⡼�ɤ��Ѥ�뤳�Ȥ�
-����ޤ���
+<code>ebzip</code> は起動時に、起動時に使用されたコマンド名と
+コマンドラインオプションから動作モードを決定します。
+<code>ebzip</code> の一回の実行の間で、動作モードが変わることは
+ありません。
 </p>
 
 <p>
-<code>ebzip</code> �� <code>ebzip</code>��<code>ebunzip</code>, 
-<code>ebzipinfo</code> �Ȥ����ۤʤ� 3 �ĤΥ��ޥ��̾�ǥ��󥹥ȡ���
-����ޤ���
-(�����δĶ��Ǥϡ�<code>ebzipinfo</code> �� <code>ebzipinf</code> 
-�Ȥ���̾���ˤʤäƤ��ޤ���)
+<code>ebzip</code> は <code>ebzip</code>、<code>ebunzip</code>, 
+<code>ebzipinfo</code> という異なる 3 つのコマンド名でインストール
+されます。
+(一部の環境では、<code>ebzipinfo</code> は <code>ebzipinf</code> 
+という名前になっています。)
 
 <p>
-<code>ebunzip</code> �Ȥ���̾���ǵ�ư���줿���ϡ���Ĺ��Ԥ��ޤ���
-<code>ebzipinfo</code> �Ȥ���̾���ǵ�ư���줿��硢������Ϥ�Ԥ��ޤ���
-����ʳ��ξ��ϡ����̤�Ԥ��ޤ���
+<code>ebunzip</code> という名前で起動された場合は、伸長を行います。
+<code>ebzipinfo</code> という名前で起動された場合、情報出力を行います。
+それ以外の場合は、圧縮を行います。
 </p>
 
 <p>
-���ޥ�ɥ饤�󥪥ץ����Ǥ⡢ư��⡼�ɤ���ꤹ�뤳�Ȥ��Ǥ��ޤ���
-<samp>--compress</samp> (<samp>-z</samp>) �ǰ��̡�<samp>--uncompress</samp>
-(<samp>-u</samp>) �ǿ�Ĺ��<samp>--information</samp> (<samp>-i</samp>)
-�Ǿ�����Ϥ�Ԥ��ޤ���
-���ץ����ϡ���ư���Υ��ޥ��̾���ͥ�褷�ޤ���
-������Ǥϡ��������ư��⡼�ɤ��ֿ�Ĺ�פˤʤ�ޤ���
+コマンドラインオプションでも、動作モードを決定することができます。
+<samp>--compress</samp> (<samp>-z</samp>) で圧縮、<samp>--uncompress</samp>
+(<samp>-u</samp>) で伸長、<samp>--information</samp> (<samp>-i</samp>)
+で情報出力を行います。
+オプションは、起動時のコマンド名より優先します。
+次の例では、いずれも動作モードが「伸長」になります。
 </p>
 
 <blockquote>
@@ -71,20 +71,20 @@ ebzipinfo --uncompress
 </blockquote>
 
 <p>
-��֥��������ˤ��б����Ƥ��ޤ���Τǡ���֥����������̻Ҥϻ��ѤǤ��ޤ���
+遠隔アクセスには対応していませんので、遠隔アクセス識別子は使用できません。
 </p>
 
 <blockquote>
 <pre>
 % ebzip ebnet://localhost/cdrom
-ebzip: ebnet �ˤ��б����Ƥ��ޤ���
+ebzip: ebnet には対応していません。
 </pre>
 </blockquote>
 
 <!-- ================================================================ -->
 <hr>
 <p>
-[<a href="ebzip-01.html">����</a>] [<a href="ebzip-03.html">����</a>] [<a href="ebzip.html#toc">�ܼ�</a>] 
+[<a href="ebzip-01.html">前へ</a>] [<a href="ebzip-03.html">次へ</a>] [<a href="ebzip.html#toc">目次</a>] 
 </p>
 </body>
 </html>

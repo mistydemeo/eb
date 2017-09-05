@@ -35,19 +35,19 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 4. �饤�֥��ν�����ȸ���� </H1>
+<H1> 4. ライブラリの初期化と後始末 </H1>
 <!--docid::SEC14::-->
 <P>
 
-���ξϤ���ϡ�EB �饤�֥��Υץ�����ߥ󥰤ˤĤ��Ƥβ���ˤʤ�ޤ���
+この章からは、EB ライブラリのプログラミングについての解説になります。
 </P><P>
 
-�ޤ������ץꥱ�������ץ�����फ�� EB �饤�֥������Ѥ���ˤϡ�
-�ǽ�˥饤�֥�����������ɬ�פ�����ޤ���
+まず、アプリケーションプログラムから EB ライブラリを利用するには、
+最初にライブラリを初期化する必要があります。
 </P><P>
 
-�饤�֥��ν������Ԥ��ˤϡ�<CODE>eb_initialize_library()</CODE> �Ȥ���
-�ؿ���ƤӽФ��ޤ���
+ライブラリの初期化を行うには、<CODE>eb_initialize_library()</CODE> という
+関数を呼び出します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_initialize_library() != EB_SUCCESS) {
@@ -56,16 +56,16 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 }
 </pre></td></tr></table></P><P>
 
-Ʊ�ͤˡ��饤�֥���Ȥ�����ä��顢<CODE>eb_finalize_library()</CODE> �Ȥ���
-�ؿ���ƤӽФ��Ƹ�����򤷤ޤ���
+同様に、ライブラリを使い終わったら、<CODE>eb_finalize_library()</CODE> という
+関数を呼び出して後始末をします。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_finalize_library();
 </pre></td></tr></table></P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_4.html#SEC15">4.1 ����ץ�ץ������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_4.html#SEC16">4.2 �ؿ��ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_4.html#SEC15">4.1 サンプルプログラム</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_4.html#SEC16">4.2 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -83,19 +83,19 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 4.1 ����ץ�ץ������ </H2>
+<H2> 4.1 サンプルプログラム </H2>
 <!--docid::SEC15::-->
 <P>
 
 <A NAME="IDX1"></A>
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/*
- * ������ˡ:
+ * 使用方法:
  *     initexit
- * ��:
+ * 例:
  *     initexit
- * ����:
- *     EB �饤�֥��ν������������򤷤Ƥߤޤ���
- *     �ץ������γ�¦���鸫��С�����ϲ��ΰ�̣��ʤ�ư��Ǥ���
+ * 説明:
+ *     EB ライブラリの初期化、後始末をしてみます。
+ *     プログラムの外側から見れば、これは何の意味もない動作です。
  */
 #include "config.h"
 
@@ -112,7 +112,7 @@ main(argc, argv)
 {
     EB_Error_Code error_code;
 
-    /* EB �饤�֥���������*/
+    /* EB ライブラリを初期化。*/
     error_code = eb_initialize_library();
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
@@ -120,7 +120,7 @@ main(argc, argv)
         exit(1);
     }
 
-    /* EB �饤�֥������Ѥ�λ��*/
+    /* EB ライブラリの利用を終了。*/
     eb_finalize_library();
     exit(0);
 }
@@ -140,11 +140,11 @@ main(argc, argv)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 4.2 �ؿ��ξܺ� </H2>
+<H2> 4.2 関数の詳細 </H2>
 <!--docid::SEC16::-->
 <P>
 
-���ι���������Ƥ���ؿ���Ȥ��ˤϡ�<TT>`eb/eb.h'</TT> ���ɤ߹���ǲ�������
+この項で説明している関数を使うには、<TT>`eb/eb.h'</TT> を読み込んで下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
@@ -156,27 +156,27 @@ main(argc, argv)
 <DD><A NAME="IDX3"></A>
 </P><P>
 
-�ؿ� <CODE>eb_initialize_library()</CODE> �ϡ�EB �饤�֥����������ޤ���
-���ץꥱ�������ץ������ϡ�EB �饤�֥���¾�δؿ���Ƥ����ˡ�ɬ��
-���������δؿ���Ƥ�ɬ�פ�����ޤ���
+関数 <CODE>eb_initialize_library()</CODE> は、EB ライブラリを初期化します。
+アプリケーションプログラムは、EB ライブラリの他の関数を呼ぶ前に、必ず
+一回だけこの関数を呼ぶ必要があります。
 </P><P>
 
-��å������ι�ݲ���ǽ (NLS) ��ͭ���ˤ��� EB �饤�֥��򥳥�ѥ���
-������硢<CODE>eb_initialize_library()</CODE> �� <CODE>bindtextdomain()</CODE> ��
-�ƤӽФ��ޤ���
-�������äơ����ץꥱ�������ץ�����ब <CODE>setlocale()</CODE> ��ƤӽФ�
-�Τϡ����δؿ���ƤӽФ����Ǥ���ɬ�פ�����ޤ���
+メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイル
+した場合、<CODE>eb_initialize_library()</CODE> は <CODE>bindtextdomain()</CODE> を
+呼び出します。
+したがって、アプリケーションプログラムが <CODE>setlocale()</CODE> を呼び出す
+のは、この関数を呼び出す前である必要があります。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
 </P><P>
 
-�饤�֥������������ˡ�EB �饤�֥���¾�δؿ���Ƥ������ư���
-̤����Ǥ���
-�ޤ������Ǥ˽������Ѥޤ������֤ǡ����� <CODE>eb_initialize_library()</CODE>
-��Ƥ�Ǥ⤤���ޤ���
-�Ƥ������ư���̤����Ǥ���
+ライブラリを初期化せずに、EB ライブラリの他の関数を呼んだ場合の動作は
+未定義です。
+また、すでに初期化を済ませた状態で、再度 <CODE>eb_initialize_library()</CODE>
+を呼んでもいけません。
+呼んだ場合の動作は未定義です。
 </DL>
 </P><P>
 
@@ -186,20 +186,20 @@ main(argc, argv)
 <DD><A NAME="IDX5"></A>
 </P><P>
 
-�ؿ� <CODE>eb_finalize_library()</CODE> �ϡ�EB �饤�֥���Ȥ�����ä��ݤ�
-�������Ԥ��ޤ���
-�����������ץꥱ�������ץ������¦�ǻ��Ѥ���
-<CODE>EB_Book</CODE>��<CODE>EB_Hookset</CODE>��<CODE>EB_Appendix</CODE> ���֥������Ȥ�
-������ϹԤ��ޤ���
-���֥������Ȥ���������ˤϡ����줾�����Ѥδؿ�
-<CODE>eb_finalize_book()</CODE>��<CODE>eb_finalize_hookset()</CODE>��
+関数 <CODE>eb_finalize_library()</CODE> は、EB ライブラリを使い終わった際の
+後始末を行います。
+ただし、アプリケーションプログラム側で使用した
+<CODE>EB_Book</CODE>、<CODE>EB_Hookset</CODE>、<CODE>EB_Appendix</CODE> オブジェクトの
+後始末は行いません。
+オブジェクトを後始末するには、それぞれ専用の関数
+<CODE>eb_finalize_book()</CODE>、<CODE>eb_finalize_hookset()</CODE>、
 <CODE>eb_finalize_appendix()</CODE>
-��ƥ��֥������Ȥ��Ф������ӸƤ�Ǥ��ɬ�פ�����ޤ���
+を各オブジェクトに対して別途呼んでやる必要があります。
 </P><P>
 
-�饤�֥��θ�����򤷤���ϡ�EB �饤�֥��Τ����ʤ�ؿ���Ƥ�Ǥ�
-�����ޤ���
-�Ƥ������ư���̤����Ǥ���
+ライブラリの後始末をした後は、EB ライブラリのいかなる関数も呼んでは
+いけません。
+呼んだ場合の動作は未定義です。
 </DL>
 </P><P>
 

@@ -35,40 +35,40 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebfont-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 2. �����Ȥ� </H1>
+<H1> 2. 外字とは </H1>
 <!--docid::SEC2::-->
 <P>
 
-CD-ROM ���Ҥ�¿���ϡ����Ҹ�ͭ��ʸ�������� (local characters) �������
-�Ƥ��ޤ���
-���Ȥ��С�CD-ROM ���Ҥ˻Ȥ���ʸ�����åȤ�ȯ���������äƤ��ʤ����ᡢ
-���¼������ˤ�ȯ�������������Ƥ����Τ�����ޤ���
+CD-ROM 書籍の多くは、書籍固有の文字、外字 (local characters) を定義し
+ています。
+たとえば、CD-ROM 書籍に使われる文字セットは発音記号を持っていないため、
+英和辞書の中には発音記号を定義しているものがあります。
 </P><P>
 
-CD-ROM ���Ҥϡ������Υӥåȥޥåץǡ�������äƤ��ޤ���
-<CODE>ebfont</CODE> ���ޥ�ɤϡ�CD-ROM ���ҤΥӥåȥޥåץǡ������ɤߡ�
-�������ꤵ�줿�����������Ѵ������ե�����˽񤭽Ф��ޤ���
-<CODE>ebfont</CODE> �ϡ�XBM (X BitMap format)��XPM (X PixMap format)��
-GIF (Graphics Interchange Format)��BMP �Τ����Τ����줫���ޤ���ʣ����
-�����ե�������������뤳�Ȥ��Ǥ��ޤ���
-�ä˻��꤬�ʤ���С�XBM ���������򤵤�ޤ���
+CD-ROM 書籍は、外字のビットマップデータも持っています。
+<CODE>ebfont</CODE> コマンドは、CD-ROM 書籍のビットマップデータを読み、
+それを指定された画像形式に変換し、ファイルに書き出します。
+<CODE>ebfont</CODE> は、XBM (X BitMap format)、XPM (X PixMap format)、
+GIF (Graphics Interchange Format)、BMP のうちのいずれか、または複数の
+画像ファイルを生成することができます。
+特に指定がなければ、XBM 形式が選択されます。
 </P><P>
 
-�����ϡ�<EM>Ⱦ��</EM> (<EM>narrow</EM>) �� <EM>����</EM> (<EM>wide</EM>) �� 2 ��
-���ʬ�व��ޤ���
-Ⱦ�Ѥ�ʸ���Υӥåȥޥåץǡ����Ǥϡ��⤵��������Ⱦʬ�Ǥ���
-���Ѥ�ʸ���Υӥåȥޥåץǡ����Ǥϡ��⤵�����Ϥۤ�Ʊ���Ǥ���
-CD-ROM ���Ҥϡ���������ξ���μ���γ�����������뤳�Ȥ���ǽ�ǡ�
-<CODE>ebfont</CODE> ��ξ���μ���β����ե�������������ޤ���
+外字は、<EM>半角</EM> (<EM>narrow</EM>) と <EM>全角</EM> (<EM>wide</EM>) の 2 種
+類に分類されます。
+半角の文字のビットマップデータでは、高さは幅の約半分です。
+全角の文字のビットマップデータでは、高さと幅はほぼ同じです。
+CD-ROM 書籍は、一冊の中に両方の種類の外字を定義することが可能で、
+<CODE>ebfont</CODE> は両方の種類の画像ファイルを生成します。
 </P><P>
 
-CD-ROM ���Ҥ����������λ��ͽ�Ǥϡ�Ⱦ�Ѥ����Ѥ�ξ���γ������Ф��� 4 
-����Υ�������������Ƥ��ޤ���
-�����������⤵���������ϼ����̤�Ǥ���
+CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して 4 
+種類のサイズを定義しています。
+外字の幅、高さ、サイズは次の通りです。
 </P><P>
 
 <TABLE>
-<TR><TD>�⤵  </TD><TD>  Ⱦ��   </TD><TD>  ����</TD>
+<TR><TD>高さ  </TD><TD>  半角   </TD><TD>  全角</TD>
 </TR>
 <TR><TD>16    </TD><TD>   8x16  </TD><TD>  16x16</TD>
 </TR>
@@ -80,8 +80,8 @@ CD-ROM ���Ҥ����������λ��ͽ�Ǥϡ�Ⱦ�Ѥ����Ѥ�ξ���γ������Ф��� 4
 </TR></TABLE>
 <P>
 
-�ä˻��꤬�ʤ���С�<CODE>ebfont</CODE> �Ϲ⤵�� 16 �ԥ�����Υե���Ȥβ���
-�ե�������������ޤ���
+特に指定がなければ、<CODE>ebfont</CODE> は高さが 16 ピクセルのフォントの画像
+ファイルを生成します。
 </P><P>
 
 <A NAME="Invoke ebfont"></A>

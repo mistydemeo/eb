@@ -35,70 +35,70 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 11. �Х��ʥ�ǡ��� </H1>
+<H1> 11. バイナリデータ </H1>
 <!--docid::SEC71::-->
 <P>
 
-<EM>�Х��ʥ�ǡ��� (binary data)</EM> �Ȥϡ��ƥ����ȥǡ���
-(��<A HREF="eb-ja_9.html#SEC44">�ƥ����ȥǡ���</A>����򻲾�) ���黲�Ȥ���롢���Ǥ�ư�衢����
-�Ȥ��ä��ޥ����ǥ����ǡ����Τ��Ȥ�ؤ��ޤ���
+<EM>バイナリデータ (binary data)</EM> とは、テキストデータ
+(「<A HREF="eb-ja_9.html#SEC44">テキストデータ</A>」節を参照) から参照される、図版や動画、音声
+といったマルチメディアデータのことを指します。
 </P><P>
 
-���ΤȤ��� EB �饤�֥��Ǥϡ�������ΥХ��ʥ�ǡ������갷�����Ȥ�
-�Ǥ���櫓�ǤϤ���ޤ���
-�Żҥ֥å��ǰ�����Τϡ�2 ��Ĵ�Υ�Υ������Ǥȡ����顼���� (JPEG) ����
-�Ǥ���
-EPWING �Ǥϡ���Υ������ǡ����顼���� (BMP ����� JPEG) �˲ä��ơ�
-WAVE (PCM) ������MPEG ư��򰷤����Ȥ��Ǥ��ޤ���
+今のところ EB ライブラリでは、全種類のバイナリデータを取り扱うことが
+できるわけではありません。
+電子ブックで扱えるのは、2 階調のモノクロ図版と、カラー図版 (JPEG) だけ
+です。
+EPWING では、モノクロ図版、カラー図版 (BMP および JPEG) に加えて、
+WAVE (PCM) 音声、MPEG 動画を扱うことができます。
 </P><P>
 
-��������EB �饤�֥�꤬�󶡤��Ƥ���Τϡ����������Х��ʥ�ǡ�����
-CD-ROM ���Ҥ���������뵡ǽ�����Ǥ���
-ɽ����������������ꤹ�뵡ǽ���Ѱդ��Ƥ��ޤ���Τǡ����դ��Ʋ�������
+ただし、EB ライブラリが提供しているのは、こうしたバイナリデータを
+CD-ROM 書籍から取得する機能だけです。
+表示したり再生したりする機能は用意していませんので、注意して下さい。
 </P><P>
 
-���ץꥱ�������ϡ����¼�����켭��Ȥ��ä�����������оݤˤ���ʤ顢
-�Х��ʥ�ǡ�����ɽ��������ˤ��б����ʤ��Ƥ�پ�Ϥ���ޤ���
-�����������Ǥϡ��޴դ������ɽ���˥�Υ������Ǥ�ȤäƤ�����ؼ�ŵ��
-�褦�ˡ��б����ʤ������ؤʤ�Τ⤢��ޤ���
-�Х��ʥ�ǡ�����ɽ��������ε�ǽ��������뤫�ɤ����ϡ����ץꥱ�������
-���оݼ����ɤ��ϰϤޤǤˤ���Τ��ˤ�äƷ�����ɤ��Ǥ��礦��
+アプリケーションは、英和辞書や国語辞書といった辞書だけを対象にするなら、
+バイナリデータの表示や再生には対応しなくても支障はありません。
+しかし一方では、図鑑や数式の表現にモノクロ図版を使っている数学辞典の
+ように、対応しないと不便なものもあります。
+バイナリデータの表示や再生の機能を実装するかどうかは、アプリケーション
+の対象辞書をどの範囲までにするのかによって決めると良いでしょう。
 </P><P>
 
-�ʲ������ξϤǤϼ����̤˥Х��ʥ�ǡ����ΰ������ˤĤ����������ޤ���
+以下、この章では種類別にバイナリデータの扱い方について説明します。
 </P><P>
 
-�Х��ʥ�ǡ����μ�����˥ǡ����μ��Ф�������̯�˰ۤʤ�ޤ��� (�����
-�ǡ����μ�Ͽ��ˡ����̯�˰ۤʤäƤ��뤫���¾�ʤ�ޤ���)�������褽���
-�ϡ����Τ褦�ʤ�Τˤʤ�ޤ���
+バイナリデータの種類毎にデータの取り出し方は微妙に異なりますが (これは
+データの収録方法が微妙に異なっているからに他なりません)、おおよそ手順
+は、次のようなものになります。
 </P><P>
 
 <OL>
-<LI>�ƥ����ȥǡ����Υեå����Ѥ��ơ��Х��ʥ�ǡ����λ��Ⱦ����
-��������
+<LI>テキストデータのフックを用いて、バイナリデータの参照情報を
+取得する
 <P>
 
-<LI><CODE>eb_binary_set_...()</CODE> �ؿ���ƤӽФ��ơ����ꤷ�����֤�
-�Х��ʥ�ǡ����򤳤줫���ɤ߹���ݤ� EB �饤�֥��������롣
+<LI><CODE>eb_binary_set_...()</CODE> 関数を呼び出して、指定した位置の
+バイナリデータをこれから読み込む旨を EB ライブラリに伝える。
 <P>
 
-<LI><CODE>eb_read_binary()</CODE> �Ǽºݤ˥ǡ������ɤ߹��ࡣ
+<LI><CODE>eb_read_binary()</CODE> で実際にデータを読み込む。
 </OL>
 <P>
 
-�ƥ����ȥǡ�����Ʊ�ͤˡ��Х��ʥ�ǡ��������ܤ�°����ǡ���
-�Ǥ��Τǡ����ܤ����򤷤Ƥ��ʤ��ȼ������뤳�ȤϤǤ��ޤ���
-�Х��ʥ�ǡ������ɤ߹��ߤˤϡ��ƥ����ȥǡ����Ȥ��̤�
-�ե�����ǥ�������ץ���������Ƥ��ޤ���
-�������äơ��������ߤ��ɤ߹���Ǥ⡢ư��ˤϱƶ��Ϥ���ޤ���
+テキストデータと同様に、バイナリデータも副本に属するデータ
+ですので、副本を選択していないと取得することはできません。
+バイナリデータの読み込みには、テキストデータとは別の
+ファイルディスクリプタが割り当てられます。
+したがって、双方を交互に読み込んでも、動作には影響はありません。
 </P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC72">11.1 ��Υ�������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC73">11.2 ���顼����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC74">11.3 WAVE (PCM) ����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">WAVE ����</TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC75">11.4 MPEG1 ư��</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC76">11.5 �ؿ��ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC72">11.1 モノクロ図版</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC73">11.2 カラー図版</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC74">11.3 WAVE (PCM) 音声</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP">WAVE 音声</TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC75">11.4 MPEG1 動画</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_11.html#SEC76">11.5 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -116,64 +116,64 @@ CD-ROM ���Ҥ���������뵡ǽ�����Ǥ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 11.1 ��Υ������� </H2>
+<H2> 11.1 モノクロ図版 </H2>
 <!--docid::SEC72::-->
 <P>
 
-2 ��Ĵ�Υ�Υ������Ǥϡ��Żҥ֥å���EPWING ������¸�ߤ���EB �饤�֥��
-�ǤϤɤ���ⰷ�����Ȥ��Ǥ��ޤ���
-(�Żҥ֥å���¸�ߤ��� 16 ��Ĵ�Υ�Υ������Ǥϡ����ΤȤ��� EB �饤�֥��
-�Ǥ��б����Ƥ��ޤ���)
+2 階調のモノクロ図版は、電子ブック、EPWING 双方に存在し、EB ライブラリ
+ではどちらも扱うことができます。
+(電子ブックに存在する 16 階調のモノクロ図版は、今のところ EB ライブラリ
+では対応していません。)
 </P><P>
 
-��Υ������ǥǡ��������������ϳ�����Ʊ���Ǥ�����EB �饤�֥��Ǥϡ�
-1 �ԥ������ 1bit �������Ƥ� BMP �������Ѵ����ƥ��ץꥱ��������
-�Ϥ��褦�ˤ��Ƥ��ޤ���
-�������äơ����ץꥱ������󤫤�ϡ��������� BMP �ο��ǥǡ�������Ͽ
-����Ƥ���褦�ˤߤ��ޤ���
+モノクロ図版データの内部形式は外字と同じですが、EB ライブラリでは、
+1 ピクセルに 1bit を割り当てた BMP 形式に変換してアプリケーションに
+渡すようにしています。
+したがって、アプリケーションからは、あたかも BMP の図版データが収録
+されているようにみえます。
 </P><P>
 
-��Υ������Ǥμ��Ф����Ǥ���������ˤϤޤ���Υ������Ǥλ��ȳ��ϤȽ�λ
-��ɽ�����������ץ������󥹤ؤΥեå� <CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE>
-�� <CODE>EB_HOOK_END_MONO_GRAPHIC</CODE> ��Ȥ��ޤ���
+モノクロ図版の取り出し方ですが、これにはまずモノクロ図版の参照開始と終了
+を表すエスケープシーケンスへのフック <CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE>
+と <CODE>EB_HOOK_END_MONO_GRAPHIC</CODE> を使います。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE> ���եå��ؿ����Ϥ�����
-(<CODE>argv</CODE>) �� 4 �Ĥ��ꡢ���Τ����� <CODE>argv[2]</CODE> �� <CODE>argv[3]</CODE> 
-�����Ǥ����ȹ⤵ (�ԥ������) ���̣���ޤ���
+フック <CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE> がフック関数に渡す引数
+(<CODE>argv</CODE>) は 4 つあり、このうちの <CODE>argv[2]</CODE> と <CODE>argv[3]</CODE> 
+が図版の幅と高さ (ピクセル数) を意味します。
 </P><P>
 
-�ޤ����եå� <CODE>EB_HOOK_END_MONO_GRAPHIC</CODE> ���եå��ؿ����Ϥ�����
-�� 3 �Ĥǡ�<CODE>argv[1]</CODE> �� <CODE>argv[2]</CODE> �������ǥǡ����Υڡ����ֹ�
-�ȥ��ե��åȤˤʤ�ޤ���
+また、フック <CODE>EB_HOOK_END_MONO_GRAPHIC</CODE> がフック関数に渡す引数
+は 3 つで、<CODE>argv[1]</CODE> と <CODE>argv[2]</CODE> が、図版データのページ番号
+とオフセットになります。
 </P><P>
 
-��Υ������Ǥ��������ˤϡ��嵭�Υեå������������ǤΥڡ����ֹ��
-���ե��åȡ���������ȹ⤵�򵭲����Ƥ����ޤ���
+モノクロ図版を取得するには、上記のフックから得た図版のページ番号と
+オフセット、および幅と高さを記憶しておきます。
 </P><P>
 
-���ˡ�<CODE>eb_set_binary_mono_graphic()</CODE> ��ƤӽФ��ơ����줫��
-��Υ������ǤΥǡ�����������뤳�Ȥ� EB �饤�֥��������ޤ���
-<CODE>eb_set_binary_mono_graphic()</CODE> �ؤΰ����ˤϡ�
-<CODE>EB_Book</CODE> ���֥������Ȥȡ���ۤ��������ǤؤΥڡ����ֹ桢���ե��åȡ�
-�����⤵���Ϥ��ޤ���
-<CODE>EB_Book</CODE> ���֥������Ȥϡ����줫����Ф����Ȥ��Ƥ�����Ǥ��Ͽ
-���Ƥ������ܤ򤢤餫�������򤷤Ƥ���ɬ�פ�����ޤ���
+次に、<CODE>eb_set_binary_mono_graphic()</CODE> を呼び出して、これから
+モノクロ図版のデータを取得することを EB ライブラリに伝えます。
+<CODE>eb_set_binary_mono_graphic()</CODE> への引数には、
+<CODE>EB_Book</CODE> オブジェクトと、先ほど得た図版へのページ番号、オフセット、
+幅、高さを渡します。
+<CODE>EB_Book</CODE> オブジェクトは、これから取り出そうとしている図版を収録
+している副本をあらかじめ選択しておく必要があります。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>eb_set_binary_mono_graphic()</CODE> �δؿ��ץ��ȥ����� */
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>eb_set_binary_mono_graphic()</CODE> の関数プロトタイプ */
 EB_Error_Code
 eb_set_binary_mono_graphic(EB_Book *book, EB_Position *position,
     int width, int height);
 </pre></td></tr></table></P><P>
 
-�Żҥ֥å��Ǥϡ��եå��ؿ����Ϥ�������ȹ⤵���ͤ� 0 �ˤʤäƤ��ޤ�����
-���Τޤ� <CODE>eb_set_binary_mono_graphic()</CODE> ���Ϥ��ޤ���
-(EPWING �Ǥ� 0 ���Ϥ��ƤϤ����ޤ���)
+電子ブックでは、フック関数に渡される幅と高さの値は 0 になっていますが、
+そのまま <CODE>eb_set_binary_mono_graphic()</CODE> に渡します。
+(EPWING では 0 を渡してはいけません。)
 </P><P>
 
-�ʾ�ǿ��ǥǡ����μ����������Ǥ����Τǡ��ǡ������ɤ߹��ߤޤ���
-����ˤϡ�<CODE>eb_read_binary()</CODE> ��Ȥ��ޤ���
+以上で図版データの取得準備ができたので、データを読み込みます。
+これには、<CODE>eb_read_binary()</CODE> を使います。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#define MAX_LENGTH 1000
@@ -187,17 +187,17 @@ if (eb_read_binary(&#38;book, MAX_LENGTH, bitmap, &#38;bitmap_length)
 }
 </pre></td></tr></table></P><P>
 
-��������ȡ��ɤ߹�������ǥǡ����� <CODE>bitmap</CODE> �˽񤭹��ޤ졢���Х���
-�񤭹�����Τ��� <CODE>bitmap_length</CODE> �˽񤭹��ޤ�ޤ���
-�񤭹��ޤ��Х��ȿ��ϡ������ <CODE>MAX_LENGTH</CODE> �Х��ȤǤ���
+成功すると、読み込んだ図版データが <CODE>bitmap</CODE> に書き込まれ、何バイト
+書き込んだのかが <CODE>bitmap_length</CODE> に書き込まれます。
+書き込まれるバイト数は、最大で <CODE>MAX_LENGTH</CODE> バイトです。
 </P><P>
 
-ɬ��������� <CODE>eb_read_binary()</CODE> �θƤӽФ��ǿ��ǥǡ�����ü�ޤ�
-�ɤ߹���ɬ�פϤʤ����ؿ��򷫤��֤��ƤӽФ��С������³�����ɤ߹��ळ��
-���Ǥ��ޤ���
-<CODE>eb_read_binary()</CODE> �ϡ����ǥǡ����ν�ü�ޤ����Ȥ���ʾ�ǡ���
-���ɤ߹��ߤޤ���Τǡ�<CODE>eb_read_binary()</CODE> �� 0 ���֤���������
-���ǥǡ�������ü�������Ȥ�ǧ���Ǥ��ޤ���
+必ずしも一回の <CODE>eb_read_binary()</CODE> の呼び出しで図版データを終端まで
+読み込む必要はなく、関数を繰り返し呼び出せば、前回の続きを読み込むこと
+ができます。
+<CODE>eb_read_binary()</CODE> は、図版データの終端まで来るとそれ以上データ
+は読み込みませんので、<CODE>eb_read_binary()</CODE> が 0 を返した時点で
+図版データが終端したことを認識できます。
 </P><P>
 
 <A NAME="Color Image"></A>
@@ -214,77 +214,77 @@ if (eb_read_binary(&#38;book, MAX_LENGTH, bitmap, &#38;bitmap_length)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 11.2 ���顼���� </H2>
+<H2> 11.2 カラー図版 </H2>
 <!--docid::SEC73::-->
 <P>
 
-���顼���Ǥϡ��Żҥ֥å��Ǥ� JPEG ������EPWING �Ǥ� JPEG �� BMP (DIB)
-�����Τ�Τ����Ѥ���Ƥ��ޤ���
-EB �饤�֥��Ϥ����򤹤٤ư������Ȥ��Ǥ��ޤ������Żҥ֥å��ؤ��б�
-�ϸ���Ū�ʤ�ΤˤʤäƤ��ޤ���(�ܤ����ϸ�Ҥ��ޤ���)
+カラー図版は、電子ブックでは JPEG 形式、EPWING では JPEG と BMP (DIB)
+形式のものが使用されています。
+EB ライブラリはこれらをすべて扱うことができますが、電子ブックへの対応
+は限定的なものになっています。(詳しくは後述します。)
 </P><P>
 
-���顼���ǤΥǡ�������Ф��ˤϡ��ޤ� <CODE>eb_set_binary_color_graphic()</CODE>
-��ƤӽФ��ơ����줫�饢�ץꥱ������󤬥��顼���ǤΥǡ�����������褦
-�Ȥ��Ƥ��뤳�Ȥ� EB �饤�֥��������ޤ���
-<CODE>eb_set_binary_color_graphic()</CODE> �ؤΰ����ˤϡ�
-<CODE>EB_Book</CODE> ���֥������Ȥ˲ä��ơ����顼���ǤΥڡ����ֹ�ȥ��ե��å�
-���Ϥ��ޤ���
+カラー図版のデータを取り出すには、まず <CODE>eb_set_binary_color_graphic()</CODE>
+を呼び出して、これからアプリケーションがカラー図版のデータを取得しよう
+としていることを EB ライブラリに伝えます。
+<CODE>eb_set_binary_color_graphic()</CODE> への引数には、
+<CODE>EB_Book</CODE> オブジェクトに加えて、カラー図版のページ番号とオフセット
+を渡します。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>eb_set_binary_color_graphic()</CODE> �δؿ��ץ��ȥ����� */
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>eb_set_binary_color_graphic()</CODE> の関数プロトタイプ */
 EB_Error_Code
 eb_set_binary_color_graphic(EB_Book *book, EB_Position *position);
 </pre></td></tr></table></P><P>
 
-<CODE>EB_Book</CODE> ���֥������Ȥϡ����줫����Ф����Ȥ��Ƥ�����Ǥ��Ͽ
-���Ƥ������ܤ򤢤餫�������򤷤Ƥ����ޤ���
-���顼���ǤΥڡ����ֹ�ȥ��ե��åȤξ���ϡ����顼���Ǥλ��ȳ��ϤȽ�λ
-��ɽ�����������ץ������󥹤ؤΥեå��������ޤ���
-�եå��ϡ�����饤��ɽ���Ѥ��󥤥�饤���Ѥ� 2 ���ब���ꡢ�����
-���줾�쳫�ϥեå��� JPEG �Ѥ� BMP �Ѥ�ʬ����Ƥ��ޤ���
+<CODE>EB_Book</CODE> オブジェクトは、これから取り出そうとしている図版を収録
+している副本をあらかじめ選択しておきます。
+カラー図版のページ番号とオフセットの情報は、カラー図版の参照開始と終了
+を表すエスケープシーケンスへのフックから得ます。
+フックは、インライン表示用と非インライン用の 2 種類があり、さらに
+それぞれ開始フックが JPEG 用と BMP 用に分かれています。
 </P><P>
 
 <DL COMPACT>
 <DT><CODE>EB_HOOK_BEGIN_COLOR_BMP</CODE>
 <DD><DT><CODE>EB_HOOK_BEGIN_COLOR_JPEG</CODE>
-<DD>�󥤥�饤���� BMP, JPEG �γ��ϥեå�
+<DD>非インライン用 BMP, JPEG の開始フック
 <P>
 
 <DT><CODE>EB_HOOK_END_COLOR_GRAPHIC</CODE>
-<DD>�󥤥�饤���ѥ��顼���� (BMP, JPEG ����) �ν�λ�եå�
+<DD>非インライン用カラー図版 (BMP, JPEG 共通) の終了フック
 <P>
 
 <DT><CODE>EB_HOOK_BEGIN_IN_COLOR_BMP</CODE>
 <DD><DT><CODE>EB_HOOK_BEGIN_IN_COLOR_JPEG</CODE>
-<DD>����饤���� BMP, JPEG �γ��ϥեå�
+<DD>インライン用 BMP, JPEG の開始フック
 <P>
 
 <DT><CODE>EB_HOOK_END_IN_COLOR_GRAPHIC</CODE>
-<DD>�󥤥�饤���ѥ��顼���� (BMP, JPEG ����) �ν�λ�եå�
+<DD>非インライン用カラー図版 (BMP, JPEG 共通) の終了フック
 </DL>
 <P>
 
-�󥤥�饤���Ѥν�λ�եå� <CODE>EB_HOOK_END_GRAPHIC</CODE> �Ǥϡ��եå��ؿ�
-���Ϥ������� <CODE>argv[1]</CODE> �� <CODE>argv[2]</CODE> �������ǥǡ����Υڡ���
-�ֹ�ȥ��ե��åȤˤʤ�ޤ��Τǡ������ <CODE>eb_set_binary_color_graphic()</CODE>
-���Ϥ��Ƥ��ޤ��� 
-Ʊ�ͤˡ�����饤���Ѥν�λ�եå� <CODE>EB_HOOK_END_IN_GRAPHIC</CODE> �Ǥϡ�
-<CODE>argv[2]</CODE> �� <CODE>argv[3]</CODE> ���ڡ����ֹ�ȥ��ե��åȤǤ��Τǡ�
-������Ϥ��ޤ���
+非インライン用の終了フック <CODE>EB_HOOK_END_GRAPHIC</CODE> では、フック関数
+に渡す引数の <CODE>argv[1]</CODE> と <CODE>argv[2]</CODE> が、図版データのページ
+番号とオフセットになりますので、これを <CODE>eb_set_binary_color_graphic()</CODE>
+に渡してやります。 
+同様に、インライン用の終了フック <CODE>EB_HOOK_END_IN_GRAPHIC</CODE> では、
+<CODE>argv[2]</CODE> と <CODE>argv[3]</CODE> がページ番号とオフセットですので、
+これを渡します。
 </P><P>
 
-��ϡ��ºݤ˥��顼���ǤΥǡ�������Ф��ޤ���
-����ˤϡ���Υ������Ǥ�Ʊ�ͤ� <CODE>eb_read_binary()</CODE> ���Ѥ��ޤ���
-�Ȥ����Ϥޤä������Ǥ��Τǡ��ܤ�����
-��<A HREF="eb-ja_11.html#SEC72">��Υ�������</A>����򻲾� �򻲾Ȥ��Ƥ���������
+後は、実際にカラー図版のデータを取り出します。
+これには、モノクロ図版と同様に <CODE>eb_read_binary()</CODE> を用います。
+使い方はまったく一緒ですので、詳しくは
+「<A HREF="eb-ja_11.html#SEC72">モノクロ図版</A>」節を参照 を参照してください。
 </P><P>
 
-���������Żҥ֥å��Υ��顼���ǤˤĤ��Ƥϡ��ǡ����ν�λ���֤���Ƥ�
-EB �饤�֥����ɤ߹��ߤ�ߤ�ʤ��Ȥ������»��ब����ޤ���
-����ϡ��ǡ������礭���˴ؤ�����󤬵�����Ƥ��ʤ�����ǡ��ǡ�����
-��ü���֤ϡ����ץꥱ������� JPEG �Υǡ�����ǥ����ɤ��Ƴ��Ф�����
-����ޤ���
+ただし、電子ブックのカラー図版については、データの終了位置が来ても
+EB ライブラリは読み込みを止めないという制限事項があります。
+これは、データの大きさに関する情報が記されていないためで、データの
+終端位置は、アプリケーションが JPEG のデータをデコードして割り出すしか
+ありません。
 </P><P>
 
 <A NAME="WAVE Sound"></A>
@@ -301,40 +301,40 @@ EB �饤�֥����ɤ߹��ߤ�ߤ�ʤ��Ȥ������»��ब����ޤ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 11.3 WAVE (PCM) ���� </H2>
+<H2> 11.3 WAVE (PCM) 音声 </H2>
 <!--docid::SEC74::-->
 <P>
 
-WAVE (PCM) �����β����ǡ����� EPWING �ˤ���¸�ߤ��ޤ���
-(������Żҥ֥å��ˤ� CD-DA �����β����ǡ���������ޤ�����EB �饤�֥��
-�Ǥ��б����Ƥ��ޤ���)
+WAVE (PCM) 形式の音声データは EPWING にだけ存在します。
+(代わりに電子ブックには CD-DA 形式の音声データがありますが、EB ライブラリ
+では対応していません。)
 </P><P>
 
-WAVE �����β����ǡ�������Ф��ˤϡ��ޤ� WAVE �����λ��ȳ��ϤȽ�λ��
-ɽ�����������ץ������󥹤ؤΥեå� <CODE>EB_HOOK_BEGIN_WAVE</CODE> ��
-<CODE>EB_HOOK_END_WAVE</CODE> ��Ȥ��ޤ���
+WAVE 形式の音声データを取り出すには、まず WAVE 音声の参照開始と終了を
+表すエスケープシーケンスへのフック <CODE>EB_HOOK_BEGIN_WAVE</CODE> と
+<CODE>EB_HOOK_END_WAVE</CODE> を使います。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_WAVE</CODE> ���եå��ؿ����Ϥ������Τ�����
-<CODE>argv[2]</CODE> �� <CODE>argv[3]</CODE> �������ǡ����γ��ϰ��֤Υڡ����ֹ��
-���ե��åȡ�<CODE>argv[4]</CODE> �� <CODE>argv[5]</CODE> ����λ���֤Υڡ����ֹ��
-���ե��åȤȤʤ�ޤ���
+フック <CODE>EB_HOOK_BEGIN_WAVE</CODE> がフック関数に渡す引数のうち、
+<CODE>argv[2]</CODE> と <CODE>argv[3]</CODE> が音声データの開始位置のページ番号と
+オフセット、<CODE>argv[4]</CODE> と <CODE>argv[5]</CODE> が終了位置のページ番号と
+オフセットとなります。
 </P><P>
 
-���γ��ϰ��֤Ƚ�λ���֤�ؿ� <CODE>eb_set_binary_wave()</CODE> ���Ϥ��ơ�����
-���֤ˤ��벻���ǡ����򤳤줫����Ф����Ȥ� EB �饤�֥��������ޤ���
+この開始位置と終了位置を関数 <CODE>eb_set_binary_wave()</CODE> に渡して、その
+位置にある音声データをこれから取り出すことを EB ライブラリに伝えます。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>eb_set_binary_wave()</CODE> �δؿ��ץ��ȥ����� */
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>eb_set_binary_wave()</CODE> の関数プロトタイプ */
 EB_Error_Code
 eb_set_binary_wave(EB_Book *book, EB_Position *start_position,
 EB_Position *end_position);
 </pre></td></tr></table></P><P>
 
-�����Ƹ�ϡ��ºݤ˲����ǡ�������Ф��ޤ���
-����ˤϡ�¾�ΥХ��ʥ�ǡ�����Ʊ�ͤ� <CODE>eb_read_binary()</CODE> ���Ѥ��ޤ���
-<CODE>eb_read_binary()</CODE> �λȤ����ϡ�
-��<A HREF="eb-ja_11.html#SEC72">��Υ�������</A>����򻲾� �򻲾Ȥ��Ƥ���������
+そして後は、実際に音声データを取り出します。
+これには、他のバイナリデータと同様に <CODE>eb_read_binary()</CODE> を用います。
+<CODE>eb_read_binary()</CODE> の使い方は、
+「<A HREF="eb-ja_11.html#SEC72">モノクロ図版</A>」節を参照 を参照してください。
 </P><P>
 
 <A NAME="MPEG Movie"></A>
@@ -351,28 +351,28 @@ EB_Position *end_position);
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 11.4 MPEG1 ư�� </H2>
+<H2> 11.4 MPEG1 動画 </H2>
 <!--docid::SEC75::-->
 <P>
 
-MPEG1 ������ư��ǡ����� EPWING �ˤ���¸�ߤ��ޤ���
-ư��ǡ����� EPWING �� CD-ROM �� movie �Ȥ����ǥ��쥯�ȥ�β��ˡ�
-ư����˰�ĤΥե�����ˤ������Ǽ�����Ƥ��ޤ���
+MPEG1 形式の動画データは EPWING にだけ存在します。
+動画データは EPWING の CD-ROM の movie というディレクトリの下に、
+動画毎に一個のファイルにした形で収められています。
 </P><P>
 
-MPEG �ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ������󥹤ؤΥեå�
-<CODE>EB_HOOK_BEGIN_MPEG</CODE> �� <CODE>EB_HOOK_END_MPEG</CODE> ����Ѥ���ȡ�
-������� MPEG �Υե�����̾������Ǥ��ޤ���
-����Ū�ˤϡ��եå� <CODE>EB_HOOK_BEGIN_MPEG</CODE> ���եå��ؿ����Ϥ�������
-������<CODE>argv[2]</CODE> �� <CODE>argv[5]</CODE> ����碌�ư�ĤΥե�����̾��
-ɽ���褦�ˤʤäƤ��ޤ���
+MPEG データの参照開始と終了を表すエスケープシーケンスへのフック
+<CODE>EB_HOOK_BEGIN_MPEG</CODE> と <CODE>EB_HOOK_END_MPEG</CODE> を使用すると、
+参照先の MPEG のファイル名を取得できます。
+具体的には、フック <CODE>EB_HOOK_BEGIN_MPEG</CODE> がフック関数に渡す引数の
+うち、<CODE>argv[2]</CODE> 〜 <CODE>argv[5]</CODE> が合わせて一つのファイル名を
+表すようになっています。
 </P><P>
 
-MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
-���Ϥ��ơ����Υե������ư��ǡ����򤳤줫����Ф��ݤ� EB �饤�֥��
-�������ޤ���
-�ե�����̾�ϡ����Τ褦�ˤ��� <CODE>argv + 2</CODE> (<CODE>&#38;argv[2]</CODE> �Ǥ�Ʊ��)
-���Ϥ��ޤ���
+MPEG 動画のデータを得るには、このファイル名を <CODE>eb_set_binary_mpeg()</CODE>
+に渡して、そのファイルの動画データをこれから取り出す旨を EB ライブラリ
+に伝えます。
+ファイル名は、次のようにして <CODE>argv + 2</CODE> (<CODE>&#38;argv[2]</CODE> でも同じ)
+を渡します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_set_binary_mpeg(&#38;book, argv + 2) != EB_SUCCESS) {
@@ -381,11 +381,11 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 }
 </pre></td></tr></table></P><P>
 
-��ϡ��ºݤ�ư��ǡ�������Ф��ޤ���
-����ˤϡ���Ϥ�¾�ΥХ��ʥ�ǡ�����Ʊ�ͤ� <CODE>eb_read_binary()</CODE> ��
-�Ѥ��ޤ���
-<CODE>eb_read_binary()</CODE> �λȤ����ˤĤ��Ƥϡ�
-��<A HREF="eb-ja_11.html#SEC72">��Υ�������</A>����򻲾� �򻲾Ȥ��Ƥ���������
+後は、実際に動画データを取り出します。
+これには、やはり他のバイナリデータと同様に <CODE>eb_read_binary()</CODE> を
+用います。
+<CODE>eb_read_binary()</CODE> の使い方については、
+「<A HREF="eb-ja_11.html#SEC72">モノクロ図版</A>」節を参照 を参照してください。
 </P><P>
 
 <A NAME="Binary Data Functions"></A>
@@ -402,12 +402,12 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 11.5 �ؿ��ξܺ� </H2>
+<H2> 11.5 関数の詳細 </H2>
 <!--docid::SEC76::-->
 <P>
 
-��������������Ƥ���ؿ���Ȥ��ˤϡ����Τ褦�˥إå��ե�������ɤ߹����
-��������
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/binary.h&#62;
@@ -419,32 +419,32 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 <DD><A NAME="IDX594"></A>
 </P><P>
 
-�ؿ� <CODE>eb_set_binary_mono_graphic()</CODE> �ϡ���Υ������ǤΥǡ�����
-���줫��������褦�Ȥ��Ƥ��뤳�Ȥ� EB �饤�֥��������ޤ���
-���� <VAR>position</VAR> �Ͽ��Ǥΰ��֡�<VAR>width</VAR>, <VAR>height</VAR> �ˤϿ��Ǥ�
-���ȹ⤵���Ϥ��ޤ���
-�����ξ���ϡ����Ǥλ��ȸ��Ǥ���ƥ����ȥǡ����˵��ܤ���Ƥ��ꡢ�̾��
-�եå��ؿ����̤�������褦�ˤ��ޤ���
-���������Żҥ֥å��Ǥ����ȹ⤵���ͤξ��󤬥ƥ����ȥǡ����˵�����Ƥ��ʤ�
-���ᡢ0 ���Ϥ����Ȥˤʤ�ޤ���
+関数 <CODE>eb_set_binary_mono_graphic()</CODE> は、モノクロ図版のデータを
+これから取得しようとしていることを EB ライブラリに伝えます。
+引数 <VAR>position</VAR> は図版の位置、<VAR>width</VAR>, <VAR>height</VAR> には図版の
+幅と高さを渡します。
+これらの情報は、図版の参照元であるテキストデータに記載されており、通常は
+フック関数を通じて得るようにします。
+ただし、電子ブックでは幅と高さの値の情報がテキストデータに記されていない
+ため、0 を渡すことになります。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ������˱��������顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因に応じたエラーコードを返します。
 </P><P>
 
-���餫���ᡢ���Ǥ���Ф����Ȥ��Ƥ������ܤ����򤷤Ƥ����ʤ����
-�ʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ��
-�֤��ޤ���
-���Ǥΰ��֡������⤵���ͤ����餫�ˤ��������� EB �饤�֥�꤬Ƚ�Ǥ���
-�Ȥ��ϡ�<CODE>EB_ERR_NO_SUCH_BINARY</CODE> ���֤��ޤ���
+あらかじめ、図版を取り出そうとしている副本を選択しておかなければ
+なりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を
+返します。
+図版の位置、幅、高さの値が明らかにおかしいと EB ライブラリが判断した
+ときは、<CODE>EB_ERR_NO_SUCH_BINARY</CODE> を返します。
 </P><P>
 
-���δؿ��ϡ��ºݤ˿��ǥǡ������ɤ߹��ळ�ȤϤ��ޤ���
-�ɤ߹��ߤˤϡ�<CODE>eb_read_binary()</CODE> ���Ѥ��ޤ���
-��Υ������ǤΥǡ����ϡ�1 �ԥ������ 1bit �������Ƥ� BMP �����ˤʤä�
-���ޤ���
+この関数は、実際に図版データを読み込むことはしません。
+読み込みには、<CODE>eb_read_binary()</CODE> を用います。
+モノクロ図版のデータは、1 ピクセルに 1bit を割り当てた BMP 形式になって
+います。
 </DL>
 </P><P>
 
@@ -454,27 +454,27 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 <DD><A NAME="IDX596"></A>
 </P><P>
 
-�ؿ� <CODE>eb_set_binary_color_graphic()</CODE> �ϡ�EPWING �Υ��顼���ǤΥǡ�����
-���줫��������褦�Ȥ��Ƥ��뤳�Ȥ� EB �饤�֥��������ޤ���
-���� <VAR>position</VAR> �Ͽ��Ǥΰ��֤��Ϥ��ޤ���
-���֤ξ���ϡ����Ǥλ��ȸ��Ǥ���ƥ����ȥǡ����˵��ܤ���Ƥ��ꡢ�̾��
-�եå��ؿ����̤�������褦�ˤ��ޤ���
+関数 <CODE>eb_set_binary_color_graphic()</CODE> は、EPWING のカラー図版のデータを
+これから取得しようとしていることを EB ライブラリに伝えます。
+引数 <VAR>position</VAR> は図版の位置を渡します。
+位置の情報は、図版の参照元であるテキストデータに記載されており、通常は
+フック関数を通じて得るようにします。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
 </P><P>
 
-���餫���ᡢ���Ǥ���Ф����Ȥ��Ƥ������ܤ����򤷤Ƥ����ʤ����
-�ʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ��
-�֤��ޤ���
-���Ǥΰ��֤����餫�ˤ��������� EB �饤�֥�꤬Ƚ�Ǥ����Ȥ��ϡ�
-<CODE>EB_ERR_NO_SUCH_BINARY</CODE> ���֤��ޤ���
+あらかじめ、図版を取り出そうとしている副本を選択しておかなければ
+なりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を
+返します。
+図版の位置が明らかにおかしいと EB ライブラリが判断したときは、
+<CODE>EB_ERR_NO_SUCH_BINARY</CODE> を返します。
 </P><P>
 
-���δؿ��ϡ��ºݤ˿��ǥǡ������ɤ߹��ळ�ȤϤ��ޤ���
-�ɤ߹��ߤˤϡ�<CODE>eb_read_binary()</CODE> ���Ѥ��ޤ���
-���顼���ǥǡ����ϡ�JPEG �� BMP (DIB) �Τ������η����ˤʤäƤ��ޤ���
+この関数は、実際に図版データを読み込むことはしません。
+読み込みには、<CODE>eb_read_binary()</CODE> を用います。
+カラー図版データは、JPEG か BMP (DIB) のいずかの形式になっています。
 </DL>
 </P><P>
 
@@ -484,28 +484,28 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 <DD><A NAME="IDX598"></A>
 </P><P>
 
-�ؿ� <CODE>eb_set_binary_wave()</CODE> �ϡ�WAVE (PCM) �����β����Υǡ�����
-���줫��������褦�Ȥ��Ƥ��뤳�Ȥ� EB �饤�֥��������ޤ���
-���� <VAR>start_position</VAR> �� <VAR>end_position</VAR> �ˤϲ����ǡ����γ��ϰ���
-���Ϥ��ޤ���
-���֤ξ���ϡ������ǡ����λ��ȸ��Ǥ���ƥ����ȥǡ����˵��ܤ���Ƥ��ꡢ
-�̾�ϥեå��ؿ����̤�������褦�ˤ��ޤ���
+関数 <CODE>eb_set_binary_wave()</CODE> は、WAVE (PCM) 形式の音声のデータを
+これから取得しようとしていることを EB ライブラリに伝えます。
+引数 <VAR>start_position</VAR> と <VAR>end_position</VAR> には音声データの開始位置
+を渡します。
+位置の情報は、音声データの参照元であるテキストデータに記載されており、
+通常はフック関数を通じて得るようにします。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ������˱��������顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因に応じたエラーコードを返します。
 </P><P>
 
-���餫���ᡢ�����ǡ�������Ф����Ȥ��Ƥ������ܤ����򤷤Ƥ����ʤ����
-�ʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ��
-�֤��ޤ���
-�����ǡ����ΰ��֤����餫�ˤ��������� EB �饤�֥�꤬Ƚ�Ǥ����Ȥ��ϡ�
-<CODE>EB_ERR_NO_SUCH_BINARY</CODE> ���֤��ޤ���
+あらかじめ、音声データを取り出そうとしている副本を選択しておかなければ
+なりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を
+返します。
+音声データの位置が明らかにおかしいと EB ライブラリが判断したときは、
+<CODE>EB_ERR_NO_SUCH_BINARY</CODE> を返します。
 </P><P>
 
-���δؿ��ϡ��ºݤ˲����ǡ������ɤ߹��ळ�ȤϤ��ޤ���
-�ɤ߹��ߤˤϡ�<CODE>eb_read_binary()</CODE> ���Ѥ��ޤ���
+この関数は、実際に音声データを読み込むことはしません。
+読み込みには、<CODE>eb_read_binary()</CODE> を用います。
 </DL>
 </P><P>
 
@@ -515,33 +515,33 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 <DD><A NAME="IDX600"></A>
 </P><P>
 
-�ؿ� <CODE>eb_set_binary_mpeg()</CODE> �ϡ�MPEG1 ������ư��Υǡ����򤳤줫��
-�������褦�Ȥ��Ƥ��뤳�Ȥ� EB �饤�֥��������ޤ���
-���� <VAR>argv</VAR> �ˤ�ư��ǡ����Υե�����̾���Ϥ��ޤ���
-�����������Υե�����̾��ʸ����ǤϤʤ����եå��ؿ�
-<CODE>EB_HOOK_BEGIN_MPEG</CODE> ���Ϥ��줿���� <CODE>argv[2]</CODE> �� <CODE>argv[5]</CODE>
-����ʬ���Ϥ��ޤ���
-�Ĥޤꡢ�եå��ؿ��ΰ��� <CODE>argv + 2</CODE> ��<CODE>eb_set_binary_mpeg()</CODE> 
-�ؤΰ��� <VAR>argv</VAR> �Ȥ����Ϥ��ޤ���
+関数 <CODE>eb_set_binary_mpeg()</CODE> は、MPEG1 形式の動画のデータをこれから
+取得しようとしていることを EB ライブラリに伝えます。
+引数 <VAR>argv</VAR> には動画データのファイル名を渡します。
+ただし、このファイル名は文字列ではなく、フック関数
+<CODE>EB_HOOK_BEGIN_MPEG</CODE> に渡された引数 <CODE>argv[2]</CODE> 〜 <CODE>argv[5]</CODE>
+の部分を渡します。
+つまり、フック関数の引数 <CODE>argv + 2</CODE> を、<CODE>eb_set_binary_mpeg()</CODE> 
+への引数 <VAR>argv</VAR> として渡します。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ������˱��������顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因に応じたエラーコードを返します。
 </P><P>
 
-���餫���ᡢư��ǡ�������Ф����Ȥ��Ƥ������ܤ����򤷤Ƥ����ʤ����
-�ʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ��
-�֤��ޤ���
-¸�ߤ��ʤ�ư��ե�����̾�� EB �饤�֥�꤬Ƚ�Ǥ����Ȥ��ϡ�
-<CODE>EB_ERR_NO_SUCH_BINARY</CODE> ���֤��ޤ���
+あらかじめ、動画データを取り出そうとしている副本を選択しておかなければ
+なりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を
+返します。
+存在しない動画ファイル名を EB ライブラリが判断したときは、
+<CODE>EB_ERR_NO_SUCH_BINARY</CODE> を返します。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
 </P><P>
 
-���δؿ��ϡ��ºݤ�ư��ǡ������ɤ߹��ळ�ȤϤ��ޤ���
-�ɤ߹��ߤˤϡ�<CODE>eb_read_binary()</CODE> ���Ѥ��ޤ���
+この関数は、実際に動画データを読み込むことはしません。
+読み込みには、<CODE>eb_read_binary()</CODE> を用います。
 </DL>
 </P><P>
 
@@ -551,8 +551,8 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 <DD><A NAME="IDX602"></A>
 </P><P>
 
-�ؿ� <CODE>eb_read_binary()</CODE> �ϡ��Х��ʥ�ǡ������ɤ߹��ߤޤ���
-�ɤ߹��⤦�Ȥ��Ƥ���Х��ʥ�ǡ����ϡ�������
+関数 <CODE>eb_read_binary()</CODE> は、バイナリデータを読み込みます。
+読み込もうとしているバイナリデータは、事前に
 </P><P>
 
 <UL>
@@ -563,29 +563,29 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 </UL>
 <P>
 
-�Τ����줫�δؿ��ǡ�EB �饤�֥������Τ��Ƥ���ɬ�פ�����ޤ���
+のいずれかの関数で、EB ライブラリに通知しておく必要があります。
 </P><P>
 
-�ɤ߹�����ǡ����ϰ��� <VAR>binary</VAR> �λؤ�����ΰ�˽񤭹��ޤ�ޤ���
-�ޤ������ΤȤ��񤭹��ޤ줿�Х��ȿ��ϡ�<VAR>binary_length</VAR> �λؤ����
-�ΰ�˥��åȤ���ޤ���
-���������񤭹��ޤ��Х��ȿ��ϡ���Ĺ�Ǥ���� <VAR>binary_max_length</VAR> ��
-���ꤷ���ͤޤǤȤʤ�ޤ���
+読み込んだデータは引数 <VAR>binary</VAR> の指す先の領域に書き込まれます。
+また、このとき書き込まれたバイト数は、<VAR>binary_length</VAR> の指す先の
+領域にセットされます。
+ただし、書き込まれるバイト数は、最長でも引数 <VAR>binary_max_length</VAR> に
+指定した値までとなります。
 </P><P>
 
-���δؿ��ϡ��ä��ɤ߹�����ǡ����ν�ü�˥ʥ�ʸ�����ղä���褦�ʻ���
-���ޤ���
-�ɤ߹��ޤ��ǡ�����Х��ʥ�����ʤΤǡ�����˥ʥ�ʸ�����и��������
-����ޤ���
+この関数は、特に読み込んだデータの終端にナル文字を付加するような事は
+しません。
+読み込まれるデータもバイナリ形式なので、途中にナル文字が出現する事も
+あります。
 </P><P>
 
-���δؿ�����ƤӽФ��������ǡ��Х��ʥ�ǡ������Τ�쵤�˼�������
-ɬ�פϤ���ޤ���
-�����֤��ƤӽФ��С������³������ǡ������ɤ߹��ޤ�ޤ���
+この関数を一回呼び出しだだけで、バイナリデータ全体を一気に取得する
+必要はありません。
+繰り返し呼び出せば、前回の続きからデータが読み込まれます。
 </P><P>
 
-���������ʲ��˵󤲤��ؿ���ƤӽФ��ȡ��Х��ʥ�ǡ������ɤ߹��ߤ˴ؤ���
-���ֵ�Ͽ���ꥻ�åȤ���ޤ��Τǡ�����ʾ���ɤ߹��ߤϤǤ��ʤ��ʤ�ޤ���
+ただし、以下に挙げた関数を呼び出すと、バイナリデータの読み込みに関する
+状態記録がリセットされますので、それ以上の読み込みはできなくなります。
 </P><P>
 
 <UL>
@@ -601,27 +601,27 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 </UL>
 <P>
 
-<CODE>eb_read_binary()</CODE> �򷫤��֤��Ƥ����硢�Х��ʥ�ǡ����Ϥ�������
-<VAR>binary</VAR> ����Ƭ����񤭹��ޤ졢*<VAR>binary_length</VAR> ���ͤ⡢���β�
-�� <CODE>eb_read_binary()</CODE> �θƤӽФ��ǽ񤭹��ޤ줿�Х��ȿ��ˤʤ�ޤ���
+<CODE>eb_read_binary()</CODE> を繰り返し呼んだ場合、バイナリデータはその都度
+<VAR>binary</VAR> の先頭から書き込まれ、*<VAR>binary_length</VAR> の値も、その回
+の <CODE>eb_read_binary()</CODE> の呼び出しで書き込まれたバイト数になります。
 </P><P>
 
-�ǡ����ν�ü�����ȡ�����ʾ夳�δؿ���Ƥ�Ǥ�ؿ��� <VAR>binary</VAR> �ˤ�
-����񤭹��ޤ���*<VAR>binary_length</VAR> �� 0 ��񤭹��ߡ�<CODE>EB_SUCCESS</CODE>
-���֤��ޤ���
+データの終端に来ると、それ以上この関数を呼んでも関数は <VAR>binary</VAR> には
+何も書き込まず、*<VAR>binary_length</VAR> に 0 を書き込み、<CODE>EB_SUCCESS</CODE>
+を返します。
 </P><P>
 
-��������ȡ����δؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>binary_length</VAR> ���ؤ��ΰ�� -1 ��񤭹��ߡ������򼨤�
-���顼�����ɤ��֤��ޤ���
-���ξ�硢�Х��ʥ�ǡ������ɤ߹��߾��֤ε�Ͽ���ꥻ�åȤ���ޤ��Τǡ�
-�ǡ�����³�����ɤ߹��ळ�ȤϤǤ��ʤ��ʤ�ޤ���
+成功すると、この関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>binary_length</VAR> が指す領域に -1 を書き込み、原因を示す
+エラーコードを返します。
+この場合、バイナリデータの読み込み状態の記録がリセットされますので、
+データの続きを読み込むことはできなくなります。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> �Ϥ����줫�����ܤ����򤷤Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
-�ޤ�����Ƭ�˵󤲤��ؿ��θƤӽФ����������Ƥ��ʤ����֤Ǥ��δؿ���Ƥ֤ȡ�
-<CODE>EB_ERR_NO_CUR_BINARY</CODE> ���֤��ޤ���
+あらかじめ、<VAR>book</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+また、冒頭に挙げた関数の呼び出しが成功していない状態でこの関数を呼ぶと、
+<CODE>EB_ERR_NO_CUR_BINARY</CODE> を返します。
 </DL>
 </P><P>
 
@@ -631,37 +631,37 @@ MPEG ư��Υǡ���������ˤϡ����Υե�����̾�� <CODE>eb_set_binary_mpeg()</CODE>
 <DD><A NAME="IDX604"></A>
 </P><P>
 
-�ؿ� <CODE>eb_compose_movie_file_name()</CODE> �ϡ�ư��ǡ����Υե�����̾��
-�̾��ʸ������Ѵ����ޤ���
+関数 <CODE>eb_compose_movie_file_name()</CODE> は、動画データのファイル名を
+通常の文字列に変換します。
 </P><P>
 
-EB �饤�֥��Ǥϡ�ư��ǡ����Υե�����̾�ϥեå��ؿ�
-<CODE>EB_HOOK_BEGIN_MPEG</CODE> ���Ϥ��줿 4 �Ĥ� int ������
-(<CODE>argv[2]</CODE> �� <CODE>argv[5]</CODE>) �ˤ�ä�ɽ������ޤ���
+EB ライブラリでは、動画データのファイル名はフック関数
+<CODE>EB_HOOK_BEGIN_MPEG</CODE> に渡された 4 つの int 型引数
+(<CODE>argv[2]</CODE> 〜 <CODE>argv[5]</CODE>) によって表現されます。
 </P><P>
 
-ư��ǡ������ɤ߹���ݤϡ�����򤽤Τޤ� <CODE>eb_set_binary_mpeg()</CODE> ��
-�Ϥ����ɤ��ΤǤ������ե�����̾���̾��ʸ��������������ϡ����δؿ���
-�Ѥ��ޤ���
-���Ȥ��С��ġ���ư��˰�դ� ID �Τ褦�ʤ�Τ򿶤ꤿ�����ϡ��ե�����
-̾�� ID �Ȥ��ƻȤ����ɤ������Τ�ޤ���
+動画データを読み込む際は、これをそのまま <CODE>eb_set_binary_mpeg()</CODE> に
+渡せば良いのですが、ファイル名を通常の文字列で得たい場合は、この関数を
+用います。
+たとえば、個々の動画に一意の ID のようなものを振りたい場合は、ファイル
+名を ID として使うと良いかも知れません。
 </P><P>
 
-�եå��ؿ��ΰ��� <CODE>argv + 2</CODE> �򤳤δؿ��ؤΰ��� <VAR>argv</VAR> �Ȥ���
-�Ϥ��ȡ�<VAR>composed_file_name</VAR> ���ؤ�����ΰ�ˡ�ʸ����������Ѵ����줿
-�ե�����̾����Ǽ����ޤ���
-�ե�����̾�Ϻ�Ĺ�� <CODE>EB_MAX_DIRECTORY_NAME_LENGTH</CODE> (= 8) �Х��Ȥ�
-�ʤ�ޤ���
-����Ĺ���ˤϽ�ü�Υʥ�ʸ����ʬ��ޤ�Ǥ��ޤ���Τǡ���Ǽ�ΰ�ˤϤϤ⤦
-1 �Х���;͵���פ�ޤ���
+フック関数の引数 <CODE>argv + 2</CODE> をこの関数への引数 <VAR>argv</VAR> として
+渡すと、<VAR>composed_file_name</VAR> が指す先の領域に、文字列形式に変換された
+ファイル名が格納されます。
+ファイル名は最長で <CODE>EB_MAX_DIRECTORY_NAME_LENGTH</CODE> (= 8) バイトに
+なります。
+この長さには終端のナル文字の分を含んでいませんので、格納領域にははもう
+1 バイト余裕が要ります。
 </P><P>
 
-�ʤ�����Ǽ���줿�ե�����̾�ϡ��ºݤ�¸�ߤ���ե�����̾�Ȥϼ㴳�ۤʤäƤ���
-��ǽ��������ޤ���
-���Ȥ��С��ѻ�����ʸ���Ⱦ�ʸ���������Ҥ�̵ͭ�ʤɤΰ㤤�������������ޤ���
+なお、格納されたファイル名は、実際に存在するファイル名とは若干異なっている
+可能性があります。
+たとえば、英字の大文字と小文字、接尾子の有無などの違いがこれに当たります。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
 </DL>
 </P><P>
 
@@ -671,15 +671,15 @@ EB �饤�֥��Ǥϡ�ư��ǡ����Υե�����̾�ϥեå��ؿ�
 <DD><A NAME="IDX606"></A>
 </P><P>
 
-�ؿ� <CODE>eb_compose_movie_file_name()</CODE> �ϡ�
-<CODE>eb_compose_movie_file_name()</CODE> �Ȥ��礦�ɵդ�Ư���򤷤ޤ���
-�Ĥޤꡢ�̾��ʸ������Ѵ����줿ư��ǡ����Υե�����̾
-<VAR>composed_file_name</VAR> ��4 �Ĥ� int ������ <VAR>argv</VAR> ���ᤷ�ޤ���
-�������äơ�<VAR>argv</VAR> �λؤ��ΰ�ϡ����ʤ��Ȥ� int �����ͤ� 4 �ĳ�Ǽ
-�Ǥ����礭����ɬ�פǤ���
+関数 <CODE>eb_compose_movie_file_name()</CODE> は、
+<CODE>eb_compose_movie_file_name()</CODE> とちょうど逆の働きをします。
+つまり、通常の文字列に変換された動画データのファイル名
+<VAR>composed_file_name</VAR> を、4 つの int 型引数 <VAR>argv</VAR> に戻します。
+したがって、<VAR>argv</VAR> の指す領域は、少なくとも int 型の値を 4 つ格納
+できる大きさが必要です。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
 </DL>
 </P><P>
 

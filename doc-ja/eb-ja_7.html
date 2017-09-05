@@ -35,44 +35,44 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 7. ���� </H1>
+<H1> 7. 副本 </H1>
 <!--docid::SEC29::-->
 <P>
 
-��˰������줿�ܤǤ��̡��ν��ҤˤʤäƤ����ΤǤ⡢�Żҥ֥å��� EPWING
-�Ǥ� 1 ��� CD-ROM �ˤޤȤ�뤳�Ȥ��Ǥ��ޤ���
+紙に印刷された本では別々の書籍になっているものでも、電子ブックや EPWING
+では 1 枚の CD-ROM にまとめることができます。
 </P><P>
 
-���Ȥ��С����� CD-ROM ���Ҥϡ���켭�񡢱ѡ���ŵ��ɴ�ʻ�ŵ�Ȥ��� 3 ��
-�� (�������줿�ܤǸ����Ȥ�����) �ֽ��ҡפ���äƤ��뤳�Ȥ⤢�����ޤ���
-ʶ��路�����򤱤뤿��ˡ�EB �饤�֥��ǤϤ����Ǹ����ֽ��ҡפΤ��Ȥ�
-<EM>���� (subbook)</EM> �ȸƤ�Ǥ��ޤ���
+たとえば、ある CD-ROM 書籍は、国語辞書、英々辞典、百科事典という 3 つ
+の (印刷された本で言うところの) 「書籍」を持っていることもあり得ます。
+紛らわしさを避けるために、EB ライブラリではここで言う「書籍」のことを
+<EM>副本 (subbook)</EM> と呼んでいます。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>�������ãġݣңϣͽ���
-������������������������������
-�������ܣ������ι�켭ŵ�ϡ���
-�������ܣ������αѡ���ŵ�ϡ���
-�������ܣ�������ɴ�ʻ�ŵ�ϡ���
-������������������������������
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>　　　ＣＤ−ＲＯＭ書籍
+┌─────────────┐
+│　副本０：　［国語辞典］　│
+│　副本１：　［英々辞典］　│
+│　副本２：　［百科事典］　│
+└─────────────┘
 </pre></td></tr></table></P><P>
 
-CD-ROM ���ҤǤϡ����줾������ܤϤ��켫�Τ���Ω�������ҤˤʤäƤ��ޤ���
-�ޤ������ܤΥǡ����⡢��������̡��Υե�����˼�����Ƥ��ޤ���
-�������äơ�EB �饤�֥��Ǥ⡢���ץꥱ�������ץ������μ��פʽ���
-�Ǥ���ñ��θ�������ʸ�ǡ����μ����ʤɤϡ����٤�����ñ�̤ǹԤ��褦��
-�ʤäƤ��ޤ���
+CD-ROM 書籍では、それぞれの副本はそれ自体が独立した書籍になっています。
+また、副本のデータも、副本毎に別々のファイルに収められています。
+したがって、EB ライブラリでも、アプリケーションプログラムの主要な処理
+である単語の検索や本文データの取得などは、すべて副本単位で行うように
+なっています。
 </P><P>
 
-�ܾϤǤϡ�EB �饤�֥��Ǥ����ܤΰ������ˤĤ����������ޤ���
+本章では、EB ライブラリでの副本の扱い方について説明します。
 </P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC30">7.1 ���ܥ�����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC31">7.2 �����������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC32">7.3 ����ץ�ץ������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC33">7.4 �ǡ������ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC34">7.5 �ؿ��ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC30">7.1 副本コード</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC31">7.2 選択中の副本</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC32">7.3 サンプルプログラム</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC33">7.4 データ型の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_7.html#SEC34">7.5 関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -90,22 +90,22 @@ CD-ROM ���ҤǤϡ����줾������ܤϤ��켫�Τ���Ω�������ҤˤʤäƤ��ޤ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 7.1 ���ܥ����� </H2>
+<H2> 7.1 副本コード </H2>
 <!--docid::SEC30::-->
 <P>
 
-EB �饤�֥��Ǥϡ����줾������ܤ��Ф��� <EM>���ܥ����� (subbook code)</EM>
-�������Ƥޤ���
-���Υ����ɤ� EB �饤�֥�꤬���ܤ��̤��뤿����Ѥ��ޤ��Τǡ��ġ���
-���ܥ����ɤϡ��������Ʊ����Τ��ʤ��褦�ˤʤäƤ��ޤ���
+EB ライブラリでは、それぞれの副本に対して <EM>副本コード (subbook code)</EM>
+を割り当てます。
+このコードは EB ライブラリが副本を識別するために用いますので、個々の
+副本コードは、書籍内で同じものがないようになっています。
 </P><P>
 
-�ʲ��Υ����������ɤϡ�<CODE>eb_subbook_list()</CODE> �Ȥ����ؿ��λ�����Ǥ���
-���δؿ��ϡ�������Τ��٤Ƥ����ܤ����ܥ����ɤ�������뤳�Ȥ��Ǥ��ޤ���
+以下のソースコードは、<CODE>eb_subbook_list()</CODE> という関数の使用例です。
+この関数は、書籍内のすべての副本の副本コードを取得することができます。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> �� <CODE>EB_Book</CODE> �Υ��֥������Ȥǡ����Ǥ˽��Ҥ˷���դ�
- * ���Ƥ���Ȳ��ꤷ�Ƥ��ޤ���*/
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> が <CODE>EB_Book</CODE> のオブジェクトで、すでに書籍に結び付け
+ * られていると仮定しています。*/
 EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
 int sub_count;
 
@@ -116,16 +116,16 @@ if (eb_subbook_list(&#38;book, sub_codes, &#38;sub_count)
 }
 </pre></td></tr></table></P><P>
 
-<CODE>eb_subbook_list()</CODE> ����������ȡ�������Τ��٤Ƥ����ܥ����ɤ�
-���� <CODE>sub_codes[]</CODE> �˳�Ǽ����ޤ���
-�������Ƭ�����ܥ����ɤ� <CODE>sub_codes[0]</CODE> ��ɽ���졢����
-�����ɤ� <CODE>sub_codes[1]</CODE>���Ȥ������ˤʤ�ޤ���
-���ܤθĿ��ϡ�<CODE>sub_count</CODE> �˳�Ǽ����ޤ���
+<CODE>eb_subbook_list()</CODE> が成功すると、書籍内のすべての副本コードが
+配列 <CODE>sub_codes[]</CODE> に格納されます。
+配列の先頭の副本コードは <CODE>sub_codes[0]</CODE> と表され、次の
+コードは <CODE>sub_codes[1]</CODE>、という具合になります。
+副本の個数は、<CODE>sub_count</CODE> に格納されます。
 </P><P>
 
-�ġ������ܤˤϡ�ɬ����̾���դ����Ƥ��ޤ���
-��Ƭ������ (<CODE>sub_codes[0]</CODE>) ����̾�ϡ����Τ褦�ˤ������뤳�Ȥ�
-�Ǥ��ޤ���
+個々の副本には、必ず題名が付けられています。
+先頭の副本 (<CODE>sub_codes[0]</CODE>) の題名は、次のようにして得ることが
+できます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>char title[EB_MAX_TITLE_LENGTH + 1];
@@ -137,12 +137,12 @@ if (eb_subbook_title2(&#38;book, sub_codes[0], title)
 }
 </pre></td></tr></table></P><P>
 
-<CODE>eb_subbook_title2()</CODE> �θƤӽФ�����������ȡ�<CODE>title</CODE> ��
-��̾��ɽ��ʸ���󤬳�Ǽ����ޤ���
+<CODE>eb_subbook_title2()</CODE> の呼び出しが成功すると、<CODE>title</CODE> に
+題名を表す文字列が格納されます。
 </P><P>
 
-��­�Ǥ�����(���ܤǤϤʤ�) CD-ROM ����̾���������ؿ��Ϥ���ޤ���
-�ʤ��ʤ顢��̾�򼨤��ǡ����� CD-ROM ����ˤϲ���ˤ�ʤ�����Ǥ���
+蛇足ですが、(副本ではなく) CD-ROM の題名を取得する関数はありません。
+なぜなら、題名を示すデータが CD-ROM の中には何処にもないからです。
 </P><P>
 
 <A NAME="Current Subbook"></A>
@@ -159,39 +159,39 @@ if (eb_subbook_title2(&#38;book, sub_codes[0], title)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 7.2 ����������� </H2>
+<H2> 7.2 選択中の副本 </H2>
 <!--docid::SEC31::-->
 <P>
 
-<CODE>EB_Book</CODE> ���֥������Ȥϡ���ӤĤ���줿 CD-ROM ���Ҥ����Ǥ�դ�
-���ܤ���������ǡ�<EM>����������� (current subbook)</EM> �Ȥ��ƻ��ꤹ��
-���Ȥ��Ǥ��ޤ���
-ʣ�������ܤ�Ʊ�������򤹤뤳�ȤϤǤ��ޤ���
-ñ��θ����䡢��ʸ�ǡ����μ����ʤɡ��ۤȤ�ɤ����ϡ�����������ܤ�
-�Ф��Ƥ����Ԥ��ޤ���
+<CODE>EB_Book</CODE> オブジェクトは、結びつけられた CD-ROM 書籍の中の任意の
+副本から一つ選んで、<EM>選択中の副本 (current subbook)</EM> として指定する
+ことができます。
+複数の副本を、同時に選択することはできません。
+単語の検索や、本文データの取得など、ほとんどの操作は、選択中の副本に
+対してだけ行えます。
 </P><P>
 
-<CODE>eb_bind()</CODE> �� <CODE>EB_Book</CODE> ���֥������Ȥ���Ҥ˷���դ���ľ��
-�ϡ�����������ܤ����򤵤�Ƥ��ʤ����֤ˤʤäƤ��ޤ���
+<CODE>eb_bind()</CODE> で <CODE>EB_Book</CODE> オブジェクトを書籍に結び付けた直後
+は、いずれの副本も選択されていない状態になっています。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>�ţ¡��£��롡�����������������ãġݣңϣͽ���
-���֥�������
-��������������������������������������������������������
-�������桡�����������������������ܣ������ι�켭ŵ�ϡ���
-�������ܡ������������������������ܣ������αѡ���ŵ�ϡ���
-����ʤ��䨢���������������������ܣ�������ɴ�ʻ�ŵ�ϡ���
-��������������������������������������������������������
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ＥＢ＿Ｂｏｏｋ　　　　　　　　　ＣＤ−ＲＯＭ書籍
+オブジェクト
+┌────┐　　　　　　　┌─────────────┐
+│選択中　│　　　　　　　│　副本０：　［国語辞典］　│
+│の副本　│　　　　　　　│　副本１：　［英々辞典］　│
+│＜なし＞│　　　　　　　│　副本２：　［百科事典］　│
+└────┘　　　　　　　└─────────────┘
 </pre></td></tr></table></P><P>
 
-���ܤ������Ԥ��ˤϡ��ؿ� <CODE>eb_set_subbook()</CODE> ����Ѥ��ޤ���
-<CODE>eb_set_subbook()</CODE> �ϡ������Ȥ����Ϥ��줿���ܥ����ɤˤ������ä�
-���ܤ����򤷤ޤ���
-�ʲ��ϡ���Ƭ������ (<CODE>sub_codes[0]</CODE>) �����򤹤������Ǥ���
+副本の選択を行うには、関数 <CODE>eb_set_subbook()</CODE> を使用します。
+<CODE>eb_set_subbook()</CODE> は、引数として渡された副本コードにしたがって
+副本を選択します。
+以下は、先頭の副本 (<CODE>sub_codes[0]</CODE>) を選択する場合の例です。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> �� <CODE>EB_Book</CODE> �Υ��֥������Ȥǡ����Ǥ˽��Ҥ˷���դ�
- * ���Ƥ���Ȳ��ꤷ�Ƥ��ޤ���*/
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>/* <CODE>book</CODE> が <CODE>EB_Book</CODE> のオブジェクトで、すでに書籍に結び付け
+ * られていると仮定しています。*/
 EB_Subbook_Code sub_codes[EB_MAX_SUBBOOKS];
 int sub_count;
 
@@ -206,16 +206,16 @@ if (eb_set_subbook(&#38;book, sub_codes[0]) != EB_SUCCESS) {
 }
 </pre></td></tr></table></P><P>
 
-��������ȡ����Τ褦�����ܤ����򤵤줿���֤ˤʤ�ޤ���
+成功すると、次のように副本が選択された状態になります。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>�ţ¡��£��롡�����������������ãġݣңϣͽ���
-���֥�������
-��������������������������������������������������������
-�������桡�����������������������ܣ������ι�켭ŵ�ϡ���
-�������ܡ������������������������ܣ������αѡ���ŵ�ϡ���
-���������������������������������ܣ�������ɴ�ʻ�ŵ�ϡ���
-��������������������������������������������������������
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>ＥＢ＿Ｂｏｏｋ　　　　　　　　　ＣＤ−ＲＯＭ書籍
+オブジェクト
+┌────┐　　　　　　　┌─────────────┐
+│選択中　│　　┏━━━━┿━副本０：　［国語辞典］　│
+│の副本　│　　┃　　　　│　副本１：　［英々辞典］　│
+│　＊━━┿━━┛　　　　│　副本２：　［百科事典］　│
+└────┘　　　　　　　└─────────────┘
 </pre></td></tr></table></P><P>
 
 <A NAME="Subbook Sample"></A>
@@ -232,19 +232,19 @@ if (eb_set_subbook(&#38;book, sub_codes[0]) != EB_SUCCESS) {
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 7.3 ����ץ�ץ������ </H2>
+<H2> 7.3 サンプルプログラム </H2>
 <!--docid::SEC32::-->
 <P>
 
 <A NAME="IDX175"></A>
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/*
- * ������ˡ:
+ * 使用方法:
  *     subbook &#60;book-path&#62;
- * ��:
+ * 例:
  *     subbook /cdrom
- * ����:
- *     &#60;boook-path&#62; �ǻ��ꤵ�� CD-ROM ���Ҥ˴ޤޤ�Ƥ��뤹�٤Ƥ����ܤ�
- *     ��̾��ɽ�����ޤ���
+ * 説明:
+ *     &#60;boook-path&#62; で指定され CD-ROM 書籍に含まれているすべての副本の
+ *     題名を表示します。
  */
 #include "config.h"
 
@@ -266,13 +266,13 @@ main(argc, argv)
     char title[EB_MAX_TITLE_LENGTH + 1];
     int i;
 
-    /* ���ޥ�ɹ԰���������å���*/
+    /* コマンド行引数をチェック。*/
     if (argc != 2) {
         fprintf(stderr, "Usage: %s book-path\n", argv[0]);
         exit(1);
     }
 
-    /* EB �饤�֥��� `book' ��������*/
+    /* EB ライブラリと `book' を初期化。*/
     error_code = eb_initialize_library();
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
@@ -281,7 +281,7 @@ main(argc, argv)
     }
     eb_initialize_book(&#38;book);
 
-    /* ���Ҥ� `book' �˷���դ��롣*/
+    /* 書籍を `book' に結び付ける。*/
     error_code = eb_bind(&#38;book, argv[1]);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
@@ -289,7 +289,7 @@ main(argc, argv)
         goto die;
     }
 
-    /* ���ܤΰ����������*/
+    /* 副本の一覧を取得。*/
     error_code = eb_subbook_list(&#38;book, subbook_list, &#38;subbook_count);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
@@ -297,7 +297,7 @@ main(argc, argv)
         goto die;
     }
 
-    /* ���Ҥ˴ޤޤ�Ƥ������ܤ���̾����ϡ�*/
+    /* 書籍に含まれている副本の題名を出力。*/
     for (i = 0; i &#60; subbook_count; i++) {
         error_code = eb_subbook_title2(&#38;book, subbook_list[i], title);
         if (error_code != EB_SUCCESS) {
@@ -308,12 +308,12 @@ main(argc, argv)
         printf("%d: %s\n", i, title);
     }
 
-    /* ���Ҥ� EB �饤�֥������Ѥ�λ��*/
+    /* 書籍と EB ライブラリの利用を終了。*/
     eb_finalize_book(&#38;book);
     eb_finalize_library();
     exit(0);
 
-    /* ���顼ȯ���ǽ�λ����Ȥ��ν�����*/
+    /* エラー発生で終了するときの処理。*/
   die:
     eb_finalize_book(&#38;book);
     eb_finalize_library();
@@ -335,12 +335,12 @@ main(argc, argv)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 7.4 �ǡ������ξܺ� </H2>
+<H2> 7.4 データ型の詳細 </H2>
 <!--docid::SEC33::-->
 <P>
 
-��������������Ƥ���ǡ�������Ȥ��ˤϡ����Τ褦�˥إå��ե������
-�ɤ߹���ǲ�������
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
@@ -353,15 +353,15 @@ main(argc, argv)
 <A NAME="IDX178"></A>
 </P><P>
 
-�ǡ����� <CODE>EB_Subbook_Code</CODE> �����ܥ����ɤ�ɽ���ޤ���
-����ν��Ҥ�������ܤϡ����줾���դ����ܥ����ɤ���äƤ��ޤ���
-���η�������դ�����������̾�Ȥ����������Ƥ��ޤ��Τǡ�2 �ĤΥ����ɤ�
-2 ��黻�� <CODE>==</CODE> �� <CODE>!=</CODE> �ǰ�����Ӥ��뤳�Ȥ��Ǥ��ޤ���
+データ型 <CODE>EB_Subbook_Code</CODE> は副本コードを表します。
+一冊の書籍の中の副本は、それぞれ一意の副本コードを持っています。
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <CODE>==</CODE> と <CODE>!=</CODE> で一致比較することができます。
 </P><P>
 
-�ޤ������������ܥ������ͤ�ɽ�� <CODE>EB_SUBBOOK_INVALID</CODE> �Ȥ������̤�
-���ܥ����ɤ��������Ƥ��ޤ���
-���Ѳ�ǽ�����ܤ��Ф��ơ��������ܥ����ɤ�������Ƥ��뤳�ȤϤ���ޤ���
+また、不正な副本コード値を表す <CODE>EB_SUBBOOK_INVALID</CODE> という特別な
+副本コードが定義されています。
+利用可能な副本に対して、この副本コードが割り当てられることはありません。
 </DL>
 </P><P>
 
@@ -379,12 +379,12 @@ main(argc, argv)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 7.5 �ؿ��ξܺ� </H2>
+<H2> 7.5 関数の詳細 </H2>
 <!--docid::SEC34::-->
 <P>
 
-��������������Ƥ���ؿ���Ȥ��ˤϡ����Τ褦�˥إå��ե�������ɤ߹����
-��������
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
@@ -396,28 +396,28 @@ main(argc, argv)
 <DD><A NAME="IDX180"></A>
 </P><P>
 
-�ؿ� <CODE>eb_load_all_subbooks()</CODE> �ϡ�<VAR>book</VAR> ��Τ��٤Ƥ����ܤ�
-��������ޤ���
-�̾���ܤν�����ϡ��������ܤ��������򤵤줿�Ȥ��˼�ưŪ�˹Ԥ��ޤ�����
-���δؿ��Ͻ���������ݤ��ǹԤ��ޤ���
-��������оݤȤʤ�Τϡ����δؿ���ƤӽФ��������Ǥޤ���������Ƥ��ʤ�
-���٤Ƥ����ܤǤ���
-���δؿ��ϡ�������ɥ������ư��륵���Х��ץꥱ�������ʤɤ�ͭ���Ǥ���
-���饤����Ȥ������³����������ˤ��δؿ���Ƥ֤��Ȥǡ����ܤν������
-����˥��饤����Ȥ��Ԥ����ʤ��ƺѤߤޤ���
+関数 <CODE>eb_load_all_subbooks()</CODE> は、<VAR>book</VAR> 内のすべての副本を
+初期化します。
+通常、副本の初期化は、その副本が初めて選択されたときに自動的に行われますが、
+この関数は初期化を前倒しで行います。
+初期化の対象となるのは、この関数を呼び出した時点でまだ初期化していない
+すべての副本です。
+この関数は、スタンドアロンで動作するサーバアプリケーションなどで有効です。
+クライアントからの接続を受ける前にこの関数を呼ぶことで、副本の初期化の
+ためにクライアントを待たせなくて済みます。
 </P><P>
 
-��������оݤȤʤä����٤Ƥ����ܤν��������������С��ؿ���
-<CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-����Ǥ������˼��Ԥ������ϡ��Ĥ�����ܤν���������ᡢ�����򼨤�
-���顼�����ɤ��֤��ޤ���
+初期化の対象となったすべての副本の初期化に成功すれば、関数は
+<CODE>EB_SUCCESS</CODE> を返します。
+一冊でも初期化に失敗した場合は、残りの副本の初期化を諦め、原因を示す
+エラーコードを返します。
 </P><P>
 
-<VAR>book</VAR> �ϡ����餫������Ҥ˷���դ����Ƥ��ʤ��ƤϤʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_BOOK</CODE> ���֤��ޤ���
+<VAR>book</VAR> は、あらかじめ書籍に結び付けられていなくてはなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
 </P><P>
 
-���δؿ���ƤӽФ��ȡ�<VAR>book</VAR> �ϡ����ܤ����򤷤Ƥ��ʤ����֤ˤʤ�ޤ���
+この関数を呼び出すと、<VAR>book</VAR> は、副本を選択していない状態になります。
 </DL>
 </P><P>
 
@@ -428,21 +428,21 @@ main(argc, argv)
 <A NAME="IDX183"></A>
 </P><P>
 
-�ؿ� <CODE>eb_subbook_list()</CODE> �ϡ�<VAR>book</VAR> ��Τ��٤����ܤ����ܥ����ɤ�
-<CODE>EB_Subbook_Code</CODE> ��������ˤ��ơ�<VAR>subbook_list</VAR> �λؤ��ΰ��
-�񤭹��ߤޤ���
-����ϡ������ <CODE>EB_MAX_SUBBOOKS</CODE> �Ĥ����Ǥ�����ޤ���
-�ä��ơ����Ҥ���Ͽ���Ƥ������ܤθĿ��� <VAR>subbook_count</VAR> �λؤ��ΰ��
-�񤭹��ߤޤ���
+関数 <CODE>eb_subbook_list()</CODE> は、<VAR>book</VAR> 内のすべて副本の副本コードを
+<CODE>EB_Subbook_Code</CODE> 型の配列にして、<VAR>subbook_list</VAR> の指す領域に
+書き込みます。
+配列は、最大で <CODE>EB_MAX_SUBBOOKS</CODE> 個の要素を持ちます。
+加えて、書籍が収録している副本の個数を <VAR>subbook_count</VAR> の指す領域に
+書き込みます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>subbook_count</VAR> �λؤ��ΰ�� 0 ��񤭹��ߡ������򼨤�
-���顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>subbook_count</VAR> の指す領域に 0 を書き込み、原因を示す
+エラーコードを返します。
 </P><P>
 
-<VAR>book</VAR> �ϡ����餫������Ҥ˷���դ����Ƥ��ʤ��ƤϤʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_BOOK</CODE> ���֤��ޤ���
+<VAR>book</VAR> は、あらかじめ書籍に結び付けられていなくてはなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
 </DL>
 </P><P>
 
@@ -452,17 +452,17 @@ main(argc, argv)
 <DD><A NAME="IDX185"></A>
 </P><P>
 
-�ؿ� <CODE>eb_subbook()</CODE> �ϡ�<VAR>book</VAR> ������������ܤ����ܥ����ɤ�
-<VAR>subbook_code</VAR> �λؤ��ΰ�˽񤭹��ߤޤ���
+関数 <CODE>eb_subbook()</CODE> は、<VAR>book</VAR> が選択中の副本の副本コードを
+<VAR>subbook_code</VAR> の指す領域に書き込みます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>subbook_code</VAR> �λؤ��ΰ�� <CODE>EB_SUBBOOK_INVALID</CODE> 
-��񤭹��ߡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>subbook_code</VAR> の指す領域に <CODE>EB_SUBBOOK_INVALID</CODE> 
+を書き込み、原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> �Ϥ����줫�����ܤ����򤷤Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
+あらかじめ、<VAR>book</VAR> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
 </DL>
 </P><P>
 
@@ -473,25 +473,25 @@ main(argc, argv)
 <A NAME="IDX188"></A>
 </P><P>
 
-�ؿ� <CODE>eb_subbook_title()</CODE> �ϡ�<VAR>book</VAR> ������������ܤ���̾��
-<VAR>title</VAR> �λؤ��ΰ��ʸ����Ȥ��ƽ񤭹��ߤޤ���
-��̾��ʸ�����Ĺ���ϡ���Ĺ�� <CODE>EB_MAX_TITLE_LENGTH</CODE> �Х��ȤǤ���
-����Ĺ���ϡ������Υʥ�ʸ����ޤߤޤ���
+関数 <CODE>eb_subbook_title()</CODE> は、<VAR>book</VAR> が選択中の副本の題名を
+<VAR>title</VAR> の指す領域に文字列として書き込みます。
+題名の文字列の長さは、最長で <CODE>EB_MAX_TITLE_LENGTH</CODE> バイトです。
+この長さは、末尾のナル文字を含みません。
 </P><P>
 
-���Ҥ�ʸ��������
-(��<A HREF="eb-ja_5.html#SEC21">[CD-ROM ���Ҥ� <CODE>EB_Book</CODE> ���֥�������] �ǡ������ξܺ�</A>����򻲾�)
-�� <CODE>EB_CHARCODE_ISO8859_1</CODE> �ʤ顢��̾��ɽ��ʸ����� ISO 8859-1 ��
-�ʤꡢ����ʳ���ʸ�������ɤʤ����ܸ� EUC �ˤʤ�ޤ���
+書籍の文字コード
+(「<A HREF="eb-ja_5.html#SEC21">[CD-ROM 書籍と <CODE>EB_Book</CODE> オブジェクト] データ型の詳細</A>」節を参照)
+が <CODE>EB_CHARCODE_ISO8859_1</CODE> なら、題名を表す文字列は ISO 8859-1 に
+なり、それ以外の文字コードなら日本語 EUC になります。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>title</VAR> �λؤ��ΰ�˶�ʸ�����񤭹��ߡ������򼨤�
-���顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>title</VAR> の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> ��Τ����줫�����ܤ����򤵤�Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
 </DL>
 </P><P>
 
@@ -501,13 +501,13 @@ main(argc, argv)
 <DD><A NAME="IDX190"></A>
 </P><P>
 
-<CODE>eb_subbook_title()</CODE> �Ȼ��Ƥ��ޤ���������������ܤǤϤʤ�������
-<VAR>subbook_code</VAR> �ǻ��ꤵ�줿���ܤ���̾��񤭹��������ۤʤ�ޤ���
+<CODE>eb_subbook_title()</CODE> と似ていますが、選択中の副本ではなく、引数
+<VAR>subbook_code</VAR> で指定された副本の題名を書き込む点が異なります。
 </P><P>
 
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ��Ƥ⹽���ޤ��󤬡����餫����
-���Ҥ˷���դ����Ƥ��ʤ���Фʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_BOOK</CODE> ���֤��ޤ���
+<VAR>book</VAR> は副本を選択していなくても構いませんが、あらかじめ
+書籍に結び付けられていなければなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
 </DL>
 </P><P>
 
@@ -518,24 +518,24 @@ main(argc, argv)
 <A NAME="IDX193"></A>
 </P><P>
 
-�ؿ� <CODE>eb_subbook_directory()</CODE> �ϡ�<VAR>book</VAR> ��Ǹ��������������
-�Υǡ����ե��������᤿�ǥ��쥯�ȥ�̾��<VAR>directory</VAR> �λؤ��ΰ��
-�񤭹��ߤޤ���
+関数 <CODE>eb_subbook_directory()</CODE> は、<VAR>book</VAR> 内で現在選択中の副本
+のデータファイルを収めたディレクトリ名を、<VAR>directory</VAR> の指す領域に
+書き込みます。
 </P><P>
 
-�ǥ��쥯�ȥ�̾��ʸ�����Ĺ���ϡ���Ĺ�� <CODE>EB_MAX_DIRECTORY_NAME_LENGTH</CODE>
-�Х��ȤǤ���
-����Ĺ���ˡ������Υʥ�ʸ���ϴޤߤޤ���
-�ǥ��쥯�ȥ�̾�� ASCII �ο������Ѿ�ʸ������������������ǹ�������ޤ���
+ディレクトリ名の文字列の長さは、最長で <CODE>EB_MAX_DIRECTORY_NAME_LENGTH</CODE>
+バイトです。
+この長さに、末尾のナル文字は含みません。
+ディレクトリ名は ASCII の数字、英小文字、アンダースコアで構成されます。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>directory</VAR> �λؤ��ΰ�˶�ʸ�����񤭹��ߡ�������
-�򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>directory</VAR> の指す領域に空文字列を書き込み、原因に
+を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> ��Τ����줫�����ܤ����򤵤�Ƥ��ʤ��ƤϤʤ�ޤ���
-���򤷤Ƥ��ʤ����ϡ�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくてはなりません。
+選択していない場合は、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
 </DL>
 </P><P>
 
@@ -545,14 +545,14 @@ main(argc, argv)
 <DD><A NAME="IDX195"></A>
 </P><P>
 
-<CODE>eb_subbook_directory()</CODE> �Ȼ��Ƥ��ޤ���������������ܤǤϤʤ�������
-<VAR>subbook_code</VAR> �ǻ��ꤵ�줿���ܤΥǥ��쥯�ȥ�̾��񤭹�������
-�ۤʤ�ޤ���
+<CODE>eb_subbook_directory()</CODE> と似ていますが、選択中の副本ではなく、引数
+<VAR>subbook_code</VAR> で指定された副本のディレクトリ名を書き込む点が
+異なります。
 </P><P>
 
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ��Ƥ⹽���ޤ��󤬡����餫����
-���Ҥ˷���դ����Ƥ��ʤ���Фʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_BOOK</CODE> ���֤��ޤ���
+<VAR>book</VAR> は副本を選択していなくても構いませんが、あらかじめ
+書籍に結び付けられていなければなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
 </DL>
 </P><P>
 
@@ -562,20 +562,20 @@ main(argc, argv)
 <DD><A NAME="IDX197"></A>
 </P><P>
 
-�ؿ� <CODE>eb_set_subbook()</CODE> �ϡ�<VAR>book</VAR> ������ <VAR>code</VAR> ������
-���ޤ���
-���Ǥ����ܤ����򤷤Ƥ������ϡ����ä���̤����ξ��֤ˤ��Ƥ�������
-<VAR>subbook_code</VAR> �����򤷤ޤ���
+関数 <CODE>eb_set_subbook()</CODE> は、<VAR>book</VAR> の副本 <VAR>code</VAR> を選択
+します。
+すでに副本を選択していた場合は、いったん未選択の状態にしてから副本
+<VAR>subbook_code</VAR> を選択します。
 </P><P>
 
-��������ȡ��ؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���ΤȤ���������̤����ξ��֤Ȥʤꡢ�������ƥ����ȥǡ������ɤ߹��ߡ�
-�Х��ʥ�ǡ������ɤ߹��ߤˤĤ��Ƥξ��ֵ�Ͽ�ϡ����٤ƥꥻ�åȤ���ޤ���
-���Ԥ���ȡ����ܤ�̤����ξ��֤ˤ��ơ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <CODE>EB_SUCCESS</CODE> を返します。
+このとき、外字は未選択の状態となり、検索、テキストデータの読み込み、
+バイナリデータの読み込みについての状態記録は、すべてリセットされます。
+失敗すると、副本を未選択の状態にして、原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> �Ͻ��Ҥ˷���դ����Ƥ��ʤ���Фʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<CODE>EB_ERR_UNBOUND_BOOK</CODE> ���֤��ޤ���
+あらかじめ、<VAR>book</VAR> は書籍に結び付けられていなければなりません。
+結びついていない場合は、<CODE>EB_ERR_UNBOUND_BOOK</CODE> を返します。
 </DL>
 </P><P>
 
@@ -585,10 +585,10 @@ main(argc, argv)
 <DD><A NAME="IDX199"></A>
 </P><P>
 
-�ؿ� <CODE>eb_unset_subbook()</CODE> �ϡ�<VAR>book</VAR> �����򤷤Ƥ������ܤ�̤����
-�ξ��֤ˤ��ޤ���
-<VAR>book</VAR> �����Ҥ˷���դ��Ƥ��ʤ��������ܤ����򤵤�Ƥ��ʤ����ϡ���
-�⤷�ޤ���
+関数 <CODE>eb_unset_subbook()</CODE> は、<VAR>book</VAR> が選択している副本を未選択
+の状態にします。
+<VAR>book</VAR> が書籍に結び付いていないか、副本が選択されていない場合は、何
+もしません。
 </DL>
 </P><P>
 

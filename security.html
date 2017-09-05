@@ -13,31 +13,31 @@
 </p>
 
 <!-- ############################################################# -->
-<h2>$B%;%-%e%j%F%#$K$D$$$F$NCm0U(B</h2>
+<h2>セキュリティについての注意</h2>
 
 <p>
-<a href="http://www.gzip.org/zlib/">zlib</a> 1.1.3 $B$*$h$S$=$l0JA0$N$b$N(B
-$B$K$O!"%;%-%e%j%F%#$K4X$9$kIT6q9g$,H/8+$5$l$F$$$^$9!#(B
-EB $B%i%$%V%i%j$O(B zlib $B$r;HMQ$7$F$$$^$9$N$G!"$3$NIT6q9g$O(B EB $B%i%$%V%i%j(B
-$B$K$b1F6A$7$^$9!#(B
-$B$^$?!"(BEB $B%i%$%V%i%j(B 3.2 $B$*$h$S$=$l0JA0$N%P!<%8%g%s$NG[I[%=!<%9%3!<%I(B
-$B$K$O!"$3$NIT6q9g$r;}$C$?(B zlib $B$N%=!<%9%3!<%I$rF1:-$7$F$$$^$9!#(B
+<a href="http://www.gzip.org/zlib/">zlib</a> 1.1.3 およびそれ以前のもの
+には、セキュリティに関する不具合が発見されています。
+EB ライブラリは zlib を使用していますので、この不具合は EB ライブラリ
+にも影響します。
+また、EB ライブラリ 3.2 およびそれ以前のバージョンの配布ソースコード
+には、この不具合を持った zlib のソースコードを同梱しています。
 </p>
 
 <p>
-EB $B%i%$%V%i%j(B 3.2.1 $B$+$i$O!"G[I[%=!<%9%3!<%I$K=$@5$7$?(B zlib $B$N%=!<%9(B
-$B%3!<%I$rF1:-$7$F$$$^$9!#(B
+EB ライブラリ 3.2.1 からは、配布ソースコードに修正した zlib のソース
+コードを同梱しています。
 </p>
 
 <p>
-EB $B%i%$%V%i%j(B 3.2 $B$*$h$S$=$l0JA0$N$b$N$r(B ($B$*A&$a$O$7$^$;$s$,(B) $B%3%s%Q(B
-$B%$%k$7$F%$%s%9%H!<%k$7$?$$$H$-$O!"(B <code>configure</code> $B$KI,$:(B
-<code>--with-included-zlib=no</code> $B%*%W%7%g%s$r;XDj$7$F!"F1:-$N(B zlib
-$B$O;H$o$J$$$h$&$K$7$F2<$5$$!#(B
+EB ライブラリ 3.2 およびそれ以前のものを (お薦めはしませんが) コンパ
+イルしてインストールしたいときは、 <code>configure</code> に必ず
+<code>--with-included-zlib=no</code> オプションを指定して、同梱の zlib
+は使わないようにして下さい。
 </p>
 
 <p>
-zlib $B$NIT6q9g$K4X$7$F>\$7$/$O!"<!$r;2>H$7$F2<$5$$!#(B
+zlib の不具合に関して詳しくは、次を参照して下さい。
 </p>
 
 <ul>
@@ -49,7 +49,7 @@ zlib $B$NIT6q9g$K4X$7$F>\$7$/$O!"<!$r;2>H$7$F2<$5$$!#(B
 <hr>
 <p class="footer">
 <a href="index.html"><img class="banner" src="eb_b.png" alt="banner"></a>
-<a href="index.html">$B%[!<%`%Z!<%8(B ($BF|K\8lHG(B)</a>$B$KLa$k!#(B
+<a href="index.html">ホームページ (日本語版)</a>に戻る。
 </p>
 </body>
 </html>

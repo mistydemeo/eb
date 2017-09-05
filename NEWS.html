@@ -15,547 +15,547 @@
 <!-- ############################################################# -->
 <h1></h1>
 <pre>
-$B%P!<%8%g%s(B 4.4.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.4.3 における主な変更点:
 
-* $B%P!<%8%g%s(B4.4.2$B$G!"6&M-%i%$%V%i%j$N%P!<%8%g%s$,@5$7$/$J$+$C$?$?$a!"(B
-  $BK\%P!<%8%g%s$G=$@5$7$?!#(B
-* $B:Y$+$JIT6q9g$r=$@5$7$?!#(B
+* バージョン4.4.2で、共有ライブラリのバージョンが正しくなかったため、
+  本バージョンで修正した。
+* 細かな不具合を修正した。
 
-$B%P!<%8%g%s(B 4.4.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.4.2 における主な変更点:
 
-* $B?^HG%a%K%e!<$K4X$9$k=hM}$G!"=i4|2==hM}$,0lItH4$1$F$$$?$N$r=$@5$7$?!#(B
-* ebzip $B?-D9;~$K!"@5>o=*N;;~$b=*N;%3!<%I$,(B1$B$K$J$C$F$7$^$&IT6q9g$r=$@5(B
-  $B$7$?!#(B
-* ebzip $B%F%9%H%b!<%I;~$b!"%U%!%$%k$N%3%T!<$,<B9T$5$l$F$7$^$&IT6q9g$r(B
-  $B=$@5$7$?!#(B
-* ebzip $B$N%a%b%j3+J|K:$l$rD>$7$?!#(B
+* 図版メニューに関する処理で、初期化処理が一部抜けていたのを修正した。
+* ebzip 伸長時に、正常終了時も終了コードが1になってしまう不具合を修正
+  した。
+* ebzip テストモード時も、ファイルのコピーが実行されてしまう不具合を
+  修正した。
+* ebzip のメモリ開放忘れを直した。
 
-$B%P!<%8%g%s(B 4.4.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.4.1 における主な変更点:
 
-* $B2hA|!"2;@<%G!<%?$r07$&:]$K!"%G!<%?$,3JG<$5$l$F$$$k%U%!%$%k$NBg$-$5$,(B
-  2GB $B$r@5$7$/07$($J$+$C$?$N$G=$@5$7$?!#(B
+* 画像、音声データを扱う際に、データが格納されているファイルの大きさが
+  2GB を正しく扱えなかったので修正した。
 
-$B%P!<%8%g%s(B 4.4 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.4 における主な変更点:
 
-* 2GB $B$rD6$($kBg$-$5$N%U%!%$%k$r07$($k$h$&$K$7$?!#$?$@$7!"%7%9%F%`B&$G(B
-  $BBP1~$7$F$$$k$3$H$,A0Ds>r7o!#(B
-* EBZIP$B7A<0$N05=L%U%!%$%k$G!"(B4294967296$B!A(B1099511627775$B%P%$%H(B (4GB$B!A(B1TB)
-  $B$N%U%!%$%k$NI=8=J}K!$r5,Dj$7$?!#(Bebzip, ebunzip $B$O$3$N5,Dj$K1h$C$F05=L(B
-  $B$*$h$S?-D%$r9T$J$&!#(B
-* ebzip, ebunzip $B$,%G%#%l%/%H%j:n@.$K<:GT$7$?$H$-!"2?$b%(%i!<%a%C%;!<%8(B
-  $B$r=P$5$:$K=*N;$9$kIT6q9g$r=$@5$7$?!#(B
+* 2GB を超える大きさのファイルを扱えるようにした。ただし、システム側で
+  対応していることが前提条件。
+* EBZIP形式の圧縮ファイルで、4294967296〜1099511627775バイト (4GB〜1TB)
+  のファイルの表現方法を規定した。ebzip, ebunzip はこの規定に沿って圧縮
+  および伸張を行なう。
+* ebzip, ebunzip がディレクトリ作成に失敗したとき、何もエラーメッセージ
+  を出さずに終了する不具合を修正した。
 
-$B%P!<%8%g%s(B 4.3.4 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.3.4 における主な変更点:
 
-* $B4D6-$K$h$C$F$O!"(Bebinfo $B$N=PNO$9$kI{K\$NBjL>$,J8;z2=$1$9$k$N$r=$@5$7$?!#(B
-* $BCm(B: $B%i%$%V%i%jK\BN$K$OJQ99$,$J$$$N$G!"6&M-%i%$%V%i%j$N%P!<%8%g%s$O99?7(B
-  $B$7$F$7$J$$!#(B
+* 環境によっては、ebinfo の出力する副本の題名が文字化けするのを修正した。
+* 注: ライブラリ本体には変更がないので、共有ライブラリのバージョンは更新
+  してしない。
 
-$B%P!<%8%g%s(B 4.3.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.3.3 における主な変更点:
 
-* Cygwin, MinGW $B$G(B DLL $B$r:n@.$G$-$k$h$&$K$7$?!#(B
-* Windows $B$G(B ebzipinfo $B$,0[>o=*N;$9$kIT6q9g$r=$@5$7$?!#(B
+* Cygwin, MinGW で DLL を作成できるようにした。
+* Windows で ebzipinfo が異常終了する不具合を修正した。
 
-$B%P!<%8%g%s(B 4.3.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.3.2 における主な変更点:
 
-* $B%P!<%8%g%s(B 4.3.1 $B$G!"6&M-%i%$%V%i%j$NHV9fIU$1$,4V0c$C$F$$$?$N$G=$@5$7$?!#(B
-* ebinfo $B$NF|K\8l%a%C%;!<%8$K!"6uGrJ8;z$,H4$1$F$$$k$b$N$,$"$C$?$N$G=$@5$7$?!#(B
+* バージョン 4.3.1 で、共有ライブラリの番号付けが間違っていたので修正した。
+* ebinfo の日本語メッセージに、空白文字が抜けているものがあったので修正した。
 
-$B%P!<%8%g%s(B 4.3.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.3.1 における主な変更点:
 
-* $BF02h%U%!%$%kL>$K1QBgJ8;z$,;H$o$l$k$H!"F02h%G!<%?$rFI$_9~$a$J$$IT6q9g(B
-  $B$r=$@5$7$?!#(B
-* $BEE;R%V%C%/%j!<%@!<(B Panasonic KX-EBP2 $BIUB0IJ$KBP1~$7$?!#(B
-* ebnet $B$G%P%C%U%!%*!<%P!<%i%s$,5/$-$kIT6q9g$r=$@5$7$?!#(B
+* 動画ファイル名に英大文字が使われると、動画データを読み込めない不具合
+  を修正した。
+* 電子ブックリーダー Panasonic KX-EBP2 付属品に対応した。
+* ebnet でバッファオーバーランが起きる不具合を修正した。
 
-$B%P!<%8%g%s(B 4.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.3 における主な変更点:
 
-* EPWING $B$GJ#?t$NI{K\$,%G%#%l%/%H%j$r6&M-$7$F$$$k>l9g!"@5$7$/%"%/%;%9(B
-  $B$G$-$J$$IT6q9g$r=$@5$7$?!#(B
-* `ebunzip --test' $B$,!"EE;R%V%C%/$NK\J8%U%!%$%k$r>e=q$-$7$F$7$^$&IT6q9g(B
-  $B$r=$@5$7$?!#(B
-* ebappendix $B$,!"(B`catalogs.app' $B$rFI$_9~$s$G$bEE;R%V%C%/7A<0$N(B appendix
-  $B$r@8@.$7$F$7$^$&IT6q9g$r=$@5$7$?!#(B
-* $B;2>H@hIU$-%+%i!<?^HG$KBP1~$7$?!#(B
-  API $B$H$7$F!"(Beb_have_image_menu() $B$H(B eb_image_menu() $B$,DI2C$5$l$?!#(B
-  $B%F%-%9%H$N%U%C%/$H$7$F!"(BEB_HOOK_BEGIN_IMAGE_PAGE, EB_HOOK_END_IMAGE_PAGE,
-  EB_HOOK_BEGIN_CLICKABLE_AREA, EB_HOOK_END_CLICKABLE_AREA $B$N(B 4$B$D$,DI2C(B
-  $B$5$l$?!#(B
+* EPWING で複数の副本がディレクトリを共有している場合、正しくアクセス
+  できない不具合を修正した。
+* `ebunzip --test' が、電子ブックの本文ファイルを上書きしてしまう不具合
+  を修正した。
+* ebappendix が、`catalogs.app' を読み込んでも電子ブック形式の appendix
+  を生成してしまう不具合を修正した。
+* 参照先付きカラー図版に対応した。
+  API として、eb_have_image_menu() と eb_image_menu() が追加された。
+  テキストのフックとして、EB_HOOK_BEGIN_IMAGE_PAGE, EB_HOOK_END_IMAGE_PAGE,
+  EB_HOOK_BEGIN_CLICKABLE_AREA, EB_HOOK_END_CLICKABLE_AREA の 4つが追加
+  された。
 
-$B%P!<%8%g%s(B 4.2.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.2.2 における主な変更点:
 
-* 4.2.1 $B$G:.F~$7$?!"0lIt$N(B EPWING $B$,@5$7$/07$($J$$IT6q9g$r=$@5$7$?!#(B
-* eb.conf $B$N(B EBCONF_ENABLE_NLS $B$NCM$,@5$7$/%;%C%H$5$l$J$$IT6q9g$r=$@5(B
-  $B$7$?!#(B
-* $B2;@<%U%!%$%k$N<h$j=P$7$,$&$^$/$$$+$J$$IT6q9g$r=*;O$7$?!#(B
-* $B0lIt$N(B Linux $B4D6-$G(B configure $B;~$K(B NLS (Native/National Language
-  Support) $B$,M-8z$K$J$i$J$$IT6q9g$r=$@5$7$?!#(B
-* $B:Y$+$JIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* 4.2.1 で混入した、一部の EPWING が正しく扱えない不具合を修正した。
+* eb.conf の EBCONF_ENABLE_NLS の値が正しくセットされない不具合を修正
+  した。
+* 音声ファイルの取り出しがうまくいかない不具合を終始した。
+* 一部の Linux 環境で configure 時に NLS (Native/National Language
+  Support) が有効にならない不具合を修正した。
+* 細かな不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 4.2.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.2.1 における主な変更点:
 
-* $BIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* 不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 4.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.2 における主な変更点:
 
-* $B%/%m%98!:w$KBP1~$7$?!#(B
-  $B4X?t(B eb_have_cross_search(), eb_search_cross() $B$r%i%$%V%i%j$KDI2C$7$?!#(B
-  $B$^$?!"(Bebinfo $B$O!"%/%m%98!:w$N>pJs$r=PNO$9$k$h$&$K$J$C$?!#(B
-* $BF02h%U%!%$%kL>$N@dBP%Q%9L>$rJV$94X?t(B eb_compose_movie_path_name() $B$r(B
-  $B%i%$%V%i%j$KDI2C$7$?!#(B
-* ebrefile $B$O!"%+%?%m%0%U%!%$%k$r>e=q$-$9$k$h$&$K$7$?!#(B
-  $B>e=q$-A0$N%+%?%m%0%U%!%$%k$O!"(B".old" $B$H$$$&@\Hx;R$NIU$$$?%U%!%$%kL>$G(B
-  $BJ]B8$5$l$k!#(B
-* zlib $B$rE:IU$7$J$$$h$&$K$7$?!#(B
-  configure $B$+$i(B --with-included-zlib $B%*%W%7%g%s$r:o=|$7$?!#(B
-* $BIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* クロス検索に対応した。
+  関数 eb_have_cross_search(), eb_search_cross() をライブラリに追加した。
+  また、ebinfo は、クロス検索の情報を出力するようになった。
+* 動画ファイル名の絶対パス名を返す関数 eb_compose_movie_path_name() を
+  ライブラリに追加した。
+* ebrefile は、カタログファイルを上書きするようにした。
+  上書き前のカタログファイルは、".old" という接尾子の付いたファイル名で
+  保存される。
+* zlib を添付しないようにした。
+  configure から --with-included-zlib オプションを削除した。
+* 不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 4.1.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.1.3 における主な変更点:
 
-* $B%P!<%8%g%s(B 4.1.2 $B$G!"6&M-%i%$%V%i%j$NHV9fIU$1$,4V0c$C$F$$$?$N$G=$@5$7$?!#(B
-* `make install' $B$,<:GT$9$kIT6q9g$r=$@5$7$?!#(B
+* バージョン 4.1.2 で、共有ライブラリの番号付けが間違っていたので修正した。
+* `make install' が失敗する不具合を修正した。
 
-$B%P!<%8%g%s(B 4.1.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.1.2 における主な変更点:
 
-* $BFCDj$N=q@R$G!"(BEB $B%i%$%V%i%j$,=q@R$K:\$C$F$$$kC18l$r8!:w$G$-$J$$(B
-  $BIT6q9g$r=$@5$7$?!#(B
-* FreeBSD-5.3-RELEASE $B$G(B make $B$,<:GT$9$kIT6q9g$r=$@5$7$?!#(B
-* Windows $B4D6-$K$*$$$F!"(Bebzip $B%3%^%s%I$N5/F0;~$N%3%^%s%IL>(B (ebunzip.exe,
-  ebzipinfo.exe $B$J$I(B) $B$r$b$H$K!"@5$7$/F0:n$r7hDj$G$-$J$$IT6q9g$r=$@5(B
-  $B$7$?!#(B
+* 特定の書籍で、EB ライブラリが書籍に載っている単語を検索できない
+  不具合を修正した。
+* FreeBSD-5.3-RELEASE で make が失敗する不具合を修正した。
+* Windows 環境において、ebzip コマンドの起動時のコマンド名 (ebunzip.exe,
+  ebzipinfo.exe など) をもとに、正しく動作を決定できない不具合を修正
+  した。
 
-$B%P!<%8%g%s(B 4.1.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.1.1 における主な変更点:
 
-* $B%f!<%F%#%j%F%#%3%^%s%I$G!"0z?t$r<h$kD9$$%*%W%7%g%s(B ($BNc(B: ebzip $B$N(B
-  --level) $B$KBP$7$F0z?t$rEO$5$J$$$H!"%3%^%s%I$,0[>o=*N;$9$kIT6q9g$r(B
-  $B=$@5$7$?!#(B
-* eb_write_text_byte2() $B$,$*$+$7$J%G!<%?$r=q$-9~$`IT6q9g$r=$@5$7$?!#(B
-* $B%I%-%e%a%s%H$N(B HTML $B%U%!%$%k$N%9%?%$%k$rJQ99$7$?!#(B
+* ユーティリティコマンドで、引数を取る長いオプション (例: ebzip の
+  --level) に対して引数を渡さないと、コマンドが異常終了する不具合を
+  修正した。
+* eb_write_text_byte2() がおかしなデータを書き込む不具合を修正した。
+* ドキュメントの HTML ファイルのスタイルを変更した。
 
-$B%P!<%8%g%s(B 4.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.1 における主な変更点:
 
-* BSD $B%i%$%;%s%9$r:NMQ$9$k$h$&$K$7$?!#(B
-* ebfont $B$,(B PNG $B7A<0$N2hA|%U%!%$%k$r@8@.$G$-$k$h$&$K$7$?!#(B
-  ebfont $B$N(B --image-format $B%*%W%7%g%s$K(B `png' $B$r;XDj$G$-$k$h$&$K$7$?!#(B
-* $B%i%$%V%i%j$K(B eb_narrow_font_png_size(), eb_wide_font_png_size(),
-  eb_bitmap_to_png() $B$r2C$($?!#(B
+* BSD ライセンスを採用するようにした。
+* ebfont が PNG 形式の画像ファイルを生成できるようにした。
+  ebfont の --image-format オプションに `png' を指定できるようにした。
+* ライブラリに eb_narrow_font_png_size(), eb_wide_font_png_size(),
+  eb_bitmap_to_png() を加えた。
 * eb_bitmap_to_xbm(), eb_bitmap_to_xpm(), eb_bitmap_to_gif(),
-  eb_bitmap_to_bmp() $B$O(B EB_Error_Code $B$rJV$9$h$&$K$?!#(B
-* $B%i%$%V%i%j$,!"Hs05=L%V%m%C%/%G!<%?$N%-%c%C%7%e$r$h$j8zN(E*$K9T$&(B
-  $B$h$&$K$7$?!#(B
-* `ebzip' $B$,(B START/HONMON $B%U%!%$%k$NItJ,05=L$KBP1~$7$?!#(B
-  $B$3$l$K$h$j!"A0J}0lCW8!:w$,B.$/$J$C$?!#(B
-* $BF|K\8l%I%-%e%a%s%H$r(B HTML $B7A<0$GG[I[$9$k$h$&$K$7$?!#(B
-* $B1Q8l$N%I%-%e%a%s%H$r:o=|$7$?!#(B
+  eb_bitmap_to_bmp() は EB_Error_Code を返すようにた。
+* ライブラリが、非圧縮ブロックデータのキャッシュをより効率的に行う
+  ようにした。
+* `ebzip' が START/HONMON ファイルの部分圧縮に対応した。
+  これにより、前方一致検索が速くなった。
+* 日本語ドキュメントを HTML 形式で配布するようにした。
+* 英語のドキュメントを削除した。
 
-$B%P!<%8%g%s(B 4.0.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.0.1 における主な変更点:
 
-* $B%X%C%@%U%!%$%kFb$N(B EB_P, ZIO_P $B%^%/%m$NDj5A$r=$@5$7$?!#(B
-* `ebzipinfo' $B$O(B `--skip-content movie' $B%*%W%7%g%s$r;XDj$7$J$$8B$j!"(B
-  $BF02h%U%!%$%k$N>pJs$bI=<($9$k$h$&$K$7$?!#(B
-* `ebzip', `ebunzip' $B$N?J9T>u67%a%C%;!<%8$O!"I8=`=PNO$G$O$J$/I8=`%(%i!<(B
-  $B=PNO$KI=<($9$k$h$&$K$7$?!#(B
+* ヘッダファイル内の EB_P, ZIO_P マクロの定義を修正した。
+* `ebzipinfo' は `--skip-content movie' オプションを指定しない限り、
+  動画ファイルの情報も表示するようにした。
+* `ebzip', `ebunzip' の進行状況メッセージは、標準出力ではなく標準エラー
+  出力に表示するようにした。
 
-$B%P!<%8%g%s(B 4.0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.0 における主な変更点:
 
-* EB_BookList $B4XO"$N(B API $B$r2~NI$7$?!#(B
-* EB_ERR_UNBOUND_BOOKLIST, EB_ERR_NO_SUCH_BOOK $B$H$$$&(B 2 $B$D$N%(%i!<(B
-  $B%3!<%I$rDI2C$7$?!#(B
-* `eb3.m4' $B$r(B `eb4.m4' $B$K2~L>$7$?!#(B
-* `configure' $B$K(B `--enable-ebnet' $B%*%W%7%g%s$rDI2C$7$?!#(B
-* `eb/flags.h' $B$r%$%s%9%H!<%k$9$k$h$&$K$7$?!#(B
-  $B$3$N%U%!%$%k$O!"(B`eb/defs.h' $B$+$i<+F0E*$K(B include $B$5$l$k!#(B
-* $B=EBg$*$h$S7ZEY$NIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* EB_BookList 関連の API を改良した。
+* EB_ERR_UNBOUND_BOOKLIST, EB_ERR_NO_SUCH_BOOK という 2 つのエラー
+  コードを追加した。
+* `eb3.m4' を `eb4.m4' に改名した。
+* `configure' に `--enable-ebnet' オプションを追加した。
+* `eb/flags.h' をインストールするようにした。
+  このファイルは、`eb/defs.h' から自動的に include される。
+* 重大および軽度の不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 4.0beta3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.0beta3 における主な変更点:
 
-* EUC-JP $B0J30$NF|K\8l$N%(%s%3!<%G%#%s%0$KBP1~$7$?!#(B
-* Windows $BBP1~$N$?$a$N%3!<%I$r$$$/$D$+IU2C$7$?!#(B
-  Windows $B>e$G(B EB $B%i%$%V%i%j$N%S%k%I$r9T$&$K$O!"(B`eb-win32' $B%Q%C%1!<%8(B
-  $B$r;HMQ$7$F2<$5$$!#(B
-* `ebstopcode' $B$K(B `--text-position' (`-p') $B%*%W%7%g%s$rDI2C$7$?!#(B
+* EUC-JP 以外の日本語のエンコーディングに対応した。
+* Windows 対応のためのコードをいくつか付加した。
+  Windows 上で EB ライブラリのビルドを行うには、`eb-win32' パッケージ
+  を使用して下さい。
+* `ebstopcode' に `--text-position' (`-p') オプションを追加した。
 
-$B%P!<%8%g%s(B 4.0beta2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.0beta2 における主な変更点:
 
-* $B8!:w%a%=%C%I$N=EBg$JIT6q9g$r=$@5$7$?!#(B
+* 検索メソッドの重大な不具合を修正した。
 
-$B%P!<%8%g%s(B 4.0beta1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.0beta1 における主な変更点:
 
-* `ebstopchk' $B$r(B `ebstopcode' $B$K2~L>$7$?!#(B
-  $B%3%^%s%I$N(B `--stop-code' $B%*%W%7%g%s$b(B `--code' $B$K2~L>$7$?!#(B
-* `ebappendix' $B$N(B `--case', `--suffix' $B%*%W%7%g%s$r:o=|$7$?!#(B
-* `ebappendix' $B$NF|K\8lHG%I%-%e%a%s%H$rMQ0U$7$?!#(B
-* `ebinfo' $B$K(B `--book-list' $B%*%W%7%g%s$rDI2C$7$?!#(B
-* `ebdump', `ebfixlog' $B$r(B `misc' $B%5%V%G%#%l%/%H%j$KF~$l$?!#(B
-* $BIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* `ebstopchk' を `ebstopcode' に改名した。
+  コマンドの `--stop-code' オプションも `--code' に改名した。
+* `ebappendix' の `--case', `--suffix' オプションを削除した。
+* `ebappendix' の日本語版ドキュメントを用意した。
+* `ebinfo' に `--book-list' オプションを追加した。
+* `ebdump', `ebfixlog' を `misc' サブディレクトリに入れた。
+* 不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 4.0beta0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 4.0beta0 における主な変更点:
 
-* $B1s3V%"%/%;%9$KBP1~$7$?!#(B
-* `ebstopchk' $B%3%^%s%I$rDI2C$7$?!#(B
+* 遠隔アクセスに対応した。
+* `ebstopchk' コマンドを追加した。
 
-$B%P!<%8%g%s(B 3.3.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.3.2 における主な変更点:
 
-* $B6&M-%i%$%V%i%j$N%P!<%8%g%sHV9f$r=$@5$7$?!#(B
-* $B!VF|1QJ)<-E5!W(B(YRRS-059) $B$KBP1~$7$?!#(B
+* 共有ライブラリのバージョン番号を修正した。
+* 「日英仏辞典」(YRRS-059) に対応した。
 
-$B%P!<%8%g%s(B 3.3.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.3.1 における主な変更点:
 
-* EPWING $BHG!V%8!<%K%"%91QOBBg<-E5!W$KBP1~$7$?!#(B
-* $BJ#9g8!:w$N=hM}$NIT6q9g$r=$@5$7$?!#(B
-* $B%G%P%C%0%b!<%I$NIT6q9g$r=$@5$7$?!#(B
+* EPWING 版「ジーニアス英和大辞典」に対応した。
+* 複合検索の処理の不具合を修正した。
+* デバッグモードの不具合を修正した。
 
-$B%P!<%8%g%s(B 3.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.3 における主な変更点:
 
-* eb_read_binary_mpeg() $B$NIT6q9g$r=$@5$7$?!#(B
+* eb_read_binary_mpeg() の不具合を修正した。
 
-$B%P!<%8%g%s(B 3.3beta3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.3beta3 における主な変更点:
 
-* $BJ#9g8!:w$r=$@5$7$?!#(B
-* $B7ZEY$NIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* 複合検索を修正した。
+* 軽度の不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 3.3beta2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.3beta2 における主な変更点:
 
-* $B=EBg$*$h$S7ZEY$NIT6q9g$r$$$/$D$+=$@5$7$?!#(B
-* `eb3.m4' $B$O(B `$(datadir)/aclocal' $B$K%$%s%9%H!<%k$9$k$h$&$K$7$?!#(B
+* 重大および軽度の不具合をいくつか修正した。
+* `eb3.m4' は `$(datadir)/aclocal' にインストールするようにした。
 
-$B%P!<%8%g%s(B 3.3beta1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.3beta1 における主な変更点:
 
-* $BIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* 不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 3.3beta0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.3beta0 における主な変更点:
 
-* EPWING $B$N%U%!%$%kL>$d05=L%?%$%W$r8+J,$1$k%3!<%I$rBgI}$K=q$-2~$a$?!#(B
-* $B4X?t(B eb_multi_title() $B$rDI2C$7$?!#(B
-  $B$3$N4X?t$O!"FCDj$NJ#9g8!:w$NBjL>$r<hF@$9$k!#$3$N4X?t$N;HMQ$K$h$C$F!"(B
-  `ebinfo' $B%3%^%s%I$G(B `--multi-search' (`-m') $B$r;XDj$7$?:]$K!"J#9g8!:w(B
-  $B$NBjL>$rI=<($9$k$h$&$K$J$C$?!#(B
-* `ebrefile' $B$NIT6q9g$r=$@5$7$?!#(B
-* $B%$%s%i%$%s2hA|$KBP1~$9$k$?$a!"%F%-%9%H%G!<%?$X$N%U%C%/$r(B 2 $B<oN`DI2C(B
-  $B$7$?!#(B
+* EPWING のファイル名や圧縮タイプを見分けるコードを大幅に書き改めた。
+* 関数 eb_multi_title() を追加した。
+  この関数は、特定の複合検索の題名を取得する。この関数の使用によって、
+  `ebinfo' コマンドで `--multi-search' (`-m') を指定した際に、複合検索
+  の題名を表示するようになった。
+* `ebrefile' の不具合を修正した。
+* インライン画像に対応するため、テキストデータへのフックを 2 種類追加
+  した。
 
-$B%P!<%8%g%s(B 3.2.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.2.3 における主な変更点:
 
-* PCM $B2;@<%G!<%?$N=hM}$K$*$1$kIT6q9g$r=$@5$7$?!#(B
-* $B%F%-%9%H$N%U%C%/$r(B 2 $B<oN`DI2C$7$?!#(B
+* PCM 音声データの処理における不具合を修正した。
+* テキストのフックを 2 種類追加した。
 
-$B%P!<%8%g%s(B 3.2.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.2.2 における主な変更点:
 
-* appendix $B$N=hM}$K$*$1$kIT6q9g$r=$@5$7$?!#(B
-* gettext $B$N%a%C%;!<%8%+%?%m%0$r=$@5$7$?!#(B
+* appendix の処理における不具合を修正した。
+* gettext のメッセージカタログを修正した。
 
-$B%P!<%8%g%s(B 3.2.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.2.1 における主な変更点:
 
-* $B%F%-%9%H$NFI$_9~$_%k!<%A%s$r=$@5$7$?!#(B
-* zlib-1.1.4 $B$r<h$j9~$s$@!#(B
+* テキストの読み込みルーチンを修正した。
+* zlib-1.1.4 を取り込んだ。
 
-$B%P!<%8%g%s(B 3.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.2 における主な変更点:
 
-* $BFC$K$J$7!#(B
+* 特になし。
 
-$B%P!<%8%g%s(B 3.2beta3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.2beta3 における主な変更点:
 
-* $B%$%s%9%H!<%k$N:]$K5/$3$kIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* インストールの際に起こる不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 3.2beta2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.2beta2 における主な変更点:
 
-* $B4D6-JQ?t(B EB_DEBUG $B$,Dj5A$5$l$F$$$k$H!"(BEB $B%i%$%V%i%j$,%G%P%C%0(B
-  $B%a%C%;!<%8$r=PNO$9$k$h$&$K$7$?!#(B
-  `configure' $B$N(B `--enable-debug' $B%*%W%7%g%s$r:o=|$7$?!#(B
-* EBZIP $B05=L7A<0%G!<%?$N?-D9$K$*$1$kCWL?E*$JIT6q9g$r=$@5$7$?!#(B
+* 環境変数 EB_DEBUG が定義されていると、EB ライブラリがデバッグ
+  メッセージを出力するようにした。
+  `configure' の `--enable-debug' オプションを削除した。
+* EBZIP 圧縮形式データの伸長における致命的な不具合を修正した。
 
-$B%P!<%8%g%s(B 3.2beta1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.2beta1 における主な変更点:
 
-* `ebzip' $B$N:G9b05=L%l%Y%k$r(B 3 $B$+$i(B 5 $B$KJQ99$7$?!#(B
-* $BIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* `ebzip' の最高圧縮レベルを 3 から 5 に変更した。
+* 不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 3.2beta0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.2beta0 における主な変更点:
 
-* eb_backward_text() $B$r<BAu$7!"(Beb_forward_text() $B$r2~NI$7$?!#(B
-* EB $B%i%$%V%i%j$N%W%m%0%i%_%s%0%I%-%e%a%s%H(B ($BF|K\8lHG(B) $B$rI|3h$5$;$?!#(B
-* $B%5%s%W%k%W%m%0%i%`$rI|3h$5$;$?!#(B
+* eb_backward_text() を実装し、eb_forward_text() を改良した。
+* EB ライブラリのプログラミングドキュメント (日本語版) を復活させた。
+* サンプルプログラムを復活させた。
 
-$B%P!<%8%g%s(B 3.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.1 における主な変更点:
 
-* $B05=L$5$l$?(B S-EBXA $B$X$N%5%]!<%H$K$*$1$kIT6q9g$r=$@5$7$?!#(B
+* 圧縮された S-EBXA へのサポートにおける不具合を修正した。
 
-$B%P!<%8%g%s(B 3.1beta1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.1beta1 における主な変更点:
 
-* $B%G%P%C%0%3!<%I$rIU2C$7$?!#(B
-  $B$3$N%3!<%I$O(B `configure --enable-debug' $B$H$9$k$H!"M-8z$K$J$k!#(B
-* eb_initialize_all_subbooks() $B$r(B eb_load_all_subbooks() $B$K2~L>$7$?!#(B
-  eb_initialize_all_appendix_subbooks() $B$b(B eb_load_all_appendix_subbooks()
-  $B$K2~L>$7$?!#(B
-  $B8eJ}8_49@-$N$?$a!"$3$l$^$G$NL>A0$O(B CPP $B%^%/%m$H$7$FDj5A$9$k$h$&$K(B
-  $B$7$?!#(B
-* "DUDEN" (EBG) $B$X$NBP1~$,I|3h$7$?!#(B
-* $B%k!<%H%G%#%l%/%H%j$K%^%&%s%H$5$l$?(B CD-ROM $B$N=hM}$K$*$1$kIT6q9g$r(B
-  $B=$@5$7$?!#(B
-* EB $B%i%$%V%i%jFb$N=i4|2=$*$h$S8e;OKv%k!<%A%s$N%*!<%P!<%[!<%k$r(B
-  $B9T$C$?!#(B
-* $B7ZEY$NIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* デバッグコードを付加した。
+  このコードは `configure --enable-debug' とすると、有効になる。
+* eb_initialize_all_subbooks() を eb_load_all_subbooks() に改名した。
+  eb_initialize_all_appendix_subbooks() も eb_load_all_appendix_subbooks()
+  に改名した。
+  後方互換性のため、これまでの名前は CPP マクロとして定義するように
+  した。
+* "DUDEN" (EBG) への対応が復活した。
+* ルートディレクトリにマウントされた CD-ROM の処理における不具合を
+  修正した。
+* EB ライブラリ内の初期化および後始末ルーチンのオーバーホールを
+  行った。
+* 軽度の不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 3.1beta0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.1beta0 における主な変更点:
 
-* $B05=L$5$l$?(B S-EBXA $B$KBP1~$7$?!#(B
-* $B%=%K!<%G!<%?%G%#%9%/%^%s(B DP-S1000 $BIUB0$N!VF|K\BgI42JA4=q!W$KBP1~$7$?!#(B
+* 圧縮された S-EBXA に対応した。
+* ソニーデータディスクマン DP-S1000 付属の「日本大百科全書」に対応した。
 
-$B%P!<%8%g%s(B 3.0.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.0.1 における主な変更点:
 
-* $BIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* 不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 3.0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.0 における主な変更点:
 
-* EB $B$N(B LANGUAGE $B%G!<%?$X$NBP1~$r$d$a$?!#(B
+* EB の LANGUAGE データへの対応をやめた。
 
-$B%P!<%8%g%s(B 3.0beta1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.0beta1 における主な変更点:
 
-* `ebrefile' $B$r(B C $B$G=q$-D>$7$?!#(B
-  $BF|K\8l$N%a%C%;!<%8%+%?%m%0$bMQ0U$7$?!#(B
-* $BIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* `ebrefile' を C で書き直した。
+  日本語のメッセージカタログも用意した。
+* 不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 3.0beta0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.0beta0 における主な変更点:
 
-* GNU gettext 0.10.36 $B$N(B libintl $B$KBP1~$7$?!#(B
-  $BK\%Q%C%1!<%8$N%f!<%F%#%j%F%#%D!<%k72$O!"(Blibiconv $B$,MxMQ2DG=$J$i(B
-  $B%j%s%/$9$k$h$&$K$J$C$?!#(B
-  `configure' $B$K(B `--with-iconv-includes', `--with-iconv-libraries' 
-  $B%*%W%7%g%s$rDI2C$7$?!#(B
-* libintl $B$N%=!<%9%3!<%I$r:o=|$7$?!#(B
-  `configure' $B$N(B `--with-included-gettext' $B%*%W%7%g%s$b:o=|$7$?!#(B
-  libintl $B$,%7%9%F%`$K$J$1$l$P!"(BNLS (Native/National Language Support)
-  $B$OL58z$K$J$k!#(B
-* EPWING $B$*$h$S(B EB $B$N%b%N%/%m2hA|%G!<%?$KBP1~$7$?!#(B
-* `ebzip' $B$OF02h!"2hA|!"2;@<$N3F%G!<%?%U%!%$%k$KBP1~$9$k$h$&$K$J$C$?!#(B
-  `ebzip' $B$K(B `--skip-content' (`-s') $B%*%W%7%g%s$rDI2C$7$?!#(B
-* $B7ZEY$NIT6q9g$r$?$/$5$s=$@5$7$?!#(B
+* GNU gettext 0.10.36 の libintl に対応した。
+  本パッケージのユーティリティツール群は、libiconv が利用可能なら
+  リンクするようになった。
+  `configure' に `--with-iconv-includes', `--with-iconv-libraries' 
+  オプションを追加した。
+* libintl のソースコードを削除した。
+  `configure' の `--with-included-gettext' オプションも削除した。
+  libintl がシステムになければ、NLS (Native/National Language Support)
+  は無効になる。
+* EPWING および EB のモノクロ画像データに対応した。
+* `ebzip' は動画、画像、音声の各データファイルに対応するようになった。
+  `ebzip' に `--skip-content' (`-s') オプションを追加した。
+* 軽度の不具合をたくさん修正した。
 
-$B%P!<%8%g%s(B 3.0alpha4 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.0alpha4 における主な変更点:
 
-* EPWING $B$NF02h%G!<%?!"%+%i!<2hA|%G!<%?$KBP1~$7$?!#(B
-* EB $B%i%$%V%i%j$rMxMQ$7$?%"%W%j%1!<%7%g%s8~$1$K!"(BM4 $B%^%/%m%U%!%$%k(B
-  `eb3.m4' $B$rMQ0U$7$?!#(B(Autoconf 2.49 $B$,I,MW!#(B)
+* EPWING の動画データ、カラー画像データに対応した。
+* EB ライブラリを利用したアプリケーション向けに、M4 マクロファイル
+  `eb3.m4' を用意した。(Autoconf 2.49 が必要。)
 
-$B%P!<%8%g%s(B 3.0alpha3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.0alpha3 における主な変更点:
 
-* $B%F%-%9%H$N%U%C%/4XO"$N(B API $B$r2~$a$?!#(B
+* テキストのフック関連の API を改めた。
 
-$B%P!<%8%g%s(B 3.0alpha2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.0alpha2 における主な変更点:
 
-* $B$?$/$5$s$NIT6q9g$r=$@5$7$?!#(B
+* たくさんの不具合を修正した。
 
-$B%P!<%8%g%s(B 3.0alpha1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.0alpha1 における主な変更点:
 
-* EPWING V6 $B$N05=L7A<0$KBP1~$7$?$$!#(B
-* $B%U%!%$%kL>$d%G%#%l%/%H%jL>$K$*$1$k!"BgJ8;z(B/$B>.J8;z$d@\Hx;R$N0l4S@-(B
-  $B$N7gG!$rL5;k$9$k$h$&$K$7$?!#(B
-* `ebzip' $B$N(B `--suffix', `--case' $B%*%W%7%g%s$r:o=|$7$?!#(B
-* $B%U%)%s%H4XO"$N(B API $B$r<c43$J$,$iJQ99$7$?!#(B
-* $B7ZEY$NIT6q9g$r!"$+$J$j?'!9$H=$@5$7$?!#(B
+* EPWING V6 の圧縮形式に対応したい。
+* ファイル名やディレクトリ名における、大文字/小文字や接尾子の一貫性
+  の欠如を無視するようにした。
+* `ebzip' の `--suffix', `--case' オプションを削除した。
+* フォント関連の API を若干ながら変更した。
+* 軽度の不具合を、かなり色々と修正した。
 
-$B%P!<%8%g%s(B 3.0alpha0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 3.0alpha0 における主な変更点:
 
-* $BJ#9g8!:w$KBP1~$7$?!#(B
-* $B>r7o8!:w$KBP1~$7$?!#(B
-* GNU gettext $B$rMQ$$$?(B NLS (Native/National Language Support)$B!#(B
-  $BF|K\8l$N%a%C%;!<%8%+%?%m%0$rMQ0U$7$?!#(B
-* $B<B83E*$J$,$i(B Pthread $B$KBP1~$7$?!#(B
-  `configure' $B$K(B `--enable-pthreads' $B%*%W%7%g%s$rDI2C$7$?!#(B
-* `configure' $B$,!"<+F0E*$K(B zlib $B$r8+$D$1=P$9$h$&$K$7$?!#(B
-* API $B$rJQ99$7$?!#(B
-  $B%P!<%8%g%s(B 2.x $B$N(B API $B$H$O!"Hs8_49$JE@$,$$$/$D$+$"$k!#(B
-* $B7ZEY$NIT6q9g$r$?$/$5$s=$@5$7$?!#(B
+* 複合検索に対応した。
+* 条件検索に対応した。
+* GNU gettext を用いた NLS (Native/National Language Support)。
+  日本語のメッセージカタログを用意した。
+* 実験的ながら Pthread に対応した。
+  `configure' に `--enable-pthreads' オプションを追加した。
+* `configure' が、自動的に zlib を見つけ出すようにした。
+* API を変更した。
+  バージョン 2.x の API とは、非互換な点がいくつかある。
+* 軽度の不具合をたくさん修正した。
 
-$B%P!<%8%g%s(B 2.3.7 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3.7 における主な変更点:
 
-* "DUDEN Die sinn-und sachverwandten Worter" (EBG) $B$H(B "DUDEN Das
-  Fremdworterbuch" $B$KBP1~$7$?!#(B
+* "DUDEN Die sinn-und sachverwandten Worter" (EBG) と "DUDEN Das
+  Fremdworterbuch" に対応した。
 
-$B%P!<%8%g%s(B 2.3.6 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3.6 における主な変更点:
 
-* $B!VF|K\8l8lWCBg7O!W(B (EPWING, $B4dGH=qE9(B) $B$G82:_2=$9$kIT6q9g$r=$@5$7$?!#(B
-* "EDICT" (JIS X 4081, $B%U%j!<$N<-=q(B) $B$G82:_2=$9$kIT6q9g$r=$@5$7$?!#(B
+* 「日本語語彙大系」 (EPWING, 岩波書店) で顕在化する不具合を修正した。
+* "EDICT" (JIS X 4081, フリーの辞書) で顕在化する不具合を修正した。
 
-$B%P!<%8%g%s(B 2.3.5 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3.5 における主な変更点:
 
-* $BFC$K$J$7!#(B
+* 特になし。
 
-$B%P!<%8%g%s(B 2.3.4 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3.4 における主な変更点:
 
-* EPWING $B$N?-D9%k!<%A%s$NIT6q9g$r=$@5$7$?!#(B
-* $B7ZEY$NIT6q9g$r$$$/$D$+=$@5$7$?!#(B
+* EPWING の伸長ルーチンの不具合を修正した。
+* 軽度の不具合をいくつか修正した。
 
-$B%P!<%8%g%s(B 2.3.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3.3 における主な変更点:
 
-* $B6&M-%i%$%V%i%j$N%P!<%8%g%sHV9f$r=$@5$7$?!#(B
+* 共有ライブラリのバージョン番号を修正した。
 
-$B%P!<%8%g%s(B 2.3.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3.2 における主な変更点:
 
-* $B7ZEY$JIT6q9g$r=$@5$7$?!#(B
+* 軽度な不具合を修正した。
 
-($B%P!<%8%g%s(B 2.3.1 $B$O%j%j!<%9$7$F$$$J$$!#(B)
+(バージョン 2.3.1 はリリースしていない。)
 
-$B%P!<%8%g%s(B 2.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3 における主な変更点:
 
-* $BFC$K$J$7!#(B
+* 特になし。
 
-$B%P!<%8%g%s(B 2.3beta3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3beta3 における主な変更点:
 
-* $BFC$K$J$7!#(B
+* 特になし。
 
-$B%P!<%8%g%s(B 2.3beta2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3beta2 における主な変更点:
 
-* $BFC$K$J$7!#(B
+* 特になし。
 
-$B%P!<%8%g%s(B 2.3beta1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3beta1 における主な変更点:
 
-* $B<B83E*$J$,$i(B EBXA-C $B$KBP1~$7$?!#(B
-* $B<B83E*$J$,$i!"6h@Z$jJ8;z(B (stop-code) $B$N<+F08!=P$KBP1~$7$?!#(B
+* 実験的ながら EBXA-C に対応した。
+* 実験的ながら、区切り文字 (stop-code) の自動検出に対応した。
 
-$B%P!<%8%g%s(B 2.3beta0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.3beta0 における主な変更点:
 
-* EPWING $B05=L7A<0$G05=L$5$l$?(B CD-ROM $B=q@R$KBP1~$7$?!#(B
-* `ebzip' $B$N>pJsDLCN%a%C%;!<%8$rJQ99$7$?!#(B
-* `ebrefile' $B$NIT6q9g$r=$@5$7$?!#(B
-  `ebrefile' $B$O(B `ebzip' $B$HF1$8=g=x$G%+%?%m%0%U%!%$%k$rC5$7$K9T$C$F(B
-  $B$$$J$+$C$?!#(B
+* EPWING 圧縮形式で圧縮された CD-ROM 書籍に対応した。
+* `ebzip' の情報通知メッセージを変更した。
+* `ebrefile' の不具合を修正した。
+  `ebrefile' は `ebzip' と同じ順序でカタログファイルを探しに行って
+  いなかった。
 
-$B%P!<%8%g%s(B 2.2.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.2.1 における主な変更点:
 
-* samples $B$H(B samples-ja $B$rE}9g$7$?!#(B
-* `configure' $B$K(B `--enable-samples' $B%*%W%7%g%s$rDI2C$7$?!#(B
-* DOS, Windows, OS/2 $B$X$NBP1~$r2~A1$7$?!#(B
+* samples と samples-ja を統合した。
+* `configure' に `--enable-samples' オプションを追加した。
+* DOS, Windows, OS/2 への対応を改善した。
 
-$B%P!<%8%g%s(B 2.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.2 における主な変更点:
 
-* EB $B%i%$%V%i%j$N%I%-%e%a%s%H$rDI2C$7$?!#(B
+* EB ライブラリのドキュメントを追加した。
 
-$B%P!<%8%g%s(B 2.1.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.1.2 における主な変更点:
 
-* $B6&M-%i%$%V%i%j$N%P!<%8%g%sHV9f$r=$@5$7$?!#(B
-* FreeBSD-ELF $B$KBP1~$7$?(B libtool $B$r;H$&$h$&$K$7$?!#(B
+* 共有ライブラリのバージョン番号を修正した。
+* FreeBSD-ELF に対応した libtool を使うようにした。
 
-$B%P!<%8%g%s(B 2.1.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.1.1 における主な変更点:
 
-* Windows VC++ $B8~$1$N%3!<%I$r$$$/$D$+DI2C$7$?!#(B
-* $BIT6q9g$r=$@5$7$?!#(B
+* Windows VC++ 向けのコードをいくつか追加した。
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 2.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.1 における主な変更点:
 
-* $BIT6q9g$r=$@5$7$?!#(B
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 2.1beta2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.1beta2 における主な変更点:
 
-* `ebzip' $B$K05=L%l%Y%k(B 3 $B$r?7@_$7$?!#(B
-* $B?7$?$K(B `ebrefile' $B%3%^%s%I$rDI2C$7$?!#(B
+* `ebzip' に圧縮レベル 3 を新設した。
+* 新たに `ebrefile' コマンドを追加した。
 
-$B%P!<%8%g%s(B 2.1beta1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.1beta1 における主な変更点:
 
-* $BIT6q9g$r=$@5$7$?!#(B
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 2.1beta0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.1beta0 における主な変更点:
 
-* `ebfont' $B$N%I%-%e%a%s%H$rDI2C$7$?!#(B
-* $BF|K\8l$N%I%-%e%a%s%H$rDI2C$7$?!#(B
-* `configure' $B$K(B `--with-zlib', `--with-zlib-includes',
-  `--with-zlib-libraries' $B%*%W%7%g%s$rDI2C$7$?!#(B
-* CD-ROM $B=q@R$N05=L(B/$B?-D9$KBP1~$7$?!#(B
-* $B?7$?$K(B `ebzip' $B%3%^%s%I$rDI2C$7$?!#(B
-* `ebappendix' $B$N(B `--filename-case' $B%*%W%7%g%s$r(B `--case' $B$K2~L>$7$?!#(B
-* `ebappendix' $B$N(B `--no-catalogs' $B%*%W%7%g%s$r:FDI2C$7$?!#(B
-* `ebfont' $B$K(B `--subbook' (`-S') $B%*%W%7%g%s$rB-$7$?!#(B
-* `ebfont' $B$,@8@.$9$k%G%#%l%/%H%j$N9=B$$rJQ99$7$?!#(B
-* zlib $B%=!<%9%3!<%I$r<h$j9~$`$h$&$K$7$?!#(B
-* $BIT6q9g$r=$@5$7$?!#(B
+* `ebfont' のドキュメントを追加した。
+* 日本語のドキュメントを追加した。
+* `configure' に `--with-zlib', `--with-zlib-includes',
+  `--with-zlib-libraries' オプションを追加した。
+* CD-ROM 書籍の圧縮/伸長に対応した。
+* 新たに `ebzip' コマンドを追加した。
+* `ebappendix' の `--filename-case' オプションを `--case' に改名した。
+* `ebappendix' の `--no-catalogs' オプションを再追加した。
+* `ebfont' に `--subbook' (`-S') オプションを足した。
+* `ebfont' が生成するディレクトリの構造を変更した。
+* zlib ソースコードを取り込むようにした。
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 2.0.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.0.3 における主な変更点:
 
-* $BIT6q9g$r=$@5$7$?!#(B
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 2.0.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.0.2 における主な変更点:
 
-* $BIT6q9g$r=$@5$7$?!#(B
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 2.0.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.0.1 における主な変更点:
 
-* $BFC$K$J$7!#(B
+* 特になし。
 
-$B%P!<%8%g%s(B 2.0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.0 における主な変更点:
 
-* $BIT6q9g$r=$@5$7$?!#(B
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 2.0beta1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.0beta1 における主な変更点:
 
-* `ebappendix' $B$N%*%W%7%g%s(B `--filename-cases' $B$r(B `--filename-case' $B$K(B
-  $B2~L>$7$?!#(B
-* $BIT6q9g$r=$@5$7$?!#(B
+* `ebappendix' のオプション `--filename-cases' を `--filename-case' に
+  改名した。
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 2.0beta0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 2.0beta0 における主な変更点:
 
-* GNU libtool $B$NMxMQ$K$h$j!"(BEB $B%i%$%V%i%j$N6&M-%i%$%V%i%jHG$r%3%s%Q%$(B
-  $B%k$G$-$k$h$&$K$7$?!#(B
-* $B4X?t$N%$%s%?!<%U%'!<%9$rJQ99$7$?!#(B
-  EB $B%i%$%V%i%j(B 1.0.x $B$H(B 2.0 $B$G!"$$$/$D$+Hs8_49$J2U=j$,@8$8$?!#(B
-* `ebinfo' $B$N(B Texinfo $B%I%-%e%a%s%H$rDI2C$7$?!#(B
-* JIS X 4081-1996 $B$N$[$H$s$I$N5-=R$KBP1~$7$?!#(B
-* $B%=!<%9%3!<%IG[I[%Q%C%1!<%8$N%G%#%l%/%H%j9=@.$rJQ99$7$?!#(B
-* `ebappendix' $B$N(B `--no-catalogs' $B%*%W%7%g%s$r:o=|$7$?!#(B
-* $BIT6q9g$r=$@5$7$?!#(B
+* GNU libtool の利用により、EB ライブラリの共有ライブラリ版をコンパイ
+  ルできるようにした。
+* 関数のインターフェースを変更した。
+  EB ライブラリ 1.0.x と 2.0 で、いくつか非互換な箇所が生じた。
+* `ebinfo' の Texinfo ドキュメントを追加した。
+* JIS X 4081-1996 のほとんどの記述に対応した。
+* ソースコード配布パッケージのディレクトリ構成を変更した。
+* `ebappendix' の `--no-catalogs' オプションを削除した。
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 1.0.6 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 1.0.6 における主な変更点:
 
-* $BIT6q9g$r=$@5$7$?!#(B
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 1.0.5 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 1.0.5 における主な変更点:
 
-* $BIT6q9g$r=$@5$7$?!#(B
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 1.0.4 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 1.0.4 における主な変更点:
 
-* $BFC$K$J$7!#(B
+* 特になし。
 
-$B%P!<%8%g%s(B 1.0.3 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 1.0.3 における主な変更点:
 
-* "Concise Oxford dicitionary" $B$KBP1~$7$?!#(B
-* $BJ#?t$N%"!<%-%F%/%A%c>e$G$N%3%s%Q%$%k$K4X$9$k(B Makefile.am $B$NIT6q9g(B
-  $B$r=$@5$7$?!#(B
-  $BJ#?t$N<oN`$N%3%s%T%e!<%?>e$G!"F1;~$KK\%Q%C%1!<%8$r%3%s%Q%$%k$G$-$k(B
-  $B$h$&$K$J$C$?!#(B
-* $B%S%C%H%^%C%W$NJQ494X?t$N%$%s%?!<%U%'!<%9$rJQ99$7$?!#(B
-* $BIT6q9g$r=$@5$7$?!#(B
+* "Concise Oxford dicitionary" に対応した。
+* 複数のアーキテクチャ上でのコンパイルに関する Makefile.am の不具合
+  を修正した。
+  複数の種類のコンピュータ上で、同時に本パッケージをコンパイルできる
+  ようになった。
+* ビットマップの変換関数のインターフェースを変更した。
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 1.0.2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 1.0.2 における主な変更点:
 
-* EB $B%i%$%V%i%j$K4X?t$r$$$/$D$+DI2C$7$?!#(B
-  $B$3$l$i$N4X?t$O!"(BCD-ROM $B=q@R$,Dj5A$7$F$$$k30;z$N2hA|%U%!%$%k$r@8@.(B
-  $B$9$k!#BP1~$7$F$$$k2hA|7A<0$O!"(BXBM, XPM $B$H(B GIF$B!#(B
-* $BIT6q9g$r=$@5$7$?!#(B
+* EB ライブラリに関数をいくつか追加した。
+  これらの関数は、CD-ROM 書籍が定義している外字の画像ファイルを生成
+  する。対応している画像形式は、XBM, XPM と GIF。
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 1.0.1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 1.0.1 における主な変更点:
 
-* JIS X 4081-1996 $B$K5-$5$l$F$$$kI=<(@)8f5-=R;R$rG'<1$9$k$h$&$K$7$?!#(B
-* $B$$$/$D$+$N(B EPWING $B=q@R$G!"4A;z$K$h$kA0J}0lCW8!:w$,$G$-$k$h$&$K$7$?!#(B
-* EPWING $BHG%j!<%@!<%:1QOB<-E5$KBP1~$7$?!#(B
-* $BIT6q9g$r=$@5$7$?!#(B
+* JIS X 4081-1996 に記されている表示制御記述子を認識するようにした。
+* いくつかの EPWING 書籍で、漢字による前方一致検索ができるようにした。
+* EPWING 版リーダーズ英和辞典に対応した。
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 1.0 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 1.0 における主な変更点:
 
-* $BIT6q9g$r=$@5$7$?!#(B
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 1.0beta2 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 1.0beta2 における主な変更点:
 
-* $BIT6q9g$r=$@5$7$?!#(B
+* 不具合を修正した。
 
-$B%P!<%8%g%s(B 1.0beta1 $B$K$*$1$k<g$JJQ99E@(B:
+バージョン 1.0beta1 における主な変更点:
 
-* appendix $B%G!<%?%U%!%$%k$N7A<0$rJQ99$7$?!#(B
-* $BIT6q9g$r=$@5$7$?!#(B
+* appendix データファイルの形式を変更した。
+* 不具合を修正した。
 </pre>
 <!-- ############################################################# -->
 <hr>
 <p class="footer">
 <a href="index.html"><img class="banner" src="eb_b.png" alt="banner"></a>
-<a href="index.html">$B%[!<%`%Z!<%8(B</a>$B$KLa$k!#(B
+<a href="index.html">ホームページ</a>に戻る。
 </p>
 
 </body>

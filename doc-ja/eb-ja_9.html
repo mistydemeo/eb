@@ -35,49 +35,49 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 9. �ƥ����ȥǡ��� </H1>
+<H1> 9. テキストデータ </H1>
 <!--docid::SEC44::-->
 <P>
 
-�ƥ����ȥǡ����μ����ϡ��������¤ֽ��פʵ�ǽ�Ǥ���
+テキストデータの取得は、検索と並ぶ重要な機能です。
 </P><P>
 
-�����Ǹ��� <EM>�ƥ����ȥǡ��� (text data)</EM> �ϡ�<EM>��ʸ (text body)</EM>
-�Ȥ�����̣�ǤϤ���ޤ���
-CD-ROM ���ҤˤϳΤ�����ʸ��¸�ߤ��ޤ�������ʸ��Ʊ���ǡ����������Ѥ���
-�񤫤줿�ǡ����������ढ��ޤ���
-�ܽ�Ǥϡ������Υǡ�����ޤȤ�ƥƥ����ȥǡ����ȸƤ�Ǥ��ޤ���
-EB �饤�֥�꤬������ƥ����ȥǡ����μ���ˤϡ����Τ�Τ�����ޤ���
+ここで言う <EM>テキストデータ (text data)</EM> は、<EM>本文 (text body)</EM>
+という意味ではありません。
+CD-ROM 書籍には確かに本文も存在しますが、本文と同じデータ形式を用いて
+書かれたデータが数種類あります。
+本書では、これらのデータをまとめてテキストデータと呼んでいます。
+EB ライブラリが扱えるテキストデータの種類には、次のものがあります。
 </P><P>
 
 <UL>
-<LI>���Ф�
-<LI>��ʸ
-<LI>��˥塼
-<LI>���ɽ��
-<LI>ʣ�縡�������ϸ�θ������
+<LI>見出し
+<LI>本文
+<LI>メニュー
+<LI>著作権表示
+<LI>複合検索の入力語の候補一覧
 </UL>
 <P>
 
-�ܾϤǤϡ������Υƥ����ȥǡ����μ����Ȳù���ˡ�ˤĤ����������ޤ���
+本章では、これらのテキストデータの取得と加工方法について説明します。
 </P><P>
 
 <BLOCKQUOTE><TABLE BORDER=0 CELLSPACING=0> 
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC45">9.1 �ƥ����ȥǡ����Υ��������ɤ߹���</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC46">9.2 �ƥ����ȥǡ�������������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC47">9.3 �եå�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC48">9.4 �եå���ʸ�������ɤδط�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC49">9.5 ���ɽ��</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC50">9.6 ��˥塼</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC51">9.7 ʣ�縡���θ������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC52">9.8 ���ڤꥳ���ɤ�����</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC53">9.9 ����ץ�ץ������</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC54">9.10 �ǡ������ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC55">9.11 �եå��ؿ��ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC56">9.12 �եå������ɤΰ���</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC57">9.13 �եå����å����ؿ��ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC58">9.14 �Ȥ߹��ߥեå��ؿ��ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
-<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC59">9.15 �ƥ����ȥǡ������ؿ��ξܺ�</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC45">9.1 テキストデータのシークと読み込み</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC46">9.2 テキストデータの内部形式</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC47">9.3 フック</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC48">9.4 フックと文字コードの関係</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC49">9.5 著作権表示</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC50">9.6 メニュー</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC51">9.7 複合検索の候補一覧</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC52">9.8 区切りコードの問題</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC53">9.9 サンプルプログラム</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC54">9.10 データ型の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC55">9.11 フック関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC56">9.12 フックコードの一覧</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC57">9.13 フックセット操作関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC58">9.14 組み込みフック関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
+<TR><TD ALIGN="left" VALIGN="TOP"><A HREF="eb-ja_9.html#SEC59">9.15 テキストデータ操作関数の詳細</A></TD><TD>&nbsp;&nbsp;</TD><TD ALIGN="left" VALIGN="TOP"></TD></TR>
 </TABLE></BLOCKQUOTE>
 <P>
 
@@ -95,72 +95,72 @@ EB �饤�֥�꤬������ƥ����ȥǡ����μ���ˤϡ����Τ�Τ�����ޤ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.1 �ƥ����ȥǡ����Υ��������ɤ߹��� </H2>
+<H2> 9.1 テキストデータのシークと読み込み </H2>
 <!--docid::SEC45::-->
 <P>
 
-UNIX �ǥץ��������Ȥ���и��Τ������ˤϡ��ե����뤫��ǡ������ɤ߹���
-�ݤ��Ѥ��� <CODE>lseek()</CODE>, <CODE>read()</CODE> �Ȥ��������ƥॳ�����¸����
-����¿���Ǥ��礦��
+UNIX でプログラムを組んだ経験のある方には、ファイルからデータを読み込む
+際に用いる <CODE>lseek()</CODE>, <CODE>read()</CODE> というシステムコールをご存じの
+方も多いでしょう。
 </P><P>
 
-EB �饤�֥��Ǥ⡢�ƥ����ȥǡ����μ����ˤϡ�<EM>������ (seek)</EM> ��
-<EM>�ɤ߹��� (read)</EM> �Ȥ��� 2 �Ĥ����ǹԤ��ޤ���
-��������EB �饤�֥��Ǥϥե�����ݥ��󥿤�ǥ�������ץ��Ϥʤ���
-<CODE>EB_Book</CODE> ���֥������Ȥ��̤��ƥ��������ɤ߹��ߤ�����Ԥ��ޤ���
+EB ライブラリでも、テキストデータの取得には、<EM>シーク (seek)</EM> と
+<EM>読み込み (read)</EM> という 2 つの操作で行います。
+ただし、EB ライブラリではファイルポインタやディスクリプタはなく、
+<CODE>EB_Book</CODE> オブジェクトを通じてシークや読み込みの操作を行います。
 </P><P>
 
-�ޤ������������˻��ꤹ����֤� <CODE>off_t</CODE> ���ǤϤʤ���
-<CODE>EB_Position</CODE> �� (��<A HREF="eb-ja_8.html#SEC42">[����] �ǡ������ξܺ�</A>����򻲾�)
-�Υ��֥������Ȥ��Ѥ��ޤ���
-���Ȥ��С���ʸ����Ƭ���֤ϡ�<CODE>eb_text()</CODE> �Ȥ����ؿ���ȤäƼ��Τ褦��
-�����Ǥ��ޤ��������ΤȤ�����֥ǡ����� <CODE>EB_Position</CODE> �����֥�������
-�˽񤭹��ޤ�ޤ���
+また、シーク時に指定する位置も <CODE>off_t</CODE> 型ではなく、
+<CODE>EB_Position</CODE> 型 (「<A HREF="eb-ja_8.html#SEC42">[検索] データ型の詳細</A>」節を参照)
+のオブジェクトを用います。
+たとえば、本文の先頭位置は、<CODE>eb_text()</CODE> という関数を使って次のように
+取得できますが、このときも位置データは <CODE>EB_Position</CODE> 型オブジェクト
+に書き込まれます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Position position;
 
-/* �ؿ��ν�������������ȡ�<CODE>position</CODE> ����ʸ�γ��ϰ��֤�
- * �񤭹��ޤ�ޤ��� */
+/* 関数の処理が成功すると、<CODE>position</CODE> に本文の開始位置が
+ * 書き込まれます。 */
 if (eb_text(&#38;book, &#38;position) != EB_SUCCESS) {
     fprintf(stderr, "an error occurs.\n");
     return;
 }
 </pre></td></tr></table></P><P>
 
-���ͤޤǤˡ�<CODE>EB_Position</CODE> ����������¤�ϡ����Τ褦�ˤʤäƤ��ޤ���
+参考までに、<CODE>EB_Position</CODE> 型の内部構造は、次のようになっています。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef struct EB_Position_Struct EB_Position;
 
 struct EB_Position_Struct {
-    int page;     /* �ڡ����ֹ� */
-    int offset;   /* �ڡ�����Υ��ե��å� */
+    int page;     /* ページ番号 */
+    int offset;   /* ページ内のオフセット */
 };
 </pre></td></tr></table></P><P>
 
-�Ȥ����ǡ��������˰��פ�������ȥ�θ��Ф�����ʸ���ɤ߹���ݤˤ⡢
-���־���λ���ˤ� <CODE>EB_Position</CODE> �����Ȥ��ޤ���
-���פ�������ȥ�ξ���ϡ��ؿ� <CODE>eb_hit_list()</CODE> �ˤ�ä�
-<CODE>EB_Hit</CODE> �Ȥ������Υ��֥������Ȥ˽񤭹��ޤ�ޤ�����<CODE>EB_Hit</CODE>
-���ϼ��Τ褦���������Ƥ��ޤ���
-(�ܤ����� ��<A HREF="eb-ja_8.html#SEC42">[����] �ǡ������ξܺ�</A>����򻲾ȡ�)
+ところで、検索時に一致したエントリの見出しや本文を読み込む際にも、
+位置情報の指定には <CODE>EB_Position</CODE> 型が使われます。
+一致したエントリの情報は、関数 <CODE>eb_hit_list()</CODE> によって
+<CODE>EB_Hit</CODE> という型のオブジェクトに書き込まれますが、<CODE>EB_Hit</CODE>
+型は次のように定義されています。
+(詳しくは 「<A HREF="eb-ja_8.html#SEC42">[検索] データ型の詳細</A>」節を参照。)
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef struct {
-    EB_Position heading;   /* ���Ф��ΰ��� */
-    EB_Position text;      /* ��ʸ�ΰ���   */
+    EB_Position heading;   /* 見出しの位置 */
+    EB_Position text;      /* 本文の位置   */
 } EB_Hit;
 </pre></td></tr></table></P><P>
 
-�Ĥޤꡢ���ΤȤ��θ��Ф�����ʸ�ΰ��֤⡢<CODE>EB_Position</CODE> ����ɽ��
-����Ƥ���ΤǤ���
+つまり、このときの見出しと本文の位置も、<CODE>EB_Position</CODE> 型で表現
+されているのです。
 </P><P>
 
-�Ǥϡ��ºݤΥץ���������ˤ��ơ����������ɤ߹��ߤ�ԤäƤߤޤ���
-�ޤ��ϡ�����������Ǥ���
-����ˤϴؿ� <CODE>eb_seek_text()</CODE> ���Ѥ��ޤ���
-�����Ǥ��Ϥꡢ���֤� <CODE>EB_Position</CODE> �����Ϥ��ޤ���
+では、実際のプログラムを例にして、シークと読み込みを行ってみます。
+まずは、シークからです。
+これには関数 <CODE>eb_seek_text()</CODE> を用います。
+ここでもやはり、位置は <CODE>EB_Position</CODE> 型で渡します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_seek_text(&#38;book, &#38;position) != EB_SUCCESS) {
@@ -169,24 +169,24 @@ struct EB_Position_Struct {
 }
 </pre></td></tr></table></P><P>
 
-�ǡ����μ��� (���Ф�����ʸ ...) �ˤ�餺���ƥ����ȥǡ����Υ�������
-���٤� <CODE>eb_seek_text()</CODE> �ǹԤ��ޤ���
+データの種類 (見出し、本文 ...) によらず、テキストデータのシークは
+すべて <CODE>eb_seek_text()</CODE> で行います。
 </P><P>
 
-��������<CODE>EB_Book</CODE> ���֥������Ȥϡ��ƥ����ȥǡ����μ����̤��ɤ߹���
-���֤�Ф��Ƥ���櫓�ǤϤʤ���������Υƥ����ȥǡ����Ƕ�ͭ������־����
-��ĳФ��Ƥ�������Ǥ���
-���Ȥ��С���ʸ���ɤ߹������ǡ��̤ΰ��֤˥��������Ƹ��Ф����ɤ߹���ȡ�
-<CODE>EB_Book</CODE> ����ʸ���ɤ߹��߰��֤Τ��Ȥ�˺��Ƥ��ޤ��ޤ���
+ただし、<CODE>EB_Book</CODE> オブジェクトは、テキストデータの種類別に読み込み
+位置を覚えているわけではなく、全種類のテキストデータで共有する位置情報を
+一つ覚えているだけです。
+たとえば、本文を読み込んだ後で、別の位置にシークして見出しを読み込むと、
+<CODE>EB_Book</CODE> は本文の読み込み位置のことは忘れてしまいます。
 </P><P>
 
-���ơ�������������ä��顢�ǡ������ɤ߹��ߤޤ���
-�ɤ߹��⤦�Ȥ���ƥ����ȥǡ����μ���ˤ�äơ����Ѥ���ؿ����ۤʤ�ޤ���
-���Ф������� <CODE>eb_read_heading()</CODE> ��Ȥ��ޤ���������ʳ��Ǥ�
-<CODE>eb_read_text()</CODE> ��Ȥ��ޤ���
+さて、シークが終わったら、データを読み込みます。
+読み込もうとするテキストデータの種類によって、使用する関数が異なります。
+見出しだけは <CODE>eb_read_heading()</CODE> を使いますが、それ以外では
+<CODE>eb_read_text()</CODE> を使います。
 </P><P>
 
-�ʲ��ϡ�<CODE>eb_read_text()</CODE> �λ�����Ǥ���
+以下は、<CODE>eb_read_text()</CODE> の使用例です。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#define MAX_LENGTH 1000
@@ -200,15 +200,15 @@ if (eb_read_text(&#38;book, NULL, NULL, NULL, MAX_LENGTH,
 }
 </pre></td></tr></table></P><P>
 
-��������ȡ�<CODE>text</CODE> �ˤϥƥ����ȥǡ�������<CODE>text_length</CODE> �ˤ�
-�ºݤ��ɤ߹�����Х��ȿ����񤭹��ޤ�ޤ���
-�ƥ����ȤϺ���� <CODE>MAX_LENGTH</CODE> �Х��Ƚ񤭹��ޤ�ޤ���
-�ƥ����ȥǡ����Ϥ���˥ʥ�ʸ���ǽ�ü����ޤ��Τǡ�<CODE>buffer</CODE> �ˤ�
-�⤦ 1 �Х���ʬ���ΰ褬ɬ�פˤʤ�ޤ���
+成功すると、<CODE>text</CODE> にはテキストデータが、<CODE>text_length</CODE> には
+実際に読み込んだバイト数が書き込まれます。
+テキストは最大で <CODE>MAX_LENGTH</CODE> バイト書き込まれます。
+テキストデータはさらにナル文字で終端されますので、<CODE>buffer</CODE> には
+もう 1 バイト分の領域が必要になります。
 </P><P>
 
-<CODE>eb_read_heading()</CODE> �θƤӽФ����⡢<CODE>eb_read_text()</CODE> ��
-�ޤä����Ѥ��ޤ���
+<CODE>eb_read_heading()</CODE> の呼び出し方も、<CODE>eb_read_text()</CODE> と
+まったく変わりません。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_read_heading(&#38;book, NULL, NULL, NULL, MAX_LENGTH,
@@ -218,16 +218,16 @@ if (eb_read_text(&#38;book, NULL, NULL, NULL, MAX_LENGTH,
 }
 </pre></td></tr></table></P><P>
 
-<CODE>eb_read_text()</CODE> �� <CODE>eb_read_heading()</CODE> ���ɤ߹����
-�ƥ����ȥǡ�����ʿʸ�Υƥ����ȤˤʤäƤ��ơ��ʥ�ʸ���ǽ�ü����Ƥ��ޤ���
+<CODE>eb_read_text()</CODE> や <CODE>eb_read_heading()</CODE> で読み込んだ
+テキストデータは平文のテキストになっていて、ナル文字で終端されています。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>printf("%s\n", text);   /* ���Ϥ��Ƥߤ� */
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>printf("%s\n", text);   /* 出力してみる */
 </pre></td></tr></table></P><P>
 
-�ɤ߹��ߤ����ƥ����ȥǡ�����Ĺ�����ơ�<CODE>eb_read_text()</CODE> ���뤤��
-<CODE>eb_read_heading()</CODE> ����ƤӽФ��������Ǥ������ɤ߹���ʤ��ä�
-���ϡ����ٸƤӽФ����Ȥ�³���Υǡ������ɤ߹��ळ�Ȥ��Ǥ��ޤ���
+読み込みたいテキストデータが長すぎて、<CODE>eb_read_text()</CODE> あるいは
+<CODE>eb_read_heading()</CODE> を一回呼び出しただけでは全部読み込めなかった
+場合は、再度呼び出すことで続きのデータを読み込むことができます。
 </P><P>
 
 <A NAME="Text Data Format"></A>
@@ -244,81 +244,81 @@ if (eb_read_text(&#38;book, NULL, NULL, NULL, MAX_LENGTH,
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.2 �ƥ����ȥǡ������������� </H2>
+<H2> 9.2 テキストデータの内部形式 </H2>
 <!--docid::SEC46::-->
 <P>
 
-�������Ǥϡ��ɤ߹�����ƥ����ȥǡ����ϡ�ʿʸ�ƥ����ȤˤʤäƤ��ޤ�����
-����ɤ⡢CD-ROM �������ʿʸ�ƥ����ȤΥǡ����������Τޤ޼�Ͽ����Ƥ���
-�櫓�ǤϤ���ޤ���
+前節の例では、読み込んだテキストデータは、平文テキストになっていました。
+けれども、CD-ROM 書籍内に平文テキストのデータが、そのまま収録されている
+わけではありません。
 </P><P>
 
-�ºݤΥƥ����ȥǡ�������򡢰ʲ��˼����ޤ���
-��¦�Υ֥��å��� 16 �ʿ��ǥ���פ����ͻҤǡ���¦�Ϥ������ JIS X 0208
-(���ܸ�Τ��ʴ���) ��ʸ����ɽ���Ƥ�����ʬ�� <SAMP>`[��]'</SAMP> �Ȥ�������
-ľ������ΤǤ���
+実際のテキストデータの例を、以下に示します。
+左側のブロックは 16 進数でダンプした様子で、右側はそれを基に JIS X 0208
+(日本語のかな漢字) の文字を表している部分を <SAMP>`[　]'</SAMP> という形に
+直したものです。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>     (16�ʿ��ˤ������)            (��ǽ����ʬ�򤫤ʴ������Ѵ�)
-1f0900011f41010026321f611f042121   1f0900011f410100[��]1f611f04[��]
-212721211f053e704a734a541f0a1f04   [��][��]1f05[��][��][��]1f0a1f04
-214e1f0525372530255e1f04214f2121   [��]1f05[��][��][��]1f04[��][��]
-214a237323692367236d236121212370   [��][��][��][��][��][��][��][��]
-2372236f236a236523632374214b1f05   [��][��][��][��][��][��][��]1f05
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>     (16進数によるダンプ)            (可能な部分をかな漢字に変換)
+1f0900011f41010026321f611f042121   1f0900011f410100[Σ]1f611f04[　]
+212721211f053e704a734a541f0a1f04   [：][　]1f05[情][報][編]1f0a1f04
+214e1f0525372530255e1f04214f2121   [［]1f05[シ][グ][マ]1f04[］][　]
+214a237323692367236d236121212370   [（][ｓ][ｉ][ｇ][ｍ][ａ][　][ｐ]
+2372236f236a236523632374214b1f05   [ｒ][ｏ][ｊ][ｅ][ｃ][ｔ][）]1f05
 </pre></td></tr></table></P><P>
 
-��¦�Υ֥��å��򸫤�ȡ������褽ʿʸ�˶ᤤ���ǥƥ����ȥǡ������������
-���뤳�Ȥ�ʬ����ޤ������Ȥ����ɤ����ˡ�ʸ���פǤϤʤ��ǡ�����ޤޤ��
-���ޤ���
+右側のブロックを見ると、おおよそ平文に近い形でテキストデータが収められて
+いることが分かりますが、ところどころに「文字」ではないデータも含まれて
+います。
 </P><P>
 
-ʸ���ǤϤʤ���ʬ�ϡ����٤ơ֥��������ץ������󥹡פȸƤФ���ΤǤ���
-���������ץ������󥹤Ȥϡ��ƥ����ȥǡ�������Ϥ���ݤˡ����Ԥζػߤ�
-��Ĵ�����Ȥ��ä��������������뤿��λ��ȤߤǤ���
-16 �ʿ��� <SAMP>`1f'</SAMP> �������������ץ������󥹤γ��Ϥ��̣���ޤ���
+文字ではない部分は、すべて「エスケープシーケンス」と呼ばれるものです。
+エスケープシーケンスとは、テキストデータを出力する際に、改行の禁止や
+強調修飾といった制御情報を伝えるための仕組みです。
+16 進数の <SAMP>`1f'</SAMP> が、エスケープシーケンスの開始を意味します。
 </P><P>
 
-���ͤޤǤˡ���Υƥ����ȥǡ����ǻȤ��Ƥ��륨�������ץ������󥹤�
-���٤���󤹤�ȡ����Τ褦�ˤʤ�ޤ���
+参考までに、上のテキストデータで使われているエスケープシーケンスを
+すべて列挙すると、次のようになります。
 </P><P>
 
 <DL COMPACT>
 <DT><SAMP>`1f09 0001'</SAMP>
-<DD>������ (����ǥ��) ���̤���ꡣ
-(������ 0001 �ʤΤǡ��������̤� 1��)
+<DD>字下げ (インデント) の量を指定。
+(引数が 0001 なので、字下げ量は 1。)
 <DT><SAMP>`1f41 0100'</SAMP>
-<DD>���������γ��ϡ�
-(���� 0100 �ΰ�̣�ˤĤ��Ƥϡ�JIS X 4081 �˵��Ҥ��ʤ�����������)
+<DD>検索キーの開始。
+(引数 0100 の意味については、JIS X 4081 に記述がないため不明。)
 <DT><SAMP>`1f61'</SAMP>
-<DD>���������ν�λ��
+<DD>検索キーの終了。
 <DT><SAMP>`1f04'</SAMP>
-<DD>Ⱦ��ɽ���γ��ϡ�
+<DD>半角表示の開始。
 <DT><SAMP>`1f05'</SAMP>
-<DD>Ⱦ��ɽ���ν�λ��
+<DD>半角表示の終了。
 <DT><SAMP>`1f0a'</SAMP>
-<DD>����
+<DD>改行
 </DL>
 <P>
 
-����Υץ������ǡ��ɤ߹�����ǡ�����ʿʸ�ƥ����ȤˤʤäƤ����Τϡ�
-�¤� EB �饤�֥�꤬�ù������򤷤�����Ǥ���
-�Ĥޤꡢ�ֲ��ԡפΤ褦��ʿʸ�ƥ����ȤǤ�ɽ����ǽ�ʥ��������ץ�������
-�ˤĤ��ƤϽ��������ָ��������γ��ϡפΤ褦��ɽ���Ǥ��ʤ���ΤˤĤ��Ƥ�
-̵�뤹��褦�ˤ��ơ�ʿʸ�ƥ����Ȥˤʤ�褦�˲ù����Ƥ����ΤǤ���
+前節のプログラムで、読み込んだデータが平文テキストになっていたのは、
+実は EB ライブラリが加工処理をしたからです。
+つまり、「改行」のように平文テキストでも表現可能なエスケープシーケンス
+については処理し、「検索キーの開始」のように表現できないものについては
+無視するようにして、平文テキストになるように加工していたのです。
 </P><P>
 
-��������ʿʸ�ƥ����Ȥ�ɽ���Ϥ�˳�����Τǡ����Υǡ����ˤϴޤޤ�Ƥ���
-���������ץ������󥹤�¿����̵�뤹�뤳�ȤˤʤäƤ��ޤ��ޤ���
-HTML �Τ褦�ˡ���ä�ɽ���ϤΤ�������ǽ��Ϥ���ʤ顢̵�뤻���˺Ѥ�
-�������󥹤����䤻�����Ǥ���
-�Ǥϡ�HTML �����ǥƥ����ȥǡ������������ؿ��� EB �饤�֥����Ѱդ����
-���뤫�Ȥ����ȡ���ǰ�ʤ��餢��ޤ���
+しかし、平文テキストは表現力が乏しいので、元のデータには含まれている
+エスケープシーケンスの多くを無視することになってしまいます。
+HTML のように、もっと表現力のある形式で出力するなら、無視せずに済む
+シーケンスを増やせそうです。
+では、HTML 形式でテキストデータを取得する関数が EB ライブラリに用意されて
+いるかというと、残念ながらありません。
 </P><P>
 
-��������ˡ����ʤ��֤Ϥ�����ޤ�������ͳ�˥ƥ����ȥǡ�����ù��Ǥ���
-����λ��Ȥߤ��Ѱդ���Ƥ��ޤ���
-���줬����������������� <EM>�եå� (hook)</EM> �Ǥ���
-�եå���Ȥ����Ȥǡ��ƥ����ȥǡ��������˲ù����뤳�Ȥ��Ǥ��ޤ���
+その代わりに、かなり手間はかかりますが、自由にテキストデータを加工できる
+ための仕組みが用意されています。
+それが、次の節で説明する <EM>フック (hook)</EM> です。
+フックを使うことで、テキストデータを柔軟に加工することができます。
 </P><P>
 
 <A NAME="Hook"></A>
@@ -335,65 +335,65 @@ HTML �Τ褦�ˡ���ä�ɽ���ϤΤ�������ǽ��Ϥ���ʤ顢̵�뤻���˺Ѥ�
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.3 �եå� </H2>
+<H2> 9.3 フック </H2>
 <!--docid::SEC47::-->
 <P>
 
-�ä˲�����ꤷ�ʤ���С�<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE>
-���֤��ƥ����ȥǡ����βù��ϡ����餫�������줿�̤����ˡ�ǹԤ��ޤ���
-���Ȥ��С��ֲ��ԡפΥ��������ץ������󥹤��Ф��Ƥϡ�<SAMP>`\n'</SAMP> ��
-�񤭹���褦�ˤʤäƤ��ޤ���
+特に何も指定しなければ、<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE>
+が返すテキストデータの加工は、あらかじめ決められた通りの方法で行われます。
+たとえば、「改行」のエスケープシーケンスに対しては、<SAMP>`\n'</SAMP> を
+書き込むようになっています。
 </P><P>
 
-<EM>�եå� (hook)</EM> ��Ȥ��ȡ����������ù���ˡ���Ѥ��뤳�Ȥ��Ǥ��ޤ���
-�եå��ϡ����餫�������줿�եå�������֤��Ф��ơ��եå��ؿ�����Ͽ
-���뤳�Ȥ�ͭ���ˤʤ�ޤ���
-�եå��ؿ�����Ͽ����Ƥ���ȡ�<CODE>eb_read_text()</CODE> ��
-<CODE>eb_read_heading()</CODE> �ϡ����餫�����ޤä�������ǥǡ�����񤭹���
-����ˡ��եå��ؿ���ƤӽФ��ޤ���
-�ƤӽФ��줿�եå��ؿ����ǡ����ν񤭹��߽�����Ԥ����Ȥǡ�
-<CODE>eb_read_text()</CODE> �� <CODE>eb_read_heading()</CODE> �����֤�ƥ����ȥǡ���
-���Ѳ�����Ȥ����櫓�Ǥ���
+<EM>フック (hook)</EM> を使うと、こうした加工方法を変えることができます。
+フックは、あらかじめ決められたフック設定位置に対して、フック関数を登録
+することで有効になります。
+フック関数が登録されていると、<CODE>eb_read_text()</CODE> や
+<CODE>eb_read_heading()</CODE> は、あらかじめ決まったやり方でデータを書き込む
+代わりに、フック関数を呼び出します。
+呼び出されたフック関数がデータの書き込み処理を行うことで、
+<CODE>eb_read_text()</CODE> や <CODE>eb_read_heading()</CODE> から返るテキストデータ
+が変化するというわけです。
 </P><P>
 
-EB �饤�֥��ˤϡ�¿���Υեå�������֤��Ѱդ���Ƥ��ޤ���
-�ƥ��������ץ������󥹤ˤϡ����줾�����Ѥ˥եå����Ѱդ���Ƥ��ꡢ
-����ʳ��ˤ�ʸ���Τ���Υեå���¸�ߤ��ޤ���
-(�ɤΤ褦�ʥեå�������֤����뤫���ܤ����� 
-��<A HREF="eb-ja_9.html#SEC56">�եå������ɤΰ���</A>����򻲾ȡ�)
+EB ライブラリには、多数のフック設定位置が用意されています。
+各エスケープシーケンスには、それぞれ専用にフックが用意されており、
+それ以外にも文字のためのフックが存在します。
+(どのようなフック設定位置があるか、詳しくは 
+「<A HREF="eb-ja_9.html#SEC56">フックコードの一覧</A>」節を参照。)
 </P><P>
 
-���줾��Υեå�������֤ϡ�<EM>�եå������� (hook code)</EM> �ȸƤФ��
-�������ͤǼ��̤���ޤ���
-���Ȥ��С����ҤΡֲ��ԡפΥ��������ץ������󥹤��б�����եå�������
-�� <CODE>EB_HOOK_NEWLINE</CODE> �ˤʤ�ޤ���
+それぞれのフック設定位置は、<EM>フックコード (hook code)</EM> と呼ばれる
+コード値で識別されます。
+たとえば、前述の「改行」のエスケープシーケンスに対応するフックコード
+は <CODE>EB_HOOK_NEWLINE</CODE> になります。
 </P><P>
 
-���ץꥱ�������ץ�����ब�եå��򰷤��ˤϡ��եå��ν���Ǥ���
-<EM>�եå����å� (hook set)</EM> ���Ѱդ��ޤ���
-����ϡ�EB �饤�֥������Ѳ�ǽ�ʤ��٤ƤΥեå�������֤��Ф��ơ��ɤ�
-�եå��ؿ���Ȥ��Τ���Ͽ���뤿��Υ��֥������ȤǤ���
+アプリケーションプログラムがフックを扱うには、フックの集合である
+<EM>フックセット (hook set)</EM> を用意します。
+これは、EB ライブラリで利用可能なすべてのフック設定位置に対して、どの
+フック関数を使うのかを記録するためのオブジェクトです。
 </P><P>
 
-�Ǥϡ��ºݤˤɤ���äƥեå����åȤ򰷤��Τ����������Ƥ����ޤ��礦��
-�եå����åȤ� <CODE>EB_Hookset</CODE> ���Υ��֥������Ȥ�ɽ���ޤ��Τǡ��ޤ�
-<CODE>EB_Hookset</CODE> ���֥������Ȥ��Ѱդ��ޤ���
+では、実際にどうやってフックセットを扱うのか、説明していきましょう。
+フックセットは <CODE>EB_Hookset</CODE> 型のオブジェクトで表しますので、まず
+<CODE>EB_Hookset</CODE> オブジェクトを用意します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Hookset hookset;
 </pre></td></tr></table></P><P>
 
-<CODE>EB_Hookset</CODE> ���֥������Ȥϡ�<CODE>EB_Book</CODE> ���֥������Ȥ�Ʊ�ͤˡ�
-��������ɬ�����������ɬ�פ�����ޤ���
+<CODE>EB_Hookset</CODE> オブジェクトは、<CODE>EB_Book</CODE> オブジェクトと同様に、
+使用前に必ず初期化する必要があります。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_initialize_hookset(&#38;hookset);
 </pre></td></tr></table></P><P>
 
-�ºݤΥեå��ؿ��ϡ����Τ褦�ʤ�Τˤʤ�ޤ���
-������Ǥϡ��եå��ؿ������ <CODE>eb_write_text_string()</CODE> �Ȥ����ؿ���
-�ƤӽФ��ơ�<SAMP>`&#60;br&#62;'</SAMP> �Ȥ���ʸ�����ƥ����ȥǡ����Ȥ��ƽ񤭹����
-���ޤ���
+実際のフック関数は、次のようなものになります。
+この例では、フック関数の中で <CODE>eb_write_text_string()</CODE> という関数を
+呼び出して、<SAMP>`&#60;br&#62;'</SAMP> という文字列をテキストデータとして書き込んで
+います。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Error_Code
@@ -404,30 +404,30 @@ hook_newline(EB_Book *book, EB_Appendix *appendix, void *container,
 }
 </pre></td></tr></table></P><P>
 
-�ؿ� <CODE>eb_set_hook()</CODE> ���Ѥ��뤳�Ȥǡ����Υեå��ؿ���եå����å�
-����Ͽ���뤳�Ȥ��Ǥ��ޤ���
-���������ޤ� <CODE>EB_Hook</CODE> �Ȥ������Υ��֥������Ȥˤ��ä���եå�������
-�ȥեå��ؿ������ꤷ������� <CODE>eb_set_hook()</CODE> ���Ϥ��Ƥ��ɬ�פ�
-����ޤ���
-�����Ǥϡ��ֲ��ԡפ�ɽ�����������ץ������󥹤��Ф��ơ��嵭�Υեå��ؿ�
-����Ͽ���Ƥߤޤ���
+関数 <CODE>eb_set_hook()</CODE> を用いることで、このフック関数をフックセット
+に登録することができます。
+ただし、まず <CODE>EB_Hook</CODE> という型のオブジェクトにいったんフックコード
+とフック関数を設定し、それを <CODE>eb_set_hook()</CODE> を渡してやる必要が
+あります。
+ここでは、「改行」を表すエスケープシーケンスに対して、上記のフック関数
+を登録してみます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Hook hook;
 
-hook.code = EB_HOOK_NEWLINE;   # �եå������ɤ򥻥å�
-hook.function = hook_newline;  # �եå��ؿ��򥻥å�
+hook.code = EB_HOOK_NEWLINE;   # フックコードをセット
+hook.function = hook_newline;  # フック関数をセット
 eb_set_hook(&#38;hookset, &#38;hook);
 </pre></td></tr></table></P><P>
 
-�ʤ���Ʊ���եå�������� (�եå�������) ��ʣ����եå��ؿ�����Ͽ���Ƥ⡢
-ͭ���ˤʤ�ΤϺǸ����Ͽ������Τ����Ǥ��Τǡ����դ��Ʋ�������
-�եå��ؿ��Ȥ��� <CODE>NULL</CODE> ����ꤹ��ȡ���Ͽ����Ƥ���եå������
-����ޤ���
+なお、同じフック設定位置 (フックコード) に複数回フック関数を登録しても、
+有効になるのは最後に登録したものだけですので、注意して下さい。
+フック関数として <CODE>NULL</CODE> を指定すると、登録されているフックが解除
+されます。
 </P><P>
 
-�ؿ� <CODE>eb_set_hooks()</CODE> (�Ǹ�� <CODE>s</CODE> ���դ�) ��Ȥ��С�ʣ����
-�եå��ؿ�����٤���Ͽ�Ǥ��ޤ���
+関数 <CODE>eb_set_hooks()</CODE> (最後に <CODE>s</CODE> が付く) を使えば、複数の
+フック関数を一度に登録できます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>static const EB_Hook hooks[] = {
@@ -440,15 +440,15 @@ eb_set_hook(&#38;hookset, &#38;hook);
 eb_set_hooks(&#38;hookset, &#38;hooks);
 </pre></td></tr></table></P><P>
 
-������������������뤿��ˡ�<CODE>EB_HOOK_NULL</CODE> �Ȥ����ü�ʥեå�������
-���֤��ޤ���
-�����������դ��Ʋ�������
+配列の末尾を明示するために、<CODE>EB_HOOK_NULL</CODE> という特殊なフックコード
+を置きます。
+この点も注意して下さい。
 </P><P>
 
-�������ƥեå��ؿ�����Ͽ�����եå����åȤ�<CODE>eb_raed_text()</CODE>,
-<CODE>eb_raed_heading()</CODE> �ؤΰ����Ȥ����Ϥ��ޤ���
-����ޤǤ���Ǥϡ�<CODE>NULL</CODE> ���Ϥ��Ƥ��ޤ������������
-<CODE>&#38;hookset</CODE> ���Ϥ��Ƥߤޤ���
+こうしてフック関数を登録したフックセットを、<CODE>eb_raed_text()</CODE>,
+<CODE>eb_raed_heading()</CODE> への引数として渡します。
+前節までの例では、<CODE>NULL</CODE> を渡していましたが、代わりに
+<CODE>&#38;hookset</CODE> を渡してみます。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>if (eb_read_text(&#38;book, NULL, &#38;hookset, NULL, MAX_LENGTH,
@@ -458,12 +458,12 @@ eb_set_hooks(&#38;hookset, &#38;hooks);
 }
 </pre></td></tr></table></P><P>
 
-����ˤ�äơ��ƥ����ȥǡ�����˲��Ԥ�ɽ�����������ץ������󥹤�����ȡ�
-<SAMP>`\n'</SAMP> ������� <SAMP>`&#60;br&#62;'</SAMP> �Ȥ���ʸ���󤬽񤭹��ޤ��褦�ˤʤ�ޤ���
+これによって、テキストデータ中に改行を表すエスケープシーケンスがあると、
+<SAMP>`\n'</SAMP> の代わりに <SAMP>`&#60;br&#62;'</SAMP> という文字列が書き込まれるようになります。
 </P><P>
 
-<CODE>EB_Hookset</CODE> ���֥������Ȥ�Ȥ�����ä��顢<CODE>eb_finalize_hookset()</CODE>
-��Ƥ�Ǹ�����򤷤ޤ���
+<CODE>EB_Hookset</CODE> オブジェクトを使い終わったら、<CODE>eb_finalize_hookset()</CODE>
+を呼んで後始末をします。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>eb_finalize_hookset(&#38;hookset);
@@ -483,71 +483,71 @@ eb_set_hooks(&#38;hookset, &#38;hooks);
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.4 �եå���ʸ�������ɤδط� </H2>
+<H2> 9.4 フックと文字コードの関係 </H2>
 <!--docid::SEC48::-->
 <P>
 
-����Ǥϡ����������ץ������󥹤��Ф���եå�����ˤȤ�ޤ�����������¾
-�ˤ⡢EB �饤�֥��ˤ�ʸ�����Ф���եå����Ѱդ���Ƥ��ޤ���
+前節では、エスケープシーケンスに対するフックを例にとりましたが、この他
+にも、EB ライブラリには文字に対するフックが用意されています。
 </P><P>
 
 <DL COMPACT>
 <DT><CODE>EB_HOOK_ISO8859_1</CODE>
-<DD>ISO 8859-1 (��ƥ�ʸ�� 1) ʸ���ؤΥեå�������������ʸ��������ޤ���
-�����Ȥ��ơ�ISO 8859-1 ��ʸ���ֹ椬�եå��ؿ����Ϥ���ޤ���
+<DD>ISO 8859-1 (ラテン文字 1) 文字へのフック。ただし制御文字を除きます。
+引数として、ISO 8859-1 の文字番号がフック関数に渡されます。
 <P>
 
 <DT><CODE>EB_HOOK_NARROW_JISX0208</CODE>
-<DD>Ⱦ�Ѥ� JIS X 0208 (���ܸ�Τ��ʴ���) ʸ���ؤΥեå���
-�����Ȥ��ơ����ܸ� EUC ��ɽ����������ʸ���ֹ椬���եå��ؿ����Ϥ���ޤ���
+<DD>半角の JIS X 0208 (日本語のかな漢字) 文字へのフック。
+引数として、日本語 EUC で表現した場合の文字番号が、フック関数に渡されます。
 <P>
 
 <DT><CODE>EB_HOOK_WIDE_JISX0208</CODE>
-<DD>���Ѥ� JIS X 0208 (���ܸ�Τ��ʴ���) ʸ���ؤΥեå���
-�����Ȥ��ơ����ܸ� EUC ��ɽ����������ʸ���ֹ椬���եå��ؿ����Ϥ���ޤ���
+<DD>全角の JIS X 0208 (日本語のかな漢字) 文字へのフック。
+引数として、日本語 EUC で表現した場合の文字番号が、フック関数に渡されます。
 <P>
 
 <DT><CODE>EB_HOOK_GB2312</CODE>
-<DD>GB 2312 (����δ��λ�) ʸ���ؤΥեå���
-�����Ȥ��ơ����� EUC ��ɽ����������ʸ���ֹ椬���եå��ؿ����Ϥ���ޤ���
+<DD>GB 2312 (中国語の簡体字) 文字へのフック。
+引数として、中国語 EUC で表現した場合の文字番号が、フック関数に渡されます。
 <P>
 
 <DT><CODE>EB_HOOK_NARROW_FONT</CODE>
-<DD>Ⱦ�Ѥγ����ؤΥեå���
-�����Ȥ��ơ�������ʸ���ֹ椬���եå��ؿ����Ϥ���ޤ���
+<DD>半角の外字へのフック。
+引数として、外字の文字番号が、フック関数に渡されます。
 <P>
 
 <DT><CODE>EB_HOOK_WIDE_FONT</CODE>
-<DD>Ⱦ�Ѥγ����ؤΥեå���
-�����Ȥ��ơ�������ʸ���ֹ椬���եå��ؿ����Ϥ���ޤ���
+<DD>半角の外字へのフック。
+引数として、外字の文字番号が、フック関数に渡されます。
 </DL>
 <P>
 
-������⡢����ʸ�����ƥ����ȥǡ�����˸�����٤ˡ��եå��ؿ����ƤӽФ���
-�ޤ���
+いずれも、その文字がテキストデータ中に現れる度に、フック関数が呼び出され
+ます。
 </P><P>
 
-��ε��Ҥ򸫤Ƥ�ʬ����褦�ˡ��եå��ؿ����Ϥ����ʸ���ֹ�ϡ����Ҥ�ʸ��
-�����ɤ˱����ơ�ISO 8859-1, ���ܸ� EUC������ EUC �Τ����줫��ʸ��������
-��ɽ�����줿��Τˤʤ�ޤ���
+上の記述を見ても分かるように、フック関数に渡される文字番号は、書籍の文字
+コードに応じて、ISO 8859-1, 日本語 EUC、中国語 EUC のいずれかの文字コード
+で表現されたものになります。
 </P><P>
 
-�եå��ؿ�����Ͽ���ʤ���С�����ʸ���ֹ椬�ƥ����ȥǡ����Ȥ��Ƥ��Τޤ�
-�񤭹��ޤ�ޤ���
+フック関数を登録しなければ、その文字番号がテキストデータとしてそのまま
+書き込まれます。
 </P><P>
 
-�⤷�����ץꥱ�������ץ�����ब��EB �饤�֥������������ɤȤϰۤʤ�
-ʸ�������ɤ���Ѥ��������ϡ������Υեå��Υեå��ؿ�����Ͽ���ơ�
-�������Ѵ������򤹤�Τ��Ǥ���
-����������ʸ����˥եå��ؿ����ƤӽФ����Τǡ��������٤�������ޤ���
+もし、アプリケーションプログラムが、EB ライブラリの内部コードとは異なる
+文字コードを使用したい場合は、これらのフックのフック関数を登録して、
+コード変換処理をするのも手です。
+ただし、一文字毎にフック関数が呼び出されるので、相応の負荷がかかります。
 </P><P>
 
-�ޤ���EBXA-C �򰷤��ˤϡ����̤ʽ�����ɬ�פǤ���
-EBXA-C �Ǥϡ�ʸ�������ɤȤ��� GB 2312 �� JIS X 0208 ���Ȥ��ޤ���
-(��<A HREF="eb-ja_2.html#SEC6">ʸ��������</A>����򻲾�)��EB �饤�֥��ˤ��ɸ��ν���
-�Ǥϡ��ɤ���� 0xa1a1 �� 0xfefe �˥ޥåԥ󥰤���ƾ��ͤ��뤿�ᡢ����
-�Ǥ�ɤ��餫������եå�����ʸ����ɽ����ˡ���Ѥ��ʤ��ȡ�����������
-�Ǥ��ޤ���
+また、EBXA-C を扱うには、特別な処理が必要です。
+EBXA-C では、文字コードとして GB 2312 と JIS X 0208 が使われますが
+(「<A HREF="eb-ja_2.html#SEC6">文字コード</A>」節を参照)、EB ライブラリによる標準の処理
+では、どちらも 0xa1a1 〜 0xfefe にマッピングされて衝突するため、最低
+でもどちらか一方をフックして文字の表現方法を変えないと、正しく出力
+できません。
 </P><P>
 
 <A NAME="Copyright Notice"></A>
@@ -564,26 +564,26 @@ EBXA-C �Ǥϡ�ʸ�������ɤȤ��� GB 2312 �� JIS X 0208 ���Ȥ��ޤ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.5 ���ɽ�� </H2>
+<H2> 9.5 著作権表示 </H2>
 <!--docid::SEC49::-->
 <P>
 
-��˵������褦�ˡ��ƥ����ȥǡ����ˤϲ����फ���ꡢ�������
-<EM>���ɽ�� (copyright notice)</EM> �Ȥ�����Τ�����ޤ���
-̾�����̤ꡢ���ɽ���˴ؤ���ƥ����ȥǡ�������᤿��ΤǤ���
+先に記したように、テキストデータには何種類かあり、その中に
+<EM>著作権表示 (copyright notice)</EM> というものがあります。
+名前の通り、著作権表示に関するテキストデータを収めたものです。
 </P><P>
 
-���̤ˡ����ɽ������ʸ�ȤϤޤä�����Ω�����ǡ����Ȥ����Ѱդ���ޤ���
-�������äơ���ʸ����Ƭ���������ޤ��ɤ�ǤߤƤ⡢���ɽ���Ϥɤ��ˤ�
-���Ĥ���ޤ���
+一般に、著作権表示は本文とはまったく独立したデータとして用意されます。
+したがって、本文を先頭から末尾まで読んでみても、著作権表示はどこにも
+見つかりません。
 </P><P>
 
-����������ܤˤĤ��ơ����ɽ���γ��ϰ��֤��Τ�ˤ� <CODE>eb_copyright()</CODE>
-��Ȥ��ޤ���
-���δؿ��ϡ����ܤ����ɽ������äƤ��ʤ���� <CODE>EB_ERR_NO_SUCH_SEARCH</CODE>
-���֤��ޤ��Τǡ����ɽ����̵ͭ��Ʊ����ʬ����ޤ���
-(���ϰ��֤ϼ��������ˡ�̵ͭ������Ĵ�٤����Ȥ��ϡ�<CODE>eb_have_copyright()</CODE>
-�Ȥ����ؿ����Ȥ��ޤ���)
+選択中の副本について、著作権表示の開始位置を知るには <CODE>eb_copyright()</CODE>
+を使います。
+この関数は、副本が著作権表示を持っていなければ <CODE>EB_ERR_NO_SUCH_SEARCH</CODE>
+を返しますので、著作権表示の有無も同時に分かります。
+(開始位置は取得せずに、有無だけを調べたいときは、<CODE>eb_have_copyright()</CODE>
+という関数が使えます。)
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Position position;
@@ -591,15 +591,15 @@ EB_Error_Code err;
 
 err = eb_copyright(&#38;book, &#38;position);
 if (err == EB_ERR_NO_SUCH_SEARCH) {
-    /* ���ɽ���Ϥʤ� */
+    /* 著作権表示はない */
 } else if (err != EB_SUCCESS) {
-    /* ����ʳ��Υ��顼 */
+    /* それ以外のエラー */
    return;
 }
 </pre></td></tr></table></P><P>
 
-��ϡ�����줿���� (<CODE>position</CODE>) �˥��������ơ�<CODE>eb_read_text()</CODE>
-�ǥƥ����ȥǡ������ɤ߹��ߤޤ���
+後は、得られた位置 (<CODE>position</CODE>) にシークして、<CODE>eb_read_text()</CODE>
+でテキストデータを読み込みます。
 </P><P>
 
 <A NAME="Menu"></A>
@@ -616,61 +616,61 @@ if (err == EB_ERR_NO_SUCH_SEARCH) {
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.6 ��˥塼 </H2>
+<H2> 9.6 メニュー </H2>
 <!--docid::SEC50::-->
 <P>
 
-��ʸ�Ȥ���Ω�����ƥ����ȥǡ����Ȥ��Ƥϡ����ɽ����¾��
-<EM>��˥塼 (menu)</EM> �Ȥ�����Τ�����ޤ���
-��˥塼�ϡ������ʸ������Ȥʤ�ǡ������Ͽ���Ƥ��ޤ���
-��ɽŪ�ʤ�ΤǤϡ������� (��)�ס�����פȤ��ä���Τ��󤲤��ޤ���
+本文とは独立したテキストデータとしては、著作権表示の他に
+<EM>メニュー (menu)</EM> というものがあります。
+メニューは、主に本文の補助となるデータを収録しています。
+代表的なものでは、「前書き (序)」「凡例」といったものが挙げられます。
 </P><P>
 
-��˥塼�Ǥϡ��̹��ܻ��ȡפȤ������������ץ������󥹤�¿�Ѥ��ơ�����Ū
-�ʹ�¤�ˤʤäƤ���Τ�����Ū�Ǥ���
-���Υ��������ץ������󥹤ˤϡ�������Υƥ����Ȥΰ��֤���Ͽ����Ƥ��ޤ���
+メニューでは「別項目参照」というエスケープシーケンスを多用して、階層的
+な構造になっているのが一般的です。
+このエスケープシーケンスには、参照先のテキストの位置が記録されています。
 </P><P>
 
-���Ȥ��С����� CD-ROM ���ҤΥ�˥塼�����Τ褦�ˤʤäƤ����Ȥ��ޤ���
-������Ǥϡ���˥塼�ˤ� 3 �Ĥι��ܤ�����ޤ���
+たとえば、ある CD-ROM 書籍のメニューが次のようになっていたとします。
+この例では、メニューには 3 つの項目があります。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre> * ��ʸ
- * ɽ���ˤĤ���
- * ����
+<TABLE><tr><td>&nbsp;</td><td class=example><pre> * 序文
+ * 表記について
+ * 奥付
 </pre></td></tr></table></P><P>
 
-��˥塼�Τ��줾��ι��ܤˤϡ������褬����ޤ���
-�ƥ����ȥǡ���������ɽ���Ǥϡ��ֽ�ʸ�ס�ɽ���ˤĤ��ơסֱ��աפ�
-���줾���ʸ�����������̹��ܻ��ȳ��Ϥ���ӽ�λ���������ץ������󥹤�
-�դ������ˤʤäƤ��ޤ���
-���Ū��ʬ����褦�˵����ȡ����Τ褦�ʷ��ˤʤäƤ��ޤ���
+メニューのそれぞれの項目には、参照先があります。
+テキストデータの内部表現では、「序文」「表記について」「奥付」の
+それぞれの文字列の前後に別項目参照開始および終了エスケープシーケンスが
+付いた形になっています。
+視覚的に分かるように記すと、次のような形になっています。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre> * &#60;�̹��ܻ��ȳ��ϥ�������&#62; "��ʸ" &#60;�̹��ܻ��Ƚ�λ��������&#62;
- * &#60;�̹��ܻ��ȳ��ϥ�������&#62; "ɽ��" &#60;�̹��ܻ��Ƚ�λ��������&#62;
- * &#60;�̹��ܻ��ȳ��ϥ�������&#62; "����" &#60;�̹��ܻ��Ƚ�λ��������&#62;
+<TABLE><tr><td>&nbsp;</td><td class=example><pre> * &#60;別項目参照開始シーケンス&#62; "序文" &#60;別項目参照終了シーケンス&#62;
+ * &#60;別項目参照開始シーケンス&#62; "表記" &#60;別項目参照終了シーケンス&#62;
+ * &#60;別項目参照開始シーケンス&#62; "奥付" &#60;別項目参照終了シーケンス&#62;
 </pre></td></tr></table></P><P>
 
-HTML �ν������ΤäƤ���ʤ顢<SAMP>`a'</SAMP> �����ȸ�����ʬ����ΤǤϤʤ���
-�Ȼפ��ޤ���
+HTML の書き方を知っているなら、<SAMP>`a'</SAMP> タグと言えば分かるのではないか
+と思います。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;a href="./index-ja.html"&#62;EB �饤�֥��Υۡ���ڡ���&#60;/a&#62;
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>&#60;a href="./index-ja.html"&#62;EB ライブラリのホームページ&#60;/a&#62;
 </pre></td></tr></table></P><P>
 
-��������������ΰ��־���Ͻ�λ��������¦�˵��ܤ���ޤ��Τǡ���������
-HTML �Ȥϵդˤʤ�ޤ���
-��­�Ǥ������̰��ֻ��Ȥϥ�˥塼�����Ǥʤ�����ʸ�Ǥ����Ū�˻��Ѥ���ޤ���
+ただし、参照先の位置情報は終了シーケンス側に記載されますので、この点は
+HTML とは逆になります。
+蛇足ですが、別位置参照はメニューだけでなく、本文でも一般的に使用されます。
 </P><P>
 
-�̹��ܻ��ȳ��Ϥ���ӽ�λ�������󥹤��Ф��ơ����줾��եå�
-<CODE>EB_HOOK_BEGIN_REFERENCE</CODE> �� <CODE>EB_HOOK_END_REFERENCE</CODE> ���Ѱ�
-����Ƥ��ޤ���
-������ΰ��־���ϡ���λ�������󥹤ؤΥեå��ؿ����Ф��ơ������Ȥ���
-�Ϥ���ޤ���
-���Ȥ��С�<CODE>EB_HOOK_END_REFERENCE</CODE> �ؤΥեå��ؿ�����Ƭ�Ǥϡ�����
-�褦�ˤ�����ɤ������Τ�ޤ���
+別項目参照開始および終了シーケンスに対して、それぞれフック
+<CODE>EB_HOOK_BEGIN_REFERENCE</CODE> と <CODE>EB_HOOK_END_REFERENCE</CODE> が用意
+されています。
+参照先の位置情報は、終了シーケンスへのフック関数に対して、引数として
+渡されます。
+たとえば、<CODE>EB_HOOK_END_REFERENCE</CODE> へのフック関数の冒頭では、次の
+ようにすると良いかも知れません。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Error_Code
@@ -679,48 +679,48 @@ hook_end_ref(EB_Book *book, EB_Appendix *appendix, void *container,
 {
     EB_Position position;
 
-    position.page = argv[1];    # ������Υڡ����ֹ�
-    position.offset = argv[2];  # ������Υ��ե��å�
+    position.page = argv[1];    # 参照先のページ番号
+    position.offset = argv[2];  # 参照先のオフセット
 </pre></td></tr></table></P><P>
 
-������ϡ���˥塼���� 2 �ؤȤʤ�ޤ���
-���ν��ҤΡֱ��աפλ������é�ä��顢���Τ褦��ɽ���ˤʤäƤ��ޤ�����
+参照先は、メニューの第 2 層となります。
+この書籍の「奥付」の参照先を辿ったら、次のような表記になっていました。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>����Ʋ���Ǽ� ����켭ŵ �� 2 �� (EPWING ��)
-�� 1 �� ȯ�� 1988ǯ 2��
-�� 2 �� ȯ�� 1999ǯ 11��
-�� 2 �� (EPWING ��) ȯ�� 2000ǯ 2��
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>○○堂出版社 新国語辞典 第 2 版 (EPWING 版)
+第 1 版 発行 1988年 2月
+第 2 版 発行 1999年 11月
+第 2 版 (EPWING 版) 発行 2000年 2月
 </pre></td></tr></table></P><P>
 
-Ʊ�ͤˡֽ�ʸ�ס�ɽ�����դ��ơפλ�����ˤĤ��Ƥ⡢��������ʸ�ϥǡ���
-���Ѱդ���Ƥ��ޤ�����
-�޼�����ȡ���˥塼�γ��ؤϼ��Τ褦�ˤʤ�ޤ���
+同様に「序文」「表記に付いて」の参照先についても、こうした文章データ
+が用意されていました。
+図示すると、メニューの階層は次のようになります。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>��������������������������������������
-�裱�ء���������������������˥塼����
-��������������������������������������
-��������������������������������
-������������������������������������������������
-������������������������������������������������
-������������������������������������������������������
-�裲�ء�����˥塼����������˥塼����������˥塼����
-������������������������������������������������������
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>　　　　　　　　　　　　┌─────┐
+第１層　　　　　　　　　│メニュー　│
+　　　　　　　　　　　　└──┰──┘
+　　　　　　　　　　　　　　　┃
+　　　　　　　┏━━━━━━━╋━━━━━━━┓
+　　　　　　　┃　　　　　　　┃　　　　　　　┃
+　　　　┌──┸──┐　┌──┸──┐　┌──┸──┐
+第２層　│メニュー　│　│メニュー　│　│メニュー　│
+　　　　└─────┘　└─────┘　└─────┘
 </pre></td></tr></table></P><P>
 
-���μ������Ǥϡ���˥塼�Ϥ����ǽ����ˤʤäƤ��ޤ��������Ҥˤ�äƤ�
-������� 3 �ء��� 4 �ؤ�³�����⤢��ޤ���
-�ޤ�����˥塼���Τ��Ѱ�γ��ؿ��ˤʤäƤ���Ȥϸ¤�ޤ���
-��˥塼�λ����褬��ʸ�����ɽ���ˤʤäƤ��뤳�Ȥ⤢��ޤ���
+この辞書の例では、メニューはここで終わりになっていますが、書籍によっては
+さらに第 3 層、第 4 層と続く場合もあります。
+また、メニュー全体が均一の階層数になっているとは限りません。
+メニューの参照先が本文や著作権表示になっていることもあります。
 </P><P>
 
-����������ܤˤĤ��ơ�(�� 1 �ؤ�) ��˥塼�γ��ϰ��� ���Τ�ˤ�
-<CODE>eb_menu()</CODE> ��Ȥ��ޤ���
-���δؿ��ϡ����ܤ���˥塼����äƤ��ʤ���� <CODE>EB_ERR_NO_SUCH_SEARCH</CODE>
-���֤��ޤ��Τǡ���˥塼��̵ͭ��Ʊ����ʬ����ޤ���
-(���ϰ��֤ϼ��������ˡ�̵ͭ������Ĵ�٤����Ȥ��ϡ�<CODE>eb_have_menu()</CODE>
-�Ȥ����ؿ����Ȥ��ޤ���)
+選択中の副本について、(第 1 層の) メニューの開始位置 を知るには
+<CODE>eb_menu()</CODE> を使います。
+この関数は、副本がメニューを持っていなければ <CODE>EB_ERR_NO_SUCH_SEARCH</CODE>
+を返しますので、メニューの有無も同時に分かります。
+(開始位置は取得せずに、有無だけを調べたいときは、<CODE>eb_have_menu()</CODE>
+という関数が使えます。)
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Position position;
@@ -728,15 +728,15 @@ EB_Error_Code err;
 
 err = eb_menu(&#38;book, &#38;position);
 if (err == EB_ERR_NO_SUCH_SEARCH) {
-    /* ��˥塼�Ϥʤ� */
+    /* メニューはない */
 } else if (err != EB_SUCCESS) {
-    /* ����ʳ��Υ��顼 */
+    /* それ以外のエラー */
    return;
 }
 </pre></td></tr></table></P><P>
 
-��ϡ�����줿���� (<CODE>position</CODE>) �˥��������ơ�<CODE>eb_read_text()</CODE>
-�ǥƥ����ȥǡ������ɤ߹��ߤޤ���
+後は、得られた位置 (<CODE>position</CODE>) にシークして、<CODE>eb_read_text()</CODE>
+でテキストデータを読み込みます。
 </P><P>
 
 <A NAME="Multi Candidates"></A>
@@ -753,124 +753,124 @@ if (err == EB_ERR_NO_SUCH_SEARCH) {
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.7 ʣ�縡���θ������ </H2>
+<H2> 9.7 複合検索の候補一覧 </H2>
 <!--docid::SEC51::-->
 <P>
 
-��ʣ�縡����(��<A HREF="eb-ja_8.html#SEC38">ʣ�縡��</A>����򻲾�) �ΤȤ����ǽҤ٤��褦�ˡ�
-ʣ�縡���Ǥϡ����ϸ�� <EM>������� (candidates)</EM> ���Ѱդ���Ƥ��뤳��
-������ޤ���
-����ϡ����ϸ�Ȥ���ͭ���ʸ�򤢤餫������󤷤Ƥ�����
-���ץꥱ�������ץ������Υ桼�������򤵤�����ȤߤǤ���
+「複合検索」(「<A HREF="eb-ja_8.html#SEC38">複合検索</A>」節を参照) のところで述べたように、
+複合検索では、入力語に <EM>候補一覧 (candidates)</EM> が用意されていること
+があります。
+これは、入力語として有効な語をあらかじめ列挙しておき、
+アプリケーションプログラムのユーザに選択させる仕組みです。
 </P><P>
 
-���Ȥ��С���̾�򸡺�����Τ���ˡ����Τ褦��ʣ�縡�������ä��Ȥ��ޤ���
+たとえば、人名を検索するのために、次のような複合検索があったとします。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>���ϸ� 0: ���ϰ�
-���ϸ� 1: ����
-���ϸ� 2: ����
-���ϸ� 3: �������
-���ϸ� 4: �������
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>入力語 0: 国・地域
+入力語 1: 時代
+入力語 2: 性別
+入力語 3: キーワード
+入力語 4: キーワード
 </pre></td></tr></table></P><P>
 
-���Τ��������ϸ� 3 �Ρ����̡פˤϡ����ϸ�Ȥ���ͭ���ʸ�ϡ��ˡפȡֽ���
-�� 2 �Ĥ����ʤ��Ǥ��礦��
-���Τ褦�ˡ����ϸ�Ȥ���ͭ���ʸ줬�¤��Ƥ�����ˡ�����������Ѱ�
-����Ƥ��뤳�Ȥ�����ޤ���
+このうち、入力語 3 の「性別」には、入力語として有効な語は「男」と「女」
+の 2 つしかないでしょう。
+このように、入力語として有効な語が限られている場合に、候補一覧が用意
+されていることがあります。
 </P><P>
 
-��������ϸ����Τ���Υǡ����ǤϤ���ޤ�����������¤�ϥƥ����ȥǡ���
-���Τ�ΤǤ���
-�桼�����Ф��Ƹ�����󵭤����������ƥ����Ȥ򼨤���������ΰ�Ĥ�����
-���Ƥ�餦�褦�ˤʤäƤ��ޤ���
+候補一覧は検索のためのデータではありますが、内部構造はテキストデータ
+そのものです。
+ユーザに対して候補を列記した示したテキストを示し、その中の一つを選択
+してもらうようになっています。
 </P><P>
 
-�����⡢��������Υǡ�����¤�ϥ�˥塼�����˻��Ƥ��ꡢ��˥塼��
-�褦�ʳ��ع�¤����äƤ��ޤ�
-(��<A HREF="eb-ja_9.html#SEC50">��˥塼</A>����򻲾�)��
-���Ȥ��С����ʣ�縡�������ϸ� 2 �ֹ��ϰ�פˤ����ΰ������ߤ����
-�����顢�ǽ�γ��ؤϼ��Τ褦�ˤʤ뤫���Τ�ޤ���
+しかも、候補一覧のデータ構造はメニューと非常に似ており、メニューの
+ような階層構造を持っています
+(「<A HREF="eb-ja_9.html#SEC50">メニュー</A>」節を参照)。
+たとえば、上の複合検索の入力語 2 「国・地域」にも候補の一覧を設けると
+したら、最初の階層は次のようになるかも知れません。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>* ���� (������)
-* ���ܰʳ��Υ����� (���ܺ�)
-* �衼���å� (���ܺ�)
-* �̥���ꥫ (���ܺ�)
-* ����¾ (���ܺ�)
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>* 日本 (→選択)
+* 日本以外のアジア (→詳細)
+* ヨーロッパ (→詳細)
+* 北アメリカ (→詳細)
+* その他 (→詳細)
 </pre></td></tr></table></P><P>
 
-�����ܡפ����֤ȡ����������ϸ줬���ꤵ�줿���Ȥˤʤ�ޤ�����������
-����ʳ��ι��ܤˤĤ��ƤϤ���˺٤���ʬ�व�줿����褬�Ѱդ����
-���ޤ���
-�����Ǥϡ����̥���ꥫ�פ�����Ǥߤޤ��礦��
-����ȡ�����˼��Τ褦�ʸ�������Υǡ������󼨤���ޤ���
+「日本」を選ぶと、そこで入力語が決定されたことになります。しかし、
+それ以外の項目についてはさらに細かく分類された選択肢が用意されて
+います。
+ここでは、「北アメリカ」を選んでみましょう。
+すると、さらに次のような候補一覧のデータが提示されます。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>* ����ꥫ (������)
-* ���ʥ� (������)
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>* アメリカ (→選択)
+* カナダ (→選択)
 </pre></td></tr></table></P><P>
 
-�����ǡ��֥���ꥫ�ס֥��ʥ��פ����֤ȡ����ϸ줬���ꤵ��ޤ���
+ここで、「アメリカ」「カナダ」を選ぶと、入力語が決定されます。
 </P><P>
 
-���˼ºݤˡ�EB �饤�֥���ȤäƤ���������������򰷤���ˡ�ˤĤ���
-�������ޤ���
-�ޤ������ץꥱ�������ץ������ϡ�ʣ�縡�������ϸ줬�����������ä�
-���뤫�ɤ����򡢳�ǧ����ɬ�פ�����Ǥ��礦��
-<CODE>eb_multi_entry_candidates()</CODE> ��Ȥ��ȡ���������ǡ����γ��ϰ���
-��������뤳�Ȥ��Ǥ��ޤ���
-���δؿ��ϡ������������äƤ��ʤ���� <CODE>EB_ERR_NO_CANDIDATES</CODE> ��
-�֤��ޤ��Τǡ����������̵ͭ��ʬ����ޤ���
-(���ϰ��֤ϼ��������ˡ�̵ͭ������Ĵ�٤����Ȥ��ϡ�
-<CODE>eb_multi_entry_have_candidates()</CODE> �Ȥ����ؿ����Ȥ��ޤ���)
+次に実際に、EB ライブラリを使ってこうした候補一覧を扱う方法について
+説明します。
+まず、アプリケーションプログラムは、複合検索の入力語が候補一覧を持って
+いるかどうかを、確認する必要があるでしょう。
+<CODE>eb_multi_entry_candidates()</CODE> を使うと、候補一覧データの開始位置
+を取得することができます。
+この関数は、候補一覧を持っていなければ <CODE>EB_ERR_NO_CANDIDATES</CODE> を
+返しますので、候補一覧の有無も分かります。
+(開始位置は取得せずに、有無だけを調べたいときは、
+<CODE>eb_multi_entry_have_candidates()</CODE> という関数が使えます。)
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Position position;
 EB_Error_Code err;
 
-/* <CODE>mulit_id</CODE>, <CODE>entry_id</CODE> �ǡ��ɤ�ʣ�縡���β����ܤ�
- * ���ϸ�ˤĤ��Ƴ�ǧ����Τ�����ꤷ�ޤ���*/
+/* <CODE>mulit_id</CODE>, <CODE>entry_id</CODE> で、どの複合検索の何番目の
+ * 入力語について確認するのかを指定します。*/
 err = eb_multi_entry_candidates(&#38;book, multi_id, entry_id, &#38;position);
 if (err == EB_ERR_NO_CANDIDATES) {
-    /* �������ϸ�ˤϡ�����������Ѱդ���Ƥ��ʤ� */
+    /* この入力語には、候補一覧が用意されていない */
    return;
 } else if (err != EB_SUCCESS) {
-    /* ����ʳ��Υ��顼 */
+    /* それ以外のエラー */
    return;
 }
 </pre></td></tr></table></P><P>
 
-��ϡ�����줿���� (<CODE>position</CODE>) �˥��������ơ�<CODE>eb_read_text()</CODE>
-�ǥƥ����ȥǡ������ɤ߹��ߤޤ���
-�ɤ߹�����ƥ����ȤǤϡ�����Ȥʤ��Τ��줾�줬���䳫�ϤȽ�λ��ɽ��
-���������ץ������󥹤˶��ޤ줿���ˤʤäƤ��ޤ���
+後は、得られた位置 (<CODE>position</CODE>) にシークして、<CODE>eb_read_text()</CODE>
+でテキストデータを読み込みます。
+読み込んだテキストでは、候補となる語のそれぞれが候補開始と終了を表す
+エスケープシーケンスに挟まれた形になっています。
 </P><P>
 
-<TABLE><tr><td>&nbsp;</td><td class=example><pre>* &#60;���䳫�ϥ�������&#62; "����" &#60;���佪λ��������&#62;
-* &#60;���䳫�ϥ�������&#62; "���ܰʳ��Υ�����" &#60;���佪λ��������&#62;
-* &#60;���䳫�ϥ�������&#62; "�衼���å�" &#60;���佪λ��������&#62;
-* &#60;���䳫�ϥ�������&#62; "�̥���ꥫ" &#60;���佪λ��������&#62;
-* &#60;���䳫�ϥ�������&#62; "����¾" &#60;���佪λ��������&#62;
+<TABLE><tr><td>&nbsp;</td><td class=example><pre>* &#60;候補開始シーケンス&#62; "日本" &#60;候補終了シーケンス&#62;
+* &#60;候補開始シーケンス&#62; "日本以外のアジア" &#60;候補終了シーケンス&#62;
+* &#60;候補開始シーケンス&#62; "ヨーロッパ" &#60;候補終了シーケンス&#62;
+* &#60;候補開始シーケンス&#62; "北アメリカ" &#60;候補終了シーケンス&#62;
+* &#60;候補開始シーケンス&#62; "その他" &#60;候補終了シーケンス&#62;
 </pre></td></tr></table></P><P>
 
-���䳫�ϥ������󥹤��Ф��Ƥϡ��եå��Ȥ��� <CODE>EB_HOOK_BEGIN_CANDIDATE</CODE>
-���Ѱդ���Ƥ��ޤ���
-��λ�������󥹤��Ф���եå��� 2 ���ढ�äơ�����˼��γ��ؤ�³�����
-�˸ƤФ�� <CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> �ȡ����θ줬���Τޤ�
-���ϸ�θ���Ȥʤ���˸ƤФ�� <CODE>EB_HOOK_END_GROUP_LEAF</CODE> ��
-ʬ����Ƥ��ޤ���
+候補開始シーケンスに対しては、フックとして <CODE>EB_HOOK_BEGIN_CANDIDATE</CODE>
+が用意されています。
+終了シーケンスに対するフックは 2 種類あって、さらに次の階層へ続く場合
+に呼ばれる <CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> と、その語がそのまま
+入力語の候補となる場合に呼ばれる <CODE>EB_HOOK_END_GROUP_LEAF</CODE> に
+分かれています。
 </P><P>
 
-���γ��ؤΥǡ����γ��ϰ��֤ϡ���λ�������󥹤Υեå��ؿ��ˡ������Ȥ���
-�ϤäƤ��ޤ���
-(���������˥塼��Ʊ�ͤʤΤǡ���˥塼�β���򻲹ͤˤ��Ʋ�������)
+次の階層のデータの開始位置は、終了シーケンスのフック関数に、引数として
+渡ってきます。
+(この点もメニューと同様なので、メニューの解説を参考にして下さい。)
 </P><P>
 
-��λ�������󥹤��Ф���եå��ؿ�����Ǥϡ�<CODE>eb_current_candidate()</CODE>
-�Ȥ����ؿ����Ȥ��ޤ���
-���δؿ��ϡ����ϥ������󥹤Ƚ�λ�������󥹤δ֤˶��ޤ줿�ָ���פ�
-ʸ���� (�ݥ���) ���֤��ޤ���
+終了シーケンスに対するフック関数の中では、<CODE>eb_current_candidate()</CODE>
+という関数が使えます。
+この関数は、開始シーケンスと終了シーケンスの間に挟まれた「候補」の
+文字列 (ポインタ) を返します。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>const char *candidate;
@@ -892,68 +892,68 @@ candidate = eb_current_candidate(book);
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.8 ���ڤꥳ���ɤ����� </H2>
+<H2> 9.8 区切りコードの問題 </H2>
 <!--docid::SEC52::-->
 <P>
 
-��ʸ�ϡ���Ƭ���������ޤǰ��ܤηҤ��ä��ǡ�����ˤʤäƤ��ޤ���
-�Ѹ켭ŵ�ʤ顢�ǽ��ñ�� `A' ����Ǹ�� `zzz' �ޤǤ������������٤�
-��ĤΡ���ʸ�פ���˽񤫤�뤳�Ȥˤʤ�ޤ���
+本文は、先頭から末尾まで一本の繋がったデータ列になっています。
+英語辞典なら、最初の単語 `A' から最後の `zzz' までの説明が、すべて
+一つの「本文」の中に書かれることになります。
 </P><P>
 
-���̤ˡ����ץꥱ�������ץ�����ब����ñ��򸡺������ݤϡ���ʸ���椫��
-���θ������������ʬ������ȴ���Ф��ƽ��Ϥ��뤳�Ȥˤʤ�Ǥ��礦��
-�����������ä����Ȥ� CD-ROM ���Ҥˤϡ�ñ��������ν����򼨤���
-(���������ץ�������) ���������Ƥ��ޤ���
-�Ĥޤꡢ������������ʬ�����Τ�ȴ���Ф����Ȥϡ��Żҥ֥å��� EPWING 
-�Ǥ��Բ�ǽ�ʤΤǤ���
+一般に、アプリケーションプログラムがある単語を検索した際は、本文の中から
+その語を説明した部分だけを抜き出して出力することになるでしょう。
+しかし、困ったことに CD-ROM 書籍には、単語の説明の終わりを示す印
+(エスケープシーケンス) が定義されていません。
+つまり、ある語の説明部分を正確に抜き出すことは、電子ブックや EPWING 
+では不可能なのです。
 </P><P>
 
-�������ʤ��顢�����ˤ���Τν��Ҥ�¿���ˤϡ�ñ��������ν�λ���֤ˤ���
-�и����롢��ͭ�Υ��������ץ������󥹤�¸�ߤ��ޤ���
-������󡢤��Υ��������ץ������󥹤������ñ��������ν�λ�פ򼨤����
-�ǤϤʤ��̤����ӤȤ����Ѥ���ΤǤ������ֽ�λ���֡פȤ������ѤǤ���
-�Ȥ�����̣�Ǥ���
+しかしながら、幸いにも市販の書籍の多くには、単語の説明の終了位置にだけ
+出現する、特有のエスケープシーケンスが存在します。
+もちろん、このエスケープシーケンスは本来「単語の説明の終了」を示すもの
+ではなく別の用途として用いるのですが、「終了位置」として代用できる
+という意味です。
 </P><P>
 
-EB �饤�֥��Ǥϡ����Ρֽ�λ���֡פΰ��˻Ȥ��륨�������ץ������󥹤�
-���Ȥ�<EM>���ڤꥳ���� (stop code)</EM> �ȸƤ�Ǥ��ޤ���
-EB �饤�֥��϶��ڤꥳ���ɤ�ưȽ�ꤹ�뵡ǽ����äƤ��ޤ�����Ƚ���
-�����ǤϤʤ��Τǳ���뤳�Ȥ⤢��ޤ���
-��������ʸ����������ڤ줿�ꡢ��ʸ��³�����䡹�Ƚ��Ϥ��줿�ꤷ�ޤ���
+EB ライブラリでは、この「終了位置」の印に使えるエスケープシーケンスの
+ことを、<EM>区切りコード (stop code)</EM> と呼んでいます。
+EB ライブラリは区切りコードを自動判定する機能を持っていますが、判定は
+完璧ではないので外れることもあります。
+外れると本文が途中で途切れたり、本文の続きが延々と出力されたりします。
 </P><P>
 
-���ξ��ϡ�����Ū�� appendix
-(�ܤ����� <CITE>ebappendix-ja</CITE> �Ρ�appendix (��Ͽ) �Ȥϡ���򻲾�)
-�Ƕ��ڤꥳ���ɤ���ꤹ�뤳�Ȥˤ�äƲ���Ǥ�����Ҥ⤢��ޤ�����
-��ǰ�ʤ�����ڤꥳ���ɤ��ޤä���¸�ߤ��ʤ����Ҥ⾯���ʤ���¸�ߤ��ޤ���
-���ڤꥳ���ɤ�����ʤ����Ҥ��Ф��ơ�ͭ�����н���ˡ�Ϻ��ΤȤ�������ޤ���
+その場合は、明示的に appendix
+(詳しくは <CITE>ebappendix-ja</CITE> の「appendix (付録) とは」節を参照)
+で区切りコードを指定することによって回避できる書籍もありますが、
+残念ながら区切りコードがまったく存在しない書籍も少数ながら存在します。
+区切りコードを持たない書籍に対して、有効な対処方法は今のところありません。
 </P><P>
 
-<CODE>eb_read_text()</CODE> �ˤ����ʸ�μ����Ǥϡ����ڤꥳ���ɤ����Ф��줿
-�������ɤ߹��ߤ�ߤ�ޤ���
-����˷����֤� <CODE>eb_read_text()</CODE> ��Ƥ�Ǥ⡢���ڤꥳ���ɤ�����
-��ʸ���ɤ߹���ޤ���
+<CODE>eb_read_text()</CODE> による本文の取得では、区切りコードが検出された
+時点で読み込みを止めます。
+さらに繰り返し <CODE>eb_read_text()</CODE> を呼んでも、区切りコードより先の
+本文は読み込めません。
 </P><P>
 
-���ڤꥳ���ɤ򸡽Ф������ɤ�����Ƚ��ˤϡ�<CODE>eb_is_text_stopped()</CODE>
-��Ȥ��ޤ���
-���δؿ��ϡ��Ǹ���ɤ߹��ߤ�Ԥä��ƥ����ȥǡ�������ˡ����ڤꥳ���ɤ�
-���Ф��Ƥ���� 1 ���֤��ޤ���
+区切りコードを検出したかどうかの判定には、<CODE>eb_is_text_stopped()</CODE>
+を使います。
+この関数は、最後に読み込みを行ったテキストデータの中に、区切りコードを
+検出していれば 1 を返します。
 </P><P>
 
-��ʸ�ʳ��Υƥ����ȥǡ����ˤ���ڤꥳ���ɤγ�ǰ��¸�ߤ��ޤ��Τǡ�
-<CODE>eb_is_text_stopped()</CODE> ��Ȥäƶ��ڤꥳ���ɤ򸡽ФǤ��ޤ���
-��ʸ�ʳ��Ǥ� EB �饤�֥�꤬�μ¤˶��ڤ��Ƚ�̤Ǥ��ޤ��Τǡ���Ƚ���
-����ϵ����ޤ���
+本文以外のテキストデータにも区切りコードの概念は存在しますので、
+<CODE>eb_is_text_stopped()</CODE> を使って区切りコードを検出できます。
+本文以外では EB ライブラリが確実に区切りを判別できますので、誤判定の
+問題は起きません。
 </P><P>
 
-���Ф��ˤ�������ڤ�ϡ����줾���ñ��θ��Ф��ν�λ���֤Ȥʤ�ޤ���
-��˥塼�����ʣ�縡���θ�������Ǥϡ����ز����줿�ġ��Υ�˥塼�ǡ���
-�ν�λ���֤Ƕ��ڤ��Ƚ�ꤵ��ޤ���
-(Ʊ�쳬�ؤ�ʣ���ĤΥ�˥塼�ǡ��������äƤ⡢�ġ��Υ�˥塼�ǡ�����
-���ڤ��ޤ���)
-���ɽ���Ǥϡ���ʸ�ν�λ���֤Ƕ��ڤ��Ƚ�ꤵ��ޤ���
+見出しにおける区切りは、それぞれの単語の見出しの終了位置となります。
+メニューおよび複合検索の候補一覧では、階層化された個々のメニューデータ
+の終了位置で区切りと判定されます。
+(同一階層に複数個のメニューデータがあっても、個々のメニューデータで
+区切られます。)
+著作権表示では、全文の終了位置で区切りと判定されます。
 </P><P>
 
 <A NAME="Text Data Sample"></A>
@@ -970,23 +970,23 @@ EB �饤�֥��϶��ڤꥳ���ɤ�ưȽ�ꤹ�뵡ǽ����äƤ��ޤ�����Ƚ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.9 ����ץ�ץ������ </H2>
+<H2> 9.9 サンプルプログラム </H2>
 <!--docid::SEC53::-->
 <P>
 
 <A NAME="IDX244"></A>
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>/*
- * ������ˡ:
+ * 使用方法:
  *     text &#60;book-path&#62; &#60;subbook-index&#62; &#60;number&#62;
- * ��:
+ * 例:
  *     text /cdrom 0 10
- * ����:
- *     &#60;book-path&#62; �ǻ��ꤷ�� CD-ROM ���Ҥ�����������ܤ����ӡ���ʸ
- *     ����Ƭ���� &#60;number&#62; ��ʬ��ñ�����������Ϥ��ޤ���
+ * 説明:
+ *     &#60;book-path&#62; で指定した CD-ROM 書籍から特定の副本を選び、本文
+ *     の先頭から &#60;number&#62; 個分の単語の説明を出力します。
  *
- *     &#60;subbook-index&#62; �ˤϡ������оݤ����ܤΥ���ǥå�������ꤷ��
- *     ��������ǥå����ϡ����Ҥκǽ�����ܤ����� 0��1��2 ... ��
- *     �ʤ�ޤ���
+ *     &#60;subbook-index&#62; には、検索対象の副本のインデックスを指定しま
+ *     す。インデックスは、書籍の最初の副本から順に 0、1、2 ... に
+ *     なります。
  */
 #include "config.h"
 
@@ -1015,7 +1015,7 @@ main(argc, argv)
     int text_count;
     int i;
 
-    /* ���ޥ�ɹ԰���������å���*/
+    /* コマンド行引数をチェック。*/
     if (argc != 4) {
         fprintf(stderr, "Usage: %s book-path subbook-index number\n",
             argv[0]);
@@ -1023,11 +1023,11 @@ main(argc, argv)
     }
     text_count = atoi(argv[3]);
 
-    /* EB �饤�֥��� `book' ��������*/
+    /* EB ライブラリと `book' を初期化。*/
     eb_initialize_library();
     eb_initialize_book(&#38;book);
 
-    /* ���Ҥ� `book' �˷���դ��롣*/
+    /* 書籍を `book' に結び付ける。*/
     error_code = eb_bind(&#38;book, argv[1]);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
@@ -1035,7 +1035,7 @@ main(argc, argv)
         goto die;
     }
 
-    /* ���ܤΰ����������*/
+    /* 副本の一覧を取得。*/
     error_code = eb_subbook_list(&#38;book, subbook_list, &#38;subbook_count);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to get the subbbook list, %s\n",
@@ -1043,17 +1043,17 @@ main(argc, argv)
         goto die;
     }
 
-    /* ���ܤΥ���ǥå����������*/
+    /* 副本のインデックスを取得。*/
     subbook_index = atoi(argv[2]);
 
-    /*�ָ��ߤ����� (current subbook)�פ����ꡣ*/
+    /*「現在の副本 (current subbook)」を設定。*/
     if (eb_set_subbook(&#38;book, subbook_list[subbook_index]) &#60; 0) {
         fprintf(stderr, "%s: failed to set the current subbook, %s\n",
             argv[0], eb_error_message(error_code));
         goto die;
     }
 
-    /* �ƥ����Ȥγ��ϰ��֤������*/
+    /* テキストの開始位置を取得。*/
     error_code = eb_text(&#38;book, &#38;text_position);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to get text information, %s\n",
@@ -1061,7 +1061,7 @@ main(argc, argv)
         goto die;
     }
 
-    /* �ƥ����Ȥ򥷡�����*/
+    /* テキストをシーク。*/
     error_code = eb_seek_text(&#38;book, &#38;text_position);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to seek text, %s\n",
@@ -1071,7 +1071,7 @@ main(argc, argv)
 
     i = 0;
     while (i &#60; text_count) {
-        /* �ƥ����Ȥ������*/
+        /* テキストを取得。*/
         error_code = eb_read_text(&#38;book, NULL, NULL, NULL, MAXLEN_TEXT,
             text, &#38;text_length);
         if (error_code != EB_SUCCESS) {
@@ -1086,7 +1086,7 @@ main(argc, argv)
 
         fputs("\n----------------------------------------\n", stdout);
 
-        /* ����ñ��������ذ�ư��*/
+        /* 次の単語の説明へ移動。*/
         error_code = eb_forward_text(&#38;book, NULL);
         if (error_code == EB_ERR_END_OF_CONTENT)
             fputs("\n[END]\n", stdout);
@@ -1098,12 +1098,12 @@ main(argc, argv)
         i++;
     }
         
-    /* ���Ҥ� EB �饤�֥������Ѥ�λ��*/
+    /* 書籍と EB ライブラリの利用を終了。*/
     eb_finalize_book(&#38;book);
     eb_finalize_library();
     exit(0);
 
-    /* ���顼ȯ���ǽ�λ����Ȥ��ν�����*/
+    /* エラー発生で終了するときの処理。*/
   die:
     eb_finalize_book(&#38;book);
     eb_finalize_library();
@@ -1125,12 +1125,12 @@ main(argc, argv)
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.10 �ǡ������ξܺ� </H2>
+<H2> 9.10 データ型の詳細 </H2>
 <!--docid::SEC54::-->
 <P>
 
-��������������Ƥ���ǡ�������Ȥ��ˤϡ����Τ褦�˥إå��ե������
-�ɤ߹���ǲ�������
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/eb.h&#62;
@@ -1143,18 +1143,18 @@ main(argc, argv)
 <A NAME="IDX247"></A>
 </P><P>
 
-�ǡ����� <CODE>EB_Hook_Hook</CODE> �ϡ��եå���������֥����ɤ�ɽ���ޤ���
+データ型 <CODE>EB_Hook_Hook</CODE> は、フックの設定位置コードを表します。
 </P><P>
 
-���η�������դ�����������̾�Ȥ����������Ƥ��ޤ��Τǡ�2 �ĤΥ����ɤ�
-2 ��黻�� <CODE>==</CODE> �� <CODE>!=</CODE> �ǰ�����Ӥ��뤳�Ȥ��Ǥ��ޤ���
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <CODE>==</CODE> と <CODE>!=</CODE> で一致比較することができます。
 </P><P>
 
-EB �饤�֥��Ǥϡ������� <CODE>EB_NUMBER_OF_HOOKS</CODE> �ĤΥեå������ɤ�
-������Ƥ��ޤ���
-�������Ƥ���������֥����ɤΰ����ˤĤ��Ƥϡ�
-������ (��<A HREF="eb-ja_9.html#SEC56">�եå������ɤΰ���</A>����򻲾�)
-�򻲾Ȥ��Ʋ�������
+EB ライブラリでは、全部で <CODE>EB_NUMBER_OF_HOOKS</CODE> 個のフックコードを
+定義しています。
+定義されている設定位置コードの一覧については、
+次の節 (「<A HREF="eb-ja_9.html#SEC56">フックコードの一覧</A>」節を参照)
+を参照して下さい。
 </DL>
 </P><P>
 
@@ -1164,9 +1164,9 @@ EB �饤�֥��Ǥϡ������� <CODE>EB_NUMBER_OF_HOOKS</CODE> �ĤΥեå������ɤ�
 <DD><A NAME="IDX249"></A>
 </P><P>
 
-�ǡ����� <CODE>EB_Hook</CODE> �ϡ��եå������ɤȤ�����б�����եå��ؿ�����
-��ɽ���ޤ���
-������¤�ϡ����Τ褦���������Ƥ��ޤ���
+データ型 <CODE>EB_Hook</CODE> は、フックコードとそれに対応するフック関数の組
+を表します。
+内部構造は、次のように定義されています。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>typedef struct EB_Hook_Struct EB_Hook;
@@ -1178,8 +1178,8 @@ struct EB_Hook_Struct {
 };
 </pre></td></tr></table></P><P>
 
-���ץꥱ�������ץ������ϡ�ľ�� <CODE>EB_Hook</CODE> ���֥������ȤΥ���
-�򻲾Ȥ����ꡢ���åȤ����ꤷ�Ƥ⹽���ޤ���
+アプリケーションプログラムは、直接 <CODE>EB_Hook</CODE> オブジェクトのメンバ
+を参照したり、セットしたりしても構いません。
 </DL>
 </P><P>
 
@@ -1189,20 +1189,20 @@ struct EB_Hook_Struct {
 <DD><A NAME="IDX251"></A>
 </P><P>
 
-�ǡ����� <CODE>EB_Hookset</CODE> �ϡ��եå��켰��ɽ���ޤ���
-EB �饤�֥������Ѳ�ǽ�ʤ��٤ƤΥեå�������֤��Ф��ơ��ɤΤ褦��
-�եå��ؿ�����ꤹ��Τ���Ͽ���뤿��η��Ǥ���
+データ型 <CODE>EB_Hookset</CODE> は、フック一式を表します。
+EB ライブラリで利用可能なすべてのフック設定位置に対して、どのような
+フック関数を指定するのかを記録するための型です。
 </P><P>
 
-<CODE>EB_Hookiset</CODE> ���֥������Ȥ����ϡ����٤� EB �饤�֥�꤬�Ѱ�
-���Ƥ���ؿ��ǹԤ��ޤ���
-���ץꥱ�������ץ������ϡ�ľ�� <CODE>EB_Hookset</CODE> ���֥������Ȥ�
-���Ф򻲾Ȥ����ꡢ���åȤ����ꤹ�٤��ǤϤ���ޤ���
+<CODE>EB_Hookiset</CODE> オブジェクトの操作は、すべて EB ライブラリが用意
+している関数で行います。
+アプリケーションプログラムは、直接 <CODE>EB_Hookset</CODE> オブジェクトの
+メンバを参照したり、セットしたりすべきではありません。
 </P><P>
 
-<CODE>EB_Hookset</CODE> ���֥������Ȥ���Ѥ���ݤϡ��ޤ����Υ��֥������Ȥ�
-�Ф��� <CODE>eb_initialize_hookset()</CODE> ��Ƥ�ǽ�������ʤ��Ƥ�
-�ʤ�ޤ���
+<CODE>EB_Hookset</CODE> オブジェクトを使用する際は、まずそのオブジェクトに
+対して <CODE>eb_initialize_hookset()</CODE> を呼んで初期化しなくては
+なりません。
 </DL>
 </P><P>
 
@@ -1220,15 +1220,15 @@ EB �饤�֥������Ѳ�ǽ�ʤ��٤ƤΥեå�������֤��Ф��ơ��ɤΤ褦��
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.11 �եå��ؿ��ξܺ� </H2>
+<H2> 9.11 フック関数の詳細 </H2>
 <!--docid::SEC55::-->
 <P>
 
-������Ǥϡ��եå��ؿ��λ��ͤˤĤ��Ƶ����ޤ���
+この節では、フック関数の仕様について記します。
 </P><P>
 
-�ޤ����եå��ؿ���ƤӽФ� <CODE>eb_read_text()</CODE> �����
-<CODE>eb_read_heading()</CODE> �Υץ��ȥ����פϼ��Τ褦�ˤʤäƤ��ޤ���
+まず、フック関数を呼び出す <CODE>eb_read_text()</CODE> および
+<CODE>eb_read_heading()</CODE> のプロトタイプは次のようになっています。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Error_Code
@@ -1237,7 +1237,7 @@ eb_read_text(EB_Book *book, EB_Appendix *appendix,
     char *text, ssize_t *text_length)
 </pre></td></tr></table></P><P>
 
-�������եå��ؿ��Υץ��ȥ����פϡ����Τ褦�ˤʤäƤ��ޤ���
+一方、フック関数のプロトタイプは、次のようになっています。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>EB_Error_Code
@@ -1245,31 +1245,31 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
     EB_Hook_Code code, int argc, const unsigned int *argv);
 </pre></td></tr></table></P><P>
 
-���� <VAR>book</VAR>, <VAR>appendix</VAR>, <VAR>container</VAR> �ϡ�
-<CODE>eb_read_text()</CODE> ���뤤�� <CODE>eb_read_heading()</CODE> ���Ϥ��줿�ͤ�
-���Τޤޥեå��ؿ��ˤ��ϤäƤ��ޤ���
+引数 <VAR>book</VAR>, <VAR>appendix</VAR>, <VAR>container</VAR> は、
+<CODE>eb_read_text()</CODE> あるいは <CODE>eb_read_heading()</CODE> に渡された値が
+そのままフック関数にも渡ってきます。
 </P><P>
 
-<VAR>appendix</VAR> �Ȥ����Τϡ����Ҥ��Ф�������ǡ������󶡤��륪�֥�������
-�Ǥ�
-(appendix (��Ͽ) �ˤĤ��ƾܤ����� <CITE>ebappendix-ja</CITE> �Ρ�appendix (��Ͽ) �Ȥϡ���򻲾�)��
+<VAR>appendix</VAR> というのは、書籍に対する補助データを提供するオブジェクト
+です
+(appendix (付録) について詳しくは <CITE>ebappendix-ja</CITE> の「appendix (付録) とは」節を参照)。
 </P><P>
 
-���� <VAR>container</VAR> �ϡ����ץꥱ�������ץ�����फ��եå��ؿ���
-�����ǡ������Ϥ������Ȥ��˻Ȥ��ޤ���
+引数 <VAR>container</VAR> は、アプリケーションプログラムからフック関数に
+何かデータを渡したいときに使います。
 </P><P>
 
-�Ǹ�� <VAR>argc</VAR> �� <VAR>argv</VAR> �ˤϡ��ù����Υƥ����ȥǡ������Ϥ���ޤ���
-ʸ�����Ф���եå��Ǥϡ�ʸ���������ֹ椬�ϤäƤ��ޤ���
-���������ץ������󥹤��Ф���եå��Ǥϡ����Υ������󥹼��ΤΥ�����
-(<SAMP>`1f'</SAMP> �ǻϤޤ륳����) �ȡ��⤷����Х��������ץ������󥹤ؤΰ�����
-���ϤäƤ��ޤ���
-�ġ��Υեå��ˤ����ơ�<VAR>argc</VAR> �� <VAR>argv</VAR> �ˤɤ��褦���ͤ��Ϥä�
-����Τ����ܤ����� ��<A HREF="eb-ja_9.html#SEC56">�եå������ɤΰ���</A>����򻲾ȡ�
+最後の <VAR>argc</VAR> と <VAR>argv</VAR> には、加工前のテキストデータが渡されます。
+文字に対するフックでは、文字コード番号が渡ってきます。
+エスケープシーケンスに対するフックでは、そのシーケンス自体のコード
+(<SAMP>`1f'</SAMP> で始まるコード) と、もしあればエスケープシーケンスへの引数を
+が渡ってきます。
+個々のフックにおいて、<VAR>argc</VAR> と <VAR>argv</VAR> にどうような値が渡って
+くるのか、詳しくは 「<A HREF="eb-ja_9.html#SEC56">フックコードの一覧</A>」節を参照。
 </P><P>
 
-�եå��ؿ����椫�鼡�˵󤲤�ؿ���ƤӽФ����Ȥǡ��ƥ����ȥǡ����ؤ�
-�񤭹��ߤ�Ԥ����Ȥ��Ǥ��ޤ���
+フック関数の中から次に挙げる関数を呼び出すことで、テキストデータへの
+書き込みを行うことができます。
 </P><P>
 
 <UL>
@@ -1280,19 +1280,19 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 </UL>
 <P>
 
-�����δؿ��λ��ͤ˴ؤ��ƾܤ�����
-��<A HREF="eb-ja_9.html#SEC59">[�ƥ����ȥǡ���] �ؿ��ξܺ�</A>����򻲾ȡ�
+これらの関数の仕様に関して詳しくは
+「<A HREF="eb-ja_9.html#SEC59">[テキストデータ] 関数の詳細</A>」節を参照。
 </P><P>
 
-�եå��ؿ��� <CODE>EB_SUCCESS</CODE> �ʳ����ͤ��֤��ȡ��եå��ؿ���ƤӽФ���
-<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> �ϥ��顼��ȯ���������
-�ȸ��ʤ������Υ��顼�����ɤ�
-���Τޤޥ��ץꥱ�������ץ��������֤��ޤ���
+フック関数が <CODE>EB_SUCCESS</CODE> 以外の値を返すと、フック関数を呼び出した
+<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> はエラーが発生したもの
+と見なし、そのエラーコードを
+そのままアプリケーションプログラムに返します。
 </P><P>
 
-�եå��ؿ�����Ǥϡ�<VAR>book</VAR> ���Ф��ưʲ��δؿ���ƤӽФ��Ƥ�
-�����ޤ���
-�ƤӽФ����Ȥ���ư��ϡ�̤����Ǥ���
+フック関数の中では、<VAR>book</VAR> に対して以下の関数を呼び出しては
+いけません。
+呼び出したときの動作は、未定義です。
 </P><P>
 
 <UL>
@@ -1325,12 +1325,12 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.12 �եå������ɤΰ��� </H2>
+<H2> 9.12 フックコードの一覧 </H2>
 <!--docid::SEC56::-->
 <P>
 
-��������������Ƥ���եå������ɤ�Ȥ��ˤϡ����Τ褦�˥إå��ե������
-�ɤ߹���ǲ�������
+この節で説明しているフックコードを使うには、次のようにヘッダファイルを
+読み込んで下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/text.h&#62;
@@ -1342,13 +1342,13 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <DD><A NAME="IDX253"></A>
 </P><P>
 
-<CODE>EB_HOOK_NULL</CODE> �ϸ�̩�ˤϥեå��ǤϤʤ���<CODE>eb_set_hooks()</CODE> ��
-ʣ���Υեå��ؿ�����Ͽ����ݤˡ�<CODE>EB_Hook</CODE> ��������������Ǥ򼨤�
-������Ѥ��ޤ���
-���Υեå������ɤ��Ф��ơ��եå��ؿ�����Ͽ�Ǥ��ޤ���
+<CODE>EB_HOOK_NULL</CODE> は厳密にはフックではなく、<CODE>eb_set_hooks()</CODE> で
+複数のフック関数を登録する際に、<CODE>EB_Hook</CODE> 配列の末尾の要素を示す
+ために用います。
+このフックコードに対して、フック関数は登録できません。
 </P><P>
 
-�ܤ����ϡ���<A HREF="eb-ja_9.html#SEC59">[�ƥ����ȥǡ���] �եå��ؿ��ξܺ�</A>����򻲾ȡ�
+詳しくは、「<A HREF="eb-ja_9.html#SEC59">[テキストデータ] フック関数の詳細</A>」節を参照。
 </DL>
 </P><P>
 
@@ -1358,15 +1358,15 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <DD><A NAME="IDX255"></A>
 </P><P>
 
-<CODE>EB_HOOK_INITIALIZE</CODE> �ϡ�<CODE>eb_seek_text()</CODE> ��ƤӽФ���ľ���
-�ǽ�� <CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> �θƤӽФ�����
-��������ޤ���
-��������������򤷤����Ȥ��ˡ��Ȥ����ɤ��Ǥ��礦��
+<CODE>EB_HOOK_INITIALIZE</CODE> は、<CODE>eb_seek_text()</CODE> を呼び出した直後の
+最初の <CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> の呼び出し時に
+処理されます。
+何か初期化処理をしたいときに、使うと良いでしょう。
 </P><P>
 
-���Υեå������եå��ؿ����Ϥ� <CODE>argc</CODE> �� 0 �Ǥ���
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ����Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+このフックが、フック関数に渡す <CODE>argc</CODE> は 0 です。
+フック関数を登録していない状態では、このフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1379,18 +1379,18 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX259"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_NARROW</CODE> ����� <CODE>EB_HOOK_END_NARROW</CODE> �ϡ�
-Ⱦ��ɽ���γ��ϤȽ�λ��ɽ�����������ץ������󥹤��Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_NARROW</CODE> および <CODE>EB_HOOK_END_NARROW</CODE> は、
+半角表示の開始と終了を表すエスケープシーケンスに対するフックです。
 </P><P>
 
-�ɤ���Υեå��⡢�եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�
-<CODE>EB_HOOK_BEGIN_NARROW</CODE> �ʤ� <SAMP>`0x1f04'</SAMP>��
-<CODE>EB_HOOK_END_NARROW</CODE> �ʤ� <SAMP>`0x1f05'</SAMP> �ˤʤ�ޤ���
+どちらのフックも、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、
+<CODE>EB_HOOK_BEGIN_NARROW</CODE> なら <SAMP>`0x1f04'</SAMP>、
+<CODE>EB_HOOK_END_NARROW</CODE> なら <SAMP>`0x1f05'</SAMP> になります。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1403,18 +1403,18 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX263"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_SUBSCRIPT</CODE> ����� <CODE>EB_HOOK_END_SUBSCRIPT</CODE> �ϡ�
-���դ�ɽ���γ��ϤȽ�λ��ɽ�����������ץ������󥹤��Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_SUBSCRIPT</CODE> および <CODE>EB_HOOK_END_SUBSCRIPT</CODE> は、
+下付き表示の開始と終了を表すエスケープシーケンスに対するフックです。
 </P><P>
 
-�ɤ���Υեå��⡢�եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> ���ͤϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�
-<CODE>EB_HOOK_BEGIN_SUBSCRIPT</CODE> �ʤ� <SAMP>`0x1f06'</SAMP>��
-<CODE>EB_HOOK_END_SUBSCRIPT</CODE> �ʤ� <SAMP>`0x1f07'</SAMP> �ˤʤ�ޤ���
+どちらのフックも、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> の値はエスケープシーケンスのコードそのもので、
+<CODE>EB_HOOK_BEGIN_SUBSCRIPT</CODE> なら <SAMP>`0x1f06'</SAMP>、
+<CODE>EB_HOOK_END_SUBSCRIPT</CODE> なら <SAMP>`0x1f07'</SAMP> になります。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ�����
-����񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに
+何も書き込みません。
 </DL>
 </P><P>
 
@@ -1424,23 +1424,23 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <DD><A NAME="IDX265"></A>
 </P><P>
 
-<CODE>EB_HOOK_SET_INDENT</CODE> �ϡ��ƥ����ȥǡ����ι�Ƭ�λ����������ɽ��
-���������ץ������󥹤��Ф���եå��Ǥ���
+<CODE>EB_HOOK_SET_INDENT</CODE> は、テキストデータの行頭の字下げ指定を表す
+エスケープシーケンスに対するフックです。
 </P><P>
 
-���Υեå������եå��ؿ����Ϥ� <CODE>argc</CODE> �� 2 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f09'</SAMP> 
-�ˤʤ�ޤ���
-<CODE>argv[1]</CODE> �������������̤�ɽ���ޤ���
+このフックが、フック関数に渡す <CODE>argc</CODE> は 2 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f09'</SAMP> 
+になります。
+<CODE>argv[1]</CODE> が、字下げの量を表します。
 </P><P>
 
-���������̤�ñ�̤������Ǥ���Τ��������Ǥ���
-�ޤ����������̤κǾ��ͤϡ�0 �ξ��� 1 �ξ������̤꤬����ޤ���
-������ˤ������������� 1 �����������긺�ä��ꤷ�ޤ���
+字下げの量の単位が、何であるのかは不明です。
+また、字下げ量の最小値は、0 の場合と 1 の場合の二通りがあります。
+いずれにしろ、字下げは 1 ずつ増えたり減ったりします。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ����Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、このフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1450,25 +1450,25 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <DD><A NAME="IDX267"></A>
 </P><P>
 
-<CODE>EB_HOOK_SET_NEWLINE</CODE> �ϡ����Ԥ�ɽ�����������ץ������󥹤��Ф���
-�եå��Ǥ���
+<CODE>EB_HOOK_SET_NEWLINE</CODE> は、改行を表すエスケープシーケンスに対する
+フックです。
 </P><P>
 
-��������<CODE>eb_read_heading()</CODE> (���Ф����ɤ߹���) �ˤ������Ǥϡ�
-���Ԥ�ɽ�����������ץ������󥹤϶��ڤꥳ���ɤȤ��Ƥⰷ���ޤ���
-���Τ��ᡢ���������ץ������󥹤����Ĥ��äƤ⤳�Υեå��ν����ϹԤ�줺��
-���������ɤ߹��߽����Ͻ�λ���ޤ���
+ただし、<CODE>eb_read_heading()</CODE> (見出しの読み込み) による処理では、
+改行を表すエスケープシーケンスは区切りコードとしても扱われます。
+そのため、エスケープシーケンスが見つかってもこのフックの処理は行われず、
+ただちに読み込み処理は終了します。
 </P><P>
 
-���Υեå������եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f0a'</SAMP> ��
-�ʤ�ޤ���
+このフックが、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f0a'</SAMP> に
+なります。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ����Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ��󤬡�<CODE>eb_initialize_hookset()</CODE> �� <CODE>EB_Hook</CODE> 
-���֥������Ȥ���������ȡ��եå��ؿ��Ȥ��� <CODE>eb_hook_newline()</CODE>
-����ưŪ����Ͽ����ޤ���
+フック関数を登録していない状態では、このフックはテキストデータに何も
+書き込みませんが、<CODE>eb_initialize_hookset()</CODE> で <CODE>EB_Hook</CODE> 
+オブジェクトを初期化すると、フック関数として <CODE>eb_hook_newline()</CODE>
+が自動的に登録されます。
 </DL>
 </P><P>
 
@@ -1481,18 +1481,18 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX271"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_SUPERSCRIPT</CODE> ����� <CODE>EB_HOOK_END_SUPERSCRIPT</CODE>
-�ϡ����դ�ɽ���γ��ϤȽ�λ��ɽ�����������ץ������󥹤��Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_SUPERSCRIPT</CODE> および <CODE>EB_HOOK_END_SUPERSCRIPT</CODE>
+は、上付き表示の開始と終了を表すエスケープシーケンスに対するフックです。
 </P><P>
 
-�ɤ���Υեå��⡢�եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�
-<CODE>EB_HOOK_BEGIN_SUPERSCRIPT</CODE> �ʤ� <SAMP>`0x1f0e'</SAMP>��
-<CODE>EB_HOOK_END_SUPERSCRIPT</CODE> �ʤ� <SAMP>`0x1f0f'</SAMP> �ˤʤ�ޤ���
+どちらのフックも、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、
+<CODE>EB_HOOK_BEGIN_SUPERSCRIPT</CODE> なら <SAMP>`0x1f0e'</SAMP>、
+<CODE>EB_HOOK_END_SUPERSCRIPT</CODE> なら <SAMP>`0x1f0f'</SAMP> になります。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1505,18 +1505,18 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX275"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_NO_NEWLINE</CODE> ����� <CODE>EB_HOOK_END_NO_NEWLINE</CODE> �ϡ�
-���Զػߤγ��ϤȽ�λ��ɽ�����������ץ������󥹤��Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_NO_NEWLINE</CODE> および <CODE>EB_HOOK_END_NO_NEWLINE</CODE> は、
+改行禁止の開始と終了を表すエスケープシーケンスに対するフックです。
 </P><P>
 
-�ɤ���Υեå��⡢�եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�
-<CODE>EB_HOOK_BEGIN_NO_NEWLINE</CODE> �ʤ� <SAMP>`0x1f10'</SAMP>��
-<CODE>EB_HOOK_END_NO_NEWLINE</CODE> �ʤ� <SAMP>`0x1f11'</SAMP> �ˤʤ�ޤ���
+どちらのフックも、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、
+<CODE>EB_HOOK_BEGIN_NO_NEWLINE</CODE> なら <SAMP>`0x1f10'</SAMP>、
+<CODE>EB_HOOK_END_NO_NEWLINE</CODE> なら <SAMP>`0x1f11'</SAMP> になります。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1529,18 +1529,18 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX279"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_EMPHASIS</CODE> ����� <CODE>EB_HOOK_END_EMPHASIS</CODE> �ϡ�
-��Ĵɽ���γ��ϤȽ�λ��ɽ�����������ץ������󥹤��Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_EMPHASIS</CODE> および <CODE>EB_HOOK_END_EMPHASIS</CODE> は、
+強調表示の開始と終了を表すエスケープシーケンスに対するフックです。
 </P><P>
 
-�ɤ���Υեå��⡢�եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�
-<CODE>EB_HOOK_BEGIN_EMPHASIS</CODE> �ʤ� <SAMP>`0x1f12'</SAMP>��
-<CODE>EB_HOOK_END_EMPHASIS</CODE> �ʤ� <SAMP>`0x1f13'</SAMP> �ˤʤ�ޤ���
+どちらのフックも、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、
+<CODE>EB_HOOK_BEGIN_EMPHASIS</CODE> なら <SAMP>`0x1f12'</SAMP>、
+<CODE>EB_HOOK_END_EMPHASIS</CODE> なら <SAMP>`0x1f13'</SAMP> になります。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1556,42 +1556,42 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX285"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_CANDIDATE</CODE> �ϡ�ʣ�縡���θ���Ȥʤ��γ��Ϥ�ɽ��
-���������ץ������󥹤��Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_CANDIDATE</CODE> は、複合検索の候補となる語の開始を表す
+エスケープシーケンスに対するフックです。
 </P><P>
 
-������Ф��ơ���λ��ɽ�����������ץ������󥹤��Ф���եå��� 2 ���ढ��
-�ޤ���
-��Ĥ� <CODE>EB_HOOK_END_CANDIDATE_LEAF</CODE> �ǡ�����Ȥʤ�줬�ºݤ˸�����
-���ϸ�Ȥ��ƻȤ����ΤǤ��뤳�Ȥ򼨤��ޤ���
-�⤦��Ĥ� <CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> �ǡ�����Ȥʤ��Ϥ����
-�٤���������ʬ����Ƥ��뤳�Ȥ򼨤��ޤ���
-(�������äơ�����Ȥʤ��򸡺������ϸ�Ȥ��ƻȤ����ȤϤǤ��ޤ���)
+それに対して、終了を表すエスケープシーケンスに対するフックは 2 種類あり
+ます。
+一つは <CODE>EB_HOOK_END_CANDIDATE_LEAF</CODE> で、候補となる語が実際に検索の
+入力語として使えるものであることを示します。
+もう一つは <CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> で、候補となる語はさらに
+細かい選択肢に分かれていることを示します。
+(したがって、候補となる語を検索の入力語として使うことはできません。)
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_CANDIDATES</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE>
-�� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f43'</SAMP>
-�ˤʤ�ޤ���
+フック <CODE>EB_HOOK_BEGIN_CANDIDATES</CODE> が、フック関数に渡す <CODE>argc</CODE>
+は 1 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f43'</SAMP>
+になります。
 </P><P>
 
-�եå� <CODE>EB_HOOK_END_CANDIDATE_LEAF</CODE> �����
-<CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE> ��
-3 �Ǥ���
-�ɤ���Υեå��⡢<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�
-<SAMP>`0x1f63'</SAMP> �ˤʤ�ޤ���
-�եå� <CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> �� <CODE>argv[1]</CODE> ��
-<CODE>argv[2]</CODE> �ϡ����γ��ؤθ�������ǡ����γ��ϥڡ����ֹ�ȥ��ե��å�
-�Ǥ���
-����ϡ�<CODE>EB_Position</CODE> ���֥�������
-(��<A HREF="eb-ja_8.html#SEC42">[����] �ǡ������ξܺ�</A>����򻲾�)
-�� <CODE>page</CODE> ����� <CODE>offset</CODE> ���Ф��ͤ��������ޤ���
-�եå� <CODE>EB_HOOK_END_CANDIDATE_LEAF</CODE> �Ǥϡ�<CODE>argv[1]</CODE>,
-<CODE>argv[2]</CODE> �� 2 �ĤȤ� 0 �ˤʤäƤ��ޤ���
+フック <CODE>EB_HOOK_END_CANDIDATE_LEAF</CODE> および
+<CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> が、フック関数に渡す <CODE>argc</CODE> は
+3 です。
+どちらのフックも、<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、
+<SAMP>`0x1f63'</SAMP> になります。
+フック <CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> の <CODE>argv[1]</CODE> と
+<CODE>argv[2]</CODE> は、次の階層の候補一覧データの開始ページ番号とオフセット
+です。
+これは、<CODE>EB_Position</CODE> オブジェクト
+(「<A HREF="eb-ja_8.html#SEC42">[検索] データ型の詳細</A>」節を参照)
+の <CODE>page</CODE> および <CODE>offset</CODE> メンバの値に相当します。
+フック <CODE>EB_HOOK_END_CANDIDATE_LEAF</CODE> では、<CODE>argv[1]</CODE>,
+<CODE>argv[2]</CODE> は 2 つとも 0 になっています。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1604,29 +1604,29 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX289"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_REFERENCE</CODE> ����� <CODE>EB_HOOK_END_REFERENCE</CODE> �ϡ�
-�̰��֤Υƥ����ȥǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ������󥹤�
-�Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_REFERENCE</CODE> および <CODE>EB_HOOK_END_REFERENCE</CODE> は、
+別位置のテキストデータの参照開始と終了を表すエスケープシーケンスに
+対するフックです。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_REFERENCE</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE>
-�� 2 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f42'</SAMP>
-�ˤʤ�ޤ���
-<CODE>argv[1]</CODE> �ΰ�̣�������Ǥ���
+フック <CODE>EB_HOOK_BEGIN_REFERENCE</CODE> が、フック関数に渡す <CODE>argc</CODE>
+は 2 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f42'</SAMP>
+になります。
+<CODE>argv[1]</CODE> の意味は不明です。
 </P><P>
 
-<CODE>EB_HOOK_END_REFERENCE</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE> �� 3 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f62'</SAMP>
-�ˤʤ�ޤ���
-<CODE>argv[1]</CODE> �� <CODE>argv[2]</CODE> �ϡ�������Υڡ����ֹ�ȥ��ե��åȤǤ���
-����ϡ�<CODE>EB_Position</CODE> ���֥�������
-(��<A HREF="eb-ja_8.html#SEC42">[����] �ǡ������ξܺ�</A>����򻲾�)
-�� <CODE>page</CODE> ����� <CODE>offset</CODE> ���Ф��ͤ��������ޤ���
+<CODE>EB_HOOK_END_REFERENCE</CODE> が、フック関数に渡す <CODE>argc</CODE> は 3 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f62'</SAMP>
+になります。
+<CODE>argv[1]</CODE> と <CODE>argv[2]</CODE> は、参照先のページ番号とオフセットです。
+これは、<CODE>EB_Position</CODE> オブジェクト
+(「<A HREF="eb-ja_8.html#SEC42">[検索] データ型の詳細</A>」節を参照)
+の <CODE>page</CODE> および <CODE>offset</CODE> メンバの値に相当します。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1639,24 +1639,24 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX293"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_KEYWORD</CODE> ����� <CODE>EB_HOOK_END_KEYWORD</CODE> �ϡ�
-���������γ��ϤȽ�λ��ɽ�����������ץ������󥹤��Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_KEYWORD</CODE> および <CODE>EB_HOOK_END_KEYWORD</CODE> は、
+検索キーの開始と終了を表すエスケープシーケンスに対するフックです。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_KEYWORD</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE> ��
-2 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f41'</SAMP>
-�ˤʤ�ޤ���
-<CODE>argv[1]</CODE> �ΰ�̣�������Ǥ���
+フック <CODE>EB_HOOK_BEGIN_KEYWORD</CODE> が、フック関数に渡す <CODE>argc</CODE> は
+2 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f41'</SAMP>
+になります。
+<CODE>argv[1]</CODE> の意味は不明です。
 </P><P>
 
-<CODE>EB_HOOK_END_KEYWORD</CODE> �ϡ��եå��ؿ��� 1 �Ĥΰ������Ϥ��ޤ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f61'</SAMP>
-�ˤʤ�ޤ���
+<CODE>EB_HOOK_END_KEYWORD</CODE> は、フック関数に 1 個の引数を渡します。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f61'</SAMP>
+になります。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1669,24 +1669,24 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX297"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_DECORATION</CODE> ����� <CODE>EB_HOOK_END_DECORATION</CODE>
-�ϡ�ʸ�������γ��ϤȽ�λ��ɽ�����������ץ������󥹤��Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_DECORATION</CODE> および <CODE>EB_HOOK_END_DECORATION</CODE>
+は、文字修飾の開始と終了を表すエスケープシーケンスに対するフックです。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_DECORATION</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE>
-�� 2 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1fe0'</SAMP>
-�ˤʤ�ޤ���
-<CODE>argv[1]</CODE> �ΰ�̣�������Ǥ���
+フック <CODE>EB_HOOK_BEGIN_DECORATION</CODE> が、フック関数に渡す <CODE>argc</CODE>
+は 2 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1fe0'</SAMP>
+になります。
+<CODE>argv[1]</CODE> の意味は不明です。
 </P><P>
 
-<CODE>EB_HOOK_END_KEYWORD</CODE> �ϡ��եå��ؿ��� 1 �Ĥΰ������Ϥ��ޤ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1fe1'</SAMP>
-�ˤʤ�ޤ���
+<CODE>EB_HOOK_END_KEYWORD</CODE> は、フック関数に 1 個の引数を渡します。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1fe1'</SAMP>
+になります。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1699,19 +1699,19 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX301"></A>
 </P><P>
 
-<CODE>EB_HOOK_NARROW_FONT</CODE> ����� <CODE>EB_HOOK_WIDE_FONT</CODE> �ϡ����줾��
-Ⱦ�ѳ��������ѳ������Ф���եå��Ǥ���
+<CODE>EB_HOOK_NARROW_FONT</CODE> および <CODE>EB_HOOK_WIDE_FONT</CODE> は、それぞれ
+半角外字と全角外字に対するフックです。
 </P><P>
 
-�ɤ���Υեå��⡢�եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϡ�������ʸ���ֹ��ɽ���ޤ���
+どちらのフックも、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> は、外字の文字番号を表します。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ����Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ��󤬡�<CODE>eb_initialize_hookset()</CODE> �� <CODE>EB_Hook</CODE> 
-���֥������Ȥ���������ȡ��եå��ؿ��Ȥ���
-<CODE>eb_hook_narrow_character_text()</CODE> �����
-<CODE>eb_hook_wide_character_text()</CODE> ����ưŪ����Ͽ����ޤ���
+フック関数を登録していない状態では、このフックはテキストデータに何も
+書き込みませんが、<CODE>eb_initialize_hookset()</CODE> で <CODE>EB_Hook</CODE> 
+オブジェクトを初期化すると、フック関数として
+<CODE>eb_hook_narrow_character_text()</CODE> および
+<CODE>eb_hook_wide_character_text()</CODE> が自動的に登録されます。
 </DL>
 </P><P>
 
@@ -1721,21 +1721,21 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <DD><A NAME="IDX303"></A>
 </P><P>
 
-<CODE>EB_HOOK_ISO8859_1</CODE> �ϡ�ISO 8859-1 (��ƥ�ʸ�� 1) ʸ�����Ф���
-�եå��Ǥ���
+<CODE>EB_HOOK_ISO8859_1</CODE> は、ISO 8859-1 (ラテン文字 1) 文字に対する
+フックです。
 </P><P>
 
-���Υեå������եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϡ�ISO 8859-1 ��ʸ���ֹ��ɽ���ޤ���
+このフックが、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> は、ISO 8859-1 の文字番号を表します。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ�<CODE>argv[0]</CODE> ���ͤ򤽤Τޤ�
-�ƥ����ȥǡ����˽񤭹��ߤޤ���
-�Ĥޤꡢʸ���Ϥ��Τޤ� ISO 8859-1 �Ȥ��ơ�1 �Х��Ƚ񤭹��ޤ�ޤ���
+フック関数を登録していない状態では、<CODE>argv[0]</CODE> の値をそのまま
+テキストデータに書き込みます。
+つまり、文字はそのまま ISO 8859-1 として、1 バイト書き込まれます。
 </P><P>
 
-���Υեå������Ѥ����Τϡ�������ν��Ҥ�ʸ�������ɤ�
-<CODE>EB_CHARCODE_ISO8859_1</CODE> �ξ������Ǥ���
+このフックが利用されるのは、処理中の書籍の文字コードが
+<CODE>EB_CHARCODE_ISO8859_1</CODE> の場合だけです。
 </DL>
 </P><P>
 
@@ -1748,23 +1748,23 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX307"></A>
 </P><P>
 
-<CODE>EB_HOOK_NARROW_JISX0208</CODE> �� <CODE>EB_HOOK_WIDE_JISX0208</CODE> �ϡ�
-Ⱦ�Ѥ�������Ѥ� JIS X 0208 (���ܸ�Τ��ʴ���) ʸ�����Ф���եå��Ǥ���
+<CODE>EB_HOOK_NARROW_JISX0208</CODE> と <CODE>EB_HOOK_WIDE_JISX0208</CODE> は、
+半角および全角の JIS X 0208 (日本語のかな漢字) 文字に対するフックです。
 </P><P>
 
-�ɤ���Υեå��⡢�եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϡ�JIS X 0208 ��ʸ�������ܸ� EUC ��ɽ�������Ȥ���ʸ���ֹ�
-��ɽ���ޤ���
+どちらのフックも、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> は、JIS X 0208 の文字を日本語 EUC で表現したときの文字番号
+を表します。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ�<CODE>argv[0]</CODE> ���ͤ򤽤Τޤ�
-�ƥ����ȥǡ����˽񤭹��ߤޤ���
-�Ĥޤꡢʸ���Ϥ��Τޤ����ܸ� EUC �Ȥ��ơ�2 �Х��Ƚ񤭹��ޤ�ޤ���
+フック関数を登録していない状態では、<CODE>argv[0]</CODE> の値をそのまま
+テキストデータに書き込みます。
+つまり、文字はそのまま日本語 EUC として、2 バイト書き込まれます。
 </P><P>
 
-���Υեå������Ѥ����Τϡ�
-������ν��Ҥ�ʸ�������ɤ� <CODE>EB_CHARCODE_JISX0208</CODE> ��
-<CODE>EB_CHARCODE_JISX0208_GB2312</CODE> �ξ������Ǥ���
+このフックが利用されるのは、
+処理中の書籍の文字コードが <CODE>EB_CHARCODE_JISX0208</CODE> か
+<CODE>EB_CHARCODE_JISX0208_GB2312</CODE> の場合だけです。
 </DL>
 </P><P>
 
@@ -1774,22 +1774,22 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <DD><A NAME="IDX309"></A>
 </P><P>
 
-<CODE>EB_HOOK_GB2312</CODE> �ϡ�GB 2312 (����δ��λ�) ʸ�����Ф���եå�
-�Ǥ���
+<CODE>EB_HOOK_GB2312</CODE> は、GB 2312 (中国語の簡体字) 文字に対するフック
+です。
 </P><P>
 
-���Υեå������եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϡ�GB 2312 ��ʸ�������� EUC ��ɽ�������Ȥ���ʸ���ֹ�
-��ɽ���ޤ���
+このフックが、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> は、GB 2312 の文字を中国語 EUC で表現したときの文字番号
+を表します。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ�<CODE>argv[0]</CODE> ���ͤ򤽤Τޤ�
-�ƥ����ȥǡ����˽񤭹��ߤޤ���
-�Ĥޤꡢʸ���Ϥ��Τޤ����� EUC �Ȥ��ơ�2 �Х��Ƚ񤭹��ޤ�ޤ���
+フック関数を登録していない状態では、<CODE>argv[0]</CODE> の値をそのまま
+テキストデータに書き込みます。
+つまり、文字はそのまま中国語 EUC として、2 バイト書き込まれます。
 </P><P>
 
-���Υեå������Ѥ����Τϡ�������ν��Ҥ�ʸ�������ɤ�
-<CODE>EB_CHARCODE_JISX0208_GB2312</CODE> �ξ������Ǥ���
+このフックが利用されるのは、処理中の書籍の文字コードが
+<CODE>EB_CHARCODE_JISX0208_GB2312</CODE> の場合だけです。
 </DL>
 </P><P>
 
@@ -1802,41 +1802,41 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX313"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE> ����� <CODE>EB_HOOK_END_MONO_GRAPIHC</CODE>
-�ϡ���Υ������Ǥλ��ȳ��ϤȽ�λ��ɽ�����������ץ������󥹤��Ф���
-�եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE> および <CODE>EB_HOOK_END_MONO_GRAPIHC</CODE>
+は、モノクロ図版の参照開始と終了を表すエスケープシーケンスに対する
+フックです。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE>
-�� 4 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f32'</SAMP>
-�� <SAMP>`0x1f44'</SAMP> �Τ����줫�ˤʤ�ޤ���
-<CODE>argv[2]</CODE> �� <CODE>argv[3]</CODE> �ϡ����Ǥι⤵���� (�ԥ������) ���̣
-���ޤ���
-���������Żҥ֥å��Υ�Υ������� (�ǽ�ΰ����� <SAMP>`0x1f32'</SAMP> �ξ��) 
-�ˤϡ����Ǥι⤵�����ξ��󤬷礱�Ƥ���Τǡ��ͤϤɤ���� 0 �ˤʤ�ޤ���
-<CODE>argv[1]</CODE> �ΰ�̣�������Ǥ���
+フック <CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE> が、フック関数に渡す <CODE>argc</CODE>
+は 4 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f32'</SAMP>
+か <SAMP>`0x1f44'</SAMP> のいずれかになります。
+<CODE>argv[2]</CODE> と <CODE>argv[3]</CODE> は、図版の高さと幅 (ピクセル数) を意味
+します。
+ただし、電子ブックのモノクロ図版 (最初の引数が <SAMP>`0x1f32'</SAMP> の場合) 
+には、図版の高さと幅の情報が欠けているので、値はどちらも 0 になります。
+<CODE>argv[1]</CODE> の意味は不明です。
 </P><P>
 
-<CODE>EB_HOOK_END_MONO_GRAPHIC</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE> �� 3
-�Ǥ���
-<CODE>argv[0]</CODE> �ϡ����������ץ������󥹤Υ����ɤ��Τ�ΤǤ���
-<CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE> �� <CODE>argv[0]</CODE> �� <SAMP>`0x1f32'</SAMP>
-�ʤ顢<CODE>EB_HOOK_END_MONO_GRAPHIC</CODE> �� <CODE>argv[0]</CODE> �� <SAMP>`0x1f52'</SAMP>
-�ˤʤꡢ<SAMP>`0x1f44'</SAMP> �ʤ� <SAMP>`0x1f64'</SAMP> �ˤʤ�ޤ���
-<CODE>argv[1]</CODE> �� <CODE>argv[2]</CODE> �ϡ����ǥǡ����Υڡ����ֹ�ȥ��ե��å�
-�Ǥ���
-����ϡ�<CODE>EB_Position</CODE> ���֥�������
-(��<A HREF="eb-ja_8.html#SEC42">[����] �ǡ������ξܺ�</A>����򻲾�)
-�� <CODE>page</CODE> ����� <CODE>offset</CODE> ���Ф��ͤ��������ޤ���
+<CODE>EB_HOOK_END_MONO_GRAPHIC</CODE> が、フック関数に渡す <CODE>argc</CODE> は 3
+です。
+<CODE>argv[0]</CODE> は、エスケープシーケンスのコードそのものです。
+<CODE>EB_HOOK_BEGIN_MONO_GRAPHIC</CODE> の <CODE>argv[0]</CODE> が <SAMP>`0x1f32'</SAMP>
+なら、<CODE>EB_HOOK_END_MONO_GRAPHIC</CODE> の <CODE>argv[0]</CODE> は <SAMP>`0x1f52'</SAMP>
+になり、<SAMP>`0x1f44'</SAMP> なら <SAMP>`0x1f64'</SAMP> になります。
+<CODE>argv[1]</CODE> と <CODE>argv[2]</CODE> は、図版データのページ番号とオフセット
+です。
+これは、<CODE>EB_Position</CODE> オブジェクト
+(「<A HREF="eb-ja_8.html#SEC42">[検索] データ型の詳細</A>」節を参照)
+の <CODE>page</CODE> および <CODE>offset</CODE> メンバの値に相当します。
 </P><P>
 
-���ǥǡ����μ��Ф����ˤĤ��Ƥϡ���<A HREF="eb-ja_11.html#SEC72">��Υ�������</A>����򻲾�
-�򻲾Ȥ��Ƥ���������
+図版データの取り出し方については、「<A HREF="eb-ja_11.html#SEC72">モノクロ図版</A>」節を参照
+を参照してください。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1849,8 +1849,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 <A NAME="IDX317"></A>
 </P><P>
 
-�����Υեå�̾�Τϡ����졼����������ǤΤ����ͽ�󤵤�Ƥ��ޤ�����
-EB �饤�֥�� 4.0 �ǤϤޤ��б����Ƥ��ޤ���
+これらのフック名称は、グレースケール図版のために予約されていますが、
+EB ライブラリ 4.0 ではまだ対応していません。
 </DL>
 </P><P>
 
@@ -1866,38 +1866,38 @@ EB �饤�֥�� 4.0 �ǤϤޤ��б����Ƥ��ޤ���
 <A NAME="IDX323"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_COLOR_BMP</CODE> �� <CODE>EB_HOOK_COLOR_JPEG</CODE> �ϡ�
-���줾�� BMP ������ JPEG �����Υ��顼���Ǥλ��ȳ��Ϥ�ɽ��
-���������ץ������󥹤��Ф���եå��Ǥ���
-���ȳ��ϤΥեå��� BMP �� JPEG �Ȥǥեå���ʬ����Ƥ��ޤ�������λ��
-�եå��϶��̤ǡ�<CODE>EB_HOOK_END_COLOR_GRAPIHC</CODE> �ˤʤ�ޤ���
+<CODE>EB_HOOK_BEGIN_COLOR_BMP</CODE> と <CODE>EB_HOOK_COLOR_JPEG</CODE> は、
+それぞれ BMP 形式と JPEG 形式のカラー図版の参照開始を表す
+エスケープシーケンスに対するフックです。
+参照開始のフックは BMP と JPEG とでフックが分かれていますが、終了の
+フックは共通で、<CODE>EB_HOOK_END_COLOR_GRAPIHC</CODE> になります。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_COLOR_BMP</CODE> �� <CODE>EB_HOOK_COLOR_JPEG</CODE> ����
-�եå��ؿ����Ϥ� <CODE>argc</CODE> �� 4 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f4d'</SAMP>
-�ˤʤ�ޤ���
-<CODE>argv[2]</CODE> �� <CODE>argv[3]</CODE> �ϡ����Ǥ����ȹ⤵ (�ԥ������) ���̣
-���ޤ���
-<CODE>argv[1]</CODE> �ΰ�̣�������Ǥ���
+フック <CODE>EB_HOOK_BEGIN_COLOR_BMP</CODE> と <CODE>EB_HOOK_COLOR_JPEG</CODE> が、
+フック関数に渡す <CODE>argc</CODE> は 4 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f4d'</SAMP>
+になります。
+<CODE>argv[2]</CODE> と <CODE>argv[3]</CODE> は、図版の幅と高さ (ピクセル数) を意味
+します。
+<CODE>argv[1]</CODE> の意味は不明です。
 </P><P>
 
-�եå� <CODE>EB_HOOK_END_COLOR_BMP</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE> ��
-3 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f6d'</SAMP> ��
-�ʤ�ޤ���
-<CODE>argv[1]</CODE> �� <CODE>argv[2]</CODE> �ϡ����ǥǡ����Υڡ����ֹ�ȥ��ե��åȤǤ���
-����ϡ�<CODE>EB_Position</CODE> ���֥�������
-(��<A HREF="eb-ja_8.html#SEC42">[����] �ǡ������ξܺ�</A>����򻲾�)
-�� <CODE>page</CODE> ����� <CODE>offset</CODE> ���Ф��ͤ��������ޤ���
+フック <CODE>EB_HOOK_END_COLOR_BMP</CODE> が、フック関数に渡す <CODE>argc</CODE> は
+3 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f6d'</SAMP> に
+なります。
+<CODE>argv[1]</CODE> と <CODE>argv[2]</CODE> は、図版データのページ番号とオフセットです。
+これは、<CODE>EB_Position</CODE> オブジェクト
+(「<A HREF="eb-ja_8.html#SEC42">[検索] データ型の詳細</A>」節を参照)
+の <CODE>page</CODE> および <CODE>offset</CODE> メンバの値に相当します。
 </P><P>
 
-���ǥǡ����μ��Ф����ˤĤ��Ƥϡ���<A HREF="eb-ja_11.html#SEC73">���顼����</A>����򻲾�
-�򻲾Ȥ��Ƥ���������
+図版データの取り出し方については、「<A HREF="eb-ja_11.html#SEC73">カラー図版</A>」節を参照
+を参照してください。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1913,39 +1913,39 @@ EB �饤�֥�� 4.0 �ǤϤޤ��б����Ƥ��ޤ���
 <A NAME="IDX329"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_IN_COLOR_BMP</CODE> �� <CODE>EB_HOOK_IN_COLOR_JPEG</CODE> �ϡ�
-���줾�� BMP ������ JPEG �����Υ���饤�󥫥顼���Ǥλ��ȳ��Ϥ�ɽ��
-���������ץ������󥹤��Ф���եå��Ǥ���
-���ȳ��ϤΥեå��� BMP �� JPEG �Ȥǥեå���ʬ����Ƥ��ޤ�������λ��
-�եå��϶��̤ǡ�<CODE>EB_HOOK_END_IN_COLOR_GRAPIHC</CODE> �ˤʤ�ޤ���
+<CODE>EB_HOOK_BEGIN_IN_COLOR_BMP</CODE> と <CODE>EB_HOOK_IN_COLOR_JPEG</CODE> は、
+それぞれ BMP 形式と JPEG 形式のインラインカラー図版の参照開始を表す
+エスケープシーケンスに対するフックです。
+参照開始のフックは BMP と JPEG とでフックが分かれていますが、終了の
+フックは共通で、<CODE>EB_HOOK_END_IN_COLOR_GRAPIHC</CODE> になります。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_IN_COLOR_BMP</CODE> �� <CODE>EB_HOOK_IN_COLOR_JPEG</CODE>
-�����եå��ؿ����Ϥ� <CODE>argc</CODE> �� 4 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f3c'</SAMP>
-�ˤʤ�ޤ���
-<CODE>argv[2]</CODE> �� <CODE>argv[3]</CODE> �ϡ����Ǥ����ȹ⤵ (�ԥ������) ���̣
-���ޤ���
-<CODE>argv[1]</CODE> �ΰ�̣�������Ǥ���
+フック <CODE>EB_HOOK_BEGIN_IN_COLOR_BMP</CODE> と <CODE>EB_HOOK_IN_COLOR_JPEG</CODE>
+が、フック関数に渡す <CODE>argc</CODE> は 4 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f3c'</SAMP>
+になります。
+<CODE>argv[2]</CODE> と <CODE>argv[3]</CODE> は、図版の幅と高さ (ピクセル数) を意味
+します。
+<CODE>argv[1]</CODE> の意味は不明です。
 </P><P>
 
-�եå� <CODE>EB_HOOK_END_IN_COLOR_BMP</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE>
-�� 3 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f5c'</SAMP>
-�ˤʤ�ޤ���
-<CODE>argv[1]</CODE> �� <CODE>argv[2]</CODE> �ϡ����ǥǡ����Υڡ����ֹ�ȥ��ե��å�
-�Ǥ���
-����ϡ�<CODE>EB_Position</CODE> ���֥�������
-(��<A HREF="eb-ja_8.html#SEC42">[����] �ǡ������ξܺ�</A>����򻲾�)
-�� <CODE>page</CODE> ����� <CODE>offset</CODE> ���Ф��ͤ��������ޤ���
+フック <CODE>EB_HOOK_END_IN_COLOR_BMP</CODE> が、フック関数に渡す <CODE>argc</CODE>
+は 3 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f5c'</SAMP>
+になります。
+<CODE>argv[1]</CODE> と <CODE>argv[2]</CODE> は、図版データのページ番号とオフセット
+です。
+これは、<CODE>EB_Position</CODE> オブジェクト
+(「<A HREF="eb-ja_8.html#SEC42">[検索] データ型の詳細</A>」節を参照)
+の <CODE>page</CODE> および <CODE>offset</CODE> メンバの値に相当します。
 </P><P>
 
-���ǥǡ����μ��Ф����ˤĤ��Ƥϡ���<A HREF="eb-ja_11.html#SEC73">���顼����</A>����򻲾�
-�򻲾Ȥ��Ƥ���������
+図版データの取り出し方については、「<A HREF="eb-ja_11.html#SEC73">カラー図版</A>」節を参照
+を参照してください。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1958,32 +1958,32 @@ EB �饤�֥�� 4.0 �ǤϤޤ��б����Ƥ��ޤ���
 <A NAME="IDX333"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_WAVE</CODE> ����� <CODE>EB_HOOK_END_WAVE</CODE> �ϡ�
-WAVE (PCM) �����β����ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ�������
-���Ф���եå��Ǥ���
+<CODE>EB_HOOK_BEGIN_WAVE</CODE> および <CODE>EB_HOOK_END_WAVE</CODE> は、
+WAVE (PCM) 形式の音声データの参照開始と終了を表すエスケープシーケンス
+に対するフックです。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_WAVE</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE> �� 6
-�Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f4a'</SAMP>
-�ˤʤ�ޤ���
-<CODE>argv[2]</CODE> �� <CODE>argv[3]</CODE> �ϲ����ǡ����γ��ϰ��֤Υڡ����ֹ��
-���ե��åȡ�<CODE>argv[4]</CODE> �� <CODE>argv[5]</CODE> �Ͻ�λ���֤Υڡ����ֹ��
-���ե��åȤ򤽤줾��ɽ���ޤ���
-<CODE>argv[1]</CODE> �ΰ�̣�������Ǥ���
+フック <CODE>EB_HOOK_BEGIN_WAVE</CODE> が、フック関数に渡す <CODE>argc</CODE> は 6
+です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f4a'</SAMP>
+になります。
+<CODE>argv[2]</CODE> と <CODE>argv[3]</CODE> は音声データの開始位置のページ番号と
+オフセット、<CODE>argv[4]</CODE> と <CODE>argv[5]</CODE> は終了位置のページ番号と
+オフセットをそれぞれ表します。
+<CODE>argv[1]</CODE> の意味は不明です。
 </P><P>
 
-<CODE>EB_HOOK_END_WAVE</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f6a'</SAMP>
-�ˤʤ�ޤ���
+<CODE>EB_HOOK_END_WAVE</CODE> が、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f6a'</SAMP>
+になります。
 </P><P>
 
-�����ǡ����μ��Ф����ˤĤ��Ƥϡ���<A HREF="eb-ja_11.html#SEC74">WAVE ����</A>����򻲾� ��
-���Ȥ��Ʋ�������
+音声データの取り出し方については、「<A HREF="eb-ja_11.html#SEC74">WAVE 音声</A>」節を参照 を
+参照して下さい。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -1996,31 +1996,31 @@ WAVE (PCM) �����β����ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ�������
 <A NAME="IDX337"></A>
 </P><P>
 
-<CODE>EB_HOOK_BEGIN_MPEG</CODE> ����� <CODE>EB_HOOK_END_MPEG</CODE> �ϡ�MPEG ����
-��ư��ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ������󥹤��Ф���եå�
-�Ǥ���
+<CODE>EB_HOOK_BEGIN_MPEG</CODE> および <CODE>EB_HOOK_END_MPEG</CODE> は、MPEG 形式
+の動画データの参照開始と終了を表すエスケープシーケンスに対するフック
+です。
 </P><P>
 
-�եå� <CODE>EB_HOOK_BEGIN_MPEG</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE> �� 6
-�Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f39'</SAMP>
-�ˤʤ�ޤ���
-<CODE>argv[2]</CODE> �� <CODE>argv[5]</CODE> �ϡ�ư��ǡ����Υե�����̾�򥨥󥳡���
-����������ˤʤ�ޤ���
-<CODE>argv[1]</CODE> �ΰ�̣�������Ǥ���
+フック <CODE>EB_HOOK_BEGIN_MPEG</CODE> が、フック関数に渡す <CODE>argc</CODE> は 6
+です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f39'</SAMP>
+になります。
+<CODE>argv[2]</CODE> 〜 <CODE>argv[5]</CODE> は、動画データのファイル名をエンコード
+した数値列になります。
+<CODE>argv[1]</CODE> の意味は不明です。
 </P><P>
 
-<CODE>EB_HOOK_END_MPEG</CODE> �����եå��ؿ����Ϥ� <CODE>argc</CODE> �� 1 �Ǥ���
-<CODE>argv[0]</CODE> �ϥ��������ץ������󥹤Υ����ɤ��Τ�Τǡ�<SAMP>`0x1f59'</SAMP>
-�ˤʤ�ޤ���
+<CODE>EB_HOOK_END_MPEG</CODE> が、フック関数に渡す <CODE>argc</CODE> は 1 です。
+<CODE>argv[0]</CODE> はエスケープシーケンスのコードそのもので、<SAMP>`0x1f59'</SAMP>
+になります。
 </P><P>
 
-ư��ǡ����μ��Ф����ˤĤ��Ƥϡ���<A HREF="eb-ja_11.html#SEC75">MPEG ư��</A>����򻲾� ��
-���Ȥ��Ʋ�������
+動画データの取り出し方については、「<A HREF="eb-ja_11.html#SEC75">MPEG 動画</A>」節を参照 を
+参照して下さい。
 </P><P>
 
-�եå��ؿ�����Ͽ���Ƥ��ʤ����֤Ǥϡ������Υեå��ϥƥ����ȥǡ����˲���
-�񤭹��ߤޤ���
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
 </DL>
 </P><P>
 
@@ -2038,12 +2038,12 @@ WAVE (PCM) �����β����ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ�������
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.13 �եå����å����ؿ��ξܺ� </H2>
+<H2> 9.13 フックセット操作関数の詳細 </H2>
 <!--docid::SEC57::-->
 <P>
 
-��������������Ƥ���ؿ���Ȥ��ˤϡ����Τ褦�˥إå��ե�������ɤ߹����
-��������
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/text.h&#62;
@@ -2055,22 +2055,22 @@ WAVE (PCM) �����β����ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ�������
 <DD><A NAME="IDX339"></A>
 </P><P>
 
-�ؿ� <CODE>initialize_hookset()</CODE> �ϡ�<VAR>hookset</VAR> �λؤ� <CODE>EB_Hookset</CODE>
-���֥������Ȥ��������ޤ���
-<CODE>EB_Hookiset</CODE> ���֥������Ȥ��Ф��� EB �饤�֥���¾�δؿ���Ƥ����ˡ�
-ɬ�����Υ��֥������Ȥ��������ʤ��ƤϤʤ�ޤ���
-��������Ƥ��ʤ����֥������Ȥ��Ф��ơ�EB �饤�֥���¾�δؿ���Ƥ��
-����ư���̤����Ǥ���
-�ޤ������Ǥ˽�����������֥������Ȥ��Ф��ơ�����
-<CODE>eb_initialize_hookset()</CODE> ��Ƥ�ǤϤ����ޤ���
-�Ƥ������ư���̤����Ǥ���
+関数 <CODE>initialize_hookset()</CODE> は、<VAR>hookset</VAR> の指す <CODE>EB_Hookset</CODE>
+オブジェクトを初期化します。
+<CODE>EB_Hookiset</CODE> オブジェクトに対して EB ライブラリの他の関数を呼ぶ前に、
+必ずそのオブジェクトを初期化しなくてはなりません。
+初期化していないオブジェクトに対して、EB ライブラリの他の関数を呼んだ
+場合の動作は未定義です。
+また、すでに初期化したオブジェクトに対して、再度
+<CODE>eb_initialize_hookset()</CODE> を呼んではいけません。
+呼んだ場合の動作は未定義です。
 </P><P>
 
-���δؿ��ϡ��ƥեå��ν���ͤ򼡤Τ褦�˥��åȤ��ޤ���
+この関数は、各フックの初期値を次のようにセットします。
 </P><P>
 
 <TABLE>
-<TR><TD>�եå�                          </TD><TD> �եå��ؿ�</TD>
+<TR><TD>フック                          </TD><TD> フック関数</TD>
 </TR>
 <TR><TD><CODE>EB_HOOK_NARROW_JISX0208</CODE>  </TD><TD> <CODE>eb_hook_euc_to_ascii()</CODE></TD>
 </TR>
@@ -2080,7 +2080,7 @@ WAVE (PCM) �����β����ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ�������
 </TR>
 <TR><TD><CODE>EB_HOOK_NEWLINE</CODE>          </TD><TD> <CODE>eb_hook_newline()</CODE></TD>
 </TR>
-<TR><TD>�嵭�ʳ��Υեå�                </TD><TD> <CODE>NULL</CODE> (�եå��ؿ��ʤ�)</TD>
+<TR><TD>上記以外のフック                </TD><TD> <CODE>NULL</CODE> (フック関数なし)</TD>
 </TR></TABLE>
 </DL>
 <P>
@@ -2091,16 +2091,16 @@ WAVE (PCM) �����β����ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ�������
 <DD><A NAME="IDX341"></A>
 </P><P>
 
-�ؿ� <CODE>eb_finalize_hookset()</CODE> �ϡ�<VAR>hookset</VAR> ���ؤ�
-<CODE>EB_Hooksest</CODE> ���֥������Ȥθ������Ԥ��ޤ���
+関数 <CODE>eb_finalize_hookset()</CODE> は、<VAR>hookset</VAR> が指す
+<CODE>EB_Hooksest</CODE> オブジェクトの後始末を行います。
 </P><P>
 
-���֥������Ȥ�������Ƥƴ������Ƥ�������ϡ����٤Ʋ�������ޤ���
-���٤ƤΥեå��ˤϡ��եå��ؿ��Ȥ��� <CODE>NULL</CODE> �����åȤ���ޤ���
+オブジェクトが割り当てて管理していたメモリは、すべて解放されます。
+すべてのフックには、フック関数として <CODE>NULL</CODE> がセットされます。
 </P><P>
 
-������򤷤����֥������Ȥ��Ф��� <CODE>eb_set_hook()</CODE>, <CODE>eb_set_hooks()</CODE>
-��Ƥ֤��Ȥǡ����֥������Ȥ�����Ѥ��뤳�Ȥ��Ǥ��ޤ���
+後始末をしたオブジェクトに対して <CODE>eb_set_hook()</CODE>, <CODE>eb_set_hooks()</CODE>
+を呼ぶことで、オブジェクトを再利用することができます。
 </DL>
 </P><P>
 
@@ -2110,19 +2110,19 @@ WAVE (PCM) �����β����ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ�������
 <DD><A NAME="IDX343"></A>
 </P><P>
 
-�ؿ� <CODE>eb_set_hook()</CODE> �ϡ�<VAR>hookset</VAR> ���ؤ� <CODE>EB_Hooksest</CODE>
-���֥������Ȥˡ��եå��ؿ�������Ͽ���ޤ���
-��Ͽ����եå��μ���ȥեå��ؿ��ϡ�<VAR>hook</VAR> �ǻ��ꤷ�ޤ���
+関数 <CODE>eb_set_hook()</CODE> は、<VAR>hookset</VAR> が指す <CODE>EB_Hooksest</CODE>
+オブジェクトに、フック関数を一つ登録します。
+登録するフックの種類とフック関数は、<VAR>hook</VAR> で指定します。
 </P><P>
 
-Ʊ���եå������ɤ�ʣ����եå��ؿ�����Ͽ���Ƥ⡢ͭ���ˤʤ�ΤϺǸ��
-��Ͽ������Τ����Ǥ��Τǡ����դ��Ʋ�������
-�եå��ؿ��Ȥ��� <CODE>NULL</CODE> ����ꤹ��ȡ���Ͽ����Ƥ���եå������
-����ޤ���
+同じフックコードに複数回フック関数を登録しても、有効になるのは最後に
+登録したものだけですので、注意して下さい。
+フック関数として <CODE>NULL</CODE> を指定すると、登録されているフックが解除
+されます。
 </P><P>
 
-��������ȡ����δؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、この関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
 </DL>
 </P><P>
 
@@ -2132,22 +2132,22 @@ WAVE (PCM) �����β����ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ�������
 <DD><A NAME="IDX345"></A>
 </P><P>
 
-���δؿ��� <CODE>eb_set_hook()</CODE> �˻��Ƥ��ޤ�����Ǥ�դθĿ���
-�եå��ؿ�����٤���Ͽ�Ǥ��������ۤʤ�ޤ���
+この関数は <CODE>eb_set_hook()</CODE> に似ていますが、任意の個数の
+フック関数を一度に登録できる点が異なります。
 </P><P>
 
-��Ͽ����եå��μ���ȥեå��ؿ��ϡ�<VAR>hooks</VAR> �ǻ��ꤷ�ޤ���
-<VAR>hooks</VAR> �� <CODE>EB_Hook</CODE> ���֥������Ȥ����� (����Ƭ) ��ؤ���
-���ʤ���Фʤ�ޤ���
-�ޤ�����������������ˤϡ��եå������� <CODE>EB_HOOK_NULL</CODE> �򥻥å�
-���� <CODE>EB_Hook</CODE> ���֥������Ȥ��������ǤȤ����֤�ɬ�פ�����ޤ���
+登録するフックの種類とフック関数は、<VAR>hooks</VAR> で指定します。
+<VAR>hooks</VAR> は <CODE>EB_Hook</CODE> オブジェクトの配列 (の先頭) を指して
+いなければなりません。
+また、この配列の末尾には、フックコード <CODE>EB_HOOK_NULL</CODE> をセット
+した <CODE>EB_Hook</CODE> オブジェクトを配列要素として置く必要があります。
 </P><P>
 
-<CODE>eb_set_hooks()</CODE> �ϡ��������Ƭ������֤ˡ����ꤵ�줿�եå�������
-���Ф��ƥեå��ؿ�����Ͽ���Ƥ����ޤ���
-���顼��ȯ������ȡ��Ĥ�Υեå�����Ͽ�Ϥ����ˡ������򼨤����顼������
-�򤿤������֤��ޤ���
-���٤ƤΥեå��ؿ�����Ͽ����������ȡ�<CODE>EB_SUCCESS</CODE> ���֤��ޤ���
+<CODE>eb_set_hooks()</CODE> は、配列の先頭から順番に、指定されたフックコード
+に対してフック関数を登録していきます。
+エラーが発生すると、残りのフックの登録はせずに、原因を示すエラーコード
+をただちに返します。
+すべてのフック関数の登録に成功すると、<CODE>EB_SUCCESS</CODE> を返します。
 </DL>
 </P><P>
 
@@ -2165,23 +2165,23 @@ WAVE (PCM) �����β����ǡ����λ��ȳ��ϤȽ�λ��ɽ�����������ץ�������
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.14 �Ȥ߹��ߥեå��ؿ��ξܺ� </H2>
+<H2> 9.14 組み込みフック関数の詳細 </H2>
 <!--docid::SEC58::-->
 <P>
 
-EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
-����Ǥϡ������Υեå��ؿ��ˤĤ��Ƥλ��ͤ���⤷�ޤ���
+EB ライブラリは、基本的なフック関数をいくつか用意しています。
+本節では、これらのフック関数についての仕様を解説します。
 </P><P>
 
-��������������Ƥ���ؿ���Ȥ��ˤϡ����Τ褦�˥إå��ե�������ɤ߹����
-��������
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/text.h&#62;
 </pre></td></tr></table></P><P>
 
-������Υեå��ؿ��⡢���� <VAR>appendix</VAR> �� <VAR>container</VAR> ��
-<CODE>NULL</CODE> ���Ϥ���Ƥ⡢ư��˻پ�Ϥʤ��褦�ˤʤäƤ��ޤ���
+いずれのフック関数も、引数 <VAR>appendix</VAR> と <VAR>container</VAR> に
+<CODE>NULL</CODE> を渡されても、動作に支障はないようになっています。
 </P><P>
 
 <A NAME="IDX346"></A>
@@ -2190,22 +2190,22 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <DD><A NAME="IDX347"></A>
 </P><P>
 
-<CODE>eb_hook_euc_to_ascii()</CODE> �ϡ��եå�������
-<CODE>EB_HOOK_NARROW_JISX0208</CODE> (Ⱦ�� JIS X 0208 ʸ��) �Τ���Υեå��ؿ�
-�Ǥ���
+<CODE>eb_hook_euc_to_ascii()</CODE> は、フックコード
+<CODE>EB_HOOK_NARROW_JISX0208</CODE> (半角 JIS X 0208 文字) のためのフック関数
+です。
 </P><P>
 
-<CODE>EB_Hookset</CODE> ���֥������Ȥ�ؿ� <CODE>eb_initialiez_hookset()</CODE> ��
-���������ȡ����δؿ�����ưŪ����Ͽ����ޤ���
+<CODE>EB_Hookset</CODE> オブジェクトを関数 <CODE>eb_initialiez_hookset()</CODE> で
+初期化すると、この関数が自動的に登録されます。
 </P><P>
 
-���Υեå��ؿ��ϡ�<CODE>argv[0]</CODE> �Ȥ����Ϥ��줿 JIS X 0208 ��ʸ��
-(���󥳡��ǥ��󥰤����ܸ� EUC) ��Ĵ�١��б����� ASCII ʸ����¸�ߤ����
-���� ASCII ʸ����ƥ����ȥǡ����Ȥ��ƽ񤭹��ߡ��ʤ���� JIS X 0208 ��
-ʸ���򤽤Τޤ޽񤭹��ߤޤ���
+このフック関数は、<CODE>argv[0]</CODE> として渡された JIS X 0208 の文字
+(エンコーディングは日本語 EUC) を調べ、対応する ASCII 文字が存在すれば
+その ASCII 文字をテキストデータとして書き込み、なければ JIS X 0208 の
+文字をそのまま書き込みます。
 </P><P>
 
-��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
+常に <CODE>EB_SUCCESS</CODE> を返します。
 </DL>
 </P><P>
 
@@ -2218,27 +2218,27 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <A NAME="IDX351"></A>
 </P><P>
 
-<CODE>eb_hook_narrow_character_text()</CODE> �ϡ��եå�������
-<CODE>EB_HOOK_NARROW_FONT</CODE> (Ⱦ�ѳ���) �Τ���Υեå��ؿ��Ǥ���
-Ʊ�ͤ� <CODE>eb_hook_wide_character_text()</CODE> �ϡ��եå�������
-<CODE>EB_HOOK_WIDE_FONT</CODE> (���ѳ���) �Τ���Υեå��ؿ��Ǥ���
+<CODE>eb_hook_narrow_character_text()</CODE> は、フックコード
+<CODE>EB_HOOK_NARROW_FONT</CODE> (半角外字) のためのフック関数です。
+同様に <CODE>eb_hook_wide_character_text()</CODE> は、フックコード
+<CODE>EB_HOOK_WIDE_FONT</CODE> (全角外字) のためのフック関数です。
 </P><P>
 
-<CODE>EB_Hookset</CODE> ���֥������Ȥ�ؿ� <CODE>eb_initialiez_hookset()</CODE> ��
-���������ȡ������δؿ�����ưŪ����Ͽ����ޤ���
+<CODE>EB_Hookset</CODE> オブジェクトを関数 <CODE>eb_initialiez_hookset()</CODE> で
+初期化すると、これらの関数が自動的に登録されます。
 </P><P>
 
-���δؿ��ϡ�<VAR>appendix</VAR> �������椷�Ƥ������ܤ���<CODE>argv[0]</CODE> �Ȥ���
-�Ϥ��줿����������ʸ�������äƤ��뤫�ɤ���Ĵ�٤ޤ���
-���äƤ���Ф���ʸ�����ƥ����ȥǡ����Ȥ��ƽ񤭹��ߡ����äƤ��ʤ����
-<SAMP>`&#60;?&#62;'</SAMP> �Ȥ���ʸ�����񤭹��ߤޤ���
+この関数は、<VAR>appendix</VAR> の選択中している副本が、<CODE>argv[0]</CODE> として
+渡された外字の代替文字列を持っているかどうか調べます。
+持っていればその文字列をテキストデータとして書き込み、持っていなければ
+<SAMP>`&#60;?&#62;'</SAMP> という文字列を書き込みます。
 </P><P>
 
-<VAR>appendix</VAR> �� <CODE>NULL</CODE> �ξ��䡢��Ͽ�����ܤ�������Ǥʤ����⡢
-����ʸ�������äƤ��ʤ���ΤȤ��ư����ޤ���
+<VAR>appendix</VAR> が <CODE>NULL</CODE> の場合や、付録が副本を選択中でない場合も、
+代替文字列を持っていないものとして扱います。
 </P><P>
 
-���δؿ��ϡ���� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
+この関数は、常に <CODE>EB_SUCCESS</CODE> を返します。
 </DL>
 </P><P>
 
@@ -2248,16 +2248,16 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <DD><A NAME="IDX353"></A>
 </P><P>
 
-<CODE>eb_hook_narrow_newline()</CODE> �ϡ��եå�������
-<CODE>EB_HOOK_NEWLINE</CODE> (����) �Τ���Υեå��ؿ��Ǥ���
+<CODE>eb_hook_narrow_newline()</CODE> は、フックコード
+<CODE>EB_HOOK_NEWLINE</CODE> (改行) のためのフック関数です。
 </P><P>
 
-<CODE>EB_Hookset</CODE> ���֥������Ȥ�ؿ� <CODE>eb_initialiez_hookset()</CODE> ��
-���������ȡ������δؿ�����ưŪ����Ͽ����ޤ���
+<CODE>EB_Hookset</CODE> オブジェクトを関数 <CODE>eb_initialiez_hookset()</CODE> で
+初期化すると、これらの関数が自動的に登録されます。
 </P><P>
 
-���δؿ��ϡ��ƥ����ȥǡ����� <SAMP>`\n'</SAMP> ��񤭹��ߤޤ���
-��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
+この関数は、テキストデータに <SAMP>`\n'</SAMP> を書き込みます。
+常に <CODE>EB_SUCCESS</CODE> を返します。
 </DL>
 </P><P>
 
@@ -2267,8 +2267,8 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <DD><A NAME="IDX355"></A>
 </P><P>
 
-<CODE>eb_hook_empty()</CODE> �ϡ����⤷�ʤ��եå��ؿ��Ǥ���
-��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
+<CODE>eb_hook_empty()</CODE> は、何もしないフック関数です。
+常に <CODE>EB_SUCCESS</CODE> を返します。
 </DL>
 </P><P>
 
@@ -2286,12 +2286,12 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="eb-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H2> 9.15 �ƥ����ȥǡ������ؿ��ξܺ� </H2>
+<H2> 9.15 テキストデータ操作関数の詳細 </H2>
 <!--docid::SEC59::-->
 <P>
 
-��������������Ƥ���ؿ���Ȥ��ˤϡ����Τ褦�˥إå��ե�������ɤ߹����
-��������
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
 </P><P>
 
 <TABLE><tr><td>&nbsp;</td><td class=example><pre>#include &#60;eb/text.h&#62;
@@ -2309,14 +2309,14 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <A NAME="IDX361"></A>
 </P><P>
 
-�ؿ� <CODE>eb_have_text()</CODE> �ϡ�<VAR>book</VAR> �����򤷤Ƥ������ܤ�����ʸ��
-���äƤ��뤫�ɤ�����Ĵ�٤ޤ���
-Ʊ�ͤˡ�<CODE>eb_have_menu()</CODE> �ϥ�˥塼����äƤ��뤫�ɤ�����
-<CODE>eb_have_copyright()</CODE> �����ɽ������äƤ��뤫�ɤ���Ĵ�٤ޤ���
+関数 <CODE>eb_have_text()</CODE> は、<VAR>book</VAR> の選択している副本が、本文を
+持っているかどうかを調べます。
+同様に、<CODE>eb_have_menu()</CODE> はメニューを持っているかどうか、
+<CODE>eb_have_copyright()</CODE> は著作権表示を持っているかどうか調べます。
 </P><P>
 
-������δؿ��⡢���äƤ���� 1 ���֤������äƤ��ʤ���� 0 ���֤��ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ����� 0 ���֤��ޤ���
+いずれの関数も、持っていれば 1 を返し、持っていなければ 0 を返します。
+<VAR>book</VAR> が副本を選択していない場合も 0 を返します。
 </DL>
 </P><P>
 
@@ -2332,21 +2332,21 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <A NAME="IDX367"></A>
 </P><P>
 
-�ؿ� <CODE>eb_text()</CODE> �ϡ�<VAR>book</VAR> �����򤷤Ƥ������ܤ���ʸ��
-���ϰ��֤� <VAR>position</VAR> �λؤ��ΰ�˽񤭹��ߤޤ���
-Ʊ�ͤˡ�<CODE>eb_menu()</CODE> �ϥ�˥塼�γ��ϰ��֤�
-<CODE>eb_have_copyright()</CODE> �����ɽ���γ��ϰ��֤�񤭹��ߤޤ���
+関数 <CODE>eb_text()</CODE> は、<VAR>book</VAR> が選択している副本の本文の
+開始位置を <VAR>position</VAR> の指す領域に書き込みます。
+同様に、<CODE>eb_menu()</CODE> はメニューの開始位置を、
+<CODE>eb_have_copyright()</CODE> は著作権表示の開始位置を書き込みます。
 </P><P>
 
-��������ȡ������δؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ�<VAR>position</VAR> ��ɬ�������������Ԥ�����֤�񤭹���ǡ�
-�����򼨤����顼�����ɤ��֤��ޤ���
+成功すると、これらの関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、<VAR>position</VAR> に必ずシークが失敗する位置を書き込んで、
+原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> ��Τ����줫�����ܤ����򤵤�Ƥ��ʤ��ƤϤʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
-����������ܤ����оݤȤʤ�ƥ����ȥǡ�������äƤ��ʤ���С�
-<CODE>EB_ERR_NO_SUCH_SEARCH</CODE> ���֤��ޤ���
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくてはなりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+選択中の副本が、対象となるテキストデータを持っていなければ、
+<CODE>EB_ERR_NO_SUCH_SEARCH</CODE> を返します。
 </DL>
 </P><P>
 
@@ -2356,33 +2356,33 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <DD><A NAME="IDX369"></A>
 </P><P>
 
-�ؿ� <CODE>eb_seek_text()</CODE> �ϡ�<VAR>book</VAR> �����򤷤Ƥ������ܤ�
-�ƥ����ȥǡ����ե�����򥷡������ޤ���
-���������֤� <VAR>position</VAR> �ǻ��ꤷ�ޤ���
-���ΤȤ���<VAR>position</VAR> �Ͼ�˥ե��������Ƭ����ΰ��֤Ȥ��Ʋ��
-����ޤ���
-(���а��֤ؤΥ�������ǽ�ϡ�EB �饤�֥��ˤϤ���ޤ���)
+関数 <CODE>eb_seek_text()</CODE> は、<VAR>book</VAR> が選択している副本の
+テキストデータファイルをシークします。
+シーク位置は <VAR>position</VAR> で指定します。
+このとき、<VAR>position</VAR> は常にファイルの先頭からの位置として解釈
+されます。
+(相対位置へのシーク機能は、EB ライブラリにはありません。)
 </P><P>
 
-��������Ԥ��ȡ�����ޤǤ˹Ԥä��ɤ߹��ߤξ��ֵ�Ͽ���ꥻ�åȤ���ޤ���
+シークを行うと、それまでに行った読み込みの状態記録がリセットされます。
 <CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE>, <CODE>eb_read_rawtext()</CODE>
-���Ѥ��ƥƥ����ȥǡ������ɤ߹���ˤϡ�����äƤ��δؿ���ƤӽФ���
-����ɬ�פ�����ޤ���
+を用いてテキストデータを読み込むには、前もってこの関数を呼び出して
+おく必要があります。
 </P><P>
 
-��������ȡ����δؿ��� <CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、この関数は <CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> ��Τ����줫�����ܤ����򤵤�Ƥ��ʤ��ƤϤʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
-����������ܤ˥ƥ����ȥǡ�����¸�ߤ��ʤ��Ȥ��ϡ�<CODE>EB_ERR_NO_TEXT</CODE>
-���֤��ޤ���
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくてはなりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+選択中の副本にテキストデータが存在しないときは、<CODE>EB_ERR_NO_TEXT</CODE>
+を返します。
 </P><P>
 
-�ʤ������Ҥˤ�äƤϡ��ƥ����ȥǡ�������᤿�ե�����ˤ�¾�Υǡ�����
-���˳�Ǽ����Ƥ��뤳�Ȥ�����ޤ������ƥ����Ȱʳ��Υǡ����˥�������
-���Ƥ⡢�ƥ����ȥǡ����θ��߰��֡��ɤ߹��ߤ˴ؤ�����ֵ�Ͽ���Ѳ����ޤ���
+なお、書籍によっては、テキストデータを収めたファイルには他のデータも
+一緒に格納されていることがありますが、テキスト以外のデータにアクセス
+しても、テキストデータの現在位置、読み込みに関する状態記録は変化しません。
 </DL>
 </P><P>
 
@@ -2392,20 +2392,20 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <DD><A NAME="IDX371"></A>
 </P><P>
 
-�ؿ� <CODE>eb_seek_text()</CODE> �ϡ�<VAR>book</VAR> �����򤷤Ƥ������ܤ�
-�ƥ����ȥǡ����ե�����θ��ߤΥ����������֤��֤��ޤ���
+関数 <CODE>eb_seek_text()</CODE> は、<VAR>book</VAR> が選択している副本の
+テキストデータファイルの現在のアクセス位置を返します。
 </P><P>
 
-��������ȡ�<VAR>position</VAR> �λؤ��ΰ�˸��ߤΥ����������֤�񤭹��ߡ�
-<CODE>EB_SUCCESS</CODE> ���֤��ޤ���
-���Ԥ���ȡ���������ɬ�����Ԥ�����֤�񤭹��ߡ������򼨤����顼������
-���֤��ޤ���
+成功すると、<VAR>position</VAR> の指す領域に現在のアクセス位置を書き込み、
+<CODE>EB_SUCCESS</CODE> を返します。
+失敗すると、シークが必ず失敗する位置を書き込み、原因を示すエラーコード
+を返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> ��Τ����줫�����ܤ����򤵤�Ƥ��ʤ��ƤϤʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
-����������ܤ˥ƥ����ȥǡ�����¸�ߤ��ʤ��Ȥ��ϡ�<CODE>EB_ERR_NO_TEXT</CODE>
-���֤��ޤ���
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくてはなりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
+選択中の副本にテキストデータが存在しないときは、<CODE>EB_ERR_NO_TEXT</CODE>
+を返します。
 </DL>
 </P><P>
 
@@ -2418,111 +2418,111 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <DD><A NAME="IDX375"></A>
 </P><P>
 
-�ؿ� <CODE>eb_read_text()</CODE> �� <CODE>eb_read_heading()</CODE> �ϡ�<VAR>book</VAR>
-�����򤷤Ƥ������ܤΥƥ����ȥǡ����ե�����θ��ߤΥ����������֤���ǡ���
-���ɤ߹��ߤޤ���
-<CODE>eb_read_heading()</CODE> �ϸ��Ф����ɤ߹��ߤ��Ѥ���<CODE>eb_read_text()</CODE>
-�Ϥ���ʳ��Υƥ����ȥǡ������ɤ߹��ߤ��Ѥ��ޤ���
+関数 <CODE>eb_read_text()</CODE> と <CODE>eb_read_heading()</CODE> は、<VAR>book</VAR>
+が選択している副本のテキストデータファイルの現在のアクセス位置からデータ
+を読み込みます。
+<CODE>eb_read_heading()</CODE> は見出しの読み込みに用い、<CODE>eb_read_text()</CODE>
+はそれ以外のテキストデータの読み込みに用います。
 </P><P>
 
-�ɤ߹��ޤ줿�ƥ����ȥǡ����ϡ�ɬ�פ˱�����ʸ�������ɤ��Ѵ�
-(��<A HREF="eb-ja_2.html#SEC6">ʸ��������</A>����򻲾�) ���Ԥ�줿��ˡ�<VAR>hookset</VAR>
-�λؤ��եå����åȤˤ������äƲù�����ޤ���
-<VAR>hookset</VAR> �� <CODE>NULL</CODE> �ΤȤ��ϡ������ EB �饤�֥��¦���Ѱ�
-���Ƥ��� <EM>ɸ��Υեå����å� (default hookset)</EM> ���Ѥ����ޤ���
-���Υեå����åȤϡ�<CODE>eb_initialize_hookset()</CODE> �ˤ�äƽ��������
-�����Υեå����åȤ������Ǥ���
+読み込まれたテキストデータは、必要に応じて文字コードの変換
+(「<A HREF="eb-ja_2.html#SEC6">文字コード</A>」節を参照) が行われた後に、<VAR>hookset</VAR>
+の指すフックセットにしたがって加工されます。
+<VAR>hookset</VAR> が <CODE>NULL</CODE> のときは、代わりに EB ライブラリ側で用意
+している <EM>標準のフックセット (default hookset)</EM> が用いられます。
+このフックセットは、<CODE>eb_initialize_hookset()</CODE> によって初期化した
+だけのフックセットと等価です。
 </P><P>
 
-�եå����åȤˤ�äƲù����줿��ˡ��ƥ����ȥǡ����� <VAR>text</VAR> �λؤ�
-�ΰ�˽񤭹��ޤ졢�񤭹�����Х��ȿ��� <VAR>text_length</VAR> �λؤ��ΰ��
-�񤭹��ޤ�ޤ���
-<VAR>text</VAR> �ϥʥ�ʸ���ǽ�ü����ޤ�����<VAR>text_length</VAR> �ˤϥʥ�ʸ��
-��ʬ�ϴ��������ޤ���
-�ƥ����ȥǡ����ϡ�<VAR>text_max_length</VAR> �ǻ��ꤵ�줿�Х��ȿ���Ķ����
-�񤭹��ळ�ȤϤ���ޤ���
-��������<VAR>text_max_length</VAR> �ˤ�ʥ�ʸ����ʬ�ϴ�������äƤ��ޤ���
-�Τǡ�<VAR>text</VAR> �� <VAR>text_max_length</VAR> + 1 �Х���ʬ�Υǡ������Ǽ
-�Ǥ����礭����ɬ�פǤ���
+フックセットによって加工された後に、テキストデータは <VAR>text</VAR> の指す
+領域に書き込まれ、書き込んだバイト数が <VAR>text_length</VAR> の指す領域に
+書き込まれます。
+<VAR>text</VAR> はナル文字で終端されますが、<VAR>text_length</VAR> にはナル文字
+の分は勘定に入れません。
+テキストデータは、<VAR>text_max_length</VAR> で指定されたバイト数を超えて
+書き込むことはありません。
+ただし、<VAR>text_max_length</VAR> にもナル文字の分は勘定に入っていません
+ので、<VAR>text</VAR> は <VAR>text_max_length</VAR> + 1 バイト分のデータを格納
+できる大きさが必要です。
 </P><P>
 
-�ɤ���δؿ��⡢��������� <CODE>EB_SUCCESS</CODE> ���֤������Ԥ����
-<VAR>text_length</VAR> �λؤ��ΰ�� 0 ��񤭹���Ǹ����򼨤����顼������
-���֤��ޤ���
+どちらの関数も、成功すれば <CODE>EB_SUCCESS</CODE> を返し、失敗すれば
+<VAR>text_length</VAR> の指す領域に 0 を書き込んで原因を示すエラーコード
+を返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> ��Τ����줫�����ܤ����򤵤�Ƥ��ʤ��ƤϤʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくてはなりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
 </P><P>
 
-�ޤ���<CODE>eb_read_text()</CODE> �� <CODE>eb_read_heading()</CODE> ��ƤӽФ��ˤϡ�
-���餫���� <CODE>eb_seek_text()</CODE> �θƤӽФ��������������ƥ����ȥǡ���
-�Υ����������֤����åȤ��줿���֤ˤ��Ƥ����ʤ��ƤϤʤ�ޤ���
-�������򤻤��˸ƤӽФ��ȡ�<CODE>EB_ERR_NO_PREV_SEEK</CODE> ���֤��ޤ���
+また、<CODE>eb_read_text()</CODE> と <CODE>eb_read_heading()</CODE> を呼び出すには、
+あらかじめ <CODE>eb_seek_text()</CODE> の呼び出しを成功させ、テキストデータ
+のアクセス位置がセットされた状態にしておかなくてはなりません。
+シークをせずに呼び出すと、<CODE>EB_ERR_NO_PREV_SEEK</CODE> を返します。
 </P><P>
 
-�դ˰��٥���������С����ڤꥳ���ɤ����Ф����ޤǤδ֤ʤ顢�ؿ���
-�����֤��Ƥ֤��Ȥǥƥ����ȥǡ�����³�����ɤ߹��ळ�Ȥ��Ǥ��ޤ���
-���ڤꥳ���ɤ����Ф����ȡ��ؿ���ƤӽФ��Ƥ��ɤ߹��ߤϹԤ��ޤ���
-���ξ��Ǥ⡢¾�˥��顼��ȯ�����ʤ���� <CODE>EB_SUCCESS</CODE> ���֤ꡢ
-<VAR>text</VAR> �ˤ϶�ʸ���󤬽񤭹��ޤ�ޤ���
+逆に一度シークすれば、区切りコードが検出されるまでの間なら、関数を
+繰り返し呼ぶことでテキストデータの続きを読み込むことができます。
+区切りコードが検出されると、関数を呼び出しても読み込みは行われません。
+その場合でも、他にエラーが発生しなければ <CODE>EB_SUCCESS</CODE> が返り、
+<VAR>text</VAR> には空文字列が書き込まれます。
 </P><P>
 
-������������ <CODE>eb_read_text()</CODE> ��ƤӽФ��ƥƥ����ȥǡ������ɤ߹���
-�Ϥ᤿�顢�����֤��ƤӽФ��ݤ⡢<CODE>eb_read_text()</CODE> ��Ȥ�ʤ����
-�ʤ�ޤ���
-���椫�� <CODE>eb_read_heading()</CODE> ����Ӹ�Ҥ� <CODE>eb_read_rawtext()</CODE>
-���ڤ��ؤ��ƸƤӽФ��� <CODE>EB_ERR_DIFF_CONTENT</CODE> ���顼���֤�ޤ���
-�ؿ� <CODE>eb_read_heading()</CODE> �ˤĤ��Ƥ�Ʊ�ͤǤ���
-�������¤ϡ����� <CODE>eb_seek_text()</CODE> ��ƤӽФ�����
-<CODE>eb_set_subbook()</CODE> �����ܤ�����ľ���ޤ�³���ޤ���
+ただし、一度 <CODE>eb_read_text()</CODE> を呼び出してテキストデータを読み込み
+始めたら、繰り返し呼び出す際も、<CODE>eb_read_text()</CODE> を使わなければ
+なりません。
+途中から <CODE>eb_read_heading()</CODE> および後述の <CODE>eb_read_rawtext()</CODE>
+に切り替えて呼び出すと <CODE>EB_ERR_DIFF_CONTENT</CODE> エラーが返ります。
+関数 <CODE>eb_read_heading()</CODE> についても同様です。
+この制限は、再度 <CODE>eb_seek_text()</CODE> を呼び出すか、
+<CODE>eb_set_subbook()</CODE> で副本を選択し直すまで続きます。
 </P><P>
 
-<VAR>appendix</VAR> �� <CODE>NULL</CODE> �ǤϤʤ������ڤꥳ���ɤξ������ä�����
-��������Ǥ���С���ʸ�ζ��ڤꥳ���ɤȤ��Ƥ����ͤ���Ѥ��ޤ���
-����ʳ��ξ��ϡ�<CODE>eb_read_text()</CODE> �����ڤꥳ���ɤ�ưȽ�̤���
-�ޤ���
-������������Ƚ��ϴ����ʤ�ΤǤϤʤ��Τǡ����Ҥˤ�äƤ��Ѥʰ��֤���ʸ
-���ڤ�Ƥ��ޤ������Τ�ޤ���
-(��ʸ�ʳ��Υƥ����ȥǡ����˴ؤ��Ƥϡ����Τ褦������ϵ����ޤ���)
+<VAR>appendix</VAR> が <CODE>NULL</CODE> ではなく、区切りコードの情報を持った副本
+を選択中であれば、本文の区切りコードとしてその値を使用します。
+それ以外の場合は、<CODE>eb_read_text()</CODE> が区切りコードを自動判別を試み
+ます。
+ただし、この判定は完璧なものではないので、書籍によっては変な位置で本文
+が切れてしまうかも知れません。
+(本文以外のテキストデータに関しては、このような問題は起きません。)
 </P><P>
 
-���� <VAR>container</VAR> �ϡ����ץꥱ�������ץ�����फ��եå��ؿ��˥ǡ���
-���Ϥ�����Τ�ΤǤ���
-<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> �Ǥϡ�ľ�ܤ��ΰ�������
-�򻲾Ȥ��뤳�ȤϤ���ޤ���
+引数 <VAR>container</VAR> は、アプリケーションプログラムからフック関数にデータ
+を渡すためのものです。
+<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> では、直接この引数の値
+を参照することはありません。
 </P><P>
 
-���� <VAR>appendix</VAR>, <VAR>container</VAR> �ϡ����Τޤޥեå��ؿ����Ϥ���ޤ���
-�����ΰ����� <CODE>NULL</CODE> �Ǥ⹽���ޤ���
-(�ƤӽФ����եå��ؿ��ǻپ㤬�ʤ���С�)
+引数 <VAR>appendix</VAR>, <VAR>container</VAR> は、そのままフック関数に渡されます。
+これらの引数は <CODE>NULL</CODE> でも構いません。
+(呼び出されるフック関数で支障がなければ。)
 </P><P>
 
-�ʤ����եå��ؿ��� <CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> 
-���Ȥ�ʸ���ʤ������������ץ������󥹰��ʬ���Ф���ǡ�����񤭹��⤦��
-�����Ȥ��ˡ�<VAR>text</VAR> �˽�ʬ�ʶ����ΰ褬�ʤ��Ȥ������Ȥ����������ޤ���
-���ξ�硢�ؿ�������ޤ� <VAR>text</VAR> �˽񤭹��ळ�ȤϤ����ˡ����ä���
-�����򽪤������ޤ���
-�������äơ��ޥ���Х���ʸ���Υǡ�����������ڤ줿�ꤹ�뤳�ȤϤ���ޤ���
+なお、フック関数や <CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> 
+自身が文字ないしエスケープシーケンス一個分に対するデータを書き込もうと
+したときに、<VAR>text</VAR> に十分な空き領域がないということが起こり得ます。
+その場合、関数は途中まで <VAR>text</VAR> に書き込むことはせずに、いったん
+処理を終えて戻ります。
+したがって、マルチバイト文字のデータが途中で切れたりすることはありません。
 </P><P>
 
-�񤭹���ʤ��ä�ʬ�ϡ������ʤ��� <VAR>text_length</VAR> �δ���ˤ�����ޤ���
-�񤭹���ʤ��ä��ǡ����� <VAR>book</VAR> ��������¸����Ƥ���Τǡ��⤦����
-<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> ��ƤӽФ��ȡ������
-�ƤӽФ��ǽ񤭹���ʤ��ä��ǡ������ޤ� <VAR>text</VAR> ����Ƭ�˽񤭹��ޤ�ޤ���
-�񤭹�����ǡ����� <VAR>text_length</VAR> �δ��������ޤ���
+書き込めなかった分は、当然ながら <VAR>text_length</VAR> の勘定には入りません。
+書き込めなかったデータは <VAR>book</VAR> 内部に保存されているので、もう一度
+<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> を呼び出すと、前回の
+呼び出しで書き込めなかったデータがまず <VAR>text</VAR> の先頭に書き込まれます。
+書き込んだデータは <VAR>text_length</VAR> の勘定に入ります。
 </P><P>
 
-��������<CODE>book</CODE> ����¸���Ƥ���ǡ�����Ĺ���� <VAR>max_text_length</VAR> ��
-Ķ���Ƥ���ȡ�����񤭹��ޤ��˴ؿ��Ͻ�λ���ޤ���
-���ΤȤ����񤭹���ʤ��ä��ǡ����ϰ���³����¸����ޤ���
-�Ĥޤꡢ<CODE>text_max_length</CODE> �����ޤ�˾������������ݻ����Ƥ���ǡ���
-�Τۤ���Ĺ���ȡ����ٸƤӽФ��Ƥ� <CODE>text</CODE> �ؤν񤭹��ߤ��ʤߤޤ���Τǡ�
-���դ�ɬ�פǤ���
+ただし、<CODE>book</CODE> が保存しているデータの長さが <VAR>max_text_length</VAR> を
+超えていると、何も書き込まずに関数は終了します。
+このとき、書き込めなかったデータは引き続き保存されます。
+つまり、<CODE>text_max_length</CODE> があまりに小さく、かつ保持しているデータ
+のほうが長いと、何度呼び出しても <CODE>text</CODE> への書き込みが進みませんので、
+注意が必要です。
 </P><P>
 
-<CODE>eb_seek_text()</CODE> ��ƤӽФ�����<CODE>eb_set_subbook()</CODE> �����ܤ�����
-��ľ���ȡ���¸���Ƥ����ǡ������˴�����ޤ���
+<CODE>eb_seek_text()</CODE> を呼び出すか、<CODE>eb_set_subbook()</CODE> で副本を選択
+し直すと、保存していたデータは破棄されます。
 </DL>
 </P><P>
 
@@ -2532,52 +2532,52 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <DD><A NAME="IDX377"></A>
 </P><P>
 
-�ؿ� <CODE>eb_read_rawtext()</CODE> �ϡ�<VAR>book</VAR> �����򤷤Ƥ������ܤ�
-�ƥ����ȥǡ����ե�����θ��ߤΥ����������֤���ǡ������ɤ߹��ߤޤ���
+関数 <CODE>eb_read_rawtext()</CODE> は、<VAR>book</VAR> が選択している副本の
+テキストデータファイルの現在のアクセス位置からデータを読み込みます。
 </P><P>
 
-<CODE>eb_read_text()</CODE> �Ȼ��Ƥ��ޤ��������δؿ��ϥեå����åȤˤ��ǡ���
-�βù���ʸ�������ɤ��Ѵ�����ڹԤ鷺���ǡ���������ɽ���Τޤ��֤��ޤ���
-�ɤ߹���ƥ����ȥǡ����μ���ϡ����Ǥ��äƤ⹽���ޤ���
+<CODE>eb_read_text()</CODE> と似ていますが、この関数はフックセットによるデータ
+の加工や文字コードの変換を一切行わず、データを内部表現のまま返します。
+読み込むテキストデータの種類は、何であっても構いません。
 </P><P>
 
-�ɤ߹�����ƥ����ȥǡ����� <VAR>text</VAR> �λؤ��ΰ�˽񤭹��ޤ졢�񤭹����
-�Х��ȿ��� <VAR>text_length</VAR> �λؤ��ΰ�˽񤭹��ޤ�ޤ���
-�ƥ����ȥǡ����ϡ�<VAR>text_max_length</VAR> �ǻ��ꤵ�줿�Х��ȿ���Ķ����
-�񤭹��ळ�ȤϤ���ޤ���
-��������<CODE>eb_read_text()</CODE> �Ȱۤʤꡢ<VAR>text</VAR> �ϥʥ�ʸ���ǽ�ü
-����ޤ���
-�ޥ���Х���ʸ���䥨�������ץ������󥹤������ <VAR>text</VAR> �λĤ��ΰ�
-��­��ʤ��ʤä����⡢����ޤǤϽ񤭹��ߤޤ���
+読み込んだテキストデータは <VAR>text</VAR> の指す領域に書き込まれ、書き込んだ
+バイト数が <VAR>text_length</VAR> の指す領域に書き込まれます。
+テキストデータは、<VAR>text_max_length</VAR> で指定されたバイト数を超えて
+書き込むことはありません。
+ただし、<CODE>eb_read_text()</CODE> と異なり、<VAR>text</VAR> はナル文字で終端
+されません。
+マルチバイト文字やエスケープシーケンスの途中で <VAR>text</VAR> の残り領域
+が足りなくなった場合も、途中までは書き込みます。
 </P><P>
 
-��������������� <CODE>EB_SUCCESS</CODE> ���֤������Ԥ���� <VAR>text_length</VAR>
-�λؤ��ΰ�� 0 ��񤭹���Ǹ����򼨤����顼�����ɤ��֤��ޤ���
+処理が成功すれば <CODE>EB_SUCCESS</CODE> を返し、失敗すれば <VAR>text_length</VAR>
+の指す領域に 0 を書き込んで原因を示すエラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> ��Τ����줫�����ܤ����򤵤�Ƥ��ʤ��ƤϤʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくてはなりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
 </P><P>
 
-�ޤ������δؿ���ƤӽФ��ˤϡ����餫���� <CODE>eb_seek_text()</CODE> �θƤӽФ�
-�������������ƥ����ȥǡ����Υ����������֤����åȤ��줿���֤ˤ���
-�����ʤ��ƤϤʤ�ޤ���
-�������򤻤��˸ƤӽФ��ȡ�<CODE>EB_ERR_NO_PREV_SEEK</CODE> ���֤��ޤ���
+また、この関数を呼び出すには、あらかじめ <CODE>eb_seek_text()</CODE> の呼び出し
+を成功させ、テキストデータのアクセス位置がセットされた状態にして
+おかなくてはなりません。
+シークをせずに呼び出すと、<CODE>EB_ERR_NO_PREV_SEEK</CODE> を返します。
 </P><P>
 
-���δؿ��ϡ������֤��ƤӽФ����Ȥǡ������ɤ߹�����ƥ����ȥǡ�����³��
-���ɤ߹��ळ�Ȥ��Ǥ��ޤ���
-�����������ڤꥳ���ɤθ��Ф�Ԥ��ޤ���Τǡ��Ҥ�����ƤӽФ���³����ȡ�
-�ƥ����ȥǡ����ե�����������ޤǹԤäƤ��ޤ��ޤ���
+この関数は、繰り返し呼び出すことで、前回読み込んだテキストデータの続き
+を読み込むことができます。
+ただし、区切りコードの検出を行いませんので、ひたすら呼び出しを続けると、
+テキストデータファイルの末尾まで行ってしまいます。
 </P><P>
 
-���� <CODE>eb_read_rawtext()</CODE> ��ƤӽФ��ƥƥ����ȥǡ������ɤ߹���
-�Ϥ᤿�顢�����֤��ƤӽФ��ݤ⡢<CODE>eb_read_rawtext()</CODE> ��Ȥ�ʤ����
-�ʤ�ޤ���
-���椫�顢<CODE>eb_read_text()</CODE> �� <CODE>eb_read_text()</CODE> ���ڤ��ؤ���ȡ�
-<CODE>EB_ERR_DIFF_CONTENT</CODE> ���顼���֤�ޤ���
-�������¤ϡ����� <CODE>eb_seek_text()</CODE> ��ƤӽФ�����
-<CODE>eb_set_subbook()</CODE> �����ܤ�����ľ���ޤ�³���ޤ���
+一度 <CODE>eb_read_rawtext()</CODE> を呼び出してテキストデータを読み込み
+始めたら、繰り返し呼び出す際も、<CODE>eb_read_rawtext()</CODE> を使わなければ
+なりません。
+途中から、<CODE>eb_read_text()</CODE> や <CODE>eb_read_text()</CODE> に切り替えると、
+<CODE>EB_ERR_DIFF_CONTENT</CODE> エラーが返ります。
+この制限は、再度 <CODE>eb_seek_text()</CODE> を呼び出すか、
+<CODE>eb_set_subbook()</CODE> で副本を選択し直すまで続きます。
 </DL>
 </P><P>
 
@@ -2587,32 +2587,32 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <DD><A NAME="IDX379"></A>
 </P><P>
 
-�ؿ� <CODE>eb_is_text_stopped()</CODE> �ϡ��Ǹ���ɤ߹�����ƥ����ȥǡ�����
-������ã�������ɤ�����Ƚ�ꤷ�ޤ���
+関数 <CODE>eb_is_text_stopped()</CODE> は、最後に読み込んだテキストデータが
+末尾に達したかどうかを判定します。
 </P><P>
 
-<VAR>book</VAR> ������������ܤǡ��Ǹ�� <CODE>eb_read_text()</CODE> �ޤ���
-<CODE>eb_read_heading()</CODE> �ǥƥ����ȥǡ������ɤ߹�����ݤˡ����ڤꥳ����
-�򸡽Ф��������ƥ����ȥǡ�����������ã�����ɤ߹��ߤ򽪤��Ƥ����С�����
-�ؿ��� 1 ���֤��ޤ���
-����ʳ��ΤȤ��ϡ�0 ���֤��ޤ���
+<VAR>book</VAR> が選択中の副本で、最後に <CODE>eb_read_text()</CODE> または
+<CODE>eb_read_heading()</CODE> でテキストデータを読み込んだ際に、区切りコード
+を検出したか、テキストデータの末尾に達して読み込みを終えていれれば、この
+関数は 1 を返します。
+それ以外のときは、0 を返します。
 </P><P>
 
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ����䡢����������ܤ˥ƥ����ȥǡ�����
-¸�ߤ��ʤ����� 0 ���֤�ޤ���
+<VAR>book</VAR> が副本を選択していない場合や、選択中の副本にテキストデータが
+存在しない場合も 0 が返ります。
 </P><P>
 
-<CODE>eb_read_text()</CODE> �ޤ��� <CODE>eb_read_heading()</CODE> �ǥƥ����ȥǡ���
-���ɤ߹���Ǥ��ʤ����⡢Ʊ�ͤ� 0 ���֤�ޤ���
-�ƥ����ȥǡ������ɤ߹������Ǥ��äƤ⡢�ƥ����ȥǡ������ɤ߹��ߤ˴ؤ���
-���ֵ�Ͽ��ꥻ�åȤ���ؿ� (eb_read_text() �ι�򻲾�) ��Ƥ�Ǥ��ޤ��ȡ�
-�ɤ߹���Ǥ��ʤ��ȸ��ʤ���ޤ��Τǡ����դ��Ʋ�������
+<CODE>eb_read_text()</CODE> または <CODE>eb_read_heading()</CODE> でテキストデータ
+を読み込んでいない場合も、同様に 0 が返ります。
+テキストデータを読み込んだ後であっても、テキストデータの読み込みに関する
+状態記録をリセットする関数 (eb_read_text() の項を参照) を呼んでしまうと、
+読み込んでいないと見なされますので、注意して下さい。
 </P><P>
 
-�̾�Ϥ��δؿ���Ȥ�ʤ��Ƥ⡢<CODE>eb_read_text()</CODE> ��
-<CODE>eb_read_heading()</CODE> �� 0 ���֤����顢�ƥ����ȥǡ�����������ã����
-�Ȥߤʤ��ƺ����٤��ʤ��Ǥ��礦��
-���������κݤϡ����� <CODE>text_max_length</CODE> ���ͤ�ʬ�礭����äƲ�������
+通常はこの関数を使わなくても、<CODE>eb_read_text()</CODE> や
+<CODE>eb_read_heading()</CODE> が 0 を返したら、テキストデータの末尾に達した
+とみなして差し支えないでしょう。
+ただしその際は、引数 <CODE>text_max_length</CODE> の値を十分大きく取って下さい。
 </P><P>
 
 </DL>
@@ -2633,32 +2633,32 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <A NAME="IDX387"></A>
 </P><P>
 
-�����δؿ��ϡ��������եå��ؿ����椫�顢�ƥ����ȥǡ�����񤭹���
-������Ѥ��ޤ���
-�񤭹���ǡ����μ���ˤ�äơ��Ȥ�ʬ���Ʋ�������
+これらの関数は、いずれもフック関数の中から、テキストデータを書き込む
+ために用います。
+書き込むデータの種類によって、使い分けて下さい。
 </P><P>
 
-<CODE>eb_write_text_byte1()</CODE> �ϡ�<VAR>byte1</VAR> �ǻ��ꤷ�� 1 �Х��Ȥ��ͤ�
-�񤭹��ߤޤ���
-<CODE>eb_write_text_byte2()</CODE> �ϡ�<VAR>byte1</VAR>, <VAR>byte2</VAR> �ǻ��ꤷ��
-2 �Х��Ȥ�񤭹��ߤޤ���
-<CODE>eb_write_text_string()</CODE> �ϡ�<VAR>string</VAR> �ǻ��ꤷ��ʸ�����
-�񤭹��ߤޤ���
-<CODE>eb_write_text()</CODE> �ϡ�<VAR>stream</VAR> ����Ϥޤ�Ĺ�� <VAR>stream_length</VAR>
-�Х��ȤΥХ������񤭹��ߤޤ���
+<CODE>eb_write_text_byte1()</CODE> は、<VAR>byte1</VAR> で指定した 1 バイトの値を
+書き込みます。
+<CODE>eb_write_text_byte2()</CODE> は、<VAR>byte1</VAR>, <VAR>byte2</VAR> で指定した
+2 バイトを書き込みます。
+<CODE>eb_write_text_string()</CODE> は、<VAR>string</VAR> で指定した文字列を
+書き込みます。
+<CODE>eb_write_text()</CODE> は、<VAR>stream</VAR> から始まる長さ <VAR>stream_length</VAR>
+バイトのバイト列を書き込みます。
 </P><P>
 
-�ɤδؿ��⡢��������� <CODE>EB_SUCCESS</CODE> ���֤������Ԥ���ȸ����򼨤�
-���顼�����ɤ��֤��ޤ���
+どの関数も、成功すると <CODE>EB_SUCCESS</CODE> を返し、失敗すると原因を示す
+エラーコードを返します。
 </P><P>
 
-�ǽ�Ū�ˡ��񤭹�����ƥ����ȥǡ����ϡ��եå��ؿ��θƤӽФ����Ǥ���
-<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> ����
-���ץꥱ�������ץ��������Ϥ���ޤ���
+最終的に、書き込んだテキストデータは、フック関数の呼び出し元である
+<CODE>eb_read_text()</CODE>, <CODE>eb_read_heading()</CODE> から
+アプリケーションプログラムに渡されます。
 </P><P>
 
-�եå��ؿ��Ȥ��ƸƤӽФ���Ƥ��ʤ��Ȥ��ˡ������δؿ���ƤӽФ������
-��ư���̤����Ǥ���
+フック関数として呼び出されていないときに、これらの関数を呼び出した場合
+の動作は未定義です。
 </DL>
 </P><P>
 
@@ -2668,36 +2668,36 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <DD><A NAME="IDX389"></A>
 </P><P>
 
-�ؿ� <CODE>eb_current_candidate()</CODE> �ϡ�����������Υƥ����ȥǡ�����
-���߰��֤˽񤫤�Ƥ��롢ʣ�縡���θ���Ȥʤ����֤��ޤ���
+関数 <CODE>eb_current_candidate()</CODE> は、アクセス中のテキストデータの
+現在位置に書かれている、複合検索の候補となる語を返します。
 </P><P>
 
-�֤�ʸ�����Ĺ���ϡ���Ĺ�� <CODE>EB_MAX_WORD_LENGTH</CODE> �Х��Ȥˤʤ�ޤ���
-������������Ĺ���˥ʥ�ʸ���ϴޤߤޤ���
+返す文字列の長さは、最長で <CODE>EB_MAX_WORD_LENGTH</CODE> バイトになります。
+ただし、この長さにナル文字は含みません。
 </P><P>
 
-���δؿ��������ü�ǡ�ʣ�縡���θ���Ȥʤ��ν�λ���̣����
-���������ץ������󥹤ؤΥեå��Ǥ��� <CODE>EB_HOOK_END_CANDIDATE_LEAF</CODE>
-����� <CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> ���Ф���եå��ؿ�����ǤΤ�
-�ƤӽФ����Ȥ��Ǥ��ޤ���
-����ʳ��ξ��ǸƤӽФ����Ȥ���ư��ϡ�̤����Ǥ���
+この関数は非常に特殊で、複合検索の候補となる語の終了を意味する
+エスケープシーケンスへのフックである <CODE>EB_HOOK_END_CANDIDATE_LEAF</CODE>
+および <CODE>EB_HOOK_END_CANDIDATE_GROUP</CODE> に対するフック関数の中でのみ
+呼び出すことができます。
+それ以外の場所で呼び出したときの動作は、未定義です。
 </P><P>
 
-���δؿ��θƤӽФ����Ǥ������եå��ؿ����ϤäƤ��� <CODE>EB_Book</CODE> 
-���֥������� (�ؤΥݥ���) �򡢤��Τޤޤ��δؿ��˰����Ȥ����Ϥ���
-���ޤ���
+この関数の呼び出し方ですが、フック関数に渡ってきた <CODE>EB_Book</CODE> 
+オブジェクト (へのポインタ) を、そのままこの関数に引数として渡して
+やります。
 </P><P>
 
-<VAR>book</VAR> ��ʸ��������
-(��<A HREF="eb-ja_5.html#SEC21">[CD-ROM ���Ҥ� <CODE>EB_Book</CODE> ���֥�������] �ǡ������ξܺ�</A>����򻲾�)
-�� <CODE>EB_CHARCODE_ISO8859_1</CODE> �ʤ顢�ؿ����֤�ʸ����� ISO 8859-1 
-�ˤʤꡢ����ʳ���ʸ�������ɤξ������ܸ� EUC �ˤʤ�ޤ���
-�ؿ����֤�ʸ����ϡ�¾�Υեå��ˤ��ù������αƶ�������ޤ���
-ʸ�������ɤ��Ѵ���Ԥ��ʳ��ϡ������ǡ����򤽤Τޤ��֤��ޤ���
+<VAR>book</VAR> の文字コード
+(「<A HREF="eb-ja_5.html#SEC21">[CD-ROM 書籍と <CODE>EB_Book</CODE> オブジェクト] データ型の詳細</A>」節を参照)
+が <CODE>EB_CHARCODE_ISO8859_1</CODE> なら、関数の返す文字列は ISO 8859-1 
+になり、それ以外の文字コードの場合は日本語 EUC になります。
+関数の返す文字列は、他のフックによる加工処理の影響を受けません。
+文字コードの変換を行う以外は、内部データをそのまま返します。
 </P><P>
 
-�ʤ������δؿ����֤���ʸ����򻲾ȤǤ���Τϡ��եå��ؿ��������ޤǤ�
-�֤����Ǥ��Τǡ����դ��Ʋ�������
+なお、この関数が返した文字列を参照できるのは、フック関数から戻るまでの
+間だけですので、注意して下さい。
 </DL>
 </P><P>
 
@@ -2710,69 +2710,69 @@ EB �饤�֥��ϡ�����Ū�ʥեå��ؿ��򤤤��Ĥ��Ѱդ��Ƥ��ޤ���
 <A NAME="IDX393"></A>
 </P><P>
 
-�ؿ� <CODE>eb_forward_text()</CODE> �� <CODE>eb_backward_text()</CODE> �ϡ�
-<VAR>book</VAR> �����򤷤Ƥ������ܤ���ʸ�Υ����������֤�����˰�ư������
-��ʸ�ζ��ڤꥳ���ɤ�ñ�̤Ȥ���Ƭ�Ф���Ԥ��ޤ���
-���礦�ɡ����� CD �ζʤ�Ƭ�Ф���Ʊ���Ǥ���
+関数 <CODE>eb_forward_text()</CODE> と <CODE>eb_backward_text()</CODE> は、
+<VAR>book</VAR> が選択している副本の本文のアクセス位置を前後に移動させ、
+本文の区切りコードを単位とした頭出しを行います。
+ちょうど、音楽 CD の曲の頭出しと同じです。
 </P><P>
 
-<CODE>eb_forward_text()</CODE> ����ʸ�����������˸����äƥ����������֤�
-�ʤᡢ<CODE>eb_backward_text()</CODE> ����Ƭ�����˸����äƥ����������֤�
-�ᤷ�ޤ���
+<CODE>eb_forward_text()</CODE> は本文の末尾方向に向かってアクセス位置を
+進め、<CODE>eb_backward_text()</CODE> は先頭方向に向かってアクセス位置を
+戻します。
 </P><P>
 
-<CODE>eb_forward_text()</CODE> �θƤӽФ��Ǥϡ������������֤�ɬ�����θ��
-�����γ��ϰ��֤ޤǰ�ư���ޤ���
-������Ф��� <CODE>eb_backward_text()</CODE> �θƤӽФ��Ǥϡ���ư�褬����
-�ˤ�äưۤʤ�ޤ���
-�⤷�����ߤΥ����������֤�����ñ�����������Ƭ�ˤ���Ȥ��ϡ�
-<CODE>eb_backward_text()</CODE> �θƤӽФ��ˤ�äơ��������ñ���������
-��Ƭ�˥����������֤���ư���ޤ���
-�����������֤�ñ�������������������ˤ���Ȥ��ϡ�����ñ���������
-��Ƭ�˰�ư���ޤ���
+<CODE>eb_forward_text()</CODE> の呼び出しでは、アクセス位置は必ず次の語の
+説明の開始位置まで移動します。
+それに対して <CODE>eb_backward_text()</CODE> の呼び出しでは、移動先が状態
+によって異なります。
+もし、現在のアクセス位置がその単語の説明の先頭にあるときは、
+<CODE>eb_backward_text()</CODE> の呼び出しによって、一つ前の単語の説明の
+先頭にアクセス位置が移動します。
+アクセス位置が単語の説明の途中や末尾にあるときは、その単語の説明の
+先頭に移動します。
 </P><P>
 
-���δؿ��ϡ���������� <CODE>EB_SUCCESS</CODE> ���֤������Ԥ���ȸ����򼨤�
-���顼�����ɤ��֤��ޤ���
+この関数は、成功すると <CODE>EB_SUCCESS</CODE> を返し、失敗すると原因を示す
+エラーコードを返します。
 </P><P>
 
-���餫���ᡢ<VAR>book</VAR> ��Τ����줫�����ܤ����򤵤�Ƥ��ʤ��ƤϤʤ�ޤ���
-<VAR>book</VAR> �����ܤ����򤷤Ƥ��ʤ���С�<CODE>EB_ERR_NO_CUR_SUB</CODE> ���֤��ޤ���
+あらかじめ、<VAR>book</VAR> 内のいずれかの副本が選択されていなくてはなりません。
+<VAR>book</VAR> が副本を選択していなければ、<CODE>EB_ERR_NO_CUR_SUB</CODE> を返します。
 </P><P>
 
-�ä��ơ������δؿ���ƤӽФ��ˤϡ����餫���� <CODE>eb_seek_text()</CODE> ��
-<CODE>eb_read_text()</CODE> ��ƤӽФ����������Ƥ��ʤ��Ȥ����ޤ���
-(<CODE>eb_read_text()</CODE> �θƤӽФ�������������ˤϡ����������ä� 
-<CODE>eb_seek_text()</CODE> �θƤӽФ������������뤳�Ȥ����Ȥʤ�ޤ���)
+加えて、これらの関数を呼び出すには、あらかじめ <CODE>eb_seek_text()</CODE> か
+<CODE>eb_read_text()</CODE> を呼び出しが成功していないといけません。
+(<CODE>eb_read_text()</CODE> の呼び出しを成功させるには、さらに前もって 
+<CODE>eb_seek_text()</CODE> の呼び出しを成功させることが条件となります。)
 </P><P>
 
-<CODE>eb_read_text()</CODE> �ǤϤʤ���<CODE>eb_read_heading()</CODE> ��
-<CODE>eb_read_rawtext()</CODE> �θƤӽФ�������������Ǥ��δؿ���ƤӽФ��ȡ�
-<CODE>EB_ERR_DIFF_CONTENT</CODE> ���֤��ޤ���
-�ޤ�������ä� <CODE>eb_seek_text()</CODE> �ǥ����������ˤ��δؿ���ƤӽФ��ȡ�
-<CODE>EB_ERR_NO_PREV_SEEK</CODE> ���֤��ޤ���
+<CODE>eb_read_text()</CODE> ではなく、<CODE>eb_read_heading()</CODE> や
+<CODE>eb_read_rawtext()</CODE> の呼び出しに成功した後でこの関数を呼び出すと、
+<CODE>EB_ERR_DIFF_CONTENT</CODE> を返します。
+また、前もって <CODE>eb_seek_text()</CODE> でシークせずにこの関数を呼び出すと、
+<CODE>EB_ERR_NO_PREV_SEEK</CODE> を返します。
 </P><P>
 
-��ʸ�ǡ�������������Ƭ��ã���Ƥ��ޤäơ����������ˤ⤦��ʸ���ʤ��Ȥ��ϡ�
-<CODE>EB_ERR_END_OF_CONTENT</CODE> ���֤��ޤ���
+本文データの末尾や先頭に達してしまって、その方向にもう本文がないときは、
+<CODE>EB_ERR_END_OF_CONTENT</CODE> を返します。
 </P><P>
 
-<VAR>appendix</VAR> �� <CODE>NULL</CODE> �ǤϤʤ������ڤꥳ���ɤξ������ä�����
-��������Ǥ���С���ʸ�ζ��ڤꥳ���ɤȤ��Ƥ����ͤ���Ѥ��ޤ���
-����ʳ��ξ��ϡ�<CODE>eb_read_text()</CODE> ��Ʊ����ˡ�Ƕ��ڤꥳ���ɤ�
-��ưȽ�̤��ߤޤ���
+<VAR>appendix</VAR> が <CODE>NULL</CODE> ではなく、区切りコードの情報を持った副本
+を選択中であれば、本文の区切りコードとしてその値を使用します。
+それ以外の場合は、<CODE>eb_read_text()</CODE> と同じ方法で区切りコードの
+自動判別を試みます。
 </P><P>
 
-�����������־�ˤ���Τ���˥塼�����ɽ���Τ褦�ˡ���ʸ�ʳ���
-�ƥ����ȥǡ����Ǥ��äƤ⡢�����ޤ���
-����������ʸ�ʳ��Υƥ����ȥǡ����������ˤϡ�Ƭ�Ф����֤���սꤷ��
-����ޤ���Τǡ����δؿ������Ω�ľ����ϤۤȤ�ɤ���ޤ���
+アクセス位置上にあるのがメニューや著作権表示のように、本文以外の
+テキストデータであっても、構いません。
+ただし、本文以外のテキストデータの内部には、頭出し位置が一箇所しか
+ありませんので、この関数が役に立つ状況はほとんどありません。
 </P><P>
 
-(��˥塼�Ǥϡ��ġ��γ��ؤΥ�˥塼�ǡ����������줾����Ω����
-�ƥ����ȥǡ����ˤʤäƤ��뤿�ᡢƬ�Ф���ԤäƤ�����Υ�˥塼�ǡ����ؤ�
-��ư�Ǥ��ޤ���
-ʣ�縡���θ��������Ʊ�ͤǤ���)
+(メニューでは、個々の階層のメニューデータが、それぞれ独立した
+テキストデータになっているため、頭出しを行っても前後のメニューデータへは
+移動できません。
+複合検索の候補一覧も同様です。)
 </DL>
 </P><P>
 

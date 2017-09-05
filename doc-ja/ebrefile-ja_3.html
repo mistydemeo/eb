@@ -35,42 +35,42 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebrefile-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 3. <CODE>ebrefile</CODE> �Υ��ץ������� </H1>
+<H1> 3. <CODE>ebrefile</CODE> のオプション一覧 </H1>
 <!--docid::SEC5::-->
 <P>
 
-<CODE>ebrefile</CODE> ���ޥ�ɤϡ�����Ū�ʰ�ʸ�����ץ����̾�ȳФ��䤹��Ĺ��
-���ץ����̾��ξ���򰷤����Ȥ��Ǥ��ޤ���
-Ĺ�����ץ����̾��ɽ���ˤϡ�<SAMP>`-'</SAMP> �ǤϤʤ� <SAMP>`--'</SAMP> ���Ѥ��ޤ���
-���ץ����̾����դ˷�ޤ��ϰ���ǡ�̾���θ�����ʬ���ά���뤳�Ȥ��Ǥ���
-����
+<CODE>ebrefile</CODE> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<SAMP>`-'</SAMP> ではなく <SAMP>`--'</SAMP> を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
 </P><P>
 
 <DL COMPACT>
 <DT><CODE>-h</CODE>
 <DD><DT><CODE>--help</CODE>
-<DD>�إ�ץ�å�������ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+<DD>ヘルプメッセージを標準出力に出力して、終了します。
 <P>
 
 <DT><CODE>-o <VAR>directory</VAR></CODE>
 <DD><DT><CODE>--output-directory <VAR>directory</VAR></CODE>
-<DD>���������������ե�������֤��ǥ��쥯�ȥ����ꤷ�ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ������ȥǥ��쥯�ȥ� (<SAMP>`.'</SAMP>) �ˤʤ�ޤ���
-(�ܤ����� ��<A HREF="ebrefile-ja_2.html#SEC2"><CODE>ebrefile</CODE> �μ¹�</A>����򻲾�)��
+<DD>新しいカタログファイルを置くディレクトリを指定します。
+指定しなかったときは、カレントディレクトリ (<SAMP>`.'</SAMP>) になります。
+(詳しくは 「<A HREF="ebrefile-ja_2.html#SEC2"><CODE>ebrefile</CODE> の実行</A>」節を参照)。
 <P>
 
 <DT><CODE>-S <VAR>subbooks</VAR></CODE>
 <DD><DT><CODE>--subbook <VAR>subbooks</VAR></CODE>
-<DD><CODE>ebrefile</CODE> �����������������ե�����˼�����٤����ܤ���ꤷ�ޤ���
-<VAR>����</VAR> �ϡ����ܤΥǥ��쥯�ȥ�̾�򥫥�� (<SAMP>`,'</SAMP>) �Ƕ��ڤä�
-�¤٤���ΤǤʤ��ƤϤ����ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ����٤Ƥ����ܤ��оݤˤʤ�ޤ�
-(�ܤ����� ��<A HREF="ebrefile-ja_2.html#SEC3">���ܤ�����</A>����򻲾�)��
+<DD><CODE>ebrefile</CODE> が新しいカタログファイルに取り込むべき副本を指定します。
+<VAR>副本</VAR> は、副本のディレクトリ名をカンマ (<SAMP>`,'</SAMP>) で区切って
+並べたものでなくてはいけません。
+指定しなかったときは、すべての副本が対象になります
+(詳しくは 「<A HREF="ebrefile-ja_2.html#SEC3">副本の選択</A>」節を参照)。
 <P>
 
 <DT><CODE>-v</CODE>
 <DD><DT><CODE>--version</CODE>
-<DD>�С�������ֹ��ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+<DD>バージョン番号を標準出力に出力して、終了します。
 </DL>
 <P>
 

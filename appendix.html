@@ -13,108 +13,108 @@
 </p>
 
 <!-- ############################################################# -->
-<h1>CD-ROM $B=q@RMQ$N(B appendix ($BIUO?(B) $B%G!<%?(B</h1>
+<h1>CD-ROM 書籍用の appendix (付録) データ</h1>
 
 <p>
-<dfn>appendix</dfn> (<dfn>$BIUO?(B</dfn>) $B$H$O(B CD-ROM $B=q@R$NJd=u%G!<%?$N(B
-$B$3$H$G$9!#(B
-appendix $B$O(B CD-ROM $B=q@R$N=PHG<R$+$iDs6!$5$l$F$$$k$b$N$G$O$J$/!"(B
-EB $B%i%$%V%i%j$K8GM-$N$b$N$G$9!#(B
+<dfn>appendix</dfn> (<dfn>付録</dfn>) とは CD-ROM 書籍の補助データの
+ことです。
+appendix は CD-ROM 書籍の出版社から提供されているものではなく、
+EB ライブラリに固有のものです。
 </p>
 
 <p>
-appendix $B$O0J2<$N%G!<%?$r(B CD-ROM $B=q@R$KBP$7$FDs6!$7$^$9!#(B
+appendix は以下のデータを CD-ROM 書籍に対して提供します。
 </p>
 
 <dl>
-<dt>$BK\J8$N6h@Z$j%3!<%I(B
+<dt>本文の区切りコード
 <dd>
-$B$"$J$?$,(B EB $B%i%$%V%i%j$N%"%W%j%1!<%7%g%s$r;H$C$F(B CD-ROM $B<-=q$NCf$N$"$k(B
-$BC18l$r0z$/:]!"$=$NC18l$N@bL@$,=*N;$9$k2U=j$G!"%"%W%j%1!<%7%g%s$,K\J8$N(B
-$B=PNO$r;_$a$k$3$H$r$"$J$?$O4|BT$9$k$N$G$O$J$$$G$7$g$&$+!#(B
-$B$7$+$7!"(BEB $B%i%$%V%i%j$O$=$N$h$&$JF0:n$rJ]>Z$9$k$3$H$,$G$-$^$;$s!#(B
-$B$J$<$J$i!"(BCD-ROM $B=q@R$NK\J8$K$O!"9`L\$N=*$o$j$r<($90u$,B8:_$7$J$$$+$i(B
-$B$G$9!#(B
+あなたが EB ライブラリのアプリケーションを使って CD-ROM 辞書の中のある
+単語を引く際、その単語の説明が終了する箇所で、アプリケーションが本文の
+出力を止めることをあなたは期待するのではないでしょうか。
+しかし、EB ライブラリはそのような動作を保証することができません。
+なぜなら、CD-ROM 書籍の本文には、項目の終わりを示す印が存在しないから
+です。
 <br><br>
-$B9,$$$K$b!"B?$/$N(B CD-ROM $B=q@R$K$O!"9`L\$N=*$o$j$r<($90u$NBeBX$H$7$F(B
-$B;H$($k0u$,$"$j$^$9!#(B
-EB $B%i%$%V%i%j$G$O$3$l$r(B <dfn>$B6h@Z$j%3!<%I(B</dfn> (<dfn>stop code</dfn>)
-$B$H8F$s$G$$$^$9!#(B
-$BDL>o!"(BEB $B%i%$%V%i%j$O$3$N6h@Z$j%3!<%I$r<+F0E*$K?dB,$9$k$h$&$K$J$C$F(B
-$B$$$k$N$G$9$,!";~!98m$C$?6h@Z$j%3!<%I$rF3$-=P$9$3$H$,$"$j$^$9!#(B
-appendix $B$N6h@Z$j%3!<%I$O!"$=$N=q@R$N@5$7$$6h@Z$j%3!<%I$r(B EB $B%i%$%V%i%j(B
-$B$K65$($F$d$k$?$a$KMQ$$$^$9!#(B
+幸いにも、多くの CD-ROM 書籍には、項目の終わりを示す印の代替として
+使える印があります。
+EB ライブラリではこれを <dfn>区切りコード</dfn> (<dfn>stop code</dfn>)
+と呼んでいます。
+通常、EB ライブラリはこの区切りコードを自動的に推測するようになって
+いるのですが、時々誤った区切りコードを導き出すことがあります。
+appendix の区切りコードは、その書籍の正しい区切りコードを EB ライブラリ
+に教えてやるために用います。
 </dd>
 
-<dt>$B30;z$NBeBXJ8;zNs(B
+<dt>外字の代替文字列
 <dd>
-$BB?$/$N(B CD-ROM $B=q@R$O!"30;z(B ($BFH<+$KDj5A$7$?J8;z(B) $B$r;}$C$F$*$j!"K\J8Cf$G(B
-$B$=$N30;z$r;H$C$F$$$^$9!#(B
-CD-ROM $B=q@R$G$O30;z$N%S%C%H%^%C%W%U%)%s%H$rMQ0U$7$F$*$j!"%"%W%j%1!<%7%g%s(B
-$B$,30;z$r=PNO$9$k$K$O!"$=$N%U%)%s%H$rIA2h$7$J$/$F$O$J$j$^$;$s!#(B
+多くの CD-ROM 書籍は、外字 (独自に定義した文字) を持っており、本文中で
+その外字を使っています。
+CD-ROM 書籍では外字のビットマップフォントを用意しており、アプリケーション
+が外字を出力するには、そのフォントを描画しなくてはなりません。
 <br><br>
-appendix $B$G$O!"30;z$N(B <dfn>$BBeBXJ8;zNs(B</dfn> (<dfn>alternation text</dfn>)
-$B$rDj5A$9$k$3$H$,$G$-$^$9!#(B
-$B%"%W%j%1!<%7%g%s$O!"%S%C%H%^%C%W%U%)%s%H$rIA2h$9$kBe$o$j$K!"$=$NBeBX(B
-$BJ8;zNs$r=PNO$9$k$3$H$K$7$F$bNI$$$G$7$g$&!#(B
+appendix では、外字の <dfn>代替文字列</dfn> (<dfn>alternation text</dfn>)
+を定義することができます。
+アプリケーションは、ビットマップフォントを描画する代わりに、その代替
+文字列を出力することにしても良いでしょう。
 </dd>
 </dl>
 
 <p>
-appendix $B%Q%C%1!<%8$N%l%$%"%&%H$O(B CD-ROM $B=q@R$N$b$N$H$h$/;w$F$$$^$9!#(B
-$B%H%C%W%G%#%l%/%H%j$K$O(B <code>CATALOG</code> $B$b$7$/$O(B <code>CATALOGS</code>
-$B%U%!%$%k$,B8:_$7!"3FI{K\$N%G!<%?$OBP1~$9$k%5%V%G%#%l%/%H%j$KG[CV$5$l$F(B
-$B$$$^$9!#(B
+appendix パッケージのレイアウトは CD-ROM 書籍のものとよく似ています。
+トップディレクトリには <code>CATALOG</code> もしくは <code>CATALOGS</code>
+ファイルが存在し、各副本のデータは対応するサブディレクトリに配置されて
+います。
 </p>
 
 <p>
-$B$3$3$K:\$C$F$$$J$$(B CD-ROM $B=q@RMQ$N(B appendix $B%Q%C%1!<%8$r:n@.$9$k>l9g$O!"(B
+ここに載っていない CD-ROM 書籍用の appendix パッケージを作成する場合は、
 <a href="doc/ebappendix.html"><code>ebappendix</code></a>
-$B%3%^%s%I$r;H$$$^$7$g$&!#(B
-appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
+コマンドを使いましょう。
+appendix のデータファイルの整形を行うことができます。
 </p>
 
 <!-- ############################################################# -->
-<h2>appendix $B%Q%C%1!<%8$N0lMw(B</h2>
+<h2>appendix パッケージの一覧</h2>
 
 <p>
-$B$3$N%Z!<%8Cf$K5-$5$l$F$$$kAjBP(B URL $B$O!"(B
-<a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/</a> $B$+$i$NAjBP%Q%9$rI=$7$F$$$^$9!#(B
+このページ中に記されている相対 URL は、
+<a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/</a> からの相対パスを表しています。
 </p>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="cencro">$B=q@RL>(B</a>
-<dd>$B%K%e!<%;%s%A%e%j!<1QOB<-E5(B - $B%S%8%M%9%^%s1QOB<-E5(B - $B?7%/%i%&%sOB1Q<-E5(B
+<dt><a name="cencro">書籍名</a>
+<dd>ニューセンチュリー英和辞典 - ビジネスマン英和辞典 - 新クラウン和英辞典
 (SONY DD-30DBZ CD-ROM)
-<dt>$B=PHG<R(B
-<dd>$B;0>JF2(B
-<dt>$B7A<0(B
+<dt>出版社
+<dd>三省堂
+<dt>形式
 <dd>EBXA
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>YRRS-176
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/cencro-2.3.tar.gz">cencro-1.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>Satoru Takabayashi $B$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B<br>
-$B$*$=$i$/;THN$N(B YRRS-235 $B$HF1$8$b$N!#(B
+<dt>備考
+<dd>Satoru Takabayashi さんによって作成されました。<br>
+おそらく市販の YRRS-235 と同じもの。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="chujiten">$B=q@RL>(B</a>
-<dd>$B?71QOB!&OB1QCf<-E5(B $BEE;R%V%C%/HG(B
-<dt>$B=PHG<R(B
-<dd>$B8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="chujiten">書籍名</a>
+<dd>新英和・和英中辞典 電子ブック版
+<dt>出版社
+<dd>研究社
+<dt>形式
 <dd>EB
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-7674-3500-5, YRRS-009
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.3
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/chujiten-2.3.tar.gz">chujiten-2.3.tar.gz</a>
@@ -123,35 +123,35 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="chujiten2">$B=q@RL>(B</a>
-<dd>CD-ROM $BHG(B $B?71QOB!&OB1Q(B $BCf<-E5(B
-<dt>$B=PHG<R(B
-<dd>$B8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="chujiten2">書籍名</a>
+<dd>CD-ROM 版 新英和・和英 中辞典
+<dt>出版社
+<dd>研究社
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>---
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/chujiten2-2.0.tar.gz">chujiten2-2.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>Toshiyuki Miyamoto $B$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dt>備考
+<dd>Toshiyuki Miyamoto さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="chujiten6">$B=q@RL>(B</a>
-<dd>$B?71QOB(B &lt;$BBh(B 6 $BHG(B&gt;$B!&OB1Q(B &lt;$BBh(B 4 $BHG(B&gt; $BCf<-E5(B $BEE;R%V%C%/HG(B
-<dt>$B=PHG<R(B
-<dd>$B8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="chujiten6">書籍名</a>
+<dd>新英和 &lt;第 6 版&gt;・和英 &lt;第 4 版&gt; 中辞典 電子ブック版
+<dt>出版社
+<dd>研究社
+<dt>形式
 <dd>EBXA
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-7674-3503-X, YRRS-261<br>
-$B$*$h$S(B ISBN4-7674-3504-8, YRRS-392
-<dt>appendix $B$N%P!<%8%g%s(B
+および ISBN4-7674-3504-8, YRRS-392
+<dt>appendix のバージョン
 <dd>2.3
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/chujiten6-2.3.tar.gz">chujiten6-2.3.tar.gz</a>
@@ -160,110 +160,110 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="colloc">$B=q@RL>(B</a>
-<dd>$B?7JT1QOB3hMQBg;vE5(B
-<dt>$B=PHG<R(B
-<dd>$B8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="colloc">書籍名</a>
+<dd>新編英和活用大事典
+<dt>出版社
+<dd>研究社
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-7674-3571-4, EPD-EC1
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/colloc-2.0.tar.gz">colloc-2.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>Ryuichi Arafune $B$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dt>備考
+<dd>Ryuichi Arafune さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="crownfj">$B=q@RL>(B</a>
-<dd>$B%/%i%&%sJ)OB<-E5(B
-<dt>$B=PHG<R(B
-<dd>$B;0>JF2(B
-<dt>$B7A<0(B
+<dt><a name="crownfj">書籍名</a>
+<dd>クラウン仏和辞典
+<dt>出版社
+<dd>三省堂
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-385-61220-X
-<dt>appendix $B%P!<%8%g%s(B
+<dt>appendix バージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/crownfj-2.0.tar.gz">crownfj-2.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>$B$3$N<-=q$rAw$C$FD:$$$?;0ED5HO:$5$s$K46<U$$$?$7$^$9!#(B
+<dt>備考
+<dd>この辞書を送って頂いた三田吉郎さんに感謝いたします。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="crownfj2">$B=q@RL>(B</a>
-<dd>$B%/%i%&%sJ)OB<-E5(B
-<dt>$B=PHG<R(B
-<dd>$B;0>JF2(B
-<dt>$B7A<0(B
+<dt><a name="crownfj2">書籍名</a>
+<dd>クラウン仏和辞典
+<dt>出版社
+<dd>三省堂
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-385-61220-X
-<dt>appendix $B%P!<%8%g%s(B
+<dt>appendix バージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/crownfj2-1.0.tar.gz">crownfj2-1.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>$B;0ED5HO:$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dt>備考
+<dd>三田吉郎さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="crowngj">$B=q@RL>(B</a>
-<dd>$B%/%i%&%sFHOB<-E5(B
-<dt>$B=PHG<R(B
-<dd>$B;0>JF2(B
-<dt>$B7A<0(B
+<dt><a name="crowngj">書籍名</a>
+<dd>クラウン独和辞典
+<dt>出版社
+<dd>三省堂
+<dt>形式
 <dd>EBXA
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-385-61100-9, YRRS-091
-<dt>appendix $B%P!<%8%g%s(B
+<dt>appendix バージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/crowngj-1.0.tar.gz">crowngj-1.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>$B;0ED5HO:$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dt>備考
+<dd>三田吉郎さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="daihyakka">$B=q@RL>(B</a>
-<dd>$BF|K\BgI42JA4=q(B
-<dt>$B=PHG<R(B
-<dd>$B>.3X4[(B
-<dt>$B7A<0(B
+<dt><a name="daihyakka">書籍名</a>
+<dd>日本大百科全書
+<dt>出版社
+<dd>小学館
+<dt>形式
 <dd>EBXA
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>YRRS-403
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/daihyakka-1.0.tar.gz">daihyakka-1.0.tar.gz</a>
 <dt>Note
-<dd>Satoru Takabayashi $B$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dd>Satoru Takabayashi さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="daijirin">$B=q@RL>(B</a>
-<dd>$BBg<-NS(B
-<dt>$B=PHG<R(B
-<dd>$B;0>JF2(B
-<dt>$B7A<0(B
+<dt><a name="daijirin">書籍名</a>
+<dd>大辞林
+<dt>出版社
+<dd>三省堂
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>J96050-211A &amp; J96551-155A
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/daijirin-2.0.tar.gz">daijirin-2.0.tar.gz</a>
@@ -272,34 +272,34 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="dd75">$B=q@RL>(B</a>
-<dd>SONY Data DiscMan DD-75 $BIUB0(B CD-ROM
-<dt>$B=PHG<R(B
-<dd>$B%=%K!<(B
-<dt>$B7A<0(B
+<dt><a name="dd75">書籍名</a>
+<dd>SONY Data DiscMan DD-75 付属 CD-ROM
+<dt>出版社
+<dd>ソニー
+<dt>形式
 <dd>EBXA
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>---
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/dd75-2.0.tar.gz">dd75-2.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>Koutarou Toyono $B$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dt>備考
+<dd>Koutarou Toyono さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="gendai2000">$B=q@RL>(B</a>
-<dd>$B8=BeMQ8l$N4pACCN<1(B 2000
-<dt>$B=PHG<R(B
-<dd>$B<+M39qL1<R(B
-<dt>$B7A<0(B
+<dt><a name="gendai2000">書籍名</a>
+<dd>現代用語の基礎知識 2000
+<dt>出版社
+<dd>自由国民社
+<dt>形式
 <dd>S-EBXA
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-426-10412-2, YRRS-2006
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/gendai2000-1.0.tar.gz">gendai2000-1.0.tar.gz</a>
@@ -308,34 +308,34 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="genius">$B=q@RL>(B</a>
-<dd>$B%8!<%K%"%91QOB!&OB1Q<-E5(B
-<dt>$B=PHG<R(B
-<dd>$BBg=$4[=qE9(B
-<dt>$B7A<0(B
+<dt><a name="genius">書籍名</a>
+<dd>ジーニアス英和・和英辞典
+<dt>出版社
+<dd>大修館書店
+<dt>形式
 <dd>EBXA
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-469-79056-7, YRRS-406
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/genius-1.0.tar.gz">genius-1.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>Satoru Takabayashi $B$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dt>備考
+<dd>Satoru Takabayashi さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="genius2">$B=q@RL>(B</a>
-<dd>$B%8!<%K%"%91QOB!&OB1Q<-E5(B
-<dt>$B=PHG<R(B
-<dd>$BBg=$4[=qE9(B
-<dt>$B7A<0(B
+<dt><a name="genius2">書籍名</a>
+<dd>ジーニアス英和・和英辞典
+<dt>出版社
+<dd>大修館書店
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-469-79061-3
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/genius2-1.1.tar.gz">genius2-1.1.tar.gz</a>
@@ -344,15 +344,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="global">$B=q@RL>(B</a>
-<dd>$B?7%0%m!<%P%k(B &amp; $B%K%e!<%;%s%A%e%j!<1QOB!&OB1Q<-E5(B
-<dt>$B=PHG<R(B
-<dd>$B;0>JF2(B
-<dt>$B7A<0(B
+<dt><a name="global">書籍名</a>
+<dd>新グローバル &amp; ニューセンチュリー英和・和英辞典
+<dt>出版社
+<dd>三省堂
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>---
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/global-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/global-2.0.tar.gz</a>
@@ -361,15 +361,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="heritage">$B=q@RL>(B</a>
+<dt><a name="heritage">書籍名</a>
 <dd>American Heritage Electronic Dictionary &amp; ROGET'S II Electronic Thesaurus
-<dt>$B=PHG<R(B
+<dt>出版社
 <dd>Houghton Mifflin
-<dt>$B7A<0(B
+<dt>形式
 <dd>EBG
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-384-00344-7, SAN-008
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.2
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/heritage-2.2.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/heritage-2.2.tar.gz</a>
@@ -378,15 +378,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="izumi">$B=q@RL>(B</a>
-<dd>$B2~D{?7HG(B $B$3$H$o$6L>8@$N@t(B
-<dt>$B=PHG<R(B
-<dd>$B>.3X4[(B
-<dt>$B7A<0(B
+<dt><a name="izumi">書籍名</a>
+<dd>改訂新版 ことわざ名言の泉
+<dt>出版社
+<dd>小学館
+<dt>形式
 <dd>EBXA
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-09-906803-X, YRRS-1020
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/izumi-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/izumi-2.0.tar.gz</a>
@@ -395,15 +395,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="jitenban">$B=q@RL>(B</a>
-<dd>$B<-E5HW(B
-<dt>$B=PHG<R(B
-<dd>$B%"%9%-!<(B
-<dt>$B7A<0(B
+<dt><a name="jitenban">書籍名</a>
+<dd>辞典盤
+<dt>出版社
+<dd>アスキー
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-7561-0350-2
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.4
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/jitenban-2.4.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/jitenban-2.4.tar.gz</a>
@@ -412,15 +412,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="jitenban97">$B=q@RL>(B</a>
-<dd>$B<-E5HW(B 97
-<dt>$B=PHG<R(B
-<dd>$B%"%9%-!<(B
-<dt>$B7A<0(B
+<dt><a name="jitenban97">書籍名</a>
+<dd>辞典盤 97
+<dt>出版社
+<dd>アスキー
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-7561-0350-2
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.1
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/jitenban97-2.1.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/jitenban97-2.1.tar.gz</a>
@@ -429,15 +429,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="kanjigen">$B=q@RL>(B</a>
-<dd>$B4A;z8;(B
-<dt>$B=PHG<R(B
-<dd>$B3X=,8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="kanjigen">書籍名</a>
+<dd>漢字源
+<dt>出版社
+<dd>学習研究社
+<dt>形式
 <dd>EB
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>SBN4-05-105774-7, YRRS-050
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kanjigen-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kanjigen-2.0.tar.gz</a>
@@ -446,35 +446,35 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="kanjigen2">$B=q@RL>(B</a>
-<dd>$B4A;z8;(B
-<dt>$B=PHG<R(B
-<dd>$B3X=,8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="kanjigen2">書籍名</a>
+<dd>漢字源
+<dt>出版社
+<dd>学習研究社
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>---
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kanjigen2-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kanjigen2-2.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>$B$3$N(B appendix $B%Q%C%1!<%8$O!"30;z$NBeBX$(J8;zNs$rDj5A$7$F$$$^$;$s!#(B
-$BDj5A$7$F$$$k$N$O!"6h@Z$jMQ$N%7!<%1%s%9(B (stop-code) $B$@$1$G$9!#(B
+<dt>備考
+<dd>この appendix パッケージは、外字の代替え文字列を定義していません。
+定義しているのは、区切り用のシーケンス (stop-code) だけです。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="kojien">$B=q@RL>(B</a>
-<dd>$B9-<-1q(B $BEE;R%V%C%/HG(B
-<dt>$B=PHG<R(B
-<dd>$B4dGH=qE9(B
-<dt>$B7A<0(B
+<dt><a name="kojien">書籍名</a>
+<dd>広辞苑 電子ブック版
+<dt>出版社
+<dd>岩波書店
+<dt>形式
 <dd>EB
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-00-130011-7, YRRS-007
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.3
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien-2.3.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien-2.3.tar.gz</a>
@@ -483,34 +483,34 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="kojien2">$B=q@RL>(B</a>
-<dd>$B9-<-1q(B $BBh;MHG(B
-<dt>$B=PHG<R(B
-<dd>$B4dGH=qE9(B
-<dt>$B7A<0(B
+<dt><a name="kojien2">書籍名</a>
+<dd>広辞苑 第四版
+<dt>出版社
+<dd>岩波書店
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>---
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien2-2.0.tar.gz">ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien2-2.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>Toshiyuki Miyamoto $B$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dt>備考
+<dd>Toshiyuki Miyamoto さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="kojien4">$B=q@RL>(B</a>
-<dd>$B9-<-1q(B $BBh(B4$BHG(B $BEE;R%V%C%/(B($BA}D{(B)$BHG(B
-<dt>$B=PHG<R(B
-<dd>$B4dGH=qE9(B
-<dt>$B7A<0(B
+<dt><a name="kojien4">書籍名</a>
+<dd>広辞苑 第4版 電子ブック(増訂)版
+<dt>出版社
+<dd>岩波書店
+<dt>形式
 <dd>EBXA
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-00-130035-4, YRRS-278
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.2
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/kojien4-2.2.tar.gz">kojien4-2.2.tar.gz</a>
@@ -519,15 +519,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="oxford">$B=q@RL>(B</a>
+<dt><a name="oxford">書籍名</a>
 <dd>The Oxford Concise Dictionary and Oxford Thesaurus
-<dt>$B=PHG<R(B
+<dt>出版社
 <dd>Oxford University Press / Electronic Book Publishing Europe Ltd
-<dt>$B7A<0(B
+<dt>形式
 <dd>EBG
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-384-00413-3, SAN-042
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/oxford-2.0.tar.gz">oxford-2.0.tar.gz</a>
@@ -536,15 +536,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="plus">$B=q@RL>(B</a>
-<dd>$B%j!<%@!<%:(B + $B%W%i%9(B
-<dt>$B=PHG<R(B
-<dd>$B8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="plus">書籍名</a>
+<dd>リーダーズ + プラス
+<dt>出版社
+<dd>研究社
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>EDP-RP1
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/plus-2.0.tar.gz">plus-2.0.tar.gz</a>
@@ -553,15 +553,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="readers">$B=q@RL>(B</a>
-<dd>$BEE;R%V%C%/HG(B $B%j!<%@!<%:1QOB<-E5(B
-<dt>$B=PHG<R(B
-<dd>$B8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="readers">書籍名</a>
+<dd>電子ブック版 リーダーズ英和辞典
+<dt>出版社
+<dd>研究社
+<dt>形式
 <dd>EB
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-7674-3530-4, YRRS-172
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.2
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/readers-2.2.tar.gz">readers-2.2.tar.gz</a>
@@ -570,34 +570,34 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="readers2">$B=q@RL>(B</a>
-<dd>CD-ROM$BHG(B $B%j!<%@!<%:1QOB<-E5(B
-<dt>$B=PHG<R(B
-<dd>$B8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="readers2">書籍名</a>
+<dd>CD-ROM版 リーダーズ英和辞典
+<dt>出版社
+<dd>研究社
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>---
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>2.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/readers2-2.0.tar.gz">readers2-2.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>Toshiyuki Miyamoto $B$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dt>備考
+<dd>Toshiyuki Miyamoto さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="ruigigo">$B=q@RL>(B</a>
-<dd>$BN`5A8l;H$$J,$1<-E5(B
-<dt>$B=PHG<R(B
-<dd>$B8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="ruigigo">書籍名</a>
+<dd>類義語使い分け辞典
+<dt>出版社
+<dd>研究社
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-327-99203-8
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/ruigigo-1.0.tar.gz">ruigigo-1.0.tar.gz</a>
@@ -606,15 +606,15 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="hyogen-katsuyo">$B=q@RL>(B</a>
-<dd>EPWING$BHG(B CD-ROM $B8&5f<R(B $BF|K\8lI=8=3hMQ<-E5(B
-<dt>$B=PHG<R(B
-<dd>$B8&5f<R(B
-<dt>$B7A<0(B
+<dt><a name="hyogen-katsuyo">書籍名</a>
+<dd>EPWING版 CD-ROM 研究社 日本語表現活用辞典
+<dt>出版社
+<dd>研究社
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>ISBN4-7674-7301-2
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/hyogen-1.0.tar.gz">hyogen-1.0.tar.gz</a>
@@ -623,27 +623,27 @@ appendix $B$N%G!<%?%U%!%$%k$N@07A$r9T$&$3$H$,$G$-$^$9!#(B
 <!-- ############################################################# -->
 <hr>
 <dl>
-<dt><a name="superdic98">$B=q@RL>(B</a>
-<dd>$B%9!<%Q!<E}9g<-=q(B98
-<dt>$B=PHG<R(B
-<dd>$BIY;NDL(B
-<dt>$B7A<0(B
+<dt><a name="superdic98">書籍名</a>
+<dd>スーパー統合辞書98
+<dt>出版社
+<dd>富士通
+<dt>形式
 <dd>EPWING
-<dt>ID (ISBN$B!"EE;R%V%C%/$N%3!<%I$J$I(B)
+<dt>ID (ISBN、電子ブックのコードなど)
 <dd>---
-<dt>appendix $B$N%P!<%8%g%s(B
+<dt>appendix のバージョン
 <dd>1.0
 <dt>URL
 <dd><a href="ftp://ftp.sra.co.jp/pub/misc/eb/appendix/superdic98-1.0.tar.gz">superdic98-1.0.tar.gz</a>
-<dt>$BHw9M(B
-<dd>H Mizutani $B$5$s$K$h$C$F:n@.$5$l$^$7$?!#(B
+<dt>備考
+<dd>H Mizutani さんによって作成されました。
 </dl>
 
 <!-- ############################################################# -->
 <hr>
 <p class="footer">
 <a href="index.html"><img class="banner" src="eb_b.png" alt="banner"></a>
-<a href="index.html">$B%[!<%`%Z!<%8(B ($BF|K\8lHG(B)</a>$B$KLa$k!#(B
+<a href="index.html">ホームページ (日本語版)</a>に戻る。
 </p>
 </body>
 </html>

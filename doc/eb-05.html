@@ -5,37 +5,37 @@
 <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
 <link rel="stylesheet" type="text/css" href="eb.css">
 <link rev="made" href="mailto:m-kasahr@sra.co.jp">
-<title>EB �饤�֥��</title>
+<title>EB ライブラリ</title>
 </head>
 
 <body>
 <p>
-[<a href="eb-04.html">����</a>] [<a href="eb-06.html">����</a>] [<a href="eb.html#toc">�ܼ�</a>] 
+[<a href="eb-04.html">前へ</a>] [<a href="eb-06.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
 </p>
 <hr>
-<h2><a name="eb_book">CD-ROM ���Ҥ� <code>EB_Book</code> ���֥�������</a></h2>
+<h2><a name="eb_book">CD-ROM 書籍と <code>EB_Book</code> オブジェクト</a></h2>
 
 <p>
-EB �饤�֥��Ǥϡ�CD-ROM ���ҤؤΥ��������ϡ����٤� <code>EB_Book</code> ��
-�Υ��֥������Ȥ�𤷤ƹԤ��ޤ���
-�������äơ��ۤȤ�ɤΥ��ץꥱ�������ץ������ϡ��ܾϤǵ��Ҥ��Ƥ���
-������ɬ�פȤ���Ϥ��Ǥ���
+EB ライブラリでは、CD-ROM 書籍へのアクセスは、すべて <code>EB_Book</code> 型
+のオブジェクトを介して行います。
+したがって、ほとんどのアプリケーションプログラムは、本章で記述している
+処理を必要とするはずです。
 </p>
 
 <p>
-�ܾϤǤ� <code>EB_Book</code> ���֥������Ȥν������������Ȥ��ä�����Ū��
-��갷�����ˤĤ����������ޤ���
+本章では <code>EB_Book</code> オブジェクトの初期化、後始末といった基本的な
+取り扱い方について説明します。
 </p>
 
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="eb_book-explanation"><code>EB_Book</code> ���֥�������</a></h3>
+<h3><a name="eb_book-explanation"><code>EB_Book</code> オブジェクト</a></h3>
 
 <p>
-CD-ROM ���Ҥإ�����������ˤϡ��ޤ� <code>EB_Book</code> ���Υ��֥������Ȥ�
-�Ѱդ��ޤ���
-Ʊ����ʣ���� CD-ROM ���Ҥ˥�����������ʤ顢���Ұ����˥��֥������Ȥ�
-���ɬ�פ�����ޤ���
+CD-ROM 書籍へアクセスするには、まず <code>EB_Book</code> 型のオブジェクトを
+用意します。
+同時に複数の CD-ROM 書籍にアクセスするなら、書籍一冊毎にオブジェクトを
+作る必要があります。
 </p>
 
 <blockquote class="program">
@@ -45,8 +45,8 @@ EB_Book book;
 </blockquote>
 
 <p>
-������󡢥��֥������Ȥ��ΰ�ϡ�<code>malloc()</code> �ǳ��ݤ��Ƥ�
-�����ޤ���
+もちろん、オブジェクトの領域は、<code>malloc()</code> で確保しても
+構いません。
 </p>
 
 <blockquote class="program">
@@ -58,9 +58,9 @@ book_pointer = (EB_Book *) malloc(sizeof(EB_Book));
 </blockquote>
 
 <p>
-<code>EB_Book</code> ���֥������Ȥ���� (�ѿ� <code>book</code> �����
-����� <code>book_pointer</code> �λؤ��ΰ�) �Ϥޤ����������Ƥ��ޤ���Τǡ�
-�������Τǥ��֥������Ȥ��������ޤ���
+<code>EB_Book</code> オブジェクトの中身 (変数 <code>book</code> の中身
+および <code>book_pointer</code> の指す領域) はまだ初期化されていませんので、
+次の要領でオブジェクトを初期化します。
 </p>
 
 <blockquote class="program">
@@ -71,31 +71,31 @@ eb_initialize_book(book_pointer);
 </blockquote>
 
 <p>
-<code>eb_initialize()</code> ���Ϥ������� <code>EB_Book</code> ���֥�������
-�ؤΥݥ��󥿤Ǥ��äơ�<code>EB_Book</code> ���֥������Ȥ��Τ�ΤǤ�
-�ʤ����Ȥ����դ��Ʋ�������
-(EB �饤�֥���¾�δؿ��⡢���٤ƥ��֥������Ȥ�ݥ��󥿤��Ϥ��ޤ���)
+<code>eb_initialize()</code> へ渡す引数は <code>EB_Book</code> オブジェクト
+へのポインタであって、<code>EB_Book</code> オブジェクトそのものでは
+ないことに注意して下さい。
+(EB ライブラリの他の関数も、すべてオブジェクトをポインタで渡します。)
 </p>
 
 <p>
-CD-ROM ���Ҥ�Ȥ��ˤϡ�³���� <code>EB_Book</code> ���֥������Ȥ�
-CD-ROM ���Ҥμ��Τ˷���դ��ޤ���
-����ϡ��ؿ� <code>eb_bind()</code> �ˤ�äƹԤ��ޤ���
+CD-ROM 書籍を使うには、続いて <code>EB_Book</code> オブジェクトを
+CD-ROM 書籍の実体に結び付けます。
+これは、関数 <code>eb_bind()</code> によって行います。
 </p>
 
 <blockquote>
 <pre>
-�ţ¡��£��롡�����������������������ãġݣңϣͽ���
-���֥������ȡ�����������������������������������������������
-������������������������������������������������������������
-�������������������������������������������������������
-��������������⡲�����ʡˡ�����������������������������
-������������������������������������������������������������
+ＥＢ＿Ｂｏｏｋ　　　　　　　　　　　　ＣＤ−ＲＯＭ書籍
+オブジェクト　　　　　　　　　　┌────────────┐
+┌───┐　　　　　　　　　　　│　　　　　　　　　　　　│
+│　　　┝━━━━━━━━━━━┥　／ｍｎｔ／ｃｄｒｏｍ　│
+└───┘　ｅｂ＿ｂｉｎｄ（）　│　　　　　　　　　　　　│
+　　　　　　　　　　　　　　　　└────────────┘
 </pre>
 </blockquote>
 
 <p>
-�ºݤΥץ������Ǥϡ����Τ褦�ˤ��ޤ���
+実際のプログラムでは、次のようにします。
 </p>
 
 <blockquote class="program">
@@ -108,16 +108,16 @@ if (eb_bind(&amp;book, "/mnt/cdrom") != EB_SUCCESS) {
 </blockquote>
 
 <p>
-<code>eb_bind()</code> ���Ϥ����ҤΥѥ� (������Ǥ� <code>/mnt/cdrom</code>)
-�Ͻ��ҤΥȥåץǥ��쥯�ȥꡢ�Ĥޤ� <code>catalog</code> �ޤ���
-<code>catalogs</code> �ե�����Τ���ǥ��쥯�ȥ����ꤷ�ޤ���
+<code>eb_bind()</code> に渡す書籍のパス (この例では <code>/mnt/cdrom</code>)
+は書籍のトップディレクトリ、つまり <code>catalog</code> または
+<code>catalogs</code> ファイルのあるディレクトリを指定します。
 </p>
 
 <p>
-<code>EB_Book</code> ���֥������Ȥ�Ȥ�����ä��顢
-<code>eb_finalize_book()</code> ��Ƥ�Ǹ�����򤷤ޤ���
-���֥������ȤϽ��ҤȤη���դ���򤫤줿���֤���ꡢ�����ǳ�����Ƥ�줿
-����ϲ������졢�����Ƥ����ե�����⤹�٤��Ĥ����ޤ���
+<code>EB_Book</code> オブジェクトを使い終わったら、
+<code>eb_finalize_book()</code> を呼んで後始末をします。
+オブジェクトは書籍との結び付きを解かれた状態に戻り、内部で割り当てられた
+メモリは解放され、開いていたファイルもすべて閉じられます。
 </p>
 
 <blockquote class="program">
@@ -128,9 +128,9 @@ eb_finalize_book(book_pointer);
 </blockquote>
 
 <p>
-���֥������Ȥ��ΰ�� <code>malloc()</code> �ǳ��ݤ������ϡ�
-<code>eb_finalize_book()</code> ��Ƥ����ʤ�С����֥������Ȥ��ΰ��
-�����˲������뤳�Ȥ��Ǥ��ޤ���
+オブジェクトの領域を <code>malloc()</code> で確保した場合は、
+<code>eb_finalize_book()</code> を呼んだ後ならば、オブジェクトの領域を
+安全に解放することができます。
 </p>
 
 <blockquote class="program">
@@ -140,32 +140,32 @@ free(book_pointer);
 </blockquote>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="eb_bind-to-remote-host">��֥ۥ��Ȥؤ� <code>eb_bind()</code></a></h3>
+<h3><a name="eb_bind-to-remote-host">遠隔ホストへの <code>eb_bind()</code></a></h3>
 
 <p>
-������������� <code>eb_bind()</code> ���Ѥ��ơ�<code>EB_Book</code>
-���֥������Ȥ��֥ۥ��Ȥν��Ҥ˷�ӤĤ��뤳�Ȥ��Ǥ��ޤ���
-����ˤϡ����ҤΥѥ�������ˡ���֥��������Ѥμ��̻Ҥ���ꤷ�ޤ���
-���̻Ҥϡ����Τ褦�ʷ�����Ȥ�ޤ���
+前節で説明した <code>eb_bind()</code> を用いて、<code>EB_Book</code>
+オブジェクトを遠隔ホストの書籍に結びつけることができます。
+これには、書籍のパスの代わりに、遠隔アクセス用の識別子を指定します。
+識別子は、次のような形式をとります。
 </p>
 
 <blockquote>
 <pre>
-ebnet://<var>�ۥ���</var>:<var>�ݡ���</var>/<var>����̾</var>
+ebnet://<var>ホスト</var>:<var>ポート</var>/<var>書籍名</var>
 </pre>
 </blockquote>
 
 <p>
-<var>�ۥ���</var> �ϱ�֥ۥ��Ȥ� IP ���ɥ쥹�⤷���ϥۥ���̾�Ǥ���
-��������IPv6 ���ɥ쥹����ꤹ����ϡ����ɥ쥹�� <code>[</code> ��
-<code>]</code> �ǰϤ�ɬ�פ�����ޤ���
-<var>�ݡ���</var> �ϡ����Υۥ��Ȥ��Ԥ������Ƥ���ݡ��Ȥ��ֹ�Ǥ���
-�ۥ��Ȥ��Ԥ������Ƥ���ݡ��Ȥ�ɸ��� 22010 �֤Ǥ���С�<var>:�ݡ���</var>
-����ʬ�Ͼ�ά��ǽ�Ǥ���
+<var>ホスト</var> は遠隔ホストの IP アドレスもしくはホスト名です。
+ただし、IPv6 アドレスを指定する場合は、アドレスを <code>[</code> と
+<code>]</code> で囲む必要があります。
+<var>ポート</var> は、そのホストが待ち受けているポートの番号です。
+ホストが待ち受けているポートが標準の 22010 番であれば、<var>:ポート</var>
+の部分は省略可能です。
 </p>
 
 <p>
-�ʲ��� <code>eb_bind()</code> �Υ�������򵭤��ޤ���
+以下に <code>eb_bind()</code> のコード例を記します。
 </p>
 
 <blockquote class="program">
@@ -178,12 +178,12 @@ if (eb_bind(&amp;book, "ebnet://localhost/cdrom") != EB_SUCCESS) {
 </blockquote>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="eb_book-sample">����ץ�ץ������</a></h3>
+<h3><a name="eb_book-sample">サンプルプログラム</a></h3>
 
 <p>
-���Υ���ץ�ץ������Ǥϡ�CD-ROM ���Ҥμ����Ĵ�٤뤿��ˡ�
-<code>eb_disc_code()</code> �Ȥ����ؿ�����Ѥ��Ƥ��ޤ���
-���δؿ��ˤĤ��Ƥϡ�<a href="eb-05.html#eb_book-functions">�ִؿ��ξܺ١�</a> �򻲾ȤΤ��ȡ�
+このサンプルプログラムでは、CD-ROM 書籍の種類を調べるために、
+<code>eb_disc_code()</code> という関数を使用しています。
+この関数については、<a href="eb-05.html#eb_book-functions">「関数の詳細」</a> を参照のこと。
 </p>
 
 <blockquote>
@@ -217,13 +217,13 @@ if (eb_bind(&amp;book, "ebnet://localhost/cdrom") != EB_SUCCESS) {
  */
 
 /*
- * ������ˡ:
+ * 使用方法:
  *     disctype &lt;book-path&gt;
- * ��:
+ * 例:
  *     disctype /cdrom
- * ����:
- *     &lt;book-path&gt; �ǻ��ꤵ�줿 CD-ROM ���Ҥμ��ब��EB �� EPWING ��
- *     ��Ĵ�٤�ɽ�����ޤ���
+ * 説明:
+ *     &lt;book-path&gt; で指定された CD-ROM 書籍の種類が、EB か EPWING か
+ *     を調べて表示します。
  */
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -238,13 +238,13 @@ main(int argc, char *argv[])
     EB_Book book;
     EB_Disc_Code disc_code;
 
-    /* ���ޥ�ɹ԰���������å���*/
+    /* コマンド行引数をチェック。*/
     if (argc != 2) {
         fprintf(stderr, "Usage: %s book-path\n", argv[0]);
         exit(1);
     }
 
-    /* EB �饤�֥��� `book' ��������*/
+    /* EB ライブラリと `book' を初期化。*/
     error_code = eb_initialize_library();
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to initialize EB Library, %s: %s\n",
@@ -253,7 +253,7 @@ main(int argc, char *argv[])
     }
     eb_initialize_book(&amp;book);
 
-    /* `book' ����Ҥ˷���դ��롣���Ԥ����齪λ��*/
+    /* `book' を書籍に結び付ける。失敗したら終了。*/
     error_code = eb_bind(&amp;book, argv[1]);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to bind the book, %s: %s\n",
@@ -261,7 +261,7 @@ main(int argc, char *argv[])
         goto die;
     }
 
-    /* ���Ҥμ����Ĵ�٤�ɽ����*/
+    /* 書籍の種類を調べて表示。*/
     error_code = eb_disc_type(&amp;book, &amp;disc_code);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to get disc type, %s: %s\n",
@@ -277,12 +277,12 @@ main(int argc, char *argv[])
         fputs("unknown\n", stdout);
     }
 
-    /* ���Ҥ� EB �饤�֥������Ѥ�λ��*/
+    /* 書籍と EB ライブラリの利用を終了。*/
     eb_finalize_book(&amp;book);
     eb_finalize_library();
     exit(0);
 
-    /* ���顼ȯ���ǽ�λ����Ȥ��ν�����*/
+    /* エラー発生で終了するときの処理。*/
   die:
     eb_finalize_book(&amp;book);
     eb_finalize_library();
@@ -292,11 +292,11 @@ main(int argc, char *argv[])
 </blockquote>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="eb_book-data-types">�ǡ������ξܺ�</a></h3>
+<h3><a name="eb_book-data-types">データ型の詳細</a></h3>
 
 <p>
-��������������Ƥ���ǡ�������Ȥ��ˤϡ����Τ褦�˥إå��ե������
-�ɤ߹���ǲ�������
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
 </p>
 
 <blockquote class="program">
@@ -306,97 +306,97 @@ main(int argc, char *argv[])
 </blockquote>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-<h4><a name="type:Book"><code>EB_Book</code> ��</a></h4>
+<h4><a name="type:Book"><code>EB_Book</code> 型</a></h4>
 
 <p>
-<code>EB_Book</code> ���ϡ������ CD-ROM ���Ҥ�ɽ���ޤ���
-CD-ROM ���ҤؤΥ��������ϡ����٤Ƥ��η��Υ��֥������Ȥ�𤷤ƹԤ��ޤ���
-Ʊ����ʣ���� CD-ROM ���Ҥ˥�����������ݤϡ����Ұ����˥��֥������Ȥ�
-���ɬ�פ�����ޤ���
+<code>EB_Book</code> 型は、一冊の CD-ROM 書籍を表します。
+CD-ROM 書籍へのアクセスは、すべてこの型のオブジェクトを介して行います。
+同時に複数の CD-ROM 書籍にアクセスする際は、書籍一冊毎にオブジェクトを
+作る必要があります。
 </p>
 
 <p>
-<code>EB_Book</code> ���֥������Ȥ����ϡ����٤� EB �饤�֥�꤬�Ѱ�
-���Ƥ���ؿ��ǹԤ��ޤ���
-���ץꥱ�������ץ������ϡ�ľ�� <code>EB_Book</code> ���֥������Ȥ�
-���Ф򻲾Ȥ����ꡢ���åȤ����ꤹ�٤��ǤϤ���ޤ���
+<code>EB_Book</code> オブジェクトの操作は、すべて EB ライブラリが用意
+している関数で行います。
+アプリケーションプログラムは、直接 <code>EB_Book</code> オブジェクトの
+メンバを参照したり、セットしたりすべきではありません。
 </p>
 
 <p>
-<code>EB_Book</code> ���֥������Ȥ���Ѥ���ݤϡ��ޤ����Υ��֥������Ȥ�
-�Ф��� <code>eb_initialize_book()</code> ��Ƥ�ǽ�������ʤ��Ƥ�
-�ʤ�ޤ���
+<code>EB_Book</code> オブジェクトを使用する際は、まずそのオブジェクトに
+対して <code>eb_initialize_book()</code> を呼んで初期化しなくては
+なりません。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-<h4><a name="type:Disc_Code"><code>EB_Disc_Code</code> ��</a></h4>
+<h4><a name="type:Disc_Code"><code>EB_Disc_Code</code> 型</a></h4>
 
 <p>
-�ǡ����� <code>EB_Disc_Code</code> �ϡ�CD-ROM ���Ҥη��������ɤ�ɽ���ޤ���
-���ߤΤȤ����������ͤ��������Ƥ��ޤ���
+データ型 <code>EB_Disc_Code</code> は、CD-ROM 書籍の形式コードを表します。
+現在のところ、次の値が定義されています。
 </p>
 
 <dl>
 <dt><code>EB_DISC_EB</code></dt>
 <dd>
-�Żҥ֥å� (EB, EBG, EBXA, EBXA-C, S-EBXA) �Ǥ��뤳�Ȥ�ɽ���ޤ���
+電子ブック (EB, EBG, EBXA, EBXA-C, S-EBXA) であることを表します。
 
 <dt><code>EB_DISC_EPWING</code></dt>
 <dd>
-EPWING �Ǥ��뤳�Ȥ�ɽ���ޤ���
+EPWING であることを表します。
 
 <dt><code>EB_DISC_INVALID</code></dt>
 <dd>
-�����ʷ����������ͤ�ɽ���ޤ���
+不正な形式コード値を表します。
 </dl>
 
 <p>
-���η�������դ�����������̾�Ȥ����������Ƥ��ޤ��Τǡ�2 �ĤΥ����ɤ�
-2 ��黻�� <code>==</code> �� <code>!=</code> �ǰ�����Ӥ��뤳�Ȥ��Ǥ��ޤ���
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <code>==</code> と <code>!=</code> で一致比較することができます。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-<h4><a name="type:EB_Character_Code"><code>EB_Character_Code</code> ��</a></h4>
+<h4><a name="type:EB_Character_Code"><code>EB_Character_Code</code> 型</a></h4>
 
 <p>
-�ǡ����� <code>EB_Character_Code</code> �ϡ�CD-ROM ���Ҥǻ��Ѥ����
-ʸ�������ɤ�ɽ���ޤ���
-���ߤΤȤ����������ͤ��������Ƥ��ޤ���
+データ型 <code>EB_Character_Code</code> は、CD-ROM 書籍で使用される
+文字コードを表します。
+現在のところ、次の値が定義されています。
 </p>
 
 <dl>
 <dt><code>EB_CHARCODE_ISO8859_1</code></dt>
 <dd>
-ISO 8859-1 (��ƥ�ʸ�� 1) ����Ѥ��Ƥ��뤳�Ȥ�ɽ���ޤ���
-�Żҥ֥å��� EBG �Ϥ���Ǥ���
+ISO 8859-1 (ラテン文字 1) を使用していることを表します。
+電子ブックの EBG はこれです。
 
 <dt><code>EB_CHARCODE_JISX0208</code></dt>
 <dd>
-JIS X 0208 (���ܸ�Τ��ʴ���) ����Ѥ��Ƥ��뤳�Ȥ�ɽ���ޤ���
-EBG, EBXA-C �ʳ����Żҥ֥å�������� EPWING �Ϥ��٤Ƥ���Ǥ���
+JIS X 0208 (日本語のかな漢字) を使用していることを表します。
+EBG, EBXA-C 以外の電子ブック、および EPWING はすべてこれです。
 
 <dt><code>EB_CHARCODE_JISX0208_GB2312</code></dt>
 <dd>
-JIS X 0208 (���ܸ�Τ��ʴ���) �� GB 2312 (����δ��λ�) ��ʻ�Ѥ��Ƥ���
-���Ȥ�ɽ���ޤ���
-�Żҥ֥å��� EBXA-C �Ϥ���Ǥ���
+JIS X 0208 (日本語のかな漢字) と GB 2312 (中国語の簡体字) を併用している
+ことを表します。
+電子ブックの EBXA-C はこれです。
 
 <dt><code>EB_CHARCODE_INVALID</code></dt>
 <dd>
-������ʸ���������ͤ�ɽ���ޤ���
+不正な文字コード値を表します。
 </dl>
 
 <p>
-���η�������դ�����������̾�Ȥ����������Ƥ��ޤ��Τǡ�2 �ĤΥ����ɤ�
-2 ��黻�� <code>==</code> �� <code>!=</code> �ǰ�����Ӥ��뤳�Ȥ��Ǥ��ޤ���
+この型は符合付き整数型の別名として定義されていますので、2 つのコードを
+2 項演算子 <code>==</code> と <code>!=</code> で一致比較することができます。
 </p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="eb_book-functions">�ؿ��ξܺ�</a></h3>
+<h3><a name="eb_book-functions">関数の詳細</a></h3>
 
 <p>
-��������������Ƥ���ؿ���Ȥ��ˤϡ����Τ褦�˥إå��ե�������ɤ߹����
-��������
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
 </p>
 
 <blockquote class="program">
@@ -409,153 +409,153 @@ JIS X 0208 (���ܸ�Τ��ʴ���) �� GB 2312 (����δ��λ�) ��ʻ�Ѥ��Ƥ���
 <h4><a name="func:initialize_book"><code>void eb_initialize_book (EB_Book *<var>book</var>)</code></a></h4>
 
 <p>
-�ؿ� <code>eb_initialize_book()</code> �ϡ�<var>book</var> �λؤ�
-<code>EB_Book</code> ���֥������Ȥ��������ޤ���
-<code>EB_Book</code> ���֥������Ȥ��Ф��� EB �饤�֥���¾�δؿ���Ƥ����ˡ�
-ɬ�����Υ��֥������Ȥ��������ʤ��ƤϤʤ�ޤ���
-��������Ƥ��ʤ����֥������Ȥ��Ф��ơ�EB �饤�֥���¾�δؿ���Ƥ��
-����ư���̤����Ǥ���
-�ޤ������Ǥ˽�����������֥������Ȥ��Ф��ơ�����
-<code>eb_initialize_book()</code> ��Ƥ�ǤϤ����ޤ���
-�Ƥ������ư���̤����Ǥ���
+関数 <code>eb_initialize_book()</code> は、<var>book</var> の指す
+<code>EB_Book</code> オブジェクトを初期化します。
+<code>EB_Book</code> オブジェクトに対して EB ライブラリの他の関数を呼ぶ前に、
+必ずそのオブジェクトを初期化しなくてはなりません。
+初期化していないオブジェクトに対して、EB ライブラリの他の関数を呼んだ
+場合の動作は未定義です。
+また、すでに初期化したオブジェクトに対して、再度
+<code>eb_initialize_book()</code> を呼んではいけません。
+呼んだ場合の動作は未定義です。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:bind"><code>EB_Error_Code eb_bind (EB_Book *<var>book</var>, const char *<var>path</var>)</code></a></h4>
 
 <p>
-�ؿ� <code>eb_bind()</code> �ϡ�<var>book</var> �λؤ� <code>EB_Book</code>
-���֥������Ȥ򡢥ѥ� <var>path</var> �ˤ��� CD-ROM ���Ҥ˷���դ��ޤ���
-�ѥ��ˤϡ����ҤΥȥåץǥ��쥯�ȥ꤫��֥����������̻Ҥ���ꤷ�ޤ���
-���ҤΥȥåץǥ��쥯�ȥ�Ȥϡ�<code>catalog</code> ���뤤��
-<code>catalogs</code> �ե������¸�ߤ���ǥ��쥯�ȥ��ؤ��ޤ���
+関数 <code>eb_bind()</code> は、<var>book</var> の指す <code>EB_Book</code>
+オブジェクトを、パス <var>path</var> にある CD-ROM 書籍に結び付けます。
+パスには、書籍のトップディレクトリか遠隔アクセス識別子を指定します。
+書籍のトップディレクトリとは、<code>catalog</code> あるいは
+<code>catalogs</code> ファイルの存在するディレクトリを指します。
 </p>
 
 <p>
-���֥������Ȥ����Ǥ˽��Ҥ˷���դ��Ƥ�����硢���ν��ҤȤη���դ���
-�򤤤Ƥ��顢<var>path</var> �ˤ�����Ҥ˷���դ��ޤ���
+オブジェクトがすでに書籍に結び付いていた場合、その書籍との結び付きを
+解いてから、<var>path</var> にある書籍に結び付けます。
 </p>
 
 <p>
-��������ȡ��ؿ��� <code>EB_SUCCESS</code> ���֤��ޤ���
-���ΤȤ������ܤ�̤����ξ��֤ˤʤ�ޤ���
-���Ԥ���ȡ����֥������Ȥ���ҤȤη���դ���򤫤줿���֤ˤ��ơ�����
-�򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+このとき、副本は未選択の状態になります。
+失敗すると、オブジェクトを書籍との結び付きを解かれた状態にして、原因
+を示すエラーコードを返します。
 </p>
 
 <p>
-<var>path</var> �ϡ�<code>EB_MAX_PATH_LENGTH</code> �Х��Ȥ˼��ޤƤ��ʤ��Ƥ�
-�ʤ�ޤ���
-����ˡ�<var>path</var> �����Хѥ��ΤȤ��ϡ����Хѥ����Ѵ�������̤�����Ĺ��
-�˼��ޤäƤ��ʤ��ƤϤʤ�ޤ���
-�����Ķ����ȡ�<code>EB_ERR_TOO_LONG_FILE_NAME</code> ���֤��ޤ���
+<var>path</var> は、<code>EB_MAX_PATH_LENGTH</code> バイトに収まていなくては
+なりません。
+さらに、<var>path</var> が相対パスのときは、絶対パスに変換した結果がこの長さ
+に収まっていなくてはなりません。
+これを超えると、<code>EB_ERR_TOO_LONG_FILE_NAME</code> を返します。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:finalize_book"><code>void eb_finalize_book (EB_Book *<var>book</var>)</code></a></h4>
 
 <p>
-�ؿ� <code>eb_finalize_book()</code> �ϡ�<var>book</var> ���ؤ�
-<code>EB_Book</code> ���֥������Ȥθ������Ԥ��ޤ���
+関数 <code>eb_finalize_book()</code> は、<var>book</var> が指す
+<code>EB_Book</code> オブジェクトの後始末を行います。
 </p>
 
 <p>
-���֥������Ȥ�������Ƥƴ������Ƥ�������Ϥ��٤Ʋ������졢
-�ե�����ǥ�������ץ��⤹�٤��Ĥ����ޤ���
-���֥������Ȥ����Ҥȷ���դ��Ƥ������ϡ�����դ����򤫤�ޤ���
+オブジェクトが割り当てて管理していたメモリはすべて解放され、
+ファイルディスクリプタもすべて閉じられます。
+オブジェクトが書籍と結び付いていた場合は、結び付きが解かれます。
 </p>
 
 <p>
-������򤷤����֥������Ȥ��Ф��� <code>eb_bind()</code> ��Ƥ֤��Ȥǡ�
-���֥������Ȥ�����Ѥ��뤳�Ȥ��Ǥ��ޤ���
+後始末をしたオブジェクトに対して <code>eb_bind()</code> を呼ぶことで、
+オブジェクトを再利用することができます。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:is_bound"><code>int eb_is_bound (EB_Book *<var>book</var>)</code></a></h4>
 
 <p>
-�ؿ� <code>eb_is_bound()</code> �ϡ�<var>book</var> �����Ҥ˷���դ��Ƥ��뤫
-�ɤ�����Ĵ�٤ޤ���
-����դ��Ƥ���� 1 ���֤��������Ǥʤ���� 0 ���֤��ޤ���
+関数 <code>eb_is_bound()</code> は、<var>book</var> が書籍に結び付いているか
+どうかを調べます。
+結び付いていれば 1 を返し、そうでなければ 0 を返します。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:path"><code>EB_Error_Code eb_path (EB_Book *<var>book</var> const char *<var>path</var>)</code></a></h4>
 
 <p>
-�ؿ� <code>eb_path()</code> �ϡ�<var>book</var> �˷���դ��Ƥ�����ҤΥѥ�
-�⤷���ϱ�֥����������̻Ҥ�<var>path</var> �λؤ��ΰ�˽񤭹��ߤޤ���
+関数 <code>eb_path()</code> は、<var>book</var> に結び付いている書籍のパス
+もしくは遠隔アクセス識別子を、<var>path</var> の指す領域に書き込みます。
 </p>
 
 <p>
-��������ȡ��ؿ��� <code>EB_SUCCESS</code> ���֤��ޤ���
-���Ԥ���ȡ�<var>path</var> �λؤ��ΰ�˶�ʸ�����񤭹��ߡ������򼨤�
-���顼�����ɤ��֤��ޤ���
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>path</var> の指す領域に空文字列を書き込み、原因を示す
+エラーコードを返します。
 </p>
 
 <p>
-<var>book</var> �ϡ����餫������Ҥ˷���դ��Ƥ���ɬ�פ�����ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<code>EB_ERR_UNBOUND_BOOK</code> ���֤��ޤ���
+<var>book</var> は、あらかじめ書籍に結び付いている必要があります。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOK</code> を返します。
 </p>
 
 <p>
-<var>path</var> �˽񤭹���ѥ�̾�ΥХ��ȿ��ϡ���Ĺ��
-<code>EB_MAX_PATH_LENGTH</code> �ˤʤ�ޤ���
-����Ĺ���ϡ������Υʥ�ʸ����ޤߤޤ���
-�ؿ����֤��ѥ������������줿���ˤʤäƤ���Τǡ�<code>eb_bind()</code> ��
-�Ϥ����Ȥ��Τ�Τ�Ʊ���Ȥϸ¤�ޤ���
-���Ȥ��С����Хѥ����ä����ϡ����Хѥ����Ѵ�����ޤ���
+<var>path</var> に書き込むパス名のバイト数は、最長で
+<code>EB_MAX_PATH_LENGTH</code> になります。
+この長さは、末尾のナル文字を含みません。
+関数が返すパスは正規化された形になっているので、<code>eb_bind()</code> に
+渡したときのものと同じとは限りません。
+たとえば、相対パスだった場合は、絶対パスに変換されます。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:disc_type"><code>EB_Error_Code eb_disc_type (EB_Book *<var>book</var>, EB_Disc_Code *<var>disc_code</var>)</code></a></h4>
 
 <p>
-�ؿ� <code>eb_disc_type()</code> �ϡ�<var>book</var> �Υǥ������η�����
-<var>disc_code</var> �λؤ��ΰ�˽񤭹��ߤޤ���
-�񤭹���ǥ������η������ͤϡ�<code>EB_Disc_Code</code> ��
-(<a href="eb-05.html#eb_book-data-types">��[CD-ROM ���Ҥ� <code>EB_Book</code> ���֥�������] �ǡ������ξܺ١�</a> �򻲾ȤΤ���)
-�Τ����줫������ͤǤ���
+関数 <code>eb_disc_type()</code> は、<var>book</var> のディスクの形式を
+<var>disc_code</var> の指す領域に書き込みます。
+書き込むディスクの形式の値は、<code>EB_Disc_Code</code> 型
+(<a href="eb-05.html#eb_book-data-types">「[CD-ROM 書籍と <code>EB_Book</code> オブジェクト] データ型の詳細」</a> を参照のこと)
+のいずれかの定数値です。
 </p>
 
 <p>
-��������ȡ��ؿ��� <code>EB_SUCCESS</code> ���֤��ޤ���
-���Ԥ���ȡ�<var>disc_code</var> �λؤ��ΰ�� <code>EB_DISC_INVALID</code>
-��񤭹��ߡ������򼨤����顼�����ɤ��֤��ޤ���
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>disc_code</var> の指す領域に <code>EB_DISC_INVALID</code>
+を書き込み、原因を示すエラーコードを返します。
 </p>
 
 <p>
-<var>book</var> �ϡ����餫������Ҥ˷���դ��Ƥ��ʤ���Фʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<code>EB_ERR_UNBOUND_BOOK</code> ���֤��ޤ���
+<var>book</var> は、あらかじめ書籍に結び付いていなければなりません。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOK</code> を返します。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:character_code"><code>EB_Error_Code eb_character_code (EB_Book *<var>book</var>, EB_Character_Code *<var>character_code</var>)</code></a></h4>
 
 <p>
-�ؿ� <code>eb_character_code()</code> �ϡ�<var>book</var> ���񤫤�Ƥ���
-ʸ�������ɤ� <var>character_code</var> �λؤ��ΰ�˽񤭹��ߤޤ���
-�񤭹���ʸ�������ɤ��ͤϡ�<code>EB_Character_Code</code> ��
-(<a href="eb-05.html#eb_book-data-types">��[CD-ROM ���Ҥ� <code>EB_Book</code> ���֥�������] �ǡ������ξܺ١�</a> �򻲾ȤΤ���)
-�Τ����줫������ͤǤ���
+関数 <code>eb_character_code()</code> は、<var>book</var> が書かれている
+文字コードを <var>character_code</var> の指す領域に書き込みます。
+書き込む文字コードの値は、<code>EB_Character_Code</code> 型
+(<a href="eb-05.html#eb_book-data-types">「[CD-ROM 書籍と <code>EB_Book</code> オブジェクト] データ型の詳細」</a> を参照のこと)
+のいずれかの定数値です。
 </p>
 
 <p>
-��������ȡ��ؿ��� <code>EB_SUCCESS</code> ���֤��ޤ���
-���Ԥ���ȡ�<var>character_code</var> �λؤ��ΰ��
-<code>EB_CHARCODE_INVALID</code> ��񤭹��ߡ������򼨤����顼�����ɤ�
-�֤��ޤ���
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>character_code</var> の指す領域に
+<code>EB_CHARCODE_INVALID</code> を書き込み、原因を示すエラーコードを
+返します。
 </p>
 
 <p>
-<var>book</var> �ϡ����餫������Ҥ˷���դ��Ƥ��ʤ���Фʤ�ޤ���
-��ӤĤ��Ƥ��ʤ����ϡ�<code>EB_ERR_UNBOUND_BOOK</code> ���֤��ޤ���
+<var>book</var> は、あらかじめ書籍に結び付いていなければなりません。
+結びついていない場合は、<code>EB_ERR_UNBOUND_BOOK</code> を返します。
 </p>
 
 <!-- ================================================================ -->
 <hr>
 <p>
-[<a href="eb-04.html">����</a>] [<a href="eb-06.html">����</a>] [<a href="eb.html#toc">�ܼ�</a>] 
+[<a href="eb-04.html">前へ</a>] [<a href="eb-06.html">次へ</a>] [<a href="eb.html#toc">目次</a>] 
 </p>
 </body>
 </html>

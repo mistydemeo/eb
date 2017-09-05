@@ -35,94 +35,94 @@ Send bugs and suggestions to <texi2html@mathematik.uni-kl.de>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[Index]</TD>
 <TD VALIGN="MIDDLE" ALIGN="LEFT">[<A HREF="ebinfo-ja_abt.html#SEC_About"> ? </A>]</TD>
 </TR></TABLE>
-<H1> 3. ���Ϥ�������ξܺ٤Ĥ��� </H1>
+<H1> 3. 出力される情報の詳細ついて </H1>
 <!--docid::SEC3::-->
 <P>
 
-������Ǥϡ�<CODE>ebinfo</CODE> �����Ϥ������ξܺ٤ˤĤ����������ޤ���
+この節では、<CODE>ebinfo</CODE> が出力する情報の詳細について説明します。
 </P><P>
 
 <DL COMPACT>
 <DT>disc type:
-<DD>���ν��Ҥη�����EB/EBG/EBXA/EBXA-C/S-EBXA �ޤ��� EPWING �Ǥ���
+<DD>その書籍の形式。EB/EBG/EBXA/EBXA-C/S-EBXA または EPWING です。
 <P>
 
 <DT>character code:
-<DD>���ν��Ҥǻ��Ѥ���Ƥ���ʸ��������ISO 8859-1 �ޤ��� JIS X 0208 ��
-����
+<DD>その書籍で使用されている文字コー。ISO 8859-1 または JIS X 0208 で
+す。
 <P>
 
 <DT>the number of subbooks:
-<DD>���ν��Ҥ˼�Ͽ����Ƥ������� (subbbok) �ο���
+<DD>その書籍に収録されている副本 (subbbok) の数。
 </DL>
 <P>
 
-�ä��ơ����ν��ҤΤ��줾������ܤˤĤ��ơ��ʲ��ξ��󤬽��Ϥ���ޤ���
+加えて、その書籍のそれぞれの副本について、以下の情報が出力されます。
 </P><P>
 
 <DL COMPACT>
 <DT>title:
-<DD>���ܤ���̾��
-���Ҥ� JIS X 0208 �˽񤫤�Ƥ���Ȥ��ϡ���̾�� EUC (Extended UNIX Code) 
-��ɽ������ޤ���
+<DD>副本の題名。
+書籍が JIS X 0208 に書かれているときは、題名は EUC (Extended UNIX Code) 
+で表示されます。
 <P>
 
 <DT>directory:
-<DD>�������ܤ˴�Ϣ����ե����뤬�֤����ǥ��쥯�ȥ��̾����
-�Ѿ�ʸ������ʸ�����Ѵ�����ޤ���
+<DD>その副本に関連するファイルが置かれるディレクトリの名前。
+英小文字は大文字に変換されます。
 <P>
 
 <DT>search methods:
-<DD>���ܤ��б����Ƥ��븡����ˡ�ΰ�����
-���ΰ����ϡ��ʲ��˵�����������ˡ�ΰ������⤷�����������鹽������ޤ���
+<DD>副本が対応している検索方法の一覧。
+この一覧は、以下に記した検索方法の一部、もしくは全部から構成されます。
 <P>
 
 <DL COMPACT>
 <DT>copyright
-<DD>���ɽ�� (copyright notice)��
-��̩�˸����С�����ϸ�����ˡ�ǤϤʤ��ΤǤ�����CD-ROM ���Ҥ�����������
-�ط����顢ɽ������褦�ˤ��Ƥ��ޤ���
+<DD>著作権表示 (copyright notice)。
+厳密に言えば、これは検索方法ではないのですが、CD-ROM 書籍の内部形式の
+関係から、表示するようにしています。
 <P>
 
 <DT>word
-<DD>�������׸��� (Word search)��
+<DD>前方一致検索 (Word search)。
 <P>
 
 <DT>endword
-<DD>�������׸��� (Endword search)��
+<DD>後方一致検索 (Endword search)。
 <P>
 
 <DT>keyword
-<DD>��︡�� (Keyword search)��
+<DD>条件検索 (Keyword search)。
 <P>
 
 <DT>multi
-<DD>ʣ�縡�� (Multi search)��
+<DD>複合検索 (Multi search)。
 <P>
 
 <DT>menu
-<DD>��˥塼���� (Menu search).
+<DD>メニュー検索 (Menu search).
 <P>
 
 <DT>graphic
-<DD>����ե��å����� (Graphic search).
+<DD>グラフィック検索 (Graphic search).
 <P>
 
 </DL>
 <P>
 
 <DT>font sizes:
-<DD>���ܤ����ġ��ե���ȤΥ������ΰ�����
-���ΰ����ˤϡ�16, 24, 30, 48 �Ȥ��� 4 �ĤΥ������ΰ������⤷����������
-�鹽������ޤ���
+<DD>副本が持つ、フォントのサイズの一覧。
+この一覧には、16, 24, 30, 48 という 4 つのサイズの一部、もしくは全部か
+ら構成されます。
 <P>
 
 <DT>narrow font characters:
-<DD>���ܤ�������Ƥ���Ⱦ��ʸ����ʸ���ֹ���ϰϡ�
+<DD>副本が定義している半角文字の文字番号の範囲。
 <P>
 
 <DT>wide font characters:
-<DD>���ܤ�������Ƥ�������ʸ����ʸ���ֹ���ϰϡ�
+<DD>副本が定義している全角文字の文字番号の範囲。
 <P>
 
 </DL>
