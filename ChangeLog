@@ -1,3 +1,26 @@
+2000-06-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 2.3.8.
+
+	* ebzip/ebzip.c (zip_file): Don't refer to `slice_location'
+	before initialize it.
+
+	* ebfont/ebfont.c (make_book_fonts): Don't refer to `subdir'
+	before initialize it.
+	
+	* libebutils/getumask.c: Include `sys/stat.h'.
+
+        * eb/zio.c (eb_zopen_epwzipped): Fix offset passed to lseek().
+        Reported by Takashi NEMOTO.
+
+	* ebrefile/ebrefile.in: Fix a bug that ebrefile fills the reserved-1
+	with 0x00, reported by Takashi NEMOTO.
+
+        * eb/hook.c: Include appendix.h.
+
+	* eb/zio.c (eb_zopen, eb_zopen2): Support DOS style path, reported
+        by Kazuhiro Ito.
+
 2000-01-22  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 2.3.7.

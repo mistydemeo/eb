@@ -150,6 +150,7 @@ eb_zopen(zip, filename)
 {
     char zipped_filename[PATH_MAX + 1];
     size_t filename_length;
+    const char *filename_tail;
     EB_Case_Code fcase;
     const char *p;
     int file;
@@ -168,6 +169,8 @@ eb_zopen(zip, filename)
      * Determine the letter case of the suffix of the zip filename.
      */
     filename_length = strlen(filename);
+    filename_tail = filename + filename_length;
+
     for (p = filename, fcase = EB_CASE_UPPER; *p != '\0'; p++) {
 	if ('A' <= *p && *p <= 'Z')
 	    fcase = EB_CASE_UPPER;
@@ -219,29 +222,50 @@ eb_zopen(zip, filename)
      * (e.g. `HONMON;1' -> `HONMON2;1').
      */
     strcpy(zipped_filename, filename);
+
+#ifndef DOS_FILE_PATH /* (for UNIX) */
     if (12 <= filename_length
-	&& (strcmp(filename + filename_length - 12, "/DATA/HONMON") == 0
-	    || strcmp(filename + filename_length - 12, "/data/honmon")
-	    == 0)) {
+	&& (strcmp(filename_tail - 12, "/DATA/HONMON") == 0
+	    || strcmp(filename_tail - 12, "/data/honmon") == 0)) {
 	strcpy(zipped_filename + filename_length, "2");
     } else if (13 <= filename_length
-	&& (strcmp(filename + filename_length - 13, "/DATA/HONMON.") == 0
-	    || strcmp(filename + filename_length - 13, "/data/honmon.")
-	    == 0)) {
+	&& (strcmp(filename_tail - 13, "/DATA/HONMON.") == 0
+	    || strcmp(filename_tail - 13, "/data/honmon.") == 0)) {
 	strcpy(zipped_filename + filename_length - 1, "2.");
     } else if (14 <= filename_length
-	&& (strcmp(filename + filename_length - 14, "/DATA/HONMON;1") == 0
-	    || strcmp(filename + filename_length - 14, "/data/honmon;1")
-	    == 0)) {
+	&& (strcmp(filename_tail - 14, "/DATA/HONMON;1") == 0
+	    || strcmp(filename_tail - 14, "/data/honmon;1") == 0)) {
 	strcpy(zipped_filename + filename_length - 2, "2;1");
     } else if (15 <= filename_length
-	&& (strcmp(filename + filename_length - 15, "/DATA/HONMON.;1") == 0
-	    || strcmp(filename + filename_length - 15, "/data/honmon.;1")
-	    == 0)) {
+	&& (strcmp(filename_tail - 15, "/DATA/HONMON.;1") == 0
+	    || strcmp(filename_tail - 15, "/data/honmon.;1") == 0)) {
 	strcpy(zipped_filename + filename_length - 3, "2;1");
     } else {
 	zipped_filename[0] = '\0';
     }
+
+#else /* DOS_FILE_PATH (for DOS and Windows) */
+    if (12 <= filename_length
+	&& (strcmp(filename_tail - 12, "\\DATA\\HONMON") == 0
+	    || strcmp(filename_tail - 12, "\\data\\honmon") == 0)) {
+	strcpy(zipped_filename + filename_length, "2");
+    } else if (13 <= filename_length
+	&& (strcmp(filename_tail - 13, "\\DATA\\HONMON.") == 0
+	    || strcmp(filename_tail - 13, "\\data\\honmon.") == 0)) {
+	strcpy(zipped_filename + filename_length - 1, "2.");
+    } else if (14 <= filename_length
+	&& (strcmp(filename_tail - 14, "\\DATA\\HONMON;1") == 0
+	    || strcmp(filename_tail - 14, "\\data\\honmon;1") == 0)) {
+	strcpy(zipped_filename + filename_length - 2, "2;1");
+    } else if (15 <= filename_length
+	&& (strcmp(filename_tail - 15, "\\DATA\\HONMON.;1") == 0
+	    || strcmp(filename_tail - 15, "\\data\\honmon.;1") == 0)) {
+	strcpy(zipped_filename + filename_length - 3, "2;1");
+    } else {
+	zipped_filename[0] = '\0';
+    }
+
+#endif /* DOS_FILE_PATH */
 
     /*
      * Try to open a `HONMON2' file instead of `HONMON'.
@@ -297,8 +321,10 @@ eb_zopen2(zip, filename)
     int is_ebzipped;
     int is_epwzipped;
     size_t filename_length;
+    const char *filename_tail;
 
     filename_length = strlen(filename);
+    filename_tail = filename + filename_length;
 
     /*
      * Try to open a `*.EBZ' file.
@@ -322,31 +348,46 @@ eb_zopen2(zip, filename)
      * Try to open a `HONMON2' file instead of `HONMON'.
      */
     is_epwzipped = 0;
+
+#ifndef DOS_FILE_PATH /* (for UNIX) */
     if (13 <= filename_length
-	&& (strcmp(filename + filename_length - 13, "/DATA/HONMON2") == 0
-	    || strcmp(filename + filename_length - 13, "/data/honmon2")
-	    == 0)) {
+	&& (strcmp(filename_tail - 13, "/DATA/HONMON2") == 0
+	    || strcmp(filename_tail - 13, "/data/honmon2") == 0)) {
 	is_epwzipped = 1;
     } else if (14 <= filename_length
-	&& (strcmp(filename + filename_length - 14, "/DATA/HONMON2.") == 0
-	    || strcmp(filename + filename_length - 14, "/data/honmon2.")
-	    == 0)) {
+	&& (strcmp(filename_tail - 14, "/DATA/HONMON2.") == 0
+	    || strcmp(filename_tail - 14, "/data/honmon2.") == 0)) {
 	is_epwzipped = 1;
     } else if (15 <= filename_length
-	&& (strcmp(filename + filename_length - 15, "/DATA/HONMON2;1") == 0
-	    || strcmp(filename + filename_length - 15, "/data/honmon2;1")
-	    == 0)) {
+	&& (strcmp(filename_tail - 15, "/DATA/HONMON2;1") == 0
+	    || strcmp(filename_tail - 15, "/data/honmon2;1") == 0)) {
 	is_epwzipped = 1;
     } else if (16 <= filename_length
-	&& (strcmp(filename + filename_length - 16, "/DATA/HONMON2.;1") == 0
-	    || strcmp(filename + filename_length - 16, "/data/honmon2.;1")
-	    == 0)) {
+	&& (strcmp(filename_tail - 16, "/DATA/HONMON2.;1") == 0
+	    || strcmp(filename_tail - 16, "/data/honmon2.;1") == 0)) {
 	is_epwzipped = 1;
     }
-    if (is_epwzipped) {
-	file = eb_zopen_epwzipped(zip, filename);
-	return file;
+
+#else /* DOS_FILE_PATH (for DOS and Windows) */
+    if (13 <= filename_length
+	&& (strcmp(filename_tail - 13, "\\DATA\\HONMON2") == 0
+	    || strcmp(filename_tail - 13, "\\data\\honmon2") == 0)) {
+	is_epwzipped = 1;
+    } else if (14 <= filename_length
+	&& (strcmp(filename_tail - 14, "\\DATA\\HONMON2.") == 0
+	    || strcmp(filename_tail - 14, "\\data\\honmon2.") == 0)) {
+	is_epwzipped = 1;
+    } else if (15 <= filename_length
+	&& (strcmp(filename_tail - 15, "\\DATA\\HONMON2;1") == 0
+	    || strcmp(filename_tail - 15, "\\data\\honmon2;1") == 0)) {
+	is_epwzipped = 1;
+    } else if (16 <= filename_length
+	&& (strcmp(filename_tail - 16, "\\DATA\\HONMON2.;1")  == 0
+	    || strcmp(filename_tail - 16, "\\data\\honmon2.;1") == 0)) {
+	is_epwzipped = 1;
     }
+
+#endif /* DOS_FILE_PATH */
 
     /*
      * Try to open a normal file.

@@ -1,4 +1,4 @@
-This is ebfont-ja.info, produced by makeinfo version 3.12s from
+This is ebfont-ja.info, produced by makeinfo version 4.0 from
 ebfont-ja.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.7 版です。 EB ライブラリバージョン 2.3.7 に対応して
+   この文書は第 2.3.8 版です。 EB ライブラリバージョン 2.3.8 に対応して
 います。
 
 * Menu:
@@ -301,13 +301,13 @@ File: ebfont-ja.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: To
 
 
 Tag Table:
-Node: Top1054
-Node: Introduction1586
-Node: What is Local Character2404
-Node: Invoking ebfont3959
-Node: Image Formats5303
-Node: Heights6161
-Node: Subbooks6979
-Node: Summary of Options8948
+Node: Top1052
+Node: Introduction1584
+Node: What is Local Character2402
+Node: Invoking ebfont3957
+Node: Image Formats5301
+Node: Heights6159
+Node: Subbooks6977
+Node: Summary of Options8946
 
 End Tag Table

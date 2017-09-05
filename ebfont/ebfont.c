@@ -751,6 +751,13 @@ make_book_fonts(book, out_path, sub_list, sub_count, font_list, font_count,
 	    goto failed;
 	}
 
+	subdir = eb_subbook_directory(book);
+	if (subdir == NULL) {
+	    fprintf(stderr, "%s: %s: subbook=%d\n", invoked_name,
+		eb_error_message(), sub_list[sub]);
+	    goto failed;
+	}
+
 	/*
 	 * Output debug information.
 	 */
@@ -760,12 +767,6 @@ make_book_fonts(book, out_path, sub_list, sub_count, font_list, font_count,
 	/*
 	 * Make a directory for the subbook.
 	 */
-	subdir = eb_subbook_directory(book);
-	if (subdir == NULL) {
-	    fprintf(stderr, "%s: %s: subbook=%d\n", invoked_name,
-		eb_error_message(), sub_list[sub]);
-	    goto failed;
-	}
 	sprintf(subpath, "%s/%s", out_path, subdir);
 #ifdef DOS_FILE_PATH
 	eb_canonicalize_filename(subpath);

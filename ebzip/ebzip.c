@@ -824,7 +824,6 @@ zip_book(book, out_path)
     char out_directory[PATH_MAX + 1];
     size_t out_path_length;
     mode_t out_dirmode;
-    struct stat st;
     int i, j;
 
     out_path_length = strlen(out_path);
@@ -998,7 +997,6 @@ unzip_book(book, out_path)
     char out_directory[PATH_MAX + 1];
     size_t out_path_length;
     mode_t out_dirmode;
-    struct stat st;
     int i, j;
 
     out_path_length = strlen(out_path);
@@ -1576,7 +1574,8 @@ zip_file(out_filename, in_filename_list)
 		invoked_name, strerror(errno), *in_filename);
 	    goto failed;
 	}
-	in_length = eb_zread(&in_zip, in_file, in_buffer, out_zip.slice_size);
+	in_length = eb_zread(&in_zip, in_file, (char *)in_buffer,
+	    out_zip.slice_size);
 	if (in_length < 0) {
 	    fprintf(stderr, "%s: cannot read from the file, %s: %s\n",
 		invoked_name, strerror(errno), *in_filename);
@@ -1638,6 +1637,8 @@ zip_file(out_filename, in_filename_list)
 		    invoked_name, out_filename);
 		goto failed;
 	    }
+	} else {
+	    slice_location = 0;
 	}
 
 	/*
@@ -2000,7 +2001,7 @@ unzip_file(out_filename, in_filename_list)
 		invoked_name, strerror(errno), *in_filename);
 	    goto failed;
 	}
-	length = eb_zread(&in_zip, in_file, buffer, in_zip.slice_size);
+	length = eb_zread(&in_zip, in_file, (char *)buffer, in_zip.slice_size);
 	if (length < 0) {
 	    fprintf(stderr, "%s: cannot read from the file, %s: %s\n",
 		invoked_name, strerror(errno), *in_filename);
@@ -2160,11 +2161,9 @@ zipinfo_file(filename_list)
     const char **filename_list;
 {
     const char **filename;
-    char buffer[EB_SIZE_EBZIP_HEADER];
     EB_Zip zip;
     int file = -1;
     struct stat st;
-    int zip_level;
 
     /*
      * Check whether a file exists.

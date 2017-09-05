@@ -21,7 +21,7 @@
 
 #include "eb.h"
 #include "text.h"
-
+#include "appendix.h"
 
 /*
  * EUC JP to ASCII conversion table.

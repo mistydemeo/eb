@@ -206,7 +206,7 @@ if (read(READ, $buf, 16) != 16) {
     close(READ);
     exit(1);
 }
-$reserved1 = unpack('x2 C14', $buf);
+@reserved1 = unpack('x2 C14', $buf);
 
 #
 # Scan the catalog.
@@ -262,7 +262,7 @@ if (!open(WRITE, ">$outfile")) {
 #
 # Write a header part.
 #
-$buf = pack("n C14", scalar(@sub_imports), $reserved1);
+$buf = pack("n C14", scalar(@sub_imports), @reserved1);
 if (!print(WRITE $buf)) {
     warn "$0: cannot read the file, $!: $outfile\n";
     close(WRITE);

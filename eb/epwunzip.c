@@ -89,7 +89,7 @@ eb_epwunzip_slice(out_buffer, in_file, huffman_tree)
 		in_read_length = eb_read_all(in_file, in_buffer, EB_SIZE_PAGE);
 		if (in_read_length <= 0)
 		    return -1;
-		in_bufp = in_buffer;
+		in_bufp = (unsigned char *)in_buffer;
 	    }
 
 	    /*

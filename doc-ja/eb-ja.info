@@ -1,4 +1,4 @@
-This is eb-ja.info, produced by makeinfo version 3.12s from eb-ja.texi.
+This is eb-ja.info, produced by makeinfo version 4.0 from eb-ja.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -26,7 +26,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.7 版です。 この文書はまだ完成していません。
+   この文書は第 2.3.8 版です。 この文書はまだ完成していません。
 
 * Menu:
 
@@ -105,7 +105,7 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 目的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳
 細については GNU General Public License をお読みください。
 
-   この文書は第 EB ライブラリバージョン 2.3.7 に対応しています。 この文
+   この文書は第 EB ライブラリバージョン 2.3.8 に対応しています。 この文
 書はまだ完成していません。
 
 
@@ -1685,36 +1685,36 @@ File: eb-ja.info,  Node: Program Index,  Prev: Variable Index,  Up: Index
 
 
 Tag Table:
-Node: Top1016
-Node: Introduction2705
-Node: Link3794
-Node: Compilation4196
-Node: Configuration5676
-Node: Character Code7176
-Node: Initialization7938
-Node: Compressed Book10857
-Node: Initialization Sample11293
-Node: Initialization Data Types13308
-Node: Initialization Functions14434
-Node: Error Handling18748
-Node: Tolerance to Error19654
-Node: Error Data Types20844
-Node: Error Variables21412
-Node: Error Codes22245
-Node: Subbook31626
-Node: Current Subbook33484
-Node: Subbook Sample35104
-Node: Subbook Data Types37454
-Node: Subbook Functions37971
-Node: Search Basics43321
-Node: Word Search44153
-Node: Get Remained Entries46717
-Node: Word Search Data Types48538
-Node: Word Search Functions49410
-Node: Index53645
-Node: Data Type Index53926
-Node: Function Index54514
-Node: Variable Index56233
-Node: Program Index60241
+Node: Top1014
+Node: Introduction2703
+Node: Link3792
+Node: Compilation4194
+Node: Configuration5674
+Node: Character Code7174
+Node: Initialization7936
+Node: Compressed Book10855
+Node: Initialization Sample11291
+Node: Initialization Data Types13306
+Node: Initialization Functions14432
+Node: Error Handling18746
+Node: Tolerance to Error19652
+Node: Error Data Types20842
+Node: Error Variables21410
+Node: Error Codes22243
+Node: Subbook31624
+Node: Current Subbook33482
+Node: Subbook Sample35102
+Node: Subbook Data Types37452
+Node: Subbook Functions37969
+Node: Search Basics43319
+Node: Word Search44151
+Node: Get Remained Entries46715
+Node: Word Search Data Types48536
+Node: Word Search Functions49408
+Node: Index53643
+Node: Data Type Index53924
+Node: Function Index54512
+Node: Variable Index56231
+Node: Program Index60239
 
 End Tag Table

@@ -1,4 +1,4 @@
-This is ebinfo-ja.info, produced by makeinfo version 3.12s from
+This is ebinfo-ja.info, produced by makeinfo version 4.0 from
 ebinfo-ja.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.2 版です。 EB ライブラリバージョン 2.2 に対応していま
-す。
+   この文書は第 2.3.8 版です。 EB ライブラリバージョン 2.3.8 に対応して
+います。
 
 * Menu:
 
@@ -213,10 +213,10 @@ File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Details about Information
 
 
 Tag Table:
-Node: Top1009
-Node: Introduction1382
-Node: Invoking ebinfo2127
-Node: Details about Information4145
-Node: Options to ebinfo5866
+Node: Top1007
+Node: Introduction1384
+Node: Invoking ebinfo2129
+Node: Details about Information4147
+Node: Options to ebinfo5868
 
 End Tag Table

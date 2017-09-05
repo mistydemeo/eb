@@ -1,5 +1,5 @@
-This is Info file ebrefile.info, produced by Makeinfo version 1.68 from
-the input file ebrefile.texi.
+This is ebrefile.info, produced by makeinfo version 4.0 from
+ebrefile.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.7, for EB Library version 2.3.7.
+   This is edition 2.3.8, for EB Library version 2.3.8.
 
 * Menu:
 
@@ -36,7 +36,7 @@ File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 * Invoking ebrefile::           Invoking `ebrefile'.
 * Summary of Options::          Summary of Options to `ebrefile'.
 
- -- The Detailed Node Listing --
+ --- The Detailed Node Listing ---
 
 Invoking `ebrefile'
 
@@ -82,7 +82,7 @@ the Free Software Foundation; either version 2, or (at your option) any
 later version.
 
    `ebrefile' is distributed in the hope that it will be useful, but
-*without any warranty*; without even the implied warranty of
+_without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
@@ -91,7 +91,7 @@ Though `ebzip' is free software, your books may not be free.
 `ebrefile' modifies contents of a certain file in a CD-ROM book.
 Please be careful.
 
-   This is edition 2.3.7, for EB Library version 2.3.7.
+   This is edition 2.3.8, for EB Library version 2.3.8.
 
 
 File: ebrefile.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -235,15 +235,15 @@ is lower, and suffix is `;1'), `ebrefile' puts a new catalog file as
    The following table displayes how a filename of `CATALOG(S)' file
 changes.
 
-case/suffix                   original file          backup file            
-lower/none                    catalog                catalog.bak            
-lower/dot                     catalog.               catalog.bak            
-lower/version                 catalog;1              catalog.bak;1          
-lower/dot+version             catalog.;1             catalog.bak;1          
-upper/none                    CATALOG                CATALOG.BAK            
-upper/dot                     CATALOG.               CATALOG.BAK            
-upper/version                 CATALOG;1              CATALOG.BAK;1          
-upper/dot+version             CATALOG.;1             CATALOG.BAK;1          
+case/suffix                   original file          backup file
+lower/none                    catalog                catalog.bak
+lower/dot                     catalog.               catalog.bak
+lower/version                 catalog;1              catalog.bak;1
+lower/dot+version             catalog.;1             catalog.bak;1
+upper/none                    CATALOG                CATALOG.BAK
+upper/dot                     CATALOG.               CATALOG.BAK
+upper/version                 CATALOG;1              CATALOG.BAK;1
+upper/dot+version             CATALOG.;1             CATALOG.BAK;1
 
    The `--case' and `--suffix' options allows you to modify these case
 and suffix styles of new catalog file and backup file.  The `--case'
@@ -341,12 +341,12 @@ allowed as long as they are unique.
 
 
 Tag Table:
-Node: Top1054
-Node: Introduction1580
-Node: Invoking ebrefile3643
-Node: Select Subbooks4339
-Node: Adjust Filename8151
-Node: Combination with ebzip9885
-Node: Summary of Options11197
+Node: Top1028
+Node: Introduction1556
+Node: Invoking ebrefile3619
+Node: Select Subbooks4315
+Node: Adjust Filename8127
+Node: Combination with ebzip9761
+Node: Summary of Options11073
 
 End Tag Table

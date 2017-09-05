@@ -1,5 +1,4 @@
-This is Info file ebzip.info, produced by Makeinfo version 1.68 from
-the input file ebzip.texi.
+This is ebzip.info, produced by makeinfo version 4.0 from ebzip.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -28,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.7, for EB Library version 2.3.7.
+   This is edition 2.3.8, for EB Library version 2.3.8.
 
 * Menu:
 
@@ -43,7 +42,7 @@ File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 * Comparision Result::          Comparision of Compression Results.
 * Compressed File Format::      Compressed File Format.
 
- -- The Detailed Node Listing --
+ --- The Detailed Node Listing ---
 
 Compression
 
@@ -94,7 +93,7 @@ Free Software Foundation; either version 2, or (at your option) any
 later version.
 
    `ebzip' is distributed in the hope that it will be useful, but
-*without any warranty*; without even the implied warranty of
+_without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
@@ -103,7 +102,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 2.3.7, for EB Library version 2.3.7.
+   This is edition 2.3.8, for EB Library version 2.3.8.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -123,6 +122,7 @@ information.
    * information
      Output information about compression status of a CD-ROM book
      compressed by `ebzip'.
+
 
 When `ebzip' is invoked, the action is determined by invoked name of
 the `ebzip' command and command line options to `ebzip'.  The action is
@@ -343,15 +343,15 @@ number `;1' in their tails.
 original form.  The following table displayes how a filename of `start'
 file changes.
 
-case/suffix                   before compression     after compresssion     
-lower/none                    start                  start.ebz              
-lower/dot                     start.                 start.ebz              
-lower/version                 start;1                start.ebz;1            
-lower/dot+version             start.;1               start.ebz;1            
-upper/none                    START                  START.EBZ              
-upper/dot                     START.                 START.EBZ              
-upper/version                 START;1                START.EBZ;1            
-upper/dot+version             START.;1               START.EBZ;1            
+case/suffix                   before compression     after compresssion
+lower/none                    start                  start.ebz
+lower/dot                     start.                 start.ebz
+lower/version                 start;1                start.ebz;1
+lower/dot+version             start.;1               start.ebz;1
+upper/none                    START                  START.EBZ
+upper/dot                     START.                 START.EBZ
+upper/version                 START;1                START.EBZ;1
+upper/dot+version             START.;1               START.EBZ;1
 
    The `--case' and `--suffix' options allows you to modify these case
 and suffix styles of output filenames.  The `--case' option takes an
@@ -773,7 +773,7 @@ long as they are unique.
 `--uncompress'
      Uncompress a CD-ROM book.
 
-     (*note Uncompression::., for more details).
+     (*note Uncompression::, for more details).
 
 `-v'
 `--version'
@@ -794,44 +794,44 @@ Comparision of Compression Results
    Compression result of the `START' file in a certain English-Japanese
 and Japanese-English dictionary (EBXA):
 
-compression level             file size              ratio                  
-(original)                    154476544 bytes        100.0%                 
-level 0                       54922039 bytes         35.6%                  
-level 1                       49615791 bytes         32.1%                  
-level 2                       45983464 bytes         29.8%                  
-level 3                       43431397 bytes         28.1%                  
-(reference: gzip -6)          38712247 bytes         25.0%                  
+compression level             file size              ratio
+(original)                    154476544 bytes        100.0%
+level 0                       54922039 bytes         35.6%
+level 1                       49615791 bytes         32.1%
+level 2                       45983464 bytes         29.8%
+level 3                       43431397 bytes         28.1%
+(reference: gzip -6)          38712247 bytes         25.0%
 
    Compression result of the `START' file in a certain English
 dictionary (EBG):
 
-compression level             file size              ratio                  
-(original)                    55511040 bytes         100.0%                 
-level 0                       25866491 bytes         46.6%                  
-level 1                       24419066 bytes         44.0%                  
-level 2                       23453212 bytes         42.2%                  
-level 3                       22748840 bytes         41.0%                  
-(reference: gzip -6)          20930009 bytes         37.7%                  
+compression level             file size              ratio
+(original)                    55511040 bytes         100.0%
+level 0                       25866491 bytes         46.6%
+level 1                       24419066 bytes         44.0%
+level 2                       23453212 bytes         42.2%
+level 3                       22748840 bytes         41.0%
+(reference: gzip -6)          20930009 bytes         37.7%
 
    Compression result of the `HONMON' file in a certain Japanese
 dictionary (EPWING V1):
 
-compression level             file size              ratio                  
-(original)                    23642112 bytes         100.0%                 
-level 0                       9927048 bytes          42.0%                  
-level 1                       9213184 bytes          39.0%                  
-level 2                       8767603 bytes          37.1%                  
-level 3                       8495563 bytes          35.9%                  
-(reference: gzip -6)          8114658 bytes          34.3%                  
+compression level             file size              ratio
+(original)                    23642112 bytes         100.0%
+level 0                       9927048 bytes          42.0%
+level 1                       9213184 bytes          39.0%
+level 2                       8767603 bytes          37.1%
+level 3                       8495563 bytes          35.9%
+(reference: gzip -6)          8114658 bytes          34.3%
 
    Compression result of the `HONMON2' file in a certain Japanese
 dictionary (EPWING V5):
 
-compression level             file size              ratio                  
-(uncompressed)                220069888 bytes        100.0%                 
-(original)                    149139690 bytes        67.8%                  
-level 0                       82973263 bytes         37.7%                  
-level 1                       78163751 bytes         35.5%                  
+compression level             file size              ratio
+(uncompressed)                220069888 bytes        100.0%
+(original)                    149139690 bytes        67.8%
+level 0                       82973263 bytes         37.7%
+level 1                       78163751 bytes         35.5%
 
 
 File: ebzip.info,  Node: Compressed File Format,  Prev: Comparision Result,  Up: Top
@@ -891,13 +891,13 @@ the last slice (slice N in the following picture) has the same size.
                                                         EOF
 
 Slice size is determined by the compression level (*note Compression
-Level::., about compression level):
+Level::, about compression level):
 
-compression level                    slice size                           
-0                                    2048 bytes                           
-1                                    4096 bytes                           
-2                                    8192 bytes                           
-3                                    16384 bytes                          
+compression level                    slice size
+0                                    2048 bytes
+1                                    4096 bytes
+2                                    8192 bytes
+3                                    16384 bytes
 
 Second, if the last slice is shorter than the slice size, `ebzip'
 extends the last slice to the slice size by padding bytes of 0x00.
@@ -962,10 +962,10 @@ is byte.
 Each index takes from 2 to 4 bytes, according with size of an original
 file:
 
-original file size                                 index size             
-0 ...      65535 bytes                             2 bytes                
-65535 ...   16777215 bytes                         3 bytes                
-16777216 ... 4294967295 bytes                      4 bytes                
+original file size                                 index size
+0 ...      65535 bytes                             2 bytes
+65535 ...   16777215 bytes                         3 bytes
+16777216 ... 4294967295 bytes                      4 bytes
 
    All multi-byte numbers in the indexes stored with the most
 significant byte first.  For example, 0x1234 is stored as follows.
@@ -1015,7 +1015,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     2.3.7, only 1 (0001 in binary digits) can be prescribed as this
+     2.3.8, only 1 (0001 in binary digits) can be prescribed as this
      version.
 
 `compression level (4 bits of the least-significant-bit side)'
@@ -1052,33 +1052,33 @@ significant byte first.
 
 
 Tag Table:
-Node: Top1060
-Node: Introduction2803
-Node: Action and Command Name4188
-Node: Invoking ebzip5797
-Node: Compression6568
-Node: Compression Example 17225
-Node: Compression Example 28805
-Node: Compression Level10348
-Node: Adjust Filenames10951
-Node: Test13087
-Node: Partial Compression13432
-Node: Overwrite Old Files16035
-Node: Compress Compressed EPWING16783
-Node: Uncompression17282
-Node: Uncompression Example17724
-Node: Options for Uncompression19281
-Node: Uncompress Compressed EPWING20789
-Node: Information21291
-Node: Information Example21678
-Node: Options for Information22330
-Node: Delete a Book22919
-Node: Summary of Options23217
-Node: Comparision Result27566
-Node: Compressed File Format30133
-Node: Format Overview30559
-Node: Data Part31415
-Node: Index Part34216
-Node: Header Part36604
+Node: Top1034
+Node: Introduction2779
+Node: Action and Command Name4164
+Node: Invoking ebzip5774
+Node: Compression6545
+Node: Compression Example 17202
+Node: Compression Example 28782
+Node: Compression Level10325
+Node: Adjust Filenames10928
+Node: Test12955
+Node: Partial Compression13300
+Node: Overwrite Old Files15903
+Node: Compress Compressed EPWING16651
+Node: Uncompression17150
+Node: Uncompression Example17592
+Node: Options for Uncompression19149
+Node: Uncompress Compressed EPWING20657
+Node: Information21159
+Node: Information Example21546
+Node: Options for Information22198
+Node: Delete a Book22787
+Node: Summary of Options23085
+Node: Comparision Result27433
+Node: Compressed File Format29537
+Node: Format Overview29962
+Node: Data Part30818
+Node: Index Part33484
+Node: Header Part35811
 
 End Tag Table

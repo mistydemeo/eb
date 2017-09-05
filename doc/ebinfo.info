@@ -1,5 +1,4 @@
-This is Info file ebinfo.info, produced by Makeinfo version 1.68 from
-the input file ebinfo.texi.
+This is ebinfo.info, produced by makeinfo version 4.0 from ebinfo.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -28,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.7, for EB Library version 2.3.7.
+   This is edition 2.3.8, for EB Library version 2.3.8.
 
 * Menu:
 
@@ -52,11 +51,11 @@ Free Software Foundation; either version 2, or (at your option) any
 later version.
 
    `ebinfo' is distributed in the hope that it will be useful, but
-*without any warranty*; without even the implied warranty of
+_without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 2.3.7, for EB Library version 2.3.7.
+   This is edition 2.3.8, for EB Library version 2.3.8.
 
 
 File: ebinfo.info,  Node: Invoking ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
@@ -215,10 +214,10 @@ long as they are unique.
 
 
 Tag Table:
-Node: Top1048
-Node: Introduction1401
-Node: Invoking ebinfo2173
-Node: Details about Information4157
-Node: Options to ebinfo5884
+Node: Top1022
+Node: Introduction1375
+Node: Invoking ebinfo2147
+Node: Details about Information4131
+Node: Options to ebinfo5858
 
 End Tag Table

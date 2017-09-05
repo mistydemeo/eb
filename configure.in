@@ -3,12 +3,12 @@ dnl * Process this file with autoconf to produce a configure script.
 dnl *
 AC_INIT(eb/eb.c)
 AC_PREREQ(2.12)
-AM_INIT_AUTOMAKE(eb, 2.3.7)
+AM_INIT_AUTOMAKE(eb, 2.3.8)
 
 dnl *
 dnl * Library version info.
 dnl *
-LIBEB_VERSION_INFO=3:4:2
+LIBEB_VERSION_INFO=3:5:2
 AC_SUBST(LIBEB_VERSION_INFO)
 
 dnl *

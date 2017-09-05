@@ -65,14 +65,12 @@ DEPENDENCIES_FOR_LIBZ = @DEPENDENCIES_FOR_LIBZ@
 DLLTOOL = @DLLTOOL@
 EXEEXT = @EXEEXT@
 INCLUDES_FOR_LIBZ = @INCLUDES_FOR_LIBZ@
-LD = @LD@
 LDADD_FOR_LIBZ = @LDADD_FOR_LIBZ@
 LIBEB_VERSION_INFO = @LIBEB_VERSION_INFO@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAILING_ADDRESS = @MAILING_ADDRESS@
 MAKEINFO = @MAKEINFO@
-NM = @NM@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -366,7 +364,7 @@ error.o: error.c ../config.h eb.h defs.h error.h
 filename.o: filename.c ../config.h eb.h defs.h error.h
 font.o: font.c ../config.h eb.h defs.h error.h font.h internal.h
 graphic.o: graphic.c ../config.h eb.h defs.h error.h
-hook.o: hook.c ../config.h eb.h defs.h text.h
+hook.o: hook.c ../config.h eb.h defs.h text.h appendix.h
 jacode.o: jacode.c ../config.h
 keyword.o: keyword.c ../config.h eb.h defs.h error.h internal.h
 language.o: language.c ../config.h eb.h defs.h error.h internal.h \
@@ -407,7 +405,7 @@ error.lo: error.c ../config.h eb.h defs.h error.h
 filename.lo: filename.c ../config.h eb.h defs.h error.h
 font.lo: font.c ../config.h eb.h defs.h error.h font.h internal.h
 graphic.lo: graphic.c ../config.h eb.h defs.h error.h
-hook.lo: hook.c ../config.h eb.h defs.h text.h
+hook.lo: hook.c ../config.h eb.h defs.h text.h appendix.h
 jacode.lo: jacode.c ../config.h
 keyword.lo: keyword.c ../config.h eb.h defs.h error.h internal.h
 language.lo: language.c ../config.h eb.h defs.h error.h internal.h \

@@ -1,4 +1,4 @@
-This is ebzip-ja.info, produced by makeinfo version 3.12s from
+This is ebzip-ja.info, produced by makeinfo version 4.0 from
 ebzip-ja.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.7 版です。 EB ライブラリバージョン 2.3.7 に対応して
+   この文書は第 2.3.8 版です。 EB ライブラリバージョン 2.3.8 に対応して
 います。
 
 * Menu:
@@ -1009,7 +1009,7 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 2.3.7 では、1 (2 進
+     圧縮モードを表します。 EB ライブラリバージョン 2.3.8 では、1 (2 進
      数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
@@ -1047,33 +1047,33 @@ significant bit) を含んでいます。 `zip モード' が 1 で、 `圧縮レベル' が
 
 
 Tag Table:
-Node: Top1012
-Node: Introduction2579
-Node: Action and Command Name3931
-Node: Invoking ebzip5658
-Node: Compression6291
-Node: Compression Example 16892
-Node: Compression Example 28469
-Node: Compression Level10029
-Node: Adjust Filenames10542
-Node: Test12563
-Node: Partial Compression12912
-Node: Overwrite Old Files15496
-Node: Compress Compressed EPWING16294
-Node: Uncompression16732
-Node: Uncompression Example17119
-Node: Options for Uncompression18643
-Node: Uncompress Compressed EPWING20191
-Node: Information20636
-Node: Information Example20975
-Node: Options for Information21682
-Node: Delete a Book22257
-Node: Summary of Options22553
-Node: Comparision Result27021
-Node: Compressed File Format28981
-Node: Format Overview29385
-Node: Data Part30239
-Node: Index Part32814
-Node: Header Part35481
+Node: Top1010
+Node: Introduction2577
+Node: Action and Command Name3929
+Node: Invoking ebzip5656
+Node: Compression6289
+Node: Compression Example 16890
+Node: Compression Example 28467
+Node: Compression Level10027
+Node: Adjust Filenames10540
+Node: Test12561
+Node: Partial Compression12910
+Node: Overwrite Old Files15494
+Node: Compress Compressed EPWING16292
+Node: Uncompression16730
+Node: Uncompression Example17117
+Node: Options for Uncompression18641
+Node: Uncompress Compressed EPWING20189
+Node: Information20634
+Node: Information Example20973
+Node: Options for Information21680
+Node: Delete a Book22255
+Node: Summary of Options22551
+Node: Comparision Result27019
+Node: Compressed File Format28979
+Node: Format Overview29383
+Node: Data Part30237
+Node: Index Part32812
+Node: Header Part35479
 
 End Tag Table

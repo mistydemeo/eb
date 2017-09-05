@@ -1,5 +1,4 @@
-This is Info file eb.info, produced by Makeinfo version 1.68 from the
-input file eb.texi.
+This is eb.info, produced by makeinfo version 4.0 from eb.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -28,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.7, for EB Library version 2.3.7.  This document
+   This is edition 2.3.8, for EB Library version 2.3.8.  This document
 is not completed.
 
 * Menu:
@@ -43,7 +42,7 @@ is not completed.
 
 * Index::                       Index.
 
- -- The Detailed Node Listing --
+ --- The Detailed Node Listing ---
 
 Link EB Library to Your Program
 
@@ -105,11 +104,11 @@ the Free Software Foundation; either version 2, or (at your option) any
 later version.
 
    EB Library is distributed in the hope that it will be useful, but
-*without any warranty*; without even the implied warranty of
+_without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This edition corresponds to version 2.3.7 of EB Library.  This
+   This edition corresponds to version 2.3.8 of EB Library.  This
 document is not completed.
 
 
@@ -451,7 +450,7 @@ section:
 
      #include <eb/eb.h>
 
-   (*note Error Handling::. for more details about error codes and the
+   (*note Error Handling:: for more details about error codes and the
 global variable `eb_error').
 
  - Function: void eb_initialize (EB_Book *BOOK)
@@ -1392,7 +1391,7 @@ entires any longer.
 
         - `eb_suspend()'
 
-   * Call one of the following functions for *any* `EB_Book' object.
+   * Call one of the following functions for _any_ `EB_Book' object.
         - `eb_search_word()'
 
         - `eb_search_endword()'
@@ -1532,7 +1531,7 @@ section:
      `eb_hit_list()' puts MAXHITS hit entries maximum into HITS.  If
      `eb_hit_list()' finds more hit entries, it gets first MAXHITS
      entries.  You can get remained entries by invoking `eb_hit_list()'
-     repeatedly until it returns 0 (*note Get Remained Entries::.).
+     repeatedly until it returns 0 (*note Get Remained Entries::).
 
      If succeeds, this function returns the number of entries recorded
      onto HITS.  Otherwise, it returns -1, and sets `eb_error'.
@@ -1696,37 +1695,37 @@ Sample Program Index
 
 
 Tag Table:
-Node: Top1038
-Node: Introduction2846
-Node: Link3885
-Node: Compilation4257
-Node: Configuration5711
-Node: Character Code7045
-Node: Initialization7733
-Node: Compressed Book10482
-Node: Initialization Sample10908
-Node: Initialization Data Types12882
-Node: Initialization Functions14009
-Node: Error Handling18102
-Node: Tolerance to Error19039
-Node: Error Data Types20145
-Node: Error Variables20688
-Node: Error Functions21513
-Node: Error Codes22638
-Node: Subbook31213
-Node: Current Subbook33284
-Node: Subbook Sample35009
-Node: Subbook Data Types37303
-Node: Subbook Functions37824
-Node: Search Basics43281
-Node: Word Search44001
-Node: Get Remained Entries46657
-Node: Word Search Data Types48447
-Node: Word Search Functions49307
-Node: Index53361
-Node: Data Type Index53657
-Node: Function Index54244
-Node: Variable Index56084
-Node: Program Index60171
+Node: Top1012
+Node: Introduction2822
+Node: Link3861
+Node: Compilation4233
+Node: Configuration5687
+Node: Character Code7021
+Node: Initialization7709
+Node: Compressed Book10458
+Node: Initialization Sample10884
+Node: Initialization Data Types12858
+Node: Initialization Functions13985
+Node: Error Handling18077
+Node: Tolerance to Error19014
+Node: Error Data Types20120
+Node: Error Variables20663
+Node: Error Functions21488
+Node: Error Codes22613
+Node: Subbook31188
+Node: Current Subbook33259
+Node: Subbook Sample34984
+Node: Subbook Data Types37278
+Node: Subbook Functions37799
+Node: Search Basics43256
+Node: Word Search43976
+Node: Get Remained Entries46632
+Node: Word Search Data Types48422
+Node: Word Search Functions49282
+Node: Index53335
+Node: Data Type Index53631
+Node: Function Index54218
+Node: Variable Index56058
+Node: Program Index60145
 
 End Tag Table
