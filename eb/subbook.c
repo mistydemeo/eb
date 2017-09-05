@@ -1115,11 +1115,12 @@ eb_set_subbook_epwing(book, subbook_code)
 	    sound_zio_code = ZIO_REOPEN;
     } else {
 	if (strncasecmp(subbook->text_file_name, "honmon2", 7)  == 0) {
-	    eb_find_file_name3(book->path, subbook->directory_name,
+	    if (eb_find_file_name3(book->path, subbook->directory_name,
 		subbook->data_directory_name, "honmons",
-		subbook->sound_file_name);
-	    eb_path_name_zio_code(subbook->sound_file_name, ZIO_PLAIN,
-		&sound_zio_code);
+		subbook->sound_file_name) == EB_SUCCESS) {
+		eb_path_name_zio_code(subbook->sound_file_name, ZIO_PLAIN,
+		    &sound_zio_code);
+	    }
 	} else {
 	    strcpy(subbook->sound_file_name, subbook->text_file_name);
 	    sound_zio_code = text_zio_code;
@@ -1157,7 +1158,7 @@ eb_unset_subbook(book)
     EB_Book *book;
 {
     eb_lock(&book->lock);
-    LOG(("in: eb_unset_subbooks(book=%d)", (int)book->code));
+    LOG(("in: eb_unset_subbook(book=%d)", (int)book->code));
 
     /*
      * Close the file of the current subbook.
@@ -1172,7 +1173,7 @@ eb_unset_subbook(book)
 	book->subbook_current = NULL;
     }
 
-    LOG(("out: eb_unset_subbooks()"));
+    LOG(("out: eb_unset_subbook()"));
     eb_unlock(&book->lock);
 }
 
