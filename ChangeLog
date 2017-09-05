@@ -1,3 +1,15 @@
+2004-12-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.1.3.
+
+	* po-eb/Makefile.in, po-ebutils/Makefile.in (mkinstalldirs):
+	Defined as `$(install_sh) -d'.
+	* po-eb/Makefile.in, po-ebutils/Makefile.in (install_sh): 
+	Defined as `@install_sh@'.
+
+	* configure.ac (LIBEB_VERSION_INFO): Set it to 9:1:0.
+	* configure.ac (AC_INIT): Set version to 4.1.3.
+
 2004-11-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.1.2.
