@@ -1799,7 +1799,7 @@ zio_unzip_slice_epwing6(out_buffer, in_file, huffman_tree)
      * If compression type is not 0, this page is not compressed.
      */
     if (compression_type != 0) {
-	if (zio_read_raw(in_file, out_buffer, ZIO_SIZE_PAGE) != 1)
+	if (zio_read_raw(in_file, out_buffer, ZIO_SIZE_PAGE) != ZIO_SIZE_PAGE)
 	    goto failed;
 	goto succeeded;
     }
