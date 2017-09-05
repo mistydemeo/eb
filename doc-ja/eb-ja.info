@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3beta2 版です。この文書はまだ完成していません。
+   この文書は第 2.3 版です。この文書はまだ完成していません。
 
 * Menu:
 
@@ -106,8 +106,8 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細
 については GNU General Public License をお読みください。
 
-   この文書は第 EB ライブラリバージョン 2.3beta2 に対応しています。この
-文書はまだ完成していません。
+   この文書は第 EB ライブラリバージョン 2.3 に対応しています。この文書
+はまだ完成していません。
 
 
 File: eb-ja.info,  Node: Link,  Next: Initialization,  Prev: Introduction,  Up: Top
@@ -1675,35 +1675,35 @@ File: eb-ja.info,  Node: Program Index,  Prev: Variable Index,  Up: Index
 
 Tag Table:
 Node: Top1040
-Node: Introduction2729
-Node: Link3811
-Node: Compilation4213
-Node: Configuration5687
-Node: Character Code7172
-Node: Initialization7934
-Node: Compressed Book10843
-Node: Initialization Sample11278
-Node: Initialization Data Types13278
-Node: Initialization Functions14391
-Node: Error Handling18667
-Node: Tolerance to Error19571
-Node: Error Data Types20756
-Node: Error Variables21323
-Node: Error Codes22151
-Node: Subbook31497
-Node: Current Subbook33347
-Node: Subbook Sample34962
-Node: Subbook Data Types37312
-Node: Subbook Functions37827
-Node: Search Basics43139
-Node: Word Search43968
-Node: Get Remained Entries46525
-Node: Word Search Data Types48342
-Node: Word Search Functions49212
-Node: Index53415
-Node: Data Type Index53696
-Node: Function Index54284
-Node: Variable Index56003
-Node: Program Index60011
+Node: Introduction2724
+Node: Link3801
+Node: Compilation4203
+Node: Configuration5677
+Node: Character Code7162
+Node: Initialization7924
+Node: Compressed Book10833
+Node: Initialization Sample11268
+Node: Initialization Data Types13268
+Node: Initialization Functions14381
+Node: Error Handling18657
+Node: Tolerance to Error19561
+Node: Error Data Types20746
+Node: Error Variables21313
+Node: Error Codes22141
+Node: Subbook31487
+Node: Current Subbook33337
+Node: Subbook Sample34952
+Node: Subbook Data Types37302
+Node: Subbook Functions37817
+Node: Search Basics43129
+Node: Word Search43958
+Node: Get Remained Entries46515
+Node: Word Search Data Types48332
+Node: Word Search Functions49202
+Node: Index53405
+Node: Data Type Index53686
+Node: Function Index54274
+Node: Variable Index55993
+Node: Program Index60001
 
 End Tag Table
