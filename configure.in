@@ -162,6 +162,7 @@ fi
 if test $included_zlib = yes ; then
    ZLIBINCS='-I$(top_srcdir)/zlib'
    ZLIBDEPS='$(top_builddir)/zlib/libz.la'
+   ZLIBLIBS='$(top_builddir)/zlib/libz.la'
 fi
 AC_SUBST(ZLIBINCS)
 AC_SUBST(ZLIBLIBS)

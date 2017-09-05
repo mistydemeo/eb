@@ -553,11 +553,9 @@ eb_canonicalize_file_name_internal(file_name)
 
 	    cwd_length = strlen(cwd);
 	    file_name_length = strlen(pfile_name);
-	    if (PATH_MAX < cwd_length + 1 + file_name_length) {
-		if (error != NULL)
-		    *error = EB_ERR_TOO_LONG_FILE_NAME;
-		return -1;
-	    }
+	    if (PATH_MAX < cwd_length + 1 + file_name_length)
+		return EB_ERR_TOO_LONG_FILE_NAME;
+
 	    source = pfile_name + file_name_length;
 	    destination = file_name + cwd_length + 1 + file_name_length;
 	    for (i = 0; i <= file_name_length; i++) {
