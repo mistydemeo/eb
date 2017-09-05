@@ -28,8 +28,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3, for EB Library version 2.3.  This document is
-not completed.
+   This is edition 2.3.2, for EB Library version 2.3.2.  This document
+is not completed.
 
 * Menu:
 
@@ -109,7 +109,7 @@ later version.
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This edition corresponds to version 2.3 of EB Library.  This
+   This edition corresponds to version 2.3.2 of EB Library.  This
 document is not completed.
 
 
@@ -1696,36 +1696,36 @@ Sample Program Index
 
 Tag Table:
 Node: Top1038
-Node: Introduction2842
-Node: Link3871
-Node: Compilation4243
-Node: Configuration5697
-Node: Character Code7031
-Node: Initialization7719
-Node: Compressed Book10468
-Node: Initialization Sample10894
-Node: Initialization Data Types12842
-Node: Initialization Functions13969
-Node: Error Handling18059
-Node: Tolerance to Error18996
-Node: Error Data Types20102
-Node: Error Variables20645
-Node: Error Functions21470
-Node: Error Codes22595
-Node: Subbook31170
-Node: Current Subbook33241
-Node: Subbook Sample34966
-Node: Subbook Data Types37260
-Node: Subbook Functions37781
-Node: Search Basics43238
-Node: Word Search43958
-Node: Get Remained Entries46614
-Node: Word Search Data Types48404
-Node: Word Search Functions49264
-Node: Index53318
-Node: Data Type Index53614
-Node: Function Index54201
-Node: Variable Index56041
-Node: Program Index60128
+Node: Introduction2846
+Node: Link3877
+Node: Compilation4249
+Node: Configuration5703
+Node: Character Code7037
+Node: Initialization7725
+Node: Compressed Book10474
+Node: Initialization Sample10900
+Node: Initialization Data Types12848
+Node: Initialization Functions13975
+Node: Error Handling18065
+Node: Tolerance to Error19002
+Node: Error Data Types20108
+Node: Error Variables20651
+Node: Error Functions21476
+Node: Error Codes22601
+Node: Subbook31176
+Node: Current Subbook33247
+Node: Subbook Sample34972
+Node: Subbook Data Types37266
+Node: Subbook Functions37787
+Node: Search Basics43244
+Node: Word Search43964
+Node: Get Remained Entries46620
+Node: Word Search Data Types48410
+Node: Word Search Functions49270
+Node: Index53324
+Node: Data Type Index53620
+Node: Function Index54207
+Node: Variable Index56047
+Node: Program Index60134
 
 End Tag Table

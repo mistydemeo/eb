@@ -508,7 +508,7 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 
     for (;;) {
 	step = 0;
-	workbuf[0] = '\0';
+	*workbuf = '\0';
 	argc = 1;
 
 	/*
@@ -615,8 +615,10 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 		    textend = 1;
 		    goto at_end;
 		}
-		*workbuf = '\n';
-		*(workbuf + 1) = '\0';
+		if (skipcode < 0) {
+		    *workbuf = '\n';
+		    *(workbuf + 1) = '\0';
+		}
 		ctlhook = hookset->hooks + EB_HOOK_NEWLINE;
 		break;
 
@@ -836,8 +838,8 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 		break;
 
 	    case 0xe4: case 0xe6: case 0xe8: case 0xea: case 0xec: case 0xee:
-	    case 0xf1: case 0xf3: case 0xf5: case 0xf7: case 0xf9: case 0xfb:
-	    case 0xfd:
+	    case 0xf0: case 0xf2: case 0xf4: case 0xf6: case 0xf8: case 0xfa:
+	    case 0xfc: case 0xfe:
 		skipcode = eb_uint1(pagebufp + 1) + 0x01;
 		break;
 
@@ -847,13 +849,12 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 		break;
 	    }
 
-	    if (ctlhook->function != NULL && ctlhook->function(book, appendix,
-		workbuf, ctlhook->code, argc, argv) < 0) {
+	    if (skipcode < 0 && ctlhook->function != NULL
+		&& ctlhook->function(book, appendix, workbuf, ctlhook->code,
+		    argc, argv) < 0) {
 		eb_error = EB_ERR_HOOK_WORKSPACE;
 		return -1;
 	    }
-	} else if (0 <= skipcode) {
-	    step = 1;
 	} else if (book->char_code == EB_CHARCODE_ISO8859_1) {
 	    /*
 	     * The book is mainly written in ISO 8859 1.
@@ -866,13 +867,16 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 		 */
 		step = 1;
 		argv[0] = eb_uint1(pagebufp);
-		*workbuf = c;
-		*(workbuf + 1) = '\0';
-		hook = hookset->hooks + EB_HOOK_ISO8859_1;
-		if (hook->function != NULL && hook->function(book, appendix,
-		    workbuf, EB_HOOK_ISO8859_1, argc, argv) < 0) {
-		    eb_error = EB_ERR_HOOK_WORKSPACE;
-		    return -1;
+		if (skipcode < 0) {
+		    *workbuf = c;
+		    *(workbuf + 1) = '\0';
+		    hook = hookset->hooks + EB_HOOK_ISO8859_1;
+		    if (hook->function != NULL
+			&& hook->function(book, appendix, workbuf,
+			    EB_HOOK_ISO8859_1, argc, argv) < 0) {
+			eb_error = EB_ERR_HOOK_WORKSPACE;
+			return -1;
+		    }
 		}
 	    } else {
 		/*
@@ -885,25 +889,29 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 
 		step = 2;
 		argv[0] = eb_uint2(pagebufp);
-		*workbuf = (unsigned char) c;
-		*(workbuf + 1) = (unsigned char) eb_uint1(pagebufp + 1);
-		*(workbuf + 2) = '\0';
-		hook = hookset->hooks + EB_HOOK_NARROW_FONT;
-		if (hook->function != NULL && hook->function(book, appendix,
-		    workbuf, EB_HOOK_NARROW_FONT, argc, argv) < 0) {
-		    eb_error = EB_ERR_HOOK_WORKSPACE;
-		    return -1;
+		if (skipcode < 0) {
+		    *workbuf = (unsigned char) c;
+		    *(workbuf + 1) = (unsigned char) eb_uint1(pagebufp + 1);
+		    *(workbuf + 2) = '\0';
+		    hook = hookset->hooks + EB_HOOK_NARROW_FONT;
+		    if (hook->function != NULL
+			&& hook->function(book, appendix, workbuf,
+			    EB_HOOK_NARROW_FONT, argc, argv) < 0) {
+			eb_error = EB_ERR_HOOK_WORKSPACE;
+			return -1;
+		    }
 		}
 	    }
 
-	    if (modhook->function != NULL && modhook->function(book, appendix,
-		workbuf, modhook->code, 0, argv) < 0) {
+	    if (skipcode < 0 && modhook->function != NULL
+		&& modhook->function(book, appendix, workbuf, modhook->code,
+		    0, argv) < 0) {
 		eb_error = EB_ERR_HOOK_WORKSPACE;
 		return -1;
 	    }
-
-	    if (refhook->function != NULL && refhook->function(book, appendix,
-		workbuf, refhook->code, 0, argv) < 0) {
+	    if (skipcode < 0 && refhook->function != NULL
+		&& refhook->function(book, appendix, workbuf, refhook->code,
+		    0, argv) < 0) {
 		eb_error = EB_ERR_HOOK_WORKSPACE;
 		return -1;
 	    }
@@ -924,7 +932,10 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 	    }
 
 	    c2 = eb_uint1(pagebufp + 1);
-	    if (0x20 < c && c < 0x7f && 0x20 < c2 && c2 < 0x7f) {
+
+	    if (0 <= skipcode) {
+		/* nothing to be done. */
+	    } else if (0x20 < c && c < 0x7f && 0x20 < c2 && c2 < 0x7f) {
 		/*
 		 * This is a JIS X 0208 KANJI character.
 		 */
@@ -941,9 +952,9 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 		    }
 		} else {
 		    hook = hookset->hooks + EB_HOOK_WIDE_JISX0208;
-		    if (hook->function != NULL && hook->function(book,
-			appendix, workbuf, EB_HOOK_WIDE_JISX0208, argc, argv)
-			< 0) {
+		    if (hook->function != NULL
+			&& hook->function(book, appendix, workbuf,
+			    EB_HOOK_WIDE_JISX0208, argc, argv) < 0) {
 			eb_error = EB_ERR_HOOK_WORKSPACE;
 			return -1;
 		    }
@@ -956,8 +967,8 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 		*(workbuf + 1) = (unsigned char) c2;
 		*(workbuf + 2) = '\0';
 		hook = hookset->hooks + EB_HOOK_GB2312;
-		if (hook->function != NULL && hook->function(book,
-		    appendix, workbuf, EB_HOOK_GB2312, 0, argv) < 0) {
+		if (hook->function != NULL && hook->function(book, appendix,
+		    workbuf, EB_HOOK_GB2312, 0, argv) < 0) {
 		    eb_error = EB_ERR_HOOK_WORKSPACE;
 		    return -1;
 		}
@@ -970,7 +981,7 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 		*(workbuf + 2) = '\0';
 		if (narwflag) {
 		    hook = hookset->hooks + EB_HOOK_NARROW_FONT;
-		    if (hook->function != NULL && hook->function(book,
+		    if (hook->function != NULL && hook->function(book, 
 			appendix, workbuf, EB_HOOK_NARROW_FONT, argc, argv)
 			< 0) {
 			eb_error = EB_ERR_HOOK_WORKSPACE;
@@ -987,13 +998,15 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 		}
 	    }
 
-	    if (modhook->function != NULL && modhook->function(book, appendix,
-		workbuf, modhook->code, 0, argv) < 0) {
+	    if (skipcode < 0 && modhook->function != NULL
+		&& modhook->function(book, appendix, workbuf, modhook->code,
+		    0, argv) < 0) {
 		eb_error = EB_ERR_HOOK_WORKSPACE;
 		return -1;
 	    }
-	    if (refhook->function != NULL && refhook->function(book, appendix,
-		workbuf, refhook->code, 0, argv) < 0) {
+	    if (skipcode < 0 && refhook->function != NULL
+		&& refhook->function(book, appendix, workbuf, refhook->code,
+		    0, argv) < 0) {
 		eb_error = EB_ERR_HOOK_WORKSPACE;
 		return -1;
 	    }
