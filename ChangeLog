@@ -1,3 +1,24 @@
+2009-09-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.3.3.
+
+	* configure.ac (AC_INIT): Set version to 4.3.3.
+	* configure.ac (LIBEB_VERSION_INFO): Set it to 12:7:0.
+	* ltmain.sh, m4/libtool.m4, config.guess, config.sub: Import from
+	libtool-1.5.26.
+
+2009-09-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/Makefile.am (libeb_la_LDFLAGS): Add `-no-undefined' option
+	Add $(ZLIBLIBS) and $(INTLLIBS) arguments.
+	* ebzip/Makefile.am (ebzip_LDADD): Exchange the order of
+	$(LIBEBUTILS) and $(LIBEB).
+
+2008-02-04  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebzip/zipinfofile.c (ebzip_zipinfo_file_internal): Don't close
+	`in_file' directly.  On Windows, it raises an exception.
+
 2008-01-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.3.2.

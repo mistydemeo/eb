@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ebutils 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-14 22:55+0900\n"
+"POT-Creation-Date: 2008-09-29 20:16+0900\n"
 "PO-Revision-Date: 2001-03-18 23:28+0900\n"
 "Last-Translator: Motoyuki Kasahara <m-kasahr@sra.co.jp>\n"
 "Language-Team: \n"
@@ -64,13 +64,13 @@ msgstr "%s: 不正なオプションです -- %c\n"
 msgid "%s: unrecognized option `--%.*s'\n"
 msgstr "%s: `--%.*s' は未知のオプションです\n"
 
-#: ../ebfont/ebfont.c:307 ../ebfont/ebfont.c:316 ../ebrefile/ebrefile.c:211
-#: ../ebrefile/ebrefile.c:219 ../ebzip/ebzip.c:264 ../ebzip/ebzip.c:274
+#: ../ebfont/ebfont.c:307 ../ebfont/ebfont.c:316 ../ebrefile/ebrefile.c:221
+#: ../ebrefile/ebrefile.c:229 ../ebzip/ebzip.c:264 ../ebzip/ebzip.c:274
 #, c-format
 msgid "%s: too long output directory path\n"
 msgstr "%s: 出力先のディレクトリのパス名が長すぎます\n"
 
-#: ../ebfont/ebfont.c:350 ../ebinfo/ebinfo.c:172 ../ebrefile/ebrefile.c:251
+#: ../ebfont/ebfont.c:350 ../ebinfo/ebinfo.c:172 ../ebrefile/ebrefile.c:261
 #: ../ebstopcode/ebstopcode.c:257 ../ebzip/ebzip.c:360
 #, c-format
 msgid "%s: too many arguments\n"
@@ -102,13 +102,13 @@ msgstr "%s: `%s...' は未知の画像形式名です\n"
 msgid "%s: unknown image format name `%s'\n"
 msgstr "%s: `%s' は未知の画像形式名です\n"
 
-#: ../ebfont/ebfont.c:589 ../ebinfo/ebinfo.c:607 ../ebrefile/ebrefile.c:318
+#: ../ebfont/ebfont.c:589 ../ebinfo/ebinfo.c:607 ../ebrefile/ebrefile.c:328
 #: ../ebzip/ebzip.c:510
 #, c-format
 msgid "Usage: %s [option...] [book-directory]\n"
 msgstr "使用法: %s [オプション...] [書籍のディレクトリ]\n"
 
-#: ../ebfont/ebfont.c:590 ../ebinfo/ebinfo.c:609 ../ebrefile/ebrefile.c:319
+#: ../ebfont/ebfont.c:590 ../ebinfo/ebinfo.c:609 ../ebrefile/ebrefile.c:329
 #: ../ebstopcode/ebstopcode.c:447 ../ebzip/ebzip.c:511
 #, c-format
 msgid "Options:\n"
@@ -133,14 +133,14 @@ msgstr ""
 "                             高さは 16, 24, 30, 48 のいずれか\n"
 
 #: ../ebfont/ebfont.c:594 ../ebfont/ebfont.c:600 ../ebfont/ebfont.c:604
-#: ../ebfont/ebfont.c:612 ../ebinfo/ebinfo.c:616 ../ebrefile/ebrefile.c:323
-#: ../ebrefile/ebrefile.c:331 ../ebstopcode/ebstopcode.c:461
+#: ../ebfont/ebfont.c:612 ../ebinfo/ebinfo.c:616 ../ebrefile/ebrefile.c:333
+#: ../ebrefile/ebrefile.c:341 ../ebstopcode/ebstopcode.c:461
 #: ../ebzip/ebzip.c:526 ../ebzip/ebzip.c:544
 #, c-format
 msgid "                             (default: %s)\n"
 msgstr "                             (省略時: %s)\n"
 
-#: ../ebfont/ebfont.c:596 ../ebinfo/ebinfo.c:610 ../ebrefile/ebrefile.c:320
+#: ../ebfont/ebfont.c:596 ../ebinfo/ebinfo.c:610 ../ebrefile/ebrefile.c:330
 #: ../ebstopcode/ebstopcode.c:450 ../ebzip/ebzip.c:514
 #, c-format
 msgid "  -h  --help                 display this help, then exit\n"
@@ -161,7 +161,7 @@ msgstr "                            「画像形式」のフォントを生成\n"
 msgid "                             xbm, xpm, gif, bmp or png\n"
 msgstr "                             xbm, xpm, gif, bmp, png のいずれか\n"
 
-#: ../ebfont/ebfont.c:602 ../ebrefile/ebrefile.c:321 ../ebzip/ebzip.c:524
+#: ../ebfont/ebfont.c:602 ../ebrefile/ebrefile.c:331 ../ebzip/ebzip.c:524
 #, c-format
 msgid "  -o DIRECTORY  --output-directory DIRECTORY\n"
 msgstr "  -o ディレクトリ  --output-directory ディレクトリ\n"
@@ -171,28 +171,28 @@ msgstr "  -o ディレクトリ  --output-directory ディレクトリ\n"
 msgid "                             output fonts under DIRECTORY\n"
 msgstr "                             フォントを「ディレクトリ」の下に生成\n"
 
-#: ../ebfont/ebfont.c:606 ../ebrefile/ebrefile.c:325 ../ebzip/ebzip.c:532
+#: ../ebfont/ebfont.c:606 ../ebrefile/ebrefile.c:335 ../ebzip/ebzip.c:532
 #, c-format
 msgid "  -S SUBBOOK[,SUBBOOK...]  --subbook SUBBOOK[,SUBBOOK...]\n"
 msgstr "  -S 副本[,副本...]  --subbook 副本[,副本...]\n"
 
-#: ../ebfont/ebfont.c:607 ../ebrefile/ebrefile.c:326 ../ebzip/ebzip.c:533
+#: ../ebfont/ebfont.c:607 ../ebrefile/ebrefile.c:336 ../ebzip/ebzip.c:533
 #, c-format
 msgid "                             target subbook\n"
 msgstr "                             処理対象の副本\n"
 
-#: ../ebfont/ebfont.c:608 ../ebrefile/ebrefile.c:327 ../ebzip/ebzip.c:534
+#: ../ebfont/ebfont.c:608 ../ebrefile/ebrefile.c:337 ../ebzip/ebzip.c:534
 #, c-format
 msgid "                             (default: all subbooks)\n"
 msgstr "                             (省略時: すべての副本)\n"
 
-#: ../ebfont/ebfont.c:609 ../ebinfo/ebinfo.c:613 ../ebrefile/ebrefile.c:328
+#: ../ebfont/ebfont.c:609 ../ebinfo/ebinfo.c:613 ../ebrefile/ebrefile.c:338
 #: ../ebstopcode/ebstopcode.c:458 ../ebzip/ebzip.c:537
 #, c-format
 msgid "  -v  --version              display version number, then exit\n"
 msgstr "  -v  --version              バージョン番号を表示して終了\n"
 
-#: ../ebfont/ebfont.c:610 ../ebinfo/ebinfo.c:614 ../ebrefile/ebrefile.c:329
+#: ../ebfont/ebfont.c:610 ../ebinfo/ebinfo.c:614 ../ebrefile/ebrefile.c:339
 #: ../ebstopcode/ebstopcode.c:459 ../ebzip/ebzip.c:542
 #, c-format
 msgid ""
@@ -202,13 +202,13 @@ msgstr ""
 "\n"
 "引数:\n"
 
-#: ../ebfont/ebfont.c:611 ../ebinfo/ebinfo.c:615 ../ebrefile/ebrefile.c:330
+#: ../ebfont/ebfont.c:611 ../ebinfo/ebinfo.c:615 ../ebrefile/ebrefile.c:340
 #: ../ebstopcode/ebstopcode.c:460 ../ebzip/ebzip.c:543
 #, c-format
 msgid "  book-directory             top directory of a CD-ROM book\n"
 msgstr "  書籍のディレクトリ         CD-ROM 書籍のトップディレクトリ\n"
 
-#: ../ebfont/ebfont.c:614 ../ebinfo/ebinfo.c:618 ../ebrefile/ebrefile.c:334
+#: ../ebfont/ebfont.c:614 ../ebinfo/ebinfo.c:618 ../ebrefile/ebrefile.c:344
 #: ../ebstopcode/ebstopcode.c:463 ../ebzip/ebzip.c:556
 #, c-format
 msgid ""
@@ -218,9 +218,9 @@ msgstr ""
 "\n"
 "バグは %s に報告して下さい\n"
 
-#: ../ebfont/ebfont.c:1030 ../ebrefile/ebrefile.c:451
-#: ../ebrefile/ebrefile.c:467 ../ebrefile/ebrefile.c:682
-#: ../ebrefile/ebrefile.c:695 ../ebzip/copyfile.c:138 ../ebzip/copyfile.c:162
+#: ../ebfont/ebfont.c:1030 ../ebrefile/ebrefile.c:461
+#: ../ebrefile/ebrefile.c:477 ../ebrefile/ebrefile.c:692
+#: ../ebrefile/ebrefile.c:705 ../ebzip/copyfile.c:138 ../ebzip/copyfile.c:162
 #: ../ebzip/sebxa.c:69 ../ebzip/sebxa.c:200 ../ebzip/speedup.c:79
 #: ../ebzip/unzipfile.c:190 ../ebzip/unzipfile.c:228 ../ebzip/zipfile.c:180
 #: ../ebzip/zipfile.c:218 ../ebzip/zipinfofile.c:104
@@ -228,7 +228,7 @@ msgstr ""
 msgid "%s: failed to open the file, %s: %s\n"
 msgstr "%s: ファイルを開けませんでした, %s: %s\n"
 
-#: ../ebfont/ebfont.c:1035 ../ebfont/ebfont.c:1040 ../ebrefile/ebrefile.c:722
+#: ../ebfont/ebfont.c:1035 ../ebfont/ebfont.c:1040 ../ebrefile/ebrefile.c:732
 #: ../ebzip/copyfile.c:199 ../ebzip/unzipfile.c:280 ../ebzip/zipfile.c:412
 #: ../ebzip/zipfile.c:470
 #, c-format
@@ -387,60 +387,60 @@ msgstr "  -l  --book-list            EBNET サーバ上の書籍リストを出力\n"
 msgid "  -m  --multi-search         also output multi-search information\n"
 msgstr "  -m  --multi-search         複合検索の情報も出力\n"
 
-#: ../ebrefile/ebrefile.c:273
+#: ../ebrefile/ebrefile.c:283
 #, c-format
 msgid "%s: too long book directory path\n"
 msgstr "%s: 書籍のディレクトリのパス名が長すぎます\n"
 
-#: ../ebrefile/ebrefile.c:322 ../ebzip/ebzip.c:525
+#: ../ebrefile/ebrefile.c:332 ../ebzip/ebzip.c:525
 #, c-format
 msgid "                             ouput files under DIRECTORY\n"
 msgstr "                             ファイルを「ディレクトリ」に出力する\n"
 
-#: ../ebrefile/ebrefile.c:367
+#: ../ebrefile/ebrefile.c:377
 #, c-format
 msgid "%s: no catalog file: %s\n"
 msgstr "%s: カタログファイルが見つかりません: %s\n"
 
-#: ../ebrefile/ebrefile.c:406
+#: ../ebrefile/ebrefile.c:416
 #, c-format
 msgid "%s: failed to move the file, %s: %s -> %s\n"
 msgstr "%s: ファイルを移動できませんでした, %s: %s -> %s\n"
 
-#: ../ebrefile/ebrefile.c:476 ../ebrefile/ebrefile.c:497
-#: ../ebrefile/ebrefile.c:545 ../ebrefile/ebrefile.c:585 ../ebzip/sebxa.c:90
+#: ../ebrefile/ebrefile.c:486 ../ebrefile/ebrefile.c:507
+#: ../ebrefile/ebrefile.c:555 ../ebrefile/ebrefile.c:595 ../ebzip/sebxa.c:90
 #: ../ebzip/sebxa.c:221 ../ebzip/speedup.c:84 ../ebzip/speedup.c:89
 #: ../ebzip/speedup.c:117 ../ebzip/speedup.c:122
 #, c-format
 msgid "%s: failed to read the file, %s: %s\n"
 msgstr "%s: ファイルを読み込めませんでした, %s: %s\n"
 
-#: ../ebrefile/ebrefile.c:483 ../ebrefile/ebrefile.c:531
-#: ../ebrefile/ebrefile.c:552 ../ebrefile/ebrefile.c:590
-#: ../ebrefile/ebrefile.c:606 ../ebrefile/ebrefile.c:628 ../ebzip/sebxa.c:142
+#: ../ebrefile/ebrefile.c:493 ../ebrefile/ebrefile.c:541
+#: ../ebrefile/ebrefile.c:562 ../ebrefile/ebrefile.c:600
+#: ../ebrefile/ebrefile.c:616 ../ebrefile/ebrefile.c:638 ../ebzip/sebxa.c:142
 #, c-format
 msgid "%s: failed to write the file, %s: %s\n"
 msgstr "%s: ファイルへ書き込めませんでした, %s: %s\n"
 
-#: ../ebrefile/ebrefile.c:570
+#: ../ebrefile/ebrefile.c:580
 #, c-format
 msgid "%s: warning: no such subbook: %s\n"
 msgstr "%s: 警告: そのような副本はありません: %s\n"
 
-#: ../ebrefile/ebrefile.c:623 ../ebzip/sebxa.c:78 ../ebzip/sebxa.c:130
+#: ../ebrefile/ebrefile.c:633 ../ebzip/sebxa.c:78 ../ebzip/sebxa.c:130
 #: ../ebzip/sebxa.c:209 ../ebzip/unzipfile.c:249 ../ebzip/zipfile.c:300
 #: ../ebzip/zipfile.c:360 ../ebzip/zipfile.c:406 ../ebzip/zipfile.c:464
 #, c-format
 msgid "%s: failed to seek the file, %s: %s\n"
 msgstr "%s: ファイルをシークできませんでした, %s: %s\n"
 
-#: ../ebrefile/ebrefile.c:672 ../ebzip/copyfile.c:74 ../ebzip/unzipfile.c:130
+#: ../ebrefile/ebrefile.c:682 ../ebzip/copyfile.c:74 ../ebzip/unzipfile.c:130
 #: ../ebzip/zipfile.c:113
 #, c-format
 msgid "%s: no such file: %s\n"
 msgstr "%s: そのようなファイルはありません: %s\n"
 
-#: ../ebrefile/ebrefile.c:713 ../ebzip/copyfile.c:181 ../ebzip/unzipfile.c:255
+#: ../ebrefile/ebrefile.c:723 ../ebzip/copyfile.c:181 ../ebzip/unzipfile.c:255
 #: ../ebzip/zipfile.c:306
 #, c-format
 msgid "%s: failed to read from the file, %s: %s\n"
@@ -594,7 +594,7 @@ msgstr "%s: 予期せぬ EOF を読み込みました: %s\n"
 msgid "%4.1f%% done (%lu / %lu bytes)\n"
 msgstr "%4.1f%% 処理済み (%lu / %lu バイト)\n"
 
-#: ../ebzip/copyfile.c:252 ../ebzip/unzipfile.c:345 ../ebzip/zipfile.c:524
+#: ../ebzip/copyfile.c:252 ../ebzip/unzipfile.c:345 ../ebzip/zipfile.c:525
 #, c-format
 msgid "%s: warning: failed to unlink the file: %s\n"
 msgstr "%s: 警告: ファイルを削除できませんでした: %s\n"

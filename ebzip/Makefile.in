@@ -59,8 +59,8 @@ am_ebzip_OBJECTS = ebzip.$(OBJEXT) ebzip1.$(OBJEXT) copyfile.$(OBJEXT) \
 	zipfile.$(OBJEXT) zipinfobook.$(OBJEXT) zipinfofile.$(OBJEXT) \
 	sebxa.$(OBJEXT) speedup.$(OBJEXT)
 ebzip_OBJECTS = $(am_ebzip_OBJECTS)
-am__DEPENDENCIES_1 = $(top_builddir)/eb/libeb.la
-am__DEPENDENCIES_2 = $(top_builddir)/libebutils/libebutils.a
+am__DEPENDENCIES_1 = $(top_builddir)/libebutils/libebutils.a
+am__DEPENDENCIES_2 = $(top_builddir)/eb/libeb.la
 am__DEPENDENCIES_3 =
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -100,6 +100,7 @@ CXXFLAGS = @CXXFLAGS@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DSYMUTIL = @DSYMUTIL@
 EBCONF_EBINCS = @EBCONF_EBINCS@
 EBCONF_EBLIBS = @EBCONF_EBLIBS@
 EBCONF_INTLINCS = @EBCONF_INTLINCS@
@@ -144,6 +145,7 @@ MAILING_ADDRESS = @MAILING_ADDRESS@
 MAKEINFO = @MAKEINFO@
 MSGFMT = @MSGFMT@
 MSGMERGE = @MSGMERGE@
+NMEDIT = @NMEDIT@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -157,6 +159,7 @@ PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
 PTHREAD_CPPFLAGS = @PTHREAD_CPPFLAGS@
 PTHREAD_LDFLAGS = @PTHREAD_LDFLAGS@
 RANLIB = @RANLIB@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -168,7 +171,9 @@ ZLIBLIBS = @ZLIBLIBS@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
+ac_ct_DSYMUTIL = @ac_ct_DSYMUTIL@
 ac_ct_F77 = @ac_ct_F77@
+ac_ct_NMEDIT = @ac_ct_NMEDIT@
 ac_ct_RANLIB = @ac_ct_RANLIB@
 ac_ct_STRIP = @ac_ct_STRIP@
 am__fastdepCC_FALSE = @am__fastdepCC_FALSE@
@@ -216,7 +221,7 @@ noinst_HEADERS = ebzip.h
 ebzip_SOURCES = ebzip.c ebzip1.c copyfile.c unzipbook.c unzipfile.c \
 	zipbook.c zipfile.c zipinfobook.c zipinfofile.c sebxa.c speedup.c
 
-ebzip_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS) $(ICONVLIBS)
+ebzip_LDADD = $(LIBEBUTILS) $(LIBEB) $(ZLIBLIBS) $(INTLLIBS) $(ICONVLIBS)
 ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS) \
 	$(ICONVDEPS)
 

@@ -122,7 +122,7 @@ ebzip_zipinfo_file_internal(const char *in_file_name, Zio_Code in_zio_code,
     /*
      * Close the file.
      */
-    close(in_file);
+    zio_close(&in_zio);
 
     /*
      * Output information.

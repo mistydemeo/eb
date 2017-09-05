@@ -501,6 +501,7 @@ ebzip_zip_file_internal(const char *out_file_name, const char *in_file_name,
 
     if (!ebzip_test_flag) {
 	close(out_zio.file);
+	out_zio.file = -1;
 	zio_finalize(&out_zio);
 	trap_file = -1;
 	trap_file_name = NULL;
@@ -560,6 +561,7 @@ ebzip_zip_file_internal(const char *out_file_name, const char *in_file_name,
 
     if (0 <= out_zio.file) {
 	close(out_zio.file);
+	out_zio.file = -1;
 	zio_finalize(&out_zio);
 	trap_file = -1;
 	trap_file_name = NULL;

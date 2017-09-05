@@ -13,7 +13,8 @@ libeb_la_SOURCES = appendix.c appsub.c bcd.c binary.c bitmap.c book.c \
 	menu.c multi.c narwalt.c narwfont.c readtext.c search.c setword.c \
 	stopcode.c strcasecmp.c subbook.c text.c widealt.c widefont.c word.c \
 	zio.c $(libeb_ebnet_sources)
-libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
+libeb_la_LDFLAGS = -no-undefined -version-info @LIBEB_VERSION_INFO@ \
+	$(ZLIBLIBS) $(INTLLIBS)
 
 dist_pkginclude_HEADERS = appendix.h binary.h booklist.h defs.h eb.h error.h \
 	font.h text.h zio.h

@@ -8,7 +8,7 @@ noinst_HEADERS = ebzip.h
 
 ebzip_SOURCES = ebzip.c ebzip1.c copyfile.c unzipbook.c unzipfile.c \
 	zipbook.c zipfile.c zipinfobook.c zipinfofile.c sebxa.c speedup.c
-ebzip_LDADD = $(LIBEB) $(LIBEBUTILS) $(ZLIBLIBS) $(INTLLIBS) $(ICONVLIBS)
+ebzip_LDADD = $(LIBEBUTILS) $(LIBEB) $(ZLIBLIBS) $(INTLLIBS) $(ICONVLIBS)
 ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS) \
 	$(ICONVDEPS)
 

@@ -79,6 +79,16 @@ int strncasecmp(const char *, const char *, size_t);
 #endif /* not MAXPATHLEN */
 #endif /* not PATH_MAX */
 
+/*
+ * rename() on Windows complains if the new file already exists.
+ * We fake rename() here for Windows.
+ */
+#ifdef WIN32
+#include <windows.h>
+#define rename(old, new) \
+    (MoveFileEx((old), (new), MOVEFILE_REPLACE_EXISTING) ? 0 : -1)
+#endif
+
 #include "eb.h"
 #include "error.h"
 #include "build-post.h"
