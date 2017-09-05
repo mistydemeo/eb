@@ -1,109 +1,109 @@
-	ndtpd@srapc1081.sra.co.jp $B%a!<%j%s%0%j%9%H(B $B$N;H$$J}$K$D$$$F(B
+	ndtpd@srapc1081.sra.co.jp メーリングリスト の使い方について
 
 ----- Index -----
 
-1	FYI: $B4JC1$J$^$H$a(B
+1	FYI: 簡単なまとめ
 
-2	$B4pK\E*$J;H$$J}(B
-2.1	$B%a!<%j%s%0%j%9%H$H$O!)(B
-2.2	$B%3%^%s%I$N;H$$J}(B
-2.3	$B$b$7!"$o$+$i$J$/$J$C$?$i!)(B
+2	基本的な使い方
+2.1	メーリングリストとは？
+2.2	コマンドの使い方
+2.3	もし、わからなくなったら？
 
-3	$B%3%^%s%I$N0lMw(B
-3.1	$B>pJs$N<h$j4s$;!&4pK\E*$J%3%^%s%I(B
-3.2	$B%a%s%P!<>pJs$dG[Aw$NDd;_!&C&2qEy(B
-3.3	$B%I%a%$%sL>$,JQ99$K$J$C$?>l9g(B
-3.4	$B$^$H$aAw$j(B
-3.5	$B2a5n$N5-;v$N<h$j4s$;J}(B
+3	コマンドの一覧
+3.1	情報の取り寄せ・基本的なコマンド
+3.2	メンバー情報や配送の停止・脱会等
+3.3	ドメイン名が変更になった場合
+3.4	まとめ送り
+3.5	過去の記事の取り寄せ方
 
-4	$BI8=`$G$J$$%3%^%s%I(B
-4.1	$B%i%$%V%i%j!<(B
-4.2	whois database $B$K$h$k>pJs8r49(B
-4.3	traffic $B%3%^%s%I(B($BEj9FNL$NE}7W(B)
-4.4	$B$=$NB>(B
+4	標準でないコマンド
+4.1	ライブラリー
+4.2	whois database による情報交換
+4.3	traffic コマンド(投稿量の統計)
+4.4	その他
 
-5	$B%3%^%s%I$N;H$$J}$N6qBNNc(B
-5.1	$B2a5n$N%a!<%k$N<h$j4s$;J}(B
+5	コマンドの使い方の具体例
+5.1	過去のメールの取り寄せ方
 
 -----------------
 
 
-1	FYI: $B4JC1$J$^$H$a(B
+1	FYI: 簡単なまとめ
 
-$B4V0c$($F%a!<%j%s%0%j%9%H$KEPO?$7$F$7$^$C$?!"<h$j$"$($:Dd;_$7$?$$!"$H$$(B
-$B$&J}$N$?$a$K!"I,MW$J;v9`$r:G=i$K@bL@$7$F$*$-$^$9!#(B
+間違えてメーリングリストに登録してしまった、取りあえず停止したい、とい
+う方のために、必要な事項を最初に説明しておきます。
 
-ndtpd@srapc1081.sra.co.jp $B%a!<%j%s%0%j%9%H$+$iC&B`$7$?$$$H$-$K$O!"K\J8$N@hF,$K(B
-# bye $B$H=q$$$?%a!<%k$r(B<ndtpd-ctl@srapc1081.sra.co.jp> $B08$F$KAw$C$F$/$@$5$$!#(B
+ndtpd@srapc1081.sra.co.jp メーリングリストから脱退したいときには、本文の先頭に
+# bye と書いたメールを<ndtpd-ctl@srapc1081.sra.co.jp> 宛てに送ってください。
 
-$BD94|=PD%$J$I$G!"0l;~E*$KG[Aw$rDd;_$7$?$$$H$-$K$O!"K\J8$N@hF,$K(B # off 
-$B$H=q$$$?%a!<%k$r(B<ndtpd-ctl@srapc1081.sra.co.jp>$B08$F$KAw$C$F$/$@$5$$!#:F3+$7$?$$$H(B
-$B$-$K$O!"(B # on $B$rAw$C$F$/$@$5$$!#(B
+長期出張などで、一時的に配送を停止したいときには、本文の先頭に # off 
+と書いたメールを<ndtpd-ctl@srapc1081.sra.co.jp>宛てに送ってください。再開したいと
+きには、 # on を送ってください。
 
-$B2a5n$N%a!<%k$,M_$7$$$H$-$O!"$^$:!"K\J8$N@hF,$K(B # index $B$H=q$$$?%a!<%k(B
-$B$r(B<ndtpd-ctl@srapc1081.sra.co.jp>$B08$F$KAw$C$F!"Ej9F%a!<%k0lMw$r<h$j4s$;$F$/$@$5$$!#(B
-$B$=$N0lMw$r;29M$K$7$F!"$?$H$($P(B #get 100-200 $B$H$$$&%3%^%s%I$rAw$C$F$/$@(B
-$B$5$$!#(B
+過去のメールが欲しいときは、まず、本文の先頭に # index と書いたメール
+を<ndtpd-ctl@srapc1081.sra.co.jp>宛てに送って、投稿メール一覧を取り寄せてください。
+その一覧を参考にして、たとえば #get 100-200 というコマンドを送ってくだ
+さい。
 
-$B%a!<%j%s%0%j%9%H%5!<%P$O!"Ej9F$5$l$?%a!<%k$N!V(BFrom$B!W$r8+$F2q0w$+$I$&$+(B
-$B$r%A%'%C%/$7$F$$$^$9!#$3$N@_Dj$,JQ$o$k$H!"Ej9F$,<u$1IU$1$i$l$J$+$C$?$j!"(B
-$B?7$?$K2q0wEPO?$,$J$5$l$F$7$^$C$?$j$7$^$9$N$GCm0U$,I,MW$G$9!#J#?t$N%a!<(B
-$B%k%"%I%l%9$r$*;}$A$NJ}!"5$$r$D$1$F$/$@$5$$!#(B
+メーリングリストサーバは、投稿されたメールの「From」を見て会員かどうか
+をチェックしています。この設定が変わると、投稿が受け付けられなかったり、
+新たに会員登録がなされてしまったりしますので注意が必要です。複数のメー
+ルアドレスをお持ちの方、気をつけてください。
 
 
 
-2	$B4pK\E*$J;H$$J}(B
+2	基本的な使い方
 
-2.1	$B%a!<%j%s%0%j%9%H$H$O!)(B
+2.1	メーリングリストとは？
 
-$B%a!<%j%s%0%j%9%H(B($B0J2<E,59%a!<%j%s%0%j%9%H$r#M#L$HN,$9(B)$B$H$O$"$k%"%I%l%9(B
+メーリングリスト(以下適宜メーリングリストをＭＬと略す)とはあるアドレス
 
 		ndtpd@srapc1081.sra.co.jp 
 
-$B$KAw$C$?%a!<%k$,%a!<%j%s%0%j%9%H$N%a%s%P!<A40w$KG[Aw$5$l$k;EAH$_$G$9!#(B
+に送ったメールがメーリングリストのメンバー全員に配送される仕組みです。
 
 
-2.2	$B%3%^%s%I$N;H$$J}(B
+2.2	コマンドの使い方
 
-$B$3$N%a!<%j%s%0%j%9%H%5!<%P$K$O!"$5$^$6$^$J5!G=$,Ek:\$5$l$F$$$^$9!#$=$N(B
-$B5!G=$r;H$&$H$-$O!X1QC18l$+$i$J$kL?Na!J0J2<!"!V%3%^%s%I!W$H8F$S$^$9!K!Y(B
-$B$NFbMF$N%a!<%k$r!";XDj$5$l$?%a!<%k%"%I%l%9$KAw$C$F2<$5$$!#(B
+このメーリングリストサーバには、さまざまな機能が搭載されています。その
+機能を使うときは『英単語からなる命令（以下、「コマンド」と呼びます）』
+の内容のメールを、指定されたメールアドレスに送って下さい。
 
-$B%a!<%j%s%0%j%9%H%5!<%P$K%3%^%s%I$rAw$j!"2a5n$N5-;v$r<h$j4s$;$?$j!"G[Aw(B
-$B$r0l;~Dd;_$9$k$?$a$K$O!"%"%I%l%9(B
+メーリングリストサーバにコマンドを送り、過去の記事を取り寄せたり、配送
+を一時停止するためには、アドレス
 
 	ndtpd-ctl@srapc1081.sra.co.jp 
 
-$B$K%3%^%s%I$r4^$`%a!<%k$rAw$C$F2<$5$$!#Aw$k$Y$-FbMF$O(B
+にコマンドを含むメールを送って下さい。送るべき内容は
 
-	# $B%3%^%s%I(B $B%*%W%7%g%s(B 
+	# コマンド オプション 
 
-$B$N7A$G$9!#(B
+の形です。
 
-$BCm0U(B: $BDL>o%3%^%s%I$O1Q8l$H?t;z$@$1$+$i$J$j$^$9!#%3%^%s%I$O!"%a!<%kK\J8(B
-$B$N@hF,$+$i!"!V(B# help$B!W$H$$$&7A<0$G=q$-$^$9!#%3%^%s%I$OBgJ8;z$G$b>.J8;z(B
-$B$G$bF1MM$KG'<1$7$^$9$N$G!"!V(B# help$B!W$O!V(B# Help$B!W$G$b!V(B# HELP$B!W$G$b$+$^(B
-$B$$$^$;$s!#(B
-$B$?$@$7!"(BDBCS($B#2%P%$%HJ8;z(B, $B$$$o$f$kA43QJ8;z!K$G!V!t!!#H#E#L#P!W$H$7$F(B
-$B$bG'<1$7$^$;$s$N$G$4Cm0U$/$@$5$$!#%*%W%7%g%s$ODL>oBgJ8;z>.J8;z$r(B"$B6hJL(B
-$B$7$^$9(B"$B!#(B
+注意: 通常コマンドは英語と数字だけからなります。コマンドは、メール本文
+の先頭から、「# help」という形式で書きます。コマンドは大文字でも小文字
+でも同様に認識しますので、「# help」は「# Help」でも「# HELP」でもかま
+いません。
+ただし、DBCS(２バイト文字, いわゆる全角文字）で「＃　ＨＥＬＰ」として
+も認識しませんのでご注意ください。オプションは通常大文字小文字を"区別
+します"。
 
 
 
-$BNc#1(B:
---------- $B%a!<%kK\J8(B --------------
+例１:
+--------- メール本文 --------------
 # help
 -----------------------------------
 
-$B%a!<%kK\J8$,",$N%a!<%k(B($BFbMF$,(B"# help"$B$@$1$r4^$`%a!<%k(B)$B$rAw$k$H!"$3$N%X(B
-$B%k%W!&%U%!%$%k$,Aw$i$l$F$-$^$9!#$^$?%3%^%s%I$O(B help $B$G$b(B HELP $B$G$b9=$$(B
-$B$^$;$s!JBgJ8;z>.J8;z$rLd$o$J$$!K!#(B
+メール本文が↑のメール(内容が"# help"だけを含むメール)を送ると、このヘ
+ルプ・ファイルが送られてきます。またコマンドは help でも HELP でも構い
+ません（大文字小文字を問わない）。
 
-$BNc#2(B:
+例２:
 
-$B0J2<$O!"2a5n$N#1#0HVL\$NEj9F$+$i#5$DJ,$r<h$j=P$7$F!";22C$7$F$$$k%a%s%P!<(B
-$B$N%j%9%H$r<h$j4s$;$k%3%^%s%I%a!<%k$NNc$G$9!#(B
---------- $B%a!<%kK\J8(B --------------
+以下は、過去の１０番目の投稿から５つ分を取り出して、参加しているメンバー
+のリストを取り寄せるコマンドメールの例です。
+--------- メール本文 --------------
 # help
 # get 10-14
 # members
@@ -111,218 +111,218 @@ ndtpd@srapc1081.sra.co.jp $B%a!<%j%s%0%j%9%H$+$iC&B`$7$?$$$H$-$K$O!"K\J8$N@hF,$
 -----------------------------------
 
 
-2.3	$B$b$7!"$o$+$i$J$/$J$C$?$i!)(B
+2.3	もし、わからなくなったら？
 
-$B4pK\E*$J>pJs$O%a!<%j%s%0%j%9%H$+$iAw$i$l$F$/$k%a!<%k$r8+$F$_$F2<$5$$!#(B
+基本的な情報はメーリングリストから送られてくるメールを見てみて下さい。
 
-"$B%a!<%k$rFI$`$?$a$N%=%U%H(B"$B$NCf$K$O!"$3$l$i$N(B X-$B$J$s$H$+(B $B$H$$$&9T$r>!<j(B
-$B$K:o$k$b$N$,$"$j$^$9!#$^$?$5$i$K$R$I$$$3$H$K(B X-$B$J$s$H$+(B $B9T$r;D$9$h$&$K(B
-$B@_DjJQ99$9$i$G$-$J$$>l9g$b$"$j$^$9!#$=$N>l9g$3$l$i$NM-1W$J>pJs$O8+$($^(B
-$B$;$s!#(B
+"メールを読むためのソフト"の中には、これらの X-なんとか という行を勝手
+に削るものがあります。またさらにひどいことに X-なんとか 行を残すように
+設定変更すらできない場合もあります。その場合これらの有益な情報は見えま
+せん。
 
-$BNc(B 1:
-   $B0ULu(B:$B"-(B $B$3$N%"%I%l%9$G$OG[Aw$H%3%^%s%I$H$b$K$&$1$D$1$^$9!#(B
+例 1:
+   意訳:↓ このアドレスでは配送とコマンドともにうけつけます。
 
    X-MLServer: fml [fml 2.1_RELEASE](distribute + commands available mode)
    X-ML-Info: If you have a question, 
    	send "# help" to the address ndtpd-ctl@srapc1081.sra.co.jp
 
-   $B0ULu(B:$B",$o$+$i$s$+$C$?$i(B ndtpd-ctl@srapc1081.sra.co.jp $B$X(B "# help" $B$rAw$C$F$M(B
+   意訳:↑わからんかったら ndtpd-ctl@srapc1081.sra.co.jp へ "# help" を送ってね
 
-$BNc(B 2:
+例 2:
    X-MLServer: fml [fml 2.1_RELEASE](distribute only mode)
 
-   $B0ULu(B:$B",(B $B$3$N%"%I%l%9$OG[Aw@lMQ$G$9!#(B
+   意訳:↑ このアドレスは配送専用です。
 
-$B$I$&$7$F$b$o$+$i$J$$$H$+!"%(%i!<%a!<%kEy$,JV$C$F$-$?$j$7$?>l9g$O!"%a!<(B
-$B%j%s%0%j%9%H$N4IM}<T(B
+どうしてもわからないとか、エラーメール等が返ってきたりした場合は、メー
+リングリストの管理者
 
 	ndtpd-admin@srapc1081.sra.co.jp
 
-$B$^$G%a!<%k$rAw$C$F2<$5$$!#=PMh$k$@$1!"(B
+までメールを送って下さい。出来るだけ、
 
-	$B2?$r$7$F!"$=$&$J$C$?$N$+!)(B
-	$B$=$N;~Ej$2$?%a!<%k!"JV$C$F$-$?%a!<%k(B
+	何をして、そうなったのか？
+	その時投げたメール、返ってきたメール
 
-$B$r$D$1$F%a!<%k$7$F$b$i$($k$H!"LdBj2r7h$N<j3]$+$j$K$J$j$^$9$N$G!"$h$m$7(B
-$B$/$*4j$$$7$^$9!#(B
-
-
-
-3	$B%3%^%s%I$N0lMw(B
-
-$B0J2<$N@bL@$O(B
-
-$B%3%^%s%I(B		$B@bL@$H6qBNNc(B
-
-$B$N7A$G$J$i$s$G$$$^$9!#6qBNNc$O<!$N>O$G@bL@$7$^$9!#(B
-$B$J$*!"(B[]$B$G0O$^$l$?ItJ,$O>JN,2DG=$G$9!#(B
+をつけてメールしてもらえると、問題解決の手掛かりになりますので、よろし
+くお願いします。
 
 
-3.1	$B>pJs$N<h$j4s$;!&4pK\E*$J%3%^%s%I(B
 
-# help			$B%3%^%s%I$N%X%k%W!J$3$N%a!<%k$NFbMF!K(B
-# objective		$B%a!<%j%s%0%j%9%H$NL\E*!"LsB+;v$rFI$`(B
-# guide			$B0lHLE*$J0FFb$rF@$k(B
-			($B%a%s%P$G$J$$?M$G$b<h$j4s$;2DG=(B)
+3	コマンドの一覧
+
+以下の説明は
+
+コマンド		説明と具体例
+
+の形でならんでいます。具体例は次の章で説明します。
+なお、[]で囲まれた部分は省略可能です。
 
 
-# msg			$B4IM}<T$X%a!<%k$rAw$k(B
-			$B!V(B# msg$B!W%3%^%s%I$,4^$^$l$F$$$k%a!<%k$O!"4IM}(B
-			$B<T$K$=$N$^$^E>Aw$5$l$^$9!#(B
-			$B$J$*!"!V(B# msg$B!W%3%^%s%I$N8e$N%3%^%s%I$O$9$Y$F(B
-			$BL5;k$5$l$^$9!#(B
-			$BNc(B:
+3.1	情報の取り寄せ・基本的なコマンド
+
+# help			コマンドのヘルプ（このメールの内容）
+# objective		メーリングリストの目的、約束事を読む
+# guide			一般的な案内を得る
+			(メンバでない人でも取り寄せ可能)
+
+
+# msg			管理者へメールを送る
+			「# msg」コマンドが含まれているメールは、管理
+			者にそのまま転送されます。
+			なお、「# msg」コマンドの後のコマンドはすべて
+			無視されます。
+			例:
 				# guide
 				# msg
-				$B$3$s$K$A$O!#$3$3$,%a%C%;!<%8$G$9!#(B
+				こんにちは。ここがメッセージです。
 				# objective
-			$B$3$NNc$G$O!V(B# guide$B!W$O<B9T$5$l$F0FFb$NJ8=q$,(B
-			$B<h$j4s$;$i$l$^$9$,!"!V(B# objective$B!W$O<B9T$5$l(B
-			$B$^$;$s!#(B
+			この例では「# guide」は実行されて案内の文書が
+			取り寄せられますが、「# objective」は実行され
+			ません。
 
 
-# summary  [$B0z?t(B]	$B2a5n$N5-;v0lMw$rF@$k(B(Summary$BA4BN$rAw$k(B)
-			$B0z?t(B:  $B5-;v$NHV9f!"HV9f$NHO0O(B
-			$BNc(B: 
-			summary		$BA45-;v$N0lMw(B
-			summary last:10 $B:G6a(B10$B8D$N5-;v0lMw(B
-			summary 100-200 $B5-;v(B100$B!A(B200 $B$N0lMw$@$1$rF@$k(B
+# summary  [引数]	過去の記事一覧を得る(Summary全体を送る)
+			引数:  記事の番号、番号の範囲
+			例: 
+			summary		全記事の一覧
+			summary last:10 最近10個の記事一覧
+			summary 100-200 記事100〜200 の一覧だけを得る
 
-# exit			$B%3%^%s%INs$N=*$j(B
-			$B$3$l0J9_$K$I$s$JJ8;z$,$"$C$F$b!"%a!<%j%s%0%j%9(B
-			$B%H%5!<%P$O%3%^%s%I$H$OG'<1$7$^$;$s!#(B
-			$B%a!<%k%=%U%H$G(B Signature $B$,<+F0$K$D$/>l9gEy$KJXMx$G$9(B
+# exit			コマンド列の終り
+			これ以降にどんな文字があっても、メーリングリス
+			トサーバはコマンドとは認識しません。
+			メールソフトで Signature が自動につく場合等に便利です
 
-# end			# exit$B$HF1$8(B
-# quit			# exit$B$HF1$8(B
-
-
-
-3.2	$B%a%s%P!<>pJs$dG[Aw$NDd;_!&C&2qEy(B
-
-# members		$BEj9F2DG=$J%a%s%P!<%j%9%H$rF@$k(B
-			$B%5!<%P$,<+F0EPO?$K@_Dj$5$l$F$$$k>l9g(B
-			# actives $B$GF@$i$l$kG[Aw%j%9%H$HF10l$G$9!#(B
-
-# actives		($B<B:]$KG[Aw$5$l$F$$$k(B)$B%a%s%P!<$N%j%9%H$rF@$k(B
-			$B4IM}<T$,<jF0$GEPO?$7$F$$$k%a!<%j%s%0%j%9%H$N>l9g(B
-			$B$OG[Aw%j%9%H$=$N$b$N$G$9!#(B
-			$B<+F0EPO?$N>l9g$O$3$l$G<h$j4s$;$i$l$k0lMw$O0UL#(B
-			$B$,$"$j$^$;$s!#(B
-
-	$BCm0U(B:$B%a%s%P!<%j%9%H$N%U%!%$%k$N7A<0$K$D$$$F(B
- 	actives $B$K7G:\$5$l$F$$$k%"%I%l%9$,<B:]$K%a!<%k$NG[Aw@h$K$J$j$^(B
-	$B$9!#(B
-	$B9TF,$K!V(B#$B!W$,0l$D$D$$$F$$$k%"%I%l%9$O!"0l;~E*$KG[Aw$r;_$a$F$$(B
-	$B$^$9!#$3$l$O!V(B# on$B!W$K$h$C$F:F3+$5$l$^$9!#(B
-	$B!V(B##BYE$B!W$O%a!<%j%s%0%j%9%H$+$iC&B`$7$?%a%s%P!<$N%"%I%l%9$G$9!#(B
+# end			# exitと同じ
+# quit			# exitと同じ
 
 
-# status [$B%"%I%l%9(B]	$B8=:_$N@_Dj$rF@$k(B
-			$B$^$H$a$*$/$j$dG[AwDd;_$J$I$N@_Dj>pJs$,F@$i$l$^(B
-			$B$9!#(B
-			$B%*%W%7%g%s$O%a!<%k%"%I%l%9$r;XDj$7$^$9!#(B
-			$B%*%W%7%g%s$r>JN,$9$k$H<+J,<+?H$N>uBV$G$9!#(B
-# stat [$B%"%I%l%9(B]	# status$B$HF1$8(B
+
+3.2	メンバー情報や配送の停止・脱会等
+
+# members		投稿可能なメンバーリストを得る
+			サーバが自動登録に設定されている場合
+			# actives で得られる配送リストと同一です。
+
+# actives		(実際に配送されている)メンバーのリストを得る
+			管理者が手動で登録しているメーリングリストの場合
+			は配送リストそのものです。
+			自動登録の場合はこれで取り寄せられる一覧は意味
+			がありません。
+
+	注意:メンバーリストのファイルの形式について
+ 	actives に掲載されているアドレスが実際にメールの配送先になりま
+	す。
+	行頭に「#」が一つついているアドレスは、一時的に配送を止めてい
+	ます。これは「# on」によって再開されます。
+	「##BYE」はメーリングリストから脱退したメンバーのアドレスです。
 
 
-	$B!A(B $BG[Aw$N%b!<%IEy$K$D$$$F(B $B!A(B
-
-	$BJ#?t$N%"%I%l%9$,EPO?$7$F$"$k>l9g$N(B ON, OFF, MATOME $BEy$NA`:n$O!"(B
-	$BA`:n$9$k$Y$-%"%I%l%9$,0l$D$KFCDj$G$-$k$^$G%"%I%l%9$r0l0U$KFCDj(B
-	$B$G$-$k$^$G%"%I%l%9$N%A%'%C%/$r87$7$/$7$F%A%c%l%s%8$7$^$9!#(B
-	$B!t$I$&$7$F$b$@$a$J>l9g$@$1$O4IM}<T$X%3%s%?%/%H$7$F2<$5$$!#(B
-
-# skip	 		$BG[Aw$ODd;_$5$l$k$,!"Ej9F$O2DG=$K$9$k(B
-			$BJ#?t2U=j$N%"%I%l%9$+$i#M#L$XEj9F$9$k>l9g(B
-			$BEj9F$O$G$-$k$,!"G[Aw$O$5$l$J$$%"%I%l%9$H@_Dj$9$k(B
-# noskip 		# skip $B$N@_Dj$r$d$a$k(B
-# off	 		$B#M#L$NG[Aw$r0l;~E*$K;_$a$k(B
-			$BD94|5Y2K!"=PD%$J$I$G%a!<%k%\%C%/%9$N0n$l$,5$$K(B
-			$B$J$k>l9g$KMxMQ$7$F$/$@$5$$!#(B
-# on	 		# off $B$N@_Dj$r2r=|$7!"G[Aw$r:F3+$9$k(B
-# bye	 		$B#M#L$r$d$a$k(B
-# unsubscribe 		$B#M#L$r$d$a$k(B
+# status [アドレス]	現在の設定を得る
+			まとめおくりや配送停止などの設定情報が得られま
+			す。
+			オプションはメールアドレスを指定します。
+			オプションを省略すると自分自身の状態です。
+# stat [アドレス]	# statusと同じ
 
 
-$B!&%a%s%P!<%j%9%H$N%U%!%$%k$N7A<0$K$D$$$F(B
+	〜 配送のモード等について 〜
 
-$B!!(Bactives $B$K7G:\$5$l$F$$$k%"%I%l%9$,<B:]$K%a%$%k$NG[Aw$5$l$k@h$K$J$j(B
-$B!!$^$9!#9TF,$K!V(B#$B!W$,IU$$$F$$$k$@$1$N$b$N$O0l;~E*$KG[Aw$r;_$a$F$$$k$b$N(B
-$B!!$G!"!V(B# on$B!W$K$h$C$F:F3+$5$l$^$9!#!V(B##BYE$B!W$OC&B`$5$l$?J}$N;D3<$G$9!#(B
+	複数のアドレスが登録してある場合の ON, OFF, MATOME 等の操作は、
+	操作するべきアドレスが一つに特定できるまでアドレスを一意に特定
+	できるまでアドレスのチェックを厳しくしてチャレンジします。
+	＃どうしてもだめな場合だけは管理者へコンタクトして下さい。
+
+# skip	 		配送は停止されるが、投稿は可能にする
+			複数箇所のアドレスからＭＬへ投稿する場合
+			投稿はできるが、配送はされないアドレスと設定する
+# noskip 		# skip の設定をやめる
+# off	 		ＭＬの配送を一時的に止める
+			長期休暇、出張などでメールボックスの溢れが気に
+			なる場合に利用してください。
+# on	 		# off の設定を解除し、配送を再開する
+# bye	 		ＭＬをやめる
+# unsubscribe 		ＭＬをやめる
 
 
-3.3	$B%I%a%$%sL>$,JQ99$K$J$C$?>l9g(B
+・メンバーリストのファイルの形式について
+
+　actives に掲載されているアドレスが実際にメイルの配送される先になり
+　ます。行頭に「#」が付いているだけのものは一時的に配送を止めているもの
+　で、「# on」によって再開されます。「##BYE」は脱退された方の残骸です。
+
+
+3.3	ドメイン名が変更になった場合
 
 SYNOPSIS:
 # chaddr old-address new-address	
 
-	old-address $B$r(B new-address $B$XJQ$($k(B
+	old-address を new-address へ変える
 
-$B%a!<%j%s%0%j%9%H$K;22C$9$k%"%I%l%9$rJQ99$9$k$K$O(B
+メーリングリストに参加するアドレスを変更するには
 
-# chaddr $B8E$$%a!<%k%"%I%l%9(B $B?7$7$$%a!<%k%"%I%l%9(B
+# chaddr 古いメールアドレス 新しいメールアドレス
 
-$B$H$$$&FbMF$N%a!<%k$rAw$k$H%a!<%k%"%I%l%9$rJQ99$9$k$3$H$,$G$-$^$9!#(B
-$BI,$:!X8E$$%"%I%l%9$+?7$7$$%"%I%l%9$N(B"$B$I$A$i$+(B"$B$+$i!Y$3$N%3%^%s%I$rAw$C(B
-$B$F$/$@$5$$!#(B
+という内容のメールを送るとメールアドレスを変更することができます。
+必ず『古いアドレスか新しいアドレスの"どちらか"から』このコマンドを送っ
+てください。
 
-$B$3$N%3%^%s%I$O!"%*%W%7%g%s$,0J2<$N>r7o$rK~$?$7$?$H$-$K<B9T$5$l$^$9!#(B
+このコマンドは、オプションが以下の条件を満たしたときに実行されます。
 
-$B#1!"%3%^%s%I$rAw$C$?%a!<%k$N(BFrom: $B$K@_Dj$7$?%"%I%l%9$,!"%*%W%7%g%s$K;X(B
-$B!!!!Dj$7$?%"%I%l%9$N$I$A$i$+$H0lCW$9$k(B
-$B#2!"%*%W%7%g%s$K;XDj$7$?%"%I%l%9$N$I$A$i$+$O$9$G$K%a%s%P!<(B
+１、コマンドを送ったメールのFrom: に設定したアドレスが、オプションに指
+　　定したアドレスのどちらかと一致する
+２、オプションに指定したアドレスのどちらかはすでにメンバー
 
-$B7k2L$K$+$+$o$i$:!"?75lN>J}$N%"%I%l%9$H#M#L%5!<%P$N4IM}<T$N#3?M$KJQ99$N(B
-$BDLCN$,%a!<%k$GAw$i$l$^$9!#(B
+結果にかかわらず、新旧両方のアドレスとＭＬサーバの管理者の３人に変更の
+通知がメールで送られます。
 
 
-3.4	$B$^$H$aAw$j(B
+3.4	まとめ送り
 
-$B$^$H$aAw$j$O!"B(;~G[Aw$G$O$J$/!"#N;~4V!H$*$-!I$K$^$H$a$FAw$i$l$kG[AwJ}(B
-$B<0$G$9!#$3$N(B N $B$r(B matome $B%3%^%s%I$N0z?t$K$7$F;XDj$7$F2<$5$$!#(B
-$B$$$DG[Aw$5$l$k$+(B?$B$O(B 0 == (24 % N) $B$N;~!"$D$^$j(B modulus $B$G$9!#(B
+まとめ送りは、即時配送ではなく、Ｎ時間“おき”にまとめて送られる配送方
+式です。この N を matome コマンドの引数にして指定して下さい。
+いつ配送されるか?は 0 == (24 % N) の時、つまり modulus です。
 
-$BCm0U(B:$B0J2<$N@bL@$G$O!V(B# matome$B!W$O!V(B# digest$B!W$H$7$F$bF1MM$NF0:n$K$J$j(B
-$B$^$9!#(B
+注意:以下の説明では「# matome」は「# digest」としても同様の動作になり
+ます。
 
-$BNc(B:
+例:
 	# matome 3mp
-	3$B;~4V$*$-$K(B MIME/Multipart $B7A<0$G$*$/$k!#(B
+	3時間おきに MIME/Multipart 形式でおくる。
 
 
-# digest $B?t;z(B(0-12)	
-# matome $B?t;z(B(0-12)	$BG[Aw4V3V$*$-$N$^$H$aAw$j$K@_Dj$9$k(B
-			$BG[Aw4V3V$O!"KhF|8aA0#0;~$r5/E@$H$7$F$O$8$^$j$^(B
-			$B$9!#$G$9$+$i!"0z?t$K!V(B13$B!W0J>e$N?t$r;XDj$7$F$b!"(B
-			$B0lF|0l2s$NG[Aw$K$J$j$^$9!#(B
- 			default $B$O(B gzip $B$7$?(B Unix From $B$D$-$N%U%!%$%k$N(B
-			$B8G$^$j$G$9!#(B
+# digest 数字(0-12)	
+# matome 数字(0-12)	配送間隔おきのまとめ送りに設定する
+			配送間隔は、毎日午前０時を起点としてはじまりま
+			す。ですから、引数に「13」以上の数を指定しても、
+			一日一回の配送になります。
+ 			default は gzip した Unix From つきのファイルの
+			固まりです。
 
-# digest $B?t;z(B(13-36)	
-# matome $B?t;z(B(13-36)	$B0lF|0l2s;XDj;~4V$N$^$H$aAw$j$K@_Dj$9$k(B
-			13$B!A(B36$B$N?t;z$,$3$N%1!<%9$KEv$F$O$^$j$^$9(B
-			$B8aA0(B5$B;~$N$^$H$aAw$j$r@_Dj$7$?$$$H$-$O!"(B24+5=29
-			$B$r;XDj$7$F$/$@$5$$!#(B
-			$B8a8e(B5$B;~$O(B17$B;~$J$N$G(B 17 $B$G;XDj$7$F2<$5$$!#(B
+# digest 数字(13-36)	
+# matome 数字(13-36)	一日一回指定時間のまとめ送りに設定する
+			13〜36の数字がこのケースに当てはまります
+			午前5時のまとめ送りを設定したいときは、24+5=29
+			を指定してください。
+			午後5時は17時なので 17 で指定して下さい。
 
 # digest 0		
-# matome 0		$BIaDL$NG[Aw$XLa$9(B
+# matome 0		普通の配送へ戻す
 
-   $BNc(B:
-	# matome 1		$B$^$H$aAw$j(B $B#1;~4V$K0l2s(B(gzipd)
-	# matome 2		$B$^$H$aAw$j(B $B#2;~4V$K0l2s(B(gzipd)
-	# matome 2u		$B$^$H$aAw$j(B $B#2;~4V$K0l2s(B(plain text)
-	# matome 2mp		$B$^$H$aAw$j(B $B#2;~4V$K0l2s(B MIME/Multipart$B7A<0$G(B
-	# matome 17		$B$^$H$aAw$j(B $B0lF|0l2s$HF1$8(B(gzipd)
-				#$B$3$N>l9g$O#1#7;~$KMh$k(B
-	# matome 29		$B$^$H$aAw$j(B $B0lF|0l2s$HF1$8(B(gzipd)
-				#$B$3$N>l9g$O8aA0#5;~$KMh$k(B
-				$B!t(Bmatome 5 $B$O#5;~4V!H$*$-!I(B $B$H$$$&0UL#(B
+   例:
+	# matome 1		まとめ送り １時間に一回(gzipd)
+	# matome 2		まとめ送り ２時間に一回(gzipd)
+	# matome 2u		まとめ送り ２時間に一回(plain text)
+	# matome 2mp		まとめ送り ２時間に一回 MIME/Multipart形式で
+	# matome 17		まとめ送り 一日一回と同じ(gzipd)
+				#この場合は１７時に来る
+	# matome 29		まとめ送り 一日一回と同じ(gzipd)
+				#この場合は午前５時に来る
+				＃matome 5 は５時間“おき” という意味
 
-   $B%*%W%7%g%s(B ($B?t;z$N8e$m$K$D$1$k%*%W%7%g%s(B):
-		$B%*%W%7%g%s$J$7$O(BGZIP(UNIX FROM)
+   オプション (数字の後ろにつけるオプション):
+		オプションなしはGZIP(UNIX FROM)
 	u	PLAINTEXT(UNIX FROM)
 	uf	PLAINTEXT(UNIX FROM)
 	i	lha + ish 
@@ -340,59 +340,59 @@ SYNOPSIS:
 	unpack	PLAINTEXT(UNIX FROM)
 
 
-3.5	$B2a5n$N5-;v$N<h$j4s$;J}(B
+3.5	過去の記事の取り寄せ方
 
 
-# index 		"# get", "# mget" $B$G<h$j4s$;2DG=$J%U%!%$%k$N%j(B
-			$B%9%H$r$+$($9!#(B
-			index $B%U%!%$%k$,$"$k$N$J$i!"$=$l$rJV$7$^$9(B
+# index 		"# get", "# mget" で取り寄せ可能なファイルのリ
+			ストをかえす。
+			index ファイルがあるのなら、それを返します
 
-# get  $B?t;z(B		$B2a5n$N5-;v$rF@$k(B (resend $B$5$l$^$9(B)
-			$B$R$H$D$:$D(B plain text $B$GJVAw$5$l$^$9(B
-# send $B?t;z(B		$BF1>e(B
+# get  数字		過去の記事を得る (resend されます)
+			ひとつずつ plain text で返送されます
+# send 数字		同上
 
-# get  $BJ#?t$N5-;v;XDj(B [$B%b!<%I(B] [$B;~4V4V3V(B]
-# mget $BJ#?t$N5-;v;XDj(B [$B%b!<%I(B] [$B;~4V4V3V(B]
-			$B%9%W!<%k$N5-;v$d(B($B$b$7$"$l$P(B)$B%"!<%+%$%V$K$"$k%U(B
-			$B%!%$%k$r0l$D$N%a!<%k$K$^$H$a$FAw$jJV$9(B
-			$BNc!'(B
-			# get 20-30	$B5-;v(B20$B!A(B30$B$rF@$k(B
-			# mget 1-10,15	$B5-;v(B1$B!A(B10$B!"(B15$B$rF@$k(B
+# get  複数の記事指定 [モード] [時間間隔]
+# mget 複数の記事指定 [モード] [時間間隔]
+			スプールの記事や(もしあれば)アーカイブにあるフ
+			ァイルを一つのメールにまとめて送り返す
+			例：
+			# get 20-30	記事20〜30を得る
+			# mget 1-10,15	記事1〜10、15を得る
 
 
-$BCm0U(B: "get" $B%3%^%s%I$N0z?t$,!X?t;z!Y$J$i$P!"$=$N?t;z$N(BCount$B$r;}$D5-;v(B
-$B$,(B resend $B$5$l$^$9!#(B"get" $B%3%^%s%I$,$=$l0J30$N7A<0(B (e.g. get 1-10) $B$G(B
-$B$"$l$P(B mget $B$HF1$8F0:n$r$7$^$9!#$=$N>l9g(B "get" $B$H(B "mget" $B$N0c$$$O%U%!(B
-$B%$%k$N7A<0$G(B
+注意: "get" コマンドの引数が『数字』ならば、その数字のCountを持つ記事
+が resend されます。"get" コマンドがそれ以外の形式 (e.g. get 1-10) で
+あれば mget と同じ動作をします。その場合 "get" と "mget" の違いはファ
+イルの形式で
 
-	get  	$B$N%G%U%)!<%k%H$O(B MIME/Multipart 
-	mget	$B$N%G%U%)!<%k%H$O(B tar.gz $B7A<0(B
+	get  	のデフォールトは MIME/Multipart 
+	mget	のデフォールトは tar.gz 形式
 
-$B$N$h$&$K@_Dj$5$l$F$$$^$9!#(B
+のように設定されています。
 
 			
-   $B!|(B# get$B!"(B# mget $B$GJ#?t$N5-;v$r<h$j4s$;$k>l9g$N0z?t(B:
-	$BHO0O$r;XDj(B	1-10,12,15-100 1,2,10
-			first first:10 last:30 100-last(mh$BE*(B Syntax)
-	$B%b!<%I(B		gz tgz ish rfc934 b rfc1153 d unpack uf(default=tgz)
-	$B;~4V4V3V(B	$BAw$jJV$9%a!<%k$,J#?t$N;~$N4V3V(B(default=300)	
+   ●# get、# mget で複数の記事を取り寄せる場合の引数:
+	範囲を指定	1-10,12,15-100 1,2,10
+			first first:10 last:30 100-last(mh的 Syntax)
+	モード		gz tgz ish rfc934 b rfc1153 d unpack uf(default=tgz)
+	時間間隔	送り返すメールが複数の時の間隔(default=300)	
 
-   $B!|(B# get $B$H(B # mget$B$N0c$$(B
+   ●# get と # mgetの違い
 
-	# mget $B$O$^$H$a$F5-;v$rF@$k$?$a$N@lMQ%3%^%s%I$G$9$N$G!"5-;v0l(B
-	$B$D$@$1$r;XDj$7$?>l9g$K$O!"$=$N%3%^%s%I$OL5;k$5$l$^$9!#(B# get $B$O!"(B
-	$B0l$D$@$1$N$H$-$HJ#?t$N5-;v$,;XDj$5$l$?$H$-$G$O0c$&F0:n$K$J$j$^(B
-	$B$9!#$I$A$i$b$^$H$a$F5-;v$,F@$i$l$k%3%^%s%I$G$9$,!"JVAw$5$l$k%U%!(B
-	$B%$%k$N7A<0$,0[$J$j$^$9!#(B
+	# mget はまとめて記事を得るための専用コマンドですので、記事一
+	つだけを指定した場合には、そのコマンドは無視されます。# get は、
+	一つだけのときと複数の記事が指定されたときでは違う動作になりま
+	す。どちらもまとめて記事が得られるコマンドですが、返送されるファ
+	イルの形式が異なります。
 
 	# get		MIME/Multipart 
-	# mget		tar.gz $B7A<0(B
+	# mget		tar.gz 形式
 
-	$B$?$@$7!"(B[$B%b!<%I(B]$B$r;XDj$9$k$3$H$G!"7A<0$rJQ$($k$3$H$b=PMh$^$9!#(B
+	ただし、[モード]を指定することで、形式を変えることも出来ます。
 
-   $B%b!<%I(B:
-		$B%*%W%7%g%s$J$7$O(B tar+gzip $B$G(B spool.tar.gz
-	tgz	tar+gzip $B$G(B spool.tar.gz
+   モード:
+		オプションなしは tar+gzip で spool.tar.gz
+	tgz	tar+gzip で spool.tar.gz
 	uf	PLAINTEXT(UNIX FROM)
 	gz	GZIP(UNIX FROM)
 	b	RFC934 format 	PLAINTEXT(mh-burst)
@@ -409,156 +409,156 @@ SYNOPSIS:
 	rfc1153	RFC1153 format 	PLAINTEXT
 
 
-4	$BI8=`$G$J$$%3%^%s%I(B
+4	標準でないコマンド
 
-$B0J2<$N%3%^%s%I$O4IM}<T$N%]%j%7!<$K$h$C$F;H$C$F$$$J$$$3$H$b$"$j$^$9!#(B
-$B%G%U%)!<%k%H$G$O;H$o$J$$$h$&$K$J$C$F$$$^$9!#(B
-
-
-4.1	$B%i%$%V%i%j!<(B
-
-$B%a%s%P!<$,%U%!%$%k$rEPO?$7$?$j!"$=$l$r<h$j4s$;$?$j$9$k$?$a$N$b$N$G$9!#(B
-
-# library $BL?Na(B		$B%i%$%V%i%j!<$X$N%"%/%;%9(B
-			$B%"!<%+%$%V$H$N0c$$$O$[$H$s$I$"$j$^$;$s$,!"(Bput 
-			$B$,2DG=$K$J$C$F$$$^$9!#(B
-			$B!t$?$@$7%;%-%e%j%F%#>e!"%U%!%$%kL>$O5-;vHV9f;X(B
-			$BDj$N$_$G$9(B
-
-# library index		$B%i%$%V%i%j!<$K$?$/$o$($i$l$F$$$k%U%!%$%k$N0lMw$rF@$k(B
-# library summary	# library index$B$HF1$8(B
-
-# library get $B?t;z(B	$B%i%$%V%i%j!<$+$i5-;v$rF@$k(B
-			mget $B$HF1$80z?t$,$D$+$($^$9(B
-
-# library put 		$B%i%$%V%i%j!<$K5-;v$rJ]B8$9$k(B
-
-# library unlink [$BHV9f(B]	$B;XDjHV9f$N5-;v$r%i%$%V%i%j!<$+$i:o=|$9$k(B
-# library delete [$BHV9f(B] $BF1>e(B
-# library rm     [$BHV9f(B] $BF1>e(B
+以下のコマンドは管理者のポリシーによって使っていないこともあります。
+デフォールトでは使わないようになっています。
 
 
-4.2	whois database $B$K$h$k>pJs8r49(B
+4.1	ライブラリー
 
-# whois [-h host] key	whois $B$G(B key $B$rC5$9!#(B
-			host $B$,M?$($i$l$?>l9g$O$=$N(Bhost$B$X(BIPC$B$G!"(B
-			$B$b$7$=$&$G$J$$>l9g$O(B
-			$B#M#L%5!<%P(B local $B$J(B whois database $BCf$rC5$7$^$9(B
+メンバーがファイルを登録したり、それを取り寄せたりするためのものです。
 
-# whois -a		$BFC<l%*%W%7%g%s$G!"$9$Y$F$NEPO?%(%s%H%j$rI=<($9$k(B
-# iam			$B<+8J>R2p$rEPO?$9$k(B
-# who			$B<+8J>R2p$N0lMw$rF@$k(B
+# library 命令		ライブラリーへのアクセス
+			アーカイブとの違いはほとんどありませんが、put 
+			が可能になっています。
+			＃ただしセキュリティ上、ファイル名は記事番号指
+			定のみです
+
+# library index		ライブラリーにたくわえられているファイルの一覧を得る
+# library summary	# library indexと同じ
+
+# library get 数字	ライブラリーから記事を得る
+			mget と同じ引数がつかえます
+
+# library put 		ライブラリーに記事を保存する
+
+# library unlink [番号]	指定番号の記事をライブラリーから削除する
+# library delete [番号] 同上
+# library rm     [番号] 同上
 
 
-4.3	traffic $B%3%^%s%I(B($BEj9FNL$NE}7W(B)
+4.2	whois database による情報交換
+
+# whois [-h host] key	whois で key を探す。
+			host が与えられた場合はそのhostへIPCで、
+			もしそうでない場合は
+			ＭＬサーバ local な whois database 中を探します
+
+# whois -a		特殊オプションで、すべての登録エントリを表示する
+# iam			自己紹介を登録する
+# who			自己紹介の一覧を得る
+
+
+4.3	traffic コマンド(投稿量の統計)
 
 SYNOPSIS:
 # traffic [-n <best?>] [-m <mails>] [-d]
 
-$B%*%W%7%g%s(B -n $B$O!"(B5. $B$NEj9FNL$NB?$$?M$N%Y%9%H2??M$^$GI=<($9$k$+$r?t;z(B
-$B$G;XDj$7$^$9!#%G%U%)%k%H$G$O!"(B-n 10 $B$HF1$8$G$9!#(B
-$B%*%W%7%g%s(B -m $B$O!"(B4. $B$N2?DL0J>e$"$C$?F|$rI=<($9$k$+$r?t;z$G;XDj$7$^$9!#(B
-$B>JN,;~$O!V(B-m 25$B!W$HF1$8$G$9!#(B
+オプション -n は、5. の投稿量の多い人のベスト何人まで表示するかを数字
+で指定します。デフォルトでは、-n 10 と同じです。
+オプション -m は、4. の何通以上あった日を表示するかを数字で指定します。
+省略時は「-m 25」と同じです。
 
-$B%*%W%7%g%s$r$9$Y$F>JN,$7$F!"!V(B# traffic$B!W$H$7$FAw$k$H!"0J2<$N>pJs$,F@$i$l$^$9!#(B
+オプションをすべて省略して、「# traffic」として送ると、以下の情報が得られます。
 
-     1. $B7nKh$N%a!<%kEj9FNL(B
-     2. $B%a!<%kEj9FNLKh$NF|?t(B
-     3. $B;~4VBSJL$NEj9FNL(B
-     4. 1 $BF|(B 25 $BDL0J>eEj9F$,$"$C$?F|(B
-     5. $BEj9F<T%Y%9%H%F%s(B
-     6. 1 $BF|Ev$?$j$NJ?6QEj9FNL$H:GBgEj9FNL(B
+     1. 月毎のメール投稿量
+     2. メール投稿量毎の日数
+     3. 時間帯別の投稿量
+     4. 1 日 25 通以上投稿があった日
+     5. 投稿者ベストテン
+     6. 1 日当たりの平均投稿量と最大投稿量
 
-$B%*%W%7%g%s$G!V(B-d$B!W$r;XDj$9$k$H!"0J2<$N>pJs$,F@$i$l$^$9!#(B
+オプションで「-d」を指定すると、以下の情報が得られます。
 
-     0. $BF|Kh$NEj9FNL(B
+     0. 日毎の投稿量
 
 
-4.4	$B$=$NB>(B
+4.4	その他
 
 # addr aoi@chan.panic
 
-	$B8=:_$G$O4IM}<TMQ$G$9!#J#?t$N%"%I%l%9$K%^%C%A$7$?>l9g$O(B
-	$B0l$D$KFCDj$G$-$k$^$G%"%I%l%9$N%^%C%A%k!<%k$r87$7$/$7$F(B
-	$B%3%^%s%I$r<B9T$7$h$&$H$7$^$9!#DL>oI,MW$"$j$^$;$s!#(B
+	現在では管理者用です。複数のアドレスにマッチした場合は
+	一つに特定できるまでアドレスのマッチルールを厳しくして
+	コマンドを実行しようとします。通常必要ありません。
 
 
-			$BJ#?t$NG[Aw@h$r;}$D?M$O#O#F#F%3%^%s%IEy$G(B
-			$B%5!<%P$N@_Dj$K$h$C$F$OJ#?t%^%C%A$7$F$7$^$&(B
-			e.g. aoi@chan.panic $B$H(B aoi@hayakawa.chan.panic
-			$B$bN>J}%^%C%A$7$F$7$^$&;~!"(B
-			$B:#$O(B aoi@chan.panic $B$K$D$$$F$N%3%^%s%I$r9T$J$$(B
-			$B$?$$;~$K;H$&$H!"$3$N%3%^%s%I0J9_$NB>$N%3%^%s%I(B
-			$B$r(B aoi@chan.panic $B$KBP$7$F$N$_9T$J$&$h$&$K$9$k!#(B
-			$B$^$s$,$$$AJ#?t%^%C%A$r$7$?$i(B $B%5!<%P$O<+F0E*$K(B
-			$B%"%I%l%9$N%A%'%C%/$N@:EY$r$"$2$F%H%i%$$r$9$k$N(B
-			$B$G$?$V$sI,MW$J$$$H$*$b$$$^$9!#(B
+			複数の配送先を持つ人はＯＦＦコマンド等で
+			サーバの設定によっては複数マッチしてしまう
+			e.g. aoi@chan.panic と aoi@hayakawa.chan.panic
+			も両方マッチしてしまう時、
+			今は aoi@chan.panic についてのコマンドを行ない
+			たい時に使うと、このコマンド以降の他のコマンド
+			を aoi@chan.panic に対してのみ行なうようにする。
+			まんがいち複数マッチをしたら サーバは自動的に
+			アドレスのチェックの精度をあげてトライをするの
+			でたぶん必要ないとおもいます。
 
 
 
-5	$B%3%^%s%I$N;H$$J}$N6qBNNc(B
+5	コマンドの使い方の具体例
 
-5.1	$B2a5n$N%a!<%k$N<h$j4s$;J}(B
+5.1	過去のメールの取り寄せ方
 
-$B%3%^%s%I$O(B
+コマンドは
 
      ndtpd-ctl@srapc1081.sra.co.jp
 
-$B08$F$KAw$C$F$/$@$5$$!#(B
+宛てに送ってください。
 
-$B!{(B $B8D!9$K<h$j4s$;$k>l9g(B
+○ 個々に取り寄せる場合
 
-$B2a5n$N%a!<%k$r0lDLC10L$G<h$j4s$;$k$K$O!V(B# get$B!W$r;H$$$^$9!#(B
-$B0J2<$K%a!<%k$NK\J8$K=q$/Nc$r<($7$^$9!#(B
+過去のメールを一通単位で取り寄せるには「# get」を使います。
+以下にメールの本文に書く例を示します。
 
-$B!!(B(1) 1 $BHVL\$N%a!<%k$,M_$7$$(B
+　(1) 1 番目のメールが欲しい
 
      # get 1
 
-$B!!(B(2) 1 $B!A(B 3 $BHVL\$N%a!<%k$,M_$7$$(B
+　(2) 1 〜 3 番目のメールが欲しい
 
      # get 1
      # get 2
      # get 3
   
-   $B!{(B $B$^$H$a$F<h$j4s$;$k>l9g(B
+   ○ まとめて取り寄せる場合
 
-$B!!!!$^$H$a$F2a5n$N%a!<%k$r<h$j4s$;$k$K$O!V(B# mget$B!W$r;H$$$^$9!#0J2<$K%a(B
-$B!!%$%k$NK\J8$K=q$/Nc$r<($7$^$9!#(B
+　　まとめて過去のメールを取り寄せるには「# mget」を使います。以下にメ
+　イルの本文に書く例を示します。
 
-$B!!(B(1) 100 $B!A(B 200 $BHVL\$N%a!<%k$,M_$7$$(B
+　(1) 100 〜 200 番目のメールが欲しい
 
      # mget 100-200
 
-$B!!(B(2) 100 $B!A(B 200 $BHVL\$N%a!<%k$rJ#?t$K$J$k>l9g$O(B 30 $BIC4V3V$GM_$7$$(B
+　(2) 100 〜 200 番目のメールを複数になる場合は 30 秒間隔で欲しい
 
      # mget 100-200 30
 
-$B!!(B(3) 100 $B!A(B 200 $BHVL\$N%a!<%k$r(B PLAIN TEXT $B$GM_$7$$(B
+　(3) 100 〜 200 番目のメールを PLAIN TEXT で欲しい
 
      # mget 100-200 unpack
 
-$B!!(B(4) 100 $B!A(B 200 $BHVL\$N%a!<%k$r(B LHA + ISH $B$GM_$7$$(B
+　(4) 100 〜 200 番目のメールを LHA + ISH で欲しい
 
      # mget 100-200 ish
 
-$B!!(B(5) 100 $B!A(B 200 $BHVL\$N%a!<%k$r(B 30 $BIC4V3V!"(BPLAIN TEXT $B$GM_$7$$(B
+　(5) 100 〜 200 番目のメールを 30 秒間隔、PLAIN TEXT で欲しい
 
      # mget 100-200 30 unpack
 
-$B!!!!JVAw$5$l$k%a!<%k$O(B 1000 $B9T$G@Z$C$F%P%i%P%i$KAw$i$l$k$N$G!"Aw$jJV$5(B
-$B!!$l$F$/$k%a!<%k$H%a!<%k$N;~4V4V3V$r;XDj$7$F2<$5$$!#@h$NNc$G$O(B 30 $B$J$N(B
-$B!!$G(B 30 $BIC4V3V$GAw$jJV$5$l$^$9!#(B
+　　返送されるメールは 1000 行で切ってバラバラに送られるので、送り返さ
+　れてくるメールとメールの時間間隔を指定して下さい。先の例では 30 なの
+　で 30 秒間隔で送り返されます。
 
-$B!!!!;XDj$7$J$+$C$?>l9g$N;~4V4V3V$O(B 5 $BJ,$G$9!#(B
+　　指定しなかった場合の時間間隔は 5 分です。
 
-$B!!!!%U%)!<%^%C%H$r;XDj$7$J$+$C$?>l9g!"%U%!%$%k$O(B tar $B$G$^$H$a$i$l(B gzip
-$B!!$5$l(B uuencode $B$5$l$FAw$jJV$5$l$^$9!#(B
+　　フォーマットを指定しなかった場合、ファイルは tar でまとめられ gzip
+　され uuencode されて送り返されます。
 
-$B!!!!(B1000 $B9T$r1[$($k>l9g$OJ#?t$N%a!<%k$KJ,$1$^$9$N$G!"<+J,$G$D$J$2$F(B(^^;
-$B!!Nc$($P(B bar $B$H$$$&%U%!%$%k$K$7$?$H$7$^$9!#(B
-$B!t(Buuencode $B$5$l$F$$$k>l9g$O(B undecode $B$r;H$($P=gHV$5$(9g$o$;$l$P<+F0E83+(B
-$B!t$5$l$^$9!#(B
+　　1000 行を越える場合は複数のメールに分けますので、自分でつなげて(^^;
+　例えば bar というファイルにしたとします。
+＃uuencode されている場合は undecode を使えば順番さえ合わせれば自動展開
+＃されます。
 
      % uudecode bar
      % ls 
@@ -570,8 +570,8 @@ SYNOPSIS:
      -rw-r--r-- .......................... spool.tar.gz
      drwxr-xr-x .......................... spool
 
-$B!!$H$$$&6q9g$K(B spool $B%G%#%l%/%H%j$H$$$&$N$,=PMh$^$9!#$3$NCf$K<h$j4s$;$?(B
-$B!!%a!<%k$,$7$^$o$l$F$$$^$9!#(B
+　という具合に spool ディレクトリというのが出来ます。この中に取り寄せた
+　メールがしまわれています。
 
 
 History:

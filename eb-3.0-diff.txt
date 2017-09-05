@@ -1,57 +1,57 @@
 
-		   EB Library 3.0 ¤ÎÊÑ¹¹ÅÀ¤Ë¤Ä¤¤¤Æ
-			       ³Ş¸¶´ğÇ·
-			   2000Ç¯ 11·î 28Æü
+		   EB Library 3.0 ã®å¤‰æ›´ç‚¹ã«ã¤ã„ã¦
+			       ç¬ åŸåŸºä¹‹
+			   2000å¹´ 11æœˆ 28æ—¥
 
-Ãí: ¤³¤ÎÊ¸½ñ¤Ë½ñ¤«¤ì¤Æ¤¤¤ë»ÅÍÍ¤Ï³«È¯ÅÓÃæ¤Î¤â¤Î¤Ç¤¹¤Î¤Ç¡¢3.0 Àµ¼°¸ø³«»ş
-    ¤È°Û¤Ê¤ëÅÀ¤¬¤¢¤ë¤«¤âÃÎ¤ì¤Ş¤»¤ó¡£
+æ³¨: ã“ã®æ–‡æ›¸ã«æ›¸ã‹ã‚Œã¦ã„ã‚‹ä»•æ§˜ã¯é–‹ç™ºé€”ä¸­ã®ã‚‚ã®ã§ã™ã®ã§ã€3.0 æ­£å¼å…¬é–‹æ™‚
+    ã¨ç•°ãªã‚‹ç‚¹ãŒã‚ã‚‹ã‹ã‚‚çŸ¥ã‚Œã¾ã›ã‚“ã€‚
 
 ----------------------------------------------------------------------
-1. eb_initialize_library(), eb_finalize_library() ¤Î¿·Àß
+1. eb_initialize_library(), eb_finalize_library() ã®æ–°è¨­
 
-EB ¥é¥¤¥Ö¥é¥ê¤ò»ÈÍÑ¤¹¤ëºİ¤Ë¤Ï¤Ş¤º¤¢¤é¤«¤¸¤á eb_initialize_library() ¤ò¡¢
-»È¤¤½ª¤ï¤Ã¤¿¤é eb_finalize_library() ¤ò¸Æ¤Ğ¤Ê¤¯¤Æ¤Ï¤Ê¤é¤Ê¤¯¤Ê¤Ã¤¿¡£
+EB ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ä½¿ç”¨ã™ã‚‹éš›ã«ã¯ã¾ãšã‚ã‚‰ã‹ã˜ã‚ eb_initialize_library() ã‚’ã€
+ä½¿ã„çµ‚ã‚ã£ãŸã‚‰ eb_finalize_library() ã‚’å‘¼ã°ãªãã¦ã¯ãªã‚‰ãªããªã£ãŸã€‚
 
-¤Ş¤¿¡¢¤³¤ì¤È´ØÏ¢¤·¤Æ¡¢EB_Book ¤Î½é´ü²½¤ò¹Ô¤¦´Ø¿ô eb_initialize() ¤Ï
-eb_initialize_book() ¤Ë²şÌ¾¤µ¤ì¡¢Æ±ÍÍ¤Ë¸å»ÏËö¤ò¹Ô¤¦´Ø¿ô eb_clear() ¤Ï
-eb_finalize_book() ¤Ë²şÌ¾¤µ¤ì¤¿¡£
+ã¾ãŸã€ã“ã‚Œã¨é–¢é€£ã—ã¦ã€EB_Book ã®åˆæœŸåŒ–ã‚’è¡Œã†é–¢æ•° eb_initialize() ã¯
+eb_initialize_book() ã«æ”¹åã•ã‚Œã€åŒæ§˜ã«å¾Œå§‹æœ«ã‚’è¡Œã†é–¢æ•° eb_clear() ã¯
+eb_finalize_book() ã«æ”¹åã•ã‚ŒãŸã€‚
 
 
-2. ¤Û¤È¤ó¤É¤Î´Ø¿ô¤ÎÌá¤êÃÍ¤Ï EB_Error_Code ¤ËÊÑ¹¹
+2. ã»ã¨ã‚“ã©ã®é–¢æ•°ã®æˆ»ã‚Šå€¤ã¯ EB_Error_Code ã«å¤‰æ›´
 
-¤¤¤¯¤Ä¤«¤ÎÎã³°¤ò½ü¤­¡¢¤Û¤È¤ó¤É¤Î´Ø¿ô¤Ï EB_Error_Code ·¿¤òÊÖ¤¹¤è¤¦¤Ë¤Ê¤Ã
-¤¿¡£¤³¤ì¤é¤Î´Ø¿ô¤Ï¡¢À®¸ù¤¹¤ì¤Ğ EB_SUCCESS ¤ò¡¢¼ºÇÔ¤¹¤ì¤Ğ EB_ERR_* ¤È¤¤
-¤¦ÃÍ¤òÊÖ¤¹¡£
+ã„ãã¤ã‹ã®ä¾‹å¤–ã‚’é™¤ãã€ã»ã¨ã‚“ã©ã®é–¢æ•°ã¯ EB_Error_Code å‹ã‚’è¿”ã™ã‚ˆã†ã«ãªã£
+ãŸã€‚ã“ã‚Œã‚‰ã®é–¢æ•°ã¯ã€æˆåŠŸã™ã‚Œã° EB_SUCCESS ã‚’ã€å¤±æ•—ã™ã‚Œã° EB_ERR_* ã¨ã„
+ã†å€¤ã‚’è¿”ã™ã€‚
 
-Îã:
-   µì: int eb_bind(EB_Book *book, const char *path);
-   ¿·: EB_Error_Code eb_bind(EB_Book *book, const char *path);
+ä¾‹:
+   æ—§: int eb_bind(EB_Book *book, const char *path);
+   æ–°: EB_Error_Code eb_bind(EB_Book *book, const char *path);
 
-ËÜµ¬Â§¤ÎÎã³°¤È¤Ê¤ë´Ø¿ô¤òÊ¬Îà¤¹¤ë¤È¡¢¼¡¤Î¤è¤¦¤Ë¤Ê¤ë¡£
+æœ¬è¦å‰‡ã®ä¾‹å¤–ã¨ãªã‚‹é–¢æ•°ã‚’åˆ†é¡ã™ã‚‹ã¨ã€æ¬¡ã®ã‚ˆã†ã«ãªã‚‹ã€‚
 
-   * Ì¾Á°¤Ë _is_¡¢_have_ ¤ò´Ş¤à´Ø¿ô
-     ¤³¤ì¤é¤Î´Ø¿ô¤Ï false¡¢true ¤Î°ÕÌ£¤Ç¡¢0 ¤« Èó 0 ¤òÊÖ¤¹¡£
+   * åå‰ã« _is_ã€_have_ ã‚’å«ã‚€é–¢æ•°
+     ã“ã‚Œã‚‰ã®é–¢æ•°ã¯ falseã€true ã®æ„å‘³ã§ã€0 ã‹ é 0 ã‚’è¿”ã™ã€‚
 
-   * Ìá¤êÃÍ¤òÊÖ¤µ¤Ê¤¤´Ø¿ô
+   * æˆ»ã‚Šå€¤ã‚’è¿”ã•ãªã„é–¢æ•°
 
    * eb_error_message()
-     (const char *) ·¿¤òÊÖ¤¹ÆÃ¼ì¤Ê´Ø¿ô¡£
+     (const char *) å‹ã‚’è¿”ã™ç‰¹æ®Šãªé–¢æ•°ã€‚
 
 
-3. °ú¿ô¤ÎÁı²Ã
+3. å¼•æ•°ã®å¢—åŠ 
 
-2. ¤ÎÊÑ¹¹¤Î±Æ¶Á¤Ç¡¢¡ÖÀ®¸ù¡×¡Ö¼ºÇÔ¡×°Ê³°¤Î¤³¤È¤ò°ÕÌ£¤¹¤ëÌá¤êÃÍ (Îã: Éû
-ËÜ¤Î¸Ä¿ô¡¢ÁªÂòÃæ¤Î³°»ú¤Î¹â¤µ¤Ê¤É) ¤òÊÖ¤·¤Æ¤¤¤¿´Ø¿ô¤Ï¡¢¤¹¤Ù¤Æ°ú¿ô¤¬°ì¤Ä
-Áı¤¨¤¿¡£Áı¤¨¤¿Ê¬¤Î°ú¿ô¤Ï»²¾ÈÅÏ¤·¤ò¤·¤Æ¡¢¤³¤ì¤Ş¤Ç¤ÏÌá¤êÃÍ¤À¤Ã¤¿¡ÖÃÍ¡×¤¬
-¤½¤³¤Ë½ñ¤­¹ş¤Ş¤ì¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£
+2. ã®å¤‰æ›´ã®å½±éŸ¿ã§ã€ã€ŒæˆåŠŸã€ã€Œå¤±æ•—ã€ä»¥å¤–ã®ã“ã¨ã‚’æ„å‘³ã™ã‚‹æˆ»ã‚Šå€¤ (ä¾‹: å‰¯
+æœ¬ã®å€‹æ•°ã€é¸æŠä¸­ã®å¤–å­—ã®é«˜ã•ãªã©) ã‚’è¿”ã—ã¦ã„ãŸé–¢æ•°ã¯ã€ã™ã¹ã¦å¼•æ•°ãŒä¸€ã¤
+å¢—ãˆãŸã€‚å¢—ãˆãŸåˆ†ã®å¼•æ•°ã¯å‚ç…§æ¸¡ã—ã‚’ã—ã¦ã€ã“ã‚Œã¾ã§ã¯æˆ»ã‚Šå€¤ã ã£ãŸã€Œå€¤ã€ãŒ
+ãã“ã«æ›¸ãè¾¼ã¾ã‚Œã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚
 
-Îã:
-   µì: EB_Disc_Code eb_disc_type(EB_Book *book);
-   ¿·: EB_Error_Code eb_disc_type(EB_Book *book, EB_Disc_Code *disc_code);
+ä¾‹:
+   æ—§: EB_Disc_Code eb_disc_type(EB_Book *book);
+   æ–°: EB_Error_Code eb_disc_type(EB_Book *book, EB_Disc_Code *disc_code);
 
-   ´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹¤È¡¢disc_code ¤ËÃÍ¤¬½ñ¤­¹ş¤Ş¤ì¤ÆÌá¤Ã¤Æ¤¯¤ë¡£
+   é–¢æ•°ã‚’å‘¼ã³å‡ºã™ã¨ã€disc_code ã«å€¤ãŒæ›¸ãè¾¼ã¾ã‚Œã¦æˆ»ã£ã¦ãã‚‹ã€‚
 
-³ºÅö¤¹¤ë´Ø¿ô:
+è©²å½“ã™ã‚‹é–¢æ•°:
    eb_character_code()
    eb_disc_type()
    eb_hit_list()
@@ -118,105 +118,105 @@ eb_finalize_book() ¤Ë²şÌ¾¤µ¤ì¤¿¡£
    eb_message()
 
 
-4. (const char *) ¤òÊÖ¤µ¤Ê¤¤¤è¤¦¤ËÊÑ¹¹
+4. (const char *) ã‚’è¿”ã•ãªã„ã‚ˆã†ã«å¤‰æ›´
 
-¤³¤ì¤Ş¤Ç¡¢½ñÀÒ¤ÎÂêÌ¾¤Ê¤É¤Ï (const char *) ¤ÇÊÖ¤·¤Æ¤¤¤¿¤¬¡¢3.0 ¤«¤é¤Ï°ú
-¿ô¤È¤·¤Æ (char *) ·¿¤ò¼è¤ë¤è¤¦¤Ë¤·¡¢¤½¤³¤Ç»ØÄê¤µ¤ì¤¿ÎÎ°è¤Ë½ñ¤­¹ş¤Ş¤ì¤ë
-¤è¤¦¤Ë¤Ê¤Ã¤¿¡£¤¿¤À¤·¡¢eb_error_message() ¤ÏÎã³°¤È¤·¤Æ¡¢(const char *)
-¤òÊÖ¤¹¡£
+ã“ã‚Œã¾ã§ã€æ›¸ç±ã®é¡Œåãªã©ã¯ (const char *) ã§è¿”ã—ã¦ã„ãŸãŒã€3.0 ã‹ã‚‰ã¯å¼•
+æ•°ã¨ã—ã¦ (char *) å‹ã‚’å–ã‚‹ã‚ˆã†ã«ã—ã€ãã“ã§æŒ‡å®šã•ã‚ŒãŸé ˜åŸŸã«æ›¸ãè¾¼ã¾ã‚Œã‚‹
+ã‚ˆã†ã«ãªã£ãŸã€‚ãŸã ã—ã€eb_error_message() ã¯ä¾‹å¤–ã¨ã—ã¦ã€(const char *)
+ã‚’è¿”ã™ã€‚
 
-³ºÅö¤¹¤ë´Ø¿ô¤Ï¡¢°Ê²¼¤Î´Ø¿ô¡£
+è©²å½“ã™ã‚‹é–¢æ•°ã¯ã€ä»¥ä¸‹ã®é–¢æ•°ã€‚
 
-   µì: const char *eb_subbook_title(EB_Book *book);
-   ¿·: EB_Error_Code eb_subbook_title(EB_Book *book, char *title);
+   æ—§: const char *eb_subbook_title(EB_Book *book);
+   æ–°: EB_Error_Code eb_subbook_title(EB_Book *book, char *title);
 
-   µì: const char *eb_appendix_path(EB_Book *book);
-   ¿·: EB_Error_Code eb_appendix_path(EB_Book *book, char *path);
+   æ—§: const char *eb_appendix_path(EB_Book *book);
+   æ–°: EB_Error_Code eb_appendix_path(EB_Book *book, char *path);
 
-   µì: const char *eb_appendix_subbook_directory(EB_Book *book);
-   ¿·: EB_Error_Code eb_appendix_subbook_directory(EB_Book *book,
+   æ—§: const char *eb_appendix_subbook_directory(EB_Book *book);
+   æ–°: EB_Error_Code eb_appendix_subbook_directory(EB_Book *book,
            char *directory);
 
-   µì: const char *eb_appendix_subbook_directory2(EB_Book *book);
-   ¿·: EB_Error_Code eb_appendix_subbook_directory2(EB_Book *book,
+   æ—§: const char *eb_appendix_subbook_directory2(EB_Book *book);
+   æ–°: EB_Error_Code eb_appendix_subbook_directory2(EB_Book *book,
            char *directory);
 
-   µì: const char *eb_path(EB_Book *book);
-   ¿·: EB_Error_Code eb_path(EB_Book *book, char *path);
+   æ—§: const char *eb_path(EB_Book *book);
+   æ–°: EB_Error_Code eb_path(EB_Book *book, char *path);
 
-   µì: const char *eb_multi_entry_label(EB_Book *book);
-   ¿·: EB_Error_Code eb_multi_entry_label(EB_Book *book, char *label);
+   æ—§: const char *eb_multi_entry_label(EB_Book *book);
+   æ–°: EB_Error_Code eb_multi_entry_label(EB_Book *book, char *label);
 
-   µì: const char *eb_subbook_title(EB_Book *book);
-   ¿·: EB_Error_Code eb_subbook_title(EB_Book *book, char *title);
+   æ—§: const char *eb_subbook_title(EB_Book *book);
+   æ–°: EB_Error_Code eb_subbook_title(EB_Book *book, char *title);
 
-   µì: const char *eb_subbook_title2(EB_Book *book);
-   ¿·: EB_Error_Code eb_subbook_title2(EB_Book *book, char *title);
+   æ—§: const char *eb_subbook_title2(EB_Book *book);
+   æ–°: EB_Error_Code eb_subbook_title2(EB_Book *book, char *title);
 
-   µì: const char *eb_subbook_directory(EB_Book *book);
-   ¿·: EB_Error_Code eb_subbook_directory(EB_Book *book, char *directory);
+   æ—§: const char *eb_subbook_directory(EB_Book *book);
+   æ–°: EB_Error_Code eb_subbook_directory(EB_Book *book, char *directory);
 
-   µì: const char *eb_subbook_directory2(EB_Book *book);
-   ¿·: EB_Error_Code eb_subbook_directory2(EB_Book *book, char *directory);
+   æ—§: const char *eb_subbook_directory2(EB_Book *book);
+   æ–°: EB_Error_Code eb_subbook_directory2(EB_Book *book, char *directory);
 
-   µì: const char *eb_error_message(EB_Book *book);
-   ¿·: EB_Error_Code eb_error_message(EB_Book *book, char *message);
+   æ—§: const char *eb_error_message(EB_Book *book);
+   æ–°: EB_Error_Code eb_error_message(EB_Book *book, char *message);
 
-   µì: const char *eb_error_message2(EB_Book *book);
-   ¿·: EB_Error_Code eb_error_message2(EB_Book *book, char *message);
+   æ—§: const char *eb_error_message2(EB_Book *book);
+   æ–°: EB_Error_Code eb_error_message2(EB_Book *book, char *message);
 
-   µì: const char *eb_narrow_font_filename(EB_Book *book);
-   ¿·: EB_Error_Code eb_narrow_font_filename(EB_Book *book, char *file_name);
+   æ—§: const char *eb_narrow_font_filename(EB_Book *book);
+   æ–°: EB_Error_Code eb_narrow_font_filename(EB_Book *book, char *file_name);
 
-   µì: const char *eb_narrow_font_filename(EB_Book *book);
-   ¿·: EB_Error_Code eb_narrow_font_filename(EB_Book *book, char *file_name);
+   æ—§: const char *eb_narrow_font_filename(EB_Book *book);
+   æ–°: EB_Error_Code eb_narrow_font_filename(EB_Book *book, char *file_name);
 
-   µì: const char *eb_wide_font_filename(EB_Book *book);
-   ¿·: EB_Error_Code eb_wide_font_filename(EB_Book *book, char *file_name);
+   æ—§: const char *eb_wide_font_filename(EB_Book *book);
+   æ–°: EB_Error_Code eb_wide_font_filename(EB_Book *book, char *file_name);
 
-   µì: const char *eb_wide_font_filename2(EB_Book *book);
-   ¿·: EB_Error_Code eb_wide_font_filename2(EB_Book *book, char *file_name);
+   æ—§: const char *eb_wide_font_filename2(EB_Book *book);
+   æ–°: EB_Error_Code eb_wide_font_filename2(EB_Book *book, char *file_name);
 
-   µì: const char *eb_language_name(EB_Book *book);
-   ¿·: EB_Error_Code eb_language_name(EB_Book *book, char *language_name);
+   æ—§: const char *eb_language_name(EB_Book *book);
+   æ–°: EB_Error_Code eb_language_name(EB_Book *book, char *language_name);
 
-   µì: const char *eb_language_name2(EB_Book *book);
-   ¿·: EB_Error_Code eb_language_name2(EB_Book *book, char *language_name);
+   æ—§: const char *eb_language_name2(EB_Book *book);
+   æ–°: EB_Error_Code eb_language_name2(EB_Book *book, char *language_name);
 
-   µì: const char *eb_message(EB_Book *book);
-   ¿·: EB_Error_Code eb_message(EB_Book *book, char *message);
+   æ—§: const char *eb_message(EB_Book *book);
+   æ–°: EB_Error_Code eb_message(EB_Book *book, char *message);
 
 
-5. °ìÉô¤Î´Ø¿ô¤Î°ú¿ô½ç½ø¤òÊÑ¹¹
+5. ä¸€éƒ¨ã®é–¢æ•°ã®å¼•æ•°é †åºã‚’å¤‰æ›´
 
-°ú¿ô¤ò»²¾ÈÅÏ¤·¤Ë¤·¤Æ¡¢´Ø¿ôÆâÉô¤Ç¤½¤ÎÆâÍÆ¤òÊÑ¹¹¤·¤Æ¤¤¤ë¤â¤Î¤Ï¡¢°ú¿ôÎó¤Î
-ºÇ¸åÈø¤ËÃÖ¤«¤ì¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿¡£
+å¼•æ•°ã‚’å‚ç…§æ¸¡ã—ã«ã—ã¦ã€é–¢æ•°å†…éƒ¨ã§ãã®å†…å®¹ã‚’å¤‰æ›´ã—ã¦ã„ã‚‹ã‚‚ã®ã¯ã€å¼•æ•°åˆ—ã®
+æœ€å¾Œå°¾ã«ç½®ã‹ã‚Œã‚‹ã‚ˆã†ã«ãªã£ãŸã€‚
 
-³ºÅö¤¹¤ë´Ø¿ô¤Ï¡¢eb_hit_list(), eb_text(), eb_heading() ¤Î 3 ¤Ä¤Ç¤¢¤ë¡£
-(²Ã¤¨¤Æ eb_text()¡¢eb_heading() ¤Ï eb_read_text()¡¢eb_raed_heading()
-¤Ë²şÌ¾¤µ¤ì¡¢¤µ¤é¤Ë container ¤È¤¤¤¦°ú¿ô¤¬ÄÉ²Ã¤µ¤ì¤Æ¤¤¤ë¡£8. ¤È 9. ¤â»²
-¾È¤Î¤³¤È)
+è©²å½“ã™ã‚‹é–¢æ•°ã¯ã€eb_hit_list(), eb_text(), eb_heading() ã® 3 ã¤ã§ã‚ã‚‹ã€‚
+(åŠ ãˆã¦ eb_text()ã€eb_heading() ã¯ eb_read_text()ã€eb_raed_heading()
+ã«æ”¹åã•ã‚Œã€ã•ã‚‰ã« container ã¨ã„ã†å¼•æ•°ãŒè¿½åŠ ã•ã‚Œã¦ã„ã‚‹ã€‚8. ã¨ 9. ã‚‚å‚
+ç…§ã®ã“ã¨)
 
-   µì: int eb_hit_list(EB_Book *book, EB_Hit *hitlist, int maxhits);
-   ¿·: EB_Error_Code eb_hit_list(EB_Book *book,
+   æ—§: int eb_hit_list(EB_Book *book, EB_Hit *hitlist, int maxhits);
+   æ–°: EB_Error_Code eb_hit_list(EB_Book *book,
            int max_hit_count, EB_Hit *hit_list, int *hit_count);
 
-   µì: int eb_text(EB_Book *book, EB_Appendix *appendix,
+   æ—§: int eb_text(EB_Book *book, EB_Appendix *appendix,
        const EB_Hookset *hookset, char *text, size_t textsize);
-   ¿·: EB_Error_Code eb_read_text(EB_Book *book, EB_Appendix *appendix,
+   æ–°: EB_Error_Code eb_read_text(EB_Book *book, EB_Appendix *appendix,
        EB_Hookset *hookset, void *container, size_t text_max_length,
        char *text, ssize_t *text_length);
 
-   µì: int eb_heading(EB_Book *book, EB_Appendix *appendix,
+   æ—§: int eb_heading(EB_Book *book, EB_Appendix *appendix,
        const EB_Hookset *hookset, char *text, size_t textsize);
-   ¿·: EB_Error_Code eb_read_heading(EB_Book *book, EB_Appendix *appendix,
+   æ–°: EB_Error_Code eb_read_heading(EB_Book *book, EB_Appendix *appendix,
        EB_Hookset *hookset, void *container, size_t text_max_length,
        char *text, ssize_t *text_length);
 
-6. _count() ¤È¤¤¤¦Ì¾¾Î¤Î´Ø¿ô¤Îºï½ü
+6. _count() ã¨ã„ã†åç§°ã®é–¢æ•°ã®å‰Šé™¤
 
-_list() ¤È¤¤¤¦Ì¾¾Î¤Î´Ø¿ô¤¬¤¢¤ë¾ì¹ç¤Ë¤Ï¡¢_count() ¤È¤¤¤¦Ì¾¾Î¤Î´Ø¿ô¤òºï
-½ü¤·¤¿¡£ÂĞ¾İ¤È¤Ê¤Ã¤¿¤Î¤Ï°Ê²¼¤Î´Ø¿ô¡£
+_list() ã¨ã„ã†åç§°ã®é–¢æ•°ãŒã‚ã‚‹å ´åˆã«ã¯ã€_count() ã¨ã„ã†åç§°ã®é–¢æ•°ã‚’å‰Š
+é™¤ã—ãŸã€‚å¯¾è±¡ã¨ãªã£ãŸã®ã¯ä»¥ä¸‹ã®é–¢æ•°ã€‚
 
    eb_appendix_subbook_count()
    eb_multi_search_count()
@@ -227,17 +227,17 @@ _list() ¤È¤¤¤¦Ì¾¾Î¤Î´Ø¿ô¤¬¤¢¤ë¾ì¹ç¤Ë¤Ï¡¢_count() ¤È¤¤¤¦Ì¾¾Î¤Î´Ø¿ô¤òºï
    eb_message_count();
 
 
-7. Âç°èÊÑ¿ô eb_error ¤ÎÇÑ»ß
+7. å¤§åŸŸå¤‰æ•° eb_error ã®å»ƒæ­¢
 
-¥¨¥é¡¼¥³¡¼¥É¤Ï´Ø¿ô¤ÎÌá¤êÃÍ¤Ë¤è¤Ã¤ÆÉ½¸½¤µ¤ì¤ë¤³¤È¤Ë¤Ê¤Ã¤¿¤¿¤á¡¢¥¨¥é¡¼¥³¡¼
-¥É¤òÊİ»ı¤¹¤ëÂç°èÊÑ¿ô eb_error ¤òÇÑ»ß¤·¤¿¡£
+ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã¯é–¢æ•°ã®æˆ»ã‚Šå€¤ã«ã‚ˆã£ã¦è¡¨ç¾ã•ã‚Œã‚‹ã“ã¨ã«ãªã£ãŸãŸã‚ã€ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼
+ãƒ‰ã‚’ä¿æŒã™ã‚‹å¤§åŸŸå¤‰æ•° eb_error ã‚’å»ƒæ­¢ã—ãŸã€‚
 
 
-8. ´Ø¿ô¤Î²şÌ¾
+8. é–¢æ•°ã®æ”¹å
 
-°Ê²¼¤Î´Ø¿ô¤ò²şÌ¾¤·¤¿¡£
+ä»¥ä¸‹ã®é–¢æ•°ã‚’æ”¹åã—ãŸã€‚
 
-   ¸Å¤¤Ì¾Á°                             ¿·¤·¤¤Ì¾Á°
+   å¤ã„åå‰                             æ–°ã—ã„åå‰
    eb_initialize()                      eb_initialize_book()
    eb_clear()                           eb_finalize_book()
    eb_clear_appendix()                  eb_finalize_appendix()
@@ -248,62 +248,62 @@ _list() ¤È¤¤¤¦Ì¾¾Î¤Î´Ø¿ô¤¬¤¢¤ë¾ì¹ç¤Ë¤Ï¡¢_count() ¤È¤¤¤¦Ì¾¾Î¤Î´Ø¿ô¤òºï
    eb_heading()                         eb_read_heading()
 
 
-9. eb_text()¡¢eb_heading() ¤Ø¤ÎÈÆÍÑ°ú¿ô¤ÎÄÉ²Ã
+9. eb_text()ã€eb_heading() ã¸ã®æ±ç”¨å¼•æ•°ã®è¿½åŠ 
 
-eb_read(), eb_heading() ¤ËÈÆÍÑ¤Î¥Ç¡¼¥¿¼õ¤±ÅÏ¤·ÍÑ°ú¿ô container ¤¬ÄÉ²Ã
-¤µ¤ì¤¿¡£¤³¤Î container ¤Ï¡¢Ç¤°Õ¤Î¥Ç¡¼¥¿ (¤Ø¤Î¥İ¥¤¥ó¥¿) ¤ò¥Õ¥Ã¥¯´Ø¿ô¤Ë
-ÅÏ¤¹¤¿¤á¤Î»Å³İ¤±¤Ç¤¢¤ë¡£eb_text()¡¢eb__heading() ÆâÉô¤Ç¤Ï container ¤Î
-»Ø¤¹Àè¤ÎÎÎ°è½ñ¤­´¹¤¨¤ë¤³¤È¤Ï·è¤·¤Æ¤Ê¤¯¡¢¥Õ¥Ã¥¯´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹ºİ¤Ë°ì½ï¤Ë
-°ú¿ô¤Î°ì¤Ä¤È¤·¤ÆÅÏ¤¹¤À¤±¤Ç¤¢¤ë (²Ã¤¨¤Æ eb_text()¡¢eb_heading() ¤Ï°ú¿ô
-¤Î½ç½ø¤¬ÊÑ¹¹¤µ¤ì¡¢¤µ¤é¤Ë eb_read_text()¡¢eb_raed_heading() ¤Ë²şÌ¾¤µ¤ì
-¤¿¡£5. ¤È 9. ¤â»²¾È¤Î¤³¤È)
+eb_read(), eb_heading() ã«æ±ç”¨ã®ãƒ‡ãƒ¼ã‚¿å—ã‘æ¸¡ã—ç”¨å¼•æ•° container ãŒè¿½åŠ 
+ã•ã‚ŒãŸã€‚ã“ã® container ã¯ã€ä»»æ„ã®ãƒ‡ãƒ¼ã‚¿ (ã¸ã®ãƒã‚¤ãƒ³ã‚¿) ã‚’ãƒ•ãƒƒã‚¯é–¢æ•°ã«
+æ¸¡ã™ãŸã‚ã®ä»•æ›ã‘ã§ã‚ã‚‹ã€‚eb_text()ã€eb__heading() å†…éƒ¨ã§ã¯ container ã®
+æŒ‡ã™å…ˆã®é ˜åŸŸæ›¸ãæ›ãˆã‚‹ã“ã¨ã¯æ±ºã—ã¦ãªãã€ãƒ•ãƒƒã‚¯é–¢æ•°ã‚’å‘¼ã³å‡ºã™éš›ã«ä¸€ç·’ã«
+å¼•æ•°ã®ä¸€ã¤ã¨ã—ã¦æ¸¡ã™ã ã‘ã§ã‚ã‚‹ (åŠ ãˆã¦ eb_text()ã€eb_heading() ã¯å¼•æ•°
+ã®é †åºãŒå¤‰æ›´ã•ã‚Œã€ã•ã‚‰ã« eb_read_text()ã€eb_raed_heading() ã«æ”¹åã•ã‚Œ
+ãŸã€‚5. ã¨ 9. ã‚‚å‚ç…§ã®ã“ã¨)
 
-   µì: int eb_text(EB_Book *book, EB_Appendix *appendix,
+   æ—§: int eb_text(EB_Book *book, EB_Appendix *appendix,
        const EB_Hookset *hookset, char *text, size_t textsize);
-   ¿·: EB_Error_Code eb_read_text(EB_Book *book, EB_Appendix *appendix,
+   æ–°: EB_Error_Code eb_read_text(EB_Book *book, EB_Appendix *appendix,
        EB_Hookset *hookset, void *container, size_t text_max_length,
        char *text, ssize_t *text_length);
 
-   µì: int eb_heading(EB_Book *book, EB_Appendix *appendix,
+   æ—§: int eb_heading(EB_Book *book, EB_Appendix *appendix,
        const EB_Hookset *hookset, char *text, size_t textsize);
-   ¿·: EB_Error_Code eb_read_heading(EB_Book *book, EB_Appendix *appendix,
+   æ–°: EB_Error_Code eb_read_heading(EB_Book *book, EB_Appendix *appendix,
        EB_Hookset *hookset, void *container, size_t text_max_length,
        char *text, ssize_t *text_length);
 
 
-10. ¥Õ¥Ã¥¯´Ø¿ô¤Î»ÅÍÍ¤Ë´Ø¤¹¤ë²şÄû
+10. ãƒ•ãƒƒã‚¯é–¢æ•°ã®ä»•æ§˜ã«é–¢ã™ã‚‹æ”¹è¨‚
 
-ËÜÊ¸¤Î²Ã¹©¤ËÍÑ¤¤¤ë¥Õ¥Ã¥¯´Ø¿ô¤Î»ÅÍÍ¤¬²ş¤á¤é¤ì¤¿¡£¤Ş¤º¡¢¿·µì¤Ç¥×¥í¥È¥¿¥¤
-¥×Àë¸À¤Ï¼¡¤Î¤è¤¦¤Ë°Û¤Ê¤ë¡£
+æœ¬æ–‡ã®åŠ å·¥ã«ç”¨ã„ã‚‹ãƒ•ãƒƒã‚¯é–¢æ•°ã®ä»•æ§˜ãŒæ”¹ã‚ã‚‰ã‚ŒãŸã€‚ã¾ãšã€æ–°æ—§ã§ãƒ—ãƒ­ãƒˆã‚¿ã‚¤
+ãƒ—å®£è¨€ã¯æ¬¡ã®ã‚ˆã†ã«ç•°ãªã‚‹ã€‚
 
-   µì: int hook_function(EB_Book *book, EB_Appendix *appendix, char *workbuf,
+   æ—§: int hook_function(EB_Book *book, EB_Appendix *appendix, char *workbuf,
            EB_Hook_Code code, int argc, const int *argv);
-   ¿·: EB_Error_Code hook_function(EB_Book *book, EB_Appendix *appendix,
+   æ–°: EB_Error_Code hook_function(EB_Book *book, EB_Appendix *appendix,
            void *container, EB_Hook_Code hook_code, int argc,
            const unsigned int *argv);
 
-¥Õ¥Ã¥¯´Ø¿ô¤âÌá¤êÃÍ¤¬ EB_Error_Code ¤ËÊÑ¹¹¤µ¤ì¤¿¡£Â¾¤Ë workbuf ¤¬ÇÑ»ß¤µ
-¤ì¤Æ¤¤¤ëÅÀ¡¢container ¤¬ÄÉ²Ã¤µ¤ì¤¿ÅÀ¡¢argv ¤¬ const unsigned int ¤Ø¤Î
-¥İ¥¤¥ó¥¿¤Ë¤Ê¤Ã¤Æ¤¤¤ëÅÀ¤¬ÊÑ¹¹ÅÀ¤È¤·¤Æµó¤²¤é¤ì¤ë¡£
+ãƒ•ãƒƒã‚¯é–¢æ•°ã‚‚æˆ»ã‚Šå€¤ãŒ EB_Error_Code ã«å¤‰æ›´ã•ã‚ŒãŸã€‚ä»–ã« workbuf ãŒå»ƒæ­¢ã•
+ã‚Œã¦ã„ã‚‹ç‚¹ã€container ãŒè¿½åŠ ã•ã‚ŒãŸç‚¹ã€argv ãŒ const unsigned int ã¸ã®
+ãƒã‚¤ãƒ³ã‚¿ã«ãªã£ã¦ã„ã‚‹ç‚¹ãŒå¤‰æ›´ç‚¹ã¨ã—ã¦æŒ™ã’ã‚‰ã‚Œã‚‹ã€‚
 
-container ¤Ï 9. ¤ÇÀâÌÀ¤·¤¿ÄÌ¤ê¡¢ÈÆÍÑ¤Î¥Ç¡¼¥¿¼õ¤±ÅÏ¤·ÍÑ¤Ë»È¤ï¤ì¤ë¡£
-eb_read_text()¡¢eb_read_heading() ¤ÇÅÏ¤·¤¿ÃÍ¤¬¡¢¤½¤Î¤Ş¤Ş¥Õ¥Ã¥¯´Ø¿ô¤ËÅÏ¤Ã
-¤Æ¤¯¤ë¡£
+container ã¯ 9. ã§èª¬æ˜ã—ãŸé€šã‚Šã€æ±ç”¨ã®ãƒ‡ãƒ¼ã‚¿å—ã‘æ¸¡ã—ç”¨ã«ä½¿ã‚ã‚Œã‚‹ã€‚
+eb_read_text()ã€eb_read_heading() ã§æ¸¡ã—ãŸå€¤ãŒã€ãã®ã¾ã¾ãƒ•ãƒƒã‚¯é–¢æ•°ã«æ¸¡ã£
+ã¦ãã‚‹ã€‚
 
-ºÇ¸å¤Î argv ¤Î·¿¤ÎÊÑ¹¹¤Ë´Ø¤·¤Æ¤Ï¡Ö½¤Àµ¡×¤È¸À¤Ã¤Æ¤âÎÉ¤¯¡¢¤è¤êÅ¬Àµ¤Ê·¿¤Ë
-¤Ê¤Ã¤¿¤À¤±¤Ç¤¢¤ë¡£
+æœ€å¾Œã® argv ã®å‹ã®å¤‰æ›´ã«é–¢ã—ã¦ã¯ã€Œä¿®æ­£ã€ã¨è¨€ã£ã¦ã‚‚è‰¯ãã€ã‚ˆã‚Šé©æ­£ãªå‹ã«
+ãªã£ãŸã ã‘ã§ã‚ã‚‹ã€‚
 
-workbuf ¤¬ÇÑ»ß¤µ¤ì¤¿ÅÀ¤Ï¡¢¥Õ¥Ã¥¯´Ø¿ô¤Î»ÅÍÍ¤Ë¤ª¤±¤ëºÇÂç¤ÎÊÑ¹¹¤È¸À¤¨¤ë¡£
-¤³¤ì¤Ş¤Ç¤Ï¡¢¤³¤Î workbuf ¤ËÂĞ¤·¤Æ¥Æ¥­¥¹¥È¤ò¥»¥Ã¥È¤¹¤ë¤³¤È¤Ç¡¢ËÜÊ¸¤ÎÊ¸
-»úÎó¤äÀ©¸æµ­½Ò»Ò¤òÇ¤°Õ¤ÎÊ¸»úÎó¤ËÃÖ¤­´¹¤¨¤ë»ÅÁÈ¤ß¤À¤Ã¤¿¤¬¡¢3.0 ¤«¤é¤Ï
-eb_write_text*() ¤È¤¤¤¦¿·Àß¤Î´Ø¿ô¤ò»È¤Ã¤Æ½ñ¤­¹ş¤à¡£
+workbuf ãŒå»ƒæ­¢ã•ã‚ŒãŸç‚¹ã¯ã€ãƒ•ãƒƒã‚¯é–¢æ•°ã®ä»•æ§˜ã«ãŠã‘ã‚‹æœ€å¤§ã®å¤‰æ›´ã¨è¨€ãˆã‚‹ã€‚
+ã“ã‚Œã¾ã§ã¯ã€ã“ã® workbuf ã«å¯¾ã—ã¦ãƒ†ã‚­ã‚¹ãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã“ã¨ã§ã€æœ¬æ–‡ã®æ–‡
+å­—åˆ—ã‚„åˆ¶å¾¡è¨˜è¿°å­ã‚’ä»»æ„ã®æ–‡å­—åˆ—ã«ç½®ãæ›ãˆã‚‹ä»•çµ„ã¿ã ã£ãŸãŒã€3.0 ã‹ã‚‰ã¯
+eb_write_text*() ã¨ã„ã†æ–°è¨­ã®é–¢æ•°ã‚’ä½¿ã£ã¦æ›¸ãè¾¼ã‚€ã€‚
 
-   eb_write_text_byte1()       1 ¥Ğ¥¤¥È½ñ¤­¹ş¤ß
-   eb_write_text_byte2()       2 ¥Ğ¥¤¥È½ñ¤­¹ş¤ß
-   eb_write_text_string()      Ê¸»úÎó¤Î½ñ¤­¹ş¤ß
-   eb_write_text()             Ç¤°Õ¤Î¥Ğ¥¤¥ÈÎó¤Î½ñ¤­¹ş¤ß
+   eb_write_text_byte1()       1 ãƒã‚¤ãƒˆæ›¸ãè¾¼ã¿
+   eb_write_text_byte2()       2 ãƒã‚¤ãƒˆæ›¸ãè¾¼ã¿
+   eb_write_text_string()      æ–‡å­—åˆ—ã®æ›¸ãè¾¼ã¿
+   eb_write_text()             ä»»æ„ã®ãƒã‚¤ãƒˆåˆ—ã®æ›¸ãè¾¼ã¿
 
-¤½¤ì¤¾¤ì¤ÎÀµ³Î¤Ê¥×¥í¥È¥¿¥¤¥×Àë¸À¤Ï¼¡¤ÎÄÌ¤ê¡£
+ãã‚Œãã‚Œã®æ­£ç¢ºãªãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—å®£è¨€ã¯æ¬¡ã®é€šã‚Šã€‚
 
    EB_Error_Code eb_write_text_byte1(EB_Book *book, int byte1);
    EB_Error_Code eb_write_text_byte2(EB_Book *book, int byte1, int byte2);
@@ -311,22 +311,22 @@ eb_write_text*() ¤È¤¤¤¦¿·Àß¤Î´Ø¿ô¤ò»È¤Ã¤Æ½ñ¤­¹ş¤à¡£
    EB_Error_Code eb_write_text(EB_Book *book, const char *stream,
        size_t stream_length);
 
-¤³¤ì¤é¤Î´Ø¿ô¤Ï¡¢¥Õ¥Ã¥¯´Ø¿ô¤ÎÃæ¤«¤é¤·¤«¸Æ¤Ó½Ğ¤»¤Ê¤¤¡£³°Éô¤«¤é¸Æ¤Ó½Ğ¤½¤¦
-¤È¤¹¤ë¤È°Û¾ïÆ°ºî¤òµ¯¤³¤¹²ÄÇ½À­¤¬¤¢¤ë¡£
+ã“ã‚Œã‚‰ã®é–¢æ•°ã¯ã€ãƒ•ãƒƒã‚¯é–¢æ•°ã®ä¸­ã‹ã‚‰ã—ã‹å‘¼ã³å‡ºã›ãªã„ã€‚å¤–éƒ¨ã‹ã‚‰å‘¼ã³å‡ºãã†
+ã¨ã™ã‚‹ã¨ç•°å¸¸å‹•ä½œã‚’èµ·ã“ã™å¯èƒ½æ€§ãŒã‚ã‚‹ã€‚
 
-¤Ê¤ª¡¢µìÍè workbuf ¤ò»È¤Ã¤Æ½ñ¤­¹ş¤ó¤Ç¤¤¤¿¤È¤­¤Ï¡¢ËÜÊ¸¤Î½ñ¤­¹ş¤á¤ëÄ¹¤µ
-¤¬ EB_MAXLEN_TEXT_WORK ¥Ğ¥¤¥È¤Ş¤Ç¤À¤Ã¤¿¤¬¡¢¤³¤ÎÀ©¸Â¤Ï¤Ê¤¯¤Ê¤Ã¤¿¡£
+ãªãŠã€æ—§æ¥ workbuf ã‚’ä½¿ã£ã¦æ›¸ãè¾¼ã‚“ã§ã„ãŸã¨ãã¯ã€æœ¬æ–‡ã®æ›¸ãè¾¼ã‚ã‚‹é•·ã•
+ãŒ EB_MAXLEN_TEXT_WORK ãƒã‚¤ãƒˆã¾ã§ã ã£ãŸãŒã€ã“ã®åˆ¶é™ã¯ãªããªã£ãŸã€‚
 
 
-11. eb_finalize_hookset() ¤Î¿·Àß
+11. eb_finalize_hookset() ã®æ–°è¨­
 
-¥Õ¥Ã¥¯¥»¥Ã¥È¤Î¸å»ÏËö¤ò¹Ô¤¦¤¿¤á¤Î´Ø¿ô¡¢eb_finalize_hookset() ¤¬¿·Àß¤µ¤ì
-¤¿¡£
+ãƒ•ãƒƒã‚¯ã‚»ãƒƒãƒˆã®å¾Œå§‹æœ«ã‚’è¡Œã†ãŸã‚ã®é–¢æ•°ã€eb_finalize_hookset() ãŒæ–°è¨­ã•ã‚Œ
+ãŸã€‚
 
    void eb_finalize_hookset(EB_Hookset *hookset);
 
 
-12. ¤½¤ÎÂ¾¤Î´Ø¿ô¤Îºï½ü
+12. ãã®ä»–ã®é–¢æ•°ã®å‰Šé™¤
 
    eb_hook_stopcode_dummy()
    eb_hook_stopcode_mixed()
@@ -335,13 +335,13 @@ eb_write_text*() ¤È¤¤¤¦¿·Àß¤Î´Ø¿ô¤ò»È¤Ã¤Æ½ñ¤­¹ş¤à¡£
    eb_multi_entry_have_endword_search()
    eb_multi_entry_have_keyword_search()
    eb_error_message()
-   ¢¨ eb_error_message2() ¤¬ eb_error_message() ¤Ë²şÌ¾¤µ¤ì¡¢½¾Íè¤Î
-      eb_error_message() ¤ËÁêÅö¤¹¤ë´Ø¿ô¤Ï¤Ê¤¯¤Ê¤Ã¤¿¡£
+   â€» eb_error_message2() ãŒ eb_error_message() ã«æ”¹åã•ã‚Œã€å¾“æ¥ã®
+      eb_error_message() ã«ç›¸å½“ã™ã‚‹é–¢æ•°ã¯ãªããªã£ãŸã€‚
 
 
-13. CPP ¥Ş¥¯¥í¤Î²şÌ¾
+13. CPP ãƒã‚¯ãƒ­ã®æ”¹å
 
-   ¸Å¤¤Ì¾Á°                             ¿·¤·¤¤Ì¾Á°
+   å¤ã„åå‰                             æ–°ã—ã„åå‰
    EB_WORD_ALPHA                        EB_WORD_ALPHABET
    EB_MAXLEN_WORD                       EB_MAX_WORD_LENGTH
    EB_MAXLEN_EB_TITLE                   EB_MAX_EB_TITLE_LENGTH
@@ -355,36 +355,36 @@ eb_write_text*() ¤È¤¤¤¦¿·Àß¤Î´Ø¿ô¤ò»È¤Ã¤Æ½ñ¤­¹ş¤à¡£
    EB_MAXLEN_TEXT_WORK                  EB_MAX_TEXT_WORK_LENGTH
 
 
-14. CPP ¥Ş¥¯¥í¤Îºï½ü
+14. CPP ãƒã‚¯ãƒ­ã®å‰Šé™¤
 
-¼¡¤Î¥Ş¥¯¥í¤òºï½ü¤·¤¿¡£
+æ¬¡ã®ãƒã‚¯ãƒ­ã‚’å‰Šé™¤ã—ãŸã€‚
 
    EB_MAX_SEARCHES
 
 
-15. ¥¨¥é¡¼¥³¡¼¥É¤ÎºÆÊÔÀ®
+15. ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã®å†ç·¨æˆ
 
-¥¨¥é¡¼¥³¡¼¥É¤Î¤¦¤Á¡¢»ÈÍÑ¤·¤Æ¤¤¤Ê¤«¤Ã¤¿¤â¤Î¤òºï½ü¤·¡¢¾ò·ï¸¡º÷¡¢Ê£¹ç¸¡º÷
-¤Î¤¿¤á¤ËÉ¬Í×¤Ê¥¨¥é¡¼¥³¡¼¥É¤òÄÉ²Ã¤·¤¿¡£¥¨¥é¡¼¥³¡¼¥É¤Î°ìÍ÷¤Ï eb/error.h
-¤ò»²¾È¤Î¤³¤È¡£
-
-
-16. ¥Æ¥­¥¹¥È¥Õ¥Ã¥¯¤ÎºÆÊÔÀ®
-
-¥Õ¥Ã¥¯¤âºÆÊÔÀ®¤ò¹Ô¤Ã¤¿¡£¥Õ¥Ã¥¯¤Î°ìÍ÷¤Ï eb/text.h ¤ò»²¾È¤Î¤³¤È¡£
+ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã®ã†ã¡ã€ä½¿ç”¨ã—ã¦ã„ãªã‹ã£ãŸã‚‚ã®ã‚’å‰Šé™¤ã—ã€æ¡ä»¶æ¤œç´¢ã€è¤‡åˆæ¤œç´¢
+ã®ãŸã‚ã«å¿…è¦ãªã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã‚’è¿½åŠ ã—ãŸã€‚ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ã®ä¸€è¦§ã¯ eb/error.h
+ã‚’å‚ç…§ã®ã“ã¨ã€‚
 
 
-17. EB_FONT_ ¤ÎÃÍ¤ÎÊÑ¹¹
+16. ãƒ†ã‚­ã‚¹ãƒˆãƒ•ãƒƒã‚¯ã®å†ç·¨æˆ
 
-³°»ú¥Õ¥©¥ó¥È¤ÎÂç¤­¤µ¤Î»ØÄê¤Ï¡¢¤³¤ì¤Ş¤Ç¤ÏÀ°¿ô¤Î 16, 24, 30, 48 ¤ò»ØÄê¤·
-¤Æ¤â¤¦¤Ş¤¯¤¤¤Ã¤¿¤¬¡¢º£¸å¤ÏÉ¬¤º°Ê²¼¤Î CPP ¥Ş¥¯¥í¤ò»È¤ï¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¯
-¤Ê¤Ã¤¿¡£
+ãƒ•ãƒƒã‚¯ã‚‚å†ç·¨æˆã‚’è¡Œã£ãŸã€‚ãƒ•ãƒƒã‚¯ã®ä¸€è¦§ã¯ eb/text.h ã‚’å‚ç…§ã®ã“ã¨ã€‚
+
+
+17. EB_FONT_ ã®å€¤ã®å¤‰æ›´
+
+å¤–å­—ãƒ•ã‚©ãƒ³ãƒˆã®å¤§ãã•ã®æŒ‡å®šã¯ã€ã“ã‚Œã¾ã§ã¯æ•´æ•°ã® 16, 24, 30, 48 ã‚’æŒ‡å®šã—
+ã¦ã‚‚ã†ã¾ãã„ã£ãŸãŒã€ä»Šå¾Œã¯å¿…ãšä»¥ä¸‹ã® CPP ãƒã‚¯ãƒ­ã‚’ä½¿ã‚ãªã‘ã‚Œã°ãªã‚‰ãªã
+ãªã£ãŸã€‚
 
         EB_FONT_16,  EB_FONT_24,  EB_FONT_30,  EB_FONT_48
 
-¥Ş¥¯¥í¤ÎÃÍ¤Ï¼¡¤Î¤è¤¦¤Ë¤Ê¤Ã¤Æ¤¤¤ë¡£
+ãƒã‚¯ãƒ­ã®å€¤ã¯æ¬¡ã®ã‚ˆã†ã«ãªã£ã¦ã„ã‚‹ã€‚
 
-			(½¾Íè¤ÎÃÍ)	(¿·¤·¤¤ÃÍ)
+			(å¾“æ¥ã®å€¤)	(æ–°ã—ã„å€¤)
 	EB_FONT_16	16		0
 	EB_FONT_24	24		1
 	EB_FONT_30	30		2
