@@ -1,13 +1,30 @@
-# Macro to add for using GNU gettext.
-# Ulrich Drepper <drepper@cygnus.com>, 1995.
-# Modified by Motoyuki Kasahara, 2000, 01.
-#
-# This file can be copied and used freely without restrictions.  It can
-# be used in projects which are not available under the GNU Public License
-# but which still want to provide support for the GNU gettext functionality.
-# Please note that the actual code is *not* freely available.
-
-# serial 5
+dnl *
+dnl * Copyright (c) 2004  Motoyuki Kasahara
+dnl *
+dnl * Redistribution and use in source and binary forms, with or without
+dnl * modification, are permitted provided that the following conditions
+dnl * are met:
+dnl * 1. Redistributions of source code must retain the above copyright
+dnl *    notice, this list of conditions and the following disclaimer.
+dnl * 2. Redistributions in binary form must reproduce the above copyright
+dnl *    notice, this list of conditions and the following disclaimer in the
+dnl *    documentation and/or other materials provided with the distribution.
+dnl * 3. Neither the name of the project nor the names of its contributors
+dnl *    may be used to endorse or promote products derived from this software
+dnl *    without specific prior written permission.
+dnl * 
+dnl * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+dnl * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+dnl * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+dnl * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+dnl * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+dnl * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+dnl * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+dnl * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+dnl * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+dnl * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+dnl * SUCH DAMAGE.
+dnl *
 
 AC_DEFUN([eb_GNU_GETTEXT], [dnl
   INTLINCS=
@@ -16,18 +33,9 @@ AC_DEFUN([eb_GNU_GETTEXT], [dnl
 
   AC_REQUIRE([AC_PROG_CC])
   AC_REQUIRE([AC_PROG_LIBTOOL])
-  AC_REQUIRE([AC_HEADER_STDC])
-  AC_REQUIRE([AC_C_CONST])
-  AC_REQUIRE([AC_C_INLINE])
-  AC_REQUIRE([AC_TYPE_OFF_T])
-  AC_REQUIRE([AC_TYPE_SIZE_T])
-  AC_REQUIRE([AC_FUNC_ALLOCA])
-  AC_REQUIRE([AC_FUNC_MMAP])
 
-  AC_CHECK_HEADERS([argz.h limits.h locale.h nl_types.h malloc.h string.h \
-unistd.h sys/param.h])
-  AC_CHECK_FUNCS([getcwd munmap putenv setenv setlocale strchr strcasecmp \
-strdup __argz_count __argz_stringify __argz_next])
+  AC_CHECK_HEADERS([locale.h nl_types.h])
+  AC_CHECK_FUNCS([setlocale])
 
   AM_LC_MESSAGES
 

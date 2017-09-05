@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2001, 02  Motoyuki Kasahara
+ * Copyright (c) 2001-2004  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -212,18 +212,11 @@ struct addrinfo {
 /*
  * Functions.
  */
-#ifdef PROTOTYPES
-const char *gai_strerror(int);
-void freeaddrinfo(struct addrinfo *);
-int getaddrinfo(const char *, const char *, const struct addrinfo *,
-    struct addrinfo **);
-int getnameinfo(const struct sockaddr *, socklen_t, char *, 
-    socklen_t, char *, socklen_t, int);
-#else
-const char *gai_strerror();
-void freeaddrinfo();
-int getaddrinfo();
-int getnameinfo();
-#endif
+const char *gai_strerror(int ecode);
+void freeaddrinfo(struct addrinfo *ai);
+int getaddrinfo(const char *nodename, const char *servname,
+    const struct addrinfo *hints, struct addrinfo **res);
+int getnameinfo(const struct sockaddr *sa, socklen_t salen, char *node, 
+    socklen_t nodelen, char *serv, socklen_t servlen, int flags);
 
 #endif /* not GETADDRINFO_H */

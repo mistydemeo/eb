@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 1997, 98, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "build-pre.h"
@@ -21,27 +34,28 @@
 /*
  * Unexported functions.
  */
-static void eb_fix_word EB_P((EB_Book *, const EB_Search *, char *, char *));
-static EB_Error_Code eb_convert_latin EB_P((EB_Book *, const char *, char *,
-    EB_Word_Code *));
-static EB_Error_Code eb_convert_euc_jp EB_P((EB_Book *, const char *, char *,
-    EB_Word_Code *));
-static void eb_convert_katakana_jis EB_P((char *));
-static void eb_convert_hiragana_jis EB_P((char *));
-static void eb_convert_lower_latin EB_P((char *));
-static void eb_convert_lower_jis EB_P((char *));
-static void eb_delete_marks_jis EB_P((char *));
-static void eb_convert_long_vowels_jis EB_P((char *));
-static void eb_delete_long_vowels_jis EB_P((char *));
-static void eb_convert_double_consonants_jis EB_P((char *));
-static void eb_convert_contracted_sounds_jis EB_P((char *));
-static void eb_convert_small_vowels_jis EB_P((char *));
-static void eb_convert_voiced_consonants_jis EB_P((char *));
-static void eb_convert_p_sounds_jis EB_P((char *));
-static void eb_delete_spaces_latin EB_P((char *));
-static void eb_delete_spaces_jis EB_P((char *));
-static void eb_reverse_word_latin EB_P((char *));
-static void eb_reverse_word_jis EB_P((char *));
+static void eb_fix_word(EB_Book *book, const EB_Search *search, char *word,
+    char *canonicalized_word);
+static EB_Error_Code eb_convert_latin(EB_Book *book, const char *input_word,
+    char *word, EB_Word_Code *word_code);
+static EB_Error_Code eb_convert_euc_jp(EB_Book *book, const char *input_word,
+    char *word, EB_Word_Code *word_code);
+static void eb_convert_katakana_jis(char *word);
+static void eb_convert_hiragana_jis(char *word);
+static void eb_convert_lower_latin(char *word);
+static void eb_convert_lower_jis(char *word);
+static void eb_delete_marks_jis(char *word);
+static void eb_convert_long_vowels_jis(char *word);
+static void eb_delete_long_vowels_jis(char *word);
+static void eb_convert_double_consonants_jis(char *word);
+static void eb_convert_contracted_sounds_jis(char *word);
+static void eb_convert_small_vowels_jis(char *word);
+static void eb_convert_voiced_consonants_jis(char *word);
+static void eb_convert_p_sounds_jis(char *word);
+static void eb_delete_spaces_latin(char *word);
+static void eb_delete_spaces_jis(char *word);
+static void eb_reverse_word_latin(char *word);
+static void eb_reverse_word_jis(char *word);
 
 
 /*
@@ -52,12 +66,8 @@ static void eb_reverse_word_jis EB_P((char *));
  * Otherwise, -1 is returned.  It means that an error occurs.
  */
 EB_Error_Code
-eb_set_word(book, input_word, word, canonicalized_word, word_code)
-    EB_Book *book;
-    const char *input_word;
-    char *word;
-    char *canonicalized_word;
-    EB_Word_Code *word_code;
+eb_set_word(EB_Book *book, const char *input_word, char *word,
+    char *canonicalized_word, EB_Word_Code *word_code)
 {
     EB_Error_Code error_code;
     const EB_Search *search;
@@ -147,12 +157,8 @@ eb_set_word(book, input_word, word, canonicalized_word, word_code)
  * Otherwise, -1 is returned.  It means that an error occurs.
  */
 EB_Error_Code
-eb_set_endword(book, input_word, word, canonicalized_word, word_code)
-    EB_Book *book;
-    const char *input_word;
-    char *word;
-    char *canonicalized_word;
-    EB_Word_Code *word_code;
+eb_set_endword(EB_Book *book, const char *input_word, char *word,
+    char *canonicalized_word, EB_Word_Code *word_code)
 {
     EB_Error_Code error_code;
     const EB_Search *search;
@@ -254,12 +260,8 @@ eb_set_endword(book, input_word, word, canonicalized_word, word_code)
  * Otherwise, -1 is returned.  It means that an error occurs.
  */
 EB_Error_Code
-eb_set_keyword(book, input_word, canonicalized_word, word, word_code)
-    EB_Book *book;
-    const char *input_word;
-    char *word;
-    char *canonicalized_word;
-    EB_Word_Code *word_code;
+eb_set_keyword(EB_Book *book, const char *input_word, char *word,
+    char *canonicalized_word, EB_Word_Code *word_code)
 {
     EB_Error_Code error_code;
 
@@ -310,15 +312,9 @@ eb_set_keyword(book, input_word, canonicalized_word, word, word_code)
  * Otherwise, -1 is returned.  It means that an error occurs.
  */
 EB_Error_Code
-eb_set_multiword(book, multi_id, entry_id, input_word, word,
-    canonicalized_word, word_code)
-    EB_Book *book;
-    EB_Multi_Search_Code multi_id;
-    EB_Multi_Entry_Code entry_id;
-    const char *input_word;
-    char *word;
-    char *canonicalized_word;
-    EB_Word_Code *word_code;
+eb_set_multiword(EB_Book *book, EB_Multi_Search_Code multi_id,
+    EB_Multi_Entry_Code entry_id, const char *input_word, char *word,
+    char *canonicalized_word, EB_Word_Code *word_code)
 {
     EB_Error_Code error_code;
     EB_Search *search;
@@ -367,11 +363,8 @@ eb_set_multiword(book, multi_id, entry_id, input_word, word,
  * and `search'.
  */
 static void
-eb_fix_word(book, search, word, canonicalized_word)
-    EB_Book *book;
-    const EB_Search *search;
-    char *word;
-    char *canonicalized_word;
+eb_fix_word(EB_Book *book, const EB_Search *search, char *word,
+    char *canonicalized_word)
 {
     LOG(("in: eb_fix_word(book=%d, word=%s, canonicalized_word=%s)",
 	(int)book->code, eb_quoted_string(word),
@@ -426,7 +419,7 @@ eb_fix_word(book, search, word, canonicalized_word)
     if (search->index_id != 0x70 && search->index_id != 0x90)
 	strcpy(word, canonicalized_word);
 
-    LOG(("out: eb_fix_word(word=%s, canonicalized_word=%s)", 
+    LOG(("out: eb_fix_word(word=%s, canonicalized_word=%s)",
 	eb_quoted_string(word), eb_quoted_string(canonicalized_word)));
 }
 
@@ -438,11 +431,8 @@ eb_fix_word(book, search, word, canonicalized_word)
  * Otherwise, -1 is returned.
  */
 static EB_Error_Code
-eb_convert_latin(book, input_word, word, word_code)
-    EB_Book *book;
-    const char *input_word;
-    char *word;
-    EB_Word_Code *word_code;
+eb_convert_latin(EB_Book *book, const char *input_word, char *word,
+    EB_Word_Code *word_code)
 {
     EB_Error_Code error_code;
     unsigned char *wp = (unsigned char *) word;
@@ -529,21 +519,21 @@ eb_convert_latin(book, input_word, word, word_code)
 static const unsigned int jisx0208_table[] = {
     /* 0x20 -- 0x2f */
     0x2121, 0x212a, 0x2149, 0x2174, 0x2170, 0x2173, 0x2175, 0x2147,
-    0x214a, 0x214b, 0x2176, 0x215c, 0x2124, 0x215d, 0x2125, 0x213f, 
+    0x214a, 0x214b, 0x2176, 0x215c, 0x2124, 0x215d, 0x2125, 0x213f,
     /* 0x30 -- 0x3f */
-    0x2330, 0x2331, 0x2332, 0x2333, 0x2334, 0x2335, 0x2336, 0x2337, 
-    0x2338, 0x2339, 0x2127, 0x2128, 0x2163, 0x2161, 0x2164, 0x2129, 
+    0x2330, 0x2331, 0x2332, 0x2333, 0x2334, 0x2335, 0x2336, 0x2337,
+    0x2338, 0x2339, 0x2127, 0x2128, 0x2163, 0x2161, 0x2164, 0x2129,
     /* 0x40 -- 0x4f */
-    0x2177, 0x2341, 0x2342, 0x2343, 0x2344, 0x2345, 0x2346, 0x2347, 
-    0x2348, 0x2349, 0x234a, 0x234b, 0x234c, 0x234d, 0x234e, 0x234f, 
+    0x2177, 0x2341, 0x2342, 0x2343, 0x2344, 0x2345, 0x2346, 0x2347,
+    0x2348, 0x2349, 0x234a, 0x234b, 0x234c, 0x234d, 0x234e, 0x234f,
     /* 0x50 -- 0x5f */
-    0x2350, 0x2351, 0x2352, 0x2353, 0x2354, 0x2355, 0x2356, 0x2357, 
-    0x2358, 0x2359, 0x235a, 0x214e, 0x2140, 0x214f, 0x2130, 0x2132, 
+    0x2350, 0x2351, 0x2352, 0x2353, 0x2354, 0x2355, 0x2356, 0x2357,
+    0x2358, 0x2359, 0x235a, 0x214e, 0x2140, 0x214f, 0x2130, 0x2132,
     /* 0x60 -- 0x6f */
-    0x2146, 0x2361, 0x2362, 0x2363, 0x2364, 0x2365, 0x2366, 0x2367, 
-    0x2368, 0x2369, 0x236a, 0x236b, 0x236c, 0x236d, 0x236e, 0x236f, 
+    0x2146, 0x2361, 0x2362, 0x2363, 0x2364, 0x2365, 0x2366, 0x2367,
+    0x2368, 0x2369, 0x236a, 0x236b, 0x236c, 0x236d, 0x236e, 0x236f,
     /* 0x70 -- 0x7e */
-    0x2370, 0x2371, 0x2372, 0x2373, 0x2374, 0x2375, 0x2376, 0x2377, 
+    0x2370, 0x2371, 0x2372, 0x2373, 0x2374, 0x2375, 0x2376, 0x2377,
     0x2378, 0x2379, 0x237a, 0x2150, 0x2143, 0x2151, 0x2141
 };
 
@@ -552,16 +542,16 @@ static const unsigned int jisx0208_table[] = {
  */
 static const unsigned int jisx0201_table[] = {
     /* 0xa0 -- 0xaf */
-    0x0000, 0x2123, 0x2156, 0x2157, 0x2122, 0x2126, 0x2572, 0x2521, 
-    0x2523, 0x2525, 0x2527, 0x2529, 0x2563, 0x2565, 0x2567, 0x2543, 
+    0x0000, 0x2123, 0x2156, 0x2157, 0x2122, 0x2126, 0x2572, 0x2521,
+    0x2523, 0x2525, 0x2527, 0x2529, 0x2563, 0x2565, 0x2567, 0x2543,
     /* 0xb0 -- 0xbf */
-    0x213c, 0x2522, 0x2524, 0x2526, 0x2528, 0x252a, 0x252b, 0x252d, 
-    0x252f, 0x2531, 0x2533, 0x2535, 0x2537, 0x2539, 0x253b, 0x253d, 
+    0x213c, 0x2522, 0x2524, 0x2526, 0x2528, 0x252a, 0x252b, 0x252d,
+    0x252f, 0x2531, 0x2533, 0x2535, 0x2537, 0x2539, 0x253b, 0x253d,
     /* 0xc0 -- 0xcf */
-    0x253f, 0x2541, 0x2544, 0x2546, 0x2548, 0x254a, 0x254b, 0x254c, 
-    0x254d, 0x254e, 0x254f, 0x2552, 0x2555, 0x2558, 0x255b, 0x255e, 
+    0x253f, 0x2541, 0x2544, 0x2546, 0x2548, 0x254a, 0x254b, 0x254c,
+    0x254d, 0x254e, 0x254f, 0x2552, 0x2555, 0x2558, 0x255b, 0x255e,
     /* 0xd0 -- 0xdf */
-    0x255f, 0x2560, 0x2561, 0x2562, 0x2564, 0x2566, 0x2568, 0x2569, 
+    0x255f, 0x2560, 0x2561, 0x2562, 0x2564, 0x2566, 0x2568, 0x2569,
     0x256a, 0x256b, 0x256c, 0x256d, 0x256f, 0x2573, 0x212b, 0x212c
 };
 
@@ -573,11 +563,8 @@ static const unsigned int jisx0201_table[] = {
  * Otherwise, -1 is returned.
  */
 static EB_Error_Code
-eb_convert_euc_jp(book, input_word, word, word_code)
-    EB_Book *book;
-    char *word;
-    const char *input_word;
-    EB_Word_Code *word_code;
+eb_convert_euc_jp(EB_Book *book, const char *input_word, char *word,
+    EB_Word_Code *word_code)
 {
     EB_Error_Code error_code;
     unsigned char *wp = (unsigned char *) word;
@@ -647,7 +634,7 @@ eb_convert_euc_jp(book, input_word, word, word_code)
 	     * `c1' is a character in JIS X 0208, or local character.
 	     */
 	    c2 = *inp++;
-	    
+
 	    if (0xa1 <= c2 && c2 <= 0xfe) {
 		c1 &= 0x7f;
 		c2 &= 0x7f;
@@ -721,18 +708,17 @@ eb_convert_euc_jp(book, input_word, word, word_code)
  * Convert KATAKANA to HIRAGANA in `word'.
  */
 static void
-eb_convert_katakana_jis(word)
-    char *word;
+eb_convert_katakana_jis(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_convert_katakana_jis(word=%s)", eb_quoted_string(word)));
 
     while (*wp != '\0' && *(wp + 1) != '\0') {
 	c1 = *wp;
 	c2 = *(wp + 1);
-	
+
 	if (c1 == 0x25 && 0x21 <= c2 && c2 <= 0x76) {
 	    /*
 	     * This is a KATAKANA.  Convert to corresponding HIRAGANA.
@@ -751,18 +737,17 @@ eb_convert_katakana_jis(word)
  * Convert HIRAGANA to KATAKANA in `word'.
  */
 static void
-eb_convert_hiragana_jis(word)
-    char *word;
+eb_convert_hiragana_jis(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_convert_hiragana_jis(word=%s)", eb_quoted_string(word)));
 
     while (*wp != '\0' && *(wp + 1) != '\0') {
 	c1 = *wp;
 	c2 = *(wp + 1);
-	
+
 	if (c1 == 0x24 && 0x21 <= c2 && c2 <= 0x76) {
 	    /*
 	     * This is a HIRAGANA.  Convert to corresponding KATAKANA.
@@ -781,11 +766,10 @@ eb_convert_hiragana_jis(word)
  * Convert lower case to upper case in `word'.
  */
 static void
-eb_convert_lower_latin(word)
-    char *word;
+eb_convert_lower_latin(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
-    
+
     LOG(("in: eb_convert_lower_latin(word=%s)", eb_quoted_string(word)));
 
     while (*wp != '\0') {
@@ -808,18 +792,17 @@ eb_convert_lower_latin(word)
  * Convert lower case to upper case in `word'.
  */
 static void
-eb_convert_lower_jis(word)
-    char *word;
+eb_convert_lower_jis(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_convert_lower_jis(word=%s)", eb_quoted_string(word)));
 
     while (*wp != '\0' && *(wp + 1) != '\0') {
 	c1 = *wp;
 	c2 = *(wp + 1);
-	
+
 	if (c1 == 0x23 && 0x61 <= c2 && c2 <= 0x7a) {
 	    /*
 	     * This is a lower case letter.  Convert to upper case.
@@ -838,19 +821,18 @@ eb_convert_lower_jis(word)
  * Delete some marks in `word'.
  */
 static void
-eb_delete_marks_jis(word)
-    char *word;
+eb_delete_marks_jis(char *word)
 {
     unsigned char *in_wp = (unsigned char *) word;
     unsigned char *out_wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_delete_marks_jis(word=%s)", eb_quoted_string(word)));
 
     while (*in_wp != '\0' && *(in_wp + 1) != '\0') {
 	c1 = *in_wp;
 	c2 = *(in_wp + 1);
-	
+
 	if (c1 != 0x21
 	    || (c2 != 0x26 && c2 != 0x3e && c2 != 0x47 && c2 != 0x5d)) {
 	    /*
@@ -922,19 +904,18 @@ static const char long_vowel_table[] = {
  * Convert long vowel marks in `word' to the previous vowels.
  */
 static void
-eb_convert_long_vowels_jis(word)
-    char *word;
+eb_convert_long_vowels_jis(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
     unsigned char previous_c1 = '\0', previous_c2 = '\0';
-    
+
     LOG(("in: eb_convert_long_vowels_jis(word=%s)", eb_quoted_string(word)));
 
     while (*wp != '\0' && *(wp + 1) != '\0') {
 	c1 = *wp;
 	c2 = *(wp + 1);
-	
+
 	if (c1 == 0x21 && c2 == 0x3c) {
 	    /*
 	     * The is a long vowel mark.
@@ -962,19 +943,18 @@ eb_convert_long_vowels_jis(word)
  * Delete long vowel marks in `word'.
  */
 static void
-eb_delete_long_vowels_jis(word)
-    char *word;
+eb_delete_long_vowels_jis(char *word)
 {
     unsigned char *in_wp = (unsigned char *) word;
     unsigned char *out_wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_delete_long_vowels_jis(word=%s)", eb_quoted_string(word)));
 
     while (*in_wp != '\0' && *(in_wp + 1) != '\0') {
 	c1 = *in_wp;
 	c2 = *(in_wp + 1);
-	
+
 	if (c1 != 0x21 || c2 != 0x3c) {
 	    /*
 	     * The is not a long vowel mark.
@@ -995,19 +975,18 @@ eb_delete_long_vowels_jis(word)
  * Convert the double consonant mark `tu' to `TU'.
  */
 static void
-eb_convert_double_consonants_jis(word)
-    char *word;
+eb_convert_double_consonants_jis(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_convert_double_consonants_jis(word=%s)",
 	eb_quoted_string(word)));
 
     while (*wp != '\0' && *(wp + 1) != '\0') {
 	c1 = *wp;
 	c2 = *(wp + 1);
-	
+
 	if ((c1 == 0x24 || c1 == 0x25) && c2 == 0x43) {
 	    /*
 	     * This is a double sound mark.  Convert to the corresponding
@@ -1029,19 +1008,18 @@ eb_convert_double_consonants_jis(word)
  * (`ya', `yu', `yo', `wa', `ka', `ke' -> `YA', `YU', `YO', `WA', `KA', `KE')
  */
 static void
-eb_convert_contracted_sounds_jis(word)
-    char *word;
+eb_convert_contracted_sounds_jis(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_convert_contracted_sounds_jis(word=%s)",
 	eb_quoted_string(word)));
 
     while (*wp != '\0' && *(wp + 1) != '\0') {
 	c1 = *wp;
 	c2 = *(wp + 1);
-	
+
 	if (c1 == 0x24 || c1 == 0x25) {
 	    /*
 	     * This is HIRAGANA or KANAKANA.
@@ -1068,18 +1046,17 @@ eb_convert_contracted_sounds_jis(word)
  * (`a', `i', `u', `e', `o' -> `A', `I', `U', `E', `O')
  */
 static void
-eb_convert_small_vowels_jis(word)
-    char *word;
+eb_convert_small_vowels_jis(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_convert_small_vowels_jis(word=%s)", eb_quoted_string(word)));
 
     while (*wp != '\0' && *(wp + 1) != '\0') {
 	c1 = *wp;
 	c2 = *(wp + 1);
-	
+
 	if (c1 == 0x24 || c1 == 0x25) {
 	    /*
 	     * This is HIRAGANA or KANAKANA.
@@ -1151,19 +1128,18 @@ static const char voiced_consonant_table[] = {
  * non-contracted sound marks (e.g. `GA' to `KA').
  */
 static void
-eb_convert_voiced_consonants_jis(word)
-    char *word;
+eb_convert_voiced_consonants_jis(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_convert_voiced_consonants_jis(word=%s)",
 	eb_quoted_string(word)));
 
     while (*wp != '\0' && *(wp + 1) != '\0') {
 	c1 = *wp;
 	c2 = *(wp + 1);
-	
+
 	if ((c1 == 0x24 || c1 == 0x25) && 0x21 <= c2 && c2 <= 0x76) {
 	    /*
 	     * This is a voiced constonat mark.  Convert to the
@@ -1184,18 +1160,17 @@ eb_convert_voiced_consonants_jis(word)
  * (`PA', `PI', `PU', `PE', `PO' -> `HA', `HI', `HU', `HE', `HO')
  */
 static void
-eb_convert_p_sounds_jis(word)
-    char *word;
+eb_convert_p_sounds_jis(char *word)
 {
     unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_convert_p_sounds_jis(word=%s)", eb_quoted_string(word)));
 
     while (*wp != '\0' && *(wp + 1) != '\0') {
 	c1 = *wp;
 	c2 = *(wp + 1);
-	
+
 	if (c1 == 0x24 || c1 == 0x25) {
 	    /*
 	     * This is HIRAGANA or KANAKANA.
@@ -1218,12 +1193,11 @@ eb_convert_p_sounds_jis(word)
  * Delete spaces in `word'.
  */
 static void
-eb_delete_spaces_latin(word)
-    char *word;
+eb_delete_spaces_latin(char *word)
 {
     unsigned char *in_wp = (unsigned char *) word;
     unsigned char *out_wp = (unsigned char *) word;
-    
+
     LOG(("in: eb_delete_space_latin(word=%s)", eb_quoted_string(word)));
 
     while (*in_wp != '\0') {
@@ -1246,19 +1220,18 @@ eb_delete_spaces_latin(word)
  * Delete spaces in `word'.
  */
 static void
-eb_delete_spaces_jis(word)
-    char *word;
+eb_delete_spaces_jis(char *word)
 {
     unsigned char *in_wp = (unsigned char *) word;
     unsigned char *out_wp = (unsigned char *) word;
     unsigned char c1, c2;
-    
+
     LOG(("in: eb_delete_space_jis(word=%s)", eb_quoted_string(word)));
 
     while (*in_wp != '\0' && *(in_wp + 1) != '\0') {
 	c1 = *in_wp;
 	c2 = *(in_wp + 1);
-	
+
 	if (c1 != 0x21 || c2 != 0x21) {
 	    /*
 	     * This is not a space character of JIS X 0208.
@@ -1277,13 +1250,12 @@ eb_delete_spaces_jis(word)
 
 /*
  * Reverse a word for ENDWORD SEARCH.
- * 
+ *
  * `word' is a word to reverse.  It must be an alphabetic word.
  * The reversed word is also put into `word'.
  */
 static void
-eb_reverse_word_latin(word)
-    char *word;
+eb_reverse_word_latin(char *word)
 {
     char *p1, *p2;
     int word_length;
@@ -1306,13 +1278,12 @@ eb_reverse_word_latin(word)
 
 /*
  * Reverse a word for ENDWORD SEARCH.
- * 
+ *
  * `word' is a word to reverse.  It must be a KANA word.
  * The reversed word is also put into `word'.
  */
 static void
-eb_reverse_word_jis(word)
-    char *word;
+eb_reverse_word_jis(char *word)
 {
     char *p1, *p2;
     int word_length;

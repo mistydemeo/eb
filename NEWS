@@ -1,380 +1,412 @@
-Major changes in release 4.0.
+バージョン 4.1 における主な変更点
 
-* Refine EB_BookList APIs.
-* Add two error codes: EB_ERR_UNBOUND_BOOKLIST and EB_ERR_NO_SUCH_BOOK.
-* Rename `eb3.m4' to `eb4.m4'.
-* Add `--ebnet-ebnet' option to `cofigure'.
-* Install `eb/flags.h' which is automatically included by `eb/defs.h'.
-* Fix some serious and minor bugs.
+* BSD ライセンスを採用するようにした。
+* ライブラリに eb_narrow_font_png_size(), eb_wide_font_png_size(),
+  eb_bitmap_to_png() を加えた。
+* eb_bitmap_to_xbm(), eb_bitmap_to_xpm(), eb_bitmap_to_gif(),
+  eb_bitmap_to_bmp() は EB_Error_Code を返すようにた。
+* ライブラリが、非圧縮ブロックデータのキャッシュをより効率的に行う
+  ようにした。
+* `ebzip' が START/HONMON ファイルの部分圧縮に対応した。
+  これにより、前方一致検索が速くなった。
+* 日本語ドキュメントを HTML 形式で配布するようにした。
+* 英語のドキュメントを削除した。
 
-Major changes in release 4.0beta3.
+バージョン 4.0.1 における主な変更点:
 
-* Support for Japanese encodings other than EUC-JP.
-* Add some Windows support codes.
-  Use `eb-win32' package to build EB Library on Windows.
-* Add `--text-position' (-p) option to `ebstopcode'.
+* ヘッダファイル内の EB_P, ZIO_P マクロの定義を修正した。
+* `ebzipinfo' は `--skip-content movie' オプションを指定しない限り、
+  動画ファイルの情報も表示するようにした。
+* `ebzip', `ebunzip' の進行状況メッセージは、標準出力ではなく標準エラー
+  出力に表示するようにした。
 
-Major changes in release 4.0beta2.
+バージョン 4.0 における主な変更点:
 
-* Fix serious bugs in search methods.
+* EB_BookList 関連の API を改良した。
+* EB_ERR_UNBOUND_BOOKLIST, EB_ERR_NO_SUCH_BOOK という 2 つのエラー
+  コードを追加した。
+* `eb3.m4' を `eb4.m4' に改名した。
+* `configure' に `--enable-ebnet' オプションを追加した。
+* `eb/flags.h' をインストールするようにした。
+  このファイルは、`eb/defs.h' から自動的に include される。
+* 重大および軽度の不具合をいくつか修正した。
 
-Major changes in release 4.0beta1.
+バージョン 4.0beta3 における主な変更点:
 
-* Rename `ebstopchk' to `ebstopcode'.
-  Also rename its option name from `--stop-code' to `--code'.
-* Delete `--case' and `--suffix' options of `ebappendix'.
-* Add Japanese edition of `ebappendix' document.
-* Add `--book-list' option to `ebinfo'.
-* Add `ebdump' and `ebfixlog' to the `misc' sub-directory.
-* Fix some bugs.
+* EUC-JP 以外の日本語のエンコーディングに対応した。
+* Windows 対応のためのコードをいくつか付加した。
+  Windows 上で EB ライブラリのビルドを行うには、`eb-win32' パッケージ
+  を使用して下さい。
+* `ebstopcode' に `--text-position' (`-p') オプションを追加した。
 
-Major changes in release 4.0beta0.
+バージョン 4.0beta2 における主な変更点:
 
-* Support for remote access.
-* Add the `ebstopchk' command.
+* 検索メソッドの重大な不具合を修正した。
 
-Major changes in release 3.3.2.
+バージョン 4.0beta1 における主な変更点:
 
-* Fix version number of the shared library.
-* Support for Nichi-Ei-Futsu Jiten (YRRS-059).
+* `ebstopchk' を `ebstopcode' に改名した。
+  コマンドの `--stop-code' オプションも `--code' に改名した。
+* `ebappendix' の `--case', `--suffix' オプションを削除した。
+* `ebappendix' の日本語版ドキュメントを用意した。
+* `ebinfo' に `--book-list' オプションを追加した。
+* `ebdump', `ebfixlog' を `misc' サブディレクトリに入れた。
+* 不具合をいくつか修正した。
 
-Major changes in release 3.3.1.
+バージョン 4.0beta0 における主な変更点:
 
-* Support for EPWING Geinus Eiwa Daijiten.
-* Fix a bug in handling of multi-search.
-* Fix a bug of debug mode.
+* 遠隔アクセスに対応した。
+* `ebstopchk' コマンドを追加した。
 
-Major changes in release 3.3.
+バージョン 3.3.2 における主な変更点:
 
-* Fix a bug of eb_read_binary_mpeg().
+* 共有ライブラリのバージョン番号を修正した。
+* 「日英仏辞典」(YRRS-059) に対応した。
 
-Major changes in release 3.3beta3.
+バージョン 3.3.1 における主な変更点:
 
-* Fix multi search.
-* Fix some minor bugs.
+* EPWING 版「ジーニアス英和大辞典」に対応した。
+* 複合検索の処理の不具合を修正した。
+* デバッグモードの不具合を修正した。
 
-Major changes in release 3.3beta2.
+バージョン 3.3 における主な変更点:
 
-* Fix some serious and minor bugs.
-* Install `eb3.m4' in `$(datadir)/aclocal'.
+* eb_read_binary_mpeg() の不具合を修正した。
 
-Major changes in release 3.3beta1.
+バージョン 3.3beta3 における主な変更点:
 
-* Fix some bugs.
+* 複合検索を修正した。
+* 軽度の不具合をいくつか修正した。
 
-Major changes in release 3.3beta0.
+バージョン 3.3beta2 における主な変更点:
 
-* Revise file name and compression type detection codes for EPWING.
-* The eb_multi_title() function is added, which gets a title of the
-  specified multi search.
-  Using this function, the `ebinfo' command also outputs multi search
-  titles when `--multi-search' (or `-m') option is specified.
-* Fix a bug of `ebrefile'.
-* Add two text hooks for inline image support.
+* 重大および軽度の不具合をいくつか修正した。
+* `eb3.m4' は `$(datadir)/aclocal' にインストールするようにした。
 
-Major changes in release 3.2.3.
+バージョン 3.3beta1 における主な変更点:
 
-* Fix a bug in handling of PCM sound data.
-* Add two text hooks.
+* 不具合をいくつか修正した。
 
-Major changes in release 3.2.2.
+バージョン 3.3beta0 における主な変更点:
 
-* Fix bug in handling of appendix.
-* Fix gettext message catalogs.
+* EPWING のファイル名や圧縮タイプを見分けるコードを大幅に書き改めた。
+* 関数 eb_multi_title() を追加した。
+  この関数は、特定の複合検索の題名を取得する。この関数の使用によって、
+  `ebinfo' コマンドで `--multi-search' (`-m') を指定した際に、複合検索
+  の題名を表示するようになった。
+* `ebrefile' の不具合を修正した。
+* インライン画像に対応するため、テキストデータへのフックを 2 種類追加
+  した。
 
-Major changes in release 3.2.1.
+バージョン 3.2.3 における主な変更点:
 
-* Fix a bug in text read routine.
-* Import zlib-1.1.4.
+* PCM 音声データの処理における不具合を修正した。
+* テキストのフックを 2 種類追加した。
 
-Major changes in release 3.2.
+バージョン 3.2.2 における主な変更点:
 
-* No major change.
+* appendix の処理における不具合を修正した。
+* gettext のメッセージカタログを修正した。
 
-Major changes in release 3.2beta3.
+バージョン 3.2.1 における主な変更点:
 
-* Fix some installation problems.
+* テキストの読み込みルーチンを修正した。
+* zlib-1.1.4 を取り込んだ。
 
-Major changes in release 3.2beta2.
+バージョン 3.2 における主な変更点:
 
-* If the EB_DEBUG environment variable is defined, EB Library outputs
-  messages for debugging.
-  `--enable-debug' option of configure is removed.
-* Fix a critical bug in decompression of EBZIP compression format.
+* 特になし。
 
-Major changes in release 3.2beta1.
+バージョン 3.2beta3 における主な変更点:
 
-* The maximum compression level of ebzip is changed from 3 to 5.
-* Fix some bugs.
+* インストールの際に起こる不具合をいくつか修正した。
 
-Major changes in release 3.2beta0.
+バージョン 3.2beta2 における主な変更点:
 
-* Implement eb_backward_text() and revise eb_forward_text().
-* The EB Library programming document (Japanese edition) is back.
-* Samples programs are back.
+* 環境変数 EB_DEBUG が定義されていると、EB ライブラリがデバッグ
+  メッセージを出力するようにした。
+  `configure' の `--enable-debug' オプションを削除した。
+* EBZIP 圧縮形式データの伸長における致命的な不具合を修正した。
 
-Major changes in release 3.1.
+バージョン 3.2beta1 における主な変更点:
 
-* Fix bugs in compressed S-EBXA support.
+* `ebzip' の最高圧縮レベルを 3 から 5 に変更した。
+* 不具合をいくつか修正した。
 
-Major changes in release 3.1beta1.
+バージョン 3.2beta0 における主な変更点:
 
-* Add debug codes.
-  Those codes are enabled by `configure --enable-debug'.
-* Rename eb_initialize_all_subbooks() to eb_load_all_subbooks(), and
-  eb_initialize_all_appendix_subbooks() to eb_load_all_appendix_subbooks().
-  For backward compatibility, the old function names are defined as cpp
-  macros.
-* Support for DUDEN EBG CD-ROMs is back.
-* Fix a bug in handling of CD-ROM mounted on the root directory.
-* Overhaul initialization and finalization routines in the library.
-* Fix some minor bugs.
+* eb_backward_text() を実装し、eb_forward_text() を改良した。
+* EB ライブラリのプログラミングドキュメント (日本語版) を復活させた。
+* サンプルプログラムを復活させた。
 
-Major changes in release 3.1beta0:
+バージョン 3.1 における主な変更点:
 
-* Support compressed S-EBXA CD-ROM book.
-  Support Nippon daihyakka zensho, accessories to Sony DataDiscMan DP-S1000.
+* 圧縮された S-EBXA へのサポートにおける不具合を修正した。
 
-Major changes in release 3.0.1:
+バージョン 3.1beta1 における主な変更点:
 
-* Fix some bugs.
+* デバッグコードを付加した。
+  このコードは `configure --enable-debug' とすると、有効になる。
+* eb_initialize_all_subbooks() を eb_load_all_subbooks() に改名した。
+  eb_initialize_all_appendix_subbooks() も eb_load_all_appendix_subbooks()
+  に改名した。
+  後方互換性のため、これまでの名前は CPP マクロとして定義するように
+  した。
+* "DUDEN" (EBG) への対応が復活した。
+* ルートディレクトリにマウントされた CD-ROM の処理における不具合を
+  修正した。
+* EB ライブラリ内の初期化および後始末ルーチンのオーバーホールを
+  行った。
+* 軽度の不具合をいくつか修正した。
 
-Major changes in release 3.0:
+バージョン 3.1beta0 における主な変更点:
 
-* LANGUAGE data in EB is no longer supported.
+* 圧縮された S-EBXA に対応した。
+* ソニーデータディスクマン DP-S1000 付属の「日本大百科全書」に対応した。
 
-Major changes in release 3.0beta1:
+バージョン 3.0.1 における主な変更点:
 
-* ebrefile is re-written with C.
-  Japanese message catalog is also available.
-* Fix some bugs.
+* 不具合をいくつか修正した。
 
-Major changes in release 3.0beta0:
+バージョン 3.0 における主な変更点:
 
-* Support linintl of GNU gettext 0.10.36.
-  Now utility tools in this package link libiconv, if available.
-  `--with-iconv-includes' and `--with-iconv-libraries' options are added
-  to `configure'.
-* libintl source is deleted.
-  Also `--with-included-gettext' option is deleted from configure.
-  If libintl is not found on the system, NLS support is disabled.
-* Support monochrome graphic data of EPWING and EB.
-* ebzip supports movie, graphic, and sound data files.
-  `-s' and `--skip-content' option is added.
-* Fix many minor bugs.
+* EB の LANGUAGE データへの対応をやめた。
 
-Major changes in release 3.0alpha4:
+バージョン 3.0beta1 における主な変更点:
 
-* Support EPWING movie, and color graphic, data.
-* For EB Library application, provide M4 macro file `eb3.m4'.
-  (autoconf 2.49 is required.)
+* `ebrefile' を C で書き直した。
+  日本語のメッセージカタログも用意した。
+* 不具合をいくつか修正した。
 
-Major changes in release 3.0alpha3:
+バージョン 3.0beta0 における主な変更点:
 
-* Text hook API is revised.
+* GNU gettext 0.10.36 の libintl に対応した。
+  本パッケージのユーティリティツール群は、libiconv が利用可能なら
+  リンクするようになった。
+  `configure' に `--with-iconv-includes', `--with-iconv-libraries' 
+  オプションを追加した。
+* libintl のソースコードを削除した。
+  `configure' の `--with-included-gettext' オプションも削除した。
+  libintl がシステムになければ、NLS (Native/National Language Support)
+  は無効になる。
+* EPWING および EB のモノクロ画像データに対応した。
+* `ebzip' は動画、画像、音声の各データファイルに対応するようになった。
+  `ebzip' に `--skip-content' (`-s') オプションを追加した。
+* 軽度の不具合をたくさん修正した。
 
-Major changes in release 3.0alpha2:
+バージョン 3.0alpha4 における主な変更点:
 
-* Fix many bugs.
+* EPWING の動画データ、カラー画像データに対応した。
+* EB ライブラリを利用したアプリケーション向けに、M4 マクロファイル
+  `eb3.m4' を用意した。(Autoconf 2.49 が必要。)
 
-Major changes in release 3.0alpha1:
+バージョン 3.0alpha3 における主な変更点:
 
-* Supprt EPWING V6 compression format.
-* Ignore case and suffix inconsistency between file and/or directory names.
-* Delete `--suffix' and `--case' options from ebzip.
-* Font API is slightly changed.
-* Fix lots of minor bugs.
+* テキストのフック関連の API を改めた。
 
-Major changes in release 3.0alpha0:
+バージョン 3.0alpha2 における主な変更点:
 
-* Support multi search.
-* Support keyword search.
-* National language support with GNU gettext.
-  Japanese message catalog is available.
-* Experimental Ptheads support.
-  The new option `--enable-pthreads' is added to `configure'.
-* configure automatically detects zlib.
-* API is changed.
-  It has some incompatibities to version 2.x API.
-* Fix many minor bugs.
+* たくさんの不具合を修正した。
 
-Major changes in release 2.3.7:
+バージョン 3.0alpha1 における主な変更点:
 
-* Support EBG ``DUDEN Die sinn-und sachverwandten Worter'' and ``DUDEN
-  Das Fremdworterbuch''.
+* EPWING V6 の圧縮形式に対応したい。
+* ファイル名やディレクトリ名における、大文字/小文字や接尾子の一貫性
+  の欠如を無視するようにした。
+* `ebzip' の `--suffix', `--case' オプションを削除した。
+* フォント関連の API を若干ながら変更した。
+* 軽度の不具合を、かなり色々と修正した。
 
-Major changes in release 2.3.6:
+バージョン 3.0alpha0 における主な変更点:
 
-* Fix a bug for "Nihongo Goi Taikei" (EPWING, Iwanami Shoten).
-* Fix a bug for "EDICT" (JIS X 4081, free distribution).
+* 複合検索に対応した。
+* 条件検索に対応した。
+* GNU gettext を用いた NLS (Native/National Language Support)。
+  日本語のメッセージカタログを用意した。
+* 実験的ながら Pthread に対応した。
+  `configure' に `--enable-pthreads' オプションを追加した。
+* `configure' が、自動的に zlib を見つけ出すようにした。
+* API を変更した。
+  バージョン 2.x の API とは、非互換な点がいくつかある。
+* 軽度の不具合をたくさん修正した。
 
-Major changes in release 2.3.5:
+バージョン 2.3.7 における主な変更点:
 
-* No major change.
+* "DUDEN Die sinn-und sachverwandten Worter" (EBG) と "DUDEN Das
+  Fremdworterbuch" に対応した。
 
-Major changes in release 2.3.4:
+バージョン 2.3.6 における主な変更点:
 
-* Fix a bug in the EPWING decompression routine.
-* Fix some minor bugs.
+* 「日本語語彙大系」 (EPWING, 岩波書店) で顕在化する不具合を修正した。
+* "EDICT" (JIS X 4081, フリーの辞書) で顕在化する不具合を修正した。
 
-Major changes in release 2.3.3:
+バージョン 2.3.5 における主な変更点:
 
-* Fix version number for shared library.
+* 特になし。
 
-Major changes in release 2.3.2:
+バージョン 2.3.4 における主な変更点:
 
-* Fix a minor bug.
+* EPWING の伸長ルーチンの不具合を修正した。
+* 軽度の不具合をいくつか修正した。
 
-(2.3.1 is not released)
+バージョン 2.3.3 における主な変更点:
 
-Major changes in release 2.3:
+* 共有ライブラリのバージョン番号を修正した。
 
-* No major change.
+バージョン 2.3.2 における主な変更点:
 
-Major changes in release 2.3beta2:
+* 軽度な不具合を修正した。
 
-* No major change.
+(バージョン 2.3.1 はリリースしていない。)
 
-Major changes in release 2.3beta2:
+バージョン 2.3 における主な変更点:
 
-* Fix minor bugs.
+* 特になし。
 
-Major changes in release 2.3beta1:
+バージョン 2.3beta3 における主な変更点:
 
-* Experimental EBXA-C support.
-* Experimental support of automatic stop-code detection.
+* 特になし。
 
-Major changes in release 2.3beta0:
+バージョン 2.3beta2 における主な変更点:
 
-* Support CD-ROM books compressed with the EPWING compression format.
-* Change informational messages of `ebzip'.
-* Fix a bug in `ebrefile'.
-  `ebrefile' didn't find catalog file in the same order as `ebzip' does.
+* 特になし。
 
-Major changes in release 2.2.1:
+バージョン 2.3beta1 における主な変更点:
 
-* Merge samples and samples-ja.
-* Add `--enable-samples' to `configure'.
-* Improve DOS, Windows, OS/2 supports.
+* 実験的ながら EBXA-C に対応した。
+* 実験的ながら、区切り文字 (stop-code) の自動検出に対応した。
 
-Major changes in release 2.2:
+バージョン 2.3beta0 における主な変更点:
 
-* Add documents of EB Library.
+* EPWING 圧縮形式で圧縮された CD-ROM 書籍に対応した。
+* `ebzip' の情報通知メッセージを変更した。
+* `ebrefile' の不具合を修正した。
+  `ebrefile' は `ebzip' と同じ順序でカタログファイルを探しに行って
+  いなかった。
 
-Major changes in release 2.1.2:
+バージョン 2.2.1 における主な変更点:
 
-* Fix an version number of the shared EB library.
-* Use libtool that supports FreeBSD-ELF.
+* samples と samples-ja を統合した。
+* `configure' に `--enable-samples' オプションを追加した。
+* DOS, Windows, OS/2 への対応を改善した。
 
-Major changes in release 2.1.1:
+バージョン 2.2 における主な変更点:
 
-* Add some codes for Windows VC++.
-* Bug fixes.
+* EB ライブラリのドキュメントを追加した。
 
-Major changes in release 2.1:
+バージョン 2.1.2 における主な変更点:
 
-* Bug fixes.
+* 共有ライブラリのバージョン番号を修正した。
+* FreeBSD-ELF に対応した libtool を使うようにした。
 
-Major changes in release 2.1beta2:
+バージョン 2.1.1 における主な変更点:
 
-* Add compression level 3 to `ebzip'.
-* Add the new command `ebrefile'.
+* Windows VC++ 向けのコードをいくつか追加した。
+* 不具合を修正した。
 
-Major changes in release 2.1beta1:
+バージョン 2.1 における主な変更点:
 
-* Bug fixes.
+* 不具合を修正した。
 
-Major changes in release 2.1beta0:
+バージョン 2.1beta2 における主な変更点:
 
-* Add document about `ebfont'.
-* Add Japanese documents.
-* Add `--with-zlib', `--with-zlib-includes', `--with-zlib-libraries'
-  options to `configure'.
-* Support CD-ROM book compression/uncompression.
-* Add the new command `ebzip'.
-* Rename the `--filename-case' option of ebappendix to `--case'.
-* Add `--no-catalogs' option of `ebappendix', again.
-* Add the `--subbook'(-S) option to `ebfont'.
-* Change directory structures `ebfont' generates.
-* Import zlib sources.
-* Bug fixes.
+* `ebzip' に圧縮レベル 3 を新設した。
+* 新たに `ebrefile' コマンドを追加した。
 
-Major changes in release 2.0.3:
+バージョン 2.1beta1 における主な変更点:
 
-* Bug fixes.
+* 不具合を修正した。
 
-Major changes in release 2.0.2:
+バージョン 2.1beta0 における主な変更点:
 
-* Bug fixes.
+* `ebfont' のドキュメントを追加した。
+* 日本語のドキュメントを追加した。
+* `configure' に `--with-zlib', `--with-zlib-includes',
+  `--with-zlib-libraries' オプションを追加した。
+* CD-ROM 書籍の圧縮/伸長に対応した。
+* 新たに `ebzip' コマンドを追加した。
+* `ebappendix' の `--filename-case' オプションを `--case' に改名した。
+* `ebappendix' の `--no-catalogs' オプションを再追加した。
+* `ebfont' に `--subbook' (`-S') オプションを足した。
+* `ebfont' が生成するディレクトリの構造を変更した。
+* zlib ソースコードを取り込むようにした。
+* 不具合を修正した。
 
-Major changes in release 2.0.1:
+バージョン 2.0.3 における主な変更点:
 
-* No major change.
+* 不具合を修正した。
 
-Major changes in release 2.0:
+バージョン 2.0.2 における主な変更点:
 
-* Bug fixes.
+* 不具合を修正した。
 
-Major changes in release 2.0beta1:
+バージョン 2.0.1 における主な変更点:
 
-* Rename the `--filename-cases' option of ebappendix to `--filename-case'.
-* Bug fixes.
+* 特になし。
 
-Major changes in release 2.0beta0:
+バージョン 2.0 における主な変更点:
 
-* Support building a shared version of EB library by using GNU libtool.
-* Change functions' interfaces.
-  EB library has some incompatibilities between 1.0.x and 2.0.
-* Add Texinfo document for `ebinfo'.
-* Support almost features described in JIS X 4081-1996.
-* Change directory layout of the source code distribution.
-* Delete the `--no-catalogs' option of `ebappendix'.
-* Bug fixes.
+* 不具合を修正した。
 
-Major changes in release 1.0.6:
+バージョン 2.0beta1 における主な変更点:
 
-* Bug fixes.
+* `ebappendix' のオプション `--filename-cases' を `--filename-case' に
+  改名した。
+* 不具合を修正した。
 
-Major changes in release 1.0.5:
+バージョン 2.0beta0 における主な変更点:
 
-* Bug fixes.
+* GNU libtool の利用により、EB ライブラリの共有ライブラリ版をコンパイ
+  ルできるようにした。
+* 関数のインターフェースを変更した。
+  EB ライブラリ 1.0.x と 2.0 で、いくつか非互換な箇所が生じた。
+* `ebinfo' の Texinfo ドキュメントを追加した。
+* JIS X 4081-1996 のほとんどの記述に対応した。
+* ソースコード配布パッケージのディレクトリ構成を変更した。
+* `ebappendix' の `--no-catalogs' オプションを削除した。
+* 不具合を修正した。
 
-Major changes in release 1.0.4:
+バージョン 1.0.6 における主な変更点:
 
-* No major change.
+* 不具合を修正した。
 
-Major changes in release 1.0.3:
+バージョン 1.0.5 における主な変更点:
 
-* Support the Concise Oxford dicitionary.  
-* Fix Makefile.am for compilation on multiple architectures.
-  You can compile the package for more than one kind of computer at
-  the same time.
-* Change interface to bitmap conversion functions.
-* Bug fixes.
+* 不具合を修正した。
 
-Major changes in release 1.0.2:
+バージョン 1.0.4 における主な変更点:
 
-* Add functions to the EB library.
-  The functions generate image files of local defined characters
-  in a CD-ROM book.  Supported image formats are XBM, XPM, and GIF.
-* Bug fixes.
+* 特になし。
 
-Major changes in release 1.0.1:
+バージョン 1.0.3 における主な変更点:
 
-* Recognize display control sequences described in JIS X 4081-1996.
-* Support kanji word search for some EPWING books.
-* Support EPWING `Readers eiwa jiten', kenkyusha.
-* Bug fixes.
+* "Concise Oxford dicitionary" に対応した。
+* 複数のアーキテクチャ上でのコンパイルに関する Makefile.am の不具合
+  を修正した。
+  複数の種類のコンピュータ上で、同時に本パッケージをコンパイルできる
+  ようになった。
+* ビットマップの変換関数のインターフェースを変更した。
+* 不具合を修正した。
 
-Major changes in release 1.0:
+バージョン 1.0.2 における主な変更点:
 
-* Bug fixes.
+* EB ライブラリに関数をいくつか追加した。
+  これらの関数は、CD-ROM 書籍が定義している外字の画像ファイルを生成
+  する。対応している画像形式は、XBM, XPM と GIF。
+* 不具合を修正した。
 
-Major changes in release 1.0beta2:
+バージョン 1.0.1 における主な変更点:
 
-* Bug fixes.
 
-Major changes in release 1.0beta1:
+バージョン 1.0 における主な変更点:
 
-* Change the format of appendix data files.
-* Bug fixes.
+* 不具合を修正した。
+
+バージョン 1.0beta2 における主な変更点:
+
+* 不具合を修正した。
+
+バージョン 1.0beta1 における主な変更点:
+
+* appendix データファイルの形式を変更した。
+* 不具合を修正した。

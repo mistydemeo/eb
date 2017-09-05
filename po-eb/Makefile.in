@@ -29,9 +29,10 @@ prefix = @prefix@
 datadir = @datadir@
 localedir = @localedir@
 
+mkdir_p = @mkdir_p@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(mkdir_p)
 
 MSGFMT = @MSGFMT@
 XGETTEXT = @XGETTEXT@

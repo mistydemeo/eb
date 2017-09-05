@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2001  Motoyuki Kasahara
+ * Copyright (c) 2001-2004  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -45,7 +45,6 @@
 
 /*
  * This program requires the following Autoconf macros:
- *   AC_C_CONST
  *   AC_STRUCT_IN6_ADDR
  *   AC_STRUCT_SOCKADDR_IN6
  *   AX_STRUCT_SOCKADDR_STORAGE

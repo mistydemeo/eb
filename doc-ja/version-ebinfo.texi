@@ -1,4 +1,0 @@
-@set UPDATED 2003 ǯ 11
-@set UPDATED-MONTH ǯ 11
-@set EDITION 4.0
-@set VERSION 4.0

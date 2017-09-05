@@ -1,16 +1,29 @@
 /*                                                            -*- C -*-
- * Copyright (c) 2001, 02
- *    Motoyuki Kasahara
+ * Copyright (c) 2001-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifndef ZIO_H
@@ -21,17 +34,7 @@ extern "C" {
 #endif
 
 #include <sys/types.h>
-
-#ifdef TIME_WITH_SYS_TIME
-# include <sys/time.h>
-# include <time.h>
-#else
-# ifdef HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
-#endif
+#include <time.h>
 
 /*
  * Header size of the ebzip compression file.
@@ -211,29 +214,21 @@ struct Zio_Struct {
 };
 
 /*
- * Trick for function protypes.
- */
-#ifdef PROTOTYPES
-#define ZIO_P(p) p
-#else
-#define ZIO_P(p) ()
-#endif
-
-/*
  * Function declarations.
  */
 /* zio.c */
-int zio_initialize_library ZIO_P((void));
-void zio_finalize_library ZIO_P((void));
-void zio_initialize ZIO_P((Zio *));
-void zio_finalize ZIO_P((Zio *));
-int zio_set_sebxa_mode ZIO_P((Zio *, off_t, off_t, off_t, off_t));
-int zio_open ZIO_P((Zio *, const char *, Zio_Code));
-void zio_close ZIO_P((Zio *));
-int zio_file ZIO_P((Zio *));
-Zio_Code zio_mode ZIO_P((Zio *));
-off_t zio_lseek ZIO_P((Zio *, off_t, int));
-ssize_t zio_read ZIO_P((Zio *, char *, size_t));
+int zio_initialize_library(void);
+void zio_finalize_library(void);
+void zio_initialize(Zio *zio);
+void zio_finalize(Zio *zio);
+int zio_set_sebxa_mode(Zio *zio, off_t index_location, off_t index_base,
+    off_t zio_start_location, off_t zio_end_location);
+int zio_open(Zio *zio, const char *file_name, Zio_Code zio_code);
+void zio_close(Zio *zio);
+int zio_file(Zio *zio);
+Zio_Code zio_mode(Zio *zio);
+off_t zio_lseek(Zio *zio, off_t offset, int whence);
+ssize_t zio_read(Zio *zio, char *buffer, size_t length);
 
 #ifdef __cplusplus
 }

@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -19,19 +32,8 @@
 
 #include <stdio.h>
 #include <sys/types.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
 
 #include "eb/eb.h"
 #include "eb/error.h"
@@ -41,27 +43,11 @@
 #include "getopt.h"
 #include "ebutils.h"
 
-#ifndef HAVE_STRCHR
-#define strchr index
-#define strrchr rindex
-#endif /* HAVE_STRCHR */
-
 #ifdef ENABLE_NLS
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
 #include <libintl.h>
-#endif
-
-/*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#ifdef PROTOTYPES
-#define EB_P(p) p
-#else
-#define EB_P(p)
-#endif
 #endif
 
 /*
@@ -82,11 +68,11 @@
 /*
  * Unexported functions.
  */
-static void output_error_message EB_P((EB_Error_Code));
-static EB_Error_Code output_booklist EB_P((const char *));
-static EB_Error_Code output_information EB_P((const char *, int));
-static EB_Error_Code output_multi_information EB_P((EB_Book *));
-static void output_help EB_P((void));
+static void output_error_message(EB_Error_Code error_code);
+static EB_Error_Code output_booklist(const char *url);
+static EB_Error_Code output_information(const char *book_path, int multi_flag);
+static EB_Error_Code output_multi_information(EB_Book *book);
+static void output_help(void);
 
 /*
  * Program name and version.
@@ -113,9 +99,7 @@ static struct option long_options[] = {
 #define DEFAULT_BOOK_DIRECTORY	"."
 
 int
-main(argc, argv)
-    int argc;
-    char *argv[];
+main(int argc, char *argv[])
 {
     EB_Error_Code error_code;
     int ch;
@@ -156,7 +140,7 @@ main(argc, argv)
 
 	case 'l':
 	    /*
-	     * Option `-l'.  Display book list on an EBNET server. 
+	     * Option `-l'.  Display book list on an EBNET server.
 	     */
 	    booklist_flag = 1;
 	    break;
@@ -213,8 +197,7 @@ main(argc, argv)
  * Output an error message to standard error.
  */
 static void
-output_error_message(error_code)
-    EB_Error_Code error_code;
+output_error_message(EB_Error_Code error_code)
 {
     fprintf(stderr, "%s: %s\n", invoked_name, eb_error_message(error_code));
     fflush(stderr);
@@ -225,8 +208,7 @@ output_error_message(error_code)
  * Output a list of books that an EBNET server provides.
  */
 static EB_Error_Code
-output_booklist(url)
-    const char *url;
+output_booklist(const char *url)
 {
     EB_BookList booklist;
     EB_Error_Code error_code;
@@ -291,9 +273,7 @@ output_booklist(url)
  * If `multi_flag' is enabled, multi-search information are also output.
  */
 static EB_Error_Code
-output_information(book_path, multi_flag)
-    const char *book_path;
-    int multi_flag;
+output_information(const char *book_path, int multi_flag)
 {
     EB_Book book;
     EB_Error_Code return_code = EB_SUCCESS;
@@ -544,8 +524,7 @@ output_information(book_path, multi_flag)
  * Output information about multi searches.
  */
 static EB_Error_Code
-output_multi_information(book)
-    EB_Book *book;
+output_multi_information(EB_Book *book)
 {
     EB_Error_Code return_code = EB_SUCCESS;
     EB_Error_Code error_code;
@@ -604,7 +583,7 @@ output_multi_information(book)
 	    fputs(_("      candidates: "), stdout);
 	    if (eb_multi_entry_have_candidates(book, multi_list[i], j))
 		fputs(_("exist\n"), stdout);
-	    else 
+	    else
 		fputs(_("not-exist\n"), stdout);
 	}
     }
@@ -619,7 +598,7 @@ output_multi_information(book)
  * Output help message to stdandard out.
  */
 static void
-output_help()
+output_help(void)
 {
     printf(_("Usage: %s [option...] [book-directory]\n"),
 	program_name);

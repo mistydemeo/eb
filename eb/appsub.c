@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 1997, 98, 2000, 01, 02
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "build-pre.h"
@@ -22,18 +35,17 @@
 /*
  * Unexported functions.
  */
-static EB_Error_Code eb_load_appendix_subbook EB_P((EB_Appendix *));
-static EB_Error_Code eb_set_appendix_subbook_eb EB_P((EB_Appendix *,
-    EB_Subbook_Code));
-static EB_Error_Code eb_set_appendix_subbook_epwing EB_P((EB_Appendix *,
-    EB_Subbook_Code));
+static EB_Error_Code eb_load_appendix_subbook(EB_Appendix *appendix);
+static EB_Error_Code eb_set_appendix_subbook_eb(EB_Appendix *appendix,
+    EB_Subbook_Code subbook_code);
+static EB_Error_Code eb_set_appendix_subbook_epwing(EB_Appendix *appendix,
+    EB_Subbook_Code subbook_code);
 
 /*
  * Initialize all subbooks in `appendix'.
  */
 void
-eb_initialize_appendix_subbooks(appendix)
-    EB_Appendix *appendix;
+eb_initialize_appendix_subbooks(EB_Appendix *appendix)
 {
     EB_Appendix_Subbook *subbook;
     int i;
@@ -68,8 +80,7 @@ eb_initialize_appendix_subbooks(appendix)
  * Initialize subbooks in `appendix'.
  */
 void
-eb_finalize_appendix_subbooks(appendix)
-    EB_Appendix *appendix;
+eb_finalize_appendix_subbooks(EB_Appendix *appendix)
 {
     EB_Appendix_Subbook *subbook;
     int i;
@@ -90,8 +101,7 @@ eb_finalize_appendix_subbooks(appendix)
  * Load all subbooks in `appendix'.
  */
 static EB_Error_Code
-eb_load_appendix_subbook(appendix)
-    EB_Appendix *appendix;
+eb_load_appendix_subbook(EB_Appendix *appendix)
 {
     EB_Error_Code error_code;
     EB_Appendix_Subbook *subbook;
@@ -120,7 +130,7 @@ eb_load_appendix_subbook(appendix)
     /*
      * Rewind the APPENDIX file.
      */
-    if (zio_lseek(&subbook->zio, (off_t)0, SEEK_SET) < 0) {
+    if (zio_lseek(&subbook->zio, 0, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
@@ -211,7 +221,7 @@ eb_load_appendix_subbook(appendix)
 		- 1;
 	    if (0x7e < (subbook->wide_end & 0xff))
 		subbook->wide_end += 0xa3;
-    
+
 	    if ((subbook->wide_start & 0xff) < 0x21
 		|| 0x7e < (subbook->wide_start & 0xff)
 		|| subbook->wide_start < 0xa121
@@ -231,8 +241,8 @@ eb_load_appendix_subbook(appendix)
     }
     stop_code_page = eb_uint4(buffer);
     if (0 < stop_code_page) {
-	if (zio_lseek(&subbook->zio,
-	    (off_t)(stop_code_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	if (zio_lseek(&subbook->zio, (stop_code_page - 1) * EB_SIZE_PAGE,
+	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_APP;
 	    goto failed;
 	}
@@ -249,7 +259,7 @@ eb_load_appendix_subbook(appendix)
     /*
      * Rewind the file descriptor, again.
      */
-    if (zio_lseek(&subbook->zio, (off_t)0, SEEK_SET) < 0) {
+    if (zio_lseek(&subbook->zio, 0, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
@@ -276,8 +286,7 @@ eb_load_appendix_subbook(appendix)
  * Load all subbooks in the book.
  */
 EB_Error_Code
-eb_load_all_appendix_subbooks(appendix)
-    EB_Appendix *appendix;
+eb_load_all_appendix_subbooks(EB_Appendix *appendix)
 {
     EB_Error_Code error_code;
     EB_Subbook_Code current_subbook_code;
@@ -346,10 +355,8 @@ eb_load_all_appendix_subbooks(appendix)
  * Get a subbook list in `appendix'.
  */
 EB_Error_Code
-eb_appendix_subbook_list(appendix, subbook_list, subbook_count)
-    EB_Appendix *appendix;
-    EB_Subbook_Code *subbook_list;
-    int *subbook_count;
+eb_appendix_subbook_list(EB_Appendix *appendix, EB_Subbook_Code *subbook_list,
+    int *subbook_count)
 {
     EB_Error_Code error_code;
     EB_Subbook_Code *list_p;
@@ -395,9 +402,7 @@ eb_appendix_subbook_list(appendix, subbook_list, subbook_count)
  * Get the subbook-code of the current subbook in `appendix'.
  */
 EB_Error_Code
-eb_appendix_subbook(appendix, subbook_code)
-    EB_Appendix *appendix;
-    EB_Subbook_Code *subbook_code;
+eb_appendix_subbook(EB_Appendix *appendix, EB_Subbook_Code *subbook_code)
 {
     EB_Error_Code error_code;
 
@@ -438,9 +443,7 @@ eb_appendix_subbook(appendix, subbook_code)
  * Get the directory name of the current subbook in `appendix'.
  */
 EB_Error_Code
-eb_appendix_subbook_directory(appendix, directory)
-    EB_Appendix *appendix;
-    char *directory;
+eb_appendix_subbook_directory(EB_Appendix *appendix, char *directory)
 {
     EB_Error_Code error_code;
 
@@ -483,10 +486,8 @@ eb_appendix_subbook_directory(appendix, directory)
  * Get the directory name of the subbook `subbook_code' in `appendix'.
  */
 EB_Error_Code
-eb_appendix_subbook_directory2(appendix, subbook_code, directory)
-    EB_Appendix *appendix;
-    EB_Subbook_Code subbook_code;
-    char *directory;
+eb_appendix_subbook_directory2(EB_Appendix *appendix,
+    EB_Subbook_Code subbook_code, char *directory)
 {
     EB_Error_Code error_code;
 
@@ -537,9 +538,7 @@ eb_appendix_subbook_directory2(appendix, subbook_code, directory)
  * Set the subbook `subbook_code' as the current subbook.
  */
 EB_Error_Code
-eb_set_appendix_subbook(appendix, subbook_code)
-    EB_Appendix *appendix;
-    EB_Subbook_Code subbook_code;
+eb_set_appendix_subbook(EB_Appendix *appendix, EB_Subbook_Code subbook_code)
 {
     EB_Error_Code error_code;
 
@@ -614,9 +613,7 @@ eb_set_appendix_subbook(appendix, subbook_code)
  * EB* specific section of eb_set_appendix_subbook().
  */
 static EB_Error_Code
-eb_set_appendix_subbook_eb(appendix, subbook_code)
-    EB_Appendix *appendix;
-    EB_Subbook_Code subbook_code;
+eb_set_appendix_subbook_eb(EB_Appendix *appendix, EB_Subbook_Code subbook_code)
 {
     EB_Error_Code error_code;
     EB_Appendix_Subbook *subbook;
@@ -668,9 +665,8 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
  * EPWING specific section of eb_set_appendix_subbook().
  */
 static EB_Error_Code
-eb_set_appendix_subbook_epwing(appendix, subbook_code)
-    EB_Appendix *appendix;
-    EB_Subbook_Code subbook_code;
+eb_set_appendix_subbook_epwing(EB_Appendix *appendix,
+    EB_Subbook_Code subbook_code)
 {
     EB_Error_Code error_code;
     EB_Appendix_Subbook *subbook;
@@ -706,7 +702,7 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
     }
 
     eb_compose_path_name3(appendix->path, subbook->directory_name,
-	subbook->data_directory_name, subbook->file_name, 
+	subbook->data_directory_name, subbook->file_name,
 	appendix_path_name);
     eb_path_name_zio_code(appendix_path_name, ZIO_PLAIN, &zio_code);
 
@@ -734,8 +730,7 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
  * Unset the current subbook.
  */
 void
-eb_unset_appendix_subbook(appendix)
-    EB_Appendix *appendix;
+eb_unset_appendix_subbook(EB_Appendix *appendix)
 {
     eb_lock(&appendix->lock);
     LOG(("in: eb_unset_appendix_subbook(appendix=%d)", (int)appendix->code));

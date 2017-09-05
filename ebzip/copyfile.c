@@ -1,16 +1,29 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1998, 99, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1998-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "ebzip.h"
@@ -25,7 +38,7 @@ static int trap_file = -1;
 /*
  * Unexported function.
  */
-static RETSIGTYPE trap EB_P((int));
+static void trap(int signal_number);
 
 
 /*
@@ -33,33 +46,32 @@ static RETSIGTYPE trap EB_P((int));
  * If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 int
-ebzip_copy_file(out_file_name, in_file_name)
-    const char *out_file_name;
-    const char *in_file_name;
+ebzip_copy_file(const char *out_file_name, const char *in_file_name)
 {
     unsigned char buffer[EB_SIZE_PAGE];
     size_t total_length;
     struct stat in_status, out_status;
     int in_file = -1, out_file = -1;
     ssize_t in_length;
-    int information_interval;
+    int progress_interval;
     int total_slices;
+    struct utimbuf utim;
     int i;
 
     /*
      * Output file name information.
      */
     if (!ebzip_quiet_flag) {
-	printf(_("==> copy %s <==\n"), in_file_name);
-	printf(_("output to %s\n"), out_file_name);
-	fflush(stdout);
+	fprintf(stderr, _("==> copy %s <==\n"), in_file_name);
+	fprintf(stderr, _("output to %s\n"), out_file_name);
+	fflush(stderr);
     }
 
     /*
      * Check for the input file.
      */
     if (stat(in_file_name, &in_status) != 0 || !S_ISREG(in_status.st_mode)) {
-	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name, 
+	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_file_name);
 	goto failed;
     }
@@ -69,8 +81,9 @@ ebzip_copy_file(out_file_name, in_file_name)
      */
     if (is_same_file(out_file_name, in_file_name)) {
 	if (!ebzip_quiet_flag) {
-	    printf(_("the input and output files are the same, skipped.\n\n"));
-	    fflush(stdout);
+	    fprintf(stderr,
+		_("the input and output files are the same, skipped.\n\n"));
+	    fflush(stderr);
 	}
 	return 0;
     }
@@ -79,6 +92,9 @@ ebzip_copy_file(out_file_name, in_file_name)
      * When test mode, return immediately.
      */
     if (ebzip_test_flag) {
+	fprintf(stderr, _("completed (%lu / %lu bytes)\n"),
+	    (unsigned long)in_status.st_size,
+	    (unsigned long)in_status.st_size);
 	fputc('\n', stderr);
 	fflush(stderr);
 	return 0;
@@ -96,7 +112,7 @@ ebzip_copy_file(out_file_name, in_file_name)
 	    }
 	    return 0;
 	}
-	if (ebzip_overwrite_mode == EBZIP_OVERWRITE_QUERY) {
+	if (ebzip_overwrite_mode == EBZIP_OVERWRITE_CONFIRM) {
 	    int y_or_n;
 
 	    fprintf(stderr, _("\nthe file already exists: %s\n"),
@@ -155,7 +171,7 @@ ebzip_copy_file(out_file_name, in_file_name)
      */
     total_length = 0;
     total_slices = (in_status.st_size + EB_SIZE_PAGE - 1) / EB_SIZE_PAGE;
-    information_interval = EBZIP_PROGRESS_INTERVAL_FACTOR;
+    progress_interval = EBZIP_PROGRESS_INTERVAL_FACTOR;
     for (i = 0; i < total_slices; i++) {
 	/*
 	 * Read data from `in_file', and write them to `out_file'.
@@ -166,12 +182,12 @@ ebzip_copy_file(out_file_name, in_file_name)
 		invoked_name, strerror(errno), in_file_name);
 	    goto failed;
 	} else if (in_length == 0) {
-	    fprintf(stderr, _("%s: unexpected EOF: %s\n"), 
+	    fprintf(stderr, _("%s: unexpected EOF: %s\n"),
 		invoked_name, in_file_name);
 	    goto failed;
 	} else if (in_length != EB_SIZE_PAGE
 	    && total_length + in_length != in_status.st_size) {
-	    fprintf(stderr, _("%s: unexpected EOF: %s\n"), 
+	    fprintf(stderr, _("%s: unexpected EOF: %s\n"),
 		invoked_name, in_file_name);
 	    goto failed;
 	}
@@ -189,12 +205,11 @@ ebzip_copy_file(out_file_name, in_file_name)
 	/*
 	 * Output status information unless `quiet' mode.
 	 */
-	if (!ebzip_quiet_flag
-	    && i % information_interval + 1 == information_interval) {
-	    printf(_("%4.1f%% done (%lu / %lu bytes)\n"),
+	if (!ebzip_quiet_flag && (i + 1) % progress_interval == 0) {
+	    fprintf(stderr, _("%4.1f%% done (%lu / %lu bytes)\n"),
 		(double)(i + 1) * 100.0 / (double)total_slices,
 		(unsigned long)total_length, (unsigned long)in_status.st_size);
-	    fflush(stdout);
+	    fflush(stderr);
 	}
     }
 
@@ -202,10 +217,10 @@ ebzip_copy_file(out_file_name, in_file_name)
      * Output the result unless quiet mode.
      */
     if (!ebzip_quiet_flag) {
-	printf(_("completed (%lu / %lu bytes)\n"),
-	    (unsigned long)total_length, (unsigned long)total_length);
-	fputc('\n', stdout);
-	fflush(stdout);
+	fprintf(stderr, _("completed (%lu / %lu bytes)\n"),
+	    (unsigned long)total_length, (unsigned long)in_status.st_size);
+	fputc('\n', stderr);
+	fflush(stderr);
     }
 
     /*
@@ -232,25 +247,20 @@ ebzip_copy_file(out_file_name, in_file_name)
     /*
      * Delete an original file unless the keep flag is set.
      */
-    if (!ebzip_keep_flag && unlink(in_file_name) < 0) {
-	fprintf(stderr, _("%s: failed to unlink the file: %s\n"), invoked_name,
-	    in_file_name);
-	goto failed;
+    if (!ebzip_keep_flag && unlink(in_file_name) < 0){
+	if (!ebzip_quiet_flag) {
+	    fprintf(stderr, _("%s: warning: failed to unlink the file: %s\n"),
+		invoked_name, in_file_name);
+	}
     }
 
     /*
      * Set owner, group, permission, atime and mtime of `out_file'.
      * We ignore return values of `chown', `chmod' and `utime'.
      */
-#if defined(HAVE_UTIME) && defined(HAVE_STRUCT_UTIMBUF)
-    {
-	struct utimbuf utim;
-
-	utim.actime = in_status.st_atime;
-	utim.modtime = in_status.st_mtime;
-	utime(out_file_name, &utim);
-    }
-#endif
+    utim.actime = in_status.st_atime;
+    utim.modtime = in_status.st_mtime;
+    utime(out_file_name, &utim);
 
     return 0;
 
@@ -275,9 +285,8 @@ ebzip_copy_file(out_file_name, in_file_name)
  * If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 int
-ebzip_copy_files_in_directory(out_directory_name, in_directory_name)
-    const char *out_directory_name;
-    const char *in_directory_name;
+ebzip_copy_files_in_directory(const char *out_directory_name,
+    const char *in_directory_name)
 {
     struct dirent *entry;
     DIR *dir = NULL;
@@ -344,19 +353,13 @@ ebzip_copy_files_in_directory(out_directory_name, in_directory_name)
 /*
  * Signal handler.
  */
-static RETSIGTYPE
-trap(signal_number)
-    int signal_number;
+static void
+trap(int signal_number)
 {
     if (0 <= trap_file)
 	close(trap_file);
     if (trap_file_name != NULL)
 	unlink(trap_file_name);
-    
-    exit(1);
 
-    /* not reached */
-#ifndef RETSIGTYPE_VOID
-    return 0;
-#endif
+    exit(1);
 }

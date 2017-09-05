@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 2000-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifndef EB_BUILD_PRE_H
@@ -24,70 +37,20 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-
-#if defined(__STDC__) || defined(MSVC)
-#include <stdarg.h>
-#else
-#include <varargs.h>
-#endif
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#else
-#include <sys/file.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
+#include <stdarg.h>
 #include <limits.h>
-#endif
-
-#if HAVE_DIRENT_H
+#include <unistd.h>
 #include <dirent.h>
-#define NAMLEN(dirent) strlen((dirent)->d_name)
-#else /* not HAVE_DIRENT_H */
-#define dirent direct
-#define NAMLEN(dirent) (dirent)->d_namlen
-#if HAVE_SYS_NDIR_H
-#include <sys/ndir.h>
-#endif /* HAVE_SYS_NDIR_H */
-#if HAVE_SYS_DIR_H
-#include <sys/dir.h>
-#endif /* HAVE_SYS_DIR_H */
-#if HAVE_NDIR_H
-#include <ndir.h>
-#endif /* HAVE_NDIR_H */
-#endif /* not HAVE_DIRENT_H */
+#include <fcntl.h>
+#include <sys/time.h>
 
-#ifdef TIME_WITH_SYS_TIME
-#include <sys/time.h>
-#include <time.h>
-#else
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#else
-#include <time.h>
-#endif
+#ifdef HAVE_DIRECT_H
+#include <direct.h>
 #endif
 
-#if defined(HAVE_DIRECT_H) && defined(HAVE__GETDCWD)
-#include <direct.h>            /* for _getcwd(), _getdcwd() */
+#ifdef HAVE__GETDCWD
 #define getcwd _getcwd
 #define getdcwd _getdcwd
 #endif
@@ -101,32 +64,6 @@
 #endif
 
 /*
- * strchr() and strrchr().
- */
-#ifndef HAVE_STRCHR
-#define strchr index
-#define strrchr rindex
-#endif /* HAVE_STRCHR */
-
-/*
- * memcpy(), memchr(), memcmp(), memmove() and memset().
- */
-#ifndef HAVE_MEMCPY
-#define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef PROTOTYPES
-void *memchr(const void *, int, size_t);
-int memcmp(const void *, const void *, size_t);
-void *memmove(void *, const void *, size_t);
-void *memset(void *, int, size_t);
-#else
-char *memchr();
-int memcmp();
-char *memmove();
-char *memset();
-#endif
-#endif
-
-/*
  * Mutual exclusion lock of Pthreads.
  */
 #ifndef ENABLE_PTHREAD
@@ -137,29 +74,11 @@ char *memset();
 /*
  * stat() macros.
  */
-#ifdef  STAT_MACROS_BROKEN
-#ifdef  S_ISREG
-#undef  S_ISREG
-#endif
-#ifdef  S_ISDIR
-#undef  S_ISDIR
-#endif
-#endif  /* STAT_MACROS_BROKEN */
-
 #ifndef S_ISREG
 #define S_ISREG(m)   (((m) & S_IFMT) == S_IFREG)
 #endif
 #ifndef S_ISDIR
 #define S_ISDIR(m)   (((m) & S_IFMT) == S_IFDIR)
-#endif
-
-/*
- * Whence parameter for lseek().
- */
-#ifndef SEEK_SET
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
 #endif
 
 /*
@@ -185,17 +104,6 @@ char *memset();
 #define ASCII_TOLOWER(c) (('A' <= (c) && (c) <= 'Z') ? (c) + 0x20 : (c))
 
 /*
- * For (void *).
- */
-#ifndef VOID
-#if defined(__STDC__) || defined(__cplusplus)
-#define VOID void
-#else
-#define VOID char
-#endif
-#endif
-
-/*
  * Tricks for gettext.
  */
 #ifdef ENABLE_NLS
@@ -210,28 +118,9 @@ char *memset();
 #define N_(string) (string)
 #endif
 
-#ifndef HAVE_GETCWD
-#define getcwd(d,n) getwd(d)
-#endif
-
-/*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#ifdef PROTOTYPES
-#define EB_P(p) p
-#else
-#define EB_P(p) ()
-#endif
-#endif
-
 /*
  * Fake missing function names.
  */
-#ifndef HAVE_MEMMOVE
-#define memmove eb_memmove
-#endif
-
 #ifndef HAVE_STRCASECMP
 #define strcasecmp eb_strcasecmp
 #define strncasecmp eb_strncasecmp

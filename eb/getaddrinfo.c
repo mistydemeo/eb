@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2001, 02  Motoyuki Kasahara
+ * Copyright (c) 2001-2004  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -30,7 +30,7 @@
  * This program provides getaddrinfo() and getnameinfo() described in
  * RFC2133, 2553 and 3493.  These functions are mainly used for IPv6
  * application to resolve hostname or address.
- * 
+ *
  * This program is designed to be working on traditional IPv4 systems
  * which don't have those functions.  Therefore, this implementation
  * supports IPv4 only.
@@ -39,20 +39,20 @@
  * and traditional IPv4 systems.  Use genuine getaddrinfo() and getnameinfo()
  * provided by system if the system supports IPv6.  Otherwise, use this
  * implementation.
- * 
+ *
  * This program is intended to be used in combination with GNU Autoconf.
- * 
+ *
  * This program also provides freeaddrinfo() and gai_strerror().
  *
  * To use this program in your application, insert the following lines to
  * C source files after including `sys/types.h', `sys/socket.h' and
  * `netdb.h'.  `getaddrinfo.h' defines `struct addrinfo' and AI_, NI_,
  * EAI_ macros.
- * 
+ *
  *    #ifndef HAVE_GETADDRINFO
  *    #include "getaddrinfo.h"
  *    #endif
- * 
+ *
  * Restriction:
  *   getaddrinfo() and getnameinfo() of this program are NOT thread
  *   safe, unless the cpp macro ENABLE_PTHREAD is defined.
@@ -60,11 +60,6 @@
 
 /*
  * Add the following code to your configure.ac (or configure.in).
- *   AC_C_CONST
- *   AC_HEADER_STDC
- *   AC_CHECK_HEADERS(string.h memory.h stdlib.h)
- *   AC_CHECK_FUNCS(memcpy)
- *   AC_REPLACE_FUNCS(memset)
  *   AC_TYPE_SOCKLEN_T
  *   AC_TYPE_IN_PORT_T
  *   AC_DECL_H_ERRNO
@@ -85,19 +80,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
 
 #ifdef ENABLE_PTHREAD
 #include <pthread.h>
@@ -105,21 +89,6 @@
 
 #ifdef ENABLE_NLS
 #include <libintl.h>
-#endif
-
-#ifndef HAVE_MEMCPY
-#define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef PROTOTYPES
-void *memchr(const void *, int, size_t);
-int memcmp(const void *, const void *, size_t);
-void *memmove(void *, const void *, size_t);
-void *memset(void *, int, size_t);
-#else
-char *memchr();
-int memcmp();
-char *memmove();
-char *memset();
-#endif
 #endif
 
 #if !defined(H_ERRNO_DECLARED) && !defined(WINSOCK)
@@ -160,7 +129,7 @@ static char *eai_errlist[] = {
     N_("Non-recoverable failure in name resolution"),
 
     /* EAI_FAMILY */
-    N_("ai_family not supported"),                      
+    N_("ai_family not supported"),
 
     /* EAI_MEMORY */
     N_("Memory allocation failure"),
@@ -198,22 +167,16 @@ static pthread_mutex_t gai_mutex = PTHREAD_MUTEX_INITIALIZER;
 /*
  * Declaration of static functions.
  */
-#ifdef PROTOTYPES
-static int is_integer(const char *);
-static int is_address(const char *);
-static int itoa_length(int);
-#else
-static int is_integer();
-static int is_address();
-static int itoa_length();
-#endif
+static int is_integer(const char *s);
+static int is_address(const char *s);
+static int itoa_length(int n);
+
 
 /*
  * gai_strerror().
  */
 const char *
-gai_strerror(ecode)
-    int ecode;
+gai_strerror(int ecode)
 {
     if (ecode < 0 || ecode > EAI_SYSTEM)
 	return _("Unknown error");
@@ -225,8 +188,7 @@ gai_strerror(ecode)
  * freeaddrinfo().
  */
 void
-freeaddrinfo(ai)
-    struct addrinfo *ai;
+freeaddrinfo(struct addrinfo *ai)
 {
     struct addrinfo *next_ai;
 
@@ -245,8 +207,7 @@ freeaddrinfo(ai)
  * Return 1 if the string `s' represents an integer.
  */
 static int
-is_integer(s)
-    const char *s;
+is_integer(const char *s)
 {
     if (*s == '-' || *s == '+')
 	s++;
@@ -266,8 +227,7 @@ is_integer(s)
  * as "192.168".
  */
 static int
-is_address(s)
-    const char *s;
+is_address(const char *s)
 {
     const static char delimiters[] = {'.', '.', '.', '\0'};
     int i, j;
@@ -291,8 +251,7 @@ is_address(s)
  * sprintf(s, "%d", n).
  */
 static int
-itoa_length(n)
-    int n;
+itoa_length(int n)
 {
     int result = 1;
 
@@ -313,11 +272,8 @@ itoa_length(n)
  * getaddrinfo().
  */
 int
-getaddrinfo(nodename, servname, hints, res)
-    const char *nodename;
-    const char *servname;
-    const struct addrinfo *hints;
-    struct addrinfo **res;
+getaddrinfo(const char *nodename, const char *servname,
+    const struct addrinfo *hints, struct addrinfo **res)
 {
     struct addrinfo *head_res = NULL;
     struct addrinfo *tail_res = NULL;
@@ -506,14 +462,8 @@ getaddrinfo(nodename, servname, hints, res)
  * getnameinfo().
  */
 int
-getnameinfo(sa, salen, node, nodelen, serv, servlen, flags)
-    const struct sockaddr *sa;
-    socklen_t salen;
-    char *node;
-    socklen_t nodelen;
-    char *serv;
-    socklen_t servlen;
-    int flags;
+getnameinfo(const struct sockaddr *sa, socklen_t salen, char *node,
+    socklen_t nodelen, char *serv, socklen_t servlen, int flags)
 {
     const struct sockaddr_in *sa_in = (const struct sockaddr_in *)sa;
     struct hostent *hostent;
@@ -563,7 +513,7 @@ getnameinfo(sa, salen, node, nodelen, serv, servlen, flags)
 	if (flags & NI_NUMERICHOST)
 	    hostent = NULL;
 	else {
-	    hostent = gethostbyaddr((char *)&sa_in->sin_addr, 
+	    hostent = gethostbyaddr((char *)&sa_in->sin_addr,
 		sizeof(struct in_addr), AF_INET);
 	}
 	if (hostent != NULL) {
@@ -584,7 +534,7 @@ getnameinfo(sa, salen, node, nodelen, serv, servlen, flags)
 	    }
 	    strcpy(node, ntoa_address);
 	}
-		
+
     }
 
   end:

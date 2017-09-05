@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 1997, 99, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "build-pre.h"
@@ -30,7 +43,7 @@ EB_Hookset eb_default_hookset;
  * Initialize default hookset.
  */
 void
-eb_initialize_default_hookset()
+eb_initialize_default_hookset(void)
 {
     LOG(("in: eb_initialize_default_hookset()"));
 
@@ -44,8 +57,7 @@ eb_initialize_default_hookset()
  * Initialize a hookset.
  */
 void
-eb_initialize_hookset(hookset)
-    EB_Hookset *hookset;
+eb_initialize_hookset(EB_Hookset *hookset)
 {
     int i;
 
@@ -74,8 +86,7 @@ eb_initialize_hookset(hookset)
  * Finalize a hookset.
  */
 void
-eb_finalize_hookset(hookset)
-    EB_Hookset *hookset;
+eb_finalize_hookset(EB_Hookset *hookset)
 {
     int i;
 
@@ -95,9 +106,7 @@ eb_finalize_hookset(hookset)
  * Set a hook.
  */
 EB_Error_Code
-eb_set_hook(hookset, hook)
-    EB_Hookset *hookset;
-    const EB_Hook *hook;
+eb_set_hook(EB_Hookset *hookset, const EB_Hook *hook)
 {
     EB_Error_Code error_code;
 
@@ -132,9 +141,7 @@ eb_set_hook(hookset, hook)
  * Set a list of hooks.
  */
 EB_Error_Code
-eb_set_hooks(hookset, hook)
-    EB_Hookset *hookset;
-    const EB_Hook *hook;
+eb_set_hooks(EB_Hookset *hookset, const EB_Hook *hook)
 {
     EB_Error_Code error_code;
     const EB_Hook *h;
@@ -217,13 +224,8 @@ static const unsigned char euc_a3_to_ascii_table[] = {
  * Hook which converts a character from EUC-JP to ASCII.
  */
 EB_Error_Code
-eb_hook_euc_to_ascii(book, appendix, container, hook_code, argc, argv)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    VOID *container;
-    EB_Hook_Code hook_code;
-    int argc;
-    const unsigned int *argv;
+eb_hook_euc_to_ascii(EB_Book *book, EB_Appendix *appendix, void *container,
+    EB_Hook_Code hook_code, int argc, const unsigned int *argv)
 {
     int in_code1, in_code2;
     int out_code = 0;
@@ -253,13 +255,9 @@ eb_hook_euc_to_ascii(book, appendix, container, hook_code, argc, argv)
  * Hook for narrow local character.
  */
 EB_Error_Code
-eb_hook_narrow_character_text(book, appendix, container, hook_code, argc, argv)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    VOID *container;
-    EB_Hook_Code hook_code;
-    int argc;
-    const unsigned int *argv;
+eb_hook_narrow_character_text(EB_Book *book, EB_Appendix *appendix,
+    void *container, EB_Hook_Code hook_code, int argc,
+    const unsigned int *argv)
 {
     char alt_text[EB_MAX_ALTERNATION_TEXT_LENGTH + 1];
 
@@ -279,13 +277,9 @@ eb_hook_narrow_character_text(book, appendix, container, hook_code, argc, argv)
  * Hook for wide local character.
  */
 EB_Error_Code
-eb_hook_wide_character_text(book, appendix, container, hook_code, argc, argv)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    VOID *container;
-    EB_Hook_Code hook_code;
-    int argc;
-    const unsigned int *argv;
+eb_hook_wide_character_text(EB_Book *book, EB_Appendix *appendix,
+    void *container, EB_Hook_Code hook_code, int argc,
+    const unsigned int *argv)
 {
     char alt_text[EB_MAX_ALTERNATION_TEXT_LENGTH + 1];
 
@@ -305,13 +299,8 @@ eb_hook_wide_character_text(book, appendix, container, hook_code, argc, argv)
  * Hook for a newline character.
  */
 EB_Error_Code
-eb_hook_newline(book, appendix, container, code, argc, argv)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    void *container;
-    EB_Hook_Code code;
-    int argc;
-    const unsigned int *argv;
+eb_hook_newline(EB_Book *book, EB_Appendix *appendix, void *container,
+    EB_Hook_Code code, int argc, const unsigned int *argv)
 {
     eb_write_text_byte1(book, '\n');
 
@@ -323,13 +312,8 @@ eb_hook_newline(book, appendix, container, code, argc, argv)
  * Hook which does nothing.
  */
 EB_Error_Code
-eb_hook_empty(book, appendix, container, hook_code, argc, argv)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    VOID *container;
-    EB_Hook_Code hook_code;
-    int argc;
-    const unsigned int *argv;
+eb_hook_empty(EB_Book *book, EB_Appendix *appendix, void *container,
+    EB_Hook_Code hook_code, int argc, const unsigned int *argv)
 {
     return EB_SUCCESS;
 }

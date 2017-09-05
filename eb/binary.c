@@ -1,16 +1,29 @@
 /*                                                            -*- C -*-
- * Copyright (c) 2001
- *    Motoyuki Kasahara
+ * Copyright (c) 2001-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "build-pre.h"
@@ -19,21 +32,24 @@
 #include "binary.h"
 #include "build-post.h"
 
-static EB_Error_Code eb_read_binary_generic EB_P((EB_Book *, size_t,
-    char *, ssize_t *));
-static EB_Error_Code eb_read_binary_wave EB_P((EB_Book *, size_t,
-    char *, ssize_t *));
-static EB_Error_Code eb_read_binary_mono_graphic EB_P((EB_Book *, size_t,
-    char *, ssize_t *));
-static EB_Error_Code eb_read_binary_gray_graphic EB_P((EB_Book *, size_t,
-    char *, ssize_t *));
+/*
+ * Unexported function.
+ */
+static EB_Error_Code eb_read_binary_generic(EB_Book *book,
+    size_t binary_max_length, char *binary, ssize_t *binary_length);
+static EB_Error_Code eb_read_binary_wave(EB_Book *book,
+    size_t binary_max_length, char *binary, ssize_t *binary_length);
+static EB_Error_Code eb_read_binary_mono_graphic(EB_Book *book,
+    size_t binary_max_length, char *binary, ssize_t *binary_length);
+static EB_Error_Code eb_read_binary_gray_graphic(EB_Book *book,
+    size_t binary_max_length, char *binary, ssize_t *binary_length);
+
 
 /*
  * Initialize binary context of `book'.
  */
 void
-eb_initialize_binary_context(book)
-    EB_Book *book;
+eb_initialize_binary_context(EB_Book *book)
 {
     LOG(("in: eb_initialize_binary_context(book=%d)", (int)book->code));
 
@@ -53,8 +69,7 @@ eb_initialize_binary_context(book)
  * Finalize binary context of `book'.
  */
 void
-eb_finalize_binary_context(book)
-    EB_Book *book;
+eb_finalize_binary_context(EB_Book *book)
 {
     LOG(("in+out: eb_finalize_binary_context(book=%d)", (int)book->code));
 
@@ -66,8 +81,7 @@ eb_finalize_binary_context(book)
  * Reset binary context of `book'.
  */
 void
-eb_reset_binary_context(book)
-    EB_Book *book;
+eb_reset_binary_context(EB_Book *book)
 {
     LOG(("in: eb_reset_binary_context(book=%d)", (int)book->code));
 
@@ -87,25 +101,25 @@ static const unsigned char mono_bmp_preamble[] = {
     'B', 'M',
 
     /* File size. (set at run time) */
-    0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00,
 
     /* Reserved. */
-    0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00,
 
     /* Offset of bitmap bits part. */
-    0x3e, 0x00, 0x00, 0x00, 
+    0x3e, 0x00, 0x00, 0x00,
 
     /* Size of bitmap info part. */
-    0x28, 0x00, 0x00, 0x00, 
+    0x28, 0x00, 0x00, 0x00,
 
     /* Width. (set at run time) */
-    0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00,
 
     /* Height. (set at run time) */
-    0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00,
 
     /* Planes. */
-    0x01, 0x00, 
+    0x01, 0x00,
 
     /* Bits per pixels. */
     0x01, 0x00,
@@ -136,11 +150,8 @@ static const unsigned char mono_bmp_preamble[] = {
  * Set monochrome bitmap picture as the current binary data.
  */
 EB_Error_Code
-eb_set_binary_mono_graphic(book, position, width, height)
-    EB_Book *book;
-    const EB_Position *position;
-    int width;
-    int height;
+eb_set_binary_mono_graphic(EB_Book *book, const EB_Position *position,
+    int width, int height)
 {
     EB_Error_Code error_code;
     EB_Binary_Context *context;
@@ -174,14 +185,14 @@ width=%d, height=%d)",
     }
 
     /*
-     * If both width and height are 0, 
+     * If both width and height are 0,
      * we get real width, height and position of the graphic data.
      */
     if (width == 0 && height == 0) {
 	char buffer[22];
 
 	if (zio_lseek(&book->subbook_current->text_zio,
-	    (off_t)(position->page - 1) * EB_SIZE_PAGE + position->offset,
+	    (position->page - 1) * EB_SIZE_PAGE + position->offset,
 	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
@@ -245,8 +256,8 @@ width=%d, height=%d)",
     context = &book->binary_context;
     context->code = EB_BINARY_MONO_GRAPHIC;
     context->zio = &book->subbook_current->text_zio;
-    context->location = (off_t)(position->page - 1) * EB_SIZE_PAGE
-	+ position->offset + (width + 7) / 8 * (height - 1);
+    context->location = (position->page - 1) * EB_SIZE_PAGE + position->offset
+	+ (width + 7) / 8 * (height - 1);
     context->size = (width + 7) / 8 * height;
     context->offset = 0;
     context->cache_offset = 0;
@@ -317,25 +328,25 @@ static const unsigned char gray_bmp_preamble[] = {
     'B', 'M',
 
     /* File size. (set at run time) */
-    0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00,
 
     /* Reserved. */
-    0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00,
 
     /* Offset of bitmap bits part. */
-    0x3e, 0x00, 0x00, 0x00, 
+    0x3e, 0x00, 0x00, 0x00,
 
     /* Size of bitmap info part. */
-    0x28, 0x00, 0x00, 0x00, 
+    0x28, 0x00, 0x00, 0x00,
 
     /* Width. (set at run time) */
-    0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00,
 
     /* Height. (set at run time) */
-    0x00, 0x00, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00,
 
     /* Planes. */
-    0x01, 0x00, 
+    0x01, 0x00,
 
     /* Bits per pixels. */
     0x04, 0x00,
@@ -387,11 +398,8 @@ static const unsigned char gray_bmp_preamble[] = {
  * Set monochrome bitmap picture as the current binary data.
  */
 EB_Error_Code
-eb_set_binary_gray_graphic(book, position, width, height)
-    EB_Book *book;
-    const EB_Position *position;
-    int width;
-    int height;
+eb_set_binary_gray_graphic(EB_Book *book, const EB_Position *position,
+    int width, int height)
 {
     EB_Error_Code error_code;
     EB_Binary_Context *context;
@@ -425,14 +433,14 @@ width=%d, height=%d)",
     }
 
     /*
-     * If both width and height are 0, 
+     * If both width and height are 0,
      * we get real width, height and position of the graphic data.
      */
     if (width == 0 && height == 0) {
 	char buffer[22];
 
 	if (zio_lseek(&book->subbook_current->text_zio,
-	    (off_t)(position->page - 1) * EB_SIZE_PAGE + position->offset,
+	    (position->page - 1) * EB_SIZE_PAGE + position->offset,
 	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
@@ -491,8 +499,8 @@ width=%d, height=%d)",
 
     context->code = EB_BINARY_GRAY_GRAPHIC;
     context->zio = &book->subbook_current->text_zio;
-    context->location = (off_t)(position->page - 1) * EB_SIZE_PAGE
-	+ position->offset + (width + 1) / 2 * (height - 1);
+    context->location = (position->page - 1) * EB_SIZE_PAGE + position->offset
+	+ (width + 1) / 2 * (height - 1);
     context->size = (width + 1) / 2 * height;
     context->offset = 0;
     context->cache_offset = 0;
@@ -558,10 +566,8 @@ width=%d, height=%d)",
  * Set WAVE sound as the current binary data.
  */
 EB_Error_Code
-eb_set_binary_wave(book, start_position, end_position)
-    EB_Book *book;
-    const EB_Position *start_position;
-    const EB_Position *end_position;
+eb_set_binary_wave(EB_Book *book, const EB_Position *start_position,
+    const EB_Position *end_position)
 {
     EB_Error_Code error_code;
     EB_Binary_Context *context;
@@ -596,9 +602,9 @@ end_position={%d,%d})",
     /*
      * Set binary context.
      */
-    start_location = (off_t)(start_position->page - 1) * EB_SIZE_PAGE
+    start_location = (start_position->page - 1) * EB_SIZE_PAGE
 	+ start_position->offset;
-    end_location   = (off_t)(end_position->page - 1)   * EB_SIZE_PAGE
+    end_location   = (end_position->page - 1)   * EB_SIZE_PAGE
 	+ end_position->offset;
 
     context = &book->binary_context;
@@ -622,8 +628,8 @@ end_position={%d,%d})",
      * Otherwise, we must read a header in another location.
      *
      * The wave data consists of:
-     * 
-     *     "RIFF" wave-size(4bytes) "WAVE" header-fragment(28bytes) 
+     *
+     *     "RIFF" wave-size(4bytes) "WAVE" header-fragment(28bytes)
      *     data-part-size(4bytes) data
      *
      * wave-size      = "WAVE" + header-fragment + data-part-size + data
@@ -645,8 +651,8 @@ end_position={%d,%d})",
 	context->cache_length = 16;
     } else {
 	if (zio_lseek(context->zio,
-	    (off_t)(book->subbook_current->sound.start_page - 1)
-	    * EB_SIZE_PAGE + 32, SEEK_SET) < 0) {
+	    (book->subbook_current->sound.start_page - 1) * EB_SIZE_PAGE + 32,
+	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
 	}
@@ -716,9 +722,7 @@ end_position={%d,%d})",
  * Set color graphic (BMP or JPEG) as the current binary data.
  */
 EB_Error_Code
-eb_set_binary_color_graphic(book, position)
-    EB_Book *book;
-    const EB_Position *position;
+eb_set_binary_color_graphic(EB_Book *book, const EB_Position *position)
 {
     EB_Error_Code error_code;
     EB_Binary_Context *context;
@@ -753,8 +757,7 @@ eb_set_binary_color_graphic(book, position)
 
     context->code = EB_BINARY_COLOR_GRAPHIC;
     context->zio = &book->subbook_current->graphic_zio;
-    context->location = (off_t)(position->page - 1) * EB_SIZE_PAGE
-	+ position->offset;
+    context->location = (position->page - 1) * EB_SIZE_PAGE + position->offset;
     context->offset = 0;
     context->cache_length = 0;
     context->cache_offset = 0;
@@ -771,7 +774,7 @@ eb_set_binary_color_graphic(book, position)
      * Read header of the graphic data.
      * Note that EB* JPEG file lacks the header.
      */
-    if (zio_read(context->zio, buffer, EB_COLOR_GRAPHIC_HEADER_LENGTH) 
+    if (zio_read(context->zio, buffer, EB_COLOR_GRAPHIC_HEADER_LENGTH)
 	!= EB_COLOR_GRAPHIC_HEADER_LENGTH) {
 	error_code = EB_ERR_FAIL_READ_BINARY;
 	goto failed;
@@ -810,9 +813,7 @@ eb_set_binary_color_graphic(book, position)
  * Set MPEG movie as the current binary data.
  */
 EB_Error_Code
-eb_set_binary_mpeg(book, argv)
-    EB_Book *book;
-    const unsigned int *argv;
+eb_set_binary_mpeg(EB_Book *book, const unsigned int *argv)
 {
     /*
      * `movie_file_name' is base name, and `movie_path_name' is absolute
@@ -847,13 +848,13 @@ eb_set_binary_mpeg(book, argv)
     }
     LOG(("aux: eb_set_binary_mpeg(): movie_file_name=%s", movie_file_name));
 
-    if (eb_find_file_name3(book->path, subbook->directory_name, 
+    if (eb_find_file_name3(book->path, subbook->directory_name,
 	subbook->movie_directory_name, movie_file_name, movie_path_name)
 	!= EB_SUCCESS) {
 	error_code = EB_ERR_NO_SUCH_BINARY;
 	goto failed;
     }
-    eb_compose_path_name3(book->path, subbook->directory_name, 
+    eb_compose_path_name3(book->path, subbook->directory_name,
 	subbook->movie_directory_name, movie_file_name, movie_path_name);
     eb_path_name_zio_code(movie_path_name, ZIO_PLAIN, &zio_code);
 
@@ -966,11 +967,8 @@ eb_read_binary(book, binary_max_length, binary, binary_length)
  * of WAVE sound.
  */
 static EB_Error_Code
-eb_read_binary_generic(book, binary_max_length, binary, binary_length)
-    EB_Book *book;
-    size_t binary_max_length;
-    char *binary;
-    ssize_t *binary_length;
+eb_read_binary_generic(EB_Book *book, size_t binary_max_length,
+    char *binary, ssize_t *binary_length)
 {
     EB_Error_Code error_code;
     EB_Binary_Context *context;
@@ -1033,11 +1031,8 @@ eb_read_binary_generic(book, binary_max_length, binary, binary_length)
  * Read WAVE sound data.
  */
 static EB_Error_Code
-eb_read_binary_wave(book, binary_max_length, binary, binary_length)
-    EB_Book *book;
-    size_t binary_max_length;
-    char *binary;
-    ssize_t *binary_length;
+eb_read_binary_wave(EB_Book *book, size_t binary_max_length, char *binary,
+    ssize_t *binary_length)
 {
     EB_Error_Code error_code;
     EB_Binary_Context *context;
@@ -1066,12 +1061,12 @@ eb_read_binary_wave(book, binary_max_length, binary, binary_length)
 	    copy_length = context->cache_length - context->cache_offset;
 
 	memcpy(binary_p, context->cache_buffer + context->cache_offset,
-	    (size_t)copy_length);
+	    copy_length);
 	binary_p += copy_length;
 	context->cache_offset += copy_length;
 
 	if (context->cache_length <= context->cache_offset)
-	    context->cache_length = 0;	
+	    context->cache_length = 0;
 
 	if (binary_max_length <= *binary_length)
 	    goto succeeded;
@@ -1103,11 +1098,8 @@ eb_read_binary_wave(book, binary_max_length, binary, binary_length)
  * The function also convert the graphic data to BMP.
  */
 static EB_Error_Code
-eb_read_binary_mono_graphic(book, binary_max_length, binary, binary_length)
-    EB_Book *book;
-    size_t binary_max_length;
-    char *binary;
-    ssize_t *binary_length;
+eb_read_binary_mono_graphic(EB_Book *book, size_t binary_max_length,
+    char *binary, ssize_t *binary_length)
 {
     EB_Error_Code error_code;
     EB_Binary_Context *context;
@@ -1150,11 +1142,11 @@ eb_read_binary_mono_graphic(book, binary_max_length, binary, binary_length)
 	    if (binary_max_length - *binary_length
 		< context->cache_length - context->cache_offset)
 		copy_length = binary_max_length - *binary_length;
-	    else 
+	    else
 		copy_length = context->cache_length - context->cache_offset;
 
 	    memcpy(binary_p, context->cache_buffer + context->cache_offset,
-		(size_t)copy_length);
+		copy_length);
 	    binary_p += copy_length;
 	    *binary_length += copy_length;
 	    context->cache_offset += copy_length;
@@ -1183,8 +1175,7 @@ eb_read_binary_mono_graphic(book, binary_max_length, binary, binary_length)
 	 */
 	if (context->offset != 0
 	    && context->offset % line_length == 0
-	    && zio_lseek(context->zio, (off_t)line_length * -2, SEEK_CUR)
-	    < 0) {
+	    && zio_lseek(context->zio, line_length * -2, SEEK_CUR) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
 	}
@@ -1204,11 +1195,11 @@ eb_read_binary_mono_graphic(book, binary_max_length, binary, binary_length)
 	if (context->offset % line_length == 0) {
 	    if (0 < line_pad_length) {
 		if (binary_max_length - *binary_length < line_pad_length) {
-		    memset(context->cache_buffer, 0, (size_t)line_pad_length);
+		    memset(context->cache_buffer, 0, line_pad_length);
 		    context->cache_length = line_pad_length;
 		    context->cache_offset = 0;
 		} else {
-		    memset(binary_p, 0, (size_t)line_pad_length);
+		    memset(binary_p, 0, line_pad_length);
 		    binary_p += line_pad_length;
 		    *binary_length += line_pad_length;
 		}
@@ -1237,11 +1228,8 @@ eb_read_binary_mono_graphic(book, binary_max_length, binary, binary_length)
  * The function also convert the graphic data to BMP.
  */
 static EB_Error_Code
-eb_read_binary_gray_graphic(book, binary_max_length, binary, binary_length)
-    EB_Book *book;
-    size_t binary_max_length;
-    char *binary;
-    ssize_t *binary_length;
+eb_read_binary_gray_graphic(EB_Book *book, size_t binary_max_length,
+    char *binary, ssize_t *binary_length)
 {
     EB_Error_Code error_code;
     EB_Binary_Context *context;
@@ -1284,11 +1272,11 @@ eb_read_binary_gray_graphic(book, binary_max_length, binary, binary_length)
 	    if (binary_max_length - *binary_length
 		< context->cache_length - context->cache_offset)
 		copy_length = binary_max_length - *binary_length;
-	    else 
+	    else
 		copy_length = context->cache_length - context->cache_offset;
 
 	    memcpy(binary_p, context->cache_buffer + context->cache_offset,
-		(size_t)copy_length);
+		copy_length);
 	    binary_p += copy_length;
 	    *binary_length += copy_length;
 	    context->cache_offset += copy_length;
@@ -1317,8 +1305,7 @@ eb_read_binary_gray_graphic(book, binary_max_length, binary, binary_length)
 	 */
 	if (context->offset != 0
 	    && context->offset % line_length == 0
-	    && zio_lseek(context->zio, (off_t)line_length * -2, SEEK_CUR)
-	    < 0) {
+	    && zio_lseek(context->zio, line_length * -2, SEEK_CUR) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_BINARY;
 		goto failed;
 	}
@@ -1338,11 +1325,11 @@ eb_read_binary_gray_graphic(book, binary_max_length, binary, binary_length)
 	if (context->offset % line_length == 0) {
 	    if (0 < line_pad_length) {
 		if (binary_max_length - *binary_length < line_pad_length) {
-		    memset(context->cache_buffer, 0, (size_t)line_pad_length);
+		    memset(context->cache_buffer, 0, line_pad_length);
 		    context->cache_length = line_pad_length;
 		    context->cache_offset = 0;
 		} else {
-		    memset(binary_p, 0, (size_t)line_pad_length);
+		    memset(binary_p, 0, line_pad_length);
 		    binary_p += line_pad_length;
 		    *binary_length += line_pad_length;
 		}
@@ -1370,8 +1357,7 @@ eb_read_binary_gray_graphic(book, binary_max_length, binary, binary_length)
  * Unset current binary.
  */
 void
-eb_unset_binary(book)
-    EB_Book *book;
+eb_unset_binary(EB_Book *book)
 {
     eb_lock(&book->lock);
     LOG(("in: eb_unset_binary(book=%d)", (int)book->code));

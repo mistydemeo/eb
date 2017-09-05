@@ -1,16 +1,29 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 98, 99, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifndef EB_BUILD_POST_H
@@ -191,59 +204,71 @@ extern EB_Hookset eb_default_hookset;
  * Function declarations.
  */
 /* appendix.c */
-void eb_initialize_alt_caches EB_P((EB_Appendix *));
-void eb_finalize_alt_caches EB_P((EB_Appendix *));
+void eb_initialize_alt_caches(EB_Appendix *appendix);
+void eb_finalize_alt_caches(EB_Appendix *appendix);
 
 /* appsub.c */
-void eb_initialize_appendix_subbooks EB_P((EB_Appendix *));
-void eb_finalize_appendix_subbooks EB_P((EB_Appendix *));
+void eb_initialize_appendix_subbooks(EB_Appendix *appendix);
+void eb_finalize_appendix_subbooks(EB_Appendix *appendix);
+
+/* bcd.c */
+unsigned eb_bcd2(const char *stream);
+unsigned eb_bcd4(const char *stream);
+unsigned eb_bcd6(const char *stream);
 
 /* binary.c */
-void eb_initialize_binary_context EB_P((EB_Book *));
-void eb_reset_binary_context EB_P((EB_Book *));
-void eb_finalize_binary_context EB_P((EB_Book *));
+void eb_initialize_binary_context(EB_Book *book);
+void eb_reset_binary_context(EB_Book *book);
+void eb_finalize_binary_context(EB_Book *book);
 
 /* booklist.c */
-EB_Error_Code eb_booklist_add_book EB_P((EB_BookList *, const char *,
-    const char *));
+EB_Error_Code eb_booklist_add_book(EB_BookList *booklist, const char *name,
+    const char *title);
 
 /* filename.c */
-EB_Error_Code eb_canonicalize_path_name EB_P((char *));
-void eb_canonicalize_file_name EB_P((char *));
-EB_Error_Code eb_fix_directory_name EB_P((const char *, char *));
-EB_Error_Code eb_fix_directory_name2 EB_P((const char *, const char *,
-    char *));
-void eb_fix_path_name_suffix EB_P((char *, const char *suffix));
-EB_Error_Code eb_find_file_name EB_P((const char *, const char *, char *));
-EB_Error_Code eb_find_file_name2 EB_P((const char *, const char *,
-    const char *, char *));
-EB_Error_Code eb_find_file_name3 EB_P((const char *, const char *,
-    const char *, const char *, char *));
-void eb_compose_path_name EB_P((const char *, const char *, char *));
-void eb_compose_path_name2 EB_P((const char *, const char *, const char *,
-    char *));
-void eb_compose_path_name3 EB_P((const char *, const char *, const char *,
-    const char *, char *));
-void eb_path_name_zio_code EB_P((const char *, Zio_Code, Zio_Code *));
+EB_Error_Code eb_canonicalize_path_name(char *path_name);
+void eb_canonicalize_file_name(char *file_name);
+EB_Error_Code eb_fix_directory_name(const char *path, char *directory_name);
+EB_Error_Code eb_fix_directory_name2(const char *path,
+    const char *directory_name, char *sub_directory_name);
+void eb_fix_path_name_suffix(char *path_name, const char *suffix);
+EB_Error_Code eb_find_file_name(const char *path_name,
+    const char *target_file_name, char *found_file_name);
+EB_Error_Code eb_find_file_name2(const char *path_name,
+    const char *sub_directory_name, const char *target_file_name,
+    char *found_file_name);
+EB_Error_Code eb_find_file_name3(const char *path_name,
+    const char *sub_directory_name, const char *sub2_directory_name,
+    const char *target_file_name, char *found_file_name);
+void eb_compose_path_name(const char *path_name, const char *file_name,
+    char *composed_path_name);
+void eb_compose_path_name2(const char *path_name,
+    const char *sub_directory_name, const char *file_name, 
+    char *composed_path_name);
+void eb_compose_path_name3(const char *path_name,
+    const char *sub_directory_name, const char *sub2_directory_name,
+    const char *file_name, char *composed_path_name);
+void eb_path_name_zio_code(const char *path_name, Zio_Code default_zio_code,
+    Zio_Code *zio_code);
 
 /* font.c */
-void eb_initialize_fonts EB_P((EB_Book *));
-void eb_load_font_headers EB_P((EB_Book *));
-void eb_finalize_fonts EB_P((EB_Book *));
+void eb_initialize_fonts(EB_Book *book);
+void eb_load_font_headers(EB_Book *book);
+void eb_finalize_fonts(EB_Book *book);
 
 /* hook.c */
-void eb_initialize_default_hookset EB_P((void));
+void eb_initialize_default_hookset(void);
 
 /* jacode.c */
-void eb_jisx0208_to_euc EB_P((char *, const char *));
-void eb_sjis_to_euc EB_P((char *, const char *));
+void eb_jisx0208_to_euc(char *out_string, const char *in_string);
+void eb_sjis_to_euc(char *out_string, const char *in_string);
 
 /* lock.c */
 #ifdef ENABLE_PTHREAD
-void eb_initialize_lock EB_P((EB_Lock *));
-void eb_finalize_lock EB_P((EB_Lock *));
-void eb_lock EB_P((EB_Lock *));
-void eb_unlock EB_P((EB_Lock *));
+void eb_initialize_lock(EB_Lock *lock);
+void eb_finalize_lock(EB_Lock *lock);
+void eb_lock(EB_Lock *lock);
+void eb_unlock(EB_Lock *lock);
 #else /* not ENABLE_PTHREAD */
 #define eb_lock(x)
 #define eb_unlock(x)
@@ -252,87 +277,85 @@ void eb_unlock EB_P((EB_Lock *));
 #endif /* not ENABLE_PTHREAD */
 
 /* log.c */
-void eb_initialize_log EB_P((void));
-const char *eb_quoted_stream EB_P((const char *, size_t));
-const char *eb_quoted_string EB_P((const char *));
+void eb_initialize_log(void);
+const char *eb_quoted_stream(const char *stream, size_t stream_length);
+const char *eb_quoted_string(const char *string);
 
 /* match.c */
-int eb_match_word EB_P((const char *, const char *, size_t));
-int eb_pre_match_word EB_P((const char *, const char *, size_t));
-int eb_exact_match_word_jis EB_P((const char *, const char *, size_t));
-int eb_exact_pre_match_word_jis EB_P((const char *, const char *, size_t));
-int eb_exact_match_word_latin EB_P((const char *, const char *, size_t));
-int eb_exact_pre_match_word_latin EB_P((const char *, const char *, size_t));
-int eb_match_word_kana_single EB_P((const char *, const char *, size_t));
-int eb_match_word_kana_group EB_P((const char *, const char *, size_t));
-int eb_exact_match_word_kana_single EB_P((const char *, const char *, size_t));
-int eb_exact_match_word_kana_group EB_P((const char *, const char *, size_t));
+int eb_match_word(const char *word, const char *pattern, size_t length);
+int eb_pre_match_word(const char *word, const char *pattern, size_t length);
+int eb_exact_match_word_jis(const char *word, const char *pattern,
+    size_t length);
+int eb_exact_pre_match_word_jis(const char *word, const char *pattern,
+    size_t length);
+int eb_exact_match_word_latin(const char *word, const char *pattern,
+    size_t length);
+int eb_exact_pre_match_word_latin(const char *word, const char *pattern,
+    size_t);
+int eb_match_word_kana_single(const char *word, const char *pattern,
+    size_t length);
+int eb_match_word_kana_group(const char *word, const char *pattern,
+    size_t length);
+int eb_exact_match_word_kana_single(const char *word, const char *pattern,
+    size_t length);
+int eb_exact_match_word_kana_group(const char *word, const char *pattern,
+    size_t length);
 
 /* message.c */
-EB_Error_Code eb_initialize_messages EB_P((EB_Book *));
+EB_Error_Code eb_initialize_messages(EB_Book *book);
 
 /* multi.c */
-void eb_initialize_multi_searches EB_P((EB_Book *));
-void eb_finalize_multi_searches EB_P((EB_Book *));
-EB_Error_Code eb_load_multi_searches EB_P((EB_Book *));
-EB_Error_Code eb_load_multi_titles EB_P((EB_Book *));
+void eb_initialize_multi_searches(EB_Book *book);
+void eb_finalize_multi_searches(EB_Book *book);
+EB_Error_Code eb_load_multi_searches(EB_Book *book);
+EB_Error_Code eb_load_multi_titles(EB_Book *book);
 
 /* narwfont.c */
-EB_Error_Code eb_open_narrow_font_file EB_P((EB_Book *, EB_Font_Code));
-EB_Error_Code eb_load_narrow_font_header EB_P((EB_Book *, EB_Font_Code));
-EB_Error_Code eb_load_narrow_font_glyphs EB_P((EB_Book *, EB_Font_Code));
+EB_Error_Code eb_open_narrow_font_file(EB_Book *book, EB_Font_Code font_code);
+EB_Error_Code eb_load_narrow_font_header(EB_Book *book,
+    EB_Font_Code font_code);
+EB_Error_Code eb_load_narrow_font_glyphs(EB_Book *book,
+    EB_Font_Code font_code);
 
 /* search.c */
-void eb_initialize_search_contexts EB_P((EB_Book *));
-void eb_finalize_search_contexts EB_P((EB_Book *));
-void eb_reset_search_contexts EB_P((EB_Book *));
-void eb_initialize_search EB_P((EB_Search *));
-void eb_finalize_search EB_P((EB_Search *));
-void eb_initialize_searches EB_P((EB_Book *book));
-void eb_finalize_searches EB_P((EB_Book *book));
-EB_Error_Code eb_presearch_word EB_P((EB_Book *, EB_Search_Context *));
-EB_Error_Code eb_hit_list EB_P((EB_Book *, int, EB_Hit *, int *));
+void eb_initialize_search_contexts(EB_Book *book);
+void eb_finalize_search_contexts(EB_Book *book);
+void eb_reset_search_contexts(EB_Book *book);
+void eb_initialize_search(EB_Search *search);
+void eb_finalize_search(EB_Search *search);
+void eb_initialize_searches(EB_Book *book);
+void eb_finalize_searches(EB_Book *book);
+EB_Error_Code eb_presearch_word(EB_Book *book, EB_Search_Context *context);
 
 /* setword.c */
-EB_Error_Code eb_set_word EB_P((EB_Book *, const char *, char *, char *,
-    EB_Word_Code *));
-EB_Error_Code eb_set_endword EB_P((EB_Book *, const char *, char *, char *,
-    EB_Word_Code *));
-EB_Error_Code eb_set_keyword EB_P((EB_Book *, const char *, char *, char *,
-    EB_Word_Code *));
-EB_Error_Code eb_set_multiword EB_P((EB_Book *, EB_Multi_Search_Code,
-    EB_Multi_Entry_Code, const char *, char *, char *, EB_Word_Code *));
+EB_Error_Code eb_set_word(EB_Book *book, const char *input_word, char *word,
+    char *canonicalized_word, EB_Word_Code *word_code);
+EB_Error_Code eb_set_endword(EB_Book *book, const char *input_word, char *word,
+    char *canonicalized_word, EB_Word_Code *word_code);
+EB_Error_Code eb_set_keyword(EB_Book *book, const char *input_word, char *word,
+    char *canonicalized_word, EB_Word_Code *word_code);
+EB_Error_Code eb_set_multiword(EB_Book *book, EB_Multi_Search_Code multi_id,
+    EB_Multi_Entry_Code entry_id, const char *input_word, char *word,
+    char *canonicalized_word, EB_Word_Code *word_code);
 
 /* subbook.c */
-void eb_initialize_subbooks EB_P((EB_Book *book));
-void eb_finalize_subbooks EB_P((EB_Book *book));
+void eb_initialize_subbooks(EB_Book *book);
+void eb_finalize_subbooks(EB_Book *book);
 
 /* text.c */
-void eb_initialize_text_context EB_P((EB_Book *));
-void eb_finalize_text_context EB_P((EB_Book *));
-void eb_reset_text_context EB_P((EB_Book *));
-void eb_invalidate_text_context EB_P((EB_Book *));
-EB_Error_Code eb_forward_heading EB_P((EB_Book *));
+void eb_initialize_text_context(EB_Book *book);
+void eb_finalize_text_context(EB_Book *book);
+void eb_reset_text_context(EB_Book *book);
+void eb_invalidate_text_context(EB_Book *book);
+EB_Error_Code eb_forward_heading(EB_Book *book);
 
 /* widefont.c */
-EB_Error_Code eb_open_wide_font_file EB_P((EB_Book *, EB_Font_Code));
-EB_Error_Code eb_load_wide_font_header EB_P((EB_Book *, EB_Font_Code));
-EB_Error_Code eb_load_wide_font_glyphs EB_P((EB_Book *, EB_Font_Code));
-
-/* uint.c */
-unsigned eb_bcd2 EB_P((const char *));
-unsigned eb_bcd4 EB_P((const char *));
-unsigned eb_bcd6 EB_P((const char *));
-
-/* memmove.c */
-#ifdef __STDC__
-void *eb_memmove(void *, const void *, size_t);
-#else
-char *eb_memmove();
-#endif
+EB_Error_Code eb_open_wide_font_file(EB_Book *book, EB_Font_Code font_code);
+EB_Error_Code eb_load_wide_font_header(EB_Book *book, EB_Font_Code font_code);
+EB_Error_Code eb_load_wide_font_glyphs(EB_Book *book, EB_Font_Code font_code);
 
 /* strcasecmp.c */
-int eb_strcasecmp EB_P((const char *, const char *));
-int eb_strncasecmp EB_P((const char *, const char *, size_t));
+int eb_strcasecmp(const char *string1, const char *string2);
+int eb_strncasecmp(const char *string1, const char *string2, size_t n);
 
 #endif /* not EB_BUILD_POST_H */

@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -21,33 +34,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#else
-#include <sys/file.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
 #include <limits.h>
-#endif
+#include <unistd.h>
+#include <fcntl.h>
 
 #ifdef ENABLE_NLS
 #ifdef HAVE_LOCALE_H
@@ -66,30 +57,12 @@
 #include "ebutils.h"
 
 #ifndef HAVE_STRCASECMP
-#ifdef PROTOTYPES
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
-#else
-int strcasecmp()
-int strncasecmp();
 #endif
-#endif
-
-#ifndef HAVE_STRCHR
-#define strchr index
-#define strrchr rindex
-#endif /* HAVE_STRCHR */
 
 #ifndef O_BINARY
 #define O_BINARY 0
-#endif
-
-#ifndef HAVE_STRERROR
-#ifdef PROTOTYPES
-char *strerror(int);
-#else
-char *strerror();
-#endif
 #endif
 
 /*
@@ -104,17 +77,6 @@ char *strerror();
 #endif /* not PATH_MAX */
 
 /*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#ifdef PROTOTYPES
-#define EB_P(p) p
-#else
-#define EB_P(p)
-#endif
-#endif
-
-/*
  * Tricks for gettext.
  */
 #ifdef ENABLE_NLS
@@ -125,7 +87,7 @@ char *strerror();
 #define N_(string) (string)
 #endif
 #else
-#define _(string) (string)       
+#define _(string) (string)
 #define N_(string) (string)
 #endif
 
@@ -162,7 +124,8 @@ typedef int Image_Format_Code;
 typedef struct {
     const char *name;
     const char *suffix;
-    void (*function) EB_P((const char *, int, int, char *, size_t *));
+    EB_Error_Code (*function)(const char *bitmap_data, int width, int height,
+	char *image_data, size_t *image_size);
 } Image_Format;
 
 static Image_Format image_formats[] = {
@@ -170,10 +133,11 @@ static Image_Format image_formats[] = {
     {"xpm", "xpm", eb_bitmap_to_xpm},
     {"gif", "gif", eb_bitmap_to_gif},
     {"bmp", "bmp", eb_bitmap_to_bmp},
+    {"png", "png", eb_bitmap_to_png},
     {NULL, NULL, NULL}
 };
 
-#define MAX_IMAGE_FORMATS	4
+#define MAX_IMAGE_FORMATS	5
 #define MAX_LENGTH_IMAGE_NAME	3
 #define MAX_LENGTH_IMAGE_SUFFIX	3
 
@@ -227,32 +191,34 @@ static int image_count = 0;
 /*
  * Unexported functions.
  */
-static int parse_image_argument EB_P((const char *, Image_Format_Code *,
-    int *));
-static int parse_font_argument EB_P((const char *, EB_Font_Code *, int *));
-static void output_help EB_P((void));
-static int make_book_fonts EB_P((EB_Book *, const char *, EB_Subbook_Code *,
-    int, EB_Font_Code *, int, Image_Format_Code *, int));
-static int make_subbook_fonts EB_P((EB_Book *, const char *, EB_Font_Code *,
-    int, Image_Format_Code *, int));
-static int make_subbook_size_fonts EB_P((EB_Book *, const char *,
-    Image_Format_Code *, int));
-static int make_subbook_size_image_fonts EB_P((EB_Book *, const char *,
-    Image_Format_Code));
-static int save_image_file EB_P((const char *, const char *, size_t));
+static int parse_font_argument(const char *argument, EB_Font_Code *font_list,
+    int *font_count);
+static int parse_image_argument(const char *argument,
+    Image_Format_Code *image_list, int *image_count);
+static void output_help(void);
+static int make_book_fonts(EB_Book *book, const char *out_path,
+    EB_Subbook_Code *subbook_list, int subbook_count, EB_Font_Code *font_list,
+    int font_count, Image_Format_Code *image_list, int image_count);
+static int make_subbook_fonts(EB_Book *book, const char *subbook_path,
+    EB_Font_Code *font_list, int font_count, Image_Format_Code *image_list,
+    int image_count);
+static int make_subbook_size_fonts(EB_Book *book, const char *font_path,
+    Image_Format_Code *image_list, int image_count);
+static int make_subbook_size_image_fonts(EB_Book *book, const char *image_path,
+    Image_Format_Code image);
+static int save_image_file(const char *file_name, const char *image_data,
+    size_t image_size);
 
 
 int
-main(argc, argv)
-    int argc;
-    char *argv[];
+main(int argc, char *argv[])
 {
     const char *book_path;
     char out_path[PATH_MAX + 1];
     EB_Error_Code error_code;
     EB_Book book;
     int ch;
-    
+
     invoked_name = argv[0];
     debug_flag = 0;
     strcpy(out_path, DEFAULT_OUTPUT_DIRECTORY);
@@ -466,10 +432,8 @@ main(argc, argv)
  * Parse an argument to option `--font-height (-f)'
  */
 static int
-parse_font_argument(argument, font_list, font_count)
-    const char *argument;
-    EB_Font_Code *font_list;
-    int *font_count;
+parse_font_argument(const char *argument, EB_Font_Code *font_list,
+    int *font_count)
 {
     const char *argument_p = argument;
     char font_name[MAX_LENGTH_FONT_NAME + 1];
@@ -546,10 +510,8 @@ parse_font_argument(argument, font_list, font_count)
  * Parse an argument to option `--font-image-format (-i)'
  */
 static int
-parse_image_argument(argument, image_list, image_count)
-    const char *argument;
-    Image_Format_Code *image_list;
-    int *image_count;
+parse_image_argument(const char *argument, Image_Format_Code *image_list,
+    int *image_count)
 {
     const char *argument_p = argument;
     char image_name[MAX_LENGTH_IMAGE_NAME + 1];
@@ -622,7 +584,7 @@ parse_image_argument(argument, image_list, image_count)
  * Output help message to standard out, then exit.
  */
 static void
-output_help()
+output_help(void)
 {
     printf(_("Usage: %s [option...] [book-directory]\n"), program_name);
     printf(_("Options:\n"));
@@ -633,7 +595,8 @@ output_help()
 	DEFAULT_FONT_HEIGHT);
     printf(_("  -h  --help                 display this help, then exit\n"));
     printf(_("  -i FORMAT[,FORMAT...]  --image-format FORMAT[,FORMAT...]\n"));
-    printf(_("                             generate fonts as FORMAT; xbm, xpm, gif or bmp\n"));
+    printf(_("                             generate fonts as FORMAT;\n"));
+    printf(_("                             xbm, xpm, gif, bmp or png\n"));
     printf(_("                             (default: %s)\n"),
 	DEFAULT_IMAGE_FORMAT);
     printf(_("  -o DIRECTORY  --output-directory DIRECTORY\n"));
@@ -657,16 +620,9 @@ output_help()
  * Make font-files in the `book_path'.
  */
 static int
-make_book_fonts(book, out_path, subbook_list, subbook_count, font_list,
-    font_count, image_list, image_count)
-    EB_Book *book;
-    const char *out_path;
-    EB_Subbook_Code *subbook_list;
-    int subbook_count;
-    EB_Font_Code *font_list;
-    int font_count;
-    Image_Format_Code *image_list;
-    int image_count;
+make_book_fonts(EB_Book *book, const char *out_path,
+    EB_Subbook_Code *subbook_list, int subbook_count, EB_Font_Code *font_list,
+    int font_count, Image_Format_Code *image_list, int image_count)
 {
     EB_Error_Code error_code;
     char subbook_path[PATH_MAX + 1];
@@ -740,14 +696,9 @@ make_book_fonts(book, out_path, subbook_list, subbook_count, font_list,
  * Make font-files in the current subbook.
  */
 static int
-make_subbook_fonts(book, subbook_path, font_list, font_count, image_list,
-    image_count)
-    EB_Book *book;
-    const char *subbook_path;
-    EB_Font_Code *font_list;
-    int font_count;
-    Image_Format_Code *image_list;
-    int image_count;
+make_subbook_fonts(EB_Book *book, const char *subbook_path,
+    EB_Font_Code *font_list, int font_count, Image_Format_Code *image_list,
+    int image_count)
 {
     EB_Error_Code error_code;
     char subbook_directory[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
@@ -787,7 +738,7 @@ make_subbook_fonts(book, subbook_path, font_list, font_count, image_list,
 	 * Output debug information.
 	 */
 	if (debug_flag) {
-	    fprintf(stderr, "%s: debug: font %d\n", invoked_name, 
+	    fprintf(stderr, "%s: debug: font %d\n", invoked_name,
 		font_list[i]);
 	}
 
@@ -822,11 +773,8 @@ make_subbook_fonts(book, subbook_path, font_list, font_count, image_list,
  * Make font-files of the current font.
  */
 static int
-make_subbook_size_fonts(book, font_path, image_list, image_count)
-    EB_Book *book;
-    const char *font_path;
-    Image_Format_Code *image_list;
-    int image_count;
+make_subbook_size_fonts(EB_Book *book, const char *font_path,
+    Image_Format_Code *image_list, int image_count)
 {
     EB_Error_Code error_code;
     char subbook_directory[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
@@ -873,10 +821,8 @@ make_subbook_size_fonts(book, font_path, image_list, image_count)
  * Make font-files of the current font as the image format.
  */
 static int
-make_subbook_size_image_fonts(book, image_path, image)
-    EB_Book *book;
-    const char *image_path;
-    Image_Format_Code image;
+make_subbook_size_image_fonts(EB_Book *book, const char *image_path,
+    Image_Format_Code image)
 {
     EB_Error_Code error_code;
     char subbook_directory[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
@@ -961,8 +907,16 @@ character=0x%04x\n",
 		    subbook_directory, image_height, character_number);
 		goto failed;
 	    }
-	    (image_formats[image].function)(bitmap_data, image_width,
-		image_height, image_data, &image_size);
+
+	    error_code = (image_formats[image].function)(bitmap_data,
+		image_width, image_height, image_data, &image_size);
+	    if (error_code != EB_SUCCESS) {
+		fprintf(stderr, "%s: %s: subbook=%s, font=%d, type=narrow, \
+character=0x%04x\n",
+		    invoked_name, eb_error_message(error_code),
+		    subbook_directory, image_height, character_number);
+		goto failed;
+	    }
 	    if (save_image_file(file_name, image_data, image_size) < 0)
 		goto failed;
 
@@ -1025,8 +979,16 @@ character=0x%04x\n",
 		    subbook_directory, image_height, character_number);
 		goto failed;
 	    }
-	    (image_formats[image].function)(bitmap_data, image_width,
-		image_height, image_data, &image_size);
+
+	    error_code = (image_formats[image].function)(bitmap_data,
+		image_width, image_height, image_data, &image_size);
+	    if (error_code != EB_SUCCESS) {
+		fprintf(stderr, "%s: %s: subbook=%s, font=%d, type=narrow, \
+character=0x%04x\n",
+		    invoked_name, eb_error_message(error_code),
+		    subbook_directory, image_height, character_number);
+		goto failed;
+	    }
 	    if (save_image_file(file_name, image_data, image_size) < 0)
 		goto failed;
 
@@ -1052,10 +1014,8 @@ character=0x%04x\n",
  * Save an image file.
  */
 static int
-save_image_file(file_name, image_data, image_size)
-    const char *file_name;
-    const char *image_data;
-    size_t image_size;
+save_image_file(const char *file_name, const char *image_data,
+    size_t image_size)
 {
     int file = -1;
 

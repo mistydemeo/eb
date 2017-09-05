@@ -1,16 +1,29 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 98, 99, 2000, 01, 02
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifndef EB_DEFS_H
@@ -21,10 +34,7 @@ extern "C" {
 #endif
 
 #include <sys/types.h>
-
-#ifdef HAVE_LIMITS_H
 #include <limits.h>
-#endif
 
 #ifdef EB_BUILD_LIBRARY
 #include "sysdefs.h"
@@ -93,15 +103,13 @@ extern "C" {
 /*
  * Maximum length of a word to be searched.
  */
-#ifdef PATH_MAX
+#if defined(PATH_MAX)
 #define EB_MAX_PATH_LENGTH		PATH_MAX
-#else
-#ifdef MAXPATHLEN
+#elif defined(MAXPATHLEN)
 #define EB_MAX_PATH_LENGTH		MAXPATHLEN
-#else /* not MAXPATHLEN */
+#else
 #define EB_MAX_PATH_LENGTH		1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
+#endif
 
 /*
  * Maximum length of a directory name.
@@ -168,17 +176,6 @@ extern "C" {
  * The number of search contexts required by a book.
  */
 #define EB_NUMBER_OF_SEARCH_CONTEXTS	EB_MAX_MULTI_ENTRIES
-
-/*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#ifdef PROTOTYPES
-#define EB_P(p) p
-#else
-#define EB_P(p) ()
-#endif
-#endif
 
 /*
  * Types for various codes.
@@ -782,9 +779,12 @@ struct EB_Search_Context_Struct {
     /*
      * Function which compares word to search and pattern in an index page.
      */
-    int (*compare_pre) EB_P((const char *, const char *, size_t));
-    int (*compare_single) EB_P((const char *, const char *, size_t));
-    int (*compare_group) EB_P((const char *, const char *, size_t));
+    int (*compare_pre)(const char *word, const char *pattern,
+	size_t length);
+    int (*compare_single)(const char *word, const char *pattern,
+	size_t length);
+    int (*compare_group)(const char *word, const char *pattern,
+	size_t length);
 
     /*
      * Result of comparison by `compare'.
@@ -949,8 +949,9 @@ struct EB_Hook_Struct {
     /*
      * Hook function for the hook code `code'.
      */
-    EB_Error_Code (*function) EB_P((EB_Book *, EB_Appendix *, void *,
-	EB_Hook_Code, int, const unsigned int *));
+    EB_Error_Code (*function)(EB_Book *book, EB_Appendix *appendix,
+	void *container, EB_Hook_Code hook_code, int argc,
+	const unsigned int *argv);
 };
 
 /*

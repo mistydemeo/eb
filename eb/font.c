@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "build-pre.h"
@@ -23,8 +36,7 @@
  * Initialize all fonts in the current subbook.
  */
 void
-eb_initialize_fonts(book)
-    EB_Book *book;
+eb_initialize_fonts(EB_Book *book)
 {
     EB_Subbook *subbook;
     EB_Font *font;
@@ -62,8 +74,7 @@ eb_initialize_fonts(book)
  * Load font files.
  */
 void
-eb_load_font_headers(book)
-    EB_Book *book;
+eb_load_font_headers(EB_Book *book)
 {
     EB_Error_Code error_code;
     EB_Subbook *subbook;
@@ -115,8 +126,7 @@ eb_load_font_headers(book)
  * Finalize all fonts in the current subbook.
  */
 void
-eb_finalize_fonts(book)
-    EB_Book *book;
+eb_finalize_fonts(EB_Book *book)
 {
     EB_Subbook *subbook;
     EB_Font *font;
@@ -151,9 +161,7 @@ eb_finalize_fonts(book)
  * `book'.
  */
 EB_Error_Code
-eb_font(book, font_code)
-    EB_Book *book;
-    EB_Font_Code *font_code;
+eb_font(EB_Book *book, EB_Font_Code *font_code)
 {
     EB_Error_Code error_code;
 
@@ -202,9 +210,7 @@ eb_font(book, font_code)
  * subbook in `book'.
  */
 EB_Error_Code
-eb_set_font(book, font_code)
-    EB_Book *book;
-    EB_Font_Code font_code;
+eb_set_font(EB_Book *book, EB_Font_Code font_code)
 {
     EB_Error_Code error_code;
     EB_Subbook *subbook;
@@ -307,8 +313,7 @@ eb_set_font(book, font_code)
  * Unset the font in the current subbook in `book'.
  */
 void
-eb_unset_font(book)
-    EB_Book *book;
+eb_unset_font(EB_Book *book)
 {
     EB_Subbook *subbook;
 
@@ -351,10 +356,7 @@ eb_unset_font(book)
  * Make a list of fonts in the current subbook in `book'.
  */
 EB_Error_Code
-eb_font_list(book, font_list, font_count)
-    EB_Book *book;
-    EB_Font_Code *font_list;
-    int *font_count;
+eb_font_list(EB_Book *book, EB_Font_Code *font_list, int *font_count)
 {
     EB_Error_Code error_code;
     EB_Subbook *subbook;
@@ -408,9 +410,7 @@ eb_font_list(book, font_list, font_count)
  * `font_code' or not.
  */
 int
-eb_have_font(book, font_code)
-    EB_Book *book;
-    EB_Font_Code font_code;
+eb_have_font(EB_Book *book, EB_Font_Code font_code)
 {
     EB_Subbook *subbook;
 
@@ -434,7 +434,7 @@ eb_have_font(book, font_code)
     if (subbook->narrow_fonts[font_code].font_code == EB_FONT_INVALID
 	&& subbook->wide_fonts[font_code].font_code == EB_FONT_INVALID)
 	goto failed;
-    
+
     LOG(("out: eb_have_font() = %d", 1));
     eb_unlock(&book->lock);
 
@@ -454,9 +454,7 @@ eb_have_font(book, font_code)
  * Get height of the font `font_code' in the current subbook of `book'.
  */
 EB_Error_Code
-eb_font_height(book, height)
-    EB_Book *book;
-    int *height;
+eb_font_height(EB_Book *book, int *height)
 {
     EB_Error_Code error_code;
     EB_Font_Code font_code;
@@ -508,13 +506,11 @@ eb_font_height(book, height)
 }
 
 
-/* 
+/*
  * Get height of the font `font_code'.
  */
 EB_Error_Code
-eb_font_height2(font_code, height)
-    EB_Font_Code font_code;
-    int *height;
+eb_font_height2(EB_Font_Code font_code, int *height)
 {
     EB_Error_Code error_code;
 

@@ -75,12 +75,8 @@ struct option {
 	int val;
 };
 
-#ifdef PROTOTYPES
 int getopt_long (int, char * const *, const char *,
     const struct option *, int *);
-#else
-int getopt_long ();
-#endif
 
 #ifdef  __cplusplus
 }

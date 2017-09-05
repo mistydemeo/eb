@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 2000, 01
- *    Motoyuki Kasahara
+ * Copyright (c) 2000-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -19,24 +32,8 @@
 
 #include <sys/types.h>
 #include <stdio.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifndef HAVE_STRCHR
-#define strchr index
-#define strrchr rindex
-#endif /* HAVE_STRCHR */
 
 /*
  * Character type tests and conversions.
@@ -58,23 +55,16 @@
 /*
  * Unexported functions.
  */
-#ifdef PROTOTYPES
-static void url_parts_canonicalize_path(char *);
-static void url_parts_expand_hex(char *);
-static void url_parts_convert_to_lower(char *);
-#else
-static void url_parts_canonicalize_path();
-static void url_parts_expand_hex();
-static void url_parts_convert_to_lower();
-#endif
+static void url_parts_canonicalize_path(char *path);
+static void url_parts_expand_hex(char *string);
+static void url_parts_convert_to_lower(char *string);
 
 
 /*
  * Initialize a query.
  */
 void
-url_parts_initialize(parts)
-    URL_Parts *parts;
+url_parts_initialize(URL_Parts *parts)
 {
     /*
      * Set all URL parts and whole URL to NULL.
@@ -99,8 +89,7 @@ url_parts_initialize(parts)
  * All allocated memories in `queue' are also disposed.
  */
 void
-url_parts_finalize(parts)
-    URL_Parts *parts;
+url_parts_finalize(URL_Parts *parts)
 {
     /*
      * Set all URL parts and whole URL to NULL.
@@ -134,8 +123,7 @@ url_parts_finalize(parts)
  * Return whole URL of a parsed URL.
  */
 const char *
-url_parts_url(parts)
-    URL_Parts *parts;
+url_parts_url(URL_Parts *parts)
 {
     return parts->url;
 }
@@ -145,8 +133,7 @@ url_parts_url(parts)
  * Return scheme part of a parsed URL.
  */
 const char *
-url_parts_scheme(parts)
-    URL_Parts *parts;
+url_parts_scheme(URL_Parts *parts)
 {
     return parts->scheme;
 }
@@ -156,8 +143,7 @@ url_parts_scheme(parts)
  * Return user part of a parsed URL.
  */
 const char *
-url_parts_user(parts)
-    URL_Parts *parts;
+url_parts_user(URL_Parts *parts)
 {
     return parts->user;
 }
@@ -167,8 +153,7 @@ url_parts_user(parts)
  * Return password part of a parsed URL.
  */
 const char *
-url_parts_password(parts)
-    URL_Parts *parts;
+url_parts_password(URL_Parts *parts)
 {
     return parts->password;
 }
@@ -178,8 +163,7 @@ url_parts_password(parts)
  * Return host part of a parsed URL.
  */
 const char *
-url_parts_host(parts)
-    URL_Parts *parts;
+url_parts_host(URL_Parts *parts)
 {
     return parts->host;
 }
@@ -189,8 +173,7 @@ url_parts_host(parts)
  * Return port part of a parsed URL.
  */
 const char *
-url_parts_port(parts)
-    URL_Parts *parts;
+url_parts_port(URL_Parts *parts)
 {
     return parts->port;
 }
@@ -200,8 +183,7 @@ url_parts_port(parts)
  * Return path part of a parsed URL.
  */
 const char *
-url_parts_path(parts)
-    URL_Parts *parts;
+url_parts_path(URL_Parts *parts)
 {
     return parts->path;
 }
@@ -211,8 +193,7 @@ url_parts_path(parts)
  * Return params part of a parsed URL.
  */
 const char *
-url_parts_params(parts)
-    URL_Parts *parts;
+url_parts_params(URL_Parts *parts)
 {
     return parts->params;
 }
@@ -222,8 +203,7 @@ url_parts_params(parts)
  * Return query part of a parsed URL.
  */
 const char *
-url_parts_query(parts)
-    URL_Parts *parts;
+url_parts_query(URL_Parts *parts)
 {
     return parts->query;
 }
@@ -233,8 +213,7 @@ url_parts_query(parts)
  * Return fragment part of a parsed URL.
  */
 const char *
-url_parts_fragment(parts)
-    URL_Parts *parts;
+url_parts_fragment(URL_Parts *parts)
 {
     return parts->fragment;
 }
@@ -255,9 +234,7 @@ url_parts_fragment(parts)
  * It returns 0, upon successful.
  */
 int
-url_parts_parse(parts, url)
-    URL_Parts *parts;
-    const char *url;
+url_parts_parse(URL_Parts *parts, const char *url)
 {
     char *separator;
     char *url_p;
@@ -373,7 +350,7 @@ url_parts_parse(parts, url)
 		parts->user = userpass;
 	    }
 	}
-    
+
 	/*
 	 * Get host and port.
 	 * IPv6 address is enclosed in `[' and `]'.
@@ -389,7 +366,7 @@ url_parts_parse(parts, url)
 		    *right_bracket = '\0';
 		}
 		separator = strchr(right_bracket + 1, ':');
-	    } 
+	    }
 	} else {
 	    separator = strchr(hostport, ':');
 	}
@@ -492,12 +469,11 @@ url_parts_parse(parts, url)
  * 	"/A/B/C/../../a.html"  --->  "/A/a.html"
  * 	"/../a.html"           --->  "/../a.html" (*1)
  *
- * (*1) If a correspondig parent segment is not exist in the path, 
+ * (*1) If a correspondig parent segment is not exist in the path,
  * we don't remove "/..".
  */
 static void
-url_parts_canonicalize_path(path)
-    char *path;
+url_parts_canonicalize_path(char *path)
 {
     char *source = path;
     char *destination = path;
@@ -612,14 +588,13 @@ static const char expandable_hex_table[] = {
     1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, /* 0xd0 ... 0xdf    */
     1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, /* 0xe0 ... 0xef    */
     1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1,  1, 1, 1, 1, /* 0xf0 ... 0xff    */
-};    
+};
 
-/*      
+/*
  * Expand all "%<HEX><HEX>" in an URL part to original characters.
  */
 static void
-url_parts_expand_hex(string)
-    char *string;
+url_parts_expand_hex(char *string)
 {
     char *source = string;
     char *destination = string;
@@ -653,7 +628,7 @@ url_parts_expand_hex(string)
 	    else if ('a' <= hex2 && hex2 <= 'f')
 		c += (hex2 - 'a' + 0x0a);
 
-	    if (expandable_hex_table[c]) 
+	    if (expandable_hex_table[c])
 		*(unsigned char *)destination++ = c;
 	    else {
 		*destination++ = '%';
@@ -676,8 +651,7 @@ url_parts_expand_hex(string)
  * since they are case insensitive,
  */
 static void
-url_parts_convert_to_lower(string)
-    char *string;
+url_parts_convert_to_lower(char *string)
 {
     char *p;
 
@@ -689,8 +663,7 @@ url_parts_convert_to_lower(string)
 
 
 void
-url_parts_print(parts)
-    URL_Parts *parts;
+url_parts_print(URL_Parts *parts)
 {
     printf("url parts = {\n");
     if (parts->scheme != NULL)
@@ -721,9 +694,7 @@ url_parts_print(parts)
 #ifdef TEST
 
 int
-main(argc, argv)
-    int argc;
-    char *argv[];
+main(int argc, char *argv[])
 {
     URL_Parts url;
     int i;

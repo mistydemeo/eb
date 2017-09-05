@@ -1,26 +1,29 @@
 /*
- * copyright (c) 1997, 98, 99, 2000, 02  Motoyuki Kasahara
+ * copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
-
-/*
- * This program requires the following Autoconf macros:
- *   AC_C_CONST
- *   AC_TYPE_SIZE_T
- *   AC_CHECK_TYPE(ssize_t, int)
- *   AC_HEADER_STDC
- *   AC_HEADER_TIME
- *   AC_CHECK_HEADERS(string.h, memory.h, stdlib.h, unistd.h)
- *   AC_CHECK_FUNCS(memcpy)
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -31,34 +34,10 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <sys/socket.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef TIME_WITH_SYS_TIME
-#include <sys/time.h>
-#include <time.h>
-#else /* not TIME_WITH_SYS_TIME */
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#else /* not HAVE_SYS_TIME_H */
-#include <time.h>
-#endif /* not HAVE_SYS_TIME_H */
-#endif /* not TIME_WITH_SYS_TIME */
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
 #include <unistd.h>
-#endif
+#include <sys/time.h>
 
 #include "linebuf.h"
 
@@ -66,28 +45,12 @@
 #include "fakelog.h"
 #endif
 
-#ifndef HAVE_MEMCPY
-#define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef PROTOTYPES
-void *memchr(const void *, int, size_t);
-int memcmp(const void *, const void *, size_t);
-void *memmove(void *, const void *, size_t);
-void *memset(void *, int, size_t);
-#else
-char *memchr();
-int memcmp();
-char *memmove();
-char *memset();
-#endif
-#endif
-
 
 /*
  * Initialize `linebuffer'.
  */
 void
-initialize_line_buffer(line_buffer)
-    Line_Buffer *line_buffer;
+initialize_line_buffer(Line_Buffer *line_buffer)
 {
     line_buffer->buffer[0] = '\0';
     line_buffer->file = -1;
@@ -100,8 +63,7 @@ initialize_line_buffer(line_buffer)
  * Finalize `line_buffer'.
  */
 void
-finalize_line_buffer(line_buffer)
-    Line_Buffer *line_buffer;
+finalize_line_buffer(Line_Buffer *line_buffer)
 {
     line_buffer->buffer[0] = '\0';
     line_buffer->file = -1;
@@ -114,9 +76,7 @@ finalize_line_buffer(line_buffer)
  * Set timeout seconds.
  */
 void
-set_line_buffer_timeout(line_buffer, timeout)
-    Line_Buffer *line_buffer;
-    int timeout;
+set_line_buffer_timeout(Line_Buffer *line_buffer, int timeout)
 {
     line_buffer->timeout = timeout;
 }
@@ -126,9 +86,7 @@ set_line_buffer_timeout(line_buffer, timeout)
  * Bind `file' to `line_buffer'.
  */
 void
-bind_file_to_line_buffer(line_buffer, file)
-    Line_Buffer *line_buffer;
-    int file;
+bind_file_to_line_buffer(Line_Buffer *line_buffer, int file)
 {
     if (line_buffer->file < 0)
 	initialize_line_buffer(line_buffer);
@@ -141,8 +99,7 @@ bind_file_to_line_buffer(line_buffer, file)
  * Return -1 when no file is bound.
  */
 int
-file_bound_to_line_buffer(line_buffer)
-    Line_Buffer *line_buffer;
+file_bound_to_line_buffer(Line_Buffer *line_buffer)
 {
     return line_buffer->file;
 }
@@ -152,8 +109,7 @@ file_bound_to_line_buffer(line_buffer)
  * Discard cache data in `line_buffer'.
  */
 void
-discard_cache_in_line_buffer(line_buffer)
-    Line_Buffer *line_buffer;
+discard_cache_in_line_buffer(Line_Buffer *line_buffer)
 {
     line_buffer->cache_length = 0;
 }
@@ -163,8 +119,7 @@ discard_cache_in_line_buffer(line_buffer)
  * Get the length of cache data in `line_buffer'.
  */
 size_t
-cache_length_in_line_buffer(line_buffer)
-    Line_Buffer *line_buffer;
+cache_length_in_line_buffer(Line_Buffer *line_buffer)
 {
     return line_buffer->cache_length;
 }
@@ -181,15 +136,12 @@ cache_length_in_line_buffer(line_buffer)
  * successful.  It doesn't count "\n" or "\r\n" in the tail of the line,
  * so that 0 is returned for an empty line, and the line length doesn't
  * exceed one less than `max_line_length'.
- * 
+ *
  * If EOF is received or an error occurs, -1 is returned.  If the
  * line is too long, `max_line_length' is returned.
  */
 ssize_t
-read_line_buffer(line_buffer, line, max_line_length)
-    Line_Buffer *line_buffer;
-    char *line;
-    size_t max_line_length;
+read_line_buffer(Line_Buffer *line_buffer, char *line, size_t max_line_length)
 {
     char *line_p;
     char *newline;
@@ -208,7 +160,7 @@ read_line_buffer(line_buffer, line, max_line_length)
 	return -1;
     if (max_line_length == 0)
 	return -1;
-    
+
     /*
      * Read a file until newline is appeared.
      */
@@ -252,7 +204,7 @@ read_line_buffer(line_buffer, line, max_line_length)
 	}
 
 	/*
-	 * Check for the length of the current line.  Return if the 
+	 * Check for the length of the current line.  Return if the
 	 * line is too long.
 	 *
 	 * Note that the following conditional expression can be
@@ -336,10 +288,8 @@ read_line_buffer(line_buffer, line, max_line_length)
  * If EOF is received or an error occurs, -1 is returned.
  */
 ssize_t
-binary_read_line_buffer(line_buffer, stream, stream_length)
-    Line_Buffer *line_buffer;
-    char *stream;
-    size_t stream_length;
+binary_read_line_buffer(Line_Buffer *line_buffer, char *stream,
+    size_t stream_length)
 {
     char *stream_p;
     size_t done_length;
@@ -440,13 +390,12 @@ binary_read_line_buffer(line_buffer, stream, stream_length)
  * If a line read by read_line_buffer() doesn't contain a newline
  * character, the line is too long.  This function reads and discards
  * the rest of the line.
- * 
+ *
  * If EOF is received or an error occurs, -1 is returned.
  * Otherwise, 0 is returned.
  */
 int
-skip_line_buffer(line_buffer)
-    Line_Buffer *line_buffer;
+skip_line_buffer(Line_Buffer *line_buffer)
 {
     ssize_t line_length;
 

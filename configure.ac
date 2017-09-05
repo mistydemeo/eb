@@ -1,7 +1,7 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT(eb, 4.0)
+AC_INIT(eb, 4.1)
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.54)
 AM_INIT_AUTOMAKE
@@ -9,11 +9,11 @@ AM_INIT_AUTOMAKE
 dnl *
 dnl * Library version info.
 dnl *
-LIBEB_VERSION_INFO=8:0:0
+LIBEB_VERSION_INFO=9:0:0
 AC_SUBST(LIBEB_VERSION_INFO)
 
 EB_VERSION_MAJOR=4
-EB_VERSION_MINOR=0
+EB_VERSION_MINOR=1
 AC_SUBST(EB_VERSION_MAJOR)
 AC_SUBST(EB_VERSION_MINOR)
 
@@ -42,7 +42,7 @@ fi
 dnl * 
 dnl * GNU gettext
 dnl * 
-eb_GNU_GETTEXT
+eb_GNU_GETTEXT(external)
 
 dnl *
 dnl * --enable-samples option.
@@ -90,6 +90,15 @@ AC_ARG_WITH(pthread-ldflags,
 AC_HELP_STRING([--with-pthread-ldflags=FLAGS],
     [additional LDFLAGS for pthread support]),
 [PTHREAD_LDFLAGS="${withval}"], [PTHREAD_LDFLAGS=''])
+
+dnl *
+dnl * --with-pkgdocdir option.
+dnl *
+AC_ARG_WITH(pkgdocdir,
+AC_HELP_STRING([--with-pkgdocdir=DIR],
+    [HTML documents in DIR [[default=DATADIR/eb/doc]]]),
+[pkgdocdir="${withval}"],[pkgdocdir='${datadir}/eb/doc'])
+AC_SUBST(pkgdocdir)
 
 dnl *
 dnl * Check for pthread.
@@ -226,24 +235,15 @@ AC_CONFIG_SUBDIRS(zlib)
 dnl * 
 dnl * Compiler Characteristics.
 dnl * 
-AC_C_CONST
-AC_C_PROTOTYPES
-AC_C_VOID_POINTER
 
 dnl * 
 dnl * Header Files.
 dnl * 
-AC_HEADER_STDC
-AC_HEADER_STAT
-AC_HEADER_TIME
-AC_HEADER_DIRENT
-AC_CHECK_HEADERS(direct.h fcntl.h langinfo.h limits.h memory.h pthread.h \
-    stdlib.h string.h unistd.h utime.h sys/utime.h)
+AC_CHECK_HEADERS(direct.h langinfo.h mbstring.h pthread.h)
 
 dnl * 
 dnl * Structures.
 dnl * 
-AC_STRUCT_UTIMBUF
 
 dnl * 
 dnl * Libraries.
@@ -258,23 +258,14 @@ AC_CHECK_LIB(socket, socket)
 dnl * 
 dnl * Library Functions.
 dnl * 
-AC_FUNC_VPRINTF
-AC_CHECK_FUNCS(dup2 memcpy memmove getcwd nl_langinfo strchr utime _getdcwd)
-AC_REPLACE_FUNCS(memset strcasecmp strerror strtol)
+AC_CHECK_FUNCS(nl_langinfo _getdcwd)
+AC_REPLACE_FUNCS(strcasecmp)
 
 dnl * 
 dnl * Typedefs.
 dnl * 
-AC_TYPE_OFF_T
-AC_TYPE_SIZE_T
 AC_TYPE_MODE_T
 AC_CHECK_TYPE(ssize_t, int)
-
-AC_TYPE_SIGNAL
-if test "$ac_cv_type_signal" = void; then
-    AC_DEFINE(RETSIGTYPE_VOID, 1,
-        [Define if the signal function returns void.])
-fi
 
 dnl *
 dnl * System services
@@ -358,6 +349,6 @@ dnl *
 AC_CONFIG_HEADER(config.h)
 AC_CONFIG_FILES([Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile
     ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebstopcode/Makefile 
-    ebzip/Makefile doc/Makefile doc-ja/Makefile po-eb/Makefile
-    po-ebutils/Makefile m4/Makefile samples/Makefile])
+    ebzip/Makefile doc/Makefile po-eb/Makefile po-ebutils/Makefile 
+    m4/Makefile samples/Makefile])
 AC_OUTPUT

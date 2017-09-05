@@ -36,32 +36,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*
- * This program requires the following Autoconf macros:
- *   AC_C_CONST
- *   AC_HEADER_STDC
- *   AC_CHECK_HEADERS(string.h, memory.h)
- */
-
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <sys/types.h>
 #include <stdio.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
 
 #ifdef ENABLE_NLS
 #include <libintl.h>
@@ -81,11 +63,6 @@
 #endif
 
 #include <getopt.h>
-
-#ifndef HAVE_STRCHR
-#define strchr index
-#define strrchr rindex
-#endif /* !HAVE_STRCHR */
 
 #ifdef REPLACE_GETOPT
 int opterr = 1;		/* if error message should be printed */
@@ -112,15 +89,11 @@ char *optarg;		/* argument associated with option */
 
 extern char *getenv();
 
-#ifdef PROTOTYPES
-static int getopt_internal(int, char * const *, const char *);
-static int gcd(int, int);
-static void permute_args(int, int, int, char * const *);
-#else
-static int getopt_internal();
-static int gcd();
-static void permute_args();
-#endif
+static int getopt_internal(int nargc, char * const *nargv,
+    const char *options);
+static int gcd(int a, int b);
+static void permute_args(int nonopt_start, int nonopt_end, int opt_end,
+    char * const *nargv);
 
 static char *place = EMSG; /* option letter processing */
 
@@ -148,9 +121,7 @@ static const char *unrec
  * Compute the greatest common divisor of a and b.
  */
 static int
-gcd(a, b)
-	int a;
-	int b;
+gcd(int a, int b)
 {
 	int c;
 
@@ -160,7 +131,7 @@ gcd(a, b)
 		b = c;
 		c = a % b;
 	}
-	   
+
 	return b;
 }
 
@@ -170,11 +141,8 @@ gcd(a, b)
  * in each block).
  */
 static void
-permute_args(nonopt_start, nonopt_end, opt_end, nargv)
-	int nonopt_start;
-	int nonopt_end;
-	int opt_end;
-	char * const *nargv;
+permute_args(int nonopt_start, int nonopt_end, int opt_end,
+    char * const *nargv)
 {
 	int cstart, cyclelen, i, j, ncycle, nnonopts, nopts, pos;
 	char *swap;
@@ -210,10 +178,7 @@ permute_args(nonopt_start, nonopt_end, opt_end, nargv)
  *  Returns -2 if -- is found (can be long option or end of options marker).
  */
 static int
-getopt_internal(nargc, nargv, options)
-	int nargc;
-	char * const *nargv;
-	const char *options;
+getopt_internal(int nargc, char * const *nargv, const char *options)
 {
 	char *oli;				/* option letter list index */
 	int optchar;
@@ -253,7 +218,7 @@ start:
 			place = EMSG;
 			if (IN_ORDER) {
 				/*
-				 * GNU extension: 
+				 * GNU extension:
 				 * return non-option as argument to option 1
 				 */
 				optarg = nargv[optind++];
@@ -305,7 +270,7 @@ start:
 	}
 	if (optchar == 'W' && oli[1] == ';') {		/* -W long-option */
 		/* XXX: what if no long options provided (called by getopt)? */
-		if (*place) 
+		if (*place)
 			return -2;
 
 		if (++optind >= nargc) {	/* no arg */
@@ -357,10 +322,7 @@ start:
  * [eventually this will replace the real getopt]
  */
 int
-getopt(nargc, nargv, options)
-	int nargc;
-	char * const *nargv;
-	const char *options;
+getopt(int nargc, char * const *nargv, const char *options)
 {
 	int retval;
 
@@ -387,12 +349,8 @@ getopt(nargc, nargv, options)
  *	Parse argc/argv argument vector.
  */
 int
-getopt_long(nargc, nargv, options, long_options, idx)
-	int nargc;
-	char * const *nargv;
-	const char *options;
-	const struct option *long_options;
-	int *idx;
+getopt_long(int nargc, char * const *nargv, const char *options,
+    const struct option *long_options, int *idx)
 {
 	int retval;
 
@@ -426,7 +384,7 @@ getopt_long(nargc, nargv, options, long_options, idx)
 			has_equal++;
 		} else
 			current_argv_len = strlen(current_argv);
-	    
+
 		for (i = 0; long_options[i].name; i++) {
 			/* find matching long option */
 			if (strncmp(current_argv, long_options[i].name,
@@ -512,7 +470,7 @@ getopt_long(nargc, nargv, options, long_options, idx)
 		if (long_options[match].flag) {
 			*long_options[match].flag = long_options[match].val;
 			retval = 0;
-		} else 
+		} else
 			retval = long_options[match].val;
 		if (idx)
 			*idx = match;

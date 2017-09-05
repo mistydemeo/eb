@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 2003
- *    Motoyuki Kasahara
+ * Copyright (c) 2003-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -20,19 +33,8 @@
 #include "build-pre.h"
 
 #include <sys/socket.h>
-
-#ifdef TIME_WITH_SYS_TIME
 #include <sys/time.h>
-#include <time.h>
-#else /* not TIME_WITH_SYS_TIME */
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#else /* not HAVE_SYS_TIME_H */
-#include <time.h>
-#endif /* not HAVE_SYS_TIME_H */
-#endif /* not TIME_WITH_SYS_TIME */
 
-#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
 #include "build-post.h"
@@ -47,9 +49,9 @@
 #include "urlparts.h"
 
 #ifndef IF_NAMESIZE
-#ifdef IFNAMSIZ 
+#ifdef IFNAMSIZ
 #define IF_NAMESIZE             IFNAMSIZ
-#else 
+#else
 #define IF_NAMESIZE             16
 #endif
 #endif
@@ -76,19 +78,20 @@
 /*
  * Unexported functions.
  */
-static int ebnet_parse_booklist_entry EB_P((const char *, char *, char *));
-static int ebnet_send_quit EB_P((int));
-static int ebnet_parse_url EB_P((const char *, char *, in_port_t *, char *,
-    char *));
-static int is_integer EB_P((const char *));
-static int write_string_all EB_P((int, int, const char *));
+static int ebnet_parse_booklist_entry(const char *line, char *book_name,
+    char *book_title);
+static int ebnet_send_quit(int file);
+static int ebnet_parse_url(const char *url, char *host, in_port_t *port,
+    char *book_name, char *file_path);
+static int is_integer(const char *string);
+static int write_string_all(int file, int timeout, const char *string);
 
 
 /*
  * Initialize ebnet.
  */
 void
-ebnet_initialize()
+ebnet_initialize(void)
 {
 #ifdef WINSOCK
     WSADATA wsa_data;
@@ -104,9 +107,7 @@ ebnet_initialize()
  * Get a book list from a server.
  */
 EB_Error_Code
-ebnet_bind_booklist(booklist, url)
-    EB_BookList *booklist;
-    const char *url;
+ebnet_bind_booklist(EB_BookList *booklist, const char *url)
 {
     EB_Error_Code error_code;
     char host[NI_MAXHOST];
@@ -217,10 +218,7 @@ ebnet_bind_booklist(booklist, url)
 
 
 static int
-ebnet_parse_booklist_entry(line, book_name, book_title)
-    const char *line;
-    char *book_name;
-    char *book_title;
+ebnet_parse_booklist_entry(const char *line, char *book_name, char *book_title)
 {
     const char *space;
     size_t book_name_length;
@@ -259,9 +257,7 @@ ebnet_parse_booklist_entry(line, book_name, book_title)
  * Extension code for eb_bind() to support ebnet.
  */
 EB_Error_Code
-ebnet_bind(book, url)
-    EB_Book *book;
-    const char *url;
+ebnet_bind(EB_Book *book, const char *url)
 {
     EB_Error_Code error_code;
     char host[NI_MAXHOST];
@@ -357,9 +353,7 @@ ebnet_bind(book, url)
  * Extension code for eb_bind_appendix() to support ebnet.
  */
 EB_Error_Code
-ebnet_bind_appendix(appendix, url)
-    EB_Appendix *appendix;
-    const char *url;
+ebnet_bind_appendix(EB_Appendix *appendix, const char *url)
 {
     EB_Error_Code error_code;
     char host[NI_MAXHOST];
@@ -456,8 +450,7 @@ ebnet_bind_appendix(appendix, url)
  * Extension code for eb_finalize_book() to support ebnet.
  */
 void
-ebnet_finalize_book(book)
-    EB_Book *book;
+ebnet_finalize_book(EB_Book *book)
 {
     LOG(("in+out: ebnet_finalize_book(book=%d)", (int)book->code));
 
@@ -472,8 +465,7 @@ ebnet_finalize_book(book)
  * Extension code for eb_finalize_appendix() to support ebnet.
  */
 void
-ebnet_finalize_appendix(appendix)
-    EB_Appendix *appendix;
+ebnet_finalize_appendix(EB_Appendix *appendix)
 {
     LOG(("in+out: ebnet_finalize_appendix(appendix=%d)", (int)appendix->code));
 
@@ -488,8 +480,7 @@ ebnet_finalize_appendix(appendix)
  * Extension code for zio_open_raw() to support ebnet.
  */
 int
-ebnet_open(url)
-    const char *url;
+ebnet_open(const char *url)
 {
     char host[NI_MAXHOST];
     in_port_t port;
@@ -586,23 +577,19 @@ ebnet_open(url)
  * Extension code for zio_close_raw() to support ebnet.
  */
 int
-ebnet_close(file)
-    int file;
+ebnet_close(int file)
 {
     LOG(("in+out: ebnet_close(file=%d)", file));
     ebnet_disconnect_socket(file);
     return 0;
-}    
+}
 
 
 /*
  * Extension code for zio_lseek_raw() to support ebnet.
  */
 off_t
-ebnet_lseek(file, offset, whence)
-    int file;
-    off_t offset;
-    int whence;
+ebnet_lseek(int file, off_t offset, int whence)
 {
     ssize_t file_size;
     off_t new_offset = 0;
@@ -648,10 +635,7 @@ ebnet_lseek(file, offset, whence)
  * Extension code for zio_read_raw() to support ebnet.
  */
 ssize_t
-ebnet_read(file, buffer, length)
-    int *file;
-    char *buffer;
-    size_t length;
+ebnet_read(int *file, char *buffer, size_t length)
 {
     Line_Buffer line_buffer;
     char line[EBNET_MAX_LINE_LENGTH + 1];
@@ -762,9 +746,7 @@ ebnet_read(file, buffer, length)
  * Extension code for eb_fix_directory_name() to support ebnet.
  */
 EB_Error_Code
-ebnet_fix_directory_name(url, directory_name)
-    const char *url;
-    char *directory_name;
+ebnet_fix_directory_name(const char *url, char *directory_name)
 {
     char host[NI_MAXHOST];
     in_port_t port;
@@ -853,10 +835,8 @@ ebnet_fix_directory_name(url, directory_name)
  * Extension code for eb_find_file_name() to support ebnet.
  */
 EB_Error_Code
-ebnet_find_file_name(url, target_file_name, found_file_name)
-    const char *url;
-    const char *target_file_name;
-    char *found_file_name;
+ebnet_find_file_name(const char *url, const char *target_file_name,
+    char *found_file_name)
 {
     char host[NI_MAXHOST];
     in_port_t port;
@@ -946,8 +926,7 @@ ebnet_find_file_name(url, target_file_name, found_file_name)
  * We must send `QUIT' command before close a connection.
  */
 static int
-ebnet_send_quit(file)
-    int file;
+ebnet_send_quit(int file)
 {
     if (write_string_all(file, EBNET_TIMEOUT_SECONDS, "QUIT\r\n") <= 0)
 	return -1;
@@ -959,8 +938,7 @@ ebnet_send_quit(file)
  * URL version of eb_canonicalize_path_name().
  */
 EB_Error_Code
-ebnet_canonicalize_url(url)
-    char *url;
+ebnet_canonicalize_url(char *url)
 {
     char host[NI_MAXHOST];
     in_port_t port;
@@ -980,7 +958,7 @@ ebnet_canonicalize_url(url)
      *   "ebnet://[" + "]:" + "/" = 12 characters.
      *    <port> is 5 characters maximum.
      */
-    if (EB_MAX_PATH_LENGTH 
+    if (EB_MAX_PATH_LENGTH
 	< strlen(host) + strlen(book_name) + strlen(url_path) + 17)
 	return EB_ERR_TOO_LONG_FILE_NAME;
 
@@ -1000,12 +978,8 @@ ebnet_canonicalize_url(url)
  * the corresponding arguments.
  */
 static int
-ebnet_parse_url(url, host, port, book_name, file_path)
-    const char *url;
-    char *host;
-    in_port_t *port;
-    char *book_name;
-    char *file_path;
+ebnet_parse_url(const char *url, char *host, in_port_t *port,
+    char *book_name, char *file_path)
 {
     URL_Parts parts;
     const char *scheme_part;
@@ -1104,8 +1078,7 @@ ebnet_parse_url(url, host, port, book_name, file_path)
  * Return 1 if it is, 0 otherwise.
  */
 static int
-is_integer(string)
-    const char *string;
+is_integer(const char *string)
 {
     const char *s = string;
 
@@ -1128,13 +1101,10 @@ is_integer(string)
 /*
  * Write data to a file.
  * It repeats to call write() until all data will have written.
- * The function returns 1 upon success, 0 upon timeout, -1 upon error. 
+ * The function returns 1 upon success, 0 upon timeout, -1 upon error.
  */
 static int
-write_string_all(file, timeout, string)
-    int file;
-    int timeout;
-    const char *string;
+write_string_all(int file, int timeout, const char *string)
 {
     const char *string_p = string;
     ssize_t rest_length = strlen(string);
@@ -1164,7 +1134,7 @@ write_string_all(file, timeout, string)
 	}
 
 	errno = 0;
-	write_result = send(file, string_p, (size_t)rest_length, 0);
+	write_result = send(file, string_p, rest_length, 0);
 	if (write_result < 0) {
 	    if (errno == EINTR)
 		continue;

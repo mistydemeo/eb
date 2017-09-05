@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 1997, 98, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "build-pre.h"
@@ -58,21 +71,26 @@ static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
 /*
  * Unexported functions.
  */
-static EB_Error_Code eb_hit_list_word EB_P((EB_Book *, EB_Search_Context *,
-    int, EB_Hit *, int *));
-static EB_Error_Code eb_hit_list_keyword EB_P((EB_Book *, EB_Search_Context *,
-    int, EB_Hit *, int *));
-static EB_Error_Code eb_hit_list_multi EB_P((EB_Book *, EB_Search_Context *,
-    int, EB_Hit *, int *));
-static void eb_and_hit_lists EB_P((EB_Hit [], int *, int, int,
-    EB_Hit [][EB_TMP_MAX_HITS], int []));
+static EB_Error_Code eb_hit_list_word(EB_Book *book,
+    EB_Search_Context *context, int max_hit_count, EB_Hit *hit_list,
+    int *hit_count);
+static EB_Error_Code eb_hit_list_keyword(EB_Book *book,
+    EB_Search_Context *context, int max_hit_count, EB_Hit *hit_list,
+    int *hit_count);
+static EB_Error_Code eb_hit_list_multi(EB_Book *book,
+    EB_Search_Context *context, int max_hit_count, EB_Hit *hit_list,
+    int *hit_count);
+static void eb_and_hit_lists(EB_Hit and_list[EB_TMP_MAX_HITS],
+    int *and_count, int max_and_count, int hit_list_count,
+    EB_Hit hit_lists[EB_NUMBER_OF_SEARCH_CONTEXTS][EB_TMP_MAX_HITS],
+    int hit_counts[EB_NUMBER_OF_SEARCH_CONTEXTS]);
+
 
 /*
  * Intialize search contexts of `book'.
  */
 void
-eb_initialize_search_contexts(book)
-    EB_Book *book;
+eb_initialize_search_contexts(EB_Book *book)
 {
     EB_Search_Context *context;
     int i;
@@ -108,8 +126,7 @@ eb_initialize_search_contexts(book)
  * Finalize search contexts of `book'.
  */
 void
-eb_finalize_search_contexts(book)
-    EB_Book *book;
+eb_finalize_search_contexts(EB_Book *book)
 {
     LOG(("in+out: eb_finalize_search_context(book=%d)", (int)book->code));
 
@@ -121,8 +138,7 @@ eb_finalize_search_contexts(book)
  * Reset search context of `book'.
  */
 void
-eb_reset_search_contexts(book)
-    EB_Book *book;
+eb_reset_search_contexts(EB_Book *book)
 {
     LOG(("in: eb_reset_search_context(book=%d)", (int)book->code));
 
@@ -136,8 +152,7 @@ eb_reset_search_contexts(book)
  * Intialize a search element.
  */
 void
-eb_initialize_search(search)
-    EB_Search *search;
+eb_initialize_search(EB_Search *search)
 {
     search->index_id = 0;
     search->start_page = 0;
@@ -161,8 +176,7 @@ eb_initialize_search(search)
  * Finalize a search element.
  */
 void
-eb_finalize_search(search)
-    EB_Search *search;
+eb_finalize_search(EB_Search *search)
 {
     /* nothing to be done */
 }
@@ -172,8 +186,7 @@ eb_finalize_search(search)
  * Initialize all search elements in the current subbook.
  */
 void
-eb_initialize_searches(book)
-    EB_Book *book;
+eb_initialize_searches(EB_Book *book)
 {
     EB_Subbook *subbook;
 
@@ -201,8 +214,7 @@ eb_initialize_searches(book)
  * Finalize all search elements in the current subbook.
  */
 void
-eb_finalize_searches(book)
-    EB_Book *book;
+eb_finalize_searches(EB_Book *book)
 {
     EB_Subbook *subbook;
 
@@ -233,9 +245,7 @@ eb_finalize_searches(book)
  * If succeeded, 0 is returned.  Otherwise -1 is returned.
  */
 EB_Error_Code
-eb_presearch_word(book, context)
-    EB_Book *book;
-    EB_Search_Context *context;
+eb_presearch_word(EB_Book *book, EB_Search_Context *context)
 {
     EB_Error_Code error_code;
     int next_page;
@@ -260,8 +270,8 @@ eb_presearch_word(book, context)
 	/*
 	 * Seek and read a page.
 	 */
-	if (zio_lseek(&book->subbook_current->text_zio, 
-	    (off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	if (zio_lseek(&book->subbook_current->text_zio,
+	    (context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	    cache_book_code = EB_BOOK_NONE;
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
@@ -308,7 +318,7 @@ entry_arrangement=%d, entry_count=%d)",
 		goto failed;
 	    }
 	    if (context->compare_pre(context->canonicalized_word, cache_p,
-		(size_t)context->entry_length) <= 0) {
+		context->entry_length) <= 0) {
 		next_page = eb_uint4(cache_p + context->entry_length);
 		break;
 	    }
@@ -358,11 +368,7 @@ entry_arrangement=%d, entry_count=%d)",
  * Get hit entries of a submitted search request.
  */
 EB_Error_Code
-eb_hit_list(book, max_hit_count, hit_list, hit_count)
-    EB_Book *book;
-    int max_hit_count;
-    EB_Hit *hit_list;
-    int *hit_count;
+eb_hit_list(EB_Book *book, int max_hit_count, EB_Hit *hit_list, int *hit_count)
 {
     EB_Error_Code error_code;
     EB_Search_Context temporary_context;
@@ -508,7 +514,7 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
      * Unlock cache data and the book.
      */
   succeeded:
-    LOG(("out: eb_hit_list(hit_count=%d) = %s", 
+    LOG(("out: eb_hit_list(hit_count=%d) = %s",
 	*hit_count, eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
     pthread_mutex_unlock(&cache_mutex);
@@ -530,19 +536,15 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
  * Get hit entries of a submitted exactword/word/endword search request.
  */
 static EB_Error_Code
-eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
-    EB_Book *book;
-    EB_Search_Context *context;
-    int max_hit_count;
-    EB_Hit *hit_list;
-    int *hit_count;
+eb_hit_list_word(EB_Book *book, EB_Search_Context *context, int max_hit_count,
+    EB_Hit *hit_list, int *hit_count)
 {
     EB_Error_Code error_code;
     EB_Hit *hit;
     int group_id;
     char *cache_p;
 
-    LOG(("in: eb_hit_list_word(book=%d, max_hit_count=%d)", (int)book->code, 
+    LOG(("in: eb_hit_list_word(book=%d, max_hit_count=%d)", (int)book->code,
 	max_hit_count));
 
     hit = hit_list;
@@ -563,14 +565,14 @@ eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
 	 *   1. the search process reaches to the end of an index page,
 	 *      and tries to read the next page.
 	 *   2. Someone else used the cache buffer.
-	 * 
+	 *
 	 * At the case of 1, the search process reads the page and update
 	 * the search context.  At the case of 2. it reads the page but
 	 * must not update the context!
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
 	    if (zio_lseek(&book->subbook_current->text_zio,
-		(off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+		(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
@@ -633,7 +635,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 */
 		context->comparison_result
 		    = context->compare_single(context->word, cache_p,
-			(size_t)context->entry_length);
+			context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
 			= eb_uint4(cache_p + context->entry_length + 6);
@@ -680,7 +682,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 */
 		context->comparison_result
 		    = context->compare_single(context->word, cache_p + 1,
-			(size_t)context->entry_length);
+			context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
 			= eb_uint4(cache_p + context->entry_length + 7);
@@ -731,10 +733,10 @@ entry_arrangement=%d, entry_count=%d)",
 		     */
 		    context->comparison_result
 			= context->compare_single(context->canonicalized_word,
-			    cache_p + 2, (size_t)context->entry_length);
+			    cache_p + 2, context->entry_length);
 		    if (context->comparison_result == 0
 			&& context->compare_single(context->word, cache_p + 2,
-			    (size_t)context->entry_length) == 0) {
+			    context->entry_length) == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
 			hit->heading.offset
@@ -762,7 +764,7 @@ entry_arrangement=%d, entry_count=%d)",
 		    }
 		    context->comparison_result
 			= context->compare_single(context->canonicalized_word,
-			    cache_p + 4, (size_t)context->entry_length);
+			    cache_p + 4, context->entry_length);
 		    context->in_group_entry = 1;
 		    cache_p += context->entry_length + 4;
 		    context->offset += context->entry_length + 4;
@@ -784,7 +786,7 @@ entry_arrangement=%d, entry_count=%d)",
 		    if (context->comparison_result == 0
 			&& context->in_group_entry
 			&& context->compare_group(context->word, cache_p + 2,
-			    (size_t)context->entry_length) == 0) {
+			    context->entry_length) == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
 			hit->heading.offset
@@ -847,12 +849,8 @@ entry_arrangement=%d, entry_count=%d)",
  * Get hit entries of a submitted keyword search request.
  */
 static EB_Error_Code
-eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
-    EB_Book *book;
-    EB_Search_Context *context;
-    int max_hit_count;
-    EB_Hit *hit_list;
-    int *hit_count;
+eb_hit_list_keyword(EB_Book *book, EB_Search_Context *context,
+    int max_hit_count, EB_Hit *hit_list, int *hit_count)
 {
     EB_Error_Code error_code;
     EB_Text_Context text_context;
@@ -895,14 +893,14 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
 	 *   1. the search process reaches to the end of an index page,
 	 *      and tries to read the next page.
 	 *   2. Someone else used the cache buffer.
-	 * 
+	 *
 	 * At the case of 1, the search process reads the page and update
 	 * the search context.  At the case of 2. it reads the page but
 	 * must not update the context!
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
 	    if (zio_lseek(&book->subbook_current->text_zio,
-		(off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+		(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
@@ -965,7 +963,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 */
 		context->comparison_result
 		    = context->compare_single(context->word, cache_p,
-			(size_t)context->entry_length);
+			context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
 			= eb_uint4(cache_p + context->entry_length + 6);
@@ -1011,7 +1009,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 */
 		context->comparison_result
 		    = context->compare_single(context->word, cache_p + 1,
-			(size_t)context->entry_length);
+			context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
 			= eb_uint4(cache_p + context->entry_length + 7);
@@ -1062,10 +1060,10 @@ entry_arrangement=%d, entry_count=%d)",
 		     */
 		    context->comparison_result
 			= context->compare_single(context->canonicalized_word,
-			    cache_p + 2, (size_t)context->entry_length);
+			    cache_p + 2, context->entry_length);
 		    if (context->comparison_result == 0
 			&& context->compare_single(context->word, cache_p + 2,
-			    (size_t)context->entry_length) == 0) {
+			    context->entry_length) == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
 			hit->heading.offset
@@ -1093,7 +1091,7 @@ entry_arrangement=%d, entry_count=%d)",
 		    }
 		    context->comparison_result
 			= context->compare_single(context->word, cache_p + 6,
-			    (size_t)context->entry_length);
+			    context->entry_length);
 		    context->keyword_heading.page
 			= eb_uint4(cache_p + context->entry_length + 6);
 		    context->keyword_heading.offset
@@ -1140,7 +1138,7 @@ entry_arrangement=%d, entry_count=%d)",
 		    }
 		    context->offset += 7;
 		    cache_p += 7;
-		    
+
 		} else {
 		    /*
 		     * Unknown group ID.
@@ -1200,19 +1198,15 @@ entry_arrangement=%d, entry_count=%d)",
  * Get hit entries of a submitted multi search request.
  */
 static EB_Error_Code
-eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
-    EB_Book *book;
-    EB_Search_Context *context;
-    int max_hit_count;
-    EB_Hit *hit_list;
-    int *hit_count;
+eb_hit_list_multi(EB_Book *book, EB_Search_Context *context, int max_hit_count,
+    EB_Hit *hit_list, int *hit_count)
 {
     EB_Error_Code error_code;
     EB_Hit *hit;
     int group_id;
     char *cache_p;
 
-    LOG(("in: eb_hit_list_multi(book=%d, max_hit_count=%d)", (int)book->code, 
+    LOG(("in: eb_hit_list_multi(book=%d, max_hit_count=%d)", (int)book->code,
 	max_hit_count));
 
     hit = hit_list;
@@ -1233,14 +1227,14 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
 	 *   1. the search process reaches to the end of an index page,
 	 *      and tries to read the next page.
 	 *   2. Someone else used the cache buffer.
-	 * 
+	 *
 	 * At the case of 1, the search process reads the page and update
 	 * the search context.  At the case of 2. it reads the page but
 	 * must not update the context!
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
 	    if (zio_lseek(&book->subbook_current->text_zio,
-		(off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+		(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
@@ -1303,7 +1297,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 */
 		context->comparison_result
 		    = context->compare_single(context->word, cache_p,
-			(size_t)context->entry_length);
+			context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
 			= eb_uint4(cache_p + context->entry_length + 6);
@@ -1349,7 +1343,7 @@ entry_arrangement=%d, entry_count=%d)",
 		 */
 		context->comparison_result
 		    = context->compare_single(context->word, cache_p + 1,
-			(size_t)context->entry_length);
+			context->entry_length);
 		if (context->comparison_result == 0) {
 		    hit->heading.page
 			= eb_uint4(cache_p + context->entry_length + 7);
@@ -1400,10 +1394,10 @@ entry_arrangement=%d, entry_count=%d)",
 		     */
 		    context->comparison_result
 			= context->compare_single(context->canonicalized_word,
-			    cache_p + 2, (size_t)context->entry_length);
+			    cache_p + 2, context->entry_length);
 		    if (context->comparison_result == 0
 			&& context->compare_single(context->word, cache_p + 2,
-			    (size_t)context->entry_length) == 0) {
+			    context->entry_length) == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
 			hit->heading.offset
@@ -1430,8 +1424,8 @@ entry_arrangement=%d, entry_count=%d)",
 			goto failed;
 		    }
 		    context->comparison_result
-			= context->compare_single(context->word,
-			    cache_p + 6, (size_t)context->entry_length);
+			= context->compare_single(context->word, cache_p + 6,
+			    context->entry_length);
 		    context->in_group_entry = 1;
 		    cache_p += context->entry_length + 6;
 		    context->offset += context->entry_length + 6;
@@ -1460,7 +1454,7 @@ entry_arrangement=%d, entry_count=%d)",
 		    }
 		    context->offset += 13;
 		    cache_p += 13;
-		    
+
 		} else {
 		    /*
 		     * Unknown group ID.
@@ -1510,14 +1504,10 @@ entry_arrangement=%d, entry_count=%d)",
  * and_list = hit_lists[0] AND hit_lists[1] AND ...
  */
 static void
-eb_and_hit_lists(and_list, and_count, max_and_count, hit_list_count,
-    hit_lists, hit_counts)
-    EB_Hit and_list[EB_TMP_MAX_HITS];
-    int *and_count;
-    int max_and_count;
-    int hit_list_count;
-    EB_Hit hit_lists[EB_NUMBER_OF_SEARCH_CONTEXTS][EB_TMP_MAX_HITS];
-    int hit_counts[EB_NUMBER_OF_SEARCH_CONTEXTS];
+eb_and_hit_lists(EB_Hit and_list[EB_TMP_MAX_HITS], int *and_count,
+    int max_and_count, int hit_list_count,
+    EB_Hit hit_lists[EB_NUMBER_OF_SEARCH_CONTEXTS][EB_TMP_MAX_HITS],
+    int hit_counts[EB_NUMBER_OF_SEARCH_CONTEXTS])
 {
     int hit_indexes[EB_NUMBER_OF_SEARCH_CONTEXTS];
     int greatest_list;
@@ -1529,7 +1519,7 @@ eb_and_hit_lists(and_list, and_count, max_and_count, hit_list_count,
     int increment_count;
     int i;
 
-    LOG(("in: eb_and_hit_lists(max_and_count=%d, hit_list_count=%d)", 
+    LOG(("in: eb_and_hit_lists(max_and_count=%d, hit_list_count=%d)",
 	max_and_count, hit_list_count));
 
     /*

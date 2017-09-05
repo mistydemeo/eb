@@ -1,16 +1,29 @@
 /*                                                            -*- C -*-
- * Copyright (c) 2003
- *    Motoyuki Kasahara
+ * Copyright (c) 2003-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -19,24 +32,13 @@
 
 #include <stdio.h>
 #include <sys/types.h>
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
 
 #ifdef ENABLE_NLS
 #ifdef HAVE_LOCALE_H
 #include <locale.h>
 #endif
 #include <libintl.h>
-#endif
-
-#ifndef HAVE_STRTOL
-#ifdef PROTOTYPES
-long strtol(const char *, char **, int);
-#else
-long strtol();
-#endif
 #endif
 
 /*
@@ -59,17 +61,6 @@ long strtol();
 #include "ebutils.h"
 
 /*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#ifdef PROTOTYPES
-#define EB_P(p) p
-#else
-#define EB_P(p)
-#endif
-#endif
-
-/*
  * Tricks for gettext.
  */
 #ifdef ENABLE_NLS
@@ -80,7 +71,7 @@ long strtol();
 #define N_(string) (string)
 #endif
 #else
-#define _(string) (string)       
+#define _(string) (string)
 #define N_(string) (string)
 #endif
 
@@ -115,7 +106,7 @@ long strtol();
  * Application cannot order EB Library not to use stop code.
  * EB Library guesses stop code automatically when appendix is not
  * given by application.
- * 
+ *
  * Instead, we use dummy stop code. The code is never used in text
  * of CD-ROM book.
  */
@@ -146,21 +137,23 @@ static const char *invoked_name;
 /*
  * Unexported functions.
  */
-static int parse_stop_code_argument EB_P((const char *, unsigned int *,
-    unsigned int *));
-static int parse_text_length_argument EB_P((const char *, ssize_t *));
-static int parse_text_position_argument EB_P((const char *, EB_Position *));
-static void output_help EB_P((void));
-static int scan_subbook_text EB_P((const char *, const char *, EB_Position *,
-    ssize_t, int, unsigned int, unsigned int));
-static EB_Error_Code hook_stop_code EB_P((EB_Book *, EB_Appendix *,
-    void *, EB_Hook_Code, int, const unsigned int *));
+static int parse_stop_code_argument(const char *argument,
+    unsigned int *stop_code0, unsigned int *stop_code1);
+static int parse_text_length_argument(const char *argument,
+    ssize_t *text_length);
+static int parse_text_position_argument(const char *argument,
+    EB_Position *text_position);
+static void output_help(void);
+static int scan_subbook_text(const char *book_directory,
+    const char *subbook_name, EB_Position *text_position,
+    ssize_t max_text_length, int show_stop_code_flag, unsigned int stop_code0,
+    unsigned int stop_code1);
+static EB_Error_Code hook_stop_code(EB_Book *book, EB_Appendix *appendix,
+    void *container, EB_Hook_Code code, int argc, const unsigned int *argv);
 
 
 int
-main(argc, argv)
-    int argc;
-    char *argv[];
+main(int argc, char *argv[])
 {
     const char *book_directory;
     ssize_t max_text_length;
@@ -292,10 +285,8 @@ main(argc, argv)
  * Parse stop code given as argument of the `-c' option.
  */
 static int
-parse_stop_code_argument(argument, stop_code0, stop_code1)
-    const char *argument;
-    unsigned int *stop_code0;
-    unsigned int *stop_code1;
+parse_stop_code_argument(const char *argument, unsigned int *stop_code0,
+    unsigned int *stop_code1)
 {
     const char *p = argument;
     const char *foundp;
@@ -357,9 +348,7 @@ parse_stop_code_argument(argument, stop_code0, stop_code1)
  * Parse stop code given as argument of the `-t' option.
  */
 static int
-parse_text_length_argument(argument, text_length)
-    const char *argument;
-    ssize_t *text_length;
+parse_text_length_argument(const char *argument, ssize_t *text_length)
 {
     const char *p = argument;
     const char *foundp;
@@ -394,9 +383,7 @@ parse_text_length_argument(argument, text_length)
  * Parse text position given as argument of the `-p' option.
  */
 static int
-parse_text_position_argument(argument, text_position)
-    const char *argument;
-    EB_Position *text_position;
+parse_text_position_argument(const char *argument, EB_Position *text_position)
 {
     const char *p = argument;
     const char *end_p;
@@ -453,7 +440,7 @@ parse_text_position_argument(argument, text_position)
  * Output help message to standard out, then exit.
  */
 static void
-output_help()
+output_help(void)
 {
     printf(_("Usage: %s [option...] [book-directory] subbook\n"),
 	program_name);
@@ -482,15 +469,9 @@ output_help()
  * Scan stop code in text.
  */
 static int
-scan_subbook_text(book_directory, subbook_name, text_position, max_text_length,
-    show_stop_code_flag, stop_code0, stop_code1)
-    const char *book_directory;
-    const char *subbook_name;
-    EB_Position *text_position;
-    ssize_t max_text_length;
-    int show_stop_code_flag;
-    unsigned int stop_code0;
-    unsigned int stop_code1;
+scan_subbook_text(const char *book_directory, const char *subbook_name,
+    EB_Position *text_position, ssize_t max_text_length,
+    int show_stop_code_flag, unsigned int stop_code0, unsigned int stop_code1)
 {
     EB_Error_Code error_code;
     EB_Book book;
@@ -502,7 +483,7 @@ scan_subbook_text(book_directory, subbook_name, text_position, max_text_length,
     char text[EB_SIZE_PAGE];
     ssize_t text_length;
 
-    /* 
+    /*
      * Initialize EB Library, `book', `appendix' and `hookset'.
      */
     eb_initialize_library();
@@ -608,7 +589,7 @@ scan_subbook_text(book_directory, subbook_name, text_position, max_text_length,
 	fputs_eucjp_to_locale(text, stdout);
 	text_length += result_length;
     }
-        
+
     /*
      * Finalize `hookset', `appendix', `book' and EB Library.
      */
@@ -634,13 +615,8 @@ scan_subbook_text(book_directory, subbook_name, text_position, max_text_length,
  * Hook function for EB_HOOK_BEGIN_KEYWORD and EB_HOK_SET_INDENT.
  */
 static EB_Error_Code
-hook_stop_code(book, appendix, container, code, argc, argv)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    void *container;
-    EB_Hook_Code code;
-    int argc;
-    const unsigned int *argv;
+hook_stop_code(EB_Book *book, EB_Appendix *appendix, void *container,
+    EB_Hook_Code code, int argc, const unsigned int *argv)
 {
     char string[EB_SIZE_PAGE];
 

@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "build-pre.h"
@@ -69,17 +82,19 @@ static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
 /*
  * Unexported functions.
  */
-static EB_Error_Code eb_read_text_internal EB_P((EB_Book *, EB_Appendix *,
-    EB_Hookset *, void *, size_t, char *, ssize_t *, int));
-static int eb_is_stop_code EB_P((EB_Book *, EB_Appendix *, unsigned int,
-    unsigned int));
+static EB_Error_Code eb_read_text_internal(EB_Book *book,
+    EB_Appendix *appendix, EB_Hookset *hookset, void *container,
+    size_t text_max_length, char *text, ssize_t *text_length,
+    int forward_only);
+static int eb_is_stop_code(EB_Book *book, EB_Appendix *appendix,
+    unsigned int code0, unsigned int code1);
+
 
 /*
  * Initialize text context of `book'.
  */
 void
-eb_initialize_text_context(book)
-    EB_Book *book;
+eb_initialize_text_context(EB_Book *book)
 {
     LOG(("in: eb_initialize_text_context(book=%d)", (int)book->code));
 
@@ -107,8 +122,7 @@ eb_initialize_text_context(book)
  * Finalize text context of `book'.
  */
 void
-eb_finalize_text_context(book)
-    EB_Book *book;
+eb_finalize_text_context(EB_Book *book)
 {
     LOG(("in: eb_finalize_text_context(book=%d)", (int)book->code));
 
@@ -124,8 +138,7 @@ eb_finalize_text_context(book)
  * Note that `contexxt_code' and `context_location' are unchanged.
  */
 void
-eb_reset_text_context(book)
-    EB_Book *book;
+eb_reset_text_context(EB_Book *book)
 {
     LOG(("in: eb_reset_text_context(book=%d)", (int)book->code));
 
@@ -153,8 +166,7 @@ eb_reset_text_context(book)
  * Invalidate text context of `book'.
  */
 void
-eb_invalidate_text_context(book)
-    EB_Book *book;
+eb_invalidate_text_context(EB_Book *book)
 {
     LOG(("in: eb_invalidate_text_context(book=%d)", (int)book->code));
 
@@ -170,9 +182,7 @@ eb_invalidate_text_context(book)
  * Reposition the offset of the subbook file.
  */
 EB_Error_Code
-eb_seek_text(book, position)
-    EB_Book *book;
-    const EB_Position *position;
+eb_seek_text(EB_Book *book, const EB_Position *position)
 {
     EB_Error_Code error_code;
 
@@ -204,7 +214,7 @@ eb_seek_text(book, position)
      */
     eb_reset_text_context(book);
     book->text_context.code = EB_TEXT_SEEKED;
-    book->text_context.location = (off_t)(position->page - 1) * EB_SIZE_PAGE
+    book->text_context.location = (position->page - 1) * EB_SIZE_PAGE
 	+ position->offset;
 
     /*
@@ -232,9 +242,7 @@ eb_seek_text(book, position)
  * Get the current text position of the subbook file.
  */
 EB_Error_Code
-eb_tell_text(book, position)
-    EB_Book *book;
-    EB_Position *position;
+eb_tell_text(EB_Book *book, EB_Position *position)
 {
     EB_Error_Code error_code;
 
@@ -256,7 +264,7 @@ eb_tell_text(book, position)
     position->page = book->text_context.location / EB_SIZE_PAGE + 1;
     position->offset = book->text_context.location % EB_SIZE_PAGE;
 
-    LOG(("out: eb_seek_text(position={%d,%d}) = %s", 
+    LOG(("out: eb_seek_text(position={%d,%d}) = %s",
 	position->page, position->offset, eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
@@ -277,15 +285,8 @@ eb_tell_text(book, position)
  * Get text in the current subbook in `book'.
  */
 EB_Error_Code
-eb_read_text(book, appendix, hookset, container, text_max_length, text,
-    text_length)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    EB_Hookset *hookset;
-    VOID *container;
-    size_t text_max_length;
-    char *text;
-    ssize_t *text_length;
+eb_read_text(EB_Book *book, EB_Appendix *appendix, EB_Hookset *hookset,
+    void *container, size_t text_max_length, char *text, ssize_t *text_length)
 {
     EB_Error_Code error_code;
     const EB_Hook *hook;
@@ -383,15 +384,8 @@ eb_read_text(book, appendix, hookset, container, text_max_length, text,
  * Get text in the current subbook in `book'.
  */
 EB_Error_Code
-eb_read_heading(book, appendix, hookset, container, text_max_length, text,
-    text_length)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    EB_Hookset *hookset;
-    VOID *container;
-    size_t text_max_length;
-    char *text;
-    ssize_t *text_length;
+eb_read_heading(EB_Book *book, EB_Appendix *appendix, EB_Hookset *hookset,
+    void *container, size_t text_max_length, char *text, ssize_t *text_length)
 {
     EB_Error_Code error_code;
     const EB_Hook *hook;
@@ -478,11 +472,8 @@ eb_read_heading(book, appendix, hookset, container, text_max_length, text,
  * Read data from the subbook file directly.
  */
 EB_Error_Code
-eb_read_rawtext(book, text_max_length, text, text_length)
-    EB_Book *book;
-    size_t text_max_length;
-    char *text;
-    ssize_t *text_length;
+eb_read_rawtext(EB_Book *book, size_t text_max_length, char *text,
+    ssize_t *text_length)
 {
     EB_Error_Code error_code;
 
@@ -519,7 +510,7 @@ eb_read_rawtext(book, text_max_length, text, text_length)
     /*
      * Seek START file and read data.
      */
-    if (zio_lseek(&book->subbook_current->text_zio, 
+    if (zio_lseek(&book->subbook_current->text_zio,
 	book->text_context.location, SEEK_SET) == -1) {
 	error_code = EB_ERR_FAIL_SEEK_TEXT;
 	goto failed;
@@ -554,16 +545,9 @@ eb_read_rawtext(book, text_max_length, text, text_length)
  * Get text or heading.
  */
 static EB_Error_Code
-eb_read_text_internal(book, appendix, hookset, container, text_max_length,
-    text, text_length, forward_only)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    EB_Hookset *hookset;
-    VOID *container;
-    size_t text_max_length;
-    char *text;
-    ssize_t *text_length;
-    int forward_only;
+eb_read_text_internal(EB_Book *book, EB_Appendix *appendix,
+    EB_Hookset *hookset, void *container, size_t text_max_length, char *text,
+    ssize_t *text_length, int forward_only)
 {
     EB_Error_Code error_code;
     EB_Text_Context *context;
@@ -606,7 +590,7 @@ text_max_length=%ld, forward=%d)",
 	    if (context->out_rest_length < context->unprocessed_size)
 		goto succeeded;
 	    memcpy(context->out, context->unprocessed,
-		(size_t)context->unprocessed_size);
+		context->unprocessed_size);
 	    context->out += context->unprocessed_size;
 	    context->out_rest_length -= context->unprocessed_size;
 	}
@@ -653,13 +637,13 @@ text_max_length=%ld, forward=%d)",
 
 	    if (0 < cache_rest_length)
 		memmove(cache_buffer, cache_p, cache_rest_length);
-	    if (zio_lseek(&book->subbook_current->text_zio, 
+	    if (zio_lseek(&book->subbook_current->text_zio,
 		context->location + cache_rest_length, SEEK_SET) == -1) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
 
-	    read_result = zio_read(&book->subbook_current->text_zio, 
+	    read_result = zio_read(&book->subbook_current->text_zio,
 		cache_buffer + cache_rest_length,
 		EB_SIZE_PAGE - cache_rest_length);
 	    if (read_result < 0) {
@@ -1425,11 +1409,8 @@ text_max_length=%ld, forward=%d)",
  * Check whether an escape sequence is stop-code or not.
  */
 static int
-eb_is_stop_code(book, appendix, code0, code1)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    unsigned int code0;
-    unsigned int code1;
+eb_is_stop_code(EB_Book *book, EB_Appendix *appendix, unsigned int code0,
+    unsigned int code1)
 {
     int result;
 
@@ -1451,8 +1432,7 @@ eb_is_stop_code(book, appendix, code0, code1)
  * Have the current text context reached the end of text?
  */
 int
-eb_is_text_stopped(book)
-    EB_Book *book;
+eb_is_text_stopped(EB_Book *book)
 {
     int is_stopped = 0;
 
@@ -1479,9 +1459,7 @@ eb_is_text_stopped(book)
  * Write a byte to a text buffer.
  */
 EB_Error_Code
-eb_write_text_byte1(book, byte1)
-    EB_Book *book;
-    int byte1;
+eb_write_text_byte1(EB_Book *book, int byte1)
 {
     EB_Error_Code error_code;
     char stream[1];
@@ -1523,10 +1501,7 @@ eb_write_text_byte1(book, byte1)
  * Write two bytes to a text buffer for output.
  */
 EB_Error_Code
-eb_write_text_byte2(book, byte1, byte2)
-    EB_Book *book;
-    int byte1;
-    int byte2;
+eb_write_text_byte2(EB_Book *book, int byte1, int byte2)
 {
     EB_Error_Code error_code;
     char stream[2];
@@ -1571,9 +1546,7 @@ eb_write_text_byte2(book, byte1, byte2)
  * Write a string to a text buffer.
  */
 EB_Error_Code
-eb_write_text_string(book, string)
-    EB_Book *book;
-    const char *string;
+eb_write_text_string(EB_Book *book, const char *string)
 {
     EB_Error_Code error_code;
     size_t string_length;
@@ -1593,7 +1566,7 @@ eb_write_text_string(book, string)
 	if (error_code != EB_SUCCESS)
 	    goto failed;
     } else {
-	memcpy(book->text_context.out, string, (size_t)string_length);
+	memcpy(book->text_context.out, string, string_length);
 	book->text_context.out += string_length;
 	book->text_context.out_rest_length -= string_length;
 	book->text_context.out_step += string_length;
@@ -1616,10 +1589,7 @@ eb_write_text_string(book, string)
  * Write a stream with `length' bytes to a text buffer.
  */
 EB_Error_Code
-eb_write_text(book, stream, stream_length)
-    EB_Book *book;
-    const char *stream;
-    size_t stream_length;
+eb_write_text(EB_Book *book, const char *stream, size_t stream_length)
 {
     EB_Error_Code error_code;
     char *reallocated;
@@ -1632,7 +1602,7 @@ eb_write_text(book, stream, stream_length)
      * save the stream in `book->text_context.unprocessed'.
      */
     if (book->text_context.unprocessed != NULL) {
-	reallocated = (char *)realloc(book->text_context.unprocessed, 
+	reallocated = (char *)realloc(book->text_context.unprocessed,
 	    book->text_context.unprocessed_size + stream_length);
 	if (reallocated == NULL) {
 	    free(book->text_context.unprocessed);
@@ -1642,10 +1612,10 @@ eb_write_text(book, stream, stream_length)
 	    goto failed;
 	}
 	memcpy(reallocated + book->text_context.unprocessed_size, stream,
-	    (size_t)stream_length);
+	    stream_length);
 	book->text_context.unprocessed = reallocated;
 	book->text_context.unprocessed_size += stream_length;
-	    
+
     } else if (book->text_context.out_rest_length < stream_length) {
 	book->text_context.unprocessed
 	    = (char *)malloc(book->text_context.out_step + stream_length);
@@ -1655,16 +1625,16 @@ eb_write_text(book, stream, stream_length)
 	}
 	book->text_context.unprocessed_size
 	    = book->text_context.out_step + stream_length;
-	memcpy(book->text_context.unprocessed, 
+	memcpy(book->text_context.unprocessed,
 	    book->text_context.out - book->text_context.out_step,
-	    (size_t)book->text_context.out_step);
+	    book->text_context.out_step);
 	memcpy(book->text_context.unprocessed + book->text_context.out_step,
-	    stream, (size_t)stream_length);
+	    stream, stream_length);
 	book->text_context.out -= book->text_context.out_step;
 	book->text_context.out_step = 0;
 
     } else {
-	memcpy(book->text_context.out, stream, (size_t)stream_length);
+	memcpy(book->text_context.out, stream, stream_length);
 	book->text_context.out += stream_length;
 	book->text_context.out_rest_length -= stream_length;
 	book->text_context.out_step += stream_length;
@@ -1687,15 +1657,14 @@ eb_write_text(book, stream, stream_length)
  * Get the current candidate word for multi search.
  */
 const char *
-eb_current_candidate(book)
-    EB_Book *book;
+eb_current_candidate(EB_Book *book)
 {
     LOG(("in: eb_current_candidate(book=%d)", (int)book->code));
 
     if (!book->text_context.is_candidate)
 	book->text_context.candidate[0] = '\0';
 
-    LOG(("out: eb_current_candidate() = %s", 
+    LOG(("out: eb_current_candidate() = %s",
 	eb_quoted_string(book->text_context.candidate)));
 
     return book->text_context.candidate;
@@ -1706,9 +1675,7 @@ eb_current_candidate(book)
  * Forward text position to the next paragraph.
  */
 EB_Error_Code
-eb_forward_text(book, appendix)
-    EB_Book *book;
-    EB_Appendix *appendix;
+eb_forward_text(EB_Book *book, EB_Appendix *appendix)
 {
     EB_Error_Code error_code;
 
@@ -1781,8 +1748,7 @@ eb_forward_text(book, appendix)
  * (for keyword search.)
  */
 EB_Error_Code
-eb_forward_heading(book)
-    EB_Book *book;
+eb_forward_heading(EB_Book *book)
 {
     EB_Error_Code error_code;
 
@@ -1805,7 +1771,7 @@ eb_forward_heading(book)
     /*
      * Forward text.
      */
-    error_code = eb_read_text_internal(book, NULL, &eb_default_hookset, 
+    error_code = eb_read_text_internal(book, NULL, &eb_default_hookset,
 	NULL, EB_SIZE_PAGE, NULL, NULL, 1);
     if (error_code != EB_SUCCESS)
 	goto failed;
@@ -1836,9 +1802,7 @@ eb_forward_heading(book)
  * Backward text position to the previous paragraph.
  */
 EB_Error_Code
-eb_backward_text(book, appendix)
-    EB_Book *book;
-    EB_Appendix *appendix;
+eb_backward_text(EB_Book *book, EB_Appendix *appendix)
 {
     EB_Error_Code error_code;
     EB_Text_Context saved_context;
@@ -1886,7 +1850,7 @@ eb_backward_text(book, appendix)
 	forward_location = book->text_context.location;
     } else {
 	memcpy(&saved_context, &book->text_context, sizeof(EB_Text_Context));
-	error_code = eb_read_text_internal(book, NULL, &eb_default_hookset, 
+	error_code = eb_read_text_internal(book, NULL, &eb_default_hookset,
 	    NULL, EB_SIZE_PAGE, NULL, NULL, 1);
 	if (error_code != EB_SUCCESS && error_code != EB_ERR_END_OF_CONTENT)
 	    goto failed;
@@ -1941,7 +1905,7 @@ eb_backward_text(book, appendix)
 	 * Since a stop code occupies 4 bytes and we start scanning
 	 * stop-code at preceding byte of the current location, we read
 	 * text in front of the current location and following 3 bytes.
-	 * 
+	 *
 	 *                  start scanning
 	 *                  |    current location
 	 *                  |    |

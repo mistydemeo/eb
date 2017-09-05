@@ -1,43 +1,42 @@
 
-			      EB Library
-		 C Library for accessing CD-ROM books
+			    EB ライブラリ
+	    CD-ROM 書籍にアクセスするための C のライブラリ
 
 
-EB Library is a C library for accessing CD-ROM books.  It can be built
-on UNIX derived systems.  EB Library supports to access CD-ROM books of
-EB, EBG, EBXA, EBXA-C, S-EBXA and EPWING formats.  CD-ROM books of those
-formats are popular in Japan.  Since CD-ROM books themseves are stands
-on the ISO 9660 format, you can mount the discs by the same way as other
-ISO 9660 discs.
+EB ライブラリは CD-ROM 書籍にアクセスするための C のライブラリです。
+UNIX 系 OS のシステム上で動作させることができます。EB, EBG, EBXA, EBXA-C,
+S-EBXA および EPWING 形式の CD-ROM 書籍に対応しています。これらの形式の
+CD-ROM 書籍は、日本で一般的に使われています。CD-ROM 書籍自体は ISO 9660
+形式になっていますので、他の ISO 9660 形式と同じ要領でマウントすること
+ができます。
 
-EB Library also provides some utility commands:
+また、EB ライブラリは幾つかのユーテリティコマンドも提供しています。
 
-	ebappendix	format appendix files for a CD-ROM book.
-	ebfont		get font data of local defined characters in
-			a CD-ROM book.
-	ebinfo		list information about a CD-ROM book.
-	ebrefile	refile a catalog file in a CD-ROM book.
-	ebstopcode	utility to analyze text data in a CD-ROM book for
-			stop code.
-	ebunzip		uncompress a CD-ROM book.
-	ebzip		compress a CD-ROM book.
-	ebzipinfo	output information about a compressed CD-ROM
-			book.
+	ebappendix	appendix (付録) データを整形する
+	ebfont		CD-ROM 書籍内の外字のフォントデータを取り出す
+	ebinfo		CD-ROM 書籍に関する情報を出力する
+	ebrefile	CD-ROM 書籍のカタログファイルを構成し直す
+	ebstopcode	CD-ROM 書籍の本文の区切りコードを検査する
+	ebunzip		CD-ROM 書籍を伸長する
+	ebzip		CD-ROM 書籍を圧縮する
+	ebzipinfo	CD-ROM 書籍の圧縮情報を出力する
 
 
-Beginning with version 4.0, EB Library supports remote book access.
-You can specify a CD-ROM book on a remote host with remote access
-identifer.  The format of the identifer is:
+バージョン 4.0 から、EB ライブラリは他のホストの書籍にアクセスできる
+ようになりました。遠隔アクセス用の識別子を使うことで、他ホスト上の
+CD-ROM 書籍を指定することができます。この識別子は、次のような形式をと
+ります。
 
-	ebnet://<host>:<port>/<book-name>	  (CD-ROM book)
-	ebnet://<host>:<port>/<book-name>.app	  (appendix package)
+	ebnet://<ホスト>:<ポート>/<書籍名>	  (CD-ROM 書籍本体)
+	ebnet://<ホスト>:<ポート>/<書籍名>.app	  (付録パッケージ)
 
-<host> is a host name or an IP address of the remote host.  Note that
-an IPv6 address must be enclosed in `[' and `]'.  <port> is a port
-number that the peer listens on.  You can omit the `:<port>' part if
-the host listens on the default port, 22010.
+<ホスト> は遠隔ホストの IP アドレスもしくはホスト名です。ただし、IPv6
+アドレスを指定する場合は、アドレスを `[' と `]' で囲む必要があります。
+<ポート> は、そのホストが待ち受けているポートの番号です。ホストが待ち
+受けているポートが標準の 22010 番であれば、`:<ポート>' の部分は省略可
+能です。
 
-For example:
+以下に例を記します。
 	ebnet://eb.example.com/dict
 	ebnet://eb.example.com:22010/dict.app
 	ebnet://192.168.1.1/dict.app
@@ -45,34 +44,21 @@ For example:
 	ebnet://[fe80::290:27ff:fe3]/dict.app
 	ebnet://[fe80::290:27ff:fe3]:22010/dict
 
-To use the remote access, you have to install EBNETD on <host>,
-which is remote access server software for EB Library.
+遠隔アクセスを行うには、EBNETD を <ホスト> 上にインストールする必要が
+あります。EBNETD は、EB Library 用の遠隔アクセスサーバのソフトウェア
+です。
 
 
-EB Library is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2, or (at your option)
-any later version.
-
-EB Library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-
-See the file NEWS for a list of major changes in the current release.
-See the file INSTALL for compilation and installation instructions.
-
-You can get the latest EB Library from
+最新の EB ライブラリは次のところから入手できます。
 
 	ftp://ftp.sra.co.jp/pub/misc/eb/
 
-You can get information about EB Library from
+EB ライブラリに関する情報は次のところから得ることができます。
 
 	http://www.sra.co.jp/people/m-kasahr/eb/
 
-Mail comments and bug reports for these programs to
+コメントやバグの報告は
 
 	m-kasahr@sra.co.jp
 
-in Japanese or English.
+宛に、日本語か英語でお送り下さい。

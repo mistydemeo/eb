@@ -1,24 +1,33 @@
 /*                                                            -*- C -*-
- * Copyright (c) 2001
- *    Motoyuki Kasahara
+ * Copyright (c) 2001-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifndef EBZIP_H
 #define EBZIP_H
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,58 +38,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <errno.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
 #include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
 #include <stdlib.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#else
-#include <sys/file.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
 #include <limits.h>
-#endif
-
-#ifdef HAVE_UTIME_H
-#include <utime.h>
-#else
-#ifdef HAVE_SYS_UTIME_H
-#include <sys/utime.h>
-#endif
-#endif
-
-#if HAVE_DIRENT_H
+#include <unistd.h>
 #include <dirent.h>
-#define NAMLEN(dirent) strlen((dirent)->d_name)
-#else /* not HAVE_DIRENT_H */
-#define dirent direct
-#define NAMLEN(dirent) (dirent)->d_namlen
-#if HAVE_SYS_NDIR_H
-#include <sys/ndir.h>
-#endif /* HAVE_SYS_NDIR_H */
-#if HAVE_SYS_DIR_H
-#include <sys/dir.h>
-#endif /* HAVE_SYS_DIR_H */
-#if HAVE_NDIR_H
-#include <ndir.h>
-#endif /* HAVE_NDIR_H */
-#endif /* not HAVE_DIRENT_H */
+#include <fcntl.h>
+#include <utime.h>
 
 #ifdef ENABLE_NLS
 #ifdef HAVE_LOCALE_H
@@ -91,34 +55,9 @@
 
 #include <zlib.h>
 
-#ifndef HAVE_STRCHR
-#define strchr index
-#define strrchr rindex
-#endif /* HAVE_STRCHR */
-
 #ifndef HAVE_STRCASECMP
-#ifdef PROTOTYPES
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
-#else
-int strcasecmp()
-int strncasecmp();
-#endif
-#endif
-
-#ifndef HAVE_MEMCPY
-#define memcpy(d, s, n) bcopy((s), (d), (n))
-#ifdef PROTOTYPES
-void *memchr(const void *, int, size_t);
-int memcmp(const void *, const void *, size_t);
-void *memmove(void *, const void *, size_t);
-void *memset(void *, int, size_t);
-#else
-char *memchr();
-int memcmp();
-char *memmove();
-char *memset();
-#endif
 #endif
 
 /*
@@ -129,26 +68,8 @@ char *memset();
 #endif
 
 /*
- * Whence parameter for lseek().
- */
-#ifndef SEEK_SET
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
-#endif
-
-/*
  * stat macros.
  */
-#ifdef	STAT_MACROS_BROKEN
-#ifdef	S_ISREG
-#undef	S_ISREG
-#endif
-#ifdef	S_ISDIR
-#undef	S_ISDIR
-#endif
-#endif	/* STAT_MACROS_BROKEN */
-
 #ifndef S_ISREG
 #define S_ISREG(m)   (((m) & S_IFMT) == S_IFREG)
 #endif
@@ -177,17 +98,6 @@ char *memset();
 #include "makedir.h"
 #include "samefile.h"
 #include "yesno.h"
-
-/*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#ifdef PROTOTYPES
-#define EB_P(p) p
-#else
-#define EB_P(p) ()
-#endif
-#endif
 
 /*
  * Tricks for gettext.
@@ -240,7 +150,7 @@ char *memset();
 /*
  * Overwrite modes.
  */
-#define EBZIP_OVERWRITE_QUERY		0
+#define EBZIP_OVERWRITE_CONFIRM		0
 #define EBZIP_OVERWRITE_FORCE		1
 #define EBZIP_OVERWRITE_NO		2
 
@@ -251,12 +161,28 @@ char *memset();
 #define EBZIP_DEFAULT_KEEP		0
 #define EBZIP_DEFAULT_QUIET		0
 #define EBZIP_DEFAULT_TEST		0
-#define EBZIP_DEFAULT_OVERWRITE		EBZIP_OVERWRITE_QUERY
+#define EBZIP_DEFAULT_OVERWRITE		EBZIP_OVERWRITE_CONFIRM
 
 #define EBZIP_DEFAULT_SKIP_FONT		0
 #define EBZIP_DEFAULT_SKIP_GRAPHIC	0
 #define EBZIP_DEFAULT_SKIP_MOVIE	0
 #define EBZIP_DEFAULT_SKIP_SOUND	0
+
+/*
+ * Region in HONMON or START file which ebzip doesn't compress.
+ */
+#define EBZIP_MAX_SPEEDUP_REGION_COUNT	3
+
+typedef struct {
+    int start_page;
+    int end_page;
+} Zip_Speedup_Region;
+
+typedef struct {
+    int region_count;
+    Zip_Speedup_Region regions[EBZIP_MAX_SPEEDUP_REGION_COUNT];
+} Zip_Speedup;
+
 
 /*
  * Global variables.
@@ -280,39 +206,57 @@ extern int ebzip_skip_flag_sound;
  * Function declarations.
  */
 /* copyfile.c */
-int ebzip_copy_file EB_P((const char *, const char *));
-int ebzip_copy_files_in_directory EB_P((const char *, const char *));
+int ebzip_copy_file(const char *out_file_name, const char *in_file_name);
+int ebzip_copy_files_in_directory(const char *out_directory_name,
+    const char *in_directory_name);
 
 /* ebzip1.c */
-int ebzip1_slice EB_P((char *, size_t *, char *, size_t));
+int ebzip1_slice(char *out_buffer, size_t *out_byte_length, char *in_buffer,
+    size_t in_byte_length);
 
 /* sebxa.c */
-int fix_sebxa_start EB_P((const char *, int));
-int get_sebxa_indexes EB_P((const char *, int, off_t *, off_t *, off_t *,
-    off_t *));
+int rewrite_sebxa_start(const char *file_name, int index_page);
+int get_sebxa_indexes(const char *file_name, int index_page,
+    off_t *index_location, off_t *index_base, off_t *zio_start_location,
+    off_t *zio_end_location);
 
 /* unzipbook.c */
-int ebzip_unzip_book EB_P((const char *, const char *,
-    char [][EB_MAX_DIRECTORY_NAME_LENGTH + 1], int));
+int ebzip_unzip_book(const char *out_top_path, const char *book_path,
+    char subbook_name_list[][EB_MAX_DIRECTORY_NAME_LENGTH + 1],
+    int subbook_name_count);
 
 /* unzipfile.c */
-int ebzip_unzip_file EB_P((const char *, const char *, Zio_Code));
-int ebzip_unzip_start_file EB_P((const char *, const char *, Zio_Code, int));
+int ebzip_unzip_file(const char *out_file_name, const char *in_file_name,
+    Zio_Code in_zio_code);
+int ebzip_unzip_start_file(const char *out_file_name,
+    const char *in_file_name, Zio_Code in_zio_code, int index_page);
 
 /* zipbook.c */
-int ebzip_zip_book EB_P((const char *, const char *,
-    char [][EB_MAX_DIRECTORY_NAME_LENGTH + 1], int));
+int ebzip_zip_book(const char *out_top_path, const char *book_path,
+    char subbook_name_list[][EB_MAX_DIRECTORY_NAME_LENGTH + 1],
+    int subbook_name_count);
 
 /* zipfile.c */
-int ebzip_zip_file EB_P((const char *, const char *, Zio_Code));
-int ebzip_zip_start_file EB_P((const char *, const char *, Zio_Code, int));
+int ebzip_zip_file(const char *out_file_name, const char *in_file_name,
+    Zio_Code in_zio_code, Zip_Speedup *speedup);
+int ebzip_zip_start_file(const char *out_file_name, const char *in_file_name,
+    Zio_Code in_zio_code, int index_page, Zip_Speedup *speedup);
 
 /* zipinfobook.c */
-int ebzip_zipinfo_book EB_P((const char *,
-    char [][EB_MAX_DIRECTORY_NAME_LENGTH + 1], int));
+int ebzip_zipinfo_book(const char *book_path,
+    char subbook_name_list[][EB_MAX_DIRECTORY_NAME_LENGTH + 1],
+    int subbook_name_count);
 
 /* zipinfofile.c */
-int ebzip_zipinfo_file EB_P((const char *, Zio_Code));
-int ebzip_zipinfo_start_file EB_P((const char *, Zio_Code, int));
+int ebzip_zipinfo_file(const char *in_file_name, Zio_Code in_zio_code);
+int ebzip_zipinfo_start_file(const char *in_file_name, Zio_Code in_zio_code,
+    int index_page);
+
+/* sppedup.c */
+void ebzip_initialize_zip_speedup(Zip_Speedup *speedup);
+void ebzip_finalize_zip_speedup(Zip_Speedup *speedup);
+int ebzip_set_zip_speedup(Zip_Speedup *speedup, const char *file_name,
+    Zio_Code zio_code, int index_page);
+int ebzip_is_speedup_slice(Zip_Speedup *speedup, int slice, int zip_level);
 
 #endif /* EBZIP_H */

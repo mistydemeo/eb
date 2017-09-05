@@ -24,6 +24,7 @@ POTFILES = \
 	$(top_srcdir)/ebzip/ebzip.c \
 	$(top_srcdir)/ebzip/ebzip1.c \
 	$(top_srcdir)/ebzip/sebxa.c \
+	$(top_srcdir)/ebzip/speedup.c \
 	$(top_srcdir)/ebzip/unzipbook.c \
 	$(top_srcdir)/ebzip/unzipfile.c \
 	$(top_srcdir)/ebzip/zipbook.c \
@@ -44,9 +45,10 @@ prefix = @prefix@
 datadir = @datadir@
 localedir = @localedir@
 
+mkdir_p = @mkdir_p@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
-mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+mkinstalldirs = $(mkdir_p)
 
 MSGFMT = @MSGFMT@
 XGETTEXT = @XGETTEXT@

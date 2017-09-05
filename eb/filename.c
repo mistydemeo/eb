@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 1997, 2000, 01  
- *    Motoyuki Kasahara
+ * Copyright (c) 1997-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "build-pre.h"
@@ -36,8 +49,7 @@
  * Convert a path name to an absolute path.
  */
 EB_Error_Code
-eb_canonicalize_path_name(path_name)
-    char *path_name;
+eb_canonicalize_path_name(char *path_name)
 {
     char cwd[EB_MAX_PATH_LENGTH + 1];
     char temporary_path_name[EB_MAX_PATH_LENGTH + 1];
@@ -86,8 +98,7 @@ eb_canonicalize_path_name(path_name)
  * Current version by Motoyuki Kasahara.
  */
 EB_Error_Code
-eb_canonicalize_path_name(path_name)
-    char *path_name;
+eb_canonicalize_path_name(char *path_name)
 {
     char cwd[EB_MAX_PATH_LENGTH + 1];
     char temporary_path_name[EB_MAX_PATH_LENGTH + 1];
@@ -187,8 +198,7 @@ eb_canonicalize_path_name(path_name)
  * file name using this function.
  */
 void
-eb_canonicalize_file_name(file_name)
-    char *file_name;
+eb_canonicalize_file_name(char *file_name)
 {
     char *p;
 
@@ -200,15 +210,13 @@ eb_canonicalize_file_name(file_name)
 
 /*
  * Rewrite `directory_name' to a real directory name in the `path' directory.
- * 
+ *
  * If a directory matched to `directory_name' exists, then EB_SUCCESS is
  * returned, and `directory_name' is rewritten to that name.  Otherwise
  * EB_ERR_BAD_DIR_NAME is returned.
  */
 EB_Error_Code
-eb_fix_directory_name(path, directory_name)
-    const char *path;
-    char *directory_name;
+eb_fix_directory_name(const char *path, char *directory_name)
 {
     struct dirent *entry;
     DIR *dir;
@@ -254,16 +262,14 @@ eb_fix_directory_name(path, directory_name)
 /*
  * Rewrite `sub_directory_name' to a real sub directory name in the
  * `path/directory_name' directory.
- * 
+ *
  * If a directory matched to `sub_directory_name' exists, then EB_SUCCESS
  * is returned, and `directory_name' is rewritten to that name.  Otherwise
  * EB_ERR_BAD_FILE_NAME is returned.
  */
 EB_Error_Code
-eb_fix_directory_name2(path, directory_name, sub_directory_name)
-    const char *path;
-    const char *directory_name;
-    char *sub_directory_name;
+eb_fix_directory_name2(const char *path, const char *directory_name,
+    char *sub_directory_name)
 {
     char sub_path_name[EB_MAX_PATH_LENGTH + 1];
 
@@ -279,9 +285,7 @@ eb_fix_directory_name2(path, directory_name, sub_directory_name)
  * Otherwise, add `suffix' to `path_name'.
  */
 void
-eb_fix_path_name_suffix(path_name, suffix)
-    char *path_name;
-    const char *suffix;
+eb_fix_path_name_suffix(char *path_name, const char *suffix)
 {
     char *base_name;
     char *dot;
@@ -349,7 +353,7 @@ eb_fix_path_name_suffix(path_name, suffix)
 /*
  * Rewrite `found_file_name' to a real file name in the `path_name'
  * directory.
- * 
+ *
  * If a file matched to `target_file_name' exists, then EB_SUCCESS
  * is returned, and `found_file_name' is rewritten to that name.
  * Otherwise EB_ERR_BAD_FILE_NAME is returned.
@@ -358,10 +362,8 @@ eb_fix_path_name_suffix(path_name, suffix)
  * EB_MAX_DIRECTORY_NAME_LENGTH characters.
  */
 EB_Error_Code
-eb_find_file_name(path_name, target_file_name, found_file_name)
-    const char *path_name;
-    const char *target_file_name;
-    char *found_file_name;
+eb_find_file_name(const char *path_name, const char *target_file_name,
+    char *found_file_name)
 {
     char ebz_target_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
     char org_target_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
@@ -416,7 +418,7 @@ eb_find_file_name(path_name, target_file_name, found_file_name)
 	 * All the comparisons are done without case sensitivity.
 	 * We support version number ";1" only.
 	 */
-	d_namlen = NAMLEN(entry);
+	d_namlen = strlen(entry->d_name);
 	if (2 < d_namlen
 	    && *(entry->d_name + d_namlen - 2) == ';'
 	    && ASCII_ISDIGIT(*(entry->d_name + d_namlen - 1))) {
@@ -473,12 +475,8 @@ eb_find_file_name(path_name, target_file_name, found_file_name)
  * is returned.
  */
 EB_Error_Code
-eb_find_file_name2(path_name, sub_directory_name, target_file_name,
-    found_file_name)
-    const char *path_name;
-    const char *sub_directory_name;
-    const char *target_file_name;
-    char *found_file_name;
+eb_find_file_name2(const char *path_name, const char *sub_directory_name,
+    const char *target_file_name, char *found_file_name)
 {
     char sub_path_name[EB_MAX_PATH_LENGTH + 1];
 
@@ -488,13 +486,9 @@ eb_find_file_name2(path_name, sub_directory_name, target_file_name,
 
 
 EB_Error_Code
-eb_find_file_name3(path_name, sub_directory_name, sub2_directory_name,
-    target_file_name, found_file_name)
-    const char *path_name;
-    const char *sub_directory_name;
-    const char *sub2_directory_name;
-    const char *target_file_name;
-    char *found_file_name;
+eb_find_file_name3(const char *path_name, const char *sub_directory_name,
+    const char *sub2_directory_name, const char *target_file_name,
+    char *found_file_name)
 {
     char sub2_path_name[EB_MAX_PATH_LENGTH + 1];
 
@@ -511,10 +505,8 @@ eb_find_file_name3(path_name, sub_directory_name, sub2_directory_name,
  * and copy it into `composed_path_name'.
  */
 void
-eb_compose_path_name(path_name, file_name, composed_path_name)
-    const char *path_name;
-    const char *file_name;
-    char *composed_path_name;
+eb_compose_path_name(const char *path_name, const char *file_name,
+    char *composed_path_name)
 {
 #ifndef DOS_FILE_PATH
     if (strcmp(path_name, "/") == 0)
@@ -538,12 +530,8 @@ eb_compose_path_name(path_name, file_name, composed_path_name)
  * and copy it into `composed_path_name'.
  */
 void
-eb_compose_path_name2(path_name, sub_directory_name, file_name, 
-    composed_path_name)
-    const char *path_name;
-    const char *sub_directory_name;
-    const char *file_name;
-    char *composed_path_name;
+eb_compose_path_name2(const char *path_name, const char *sub_directory_name,
+    const char *file_name, char *composed_path_name)
 {
 #ifndef DOS_FILE_PATH
     if (strcmp(path_name, "/") == 0) {
@@ -555,11 +543,11 @@ eb_compose_path_name2(path_name, sub_directory_name, file_name,
     }
 #else
     if (is_ebnet_url(path_name)) {
-	sprintf(composed_path_name, "%s/%s/%s", 
+	sprintf(composed_path_name, "%s/%s/%s",
 	    path_name, sub_directory_name, file_name);
     } else if (ASCII_ISALPHA(*path_name)
 	&& strcmp(path_name + 1, ":\\") == 0) {
-	sprintf(composed_path_name, "%s%s\\%s", 
+	sprintf(composed_path_name, "%s%s\\%s",
 	    path_name, sub_directory_name, file_name);
     } else {
 	sprintf(composed_path_name, "%s\\%s\\%s",
@@ -575,13 +563,9 @@ eb_compose_path_name2(path_name, sub_directory_name, file_name,
  * and copy it into `composed_path_name'.
  */
 void
-eb_compose_path_name3(path_name, sub_directory_name, sub2_directory_name,
-    file_name, composed_path_name)
-    const char *path_name;
-    const char *sub_directory_name;
-    const char *sub2_directory_name;
-    const char *file_name;
-    char *composed_path_name;
+eb_compose_path_name3(const char *path_name, const char *sub_directory_name,
+    const char *sub2_directory_name, const char *file_name,
+    char *composed_path_name)
 {
 #ifndef DOS_FILE_PATH
     if (strcmp(path_name, "/") == 0) {
@@ -593,11 +577,11 @@ eb_compose_path_name3(path_name, sub_directory_name, sub2_directory_name,
     }
 #else
     if (is_ebnet_url(path_name)) {
-	sprintf(composed_path_name, "%s/%s/%s/%s", 
+	sprintf(composed_path_name, "%s/%s/%s/%s",
 	    path_name, sub_directory_name, sub2_directory_name, file_name);
     } else if (ASCII_ISALPHA(*path_name)
 	&& strcmp(path_name + 1, ":\\") == 0) {
-	sprintf(composed_path_name, "%s%s\\%s\\%s", 
+	sprintf(composed_path_name, "%s%s\\%s\\%s",
 	    path_name, sub_directory_name, sub2_directory_name, file_name);
     } else {
 	sprintf(composed_path_name, "%s\\%s\\%s\\%s",
@@ -616,9 +600,7 @@ eb_compose_path_name3(path_name, sub_directory_name, sub2_directory_name,
  * Otherwise EB_ERR_BAD_FILE_NAME is returned.
  */
 EB_Error_Code
-eb_compose_movie_file_name(argv, composed_file_name)
-    const unsigned int *argv;
-    char *composed_file_name;
+eb_compose_movie_file_name(const unsigned int *argv, char *composed_file_name)
 {
     unsigned short jis_characters[EB_MAX_DIRECTORY_NAME_LENGTH];
     const unsigned int *arg_p;
@@ -667,9 +649,8 @@ eb_compose_movie_file_name(argv, composed_file_name)
  * EB_SUCCESS is returned upon success, EB_ERR_BAD_FILE_NAME otherwise.
  */
 EB_Error_Code
-eb_decompose_movie_file_name(argv, composed_file_name)
-    unsigned int *argv;
-    const char *composed_file_name;
+eb_decompose_movie_file_name(unsigned int *argv,
+    const char *composed_file_name)
 {
     unsigned short jis_characters[EB_MAX_DIRECTORY_NAME_LENGTH];
     unsigned int *arg_p;
@@ -717,15 +698,13 @@ eb_decompose_movie_file_name(argv, composed_file_name)
 
 
 void
-eb_path_name_zio_code(path_name, default_zio_code, zio_code)
-    const char *path_name;
-    Zio_Code default_zio_code;
-    Zio_Code *zio_code;
+eb_path_name_zio_code(const char *path_name, Zio_Code default_zio_code,
+    Zio_Code *zio_code)
 {
     const char *base_name;
     const char *dot;
 
-#ifndef DOS_FILE_PATH 
+#ifndef DOS_FILE_PATH
     base_name = strrchr(path_name, '/');
 #else
     if (is_ebnet_url(path_name))

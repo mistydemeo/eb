@@ -1,16 +1,29 @@
 /*                                                            -*- C -*-
- * Copyright (c) 2001  
- *    Motoyuki Kasahara
+ * Copyright (c) 2001-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #include "ebzip.h"
@@ -25,9 +38,7 @@
  * Return 0 if succeeds, -1 otherwise.
  */
 int
-fix_sebxa_start(file_name, index_page)
-    const char *file_name;
-    int index_page;
+rewrite_sebxa_start(const char *file_name, int index_page)
 {
     char buffer[EB_SIZE_PAGE];
     int file = -1;
@@ -46,8 +57,8 @@ fix_sebxa_start(file_name, index_page)
      * Output information.
      */
     if (!ebzip_quiet_flag) {
-        printf(_("==> fix %s <==\n"), file_name);
-        fflush(stdout);
+        fprintf(stderr, _("==> rewrite %s <==\n"), file_name);
+        fflush(stderr);
     }
 
     /*
@@ -63,7 +74,7 @@ fix_sebxa_start(file_name, index_page)
     /*
      * Read index page.
      */
-    if (lseek(file, (off_t)(index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (lseek(file, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), file_name);
 	goto failed;
@@ -72,8 +83,7 @@ fix_sebxa_start(file_name, index_page)
     done_length = 0;
     while (done_length < EB_SIZE_PAGE) {
 	errno = 0;
-	n =  read(file, buffer + done_length,
-	    (size_t)EB_SIZE_PAGE - done_length);
+	n =  read(file, buffer + done_length, EB_SIZE_PAGE - done_length);
 	if (n < 0) {
             if (errno == EINTR)
                 continue;
@@ -116,7 +126,7 @@ fix_sebxa_start(file_name, index_page)
     /*
      * Write back the index page.
      */
-    if (lseek(file, (off_t)(index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (lseek(file, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), file_name);
 	goto failed;
@@ -125,8 +135,7 @@ fix_sebxa_start(file_name, index_page)
     done_length = 0;
     while (done_length < EB_SIZE_PAGE) {
 	errno = 0;
-	n =  write(file, buffer + done_length,
-	    (size_t)EB_SIZE_PAGE - done_length);
+	n =  write(file, buffer + done_length, EB_SIZE_PAGE - done_length);
 	if (n < 0) {
             if (errno == EINTR)
                 continue;
@@ -138,7 +147,13 @@ fix_sebxa_start(file_name, index_page)
 	}
     }
 
-    fputs(_("completed\n\n"), stdout);
+    if (!ebzip_quiet_flag) {
+	fprintf(stderr, _("completed (%lu / %lu bytes)\n"),
+	    (unsigned long)done_length, (unsigned long)done_length);
+	fputc('\n', stderr);
+	fflush(stderr);
+    }
+
     close(file);
     return 0;
 
@@ -156,14 +171,8 @@ fix_sebxa_start(file_name, index_page)
  * Return 0 if succeeds, -1 otherwise.
  */
 int
-get_sebxa_indexes(file_name, index_page, index_location, index_base,
-    zio_start_location, zio_end_location)
-    const char *file_name;
-    int index_page;
-    off_t *index_location;
-    off_t *index_base;
-    off_t *zio_start_location;
-    off_t *zio_end_location;
+get_sebxa_indexes(const char *file_name, int index_page, off_t *index_location,
+    off_t *index_base, off_t *zio_start_location, off_t *zio_end_location)
 {
     char buffer[EB_SIZE_PAGE];
     int file = -1;
@@ -196,7 +205,7 @@ get_sebxa_indexes(file_name, index_page, index_location, index_base,
     /*
      * Read index page.
      */
-    if (lseek(file, (off_t)(index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (lseek(file, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), file_name);
 	goto failed;
@@ -205,8 +214,7 @@ get_sebxa_indexes(file_name, index_page, index_location, index_base,
     done_length = 0;
     while (done_length < EB_SIZE_PAGE) {
 	errno = 0;
-	n =  read(file, buffer + done_length,
-	    (size_t)EB_SIZE_PAGE - done_length);
+	n =  read(file, buffer + done_length, EB_SIZE_PAGE - done_length);
 	if (n < 0) {
             if (errno == EINTR)
                 continue;

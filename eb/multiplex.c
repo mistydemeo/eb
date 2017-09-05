@@ -1,16 +1,29 @@
 /*
- * Copyright (c) 2003
- *    Motoyuki Kasahara
+ * Copyright (c) 2003-2004  Motoyuki Kasahara
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2, or (at your option)
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. Neither the name of the project nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE PROJECT AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE PROJECT OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  */
 
 #ifdef HAVE_CONFIG_H
@@ -39,9 +52,9 @@
 #include "ebnet.h"
 
 #ifndef IF_NAMESIZE
-#ifdef IFNAMSIZ 
+#ifdef IFNAMSIZ
 #define IF_NAMESIZE             IFNAMSIZ
-#else 
+#else
 #define IF_NAMESIZE             16
 #endif
 #endif
@@ -129,26 +142,27 @@ static EBNet_Host_Info ebnet_host_info_cache;
  * a new connection with a server, and invokes the bye hook each time
  * it closes a last socket connected with a server.
  */
-static int (*hello_hook) EB_P((int));
-static int (*bye_hook) EB_P((int));
+static int (*hello_hook)(int file);
+static int (*bye_hook)(int file);
 
 /*
  * Unexported functions.
  */
-static void ebnet_get_addresses EB_P((const char *, char *, char *));
-static EBNet_Socket_Entry *ebnet_find_multiplex_entry EB_P((const char *,
-    const char *, int, int));
-static int ebnet_create_new_connection EB_P((const char *, int));
-static void ebnet_add_socket_entry EB_P((EBNet_Socket_Entry *));
-static void ebnet_delete_socket_entry EB_P((EBNet_Socket_Entry *));
-static EBNet_Socket_Entry *ebnet_find_socket_entry EB_P((int));
+static void ebnet_get_addresses(const char *host, char *ipv6_address,
+    char *ipv4_address);
+static EBNet_Socket_Entry *ebnet_find_multiplex_entry(const char *ipv6_address,
+    const char *ipv4_address, int port, int family);
+static int ebnet_create_new_connection(const char *address, int port);
+static void ebnet_add_socket_entry(EBNet_Socket_Entry *new_entry);
+static void ebnet_delete_socket_entry(EBNet_Socket_Entry *target_entry);
+static EBNet_Socket_Entry *ebnet_find_socket_entry(int file);
 
 
 /*
  * Initialize the multiplex module.
  */
 void
-ebnet_initialize_multiplex()
+ebnet_initialize_multiplex(void)
 {
     ebnet_socket_entries = NULL;
     ebnet_socket_entry_cache = NULL;
@@ -166,7 +180,7 @@ ebnet_initialize_multiplex()
  * Finalize the multiplex module.
  */
 void
-ebnet_finalize()
+ebnet_finalize(void)
 {
     while (ebnet_socket_entries != NULL) {
 	close(ebnet_socket_entries->file);
@@ -185,8 +199,7 @@ ebnet_finalize()
  * Set hello hook.
  */
 void
-ebnet_set_hello_hook(hook)
-    int (*hook) EB_P((int));
+ebnet_set_hello_hook(int (*hook)(int file))
 {
     hello_hook = hook;
 }
@@ -196,8 +209,7 @@ ebnet_set_hello_hook(hook)
  * Set bye hook.
  */
 void
-ebnet_set_bye_hook(hook)
-    int (*hook) EB_P((int));
+ebnet_set_bye_hook(int (*hook)(int file))
 {
     bye_hook = hook;
 }
@@ -206,7 +218,7 @@ ebnet_set_bye_hook(hook)
 /*
  * Create a socket connected with a server.
  *
- * `host' is a host name or an IP address of the server.  `port' is 
+ * `host' is a host name or an IP address of the server.  `port' is
  * destination port number of the TCP connection.  `family' is protocol
  * family: PF_INET, PF_INET6 or PF_UNSPEC.
  *
@@ -217,10 +229,7 @@ ebnet_set_bye_hook(hook)
  * connected with the server, this function simply duplicates the socket.
  */
 int
-ebnet_connect_socket(host, port, family)
-    const char *host;
-    int port;
-    int family;
+ebnet_connect_socket(const char *host, int port, int family)
 {
     char ipv6_address[INET6_ADDRSTRLEN + IF_NAMESIZE];
     char ipv4_address[INET_ADDRSTRLEN];
@@ -378,10 +387,7 @@ ebnet_connect_socket(host, port, family)
  * Otherwise an empty string is written.
  */
 static void
-ebnet_get_addresses(host, ipv6_address, ipv4_address)
-    const char *host;
-    char *ipv6_address;
-    char *ipv4_address;
+ebnet_get_addresses(const char *host, char *ipv6_address, char *ipv4_address)
 {
     struct addrinfo hints;
     struct addrinfo *info_list = NULL;
@@ -469,11 +475,8 @@ ebnet_get_addresses(host, ipv6_address, ipv4_address)
  * If found, the function returns the entry.  Otherwise it returns NULL.
  */
 static EBNet_Socket_Entry *
-ebnet_find_multiplex_entry(ipv6_address, ipv4_address, port, family)
-    const char *ipv6_address;
-    const char *ipv4_address;
-    int port;
-    int family;
+ebnet_find_multiplex_entry(const char *ipv6_address, const char *ipv4_address,
+    int port, int family)
 {
     EBNet_Socket_Entry *entry;
 
@@ -522,16 +525,14 @@ ebnet_find_multiplex_entry(ipv6_address, ipv4_address, port, family)
 /*
  * Establish a TCP connection with an EBNET server.
  *
- * `host' is a host name or an IP address of the server.  `port' is 
+ * `host' is a host name or an IP address of the server.  `port' is
  * destination port number of the TCP connection.
  *
  * Upon success, file descriptor of the socket is returned.
  * Otherwise -1 is returned.
  */
 static int
-ebnet_create_new_connection(address, port)
-    const char *address;
-    int port;
+ebnet_create_new_connection(const char *address, int port)
 {
     struct addrinfo hints;
     struct addrinfo *info_list = NULL;
@@ -582,8 +583,7 @@ ebnet_create_new_connection(address, port)
  * Add `new_entry' to `ebnet_socket_entries'.
  */
 static void
-ebnet_add_socket_entry(new_entry)
-    EBNet_Socket_Entry *new_entry;
+ebnet_add_socket_entry(EBNet_Socket_Entry *new_entry)
 {
     EBNet_Socket_Entry *entry;
     int reference_count;
@@ -618,8 +618,7 @@ ebnet_add_socket_entry(new_entry)
  * Delete `target_entry' from `ebnet_socket_entries'.
  */
 static void
-ebnet_delete_socket_entry(target_entry)
-    EBNet_Socket_Entry *target_entry;
+ebnet_delete_socket_entry(EBNet_Socket_Entry *target_entry)
 {
     EBNet_Socket_Entry *entry;
     int new_reference_id;
@@ -667,8 +666,7 @@ ebnet_delete_socket_entry(target_entry)
  * Disconnect with a server.
  */
 void
-ebnet_disconnect_socket(file)
-    int file;
+ebnet_disconnect_socket(int file)
 {
     EBNet_Socket_Entry *entry;
 
@@ -695,8 +693,7 @@ ebnet_disconnect_socket(file)
  * It returns `file' upon success, -1 otherwise.
  */
 int
-ebnet_reconnect_socket(file)
-    int file;
+ebnet_reconnect_socket(int file)
 {
     EBNet_Socket_Entry *old_entry;
     EBNet_Socket_Entry *new_entry = NULL;
@@ -739,7 +736,7 @@ ebnet_reconnect_socket(file)
 
     ebnet_delete_socket_entry(old_entry);
 
-#ifdef HAVE_DUP2
+#ifndef WINSOCK
     if (dup2(new_entry->file, file) < 0)
 	goto failed;
     close(new_entry->file);
@@ -772,8 +769,7 @@ ebnet_reconnect_socket(file)
  * doesn't duplicate lost-synchronized files.
  */
 int
-ebnet_set_lost_sync(file)
-    int file;
+ebnet_set_lost_sync(int file)
 {
     EBNet_Socket_Entry *entry;
     int reference_id;
@@ -796,8 +792,7 @@ ebnet_set_lost_sync(file)
  * Search `ebnet_socket_entries' for a connection entry with `file'.
  */
 static EBNet_Socket_Entry *
-ebnet_find_socket_entry(file)
-    int file;
+ebnet_find_socket_entry(int file)
 {
     EBNet_Socket_Entry *entry;
 
@@ -820,9 +815,7 @@ ebnet_find_socket_entry(file)
  * Set book name associated with `file'.
  */
 int
-ebnet_set_book_name(file, book_name)
-    int file;
-    const char *book_name;
+ebnet_set_book_name(int file, const char *book_name)
 {
     EBNet_Socket_Entry *entry;
 
@@ -841,8 +834,7 @@ ebnet_set_book_name(file, book_name)
  * Get book name associated with `file'.
  */
 const char *
-ebnet_get_book_name(file)
-    int file;
+ebnet_get_book_name(int file)
 {
     EBNet_Socket_Entry *entry;
 
@@ -858,9 +850,7 @@ ebnet_get_book_name(file)
  * Set book name associated with `file'.
  */
 int
-ebnet_set_file_path(file, file_path)
-    int file;
-    const char *file_path;
+ebnet_set_file_path(int file, const char *file_path)
 {
     EBNet_Socket_Entry *entry;
 
@@ -879,8 +869,7 @@ ebnet_set_file_path(file, file_path)
  * Get file path associated with `file'.
  */
 const char *
-ebnet_get_file_path(file)
-    int file;
+ebnet_get_file_path(int file)
 {
     EBNet_Socket_Entry *entry;
 
@@ -896,9 +885,7 @@ ebnet_get_file_path(file)
  * Set file offset.
  */
 int
-ebnet_set_offset(file, offset)
-    int file;
-    off_t offset;
+ebnet_set_offset(int file, off_t offset)
 {
     EBNet_Socket_Entry *entry;
 
@@ -915,8 +902,7 @@ ebnet_set_offset(file, offset)
  * Get file offset.
  */
 off_t
-ebnet_get_offset(file)
-    int file;
+ebnet_get_offset(int file)
 {
     EBNet_Socket_Entry *entry;
 
@@ -932,9 +918,7 @@ ebnet_get_offset(file)
  * Set file size.
  */
 int
-ebnet_set_file_size(file, file_size)
-    int file;
-    size_t file_size;
+ebnet_set_file_size(int file, size_t file_size)
 {
     EBNet_Socket_Entry *entry;
 
@@ -951,8 +935,7 @@ ebnet_set_file_size(file, file_size)
  * Get file size.
  */
 ssize_t
-ebnet_get_file_size(file)
-    int file;
+ebnet_get_file_size(int file)
 {
     EBNet_Socket_Entry *entry;
 
