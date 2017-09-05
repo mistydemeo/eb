@@ -94,7 +94,6 @@ eb_load_multi_searches(book)
     char *buffer_p;
     int index_count;
     int index_id;
-    int page;
     int i, j, k;
 
     LOG(("in: eb_load_multi_searches(book=%d)", book->code));
@@ -148,21 +147,29 @@ eb_load_multi_searches(book)
 		 * Get the index page information of the entry.
 		 */
 		index_id = eb_uint1(buffer_p);
-		page = eb_uint4(buffer_p + 2);
 		switch (index_id) {
 		case 0x71:
-		    if (entry->start_page == 0)
-			entry->start_page = page;
-		    entry->index_id = index_id;
-		    break;
 		case 0x91:
 		case 0xa1:
-		    entry->start_page = page;
+		    if (entry->start_page != 0 && entry->index_id != 0x71)
+			break;
+		    entry->start_page = eb_uint4(buffer_p + 2);
+		    entry->end_page = entry->start_page
+			+ eb_uint4(buffer_p + 6) - 1;
 		    entry->index_id = index_id;
+		    entry->katakana         = EB_INDEX_STYLE_ASIS;
+		    entry->lower            = EB_INDEX_STYLE_CONVERT;
+		    entry->mark             = EB_INDEX_STYLE_ASIS;
+		    entry->long_vowel       = EB_INDEX_STYLE_ASIS;
+		    entry->double_consonant = EB_INDEX_STYLE_ASIS;
+		    entry->contracted_sound = EB_INDEX_STYLE_ASIS;
+		    entry->voiced_consonant = EB_INDEX_STYLE_ASIS;
+		    entry->small_vowel      = EB_INDEX_STYLE_ASIS;
+		    entry->p_sound          = EB_INDEX_STYLE_ASIS;
+		    entry->space            = EB_INDEX_STYLE_ASIS;
 		    break;
 		case 0x01:
-		    entry->candidates_page = page;
-		    entry->index_id = index_id;
+		    entry->candidates_page = eb_uint4(buffer_p + 2);
 		    break;
 		}
 		buffer_p += 16;

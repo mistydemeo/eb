@@ -1,7 +1,7 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT(eb, 3.3beta2)
+AC_INIT(eb, 3.3beta3)
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.54)
 AM_INIT_AUTOMAKE

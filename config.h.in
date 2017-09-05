@@ -17,7 +17,7 @@
 /* Define if pthread support is enabled. */
 #undef ENABLE_PTHREAD
 
-/* Define if command names have the suffix `.exe' */
+/* Define if command names have the suffix \`.exe' */
 #undef EXEEXT_EXE
 
 /* Define to 1 if you have `alloca', as a function or macro. */
@@ -55,7 +55,7 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define if you have the `LC_MESSAGES' locale category */
+/* Define if you have the \`LC_MESSAGES' locale category */
 #undef HAVE_LC_MESSAGES
 
 /* Define to 1 if you have the <limits.h> header file. */
@@ -127,7 +127,7 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
-/* Define if `struct utimbuf' is declared -- usually in <utime.h>. */
+/* Define if \`struct utimbuf' is declared -- usually in <utime.h>. */
 #undef HAVE_STRUCT_UTIMBUF
 
 /* Define to 1 if you have the `syslog' function. */

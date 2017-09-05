@@ -1,3 +1,14 @@
+2003-01-12  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.3beta3.
+
+	* doc-ja/Makefile.am (eb-ver.texi, stamp-eb): Add missing targets.
+	* doc-ja/Makefile.am (EXTRA_DIST): Add `stamp-eb'.
+
+	* eb/multi.c (eb_load_multi_searches): Set index style flags.
+
+	* configure.ac (AC_INIT): Set version to `3.3beta3'.
+
 2002-10-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.3beta2.

@@ -1,4 +1,4 @@
-This is ebfont.info, produced by makeinfo version 4.1 from ebfont.texi.
+This is ebfont.info, produced by makeinfo version 4.2 from ebfont.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.3beta2, for EB Library version 3.3beta2.
+   This is edition 3.3beta3, for EB Library version 3.3beta3.
 
 * Menu:
 
@@ -65,7 +65,7 @@ _without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 3.3beta2, for EB Library version 3.3beta2.
+   This is edition 3.3beta3, for EB Library version 3.3beta3.
 
 
 File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
