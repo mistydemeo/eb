@@ -1,3 +1,14 @@
+2008-01-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.3.2.
+
+	* configure.ac (LIBEB_VERSION_INFO): Set it to 12:6:0.
+	In EB Library version 4.3.1, LIBEB_VERSION_INFO is set to 12:4:1,
+	but it is incorrect.  It would be 12:5:0.
+
+	* po-ebutils/ja.po: Add a missing space to a msgstr corresponding
+	to the msgid "image-menu ".
+
 2008-01-14  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.3.1.

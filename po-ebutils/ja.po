@@ -321,7 +321,7 @@ msgstr "メニュー "
 
 #: ../ebinfo/ebinfo.c:415
 msgid "image-menu "
-msgstr "画像メニュー"
+msgstr "画像メニュー "
 
 #: ../ebinfo/ebinfo.c:417
 msgid "copyright "
