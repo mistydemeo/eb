@@ -169,6 +169,15 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 この場合、@code{ebrefile} はカレントディレクトリ (@file{.}) が指定され
 たものと判断します。
 
+遠隔アクセスには対応していませんので、遠隔アクセス識別子は使用できません。
+
+@example
+@group
+% ebrefile ebnet://localhost/cdrom
+ebrefile: ebnet には対応していません。
+@end group
+@end example
+
 @menu
 * Select Subbooks::             副本の選択
 * Combination with ebzip::      @code{ebzip} との連携

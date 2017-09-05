@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.3.4, for EB Library version 3.3.4.
+   This is edition 4.0beta0, for EB Library version 4.0beta0.
 
 * Menu:
 
@@ -90,7 +90,7 @@ Though `ebzip' is free software, your books may not be free.
 `ebrefile' modifies contents of a certain file in a CD-ROM book.
 Please be careful.
 
-   This is edition 3.3.4, for EB Library version 3.3.4.
+   This is edition 4.0beta0, for EB Library version 4.0beta0.
 
 
 File: ebrefile.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -110,6 +110,12 @@ book-paths, you can omit book-path like as follows:
 
 In this case, `ebrefile' assumes that the current working directory
 (`.') is specified.
+
+   Since `ebrefile' doesn't support remote access, it rejects remote
+access identifer.
+
+     % ebrefile ebnet://localhost/cdrom
+     ebrefile: ebnet is not supported
 
 * Menu:
 
@@ -278,10 +284,10 @@ allowed as long as they are unique.
 
 Tag Table:
 Node: Top1036
-Node: Introduction1515
-Node: Invoking ebrefile3578
-Node: Select Subbooks4225
-Node: Combination with ebzip7784
-Node: Summary of Options8865
+Node: Introduction1521
+Node: Invoking ebrefile3590
+Node: Select Subbooks4404
+Node: Combination with ebzip7963
+Node: Summary of Options9044
 
 End Tag Table

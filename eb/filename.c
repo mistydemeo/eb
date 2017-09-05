@@ -16,6 +16,9 @@
 #include "build-pre.h"
 #include "eb.h"
 #include "error.h"
+#ifdef ENABLE_EBNET
+#include "ebnet.h"
+#endif
 #include "build-post.h"
 
 #ifdef WIN32
@@ -213,6 +216,11 @@ eb_fix_directory_name(path, directory_name)
     struct dirent *entry;
     DIR *dir;
 
+#ifdef ENABLE_EBNET
+    if (is_ebnet_url(path))
+	return ebnet_fix_directory_name(path, directory_name);
+#endif
+
     /*
      * Open the directory `path'.
      */
@@ -362,6 +370,13 @@ eb_find_file_name(path_name, target_file_name, found_file_name)
     struct dirent *entry;
     size_t d_namlen;
     int found = FOUND_NONE;
+
+#ifdef ENABLE_EBNET
+    if (is_ebnet_url(path_name)) {
+	return ebnet_find_file_name(path_name, target_file_name,
+	    found_file_name);
+    }
+#endif
 
     strcpy(ebz_target_file_name, target_file_name);
     strcat(ebz_target_file_name, ".ebz");

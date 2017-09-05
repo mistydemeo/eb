@@ -332,6 +332,12 @@ main(argc, argv)
         strcpy(book_path, DEFAULT_BOOK_DIRECTORY);
     else
         strcpy(book_path, argv[optind]);
+
+    if (is_ebnet_url(book_path)) {
+	fprintf(stderr, "%s: %s\n", invoked_name,
+	    eb_error_message(EB_ERR_EBNET_UNSUPPORTED));
+	goto die;
+    }
     canonicalize_path(book_path);
 
     if (PATH_MAX

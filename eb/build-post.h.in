@@ -121,6 +121,17 @@
 #define EB_MAX_INDEX_DEPTH		6
 
 /*
+ * The maximum length of path name relative to top directory of a CD-ROM
+ * book.  An example of the longest relative path is:
+ *
+ *     "subdir01/subdir02/filename.ebz;1"
+ */
+#define EB_MAX_RELATIVE_PATH_LENGTH \
+	(EB_MAX_DIRECTORY_NAME_LENGTH + 1 \
+	+ EB_MAX_DIRECTORY_NAME_LENGTH + 1 \
+	+ EB_MAX_FILE_NAME_LENGTH)
+
+/*
  * The environment variable name to enable/disable debug messages.
  */
 #define EB_DEBUG_ENVIRONMENT_VARIABLE	"EB_DEBUG"
@@ -151,6 +162,11 @@
         + (*(const unsigned char *)((p) + 1) << 8) \
         + (*(const unsigned char *)((p) + 2) << 16) \
         + (*(const unsigned char *)((p) + 3) << 24))
+
+/*
+ * Test whether the path is URL with the `ebnet' scheme.
+ */
+#define is_ebnet_url(path) (strncasecmp((path), "ebnet://", 8) == 0)
 
 /*
  * External variable declarations.
@@ -198,7 +214,7 @@ void eb_path_name_zio_code EB_P((const char *, Zio_Code, Zio_Code *));
 
 /* font.c */
 void eb_initialize_fonts EB_P((EB_Book *));
-void eb_load_fonts EB_P((EB_Book *));
+void eb_load_font_headers EB_P((EB_Book *));
 void eb_finalize_fonts EB_P((EB_Book *));
 
 /* hook.c */
@@ -245,7 +261,9 @@ EB_Error_Code eb_load_multi_searches EB_P((EB_Book *));
 EB_Error_Code eb_load_multi_titles EB_P((EB_Book *));
 
 /* narwfont.c */
-EB_Error_Code eb_load_narrow_font EB_P((EB_Book *));
+EB_Error_Code eb_open_narrow_font_file EB_P((EB_Book *, EB_Font_Code));
+EB_Error_Code eb_load_narrow_font_header EB_P((EB_Book *, EB_Font_Code));
+EB_Error_Code eb_load_narrow_font_glyphs EB_P((EB_Book *, EB_Font_Code));
 
 /* search.c */
 void eb_initialize_search_contexts EB_P((EB_Book *));
@@ -280,7 +298,9 @@ void eb_invalidate_text_context EB_P((EB_Book *));
 EB_Error_Code eb_forward_heading EB_P((EB_Book *));
 
 /* widefont.c */
-EB_Error_Code eb_load_wide_font EB_P((EB_Book *));
+EB_Error_Code eb_open_wide_font_file EB_P((EB_Book *, EB_Font_Code));
+EB_Error_Code eb_load_wide_font_header EB_P((EB_Book *, EB_Font_Code));
+EB_Error_Code eb_load_wide_font_glyphs EB_P((EB_Book *, EB_Font_Code));
 
 /* uint.c */
 unsigned eb_bcd2 EB_P((const char *));

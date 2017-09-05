@@ -235,4 +235,26 @@ char *memset();
 #define strncasecmp eb_strncasecmp
 #endif
 
+#ifndef HAVE_GETADDRINFO
+#define addrinfo ebnet_addrinfo
+#define getaddrinfo ebnet_getaddrinfo
+#define freeaddrinfo ebnet_freeaddrinfo
+#endif
+
+#ifndef HAVE_GETNAMEINFO
+#define getnameinfo ebnet_getnameinfo
+#endif
+
+#ifndef HAVE_GAI_STRERROR
+#define gai_strerror ebnet_gai_strerror
+#endif
+
+#ifndef IN6ADDR_ANY_DECLARED
+#define in6addr_any ebnet_in6addr_any
+#endif
+
+#ifndef IN6ADDR_LOOPBACK_DECLARED
+#define in6addr_loopback ebnet_in6addr_loopback
+#endif
+
 #endif /* EB_BUILD_PRE_H */

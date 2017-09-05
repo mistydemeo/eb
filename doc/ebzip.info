@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.3.4, for EB Library version 3.3.4.
+   This is edition 4.0beta0, for EB Library version 4.0beta0.
 
 * Menu:
 
@@ -101,7 +101,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 3.3.4, for EB Library version 3.3.4.
+   This is edition 4.0beta0, for EB Library version 4.0beta0.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -177,6 +177,12 @@ book-path like as follows:
 In this case, it is assumed that the current working directory (`.') is
 specified.
 
+   Since the commands don't support remote access, they reject remote
+access identifier.
+
+     % ebzip ebnet://localhost/cdrom
+     ebzip: ebnet is not supported
+
 
 File: ebzip.info,  Node: Compression,  Next: Uncompression,  Prev: Invoking ebzip,  Up: Top
 
@@ -246,7 +252,8 @@ The suffix `.ebz' is added to the some files (`/dict/language.ebz',
 compressed files.  Other files are unchanged.
 
    `ebzip' compresses the following files; `START', `HONMON',
-`LANGUAGE', and font files under the `GAIJI' directories.
+`HONMON2', `HONMONS', `LANGUAGE', and font files under the `GAIJI'
+directories.
 
 
 File: ebzip.info,  Node: Compression Example 2,  Next: Compression Level,  Prev: Compression Example 1,  Up: Compression
@@ -426,8 +433,8 @@ Compress Compressed Book
 ========================
 
    Also S-EBXA and EPWING define compression formats, and some CD-ROM
-books of S-EBXA and EPWING are compressed with the formats.  The
-formats are different from the ebzip compression format.
+books of S-EBXA and EPWING are compressed with the formats.  However,
+their compression formats are different from that of ebzip.
 
    `ebzip' (`ebunzip') can also uncompress CD-ROM book compressed with
 the EPWING or S-EBXA compression fomrat, but it cannot compress book
@@ -508,8 +515,8 @@ is slightly changed.
      /dict/kanji/start
      /dict/english/start
 
-Uncompressed files change their filenames; the suffix `.ebz' is removed
-from them.
+Uncompressed files change their file names; the suffix `.ebz' is
+removed from them.
 
 
 File: ebzip.info,  Node: Options for Uncompression,  Next: Uncompress Compressed Book,  Prev: Uncompression Example,  Up: Uncompression
@@ -546,12 +553,16 @@ Uncompress Compressed Book
 ==========================
 
    Also S-EBXA and EPWING define compression formats, and some CD-ROM
-books of S-EBXA and EPWING are compressed with the formats.  The
-formats are different from the ebzip compression format.
+books of S-EBXA and EPWING are compressed with the formats.  However,
+their compression formats are different from that of ebzip.
 
    `ebzip' (`ebunzip') can also uncompress CD-ROM book compressed with
 the EPWING or S-EBXA compression fomrat, but it cannot compress book
 with the format.
+
+   When `ebzip' (`ebunzip') has uncompressed S-EBXA's `START' file,
+EPWING's `HONMON2' file or EPWING's `HONMONS' file, it adds the suffix
+`.org' to the uncompressed file (e.g. `honmon2' -> `honmon2.org').
 
 
 File: ebzip.info,  Node: Information,  Next: Delete a Book,  Prev: Uncompression,  Up: Top
@@ -967,7 +978,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     3.3.4, only 1 (0001 in binary digits) can be prescribed as this
+     4.0beta0, only 1 (0001 in binary digits) can be prescribed as this
      version.
 
 `compression level (4 bits of the least-significant-bit side)'
@@ -1005,31 +1016,31 @@ significant byte first.
 
 Tag Table:
 Node: Top1042
-Node: Introduction2731
-Node: Action and Command Name4116
-Node: Invoking ebzip5726
-Node: Compression6497
-Node: Compression Example 17102
-Node: Compression Example 28682
-Node: Compression Level10285
-Node: Test10875
-Node: Partial Compression11221
-Node: Overwrite Old Files14084
-Node: Compress Compressed Book14830
-Node: Uncompression15642
-Node: Uncompression Example16080
-Node: Options for Uncompression17637
-Node: Uncompress Compressed Book18818
-Node: Information19333
-Node: Information Example19720
-Node: Options for Information20373
-Node: Delete a Book20916
-Node: Summary of Options21214
-Node: Comparision Result24713
-Node: Compressed File Format27177
-Node: Format Overview27602
-Node: Data Part28458
-Node: Index Part31222
-Node: Header Part33549
+Node: Introduction2737
+Node: Action and Command Name4128
+Node: Invoking ebzip5738
+Node: Compression6672
+Node: Compression Example 17277
+Node: Compression Example 28879
+Node: Compression Level10482
+Node: Test11072
+Node: Partial Compression11418
+Node: Overwrite Old Files14281
+Node: Compress Compressed Book15027
+Node: Uncompression15847
+Node: Uncompression Example16285
+Node: Options for Uncompression17843
+Node: Uncompress Compressed Book19024
+Node: Information19754
+Node: Information Example20141
+Node: Options for Information20794
+Node: Delete a Book21337
+Node: Summary of Options21635
+Node: Comparision Result25134
+Node: Compressed File Format27598
+Node: Format Overview28023
+Node: Data Part28879
+Node: Index Part31643
+Node: Header Part33970
 
 End Tag Table

@@ -103,6 +103,7 @@ EB ライブラリの特徴
 * Header Files::                ヘッダファイル
 * Character Code::              文字コード
 * Compressed Book::             圧縮された書籍
+* Remote Access::               遠隔ホスト上の書籍
 * Traditional System::          古いシステムへの対応
 
 プログラムのコンパイル方法
@@ -119,6 +120,7 @@ EB ライブラリの特徴
 CD-ROM 書籍と @code{EB_Book} オブジェクト
 
 * EB_Book Explanation::         @code{EB_Book} オブジェクト
+* eb_bind to Remote Host::      遠隔ホストへの @code{eb_bind()}
 * EB_Book Sample::              サンプルプログラム
 * EB_Book Data Types::          データ型の詳細
 * EB_Book Functions::           関数の詳細
@@ -329,6 +331,7 @@ EB ライブラリは、これらの CD-ROM 書籍に対して、次の処理を行うことが
 * Header Files::                ヘッダファイル
 * Character Code::              文字コード
 * Compressed Book::             圧縮された書籍
+* Remote Access::               遠隔ホスト上の書籍
 * Traditional System::          古いシステムへの対応
 @end menu
 
@@ -458,7 +461,7 @@ EB ライブラリでは、アプリケーションとのやり取りに使う文字コードは、
 外字について詳しくは @pxref{Local Character,, 外字}。
 
 @c -------------------------------------------------------------------
-@node Compressed Book, Traditional System, Character Code, Features
+@node Compressed Book, Remote Access, Character Code, Features
 @section 圧縮された書籍について
 
 EB ライブラは、データを圧縮して収録した書籍を扱うことができます。
@@ -487,7 +490,22 @@ EPWING V4, V5 形式の改良型です。
 必要はありません。
 
 @c -------------------------------------------------------------------
-@node Traditional System,  , Compressed Book, Features
+@node Remote Access, Traditional System, Compressed Book, Features
+@section 遠隔ホスト上の書籍について
+
+バージョン 4.0 から、EB ライブラリは他のホストの書籍にアクセスできる
+ようになりました。
+
+遠隔アクセスの処理はすべて EB ライブラリ側で行われますので、
+アプリケーションプログラムは、書籍が自分のホスト上にあるかどうかで、
+EB ライブラリの呼び出し手順を変える必要はありません。
+
+ただし、他のホストからアクセスすると、処理速度は非常に遅くなります。
+そのため、効率良く処理できるよう、アプリケーションの処理方法を工夫すべき
+状況が生じることはあるかも知れません。
+
+@c -------------------------------------------------------------------
+@node Traditional System,  , Remote Access, Features
 @section 古いシステムへの対応
 
 アプリケーションプログラムのコンパイルに用いるコンパイラには、
@@ -760,7 +778,8 @@ EB ライブラリは標準エラー出力に、次のようなログを (かなり大量ですが)
 #! /usr/bin/perl
 
 use Getopt::Std;
-getopts('z') or die "Usage: $0 [-z] [file...]\n";
+getopts('zn') or die "Usage: $0 [-z|-n] [file...]\n";
+$opt_z = 1 if (defined($opt_n));   # `-n' implies `-z'.
 
 $indent = 0;
 while (<>) @{
@@ -768,6 +787,7 @@ while (<>) @{
     if (/^\[EB\] (.*)$/) @{
         $message = $1;
         next if (!$opt_z && $message =~ /^\S+: zio_/);
+        next if (!$opt_n && $message =~ /^\S+: ebnet_/);
         $indent-- if ($message =~ /^out: /);
         $_ = '[EB] ' . (' ' x ($indent * 2)) . $message;
         $indent++ if ($message =~ /^in: /);
@@ -789,16 +809,24 @@ while (<>) @{
 [EB] out: eb_set_font() = EB_SUCCESS
 @end example
 
-通常 @code{ebfixlog} スクリプトは、zio と呼ばれる、EB ライブラリで
-ファイル入出力を受け持つ処理部のログは読み捨てるようになっています。
+通常 @code{ebfixlog} スクリプトは、zio および ebnet と呼ばれる、
+EB ライブラリでファイル入出力を受け持つ処理部のログは読み捨てるように
+なっています。
 これにより、ログの量がかなり減ります。
 
-zio は、EB ライブラリでもっとも低レベルの処理部で、頻繁に呼び出されます。
+zio は EB ライブラリの低レベル入出力の処理部で、頻繁に呼び出されます。
 問題の原因を調べる際も、まずは読み捨てた方がライブラリの内部動作を追跡
 しやすいでしょう。
 
 @code{ebfixlog} の @samp{-z} オプションを使うと、zio のメッセージを
 読み捨てずに出力するようになります。
+
+ebnet は遠隔アクセスの入出力を処理する部分で、zio よりもさらに
+下位レベルに位置します。
+遠隔アクセスの挙動を追跡するとき以外は、読み捨てた方が良いと思います。
+
+@code{ebfixlog} の @samp{-n} オプションを使うと、ebnet, zio 両方の
+メッセージを読み捨てずに出力するようになります。
 
 @c ===================================================================
 @node Init and Exit, EB_Book, Compilation, Top
@@ -907,13 +935,14 @@ EB ライブラリでは、CD-ROM 書籍へのアクセスは、すべて @code{EB_Book} 型
 
 @menu
 * EB_Book Explanation::         @code{EB_Book} オブジェクト
+* eb_bind to Remote Host::      遠隔ホストへの @code{eb_bind()}
 * EB_Book Sample::              サンプルプログラム
 * EB_Book Data Types::          データ型の詳細
 * EB_Book Functions::           関数の詳細
 @end menu
 
 @c -------------------------------------------------------------------
-@node EB_Book Explanation, EB_Book Sample, EB_Book, EB_Book
+@node EB_Book Explanation, eb_bind to Remote Host, EB_Book, EB_Book
 @section @code{EB_Book} オブジェクト
 
 CD-ROM 書籍へアクセスするには、まず @code{EB_Book} 型のオブジェクトを
@@ -1008,7 +1037,41 @@ free(book_pointer);
 @end example
 
 @c -------------------------------------------------------------------
-@node EB_Book Sample, EB_Book Data Types, EB_Book Explanation, EB_Book
+@node eb_bind to Remote Host, EB_Book Sample, EB_Book Explanation, EB_Book
+@section 遠隔ホストへの @code{eb_bind()}
+
+前節で説明した @code{eb_bind()} を用いて、@code{EB_Book} オブジェクト
+を遠隔ホストの書籍に結びつけることができます。
+これには、書籍のパスの代わりに、遠隔アクセス用の識別子を指定します。
+識別子は、次のような形式をとります。
+
+@example
+@group
+ebnet://@var{ホスト}:@var{ポート}/@var{書籍名}
+@end group
+@end example
+
+@noindent
+@var{ホスト} は遠隔ホストの IP アドレスもしくはホスト名です。
+ただし、IPv6 アドレスを指定する場合は、アドレスを @code{[} と @code{]}
+で囲む必要があります。
+@var{ポート} は、そのホストが待ち受けているポートの番号です。
+ホストが待ち受けているポートが標準の 22010 番であれば、@var{:ポート}
+の部分は省略可能です。
+
+以下に @code{eb_bind()} のコード例を記します。
+
+@example
+@group
+if (eb_bind(&book, "ebnet://localhost/cdrom") != EB_SUCCESS) @{
+    printf("eb_bind() failed\n");
+    return;
+@}
+@end group
+@end example
+
+@c -------------------------------------------------------------------
+@node EB_Book Sample, EB_Book Data Types, eb_bind to Remote Host, EB_Book
 @section サンプルプログラム
 
 このサンプルプログラムでは、CD-ROM 書籍の種類を調べるために、
@@ -1142,8 +1205,10 @@ JIS X 0208 (日本語のかな漢字) と GB 2312 (中国語の簡体字) を併用している
 
 関数 @code{eb_bind()} は、@var{book} の指す @code{EB_Book} オブジェクト
 を、パス @var{path} にある CD-ROM 書籍に結び付けます。
-パスは書籍のトップディレクトリ、つまり @file{CATALOG} あるいは
-@file{CATALOGS} ファイルの存在するディレクトリでなくてはなりません。
+パスには、書籍のトップディレクトリか遠隔アクセス識別子を指定します。
+書籍のトップディレクトリとは、@file{CATALOG} あるいは @file{CATALOGS}
+ファイルの存在するディレクトリを指します。
+
 オブジェクトがすでに書籍に結び付いていた場合、その書籍との結び付きを
 解いてから、@var{path} にある書籍に結び付けます。
 
@@ -1188,8 +1253,8 @@ JIS X 0208 (日本語のかな漢字) と GB 2312 (中国語の簡体字) を併用している
 @xfindex path
 @xvindex MAX_PATH_LENGTH
 
-関数 @code{eb_path()} は、@var{book} に結び付いている書籍のパスを、
-@var{path} の指す領域に書き込みます。
+関数 @code{eb_path()} は、@var{book} に結び付いている書籍のパス
+もしくは遠隔アクセス識別子を、@var{path} の指す領域に書き込みます。
 
 成功すると、関数は @code{EB_SUCCESS} を返します。
 失敗すると、@var{path} の指す領域に空文字列を書き込み、原因を示す
@@ -1865,7 +1930,36 @@ EB ライブラリが、書籍のバイナリデータファイル内で、想定外のデータ列を
 
 あらかじめ @code{eb_seek_text()} でシークを行っていない状態で、
 テキストデータの読み込みや頭出しを行おうとした。
+@end defvr
 
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_EBNET_UNSUPPORTED
+@xvindex ERR_EBNET_UNSUPPORTED
+
+この EB ライブラリは、遠隔ホストへのアクセスには対応していない。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_EBNET_FAIL_CONNECT
+@xvindex ERR_EBNET_FAIL_CONNECT
+
+遠隔ホストへのアクセスを試みたが、サーバ (EBNETD) に接続できなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_EBNET_SERVER_BUSY
+@xvindex ERR_EBNET_SERVER_BUSY
+
+遠隔ホストへの接続を行ったが、書籍にアクセスしているクライアントの数が
+すでに上限に達しているため、その書籍を利用できなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_EBNET_NO_PERMISSION
+@xvindex ERR_EBNET_NO_PERMISSION
+
+遠隔ホストへの接続を行ったが、その書籍への利用権限がないため、サーバ
+からアクセスを拒否された。
 @end defvr
 
 @c -------------------------------------------------------------------

@@ -110,11 +110,15 @@ static const char * const error_strings[] = {
     "EB_ERR_NO_SUCH_ENTRY_ID",
     "EB_ERR_TOO_MANY_WORDS",
     "EB_ERR_NO_WORD",
-    "EB_ERR_NO_CANDIDATES"
+    "EB_ERR_NO_CANDIDATES",
     "EB_ERR_END_OF_CONTENT",
 
     /* 60 -- 64 */
     "EB_ERR_NO_PREV_SEEK",
+    "EB_ERR_EBNET_UNSUPPORTED",
+    "EB_ERR_EBNET_FAIL_CONNECT",
+    "EB_ERR_EBNET_SERVER_BUSY",
+    "EB_ERR_EBNET_NO_PERMISSION",
 
     NULL
 };
@@ -227,6 +231,10 @@ static const char * const error_messages[] = {
 
     /* 60 -- 64 */
     N_("no previous seek"),
+    N_("ebnet is not supported"),
+    N_("failed to connect to an ebnet server"),
+    N_("ebnet server is busy"),
+    N_("no access permission"),
 
     NULL
 };

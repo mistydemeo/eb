@@ -17,10 +17,36 @@ EB Library also provides some utility commands:
 			a CD-ROM book.
 	ebinfo		list information about a CD-ROM book.
 	ebrefile	refile a catalog file in a CD-ROM book.
+	ebstopchk	utility to analyze text data in a CD-ROM book for
+			stop code.
 	ebunzip		uncompress a CD-ROM book.
 	ebzip		compress a CD-ROM book.
 	ebzipinfo	output information about a compressed CD-ROM
 			book.
+
+
+Beginning with version 4.0, EB Library supports remote book access.
+You can specify a CD-ROM book on a remote host with remote access
+identifer.  The format of the identifer is:
+
+	ebnet://<host>:<port>/<book-name>	  (CD-ROM book)
+	ebnet://<host>:<port>/<book-name>.app	  (appendix package)
+
+<host> is a host name or an IP address of the remote host.  Note that
+an IPv6 address must be enclosed in `[' and `]'.  <port> is a port
+number that the peer listens on.  You can omit the `:<port>' part if
+the host listens on the default port, 22010.
+
+For example:
+	ebnet://eb.example.com/dict
+	ebnet://eb.example.com:22010/dict.app
+	ebnet://192.168.1.1/dict.app
+	ebnet://192.168.1.1:22010/dict
+	ebnet://[fe80::290:27ff:fe3]/dict.app
+	ebnet://[fe80::290:27ff:fe3]:22010/dict
+
+To use the remote access, you have to install EBNETD on <host>,
+which is remote access server software for EB Library.
 
 
 EB Library is free software; you can redistribute it and/or modify

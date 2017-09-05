@@ -1,12 +1,7 @@
-Major changes in release 3.3.4.
+Major changes in release 4.0beta0.
 
-* Fix a bug in word search that EB Library sometimes cannot have found words.
-* Support for "Japanese-English-Spanish Jiten" (YRRS-060).
-
-Major changes in release 3.3.3.
-
-* Fix a bug in eb_narrow_font_size2().
-* Fix file descriptor leak in handling of fonts (local defined characters).
+* Support for remote access.
+* Add the `ebstopchk' command.
 
 Major changes in release 3.3.2.
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000, 01  
+ * Copyright (c) 1997, 98, 99, 2000, 01, 03
  *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
@@ -17,6 +17,9 @@
 #include "eb.h"
 #include "error.h"
 #include "font.h"
+#ifdef ENABLE_EBNET
+#include "ebnet.h"
+#endif
 #include "build-post.h"
 
 /*
@@ -57,6 +60,9 @@ eb_initialize_book(book)
     book->path_length = 0;
     book->subbooks = NULL;
     book->subbook_current = NULL;
+#ifdef ENABLE_EBNET
+    book->ebnet_file = -1;
+#endif
     eb_initialize_text_context(book);
     eb_initialize_binary_context(book);
     eb_initialize_search_contexts(book);
@@ -77,6 +83,7 @@ eb_bind(book, path)
 {
     EB_Error_Code error_code;
     char temporary_path[EB_MAX_PATH_LENGTH + 1];
+    int is_ebnet;
 
     eb_lock(&book->lock);
     LOG(("in: eb_bind(path=%s)", path));
@@ -95,6 +102,17 @@ eb_bind(book, path)
     pthread_mutex_lock(&book_counter_mutex);
     book->code = book_counter++;
     pthread_mutex_unlock(&book_counter_mutex);
+
+    /*
+     * Check whether `path' is URL.
+     */
+    is_ebnet = is_ebnet_url(path);
+#ifndef ENABLE_EBNET
+    if (is_ebnet) {
+	error_code = EB_ERR_EBNET_UNSUPPORTED;
+	goto failed;
+    }
+#endif
     
     /*
      * Set the path of the book.
@@ -106,14 +124,20 @@ eb_bind(book, path)
 	goto failed;
     }
     strcpy(temporary_path, path);
+#ifdef ENABLE_EBNET
+    if (is_ebnet)
+	error_code = ebnet_canonicalize_url(temporary_path);
+    else
+	error_code = eb_canonicalize_path_name(temporary_path);
+#else
     error_code = eb_canonicalize_path_name(temporary_path);
+#endif
     if (error_code != EB_SUCCESS)
 	goto failed;
 
     book->path_length = strlen(temporary_path);
     if (EB_MAX_PATH_LENGTH
-	< book->path_length + 1 + EB_MAX_DIRECTORY_NAME_LENGTH + 1
-	+ EB_MAX_DIRECTORY_NAME_LENGTH + 1 + EB_MAX_FILE_NAME_LENGTH) {
+	< book->path_length + 1 + EB_MAX_RELATIVE_PATH_LENGTH) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;
 	goto failed;
     }
@@ -124,6 +148,17 @@ eb_bind(book, path)
 	goto failed;
     }
     strcpy(book->path, temporary_path);
+
+    /*
+     * Establish a connection with a ebnet server.
+     */
+#ifdef ENABLE_EBNET
+    if (is_ebnet) {
+	error_code = ebnet_bind(book, book->path);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+    }
+#endif
 
     /*
      * Read information from the `LANGUAGE' file.
@@ -165,15 +200,6 @@ eb_finalize_book(book)
 
     eb_unset_subbook(book);
 
-    if (book->path != NULL)
-	free(book->path);
-
-    book->code = EB_BOOK_NONE;
-    book->disc_code = EB_DISC_INVALID;
-    book->character_code = EB_CHARCODE_INVALID;
-    book->path = NULL;
-    book->path_length = 0;
-
     if (book->subbooks != NULL) {
 	eb_finalize_subbooks(book);
 	free(book->subbooks);
@@ -186,7 +212,19 @@ eb_finalize_book(book)
     eb_finalize_search_contexts(book);
     eb_finalize_binary_context(book);
     eb_finalize_lock(&book->lock);
-    eb_finalize_lock(&book->lock);
+
+#ifdef ENABLE_EBNET
+    ebnet_finalize_book(book);
+#endif
+
+    if (book->path != NULL)
+	free(book->path);
+
+    book->code = EB_BOOK_NONE;
+    book->disc_code = EB_DISC_INVALID;
+    book->character_code = EB_CHARCODE_INVALID;
+    book->path = NULL;
+    book->path_length = 0;
 
     LOG(("out: eb_finalize_book()"));
 }
@@ -212,10 +250,6 @@ static const char * const misleaded_book_table[] = {
 
     /* Nichi-Ei-Futsu Jiten (YRRS-059) */
     "#E#N#G!?#J#A#N!J!\\#F#R#E!K",
-
-    /* Japanese-English-Spanish Jiten (YRRS-060) */
-    "#E#N#G!?#J#A#N!J!\\#S#P#A!K",
-
     NULL
 };
 

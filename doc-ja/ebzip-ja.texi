@@ -189,15 +189,13 @@ CD-ROM 書籍の出版社がハードディスク (および他の補助記憶装置) に書籍を
 @end example
 
 @noindent
-@code{ebunzip} という名前で起動された場合、オプションで動作モードを
-指定しなければ伸長を行います。
-@code{ebzipinfo} という名前で起動された場合、オプションで動作モード
-を指定しなければ情報出力を行います。
+@code{ebunzip} という名前で起動された場合は、伸長を行います。
+@code{ebzipinfo} という名前で起動された場合、情報出力を行います。
 それ以外の場合は、オプションで動作モードを指定しないと圧縮を行います。
 
 コマンドラインオプションでも、動作モードを決定することができます。
-オプションは @samp{--compress}(@samp{-z}) および
-@samp{--uncompress}(@samp{-u}) と @samp{--information}(@samp{-i}) です。
+@samp{--compress} (@samp{-z}) で圧縮、@samp{--uncompress} (@samp{-u}) 
+で伸長、@samp{--information} (@samp{-i}) で情報出力を行います。
 オプションは、起動時のコマンド名より優先します。
 次の例では、いずれも動作モードが「伸長」になります。
 
@@ -206,6 +204,15 @@ CD-ROM 書籍の出版社がハードディスク (および他の補助記憶装置) に書籍を
 ebunzip
 ebzip --uncompress
 ebzipinfo --uncompress
+@end group
+@end example
+
+遠隔アクセスには対応していませんので、遠隔アクセス識別子は使用できません。
+
+@example
+@group
+% ebzip ebnet://localhost/cdrom
+ebzip: ebnet には対応していません。
 @end group
 @end example
 
@@ -313,8 +320,8 @@ CD-ROM 書籍がすでに @file{/dict} にコピーされているものの、まだ圧縮
 @end example
 
 @noindent
-圧縮が完了すると、@file{/dict} の下のディレクトリ構成は少し変化して
-います。
+圧縮が完了すると、@file{/dict} の下のディレクトリ構成が少し変化して
+いるのが分かります。
 
 @example
 @group
@@ -329,12 +336,12 @@ CD-ROM 書籍がすでに @file{/dict} にコピーされているものの、まだ圧縮
 拡張子 @samp{.ebz} がいくつかのファイル (@file{/dict/language.ebz}、
 @file{/dict/kanji/start.ebz}、@file{/dict/english/start.ebz}) に
 付いています。
-これらは圧縮されたファイルです。
+これらが圧縮されたファイルです。
 他のファイルは変化していません。
 
 @code{ebzip} が圧縮するファイルは、
-@file{START}、@file{HONMON}、@file{LANGUAGE} ファイルと @file{GAIJI} 
-ディレクトリにある外字ファイルです。
+@file{START}、@file{HONMON}、@file{HONMON2}、@file{HONMONS}、
+@file{LANGUAGE} ファイルと @file{GAIJI} ディレクトリにある外字ファイルです。
 
 @c -------------------------------------------------------------------
 @node Compression Example 2, Compression Level, Compression Example 1, Compression
@@ -715,12 +722,17 @@ S-EBXA および EPWING 規格においても圧縮形式を定義しており、CD-ROM 書籍
 @node Uncompress Compressed Book,  , Options for Uncompression, Uncompression
 @section 圧縮された書籍の伸長
 
-S-EBXA および EPWING 規格では ebzip のものとは異なる圧縮形式を定義して
-おり、CD-ROM 書籍にはこれらの圧縮形式を実際に採用しているものがあります。
-これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
+S-EBXA および EPWING 規格でも圧縮形式を定義しており、CD-ROM 書籍には
+これらの圧縮形式を実際に採用しているものがあります。
+しかし、S-EBXA や EPWINGの圧縮形式は、ebzip の圧縮形式とは異なります。
 
 @code{ebzip} は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
 することができますが、圧縮することはできません。
+
+S-EBXA 形式で圧縮された @code{START} ファイルや、EPWING 形式で圧縮された
+@file{HONMON2}, @file{HONMONS} ファイルを伸長すると、伸長後のファイル
+には拡張子 @samp{.org} が付加されます
+(例: @file{honmon2} → @file{honmon2.org})。
 
 @c ===================================================================
 @node Information, Delete a Book, Uncompression, Top

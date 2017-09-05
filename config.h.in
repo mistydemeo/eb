@@ -11,6 +11,12 @@
 /* Define if EB Library is built with pthread support. */
 #undef EBCONF_ENABLE_PTHREAD
 
+/* Define if build with ebnet support */
+#undef ENABLE_EBNET
+
+/* Define if build with IPv6 support */
+#undef ENABLE_IPV6
+
 /* Define if NLS is requested */
 #undef ENABLE_NLS
 
@@ -46,8 +52,17 @@
 /* Define to 1 if you have the <fcntl.h> header file. */
 #undef HAVE_FCNTL_H
 
+/* Define to 1 if you have the `gai_strerror' function. */
+#undef HAVE_GAI_STRERROR
+
+/* Define to 1 if you have the `getaddrinfo' function. */
+#undef HAVE_GETADDRINFO
+
 /* Define to 1 if you have the `getcwd' function. */
 #undef HAVE_GETCWD
+
+/* Define to 1 if you have the `getnameinfo' function. */
+#undef HAVE_GETNAMEINFO
 
 /* Define to 1 if you have the `getpagesize' function. */
 #undef HAVE_GETPAGESIZE
@@ -57,6 +72,18 @@
 
 /* Define if you have the \`LC_MESSAGES' locale category */
 #undef HAVE_LC_MESSAGES
+
+/* Define to 1 if you have the `bind' library (-lbind). */
+#undef HAVE_LIBBIND
+
+/* Define to 1 if you have the `nsl' library (-lnsl). */
+#undef HAVE_LIBNSL
+
+/* Define to 1 if you have the `resolv' library (-lresolv). */
+#undef HAVE_LIBRESOLV
+
+/* Define to 1 if you have the `socket' library (-lsocket). */
+#undef HAVE_LIBSOCKET
 
 /* Define to 1 if you have the <limits.h> header file. */
 #undef HAVE_LIMITS_H
@@ -127,6 +154,18 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
+/* Define to 1 if you have the `strtol' function. */
+#undef HAVE_STRTOL
+
+/* Define if <netinet/in.h> defines \`struct in6_addr' */
+#undef HAVE_STRUCT_IN6_ADDR
+
+/* Define if <netinet/in.h> defines \`struct sockaddr_in6' */
+#undef HAVE_STRUCT_SOCKADDR_IN6
+
+/* Define if <netinet/in.h> defines \`struct sockaddr_storage' */
+#undef HAVE_STRUCT_SOCKADDR_STORAGE
+
 /* Define if \`struct utimbuf' is declared -- usually in <utime.h>. */
 #undef HAVE_STRUCT_UTIMBUF
 
@@ -183,6 +222,12 @@
 /* Define to 1 if you have the `__argz_stringify' function. */
 #undef HAVE___ARGZ_STRINGIFY
 
+/* Define if \`in6addr_any' is declared by <netinet/in.h> */
+#undef IN6ADDR_ANY_DECLARED
+
+/* Define if \`in6addr_loopback' is declared by <netinet/in.h> */
+#undef IN6ADDR_LOOPBACK_DECLARED
+
 /* Mailing address */
 #undef MAILING_ADDRESS
 
@@ -233,6 +278,9 @@
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
+/* Define to \`int' if <sys/types.h> or <sys/socket.h> does not define. */
+#undef in_port_t
+
 /* Define as `__inline' if that's what the C compiler calls it, or to nothing
    if it is not supported. */
 #undef inline
@@ -243,8 +291,14 @@
 /* Define to `long' if <sys/types.h> does not define. */
 #undef off_t
 
+/* Define to \`int' if <sys/types.h> or <sys/socket.h> does not define. */
+#undef sa_family_t
+
 /* Define to `unsigned' if <sys/types.h> does not define. */
 #undef size_t
+
+/* Define to \`int' if <sys/types.h> or <sys/socket.h> does not define. */
+#undef socklen_t
 
 /* Define to `int' if <sys/types.h> does not define. */
 #undef ssize_t

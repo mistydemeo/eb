@@ -1,7 +1,7 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT(eb, 3.3.4)
+AC_INIT(eb, 4.0beta0)
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.54)
 AM_INIT_AUTOMAKE
@@ -9,11 +9,11 @@ AM_INIT_AUTOMAKE
 dnl *
 dnl * Library version info.
 dnl *
-LIBEB_VERSION_INFO=7:4:1
+LIBEB_VERSION_INFO=8:0:0
 AC_SUBST(LIBEB_VERSION_INFO)
 
-EB_VERSION_MAJOR=3
-EB_VERSION_MINOR=3
+EB_VERSION_MAJOR=4
+EB_VERSION_MINOR=0
 AC_SUBST(EB_VERSION_MAJOR)
 AC_SUBST(EB_VERSION_MINOR)
 
@@ -203,6 +203,14 @@ AC_SUBST(ZLIBLIBS)
 AC_SUBST(ZLIBDEPS)
 AM_CONDITIONAL(INCLUDED_ZLIB, test $included_zlib = yes)
 
+dnl *
+dnl * --enable-ipv6 option.
+dnl *
+AC_ARG_ENABLE(ipv6,
+AC_HELP_STRING([--enable-ipv6],
+    [IPv6 support [[yes]] (if the system supports IPv6)]),
+[ENABLE_IPV6="${enableval}"], [ENABLE_IPV6='auto'])
+
 dnl * 
 dnl * Subdirectories.
 dnl *
@@ -229,11 +237,21 @@ dnl *
 AC_STRUCT_UTIMBUF
 
 dnl * 
+dnl * Libraries.
+dnl * 
+AC_CHECK_LIB(resolv, res_query)
+if test "$ac_cv_lib_resolv_res_query" = no ; then
+    AC_CHECK_LIB(bind, res_query)
+fi
+AC_CHECK_LIB(nsl, gethostname)
+AC_CHECK_LIB(socket, socket)
+
+dnl * 
 dnl * Library Functions.
 dnl * 
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(memcpy memmove getcwd strchr syslog utime vsyslog _getdcwd)
-AC_REPLACE_FUNCS(memset strcasecmp strerror)
+AC_REPLACE_FUNCS(memset strcasecmp strerror strtol)
 
 dnl * 
 dnl * Typedefs.
@@ -257,6 +275,42 @@ AM_CONDITIONAL(EXEEXT_EXE, test X$ac_exeext = Xyes)
 if test X$ac_exeext = X.exe ; then
    AC_DEFINE(EXEEXT_EXE, 1, [Define if command names have the suffix \`.exe'])
 fi
+
+dnl *
+dnl * ebnet support
+dnl *
+AC_DEFINE(ENABLE_EBNET, 1, [Define if build with ebnet support])
+
+AC_TYPE_IN_PORT_T
+AC_TYPE_SA_FAMILY_T
+AC_TYPE_SOCKLEN_T
+AC_STRUCT_IN6_ADDR
+AC_STRUCT_SOCKADDR_IN6
+AC_STRUCT_SOCKADDR_STORAGE
+AC_DECL_IN6ADDR_ANY
+AC_DECL_IN6ADDR_LOOPBACK
+
+AC_CHECK_FUNCS(getaddrinfo getnameinfo gai_strerror)
+
+if test "$ENABLE_IPV6" = auto ; then
+    if test "$ac_cv_struct_in6_addr$ac_cv_func_getaddrinfo" = yesyes ; then
+        ENABLE_IPV6=yes
+    else
+        ENABLE_IPV6=no
+    fi
+fi
+
+AC_MSG_CHECKING(for IPv6 support)
+if test "$ENABLE_IPV6" = yes ; then
+    if test "$ac_cv_struct_in6_addr" = no ; then
+        AC_MSG_ERROR(IPv6 not available)
+    fi
+    if test "${ac_cv_func_getaddrinfo}" = no ; then
+        AC_MSG_ERROR(IPv6 not available)
+    fi
+    AC_DEFINE(ENABLE_IPV6, 1, [Define if build with IPv6 support])
+fi
+AC_MSG_RESULT($ENABLE_IPV6)
 
 dnl *
 dnl * Substitusion for eb.conf.
@@ -291,7 +345,7 @@ dnl * Output Files.
 dnl * 
 AC_CONFIG_HEADER(config.h)
 AC_CONFIG_FILES([Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile
-    ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebzip/Makefile
-    doc/Makefile doc-ja/Makefile po-eb/Makefile po-ebutils/Makefile
-    m4/Makefile samples/Makefile])
+    ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebstopchk/Makefile 
+    ebzip/Makefile doc/Makefile doc-ja/Makefile po-eb/Makefile
+    po-ebutils/Makefile m4/Makefile samples/Makefile])
 AC_OUTPUT

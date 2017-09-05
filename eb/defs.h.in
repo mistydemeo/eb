@@ -387,6 +387,13 @@ struct EB_Appendix_Struct {
     EB_Appendix_Subbook *subbook_current;
 
     /*
+     * ebnet socket file. 
+     */
+#ifdef ENABLE_EBNET
+    int ebnet_file;
+#endif
+
+    /*
      * Lock.
      */
 #ifdef EBCONF_ENABLE_PTHREAD
@@ -431,6 +438,11 @@ struct EB_Font_Struct {
      * File name of the font. (EPWING only)
      */
     char file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+
+    /*
+     * Font data cache.
+     */
+    char *glyphs;
 
     /*
      * Compression Information.
@@ -743,7 +755,7 @@ struct EB_Text_Context_Struct {
     EB_Text_Status_Code text_status;
 
     /*
-     * Skip until `skipcoe' appears.
+     * Skip until `skipcode' appears.
      */
     int skip_code;
 
@@ -898,6 +910,13 @@ struct EB_Book_Struct {
      * Context parameters for text reading.
      */
     EB_Search_Context search_contexts[EB_NUMBER_OF_SEARCH_CONTEXTS];
+
+    /*
+     * ebnet socket file. 
+     */
+#ifdef ENABLE_EBNET
+    int ebnet_file;
+#endif
 
     /*
      * Lock.

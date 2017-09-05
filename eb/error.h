@@ -100,12 +100,17 @@ extern "C" {
 #define EB_ERR_NO_WORD			57
 #define EB_ERR_NO_CANDIDATES		58
 #define EB_ERR_END_OF_CONTENT		59
+
 #define EB_ERR_NO_PREV_SEEK		60
+#define EB_ERR_EBNET_UNSUPPORTED	61
+#define EB_ERR_EBNET_FAIL_CONNECT	62
+#define EB_ERR_EBNET_SERVER_BUSY	63
+#define EB_ERR_EBNET_NO_PERMISSION	64
 
 /*
  * The number of error codes.
  */
-#define EB_NUMBER_OF_ERRORS		61
+#define EB_NUMBER_OF_ERRORS		65
 
 /*
  * The maximum length of an error message.

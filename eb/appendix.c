@@ -17,6 +17,9 @@
 #include "eb.h"
 #include "error.h"
 #include "appendix.h"
+#ifdef ENABLE_EBNET
+#include "ebnet.h"
+#endif
 #include "build-post.h"
 
 /*
@@ -89,6 +92,9 @@ eb_initialize_appendix(appendix)
     appendix->subbook_count = 0;
     appendix->subbooks = NULL;
     appendix->subbook_current = NULL;
+#ifdef ENABLE_EBNET
+    appendix->ebnet_file = -1;
+#endif
     eb_initialize_lock(&appendix->lock);
     eb_initialize_alt_caches(appendix);
 
@@ -125,6 +131,10 @@ eb_finalize_appendix(appendix)
     eb_finalize_lock(&appendix->lock);
     eb_finalize_alt_caches(appendix);
 
+#ifdef ENABLE_EBNET
+    ebnet_finalize_appendix(appendix);
+#endif
+
     LOG(("out: eb_finalize_appendix()"));
 }
 
@@ -139,6 +149,7 @@ eb_bind_appendix(appendix, path)
 {
     EB_Error_Code error_code;
     char temporary_path[EB_MAX_PATH_LENGTH + 1];
+    int is_ebnet;
 
     eb_lock(&appendix->lock);
     LOG(("in: eb_bind_appendix(path=%s)", path));
@@ -159,6 +170,17 @@ eb_bind_appendix(appendix, path)
     pthread_mutex_unlock(&appendix_counter_mutex);
 
     /*
+     * Check whether `path' is URL.
+     */
+    is_ebnet = is_ebnet_url(path);
+#ifndef ENABLE_EBNET
+    if (is_ebnet) {
+	error_code = EB_ERR_EBNET_UNSUPPORTED;
+	goto failed;
+    }
+#endif
+    
+    /*
      * Set path of the appendix.
      * The length of the file name "path/subdir/subsubdir/file.;1" must
      * be EB_MAX_PATH_LENGTH maximum.
@@ -168,14 +190,20 @@ eb_bind_appendix(appendix, path)
 	goto failed;
     }
     strcpy(temporary_path, path);
+#ifdef ENABLE_EBNET
+    if (is_ebnet)
+	error_code = ebnet_canonicalize_url(temporary_path);
+    else
+	error_code = eb_canonicalize_path_name(temporary_path);
+#else
     error_code = eb_canonicalize_path_name(temporary_path);
+#endif
     if (error_code != EB_SUCCESS)
 	goto failed;
     appendix->path_length = strlen(temporary_path);
 
     if (EB_MAX_PATH_LENGTH
-	< appendix->path_length + 1 + EB_MAX_DIRECTORY_NAME_LENGTH
-	+ 1 + EB_MAX_DIRECTORY_NAME_LENGTH + 1 + EB_MAX_FILE_NAME_LENGTH) {
+	< appendix->path_length + 1 + EB_MAX_RELATIVE_PATH_LENGTH) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;
 	goto failed;
     }
@@ -186,6 +214,17 @@ eb_bind_appendix(appendix, path)
 	goto failed;
     }
     strcpy(appendix->path, temporary_path);
+
+    /*
+     * Establish a connection with a ebnet server.
+     */
+#ifdef ENABLE_EBNET
+    if (is_ebnet) {
+	error_code = ebnet_bind_appendix(appendix, appendix->path);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+    }
+#endif
 
     /*
      * Read information from the catalog file.

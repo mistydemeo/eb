@@ -1,5 +1,5 @@
-これは ebrefile-ja.info、 ebrefile-ja.texi より makeinfo バージョン 4.5
-によって作成されました。
+This is ebrefile-ja.info, produced by makeinfo version 4.0 from
+ebrefile-ja.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3.4 版です。 EB ライブラリバージョン 3.3.4 に対応して
-います。
+   この文書は第 4.0beta0 版です。 EB ライブラリバージョン 4.0beta0 に対
+応しています。
 
 * Menu:
 
@@ -83,16 +83,16 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 ができます。
 
    `ebrefile' は有用とは思いますが、頒布にあたっては、市場性及び特定目
-的 適合性についての暗黙の保証を含めて、いかなる保証も行ないません。 詳
+的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。 詳
 細については GNU General Public License をお読み下さい。
 
    加えて、あなたは自分の所有する CD-ROM 書籍の使用許諾も守らなくてはい
-け ません。 `ebrefile' はフリーソフトウェアですが、あなたの書籍が自由に
+けません。 `ebrefile' はフリーソフトウェアですが、あなたの書籍が自由に
 使えるものであるとは限りません。 `ebrefile' は、CD-ROM 書籍のあるファ
 イルの内容に変更を加えます。 ご注意下さい。
 
-   この文書は第 3.3.4 版です。 EB ライブラリバージョン 3.3.4 に対応して
-います。
+   この文書は第 4.0beta0 版です。 EB ライブラリバージョン 4.0beta0 に対
+応しています。
 
 
 File: ebrefile-ja.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -113,6 +113,12 @@ File: ebrefile-ja.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Pr
 
 この場合、`ebrefile' はカレントディレクトリ (`.') が指定されたものと判
 断します。
+
+   遠隔アクセスには対応していませんので、遠隔アクセス識別子は使用できま
+せん。
+
+     % ebrefile ebnet://localhost/cdrom
+     ebrefile: ebnet には対応していません。
 
 * Menu:
 
@@ -278,11 +284,11 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 
 
 Tag Table:
-Node: Top1049
-Node: Introduction1525
-Node: Invoking ebrefile3674
-Node: Select Subbooks4319
-Node: Combination with ebzip7711
-Node: Summary of Options8674
+Node: Top1034
+Node: Introduction1516
+Node: Invoking ebrefile3669
+Node: Select Subbooks4479
+Node: Combination with ebzip7871
+Node: Summary of Options8834
 
 End Tag Table

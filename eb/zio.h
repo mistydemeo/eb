@@ -207,6 +207,11 @@ struct Zio_Struct {
      * Add this value to offset written in index. (S-EBXA compression only)
      */
     off_t index_base;
+
+    /*
+     * ebnet mode flag.
+     */
+    int is_ebnet;
 };
 
 /*

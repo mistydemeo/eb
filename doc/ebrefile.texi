@@ -159,6 +159,16 @@ you can omit book-path like as follows:
 In this case, @code{ebrefile} assumes that the current working directory
 (@file{.}) is specified.
 
+Since @code{ebrefile} doesn't support remote access, it rejects remote
+access identifer.
+
+@example
+@group
+% ebrefile ebnet://localhost/cdrom
+ebrefile: ebnet is not supported
+@end group
+@end example
+
 @menu
 * Select Subbooks::             Select Subbooks.
 * Combination with ebzip::      Combination with @code{ebzip}.

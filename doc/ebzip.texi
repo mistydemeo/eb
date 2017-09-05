@@ -248,6 +248,16 @@ you can omit book-path like as follows:
 In this case, it is assumed that the current working directory
 (@file{.}) is specified.
 
+Since the commands don't support remote access, they reject remote 
+access identifier.
+
+@example
+@group
+% ebzip ebnet://localhost/cdrom
+ebzip: ebnet is not supported
+@end group
+@end example
+
 @c ===================================================================
 @node Compression, Uncompression, Invoking ebzip, Top
 @chapter Compression
@@ -337,7 +347,8 @@ They are compressed files.
 Other files are unchanged.
 
 @code{ebzip} compresses the following files; @file{START}, @file{HONMON},
-@file{LANGUAGE}, and font files under the @file{GAIJI} directories.
+@file{HONMON2}, @file{HONMONS}, @file{LANGUAGE}, and font files under
+the @file{GAIJI} directories.
 
 @c -------------------------------------------------------------------
 @node Compression Example 2, Compression Level, Compression Example 1, Compression
@@ -566,7 +577,7 @@ Similary, when the @samp{--no-overwrite} option is specified,
 
 Also S-EBXA and EPWING define compression formats, and some CD-ROM
 books of S-EBXA and EPWING are compressed with the formats.
-The formats are different from the ebzip compression format.
+However, their compression formats are different from that of ebzip.
 
 @code{ebzip} (@code{ebunzip}) can also uncompress CD-ROM book
 compressed with the EPWING or S-EBXA compression fomrat, but it cannot
@@ -671,7 +682,7 @@ When the uncompression has done, the directory structure under
 @end example
 
 @noindent
-Uncompressed files change their filenames;
+Uncompressed files change their file names;
 the suffix @samp{.ebz} is removed from them.
 
 @c -------------------------------------------------------------------
@@ -708,11 +719,16 @@ You don't have to specify the @samp{--level} option at uncompression.
 
 Also S-EBXA and EPWING define compression formats, and some CD-ROM
 books of S-EBXA and EPWING are compressed with the formats.
-The formats are different from the ebzip compression format.
+However, their compression formats are different from that of ebzip.
 
 @code{ebzip} (@code{ebunzip}) can also uncompress CD-ROM book compressed
 with the EPWING or S-EBXA compression fomrat, but it cannot compress
 book with the format.
+
+When @code{ebzip} (@code{ebunzip}) has uncompressed S-EBXA's @file{START}
+file, EPWING's @file{HONMON2} file or EPWING's @file{HONMONS} file,
+it adds the suffix @samp{.org} to the uncompressed file
+(e.g. @file{honmon2} -> @file{honmon2.org}).
 
 @c ===================================================================
 @node Information, Delete a Book, Uncompression, Top

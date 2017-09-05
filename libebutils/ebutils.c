@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 98, 99, 2000, 01  
+ * Copyright (c) 1997 - 2003
  *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
@@ -115,7 +115,7 @@ output_version(program_name, program_version)
     const char *program_version;
 {
     printf("%s (EB Library) version %s\n", program_name, program_version);
-    printf("Copyright (c) 1997, 98, 99, 2000, 01, 02\n");
+    printf("Copyright (c) 1997 - 2003\n");
     printf("   Motoyuki Kasahara\n");
     fflush(stdout);
 }
