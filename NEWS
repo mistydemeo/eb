@@ -1,3 +1,17 @@
+バージョン 4.3 における主な変更点:
+
+* EPWING が複数の副本がディレクトリを共有している場合、正しくアクセス
+  できない不具合を修正した。
+* `ebunzip --test' が、電子ブックの本文ファイルを上書きしてしまう不具合
+  を修正した。
+* ebappendix が、`catalogs.app' を読み込んでも電子ブック形式の appendix
+  を生成してしまう不具合を修正した。
+* 参照先付きカラー図版に対応した。
+  API として、eb_have_image_menu() と eb_image_menu() が追加された。
+  テキストのフックとして、EB_HOOK_BEGIN_IMAGE_PAGE, EB_HOOK_END_IMAGE_PAGE,
+  EB_HOOK_BEGIN_CLICKABLE_AREA, EB_HOOK_END_CLICKABLE_AREA の 4つが追加
+  された。
+
 バージョン 4.2.2 における主な変更点:
 
 * 4.2.1 で混入した、一部の EPWING が正しく扱えない不具合を修正した。

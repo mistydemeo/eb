@@ -23,7 +23,7 @@
 <!-- #include "eb-toc.html" -->
 
 <p>
-Copyright (c) 2001-2005  Motoyuki Kasahara
+Copyright (c) 2001-2006  Motoyuki Kasahara
 </p>
 
 <!-- ================================================================ -->
@@ -5182,7 +5182,7 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 
 <p>
 <code>EB_HOOK_BEGIN_MONO_GRAPHIC</code> および
-<code>EB_HOOK_END_MONO_GRAPIHC</code> は、モノクロ図版の参照開始と終了を
+<code>EB_HOOK_END_MONO_GRAPIHC</code> は、モノクロ図版の開始と終了を
 表すエスケープシーケンスに対するフックです。
 </p>
 
@@ -5215,7 +5215,7 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 </p>
 
 <p>
-図版データの取り出し方については、<a href="#monochrome-image">「モノクロ図版」</a> を参照のこと
+図版データの取り出し方については、<a href="#monochrome-image">「モノクロ図版」</a>
 を参照してください。
 </p>
 
@@ -5243,9 +5243,9 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 
 <p>
 <code>EB_HOOK_BEGIN_COLOR_BMP</code> と <code>EB_HOOK_COLOR_JPEG</code>
-は、それぞれ BMP 形式と JPEG 形式のカラー図版の参照開始を表す
+は、それぞれ BMP 形式と JPEG 形式のカラー図版の開始を表す
 エスケープシーケンスに対するフックです。
-参照開始のフックは BMP と JPEG とでフックが分かれていますが、終了の
+開始のフックは BMP と JPEG とでフックが分かれていますが、終了の
 フックは共通で、<code>EB_HOOK_END_COLOR_GRAPIHC</code> になります。
 </p>
 
@@ -5273,7 +5273,7 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 </p>
 
 <p>
-図版データの取り出し方については、<a href="#color-image">「カラー図版」</a> を参照のこと
+図版データの取り出し方については、<a href="#color-image">「カラー図版」</a>
 を参照してください。
 </p>
 
@@ -5291,9 +5291,9 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 
 <p>
 <code>EB_HOOK_BEGIN_IN_COLOR_BMP</code> と <code>EB_HOOK_IN_COLOR_JPEG</code> は、
-それぞれ BMP 形式と JPEG 形式のインラインカラー図版の参照開始を表す
+それぞれ BMP 形式と JPEG 形式のインラインカラー図版の開始を表す
 エスケープシーケンスに対するフックです。
-参照開始のフックは BMP と JPEG とでフックが分かれていますが、終了の
+開始のフックは BMP と JPEG とでフックが分かれていますが、終了の
 フックは共通で、<code>EB_HOOK_END_IN_COLOR_GRAPIHC</code> になります。
 </p>
 
@@ -5321,8 +5321,73 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 </p>
 
 <p>
-図版データの取り出し方については、<a href="#color-image">「カラー図版」</a> を参照のこと
+図版データの取り出し方については、<a href="#color-image">「カラー図版」</a>
 を参照してください。
+</p>
+
+<p>
+フック関数を登録していない状態では、これらのフックはテキストデータに何も
+書き込みません。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_BEGIN_CLICKABLE_AREA">定数 <code>EB_HOOK_BEGIN_CLICKABLE_AREA</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="const:HOOK_END_CLICKABLE_AREA">定数 <code>EB_HOOK_END_CLICKABLE_AREA</code></a></h4>
+
+<p>
+<code>EB_HOOK_BEGIN_CLICKABLE_AREA</code> は、カラー図版およびインラインカラー図版内の特定矩形領域に対して、参照先情報を表現した開始エスケープシーケンスに対するフックです。
+同様に、<code>EB_HOOK_END_CLICKABLE_AREA</code> は終了エスケープシーケンスに対するフックです。
+</p>
+
+<p>
+フック <code>EB_HOOK_BEGIN_CLICKABLE_AREA</code> が、フック関数に渡す
+<code>argc</code> は 7 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f4f</samp> になります。
+<code>argv[1]</code> と <code>argv[2]</code> は、それぞれ矩形領域の開始
+x, y 座標を表します。
+それぞれ矩形領域の開始 x, y 座標を表します。
+カラー図版の左上の座標が (0, 0) です。
+同様に、<code>argv[3]</code> と <code>argv[4]</code> が図版の右方向への
+幅と、下方向への高さを表します。
+最後の <code>argv[5]</code> と <code>argv[6]</code> が参照先のページ番号
+とオフセットとなります。
+</p>
+
+<blockquote>
+<pre>
+　　　　　　　　　参照先付きカラー図版
+（０，０）
+　　┌─────────────────────┐
+　　│　　　　　　　　　　　　　　　　　　　　　│
+　　│（ｘ，ｙ）　　　　　　　　　　　　　　　　│
+　　│　　┌　─　─　─　─　─　─　┐　　　　│
+　　│　　│　　　　　　　　　高さ↑　│　　　　│
+　　│　　　　　　　　　　　　　　│　　　　　　│
+　　│　　│　　矩形領域　　　　　│　│　　　　│
+　　│　　　　　　　　　　　　　　│　　　　　　│
+　　│　　│　　　　　　　　　　　│　│　　　　│
+　　│　　　　　　　幅　　　　　　│　　　　　　│
+　　│　　│←──────────┼→│　　　　│
+　　│　　　　　　　　　　　　　　↓　　　　　　│
+　　│　　└　─　─　─　─　─　─　┘　　　　│
+　　│　　　　　　　　　　　　　　　　　　　　　│
+　　└─────────────────────┘
+</pre>
+</blockquote>
+
+<p>
+<code>EB_HOOK_END_CLICKABLE_AREA</code> が、フック関数に渡す
+<code>argc</code> は 1 です。
+<code>argv[0]</code> はエスケープシーケンスのコードそのもので、
+<samp>0x1f6f</samp> になります。
+</p>
+
+<p>
+参照先情報の取り出し方については、
+<a href="#clickable-color-image">「参照先付きカラー図版」</a>
+を参照して下さい。
 </p>
 
 <p>
@@ -5337,8 +5402,8 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 
 <p>
 <code>EB_HOOK_BEGIN_WAVE</code> および <code>EB_HOOK_END_WAVE</code> は、
-WAVE (PCM) 形式の音声データの参照開始と終了を表すエスケープシーケンス
-に対するフックです。
+WAVE (PCM) 形式の音声データの開始と終了を表すエスケープシーケンスに対する
+フックです。
 </p>
 
 <p>
@@ -5360,8 +5425,8 @@ WAVE (PCM) 形式の音声データの参照開始と終了を表すエスケープシーケンス
 </p>
 
 <p>
-音声データの取り出し方については、<a href="#wave-sound">「WAVE 音声」</a> を参照のこと を
-参照して下さい。
+音声データの取り出し方については、<a href="#wave-sound">「WAVE 音声」</a>
+を参照して下さい。
 </p>
 
 <p>
@@ -5376,8 +5441,8 @@ WAVE (PCM) 形式の音声データの参照開始と終了を表すエスケープシーケンス
 
 <p>
 <code>EB_HOOK_BEGIN_MPEG</code> および <code>EB_HOOK_END_MPEG</code> は、
-MPEG 形式の動画データの参照開始と終了を表すエスケープシーケンスに対する
-フックです。
+MPEG 形式の動画データの開始と終了を表すエスケープシーケンスに対するフック
+です。
 </p>
 
 <p>
@@ -5398,8 +5463,8 @@ MPEG 形式の動画データの参照開始と終了を表すエスケープシーケンスに対する
 </p>
 
 <p>
-動画データの取り出し方については、<a href="#mpeg-movie">「MPEG 動画」</a> を参照のこと を
-参照して下さい。
+動画データの取り出し方については、<a href="#mpeg-movie">「MPEG 動画」</a>
+を参照して下さい。
 </p>
 
 <p>
@@ -6286,8 +6351,8 @@ CD-ROM 書籍における外字には、「全角外字」「半角外字」の二種類があります。
 
 <p>
 テキストデータには、半角表示の開始と終了を表すエスケープシーケンスが
-あり (<a href="#text-data-format">「テキストデータの内部形式」</a> を参照のこと)、開始と
-終了の間に置かれたものは半角外字、それ以外のところなら全角外字に
+あり (<a href="#text-data-format">「テキストデータの内部形式」</a> を参照のこと)、
+開始と終了の間に置かれたものは半角外字、それ以外のところなら全角外字に
 なります。
 </p>
 
@@ -7447,9 +7512,9 @@ CD-ROM 書籍から取得する機能だけです。
 テキストデータ内からは、バイナリデータであるモノクロ図版を参照する形
 をとります。
 モノクロ図版を取り出すには、この参照情報が必要です。
-参照情報の取得は、モノクロ図版の参照開始と終了を表すエスケープシーケンス
-へのフック <code>EB_HOOK_BEGIN_MONO_GRAPHIC</code> と 
-<code>EB_HOOK_END_MONO_GRAPHIC</code> を用いて行います。
+参照情報の取得は、テキストデータ処理時に、モノクロ図版の開始と終了を
+表すエスケープシーケンスへのフック <code>EB_HOOK_BEGIN_MONO_GRAPHIC</code>
+と <code>EB_HOOK_END_MONO_GRAPHIC</code> を用いて行います。
 </p>
 
 <p>
@@ -7565,14 +7630,15 @@ eb_set_binary_color_graphic(EB_Book *book, EB_Position *position);
 <code>EB_Book</code> オブジェクトは、これから取り出そうとしている図版を
 収録している副本をあらかじめ選択しておきます。
 
-カラー図版のページ番号とオフセットの情報は、カラー図版の参照開始と終了
-を表すエスケープシーケンスへのフックから得ます。
+カラー図版のページ番号とオフセットの情報は、カラー図版の開始と終了を表す
+エスケープシーケンスへのフックから得ます。
 フックは、インライン表示用と非インライン用の 2 種類があり、さらに
 それぞれ開始フックが JPEG 用と BMP 用に分かれています。
 </p>
 
 <dl>
 <dt><code>EB_HOOK_BEGIN_COLOR_BMP</code></dt>
+<dt><code>EB_HOOK_BEGIN_COLOR_JPEG</code></dt>
 <dd>
 非インライン用 BMP, JPEG の開始フック
 
@@ -7581,6 +7647,7 @@ eb_set_binary_color_graphic(EB_Book *book, EB_Position *position);
 非インライン用カラー図版 (BMP, JPEG 共通) の終了フック
 
 <dt><code>EB_HOOK_BEGIN_IN_COLOR_BMP</code></dt>
+<dt><code>EB_HOOK_BEGIN_IN_COLOR_JPEG</code></dt>
 <dd>
 インライン用 BMP, JPEG の開始フック
 
@@ -7603,7 +7670,7 @@ eb_set_binary_color_graphic(EB_Book *book, EB_Position *position);
 後は、実際にカラー図版のデータを取り出します。
 これには、モノクロ図版と同様に <code>eb_read_binary()</code> を用います。
 使い方はまったく一緒ですので、詳しくは
-<a href="#monochrome-image">「モノクロ図版」</a> を参照のこと を参照してください。
+<a href="#monochrome-image">「モノクロ図版」</a> を参照してください。
 </p>
 
 <p>
@@ -7612,6 +7679,82 @@ EB ライブラリは読み込みを止めないという制限事項があります。
 これは、データの大きさに関する情報が記されていないためで、データの
 終端位置は、アプリケーションが JPEG のデータをデコードして割り出すしか
 ありません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="clickable-color-image">参照先付きカラー図版</a></h3>
+
+<p>
+カラー図版には、画像内の特定の矩形領域に参照先の情報を付け加えたものが
+あります。
+HTML におけるクリッカブル・イメージ (clickable image) とほぼ同じで、その
+矩形領域内にマウスポインタがある間にマウスをクリックすると、あらかじめ
+決められたリンク先に画面が遷移するという仕掛けです。
+リンク先となる矩形領域は、画像一つに対して複数個登録できます。
+</p>
+
+<blockquote>
+<pre>
+　　　　　　　参照先付きカラー図版の例
+┌────────────────────────┐
+│┌　─　─　─　─　┐　　┌　─　─　─　─　┐│
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+││　　矩形領域１　　│　　│　　矩形領域２　　││
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+│└　─　─　─　─　┘　　└　─　─　─　─　┘│
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+│┌　─　─　─　─　┐　　　　　　　　　　　　　│
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+││　　矩形領域３　　│　　　　　　図版　　　　　│
+│　　　　　　　　　　　　　　　　　　　　　　　　│
+│└　─　─　─　─　┘　　　　　　　　　　　　　│
+└────────────────────────┘
+</pre>
+</blockquote>
+
+<p>
+参照先付きカラー図版の取り扱い方は、通常のカラー図版を拡張した形と
+なります。通常のカラー図版の場合では、たとえば JPEG の非インライン
+画像では、次のような順番でフックが呼び出されます。
+</p>
+
+<ol>
+<li><code>EB_HOOK_BEGIN_COLOR_JPEG</code> (非インライン用 JPEG 開始)
+<li><code>EB_HOOK_END_COLOR_GRAPHIC</code> (非インライン用 JPEG 終了)
+</ol>
+
+<p>
+これに対して参照先付きのカラー図版では、この2つのフックの間に、矩形領域
+情報に関するフックが挿入されます。
+</p>
+
+<ol>
+<li><code>EB_HOOK_BEGIN_COLOR_JPEG</code> (非インライン用 JPEG 開始)
+<li><code>EB_HOOK_BEGIN_CLICKABLE_AREA</code> (矩形領域1 開始)
+<li><code>EB_HOOK_END_CLICKABLE_AREA</code> (矩形領域1 終了)
+<li><code>EB_HOOK_BEGIN_CLICKABLE_AREA</code> (矩形領域2 開始)
+<li><code>EB_HOOK_END_CLICKABLE_AREA</code> (矩形領域2 終了)<br>
+    以下、矩形領域3、矩形領域4 ... と矩形領域の個数分だけ続く。
+<li><code>EB_HOOK_END_COLOR_GRAPHIC</code> (非インライン用 JPEG 終了)
+</ol>
+
+<p>
+矩形領域に関する具体的な情報は、<code>EB_HOOK_BEGIN_CLICKABLE_AREA</code>
+(開始フック) のほうで取得します。
+フック関数に渡す引数の <code>argv[1]</code> と <code>argv[2]</code> が、
+それぞれ矩形領域の開始 x, y 座標を表します。
+カラー図版の左上の座標が (0, 0) です。
+同様に、<code>argv[3]</code> と <code>argv[4]</code> が矩形領域の右方向
+への幅と、下方向への高さを表します。
+最後の <code>argv[5]</code> と <code>argv[6]</code> が参照先のページ番号
+とオフセットとなります。
+</p>
+
+<p>
+アプリケーションが参照先付きカラー図版に対応しない場合は、矩形領域の
+開始情報と終了情報を無視することになります。
+これにより、図版は通常の (参照先を持たない) カラー図版とまったく同じく
+扱われます。
 </p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->

@@ -1,9 +1,10 @@
 noinst_LIBRARIES = libebutils.a
 libebutils_a_SOURCES = ebutils.c getopt.c getumask.c makedir.c puts_eucjp.c \
-	samefile.c yesno.c
+	samefile.c strlist.c yesno.c
 libebutils_a_LIBADD = @LIBOBJS@
 
-dist_noinst_HEADERS = getopt.h getumask.h makedir.h samefile.h yesno.h
+dist_noinst_HEADERS = getopt.h getumask.h makedir.h samefile.h strlist.h \
+	yesno.h
 nodist_noinst_HEADERS = ebutils.h
 
 EXTRA_DIST = getopt_long.pl ebutils.h.in

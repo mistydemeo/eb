@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997-2005  Motoyuki Kasahara
+ * Copyright (c) 1997-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -411,6 +411,8 @@ output_information(const char *book_path, int multi_flag)
 	    fputs(_("multi "), stdout);
 	if (eb_have_menu(&book))
 	    fputs(_("menu "), stdout);
+	if (eb_have_image_menu(&book))
+	    fputs(_("image-menu "), stdout);
 	if (eb_have_copyright(&book))
 	    fputs(_("copyright "), stdout);
 	fputc('\n', stdout);

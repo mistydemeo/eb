@@ -1,6 +1,6 @@
 /* automatically generated from narwfont.c. */
 /*
- * Copyright (c) 1997-2005  Motoyuki Kasahara
+ * Copyright (c) 1997-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

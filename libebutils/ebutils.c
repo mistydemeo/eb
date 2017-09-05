@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997-2005  Motoyuki Kasahara
+ * Copyright (c) 1997-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -116,7 +116,7 @@ void
 output_version(const char *program_name, const char *program_version)
 {
     printf("%s (EB Library) version %s\n", program_name, program_version);
-    printf("Copyright (c) 1997-2005  Motoyuki Kasahara\n");
+    printf("Copyright (c) 1997-2006  Motoyuki Kasahara\n");
     fflush(stdout);
 }
 

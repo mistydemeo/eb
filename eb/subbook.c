@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997-2005  Motoyuki Kasahara
+ * Copyright (c) 1997-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -392,6 +392,9 @@ eb_load_subbook_indexes(EB_Book *book)
 	    break;
 	case 0x02:
 	    memcpy(&subbook->copyright, &search, sizeof(EB_Search));
+	    break;
+	case 0x10:
+	    memcpy(&subbook->image_menu, &search, sizeof(EB_Search));
 	    break;
 	case 0x16:
 	    if (book->disc_code == EB_DISC_EPWING)
@@ -937,7 +940,7 @@ eb_set_subbook_eb(EB_Book *book, EB_Subbook_Code subbook_code)
     if (subbook->initialized) {
 	if (zio_mode(&subbook->graphic_zio) != ZIO_INVALID)
 	    graphic_zio_code = ZIO_REOPEN;
-    } else {
+    } else if (text_zio_code != ZIO_INVALID) {
 	strcpy(subbook->graphic_file_name, subbook->text_file_name);
 	graphic_zio_code = text_zio_code;
     }
@@ -1003,13 +1006,18 @@ eb_set_subbook_epwing(EB_Book *book, EB_Subbook_Code subbook_code)
 
     /*
      * Open a text file if exists.
+     *
+     * If a subbook has stream data only, its index_page has been set
+     * to 0.  In this case, we must not try to open a text file of
+     * the subbook, since the text file may be for another subbook.
+     * Remember that subbooks can share a `data' sub-directory.
      */
     text_zio_code = ZIO_INVALID;
 
     if (subbook->initialized) {
 	if (zio_mode(&subbook->text_zio) != ZIO_INVALID)
 	    text_zio_code = ZIO_REOPEN;
-    } else {
+    } else if (subbook->index_page > 0) {
 	eb_canonicalize_file_name(subbook->text_file_name);
 	if (eb_find_file_name3(book->path, subbook->directory_name,
 	    subbook->data_directory_name, subbook->text_file_name,
@@ -1033,13 +1041,14 @@ eb_set_subbook_epwing(EB_Book *book, EB_Subbook_Code subbook_code)
 
     /*
      * Open a graphic file if exists.
+     *
      */
     graphic_zio_code = ZIO_INVALID;
 
     if (subbook->initialized) {
 	if (zio_mode(&subbook->graphic_zio) != ZIO_INVALID)
 	    graphic_zio_code = ZIO_REOPEN;
-    } else {
+    } else if (text_zio_code != ZIO_INVALID) {
 	eb_canonicalize_file_name(subbook->graphic_file_name);
 	if (eb_find_file_name3(book->path, subbook->directory_name,
 	    subbook->data_directory_name, subbook->graphic_file_name,
@@ -1069,7 +1078,7 @@ eb_set_subbook_epwing(EB_Book *book, EB_Subbook_Code subbook_code)
     if (subbook->initialized) {
 	if (zio_mode(&subbook->sound_zio) != ZIO_INVALID)
 	    sound_zio_code = ZIO_REOPEN;
-    } else {
+    } else if (text_zio_code != ZIO_INVALID) {
 	eb_canonicalize_file_name(subbook->sound_file_name);
 	if (eb_find_file_name3(book->path, subbook->directory_name,
 	    subbook->data_directory_name, subbook->sound_file_name,

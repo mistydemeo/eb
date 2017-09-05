@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1998-2005  Motoyuki Kasahara
+ * Copyright (c) 1998-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,6 +31,7 @@
 
 #include "getumask.h"
 #include "makedir.h"
+#include "strlist.h"
 
 /*
  * Unexported function.
@@ -123,6 +124,7 @@ ebzip_unzip_book_eb(EB_Book *book, const char *out_top_path,
     const char *book_path, EB_Subbook_Code *subbook_list, int subbook_count)
 {
     EB_Subbook *subbook;
+    String_List string_list;
     char in_path_name[PATH_MAX + 1];
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
@@ -146,6 +148,7 @@ ebzip_unzip_book_eb(EB_Book *book, const char *out_top_path,
      */
     out_directory_mode = 0777 ^ get_umask();
     eb_load_all_subbooks(book);
+    string_list_initialize(&string_list);
 
     /*
      * Uncompress a book.
@@ -160,26 +163,29 @@ ebzip_unzip_book_eb(EB_Book *book, const char *out_top_path,
 	    out_sub_path);
 	if (!ebzip_test_flag
 	    && make_missing_directory(out_sub_path, out_directory_mode) < 0)
-	    return -1;
+	    goto failed;
 
 	/*
 	 * Uncompress START file.
 	 */
 	in_zio_code = zio_mode(&subbook->text_zio);
+	eb_compose_path_name2(book->path, subbook->directory_name,
+	    subbook->text_file_name, in_path_name);
+	eb_compose_path_name2(out_top_path, subbook->directory_name,
+	    subbook->text_file_name, out_path_name);
+	eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 
-	if (in_zio_code != ZIO_INVALID) {
-	    eb_compose_path_name2(book->path, subbook->directory_name,
-		subbook->text_file_name, in_path_name);
-	    eb_compose_path_name2(out_top_path, subbook->directory_name,
-		subbook->text_file_name, out_path_name);
-	    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+	if (in_zio_code != ZIO_INVALID
+	    && !string_list_find(&string_list, in_path_name)) {
 	    if (ebzip_unzip_start_file(out_path_name, in_path_name,
 		in_zio_code, subbook->index_page) < 0)
-		return -1;
+		goto failed;
 	}
 
-	if (rewrite_sebxa_start(out_path_name, subbook->index_page) < 0)
-	    return -1;
+	if (!ebzip_test_flag
+	    && rewrite_sebxa_start(out_path_name, subbook->index_page) < 0)
+	    goto failed;
+	string_list_add(&string_list, in_path_name);
     }
 
     /*
@@ -192,7 +198,7 @@ ebzip_unzip_book_eb(EB_Book *book, const char *out_top_path,
 	eb_path_name_zio_code(in_path_name, ZIO_PLAIN, &in_zio_code);
 	eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 	if (ebzip_unzip_file(out_path_name, in_path_name, in_zio_code) < 0)
-	    return -1;
+	    goto failed;
     }
 
     /*
@@ -203,10 +209,18 @@ ebzip_unzip_book_eb(EB_Book *book, const char *out_top_path,
 	eb_compose_path_name(book->path, catalog_file_name, in_path_name);
 	eb_compose_path_name(out_top_path, catalog_file_name, out_path_name);
 	if (ebzip_copy_file(out_path_name, in_path_name) < 0)
-	    return -1;
+	    goto failed;
     }
 
+    string_list_finalize(&string_list);
     return 0;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    string_list_finalize(&string_list);
+    return -1;
 }
 
 
@@ -219,6 +233,7 @@ ebzip_unzip_book_epwing(EB_Book *book, const char *out_top_path,
     const char *book_path, EB_Subbook_Code *subbook_list, int subbook_count)
 {
     EB_Subbook *subbook;
+    String_List string_list;
     EB_Font *font;
     char in_path_name[PATH_MAX + 1];
     char out_sub_path[PATH_MAX + 1];
@@ -242,6 +257,7 @@ ebzip_unzip_book_epwing(EB_Book *book, const char *out_top_path,
      */
     out_directory_mode = 0777 ^ get_umask();
     eb_load_all_subbooks(book);
+    string_list_initialize(&string_list);
 
     /*
      * Uncompress a book.
@@ -256,7 +272,7 @@ ebzip_unzip_book_epwing(EB_Book *book, const char *out_top_path,
 	    out_sub_path);
 	if (!ebzip_test_flag
 	    && make_missing_directory(out_sub_path, out_directory_mode) < 0)
-	    return -1;
+	    goto failed;
 
 	/*
 	 * Make `data' sub directory for the current subbook.
@@ -265,64 +281,68 @@ ebzip_unzip_book_epwing(EB_Book *book, const char *out_top_path,
 	    subbook->data_directory_name, out_sub_path);
 	if (!ebzip_test_flag
 	    && make_missing_directory(out_sub_path, out_directory_mode) < 0)
-	    return -1;
+	    goto failed;
 
 	/*
 	 * Uncompress HONMON/HONMON2 file.
 	 */
 	in_zio_code = zio_mode(&subbook->text_zio);
+	eb_compose_path_name3(book->path, subbook->directory_name,
+	    subbook->data_directory_name, subbook->text_file_name,
+	    in_path_name);
+	eb_compose_path_name3(out_top_path, subbook->directory_name,
+	    subbook->data_directory_name, subbook->text_file_name,
+	    out_path_name);
 
-	if (in_zio_code != ZIO_INVALID) {
-	    eb_compose_path_name3(book->path, subbook->directory_name,
-		subbook->data_directory_name, subbook->text_file_name,
-		in_path_name);
-	    eb_compose_path_name3(out_top_path, subbook->directory_name,
-		subbook->data_directory_name, subbook->text_file_name,
-		out_path_name);
+	if (in_zio_code != ZIO_INVALID
+	    && !string_list_find(&string_list, in_path_name)) {
 	    if (strncasecmp(subbook->text_file_name, "honmon2", 7) == 0)
 		eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_ORG);
 	    else
 		eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 	    if (ebzip_unzip_file(out_path_name, in_path_name, in_zio_code) < 0)
-		return -1;
+		goto failed;
+	    string_list_add(&string_list, in_path_name);
 	}
 
 	/*
 	 * Uncompress HONMONS file.
 	 */
 	in_zio_code = zio_mode(&subbook->sound_zio);
+	eb_compose_path_name3(book->path, subbook->directory_name,
+	    subbook->data_directory_name, subbook->sound_file_name,
+	    in_path_name);
+	eb_compose_path_name3(out_top_path, subbook->directory_name,
+	    subbook->data_directory_name, subbook->sound_file_name,
+	    out_path_name);
+	eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 
 	if (!ebzip_skip_flag_sound
 	    && in_zio_code != ZIO_INVALID
-	    && strncasecmp(subbook->sound_file_name, "honmons", 7) == 0) {
-	    eb_compose_path_name3(book->path, subbook->directory_name,
-		subbook->data_directory_name, subbook->sound_file_name,
-		in_path_name);
-	    eb_compose_path_name3(out_top_path, subbook->directory_name,
-		subbook->data_directory_name, subbook->sound_file_name,
-		out_path_name);
-	    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+	    && !string_list_find(&string_list, in_path_name)) {
 	    if (ebzip_unzip_file(out_path_name, in_path_name, in_zio_code) < 0)
-		return -1;
+		goto failed;
+	    string_list_add(&string_list, in_path_name);
 	}
 
 	/*
 	 * Uncompress HONMONG file.
 	 */
 	in_zio_code = zio_mode(&subbook->graphic_zio);
+	eb_compose_path_name3(book->path, subbook->directory_name,
+	    subbook->data_directory_name, subbook->graphic_file_name,
+	    in_path_name);
+	eb_compose_path_name3(out_top_path, subbook->directory_name,
+	    subbook->data_directory_name, subbook->graphic_file_name,
+	    out_path_name);
+	eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 
 	if (!ebzip_skip_flag_graphic
 	    && in_zio_code != ZIO_INVALID
-	    && strncasecmp(subbook->graphic_file_name, "honmong", 7) == 0) {
-	    eb_compose_path_name3(book->path, subbook->directory_name,
-		subbook->data_directory_name, subbook->graphic_file_name,
-		in_path_name);
-	    eb_compose_path_name3(out_top_path, subbook->directory_name,
-		subbook->data_directory_name, subbook->graphic_file_name,
-		out_path_name);
-	    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+	    && !string_list_find(&string_list, in_path_name)) {
 	    if (ebzip_unzip_file(out_path_name, in_path_name, in_zio_code) < 0)
-		return -1;
+		goto failed;
+	    string_list_add(&string_list, in_path_name);
 	}
 
 	/*
@@ -334,7 +354,7 @@ ebzip_unzip_book_epwing(EB_Book *book, const char *out_top_path,
 	    if (!ebzip_test_flag
 		&& make_missing_directory(out_sub_path, out_directory_mode)
 		< 0) {
-		return -1;
+		goto failed;
 	    }
 
 	    /*
@@ -346,18 +366,20 @@ ebzip_unzip_book_epwing(EB_Book *book, const char *out_top_path,
 		    continue;
 
 		in_zio_code = zio_mode(&font->zio);
+		eb_compose_path_name3(book->path, subbook->directory_name,
+		    subbook->gaiji_directory_name, font->file_name,
+		    in_path_name);
+		eb_compose_path_name3(out_top_path, subbook->directory_name,
+		    subbook->gaiji_directory_name, font->file_name,
+		    out_path_name);
+		eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 
-		if (in_zio_code != ZIO_INVALID) {
-		    eb_compose_path_name3(book->path,
-			subbook->directory_name, subbook->gaiji_directory_name,
-			font->file_name, in_path_name);
-		    eb_compose_path_name3(out_top_path,
-			subbook->directory_name, subbook->gaiji_directory_name,
-			font->file_name, out_path_name);
-		    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+		if (in_zio_code != ZIO_INVALID
+		    && !string_list_find(&string_list, in_path_name)) {
 		    if (ebzip_unzip_file(out_path_name, in_path_name,
 			in_zio_code) < 0)
-			return -1;
+			goto failed;
+		    string_list_add(&string_list, in_path_name);
 		}
 	    }
 
@@ -370,18 +392,20 @@ ebzip_unzip_book_epwing(EB_Book *book, const char *out_top_path,
 		    continue;
 
 		in_zio_code = zio_mode(&font->zio);
+		eb_compose_path_name3(book->path, subbook->directory_name,
+		    subbook->gaiji_directory_name,
+		    font->file_name, in_path_name);
+		eb_compose_path_name3(out_top_path, subbook->directory_name,
+		    subbook->gaiji_directory_name, font->file_name,
+		    out_path_name);
+		eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 
-		if (in_zio_code != ZIO_INVALID) {
-		    eb_compose_path_name3(book->path,
-			subbook->directory_name, subbook->gaiji_directory_name,
-			font->file_name, in_path_name);
-		    eb_compose_path_name3(out_top_path,
-			subbook->directory_name, subbook->gaiji_directory_name,
-			font->file_name, out_path_name);
-		    eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
+		if (in_zio_code != ZIO_INVALID
+		    && !string_list_find(&string_list, in_path_name)) {
 		    if (ebzip_unzip_file(out_path_name, in_path_name,
 			in_zio_code) < 0)
-			return -1;
+			goto failed;
+		    string_list_add(&string_list, in_path_name);
 		}
 	    }
 	}
@@ -395,7 +419,7 @@ ebzip_unzip_book_epwing(EB_Book *book, const char *out_top_path,
 	    eb_compose_path_name2(out_top_path, subbook->directory_name,
 		subbook->movie_directory_name, out_path_name);
 	    if (ebzip_copy_files_in_directory(out_path_name, in_path_name) < 0)
-		return -1;
+		goto failed;
 	}
     }
 
@@ -407,8 +431,16 @@ ebzip_unzip_book_epwing(EB_Book *book, const char *out_top_path,
 	eb_compose_path_name(book->path, catalogs_file_name, in_path_name);
 	eb_compose_path_name(out_top_path, catalogs_file_name, out_path_name);
 	if (ebzip_copy_file(out_path_name, in_path_name) < 0)
-	    return -1;
+	    goto failed;
     }
 
+    string_list_finalize(&string_list);
     return 0;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    string_list_finalize(&string_list);
+    return -1;
 }

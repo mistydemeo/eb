@@ -1,5 +1,5 @@
 dnl *
-dnl * Copyright (c) 2001-2005  Motoyuki Kasahara
+dnl * Copyright (c) 2001-2006  Motoyuki Kasahara
 dnl *
 dnl * Redistribution and use in source and binary forms, with or without
 dnl * modification, are permitted provided that the following conditions

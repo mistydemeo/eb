@@ -1,5 +1,5 @@
-/*                                                            -*- C -*-
- * Copyright (c) 2001-2006  Motoyuki Kasahara
+/*
+ * Copyright (c) 2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -26,48 +26,55 @@
  * SUCH DAMAGE.
  */
 
-#ifndef EB_BINARY_H
-#define EB_BINARY_H
+#ifndef STRLIST_H
+#define STRLIST_H
 
-#ifdef __cplusplus
-extern "C" {
+#ifdef HAVE_CONFIG_H
+#include "config.h"
 #endif
 
-#include <sys/types.h>
+/*
+ * Type definitions.
+ */
+typedef struct String_List_Struct String_List; 
+typedef struct String_List_Node_Struct String_List_Node; 
 
-#ifdef EB_BUILD_LIBRARY
-#include "defs.h"
-#else
-#include <eb/defs.h>
-#endif
+struct String_List_Struct {
+    int node_count;
+    String_List_Node *head;
+    String_List_Node *tail;
+};
+
+
+struct String_List_Node_Struct {
+    char *string;
+    String_List_Node *next;
+    String_List_Node *back;
+};
+
 
 /*
  * Function declarations.
  */
-/* binary.c */
-EB_Error_Code eb_set_binary_mono_graphic(EB_Book *book,
-    const EB_Position *position, int width, int height);
-EB_Error_Code eb_set_binary_gray_graphic(EB_Book *book,
-    const EB_Position *position, int width, int height);
-EB_Error_Code eb_set_binary_wave(EB_Book *book,
-    const EB_Position *start_position, const EB_Position *end_position);
-EB_Error_Code eb_set_binary_color_graphic(EB_Book *book,
-    const EB_Position *position);
-EB_Error_Code eb_set_binary_mpeg(EB_Book *book, const unsigned int *argv);
-EB_Error_Code eb_read_binary(EB_Book *book, size_t binary_max_length,
-    char *binary, ssize_t *binary_length);
-void eb_unset_binary(EB_Book *book);
+void
+string_list_initialize(String_List *list);
 
-/* filename.c */
-EB_Error_Code eb_compose_movie_file_name(const unsigned int *argv,
-    char *composed_file_name);
-EB_Error_Code eb_compose_movie_path_name(EB_Book *book,
-    const unsigned int *argv, char *composed_path_name);
-EB_Error_Code eb_decompose_movie_file_name(unsigned int *argv,
-    const char *composed_file_name);
+void
+string_list_finalize(String_List *list);
 
-#ifdef __cplusplus
-}
-#endif
+int
+string_list_add(String_List *list, const char *string);
 
-#endif /* not EB_BINARY_H */
+void
+string_list_delete(String_List *list, const char *string);
+
+void
+string_list_delete_all(String_List *list);
+
+int
+string_list_find(String_List *list, const char *string);
+
+int
+string_list_count_node(String_List *list);
+
+#endif /* not STRLIST_H */

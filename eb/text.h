@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997-2005  Motoyuki Kasahara
+ * Copyright (c) 1997-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -99,6 +99,11 @@ extern "C" {
 #define EB_HOOK_GRAPHIC_REFERENCE	42
 #define EB_HOOK_BEGIN_DECORATION	43
 #define EB_HOOK_END_DECORATION		44
+
+#define EB_HOOK_BEGIN_IMAGE_PAGE        45
+#define EB_HOOK_END_IMAGE_PAGE          46
+#define EB_HOOK_BEGIN_CLICKABLE_AREA    47
+#define EB_HOOK_END_CLICKABLE_AREA      48
 
 /*
  * Function declarations.

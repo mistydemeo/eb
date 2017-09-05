@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997-2005  Motoyuki Kasahara
+ * Copyright (c) 1997-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -96,6 +96,8 @@ void eb_log_stderr(const char *message, va_list ap);
 /* menu.c */
 int eb_have_menu(EB_Book *book);
 EB_Error_Code eb_menu(EB_Book *book, EB_Position *position);
+int eb_have_image_menu(EB_Book *book);
+EB_Error_Code eb_image_menu(EB_Book *book, EB_Position *position);
 
 /* multi.c */
 int eb_have_multi_search(EB_Book *book);

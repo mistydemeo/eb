@@ -9,7 +9,7 @@ endif
 SUBDIRS = eb libebutils ebappendix ebfont ebinfo ebrefile ebstopcode ebzip \
 	doc po-eb po-ebutils m4 $(SAMPLES_SUBDIR)
 
-EXTRA_DIST = ChangeLog.0 ChangeLog.1 move-if-change \
+EXTRA_DIST = ChangeLog.0 ChangeLog.1 ChangeLog.2 move-if-change \
    eb.conf.in misc/ebfixlog misc/ebdump
 CLEANFILES = eb.conf
 

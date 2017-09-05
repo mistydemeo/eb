@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1998-2005  Motoyuki Kasahara
+ * Copyright (c) 1998-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -1877,13 +1877,16 @@ zio_unzip_slice_sebxa(Zio *zio, char *out_buffer)
 		if (ZIO_SEBXA_SLICE_LENGTH < out_length + copy_length)
 		    copy_length = ZIO_SEBXA_SLICE_LENGTH - out_length;
 
-		if (copy_offset < out_length) {
-		    copy_p = (unsigned char *)out_buffer + copy_offset;
-		    for (j = 0; j < copy_length; j++)
-			*out_buffer_p++ = *copy_p++;
-		} else {
-		    for (j = 0; j < copy_length; j++)
+		copy_p = (unsigned char *)out_buffer + copy_offset;
+		for (j = 0; j < copy_length; j++) {
+		    if (copy_p < out_buffer_p)
+			*out_buffer_p++ = *copy_p;
+		    else
 			*out_buffer_p++ = 0x00;
+		    copy_p++;
+		    if (ZIO_SEBXA_SLICE_LENGTH <=
+			copy_p - (unsigned char *)out_buffer)
+			copy_p -= ZIO_SEBXA_SLICE_LENGTH;
 		}
 
 		in_read_rest -= 2;

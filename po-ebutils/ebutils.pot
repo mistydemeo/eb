@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-26 10:17+0900\n"
+"POT-Creation-Date: 2006-08-31 11:04+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,7 +78,7 @@ msgstr ""
 msgid "%s: too many arguments\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:398 ../ebzip/unzipbook.c:92 ../ebzip/zipbook.c:93
+#: ../ebfont/ebfont.c:398 ../ebzip/unzipbook.c:93 ../ebzip/zipbook.c:94
 #: ../ebzip/zipinfobook.c:95
 #, c-format
 msgid "%s: unknown subbook name `%s'\n"
@@ -104,13 +104,13 @@ msgstr ""
 msgid "%s: unknown image format name `%s'\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:589 ../ebinfo/ebinfo.c:605 ../ebrefile/ebrefile.c:318
+#: ../ebfont/ebfont.c:589 ../ebinfo/ebinfo.c:607 ../ebrefile/ebrefile.c:318
 #: ../ebzip/ebzip.c:510
 #, c-format
 msgid "Usage: %s [option...] [book-directory]\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:590 ../ebinfo/ebinfo.c:607 ../ebrefile/ebrefile.c:319
+#: ../ebfont/ebfont.c:590 ../ebinfo/ebinfo.c:609 ../ebrefile/ebrefile.c:319
 #: ../ebstopcode/ebstopcode.c:447 ../ebzip/ebzip.c:511
 #, c-format
 msgid "Options:\n"
@@ -133,14 +133,14 @@ msgid ""
 msgstr ""
 
 #: ../ebfont/ebfont.c:594 ../ebfont/ebfont.c:600 ../ebfont/ebfont.c:604
-#: ../ebfont/ebfont.c:612 ../ebinfo/ebinfo.c:614 ../ebrefile/ebrefile.c:323
+#: ../ebfont/ebfont.c:612 ../ebinfo/ebinfo.c:616 ../ebrefile/ebrefile.c:323
 #: ../ebrefile/ebrefile.c:331 ../ebstopcode/ebstopcode.c:461
 #: ../ebzip/ebzip.c:526 ../ebzip/ebzip.c:544
 #, c-format
 msgid "                             (default: %s)\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:596 ../ebinfo/ebinfo.c:608 ../ebrefile/ebrefile.c:320
+#: ../ebfont/ebfont.c:596 ../ebinfo/ebinfo.c:610 ../ebrefile/ebrefile.c:320
 #: ../ebstopcode/ebstopcode.c:450 ../ebzip/ebzip.c:514
 #, c-format
 msgid "  -h  --help                 display this help, then exit\n"
@@ -186,13 +186,13 @@ msgstr ""
 msgid "                             (default: all subbooks)\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:609 ../ebinfo/ebinfo.c:611 ../ebrefile/ebrefile.c:328
+#: ../ebfont/ebfont.c:609 ../ebinfo/ebinfo.c:613 ../ebrefile/ebrefile.c:328
 #: ../ebstopcode/ebstopcode.c:458 ../ebzip/ebzip.c:537
 #, c-format
 msgid "  -v  --version              display version number, then exit\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:610 ../ebinfo/ebinfo.c:612 ../ebrefile/ebrefile.c:329
+#: ../ebfont/ebfont.c:610 ../ebinfo/ebinfo.c:614 ../ebrefile/ebrefile.c:329
 #: ../ebstopcode/ebstopcode.c:459 ../ebzip/ebzip.c:542
 #, c-format
 msgid ""
@@ -200,13 +200,13 @@ msgid ""
 "Argument:\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:611 ../ebinfo/ebinfo.c:613 ../ebrefile/ebrefile.c:330
+#: ../ebfont/ebfont.c:611 ../ebinfo/ebinfo.c:615 ../ebrefile/ebrefile.c:330
 #: ../ebstopcode/ebstopcode.c:460 ../ebzip/ebzip.c:543
 #, c-format
 msgid "  book-directory             top directory of a CD-ROM book\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:614 ../ebinfo/ebinfo.c:616 ../ebrefile/ebrefile.c:334
+#: ../ebfont/ebfont.c:614 ../ebinfo/ebinfo.c:618 ../ebrefile/ebrefile.c:334
 #: ../ebstopcode/ebstopcode.c:463 ../ebzip/ebzip.c:556
 #, c-format
 msgid ""
@@ -314,65 +314,69 @@ msgid "menu "
 msgstr ""
 
 #: ../ebinfo/ebinfo.c:415
+msgid "image-menu "
+msgstr ""
+
+#: ../ebinfo/ebinfo.c:417
 msgid "copyright "
 msgstr ""
 
 #.
 #. * Output a font list.
 #.
-#: ../ebinfo/ebinfo.c:421
+#: ../ebinfo/ebinfo.c:423
 msgid "  font sizes: "
 msgstr ""
 
 #.
 #. * Output character range of the narrow font.
 #.
-#: ../ebinfo/ebinfo.c:443
+#: ../ebinfo/ebinfo.c:445
 msgid "  narrow font characters: "
 msgstr ""
 
 #.
 #. * Output character range of the wide font.
 #.
-#: ../ebinfo/ebinfo.c:471
+#: ../ebinfo/ebinfo.c:473
 #, c-format
 msgid "  wide font characters: "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:554
+#: ../ebinfo/ebinfo.c:556
 #, c-format
 msgid "  multi search %d:\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:568
+#: ../ebinfo/ebinfo.c:570
 #, c-format
 msgid "    title: "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:581
+#: ../ebinfo/ebinfo.c:583
 #, c-format
 msgid "    label %d: "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:585
+#: ../ebinfo/ebinfo.c:587
 msgid "      candidates: "
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:587
+#: ../ebinfo/ebinfo.c:589
 msgid "exist\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:589
+#: ../ebinfo/ebinfo.c:591
 msgid "not-exist\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:609
+#: ../ebinfo/ebinfo.c:611
 #, c-format
 msgid ""
 "  -l  --book-list            output a list of books on an EBENT server\n"
 msgstr ""
 
-#: ../ebinfo/ebinfo.c:610
+#: ../ebinfo/ebinfo.c:612
 #, c-format
 msgid "  -m  --multi-search         also output multi-search information\n"
 msgstr ""

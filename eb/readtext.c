@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997-2005  Motoyuki Kasahara
+ * Copyright (c) 1997-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,7 +35,7 @@
 /*
  * The maximum number of arguments for an escape sequence.
  */
-#define EB_MAX_ARGV 	6
+#define EB_MAX_ARGV 	7
 
 /*
  * Read next when the length of cached data is shorter than this value.
@@ -956,11 +956,22 @@ text_max_length=%ld, forward=%d)",
 		argv[1] = eb_bcd4(cache_p + 2);
 		argv[2] = eb_bcd2(cache_p + 6);
 		if (cache_p[8]==0x1f && cache_p[9]==0x6b) {
+		    context->text_status = EB_TEXT_STATUS_SOFT_STOP;
 		    hook = hookset->hooks + EB_HOOK_GRAPHIC_REFERENCE;
 		    in_step = 10;
 		} else {
 		    hook = hookset->hooks + EB_HOOK_BEGIN_GRAPHIC_REFERENCE;
 		}
+		break;
+
+	    case 0x4c:
+		/* beginning of image page */
+		in_step = 4;
+		if (cache_rest_length < in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		hook = hookset->hooks + EB_HOOK_BEGIN_IMAGE_PAGE;
 		break;
 
 	    case 0x4d:
@@ -980,7 +991,25 @@ text_max_length=%ld, forward=%d)",
 		    hook = hookset->hooks + EB_HOOK_BEGIN_COLOR_JPEG;
 		break;
 
-	    case 0x49: case 0x4c: case 0x4e: case 0x4f:
+	    case 0x4f:
+	        /* beginning of clickable area */
+	        in_step = 34;
+	        if (cache_rest_length < in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		argc = 7;
+		argv[1] = eb_bcd2(cache_p + 8);	  
+		argv[2] = eb_bcd2(cache_p + 10);	  
+		argv[3] = eb_bcd2(cache_p + 12);	  
+		argv[4] = eb_bcd2(cache_p + 14);	  
+		argv[5] = eb_bcd4(cache_p + 28);	  
+		argv[6] = eb_bcd2(cache_p + 32);	  
+		hook = hookset->hooks + EB_HOOK_BEGIN_CLICKABLE_AREA;
+	      break;
+
+	    case 0x49: case 0x4e:
+
 		in_step = 2;
 		context->skip_code = eb_uint1(cache_p + 1) + 0x20;
 		break;
@@ -1095,6 +1124,17 @@ text_max_length=%ld, forward=%d)",
 		hook = hookset->hooks + EB_HOOK_END_WAVE;
 		break;
 
+	    case 0x6c:
+		/* end of image page */
+		in_step = 2;
+		if (cache_rest_length < in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		context->text_status = EB_TEXT_STATUS_SOFT_STOP;
+		hook = hookset->hooks + EB_HOOK_END_IMAGE_PAGE;
+		break;
+
 	    case 0x6d:
 		/* end of color graphic (BMP or JPEG) */
 		in_step = 2;
@@ -1103,6 +1143,16 @@ text_max_length=%ld, forward=%d)",
 		    goto failed;
 		}
 		hook = hookset->hooks + EB_HOOK_END_COLOR_GRAPHIC;
+		break;
+
+	    case 0x6f:
+		/* end of clickable area */
+		in_step = 2;
+		if (cache_rest_length < in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		hook = hookset->hooks + EB_HOOK_END_CLICKABLE_AREA;
 		break;
 
 	    case 0x70: case 0x71: case 0x72: case 0x73: case 0x74: case 0x75:
@@ -1372,6 +1422,11 @@ text_max_length=%ld, forward=%d)",
 	 */
 	if (context->unprocessed != NULL)
 	    break;
+	/*
+	 * Break if EB_TEXT_STATUS_SOFT_STOP is set.
+	 */
+	if (context->text_status == EB_TEXT_STATUS_SOFT_STOP)
+	  break;
     }
 
   succeeded:

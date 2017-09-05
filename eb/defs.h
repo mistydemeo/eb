@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997-2005  Motoyuki Kasahara
+ * Copyright (c) 1997-2006  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -175,7 +175,7 @@ extern "C" {
 /*
  * The number of text hooks.
  */
-#define EB_NUMBER_OF_HOOKS		45
+#define EB_NUMBER_OF_HOOKS		49
 
 /*
  * The number of search contexts required by a book.
@@ -602,6 +602,7 @@ struct EB_Subbook_Struct {
     EB_Search endword_kana;
     EB_Search keyword;
     EB_Search menu;
+    EB_Search image_menu;
     EB_Search cross;
     EB_Search copyright;
     EB_Search text;
