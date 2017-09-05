@@ -1,6 +1,17 @@
+2004-10-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.1.1.
+
+	* libebutils/getopt.c: Fix a bug in getopt_long().
+	It may abort when it outputs the message "option `--xxx' requires
+	an argument".
+
+	* eb/readtext.c (eb_write_text_byte2): Fix a bug that the function
+	writes incorrect data on the text buffer.
+
 2004-07-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
-	* Version 4.1
+	* Version 4.1.
 
 	* doc/Makefile.am (uninstall-hook): Defined.
 	* doc/Makefile.am: Fix bugs that `make all' fails when $(srcdir)

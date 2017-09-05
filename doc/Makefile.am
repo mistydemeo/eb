@@ -2,8 +2,8 @@ pkgdoc_DATA = eb.html ebappendix.html ebfont.html ebinfo.html ebrefile.html \
 	ebstopcode.html ebzip.html 
 
 EXTRA_DIST = eb.html.in ebappendix.html.in ebfont.html.in ebinfo.html.in \
-	ebrefile.html.in ebstopcode.html.in ebzip.html.in c2html \
-	html-include html-index html-split html-toc
+	ebrefile.html.in ebstopcode.html.in ebzip.html.in eb.css ebutils.css \
+	c2html html-include html-index html-split html-toc
 
 CLEANFILES = *.html
 

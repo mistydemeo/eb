@@ -3,6 +3,7 @@
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
+<link rel="stylesheet" type="text/css" href="eb.css">
 <link rev="made" href="mailto:m-kasahr@sra.co.jp">
 <title>EB ライブラリ</title>
 </head>
@@ -208,7 +209,7 @@ EB ライブラリの基本ヘッダファイル。
 をファイルの先頭付近で読み込みます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 #include &lt;eb/error.h&gt;
@@ -519,7 +520,7 @@ Autoconf はバージョン 2.50 以降が必要です。
 (もしくは <code>configure.in</code>) に、次の行を加えます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 eb_LIB_EB4
 </pre>
@@ -572,7 +573,7 @@ aclocal -I m4
 <code>aclocal</code> へ渡すオプションを書いておきます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 ACLOCAL_AMFLAGS = -I m4
 </pre>
@@ -597,7 +598,7 @@ libtoolize
 します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 program_LDFLAGS = $(EBCONF_EBLIBS) $(EBCONF_ZLIBLIBS) $(EBCONF_INTLLIBS)
 INCLUDES = $(EBCONF_EBINCS)
@@ -708,7 +709,7 @@ zio 両方のメッセージを読み捨てずに出力するようになります。
 という関数を呼び出します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_initialize_library() != EB_SUCCESS) {
     printf("eb_initialize_library() failed\n");
@@ -722,7 +723,7 @@ if (eb_initialize_library() != EB_SUCCESS) {
 という関数を呼び出して後始末をします。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 eb_finalize_library();
 </pre>
@@ -741,7 +742,7 @@ eb_finalize_library();
 この項で説明している関数を使うには、<code>eb/eb.h</code> を読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -823,7 +824,7 @@ CD-ROM 書籍へアクセスするには、まず <code>EB_Book</code> 型のオブジェクトを
 作る必要があります。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Book book;
 </pre>
@@ -834,7 +835,7 @@ EB_Book book;
 構いません。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Book *book_pointer;
 
@@ -848,7 +849,7 @@ book_pointer = (EB_Book *) malloc(sizeof(EB_Book));
 次の要領でオブジェクトを初期化します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 eb_initialize_book(&amp;book);
 eb_initialize_book(book_pointer);
@@ -883,7 +884,7 @@ CD-ROM 書籍の実体に結び付けます。
 実際のプログラムでは、次のようにします。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_bind(&amp;book, "/mnt/cdrom") != EB_SUCCESS) {
     printf("eb_bind() failed\n");
@@ -905,7 +906,7 @@ if (eb_bind(&amp;book, "/mnt/cdrom") != EB_SUCCESS) {
 メモリは解放され、開いていたファイルもすべて閉じられます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 eb_finalize_book(&amp;book);
 eb_finalize_book(book_pointer);
@@ -918,7 +919,7 @@ eb_finalize_book(book_pointer);
 安全に解放することができます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 free(book_pointer);
 </pre>
@@ -953,7 +954,7 @@ ebnet://<var>ホスト</var>:<var>ポート</var>/<var>書籍名</var>
 以下に <code>eb_bind()</code> のコード例を記します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_bind(&amp;book, "ebnet://localhost/cdrom") != EB_SUCCESS) {
     printf("eb_bind() failed\n");
@@ -981,7 +982,7 @@ if (eb_bind(&amp;book, "ebnet://localhost/cdrom") != EB_SUCCESS) {
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -1081,7 +1082,7 @@ JIS X 0208 (日本語のかな漢字) と GB 2312 (中国語の簡体字) を併用している
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -1266,7 +1267,7 @@ EB ライブラリの関数の多くは、戻り値として <code>EB_Error_Code</code>
 がよく行われます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Error_Code error_code;
 
@@ -1285,7 +1286,7 @@ if (error_code != EB_SUCCESS) {
 もう少し分かりやすく伝えることができます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 error_code = eb_bind(&amp;book, "/mnt/cdrom");
 if (error_code != EB_SUCCESS) {
@@ -1352,7 +1353,7 @@ too long filename
 渡したらどうなるでしょうか。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Book book;
 EB_Error_Code error_code;
@@ -1377,7 +1378,7 @@ EB ライブラリの関数は、必要なパラメタがセットされていないオブジェクトを
 次のようなことをすると、プログラムを異常終了させてしまいます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 eb_bind(NULL, "/mnt/cdrom");    /* 異常終了! */
 eb_bind(&amp;book, NULL);           /* これも異常終了! */
@@ -1392,7 +1393,7 @@ eb_bind(&amp;book, NULL);           /* これも異常終了! */
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/error.h&gt;
 </pre>
@@ -1424,7 +1425,7 @@ EB ライブラリでは、全部で <code>EB_NUMBER_OF_ERRORS</code> 個の
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/error.h&gt;
 </pre>
@@ -1949,14 +1950,14 @@ appendix は副本を一つも持っていない。
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/error.h&gt;
 </pre>
 </blockquote>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-<h4><a name="func:error_string"><code>{const char *} eb_error_string (EB_Error_Code <var>error_code</var>)</code></a></h4>
+<h4><a name="func:error_string"><code>const char *eb_error_string (EB_Error_Code <var>error_code</var>)</code></a></h4>
 
 <p>
 関数 <code>eb_error_string()</code> は、エラーコード <var>error_code</var>
@@ -1968,7 +1969,7 @@ appendix は副本を一つも持っていない。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-<h4><a name="func:error_message"><code>{const char *} eb_error_message (EB_Error_Code <var>error_code</var>)</code></a></h4>
+<h4><a name="func:error_message"><code>const char *eb_error_message (EB_Error_Code <var>error_code</var>)</code></a></h4>
 
 <p>
 関数 <code>eb_error_message()</code> は、エラーコード <var>error_code</var>
@@ -2055,7 +2056,7 @@ EB ライブラリでは、それぞれの副本に対して <dfn>副本コード (subbook code)</dfn>
 この関数は、書籍内のすべての副本の副本コードを取得することができます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
  * 書籍に結び付けられていると仮定しています。*/
@@ -2084,7 +2085,7 @@ if (eb_subbook_list(&amp;book, sub_codes, &amp;sub_count)
 得ることができます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 char title[EB_MAX_TITLE_LENGTH + 1];
 
@@ -2142,7 +2143,7 @@ if (eb_subbook_title2(&amp;book, sub_codes[0], title)
 以下は、先頭の副本 (<code>sub_codes[0]</code>) を選択する場合の例です。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
  * 書籍に結び付けられていると仮定しています。*/
@@ -2190,7 +2191,7 @@ if (eb_set_subbook(&amp;book, sub_codes[0]) != EB_SUCCESS) {
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -2221,7 +2222,7 @@ if (eb_set_subbook(&amp;book, sub_codes[0]) != EB_SUCCESS) {
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -2483,7 +2484,7 @@ EB ライブラリでは、検索を行うことができるのは、選択中の副本に対して
 います。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
  * 書籍に結び付けられ、副本を選択中だと仮定しています。*/
@@ -2550,7 +2551,7 @@ if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
 他はすべて同じです。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_search_endword(&amp;book, "nalization") != EB_SUCCESS) {
     printf("eb_search_endword() failed\n");
@@ -2565,7 +2566,7 @@ if (eb_search_endword(&amp;book, "nalization") != EB_SUCCESS) {
 です。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_search_exactword(&amp;book, "library") != EB_SUCCESS) {
     printf("eb_search_exactword() failed\n");
@@ -2588,7 +2589,7 @@ if (eb_search_exactword(&amp;book, "library") != EB_SUCCESS) {
 一致するエントリを、選択中の副本の中から探し出すプログラムの断片です。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
  * 書籍に結び付けられ、副本を選択中だと仮定しています。*/
@@ -2617,7 +2618,7 @@ if (eb_search_word(&amp;book, keywords) != EB_SUCCESS) {
 使います。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Hit hits[MAX_HITS];
 int hit_count;
@@ -2680,7 +2681,7 @@ if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
 な複合検索の一覧が得られます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
  * 書籍に結び付けられ、副本を選択中だと仮定しています。*/
@@ -2704,7 +2705,7 @@ if (eb_multi_search_list(&amp;book, multi_codes, &amp;multi_count)
 を指定しています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 char title[EB_MAX_MULTI_TITLE_LENGTH + 1];
 
@@ -2725,7 +2726,7 @@ if (eb_multi_title(&amp;book, multi_codes[0], title)
 します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 char label[EB_MAX_MULTI_LABEL_LENGTH + 1];
 
@@ -2750,7 +2751,7 @@ if (eb_multi_entry_label(&amp;book, multi_code[0], 0, label)
 取得するには <code>eb_hit_list()</code> を使います。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Hit hits[MAX_HITS];
 int hit_count;
@@ -2782,7 +2783,7 @@ if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
 領域に書き込みます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに書籍に結び付け
  * られ、副本を選択中だと仮定しています。*/
@@ -2834,7 +2835,7 @@ if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
 エントリの数をアプリケーションプログラムに教えます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 error_code = eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count);
 if (error_code == EB_SUCCESS)
@@ -2848,7 +2849,7 @@ if (error_code == EB_SUCCESS)
 取得することができます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 for (;;) {
     if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
@@ -2941,7 +2942,7 @@ EB ライブラリは、こうした重複エントリの削除は行いません。
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -2956,7 +2957,7 @@ EB ライブラリは、こうした重複エントリの削除は行いません。
 内部構造は、次のように定義されています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 typedef struct EB_Hit_Struct EB_Hit;
 
@@ -2980,7 +2981,7 @@ struct EB_Hit_Struct {
 内部構造は、次のように定義されています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 typedef struct EB_Position_Struct EB_Position;
 
@@ -3030,7 +3031,7 @@ struct EB_Position_Struct {
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -3338,8 +3339,8 @@ struct EB_Position_Struct {
 </p>
 
 <p>
-<code>eb_hit_list()</code> は最大で <var>hit_count</var> 個の一致エントリ
-を <var>hit_list</var> に書き込みます。
+<code>eb_hit_list()</code> は最大で <var>max_hit_count</var> 個の
+一致エントリを <var>hit_list</var> に書き込みます。
 そして、書き込んだ一致エントリの数を <var>hit_count</var> が指す領域に
 書き込みます。
 それ以上の個数の一致エントリが存在する場合、残ったエントリの情報は、
@@ -3446,7 +3447,7 @@ EB ライブラリでも、テキストデータの取得には、<dfn>シーク (seek)</dfn> と
 型オブジェクトに書き込まれます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Position position;
 
@@ -3463,7 +3464,7 @@ if (eb_text(&amp;book, &amp;position) != EB_SUCCESS) {
 参考までに、<code>EB_Position</code> 型の内部構造は、次のようになっています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 typedef struct EB_Position_Struct EB_Position;
 
@@ -3483,7 +3484,7 @@ struct EB_Position_Struct {
 (詳しくは <a href="#search-data-types">「[検索] データ型の詳細」</a> を参照のこと。)
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 typedef struct {
     EB_Position heading;   /* 見出しの位置 */
@@ -3504,7 +3505,7 @@ typedef struct {
 ここでもやはり、位置は <code>EB_Position</code> 型で渡します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_seek_text(&amp;book, &amp;position) != EB_SUCCESS) {
     fprintf(stderr, "an error occurs.\n");
@@ -3537,7 +3538,7 @@ if (eb_seek_text(&amp;book, &amp;position) != EB_SUCCESS) {
 以下は、<code>eb_read_text()</code> の使用例です。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #define MAX_LENGTH 1000
 char buffer[MAX_LENGTH + 1];
@@ -3564,7 +3565,7 @@ if (eb_read_text(&amp;book, NULL, NULL, NULL, MAX_LENGTH,
 とまったく変わりません。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_read_heading(&amp;book, NULL, NULL, NULL, MAX_LENGTH,
     text, &amp;text_length) != EB_SUCCESS) {
@@ -3579,7 +3580,7 @@ if (eb_read_heading(&amp;book, NULL, NULL, NULL, MAX_LENGTH,
 テキストデータは平文のテキストになっていて、ナル文字で終端されています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 printf("%s\n", text);   /* 出力してみる */
 </pre>
@@ -3735,7 +3736,7 @@ EB ライブラリには、多数のフック設定位置が用意されています。
 まず <code>EB_Hookset</code> オブジェクトを用意します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Hookset hookset;
 </pre>
@@ -3746,7 +3747,7 @@ EB_Hookset hookset;
 と同様に、使用前に必ず初期化する必要があります。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 eb_initialize_hookset(&amp;hookset);
 </pre>
@@ -3759,7 +3760,7 @@ eb_initialize_hookset(&amp;hookset);
 として書き込んでいます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Error_Code
 hook_newline(EB_Book *book, EB_Appendix *appendix, void *container,
@@ -3780,7 +3781,7 @@ hook_newline(EB_Book *book, EB_Appendix *appendix, void *container,
 を登録してみます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Hook hook;
 
@@ -3802,7 +3803,7 @@ eb_set_hook(&amp;hookset, &amp;hook);
 複数のフック関数を一度に登録できます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 static const EB_Hook hooks[] = {
     {EB_HOOK_NEWLINE,        hook_newline},
@@ -3828,7 +3829,7 @@ eb_set_hooks(&amp;hookset, &amp;hooks);
 <code>&amp;hookset</code> を渡してみます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_read_text(&amp;book, NULL, &amp;hookset, NULL, MAX_LENGTH,
     text, &amp;text_length) != EB_SUCCESS) {
@@ -3849,7 +3850,7 @@ if (eb_read_text(&amp;book, NULL, &amp;hookset, NULL, MAX_LENGTH,
 <code>eb_finalize_hookset()</code> を呼んで後始末をします。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 eb_finalize_hookset(&amp;hookset);
 </pre>
@@ -3952,7 +3953,7 @@ EBXA-C では、文字コードとして GB 2312 と JIS X 0208 が使われますが
 <code>eb_have_copyright()</code> という関数が使えます。)
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Position position;
 EB_Error_Code err;
@@ -4022,7 +4023,7 @@ HTML の書き方を知っているなら、<samp>a</samp> タグと言えば分かるのでは
 ないかと思います。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 &lt;a href="./index.html"&gt;EB ライブラリのホームページ&lt;/a&gt;
 </pre>
@@ -4044,7 +4045,7 @@ HTML とは逆になります。
 次のようにすると良いかも知れません。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Error_Code
 hook_end_ref(EB_Book *book, EB_Appendix *appendix, void *container,
@@ -4108,7 +4109,7 @@ hook_end_ref(EB_Book *book, EB_Appendix *appendix, void *container,
 <code>eb_have_menu()</code> という関数が使えます。)
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Position position;
 EB_Error_Code err;
@@ -4217,7 +4218,7 @@ if (err == EB_ERR_NO_SUCH_SEARCH) {
 <code>eb_multi_entry_have_candidates()</code> という関数が使えます。)
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Position position;
 EB_Error_Code err;
@@ -4274,7 +4275,7 @@ if (err == EB_ERR_NO_CANDIDATES) {
 (ポインタ) を返します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 const char *candidate;
 
@@ -4383,7 +4384,7 @@ EB ライブラリは区切りコードを自動判定する機能を持っていますが、判定は
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -4418,7 +4419,7 @@ EB ライブラリでは、全部で <code>EB_NUMBER_OF_HOOKS</code> 個のフックコード
 内部構造は、次のように定義されています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 typedef struct EB_Hook_Struct EB_Hook;
 
@@ -4469,7 +4470,7 @@ EB ライブラリで利用可能なすべてのフック設定位置に対して、どのような
 <code>eb_read_heading()</code> のプロトタイプは次のようになっています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Error_Code
 eb_read_text(EB_Book *book, EB_Appendix *appendix,
@@ -4482,7 +4483,7 @@ eb_read_text(EB_Book *book, EB_Appendix *appendix,
 一方、フック関数のプロトタイプは、次のようになっています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Error_Code
 hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
@@ -4572,7 +4573,7 @@ hook_function(EB_Book *book, EB_Appendix *appendix, void *container,
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/text.h&gt;
 </pre>
@@ -5260,7 +5261,7 @@ MPEG 形式の動画データの参照開始と終了を表すエスケープシーケンスに対する
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/text.h&gt;
 </pre>
@@ -5389,7 +5390,7 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/text.h&gt;
 </pre>
@@ -5496,7 +5497,7 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/text.h&gt;
 </pre>
@@ -5693,8 +5694,8 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 </p>
 
 <p>
-<var>appendix</var> が <code>NULL</code> ではなく、区切りコードの情報を
-持った副本を選択中であれば、本文の区切りコードとしてその値を使用します。
+渡された <var>appendix</var> が区切りコードの情報を持った副本を選択中
+であれば、本文の区切りコードとしてその値を使用します。
 それ以外の場合は、<code>eb_read_text()</code> が区切りコードを自動判別を
 試みます。
 ただし、この判定は完璧なものではないので、書籍によっては変な位置で本文
@@ -5825,8 +5826,8 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 <p>
 <var>book</var> が選択中の副本で、最後に <code>eb_read_text()</code>
 または <code>eb_read_heading()</code> でテキストデータを読み込んだ際に、
-区切りコードを検出したか、テキストデータの末尾に達して読み込みを終えて
-いれば、この関数は 1 を返します。
+区切りコードを検出したか、テキストデータ全体の一番後ろの位置に達して
+読み込みを終えていれば、この関数は 1 を返します。
 それ以外のときは、0 を返します。
 </p>
 
@@ -5895,7 +5896,7 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-<h4><a name="func:current_candidate"><code>{const char *} eb_current_candidate (EB_Book *<var>book</var>)</code></a></h4>
+<h4><a name="func:current_candidate"><code>const char *eb_current_candidate (EB_Book *<var>book</var>)</code></a></h4>
 
 <p>
 関数 <code>eb_current_candidate()</code> は、アクセス中のテキストデータの
@@ -6006,9 +6007,10 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 
 <p>
 アクセス位置上にあるのがメニューや著作権表示のように、本文以外の
-テキストデータであっても、構いません。
-ただし、本文以外のテキストデータの内部には、頭出し位置が一箇所しか
-ありませんので、この関数が役に立つ状況はほとんどありません。
+テキストデータであっても構いません。
+ただし、本文以外のテキストデータの内部には、頭出し位置がデータの
+先頭位置にしかありませんので、この関数が役に立つ状況はほとんど
+ありません。
 </p>
 
 <p>
@@ -6174,7 +6176,7 @@ EB ライブラリで外字のフォントデータ (ビットマップデータ) を取り出すには、
 以下のプログラムは、高さ 24 ピクセルのフォントを選択する場合の例です。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
  * 書籍に結び付けられ、副本を選択中だと仮定しています。*/
@@ -6205,7 +6207,7 @@ if (eb_set_font(&amp;book, EB_FONT_24) != EB_SUCCESS) {
 使い方が良く似ています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Font_Code font_list[EB_MAX_FONTS];
 int font_count;
@@ -6229,7 +6231,7 @@ for (i = 0; i &lt; font_count; i++) {
 調べることができます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_have_font(&amp;book, EB_FONT_24)) {
     printf("this subbook has EB_FONT_24\n");
@@ -6243,7 +6245,7 @@ if (eb_have_font(&amp;book, EB_FONT_24)) {
 を使って調べることができます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_have_narrow_font(&amp;book))
     printf("this subbook has narrow font\n");
@@ -6279,7 +6281,7 @@ if (eb_have_wide_font(&amp;book))
 半角外字の場合は、呼び出す関数名が変わるだけです。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>book</code> が <code>EB_Book</code> のオブジェクトで、すでに
  * 書籍に結び付けられ、副本と外字の高さを選択中だと仮定しています。*/
@@ -6369,7 +6371,7 @@ EB ライブラリには、外字のビットマップデータを XBM, XPM, GIF, BMP, PNG
 を示します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>bitmap</code> に高さ 16 の全角外字のビットマップデータが格納
  * されていると仮定しています。*/
@@ -6421,7 +6423,7 @@ XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -6462,7 +6464,7 @@ XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/eb.h&gt;
 </pre>
@@ -6670,7 +6672,7 @@ XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/font.h&gt;
 </pre>
@@ -7034,7 +7036,7 @@ XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
 この場合、次の呼び出しと等価になります。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* n &lt; 0 とする */
 eb_backward_narrow_font_character (book, -n, character_number);
@@ -7071,7 +7073,7 @@ eb_backward_narrow_font_character (book, -n, character_number);
 等価になります。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* 半角外字の場合 (n &lt; 0) */
 eb_forward_narrow_font_character (book, -n, character_number);
@@ -7282,7 +7284,7 @@ CD-ROM 書籍から取得する機能だけです。
 収録している副本をあらかじめ選択しておく必要があります。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>eb_set_binary_mono_graphic()</code> の関数プロトタイプ */
 EB_Error_Code
@@ -7302,7 +7304,7 @@ eb_set_binary_mono_graphic(EB_Book *book, EB_Position *position,
 これには、<code>eb_read_binary()</code> を使います。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #define MAX_LENGTH 1000
 char bitmap[MAX_LENGTH];
@@ -7356,7 +7358,7 @@ EB ライブラリに伝えます。
 オフセットを渡します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>eb_set_binary_color_graphic()</code> の関数プロトタイプ */
 EB_Error_Code
@@ -7446,7 +7448,7 @@ WAVE 形式の音声データを取り出すには、まずテキストデータ中から WAVE 音声
 その位置にある音声データをこれから取り出すことを EB ライブラリに伝えます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>eb_set_binary_wave()</code> の関数プロトタイプ */
 EB_Error_Code
@@ -7493,7 +7495,7 @@ MPEG 動画のデータを得るには、このファイル名を
 (<code>&amp;argv[2]</code> でも同じ) を渡します。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_set_binary_mpeg(&amp;book, argv + 2) != EB_SUCCESS) {
     fprintf(stderr, "an error occurs.\n");
@@ -7518,7 +7520,7 @@ if (eb_set_binary_mpeg(&amp;book, argv + 2) != EB_SUCCESS) {
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/binary.h&gt;
 </pre>
@@ -7858,7 +7860,7 @@ CD-ROM 書籍本体を扱うには <code>EB_Book</code> オブジェクトを
 ずつ作る必要があります。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Appendix app;
 </pre>
@@ -7869,7 +7871,7 @@ EB_Appendix app;
 構いません。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 EB_Appendix *app_pointer;
 
@@ -7884,7 +7886,7 @@ app_pointer = (EB_Appendix *) malloc(sizeof(EB_Appendix));
 で初期化する必要がありましたが、それと同じです。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 eb_initialize_appendix(&amp;app);
 eb_initialize_appendix(app_pointer);
@@ -7913,7 +7915,7 @@ eb_initialize_appendix(app_pointer);
 実際のプログラムでは、次のようにします。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 if (eb_bind_appendix(&amp;app, "/mnt/dict") != EB_SUCCESS) {
     printf("eb_bind_appendix() failed\n");
@@ -7939,7 +7941,7 @@ if (eb_bind_appendix(&amp;app, "/mnt/dict") != EB_SUCCESS) {
 閉じられます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 eb_finalize_appendix(&amp;app);
 eb_finalize_appendix(app_pointer);
@@ -7952,7 +7954,7 @@ eb_finalize_appendix(app_pointer);
 領域を安全に解放することができます。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 free(app_pointer);
 </pre>
@@ -7973,7 +7975,7 @@ CD-ROM 書籍内のすべての副本の副本コードを取得する関数として
 <code>eb_appendix_subbook_list()</code> という同様の関数があります。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>app</code> が <code>EB_Appendix</code> のオブジェクトで、
  * すでに書籍に結び付けられていると仮定しています。*/
@@ -8009,7 +8011,7 @@ if (eb_appendix_subbook_list(&amp;app, sub_codes, &amp;sub_count)
 以下は、先頭の副本 (<code>sub_codes[0]</code>) を選択する場合の例です。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>app</code> が <code>EB_Appendix</code> のオブジェクトで、
  * すでに書籍に結び付けられていると仮定しています。*/
@@ -8044,7 +8046,7 @@ CD-ROM 書籍の本文を取得する関数 <code>eb_read_text()</code> は
 オブジェクトを渡してやるようにします。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>book</code>, <code>app</code> は、それぞれ <code>EB_Book</code>
  * および <code>EB_Appendix</code> のオブジェクトで、どちらもすでに
@@ -8101,7 +8103,7 @@ appendix に定義されている代替文字列を取り出す関数は、2 つあります。
 <samp>buffer</samp> に格納しています。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* <code>app</code> が <code>EB_Appendix</code> のオブジェクトで、
  * すでに副本を選択中であると仮定しています。*/
@@ -8137,7 +8139,7 @@ if (eb_narrow_alt_character_text(&amp;app, buffer, 0xa121)
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/appendix.h&gt;
 </pre>
@@ -8174,7 +8176,7 @@ CD-ROM 書籍へのアクセスは、すべてこの型のオブジェクトを介して行います。
 下さい。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 #include &lt;eb/appendix.h&gt;
 </pre>
@@ -8652,7 +8654,7 @@ appendix に結び付けられていなければなりません。
 この場合、次の呼び出しと等価になります。
 </p>
 
-<blockquote>
+<blockquote class="program">
 <pre>
 /* n &lt; 0 とする */
 eb_backward_narrow_font_character (book, -n, character_number);
@@ -8736,7 +8738,7 @@ EBNET サーバの提供する書籍および appendix データの一覧を取得するには、
 まず <code>EB_BookList</code> 型のオブジェクトを用意する必要があります。
 </p>
 
-<blockquote>
+<blockquote="program">
 <pre>
 EB_BookList bl;
 </pre>
@@ -8746,7 +8748,7 @@ EB_BookList bl;
 オブジェクトの領域は、<code>malloc()</code> で確保しても構いません。
 </p>
 
-<blockquote>
+<blockquote="program">
 <pre>
 EB_BookList *bl_pointer;
 
@@ -8760,7 +8762,7 @@ bl_pointer = (EB_BookList *) malloc(sizeof(EB_BookList));
 これは、<code>eb_initialize_booklist()</code> という関数で行います。
 </p>
 
-<blockquote>
+<blockquote="program">
 <pre>
 eb_initialize_booklist(&amp;bl);
 eb_initialize_booklist(bl_pointer);
@@ -8773,7 +8775,7 @@ eb_initialize_booklist(bl_pointer);
 オブジェクトを結びつけるには次のようにします。
 </p>
 
-<blockquote>
+<blockquote="program">
 <pre>
 if (eb_bind_booklist(&amp;bl, "ebnet://localhost") != EB_SUCCESS) {
     printf("eb_bind_booklist() failed\n");
@@ -8797,7 +8799,7 @@ if (eb_bind_booklist(&amp;bl, "ebnet://localhost") != EB_SUCCESS) {
 と appendix データの題名を得ることができます。
 </p>
 
-<blockquote>
+<blockquote="program">
 <pre>
 char *name, *title;
 int count, i;
@@ -8822,7 +8824,7 @@ for (i = 0; i &lt; count; i++) {
 行います。
 </p>
 
-<blockquote>
+<blockquote="program">
 <pre>
 eb_finalize_booklist(&amp;bl);
 eb_finalize_booklist(bl_pointer);
@@ -8835,7 +8837,7 @@ eb_finalize_booklist(bl_pointer);
 を安全に解放することができます。
 </p>
 
-<blockquote>
+<blockquote="program">
 <pre>
 free(bl_pointer);
 </pre>
@@ -8849,7 +8851,7 @@ free(bl_pointer);
 読み込んで下さい。
 </p>
 
-<blockquote>
+<blockquote="program">
 <pre>
 #include &lt;eb/booklist.h&gt;
 </pre>
@@ -8877,7 +8879,7 @@ appendix の一覧を取得する際に用いるオクジェクトの型です。
 下さい。
 </p>
 
-<blockquote>
+<blockquote="program">
 <pre>
 #include &lt;eb/booklist.h&gt;
 </pre>

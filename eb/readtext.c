@@ -1516,7 +1516,7 @@ eb_write_text_byte2(EB_Book *book, int byte1, int byte2)
     if (book->text_context.unprocessed != NULL
 	|| book->text_context.out_rest_length < 2) {
 	*(unsigned char *)stream = byte1;
-	*(unsigned char *)(stream + 1) = byte1;
+	*(unsigned char *)(stream + 1) = byte2;
 	error_code = eb_write_text(book, stream, 2);
 	if (error_code != EB_SUCCESS)
 	    goto failed;

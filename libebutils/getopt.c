@@ -448,7 +448,8 @@ getopt_long(int nargc, char * const *nargv, const char *options,
 				 */
 				if (PRINT_ERROR)
 					fprintf(stderr, gettext(recargstring),
-					    nargv[0], current_argv);
+					    nargv[0], (int)current_argv_len,
+					    current_argv);
 				/*
 				 * XXX: GNU sets optopt to val regardless
 				 * of flag
