@@ -13,12 +13,11 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
 #include "text.h"
+#include "build-post.h"
 
 /*
  * Page-ID macros.
@@ -69,20 +68,158 @@ static void eb_and_hit_lists EB_P((EB_Hit [], int *, int, int,
     EB_Hit [][EB_TMP_MAX_HITS], int []));
 
 /*
- * Intialize the current search status.
+ * Intialize search contexts of `book'.
  */
 void
-eb_initialize_search(book)
+eb_initialize_search_contexts(book)
     EB_Book *book;
 {
-    pthread_mutex_lock(&cache_mutex);
+    EB_Search_Context *context;
+    int i;
 
-    if (book->code == cache_book_code) {
-	cache_book_code = EB_BOOK_NONE;
-	book->search_contexts[0].code = EB_SEARCH_NONE;
+    LOG(("in: eb_initialize_search_context(book=%d)", (int)book->code));
+
+    for (i = 0, context = book->search_contexts;
+	 i < EB_NUMBER_OF_SEARCH_CONTEXTS; i++, context++) {
+	context->code = EB_SEARCH_NONE;
+	context->compare_pre = NULL;
+	context->compare_hit = NULL;
+	context->comparison_result = -1;
+	context->word[0] = '\0';
+	context->canonicalized_word[0] = '\0';
+	context->page = 0;
+	context->offset = 0;
+	context->page_id = 0;
+	context->entry_count = 0;
+	context->entry_index = 0;
+	context->entry_length = 0;
+	context->entry_arrangement = EB_ARRANGE_INVALID;
+	context->in_group_entry = 0;
+	context->keyword_heading.page = 0;
+	context->keyword_heading.offset = 0;
     }
 
-    pthread_mutex_unlock(&cache_mutex);
+    LOG(("out: eb_initialize_search_context()"));
+}
+
+
+/*
+ * Finalize search contexts of `book'.
+ */
+void
+eb_finalize_search_contexts(book)
+    EB_Book *book;
+{
+    LOG(("in+out: eb_finalize_search_context(book=%d)", (int)book->code));
+
+    /* nothing to be done */
+}
+
+
+/*
+ * Reset search context of `book'.
+ */
+void
+eb_reset_search_contexts(book)
+    EB_Book *book;
+{
+    LOG(("in+out: eb_reset_search_context(book=%d)", (int)book->code));
+
+    eb_initialize_search_contexts(book);
+}
+
+
+/*
+ * Intialize a search element.
+ */
+void
+eb_initialize_search(search)
+    EB_Search *search;
+{
+    search->index_id = 0;
+    search->start_page = 0;
+    search->end_page = 0;
+    search->candidates_page = 0;
+    search->katakana = EB_INDEX_STYLE_CONVERT;
+    search->lower = EB_INDEX_STYLE_CONVERT;
+    search->mark = EB_INDEX_STYLE_DELETE;
+    search->long_vowel = EB_INDEX_STYLE_CONVERT;
+    search->double_consonant = EB_INDEX_STYLE_CONVERT;
+    search->contracted_sound = EB_INDEX_STYLE_CONVERT;
+    search->voiced_consonant = EB_INDEX_STYLE_CONVERT;
+    search->small_vowel = EB_INDEX_STYLE_CONVERT;
+    search->p_sound = EB_INDEX_STYLE_CONVERT;
+    search->space = EB_INDEX_STYLE_DELETE;
+    search->label[0] = '\0';
+}
+
+
+/*
+ * Finalize a search element.
+ */
+void
+eb_finalize_search(search)
+    EB_Search *search;
+{
+    /* nothing to be done */
+}
+
+
+/*
+ * Initialize all search elements in the current subbook.
+ */
+void
+eb_initialize_searches(book)
+    EB_Book *book;
+{
+    EB_Subbook *subbook;
+
+    LOG(("in: eb_initialize_searches(book=%d)", (int)book->code));
+
+    subbook = book->subbook_current;
+
+    eb_initialize_search(&subbook->word_alphabet);
+    eb_initialize_search(&subbook->word_asis);
+    eb_initialize_search(&subbook->word_kana);
+    eb_initialize_search(&subbook->endword_alphabet);
+    eb_initialize_search(&subbook->endword_asis);
+    eb_initialize_search(&subbook->endword_kana);
+    eb_initialize_search(&subbook->keyword);
+    eb_initialize_search(&subbook->menu);
+    eb_initialize_search(&subbook->copyright);
+    eb_initialize_search(&subbook->text);
+    eb_initialize_search(&subbook->sound);
+
+    LOG(("out: eb_initialize_searches(book=%d)", (int)book->code));
+}
+
+
+/*
+ * Finalize all search elements in the current subbook.
+ */
+void
+eb_finalize_searches(book)
+    EB_Book *book;
+{
+    EB_Subbook *subbook;
+
+    LOG(("in: eb_finalize_searches(book=%d)", (int)book->code));
+
+    subbook = book->subbook_current;
+
+    eb_finalize_search(&subbook->word_alphabet);
+    eb_finalize_search(&subbook->word_asis);
+    eb_finalize_search(&subbook->word_kana);
+    eb_finalize_search(&subbook->endword_alphabet);
+    eb_finalize_search(&subbook->endword_asis);
+    eb_finalize_search(&subbook->endword_kana);
+    eb_finalize_search(&subbook->keyword);
+    eb_finalize_search(&subbook->menu);
+    eb_finalize_search(&subbook->copyright);
+    eb_finalize_search(&subbook->text);
+    eb_finalize_search(&subbook->sound);
+
+    LOG(("out: eb_finalize_searches()"));
 }
 
 
@@ -103,6 +240,7 @@ eb_presearch_word(book, context)
     char *cache_p;
 
     pthread_mutex_lock(&cache_mutex);
+    LOG(("in: eb_presearch_word(book=%d)", (int)book->code));
 
     /*
      * Discard cache data.
@@ -144,6 +282,11 @@ eb_presearch_word(book, context)
 	context->entry_count = eb_uint2(cache_buffer + 2);
 	context->offset = 4;
 	cache_p = cache_buffer + 4;
+
+	LOG(("aux: eb_presearch_word(page_id=0x%02x, entry_length=%d, \
+entry_arrangement=%d, entry_count=%d)",
+	    context->page_id, context->entry_length,
+	    context->entry_arrangement, context->entry_count));
 
 	/*
 	 * Exit the loop if it reached to the leaf index.
@@ -190,12 +333,12 @@ eb_presearch_word(book, context)
      */
     context->entry_index = 0;
     context->comparison_result = 1;
-    context->entry_length = 0;
     context->in_group_entry = 0;
     cache_book_code = book->code;
     cache_page = context->page;
 
   succeeded:
+    LOG(("out: eb_presearch_word() = %s", eb_error_string(EB_SUCCESS)));
     pthread_mutex_unlock(&cache_mutex);
     return EB_SUCCESS;
 
@@ -203,6 +346,7 @@ eb_presearch_word(book, context)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_presearch_word() = %s", eb_error_string(error_code)));
     pthread_mutex_unlock(&cache_mutex);
     return error_code;
 }
@@ -230,6 +374,8 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
      */
     pthread_mutex_lock(&cache_mutex);
     eb_lock(&book->lock);
+    LOG(("in: eb_hit_list(book=%d, max_hit_count=%d)", (int)book->code,
+	max_hit_count));
 
     if (max_hit_count == 0)
 	goto succeeded;
@@ -360,9 +506,10 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
      * Unlock cache data and the book.
      */
   succeeded:
+    LOG(("out: eb_hit_list(hit_count=%d) = %s", 
+	*hit_count, eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
     pthread_mutex_unlock(&cache_mutex);
-
     return EB_SUCCESS;
 
     /*
@@ -370,6 +517,7 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
      */
   failed:
     *hit_count = 0;
+    LOG(("out: eb_hit_list() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     pthread_mutex_unlock(&cache_mutex);
     return error_code;
@@ -391,6 +539,9 @@ eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
     EB_Hit *hit;
     int group_id;
     char *cache_p;
+
+    LOG(("in: eb_hit_list_word(book=%d, max_hit_count=%d)", (int)book->code, 
+	max_hit_count));
 
     hit = hit_list;
     *hit_count = 0;
@@ -447,6 +598,11 @@ eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
 	}
 
 	cache_p = cache_buffer + context->offset;
+
+	LOG(("aux: eb_hit_list_word(page_id=0x%02x, entry_length=%d, \
+entry_arrangement=%d, entry_count=%d)",
+	    context->page_id, context->entry_length,
+	    context->entry_arrangement, context->entry_count));
 
 	if (!PAGE_ID_IS_LEAF_LAYER(context->page_id)) {
 	    /*
@@ -668,6 +824,8 @@ eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
     }
 
   succeeded:
+    LOG(("out: eb_hit_list_word(hit_count=%d) = %s",
+	*hit_count, eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
@@ -678,6 +836,7 @@ eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
     if (error_code == EB_ERR_FAIL_READ_TEXT)
 	cache_book_code = EB_BOOK_NONE;
     *hit_count = 0;
+    LOG(("out: eb_hit_list_word() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -698,6 +857,9 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
     EB_Hit *hit;
     int group_id;
     char *cache_p;
+
+    LOG(("in: eb_hit_list_keyword(book=%d, max_hit_count=%d)",
+	(int)book->code, max_hit_count));
 
     hit = hit_list;
     *hit_count = 0;
@@ -768,6 +930,11 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
 	}
 
 	cache_p = cache_buffer + context->offset;
+
+	LOG(("aux: eb_hit_list_keyword(page_id=0x%02x, entry_length=%d, \
+entry_arrangement=%d, entry_count=%d)",
+	    context->page_id, context->entry_length,
+	    context->entry_arrangement, context->entry_count));
 
 	if (!PAGE_ID_IS_LEAF_LAYER(context->page_id)) {
 	    /*
@@ -1009,6 +1176,8 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
      * Restore the text context in `book'.
      */
     memcpy(&book->text_context, &text_context, sizeof(EB_Text_Context));
+    LOG(("out: eb_hit_list_keyword(hit_count=%d) = %s",
+	*hit_count, eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
@@ -1020,6 +1189,7 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
 	cache_book_code = EB_BOOK_NONE;
     *hit_count = 0;
     memcpy(&book->text_context, &text_context, sizeof(EB_Text_Context));
+    LOG(("out: eb_hit_list_keyword() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -1040,6 +1210,9 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
     int group_id;
     char *cache_p;
 
+    LOG(("in: eb_hit_list_multi(book=%d, max_hit_count=%d)", (int)book->code, 
+	max_hit_count));
+
     hit = hit_list;
     *hit_count = 0;
 
@@ -1048,7 +1221,7 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
      * matched entries have been found.
      */
     if (context->comparison_result < 0)
-	return 0;
+	goto succeeded;
 
     for (;;) {
 	/*
@@ -1095,6 +1268,11 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
 	}
 
 	cache_p = cache_buffer + context->offset;
+
+	LOG(("aux: eb_hit_list_multi(page_id=0x%02x, entry_length=%d, \
+entry_arrangement=%d, entry_count=%d)",
+	    context->page_id, context->entry_length,
+	    context->entry_arrangement, context->entry_count));
 
 	if (!PAGE_ID_IS_LEAF_LAYER(context->page_id)) {
 	    /*
@@ -1308,6 +1486,8 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
     }
 
   succeeded:
+    LOG(("out: eb_hit_list_multi(hit_count=%d) = %s",
+	*hit_count, eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
@@ -1318,6 +1498,7 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
     if (error_code == EB_ERR_FAIL_READ_TEXT)
 	cache_book_code = EB_BOOK_NONE;
     *hit_count = 0;
+    LOG(("out: eb_hit_list_multi() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -1345,6 +1526,9 @@ eb_and_hit_lists(and_list, and_count, max_and_count, hit_list_count,
     int equal_count;
     int increment_count;
     int i;
+
+    LOG(("in: eb_and_hit_lists(max_and_count=%d, hit_list_count=%d)", 
+	max_and_count, hit_list_count));
 
     /*
      * Initialize indexes for the hit_lists[].
@@ -1448,4 +1632,6 @@ eb_and_hit_lists(and_list, and_count, max_and_count, hit_list_count,
      */
     for (i = 0; i < hit_list_count; i++)
 	hit_counts[i] = hit_indexes[i];
+
+    LOG(("out: eb_and_hit_lists(and_count=%d)", and_count));
 }

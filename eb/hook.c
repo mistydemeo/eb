@@ -13,13 +13,12 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
-#include "text.h"
 #include "appendix.h"
+#include "text.h"
+#include "build-post.h"
 
 /*
  * Default hookset.
@@ -33,6 +32,8 @@ EB_Hookset eb_default_hookset;
 void
 eb_initialize_default_hookset()
 {
+    LOG(("in+out: eb_initialize_default_hookset()"));
+
     eb_initialize_hookset(&eb_default_hookset);
 }
 
@@ -45,6 +46,8 @@ eb_initialize_hookset(hookset)
     EB_Hookset *hookset;
 {
     int i;
+
+    LOG(("in: eb_initialize_hookset()"));
 
     eb_initialize_lock(&hookset->lock);
 
@@ -62,6 +65,8 @@ eb_initialize_hookset(hookset)
 	= eb_hook_wide_character_text;
     hookset->hooks[EB_HOOK_NEWLINE].function
 	= eb_hook_newline;
+
+    LOG(("out: eb_initialize_hookset()"));
 }
 
 
@@ -72,7 +77,17 @@ void
 eb_finalize_hookset(hookset)
     EB_Hookset *hookset;
 {
+    int i;
+
+    LOG(("in: eb_finalize_hookset()"));
+
+    for (i = 0; i < EB_NUMBER_OF_HOOKS; i++) {
+	hookset->hooks[i].code = i;
+	hookset->hooks[i].function = NULL;
+    }
     eb_finalize_lock(&hookset->lock);
+
+    LOG(("out: eb_finalize_hookset()"));
 }
 
 
@@ -86,10 +101,8 @@ eb_set_hook(hookset, hook)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the hookset.
-     */
     eb_lock(&hookset->lock);
+    LOG(("in: eb_set_hook(hook=%d)", (int)hook->code));
 
     /*
      * Set a hook.
@@ -100,9 +113,7 @@ eb_set_hook(hookset, hook)
     }
     hookset->hooks[hook->code].function = hook->function;
 
-    /*
-     * Unlock the hookset.
-     */
+    LOG(("out: eb_set_hook() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&hookset->lock);
 
     return EB_SUCCESS;
@@ -111,6 +122,7 @@ eb_set_hook(hookset, hook)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_set_hook() = %s", eb_error_string(error_code)));
     eb_unlock(&hookset->lock);
     return error_code;
 }
@@ -126,19 +138,19 @@ eb_set_hooks(hookset, hook)
 {
     EB_Error_Code error_code;
     const EB_Hook *h;
-    int i;
 
-    /*
-     * Lock the hookset.
-     */
     eb_lock(&hookset->lock);
+    LOG(("in: eb_set_hooks(hooks=[below])"));
+#ifdef ENABLE_DEBUG
+    for (h = hook; h->code != EB_HOOK_NULL; h++)
+	LOG(("    hook=%d", h->code));
+#endif
 
     /*
      * Set hooks.
      */
-    for (i = 0, h = hook; i < EB_NUMBER_OF_HOOKS && h->code != EB_HOOK_NULL;
-	 i++, h++) {
-	if (hook->code < 0 || EB_NUMBER_OF_HOOKS <= hook->code) {
+    for (h = hook; h->code != EB_HOOK_NULL; h++) {
+	if (h->code < 0 || EB_NUMBER_OF_HOOKS <= h->code) {
 	    error_code = EB_ERR_NO_SUCH_HOOK;
 	    goto failed;
 	}
@@ -148,6 +160,7 @@ eb_set_hooks(hookset, hook)
     /*
      * Unlock the hookset.
      */
+    LOG(("out: eb_set_hooks() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&hookset->lock);
 
     return EB_SUCCESS;
@@ -156,6 +169,7 @@ eb_set_hooks(hookset, hook)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_set_hooks() = %s", eb_error_string(error_code)));
     eb_unlock(&hookset->lock);
     return error_code;
 }

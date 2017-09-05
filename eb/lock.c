@@ -13,9 +13,9 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "defs.h"
+#include "build-post.h"
 
 /*
  * Examine whether built library supports Pthread.

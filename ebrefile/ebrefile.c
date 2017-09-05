@@ -57,8 +57,6 @@
 #include <libintl.h>
 #endif
 
-#include "ebutils.h"
-
 #ifndef HAVE_MEMCPY
 #define memcpy(d, s, n) bcopy((s), (d), (n))
 #ifdef __STDC__
@@ -132,9 +130,11 @@ int strncasecmp();
 #endif /* not MAXPATHLEN */
 #endif /* not PATH_MAX */
 
-#include "eb/eb.h"
-#include "eb/error.h"
-#include "eb/internal.h"
+#include "eb.h"
+#include "error.h"
+#include "build-post.h"
+
+#include "ebutils.h"
 
 #include "getopt.h"
 #include "getumask.h"

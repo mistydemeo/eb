@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4h from Makefile.am.
+# Makefile.in generated automatically by automake 1.4j from Makefile.am.
 
 # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -96,8 +96,8 @@ XGETTEXT = @XGETTEXT@
 ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
-_am_include = @_am_include@
-_am_quote = @_am_quote@
+am__include = @am__include@
+am__quote = @am__quote@
 install_sh = @install_sh@
 localedir = @localedir@
 
@@ -105,23 +105,23 @@ lib_LTLIBRARIES = libeb.la
 pkginclude_HEADERS = appendix.h binary.h defs.h eb.h error.h font.h \
 	text.h zio.h
 
-noinst_HEADERS = ebconfig.h
+noinst_HEADERS = build-pre.h
 
 INCLUDES = -DEB_BUILD_LIBRARY $(INTLINCS) $(ZLIBINCS)
 
 libeb_la_SOURCES = appendix.c appsub.c bcd.c binary.c bitmap.c book.c \
-   copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
-   hook.c jacode.c keyword.c lock.c match.c menu.c memmove.c multi.c \
-   narwalt.c narwfont.c search.c setword.c stopcode.c strcasecmp.c \
-   subbook.c text.c widealt.c widefont.c word.c zio.c
+	copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
+	hook.c jacode.c keyword.c lock.c log.c match.c menu.c memmove.c \
+	multi.c narwalt.c narwfont.c search.c setword.c stopcode.c \
+	strcasecmp.c subbook.c text.c widealt.c widefont.c word.c zio.c
 
 libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
 
-EXTRA_DIST = internal.h.in
-CLEANFILES = stamp-internal-h stamp-widealt-h stamp-widefont-h \
-   internal.h widealt.c widefont.c
+EXTRA_DIST = build-post.h.in
+CLEANFILES = stamp-build-post-h stamp-widealt-h stamp-widefont-h \
+	build-post.h widealt.c widefont.c
 
-BUILT_SOURCES = internal.h widealt.c widefont.c
+BUILT_SOURCES = build-post.h widealt.c widefont.c
 subdir = eb
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
@@ -131,7 +131,7 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libeb_la_LIBADD =
 am_libeb_la_OBJECTS = appendix.lo appsub.lo bcd.lo binary.lo bitmap.lo \
 	book.lo copyright.lo eb.lo endword.lo error.lo exactword.lo \
-	filename.lo font.lo hook.lo jacode.lo keyword.lo lock.lo \
+	filename.lo font.lo hook.lo jacode.lo keyword.lo lock.lo log.lo \
 	match.lo menu.lo memmove.lo multi.lo narwalt.lo narwfont.lo \
 	search.lo setword.lo stopcode.lo strcasecmp.lo subbook.lo \
 	text.lo widealt.lo widefont.lo word.lo zio.lo
@@ -151,15 +151,15 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 @AMDEP_TRUE@	$(DEPDIR)/exactword.Plo $(DEPDIR)/filename.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/font.Plo $(DEPDIR)/hook.Plo \
 @AMDEP_TRUE@	$(DEPDIR)/jacode.Plo $(DEPDIR)/keyword.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/lock.Plo $(DEPDIR)/match.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/memmove.Plo $(DEPDIR)/menu.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/multi.Plo $(DEPDIR)/narwalt.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/narwfont.Plo $(DEPDIR)/search.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/setword.Plo $(DEPDIR)/stopcode.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/strcasecmp.Plo $(DEPDIR)/subbook.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/text.Plo $(DEPDIR)/widealt.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/widefont.Plo $(DEPDIR)/word.Plo \
-@AMDEP_TRUE@	$(DEPDIR)/zio.Plo
+@AMDEP_TRUE@	$(DEPDIR)/lock.Plo $(DEPDIR)/log.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/match.Plo $(DEPDIR)/memmove.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/menu.Plo $(DEPDIR)/multi.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/narwalt.Plo $(DEPDIR)/narwfont.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/search.Plo $(DEPDIR)/setword.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/stopcode.Plo $(DEPDIR)/strcasecmp.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/subbook.Plo $(DEPDIR)/text.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/widealt.Plo $(DEPDIR)/widefont.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/word.Plo $(DEPDIR)/zio.Plo
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
@@ -215,7 +215,7 @@ uninstall-libLTLIBRARIES:
 
 clean-libLTLIBRARIES:
 	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-libeb.la: $(libeb_la_OBJECTS) $(libeb_la_DEPENDENCIES)
+libeb.la: $(libeb_la_OBJECTS) $(libeb_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libeb_la_LDFLAGS) $(libeb_la_OBJECTS) $(libeb_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
@@ -224,39 +224,40 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/appendix.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/appsub.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/bcd.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/binary.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/bitmap.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/book.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/copyright.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/eb.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/endword.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/error.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/exactword.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/filename.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/font.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/hook.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/jacode.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/keyword.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/lock.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/match.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/memmove.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/menu.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/multi.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/narwalt.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/narwfont.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/search.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/setword.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/stopcode.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/strcasecmp.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/subbook.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/text.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/widealt.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/widefont.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/word.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/zio.Plo@_am_quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/appendix.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/appsub.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/bcd.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/binary.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/bitmap.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/book.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/copyright.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/eb.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/endword.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/error.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/exactword.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/filename.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/font.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/hook.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/jacode.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/keyword.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/lock.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/log.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/match.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/memmove.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/menu.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/multi.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/narwalt.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/narwfont.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/search.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/setword.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/stopcode.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/strcasecmp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/subbook.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/text.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/widealt.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/widefont.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/word.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/zio.Plo@am__quote@
 
 distclean-depend:
 	-rm -rf $(DEPDIR)
@@ -325,10 +326,10 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 GTAGS:
 	here=`CDPATH=: && cd $(top_builddir) && pwd` \
 	  && cd $(top_srcdir) \
-	  && gtags -i $$here
+	  && gtags -i $(GTAGS_ARGS) $$here
 
 distclean-tags:
-	-rm -f TAGS ID
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
@@ -423,7 +424,7 @@ mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
 	uninstall-pkgincludeHEADERS
 
-.PHONY: all all-am check check-am clean clean-generic \
+.PHONY: GTAGS all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool distclean distclean-compile \
 	distclean-depend distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am info info-am install \
@@ -437,13 +438,13 @@ uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
 	uninstall-libLTLIBRARIES uninstall-pkgincludeHEADERS
 
 
-internal.h: stamp-internal-h
-stamp-internal-h: internal.h.in Makefile
-	rm -f internal.h.tmp
+build-post.h: stamp-build-post-h
+stamp-build-post-h: build-post.h.in Makefile
+	rm -f build-post.h.tmp
 	sed -e 's;\@localedir\@;$(localedir);' \
-	   $(srcdir)/internal.h.in > internal.h.tmp
-	$(top_srcdir)/move-if-change internal.h.tmp internal.h
-	@echo timestamp > stamp-internal-h
+	   $(srcdir)/build-post.h.in > build-post.h.tmp
+	$(top_srcdir)/move-if-change build-post.h.tmp build-post.h
+	@echo timestamp > stamp-build-post-h
 
 widealt.c: stamp-widealt-h
 stamp-widealt-h: narwalt.c Makefile

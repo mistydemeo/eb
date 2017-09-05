@@ -13,11 +13,10 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
+#include "build-post.h"
 
 /*
  * Initialize the library.
@@ -27,6 +26,8 @@ eb_initialize_library()
 {
     EB_Error_Code error_code;
 
+    LOG(("in: eb_initialize_library()"));
+
     eb_initialize_default_hookset();
 #ifdef ENABLE_NLS
     bindtextdomain(EB_TEXT_DOMAIN_NAME, LOCALEDIR);
@@ -35,12 +36,16 @@ eb_initialize_library()
 	error_code = EB_ERR_MEMORY_EXHAUSTED;
 	goto failed;
     }
+
+    LOG(("out: eb_initialize_library() = %s", eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_initialize_library() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -51,5 +56,9 @@ eb_initialize_library()
 void
 eb_finalize_library()
 {
+    LOG(("in: eb_finalize_library()"));
+
     zio_finalize_library();
+
+    LOG(("out: eb_finalize_library()"));
 }

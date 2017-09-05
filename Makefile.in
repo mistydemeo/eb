@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4h from Makefile.am.
+# Makefile.in generated automatically by automake 1.4j from Makefile.am.
 
 # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -96,8 +96,8 @@ XGETTEXT = @XGETTEXT@
 ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
-_am_include = @_am_include@
-_am_quote = @_am_quote@
+am__include = @am__include@
+am__quote = @am__quote@
 install_sh = @install_sh@
 localedir = @localedir@
 
@@ -317,10 +317,10 @@ TAGS: tags-recursive $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) \
 GTAGS:
 	here=`CDPATH=: && cd $(top_builddir) && pwd` \
 	  && cd $(top_srcdir) \
-	  && gtags -i $$here
+	  && gtags -i $(GTAGS_ARGS) $$here
 
 distclean-tags:
-	-rm -f TAGS ID
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
@@ -390,7 +390,9 @@ distcheck: dist
 	  && $(MAKE) $(AM_MAKEFLAGS) install \
 	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
 	  && $(MAKE) $(AM_MAKEFLAGS) uninstall \
-	  && test `find $$dc_install_base -type f -print | wc -l` -le 1 \
+	  && (test `find $$dc_install_base -type f -print | wc -l` -le 1 \
+	     || (echo "Error: files left after uninstall" 1>&2; \
+	         exit 1) ) \
 	  && $(MAKE) $(AM_MAKEFLAGS) dist \
 	  && $(MAKE) $(AM_MAKEFLAGS) distclean \
 	  && rm -f $(distdir).tar.gz \
@@ -474,7 +476,7 @@ uninstall-am: uninstall-appendixDATA uninstall-info-am \
 
 uninstall-info: uninstall-info-recursive
 
-.PHONY: $(RECURSIVE_TARGETS) all all-am check check-am clean \
+.PHONY: $(RECURSIVE_TARGETS) GTAGS all all-am check check-am clean \
 	clean-generic clean-libtool clean-recursive dist dist-all \
 	distcheck distclean distclean-generic distclean-hdr \
 	distclean-libtool distclean-recursive distclean-tags distdir \

@@ -13,13 +13,12 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
 #include "appendix.h"
 #include "text.h"
+#include "build-post.h"
 
 /*
  * Examine whether the current subbook in `appendix' has a stop-code.
@@ -28,10 +27,8 @@ int
 eb_have_stop_code(appendix)
     EB_Appendix *appendix;
 {
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_have_stop_code(appendix=%d)", (int)appendix->code));
 
     /*
      * Current subbook must have been set.
@@ -42,9 +39,7 @@ eb_have_stop_code(appendix)
     if (appendix->subbook_current->stop0 == 0)
 	goto failed;
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_have_stop_code() = %d", 1));
     eb_unlock(&appendix->lock);
 
     return 1;
@@ -53,6 +48,7 @@ eb_have_stop_code(appendix)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_have_stop_code() = %d", 0));
     eb_unlock(&appendix->lock);
     return 0;
 }
@@ -68,10 +64,8 @@ eb_stop_code(appendix, stop_code)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_stop_code(appendix=%d)", (int)appendix->code));
 
     /*
      * Current subbook must have been set.
@@ -84,9 +78,7 @@ eb_stop_code(appendix, stop_code)
     *stop_code = (appendix->subbook_current->stop0 << 16)
 	+ appendix->subbook_current->stop1;
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_stop_code() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -96,6 +88,7 @@ eb_stop_code(appendix, stop_code)
      */
   failed:
     *stop_code = -1;
+    LOG(("out: eb_stop_code() = %s", eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }

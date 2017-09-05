@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2001-07-17 17:21+0900\n"
+"POT-Creation-Date: 2001-08-08 12:00+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -89,19 +89,19 @@ msgid "%s: option `-W %s' doesn't allow an argument\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:352 ../ebfont/ebfont.c:361 ../ebrefile/ebrefile.c:277
-#: ../ebrefile/ebrefile.c:285 ../ebzip/ebzip.c:341 ../ebzip/ebzip.c:351
+#: ../ebrefile/ebrefile.c:285 ../ebzip/ebzip.c:229 ../ebzip/ebzip.c:239
 #, c-format
 msgid "%s: too long output directory path\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:395 ../ebinfo/ebinfo.c:174 ../ebrefile/ebrefile.c:317
-#: ../ebzip/ebzip.c:419
+#: ../ebzip/ebzip.c:307
 #, c-format
 msgid "%s: too many arguments\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:443 ../ebzip/unzipbook.c:159 ../ebzip/zipbook.c:159
-#: ../ebzip/zipinfobook.c:159
+#: ../ebfont/ebfont.c:443 ../ebzip/unzipbook.c:87 ../ebzip/zipbook.c:87
+#: ../ebzip/zipinfobook.c:87
 #, c-format
 msgid "%s: unknown subbook name `%s'\n"
 msgstr ""
@@ -127,13 +127,13 @@ msgid "%s: unknown image format name `%s'\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:638 ../ebinfo/ebinfo.c:481 ../ebrefile/ebrefile.c:362
-#: ../ebzip/ebzip.c:566
+#: ../ebzip/ebzip.c:454
 #, c-format
 msgid "Usage: %s [option...] [book-directory]\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:639 ../ebinfo/ebinfo.c:483 ../ebrefile/ebrefile.c:363
-#: ../ebzip/ebzip.c:567
+#: ../ebzip/ebzip.c:455
 msgid "Options:\n"
 msgstr ""
 
@@ -152,13 +152,13 @@ msgstr ""
 
 #: ../ebfont/ebfont.c:643 ../ebfont/ebfont.c:648 ../ebfont/ebfont.c:652
 #: ../ebfont/ebfont.c:660 ../ebinfo/ebinfo.c:489 ../ebrefile/ebrefile.c:367
-#: ../ebrefile/ebrefile.c:375 ../ebzip/ebzip.c:580 ../ebzip/ebzip.c:595
+#: ../ebrefile/ebrefile.c:375 ../ebzip/ebzip.c:468 ../ebzip/ebzip.c:483
 #, c-format
 msgid "                             (default: %s)\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:645 ../ebinfo/ebinfo.c:484 ../ebrefile/ebrefile.c:364
-#: ../ebzip/ebzip.c:569
+#: ../ebzip/ebzip.c:457
 msgid "  -h  --help                 display this help, then exit\n"
 msgstr ""
 
@@ -171,7 +171,7 @@ msgid ""
 "                             generate fonts as FORMAT; xbm, xpm, or gif\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:650 ../ebrefile/ebrefile.c:365 ../ebzip/ebzip.c:578
+#: ../ebfont/ebfont.c:650 ../ebrefile/ebrefile.c:365 ../ebzip/ebzip.c:466
 msgid "  -o DIRECTORY  --output-directory DIRECTORY\n"
 msgstr ""
 
@@ -179,37 +179,37 @@ msgstr ""
 msgid "                             output fonts under DIRECTORY\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:654 ../ebrefile/ebrefile.c:369 ../ebzip/ebzip.c:586
+#: ../ebfont/ebfont.c:654 ../ebrefile/ebrefile.c:369 ../ebzip/ebzip.c:474
 msgid "  -S SUBBOOK[,SUBBOOK...]  --subbook SUBBOOK[,SUBBOOK...]\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:655 ../ebrefile/ebrefile.c:370 ../ebzip/ebzip.c:587
+#: ../ebfont/ebfont.c:655 ../ebrefile/ebrefile.c:370 ../ebzip/ebzip.c:475
 msgid "                             target subbook\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:656 ../ebrefile/ebrefile.c:371 ../ebzip/ebzip.c:588
+#: ../ebfont/ebfont.c:656 ../ebrefile/ebrefile.c:371 ../ebzip/ebzip.c:476
 msgid "                             (default: all subbooks)\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:657 ../ebinfo/ebinfo.c:486 ../ebrefile/ebrefile.c:372
-#: ../ebzip/ebzip.c:591
+#: ../ebzip/ebzip.c:479
 msgid "  -v  --version              display version number, then exit\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:658 ../ebinfo/ebinfo.c:487 ../ebrefile/ebrefile.c:373
-#: ../ebzip/ebzip.c:593
+#: ../ebzip/ebzip.c:481
 msgid ""
 "\n"
 "Argument:\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:659 ../ebinfo/ebinfo.c:488 ../ebrefile/ebrefile.c:374
-#: ../ebzip/ebzip.c:594
+#: ../ebzip/ebzip.c:482
 msgid "  book-directory             top directory of a CD-ROM book\n"
 msgstr ""
 
 #: ../ebfont/ebfont.c:662 ../ebinfo/ebinfo.c:491 ../ebrefile/ebrefile.c:378
-#: ../ebzip/ebzip.c:607
+#: ../ebzip/ebzip.c:495
 #, c-format
 msgid ""
 "\n"
@@ -217,15 +217,15 @@ msgid ""
 msgstr ""
 
 #: ../ebfont/ebfont.c:1081 ../ebrefile/ebrefile.c:469
-#: ../ebrefile/ebrefile.c:485 ../ebzip/copyfile.c:265 ../ebzip/copyfile.c:289
-#: ../ebzip/unzipfile.c:260 ../ebzip/unzipfile.c:284 ../ebzip/zipfile.c:278
-#: ../ebzip/zipfile.c:302 ../ebzip/zipinfofile.c:170
+#: ../ebrefile/ebrefile.c:485 ../ebzip/copyfile.c:122 ../ebzip/copyfile.c:146
+#: ../ebzip/unzipfile.c:166 ../ebzip/unzipfile.c:190 ../ebzip/zipfile.c:143
+#: ../ebzip/zipfile.c:167 ../ebzip/zipinfofile.c:78
 #, c-format
 msgid "%s: failed to open the file, %s: %s\n"
 msgstr ""
 
-#: ../ebfont/ebfont.c:1086 ../ebfont/ebfont.c:1091 ../ebzip/copyfile.c:326
-#: ../ebzip/unzipfile.c:337 ../ebzip/zipfile.c:493 ../ebzip/zipfile.c:552
+#: ../ebfont/ebfont.c:1086 ../ebfont/ebfont.c:1091 ../ebzip/copyfile.c:183
+#: ../ebzip/unzipfile.c:243 ../ebzip/zipfile.c:358 ../ebzip/zipfile.c:417
 #, c-format
 msgid "%s: failed to write to the file, %s: %s\n"
 msgstr ""
@@ -352,7 +352,7 @@ msgstr ""
 msgid "%s: too long book directory path\n"
 msgstr ""
 
-#: ../ebrefile/ebrefile.c:366 ../ebzip/ebzip.c:579
+#: ../ebrefile/ebrefile.c:366 ../ebzip/ebzip.c:467
 msgid "                             ouput files under DIRECTORY\n"
 msgstr ""
 
@@ -379,239 +379,239 @@ msgstr ""
 msgid "%s: warning: no such subbook: %s\n"
 msgstr ""
 
-#: ../ebrefile/ebrefile.c:609 ../ebzip/unzipfile.c:306 ../ebzip/zipfile.c:384
-#: ../ebzip/zipfile.c:441 ../ebzip/zipfile.c:487 ../ebzip/zipfile.c:546
+#: ../ebrefile/ebrefile.c:609 ../ebzip/unzipfile.c:212 ../ebzip/zipfile.c:249
+#: ../ebzip/zipfile.c:306 ../ebzip/zipfile.c:352 ../ebzip/zipfile.c:411
 #, c-format
 msgid "%s: failed to seek the file, %s: %s\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:196
+#: ../ebzip/copyfile.c:53
 #, c-format
 msgid "==> copy %s <==\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:197 ../ebzip/unzipfile.c:193 ../ebzip/zipfile.c:204
+#: ../ebzip/copyfile.c:54 ../ebzip/unzipfile.c:99 ../ebzip/zipfile.c:69
 #, c-format
 msgid "output to %s\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:205 ../ebzip/unzipfile.c:201 ../ebzip/zipfile.c:212
+#: ../ebzip/copyfile.c:62 ../ebzip/unzipfile.c:107 ../ebzip/zipfile.c:77
 #, c-format
 msgid "%s: no such file: %s\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:215 ../ebzip/unzipfile.c:211 ../ebzip/zipfile.c:222
+#: ../ebzip/copyfile.c:72 ../ebzip/unzipfile.c:117 ../ebzip/zipfile.c:87
 msgid ""
 "the input and output files are the same, skipped.\n"
 "\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:237 ../ebzip/unzipfile.c:234 ../ebzip/zipfile.c:252
+#: ../ebzip/copyfile.c:94 ../ebzip/unzipfile.c:140 ../ebzip/zipfile.c:117
 msgid ""
 "already exists, skip the file\n"
 "\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:245 ../ebzip/unzipfile.c:241 ../ebzip/zipfile.c:259
+#: ../ebzip/copyfile.c:102 ../ebzip/unzipfile.c:147 ../ebzip/zipfile.c:124
 #, c-format
 msgid ""
 "\n"
 "the file already exists: %s\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:247 ../ebzip/unzipfile.c:243 ../ebzip/zipfile.c:261
+#: ../ebzip/copyfile.c:104 ../ebzip/unzipfile.c:149 ../ebzip/zipfile.c:126
 msgid "do you wish to overwrite (y or n)? "
 msgstr ""
 
-#: ../ebzip/copyfile.c:254 ../ebzip/copyfile.c:379 ../ebzip/unzipfile.c:250
-#: ../ebzip/unzipfile.c:402 ../ebzip/zipfile.c:268 ../ebzip/zipfile.c:601
+#: ../ebzip/copyfile.c:111 ../ebzip/copyfile.c:236 ../ebzip/unzipfile.c:156
+#: ../ebzip/unzipfile.c:308 ../ebzip/zipfile.c:133 ../ebzip/zipfile.c:466
 #, c-format
 msgid "%s: failed to unlink the file: %s\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:308 ../ebzip/unzipfile.c:312 ../ebzip/zipfile.c:390
+#: ../ebzip/copyfile.c:165 ../ebzip/unzipfile.c:218 ../ebzip/zipfile.c:255
 #, c-format
 msgid "%s: failed to read from the file, %s: %s\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:312 ../ebzip/copyfile.c:317 ../ebzip/unzipfile.c:316
-#: ../ebzip/unzipfile.c:321 ../ebzip/zipfile.c:394 ../ebzip/zipfile.c:399
+#: ../ebzip/copyfile.c:169 ../ebzip/copyfile.c:174 ../ebzip/unzipfile.c:222
+#: ../ebzip/unzipfile.c:227 ../ebzip/zipfile.c:259 ../ebzip/zipfile.c:264
 #, c-format
 msgid "%s: unexpected EOF: %s\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:337 ../ebzip/unzipfile.c:349 ../ebzip/zipfile.c:507
+#: ../ebzip/copyfile.c:194 ../ebzip/unzipfile.c:255 ../ebzip/zipfile.c:372
 #, c-format
 msgid "%4.1f%% done (%lu / %lu bytes)\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:348 ../ebzip/unzipfile.c:360 ../ebzip/zipfile.c:563
+#: ../ebzip/copyfile.c:205 ../ebzip/unzipfile.c:266 ../ebzip/zipfile.c:428
 #, c-format
 msgid "completed (%lu / %lu bytes)\n"
 msgstr ""
 
-#: ../ebzip/copyfile.c:451
+#: ../ebzip/copyfile.c:308
 #, c-format
 msgid "%s: failed to open the directory, %s: %s\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:487
+#: ../ebzip/ebzip.c:375
 #, c-format
 msgid "%s: invalid compression level `%s'\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:530 ../ebzip/ebzip.c:549
+#: ../ebzip/ebzip.c:418 ../ebzip/ebzip.c:437
 #, c-format
 msgid "%s: invalid content name `%s'\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:568
+#: ../ebzip/ebzip.c:456
 msgid "  -f  --force-overwrite      force overwrite of output files\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:570
+#: ../ebzip/ebzip.c:458
 msgid "  -i  --information          list information of compressed files\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:571
+#: ../ebzip/ebzip.c:459
 msgid "  -k  --keep                 keep (don't delete) original files\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:572
+#: ../ebzip/ebzip.c:460
 msgid "  -l INTEGER  --level INTEGER\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:573
+#: ../ebzip/ebzip.c:461
 #, c-format
 msgid "                             compression level; 0..%d\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:575
+#: ../ebzip/ebzip.c:463
 #, c-format
 msgid "                             (default: %d)\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:577
+#: ../ebzip/ebzip.c:465
 msgid "  -n  --no-overwrite         don't overwrite output files\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:582
+#: ../ebzip/ebzip.c:470
 msgid "  -q  --quiet  --silence     suppress all warnings\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:583
+#: ../ebzip/ebzip.c:471
 msgid "  -s TYPE[,TYPE]  --skip-content TYPE[,TYPE...]\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:584
+#: ../ebzip/ebzip.c:472
 msgid ""
 "                             skip content; font, graphic, sound or movie\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:585
+#: ../ebzip/ebzip.c:473
 msgid "                             (default: none is skipped)\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:589
+#: ../ebzip/ebzip.c:477
 msgid "  -t  --test                 only check for input files\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:590
+#: ../ebzip/ebzip.c:478
 msgid "  -u  --uncompress           uncompress files\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:592
+#: ../ebzip/ebzip.c:480
 msgid "  -z  --compress             compress files\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:598
+#: ../ebzip/ebzip.c:486
 msgid ""
 "\n"
 "Default action:\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:600
+#: ../ebzip/ebzip.c:488
 msgid "  When invoked as `ebunzip', uncompression is the default action.\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:601
+#: ../ebzip/ebzip.c:489
 msgid ""
 "  When invoked as `ebzipinfo', listing information is the default action.\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:603
+#: ../ebzip/ebzip.c:491
 msgid "  When invoked as `ebunzip.exe', uncompression is the default action.\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:604
+#: ../ebzip/ebzip.c:492
 msgid ""
 "  When invoked as `ebzipinf.exe', listing information is the default "
 "action.\n"
 msgstr ""
 
-#: ../ebzip/ebzip.c:606
+#: ../ebzip/ebzip.c:494
 msgid "  Otherwise, compression is the default action.\n"
 msgstr ""
 
-#: ../ebzip/unzipfile.c:192
+#: ../ebzip/unzipfile.c:98
 #, c-format
 msgid "==> uncompress %s <==\n"
 msgstr ""
 
-#: ../ebzip/unzipfile.c:222 ../ebzip/zipfile.c:233 ../ebzip/zipfile.c:240
-#: ../ebzip/zipfile.c:425
+#: ../ebzip/unzipfile.c:128 ../ebzip/zipfile.c:98 ../ebzip/zipfile.c:105
+#: ../ebzip/zipfile.c:290
 #, c-format
 msgid "%s: memory exhausted\n"
 msgstr ""
 
-#: ../ebzip/unzipfile.c:362
+#: ../ebzip/unzipfile.c:268
 #, c-format
 msgid ""
 "%lu -> %lu bytes\n"
 "\n"
 msgstr ""
 
-#: ../ebzip/unzipfile.c:394
+#: ../ebzip/unzipfile.c:300
 #, c-format
 msgid "%s: CRC error: %s\n"
 msgstr ""
 
-#: ../ebzip/zipfile.c:203
+#: ../ebzip/zipfile.c:68
 #, c-format
 msgid "==> compress %s <==\n"
 msgstr ""
 
-#: ../ebzip/zipfile.c:358 ../ebzip/zipfile.c:365 ../ebzip/zipfile.c:446
+#: ../ebzip/zipfile.c:223 ../ebzip/zipfile.c:230 ../ebzip/zipfile.c:311
 #, c-format
 msgid "%s: failed to write to the file: %s\n"
 msgstr ""
 
-#: ../ebzip/zipfile.c:566
+#: ../ebzip/zipfile.c:431
 #, c-format
 msgid ""
 "%lu -> %lu bytes (%4.1f%%)\n"
 "\n"
 msgstr ""
 
-#: ../ebzip/zipinfofile.c:184
+#: ../ebzip/zipinfofile.c:92
 #, c-format
 msgid "%lu bytes (not compressed)\n"
 msgstr ""
 
-#: ../ebzip/zipinfofile.c:187
+#: ../ebzip/zipinfofile.c:95
 #, c-format
 msgid "%lu -> %lu bytes "
 msgstr ""
 
-#: ../ebzip/zipinfofile.c:190
+#: ../ebzip/zipinfofile.c:98
 msgid "(empty original file, "
 msgstr ""
 
-#: ../ebzip/zipinfofile.c:196
+#: ../ebzip/zipinfofile.c:104
 #, c-format
 msgid "ebzip level %d compression)\n"
 msgstr ""
 
-#: ../ebzip/zipinfofile.c:198
+#: ../ebzip/zipinfofile.c:106
 msgid "EPWING compression)\n"
 msgstr ""

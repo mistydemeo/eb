@@ -13,88 +13,16 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
-#include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
-#ifdef ENABLE_NLS
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
-#include <libintl.h>
-#endif
-
-/*
- * The maximum length of path name.
- */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX        MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX        1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
-
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
 #include "font.h"
+#include "build-post.h"
+
+#include "ebzip.h"
+#include "ebutils.h"
 
 #include "getumask.h"
 #include "makedir.h"
-
-#include "ebutils.h"
-#include "ebzip.h"
-
-/*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#ifdef __STDC__
-#define EB_P(p) p
-#else /* not __STDC__ */
-#define EB_P(p) ()
-#endif /* not __STDC__ */
-#endif /* EB_P */
-
-/*
- * Tricks for gettext.
- */
-#ifdef ENABLE_NLS
-#define _(string) gettext(string)
-#ifdef gettext_noop
-#define N_(string) gettext_noop(string)
-#else
-#define N_(string) (string)
-#endif
-#else
-#define _(string) (string)       
-#define N_(string) (string)
-#endif
 
 /*
  * Unexported function.
@@ -216,7 +144,7 @@ ebzip_zip_book_eb(book, out_top_path, book_path, subbook_list, subbook_count)
      * Initialize variables.
      */
     out_directory_mode = 0777 ^ get_umask();
-    eb_initialize_all_subbooks(book);
+    eb_load_all_subbooks(book);
 
     /*
      * Compress a book.
@@ -311,7 +239,7 @@ ebzip_zip_book_epwing(book, out_top_path, book_path, subbook_list,
      * Initialize variables.
      */
     out_directory_mode = 0777 ^ get_umask();
-    eb_initialize_all_subbooks(book);
+    eb_load_all_subbooks(book);
 
     /*
      * Compress a book.

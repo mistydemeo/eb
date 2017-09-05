@@ -33,11 +33,12 @@
 
 #include <sys/types.h>
 
-
+#ifndef VOID
 #ifdef __STDC__
 #define VOID void
 #else
 #define VOID char
+#endif
 #endif
 
 

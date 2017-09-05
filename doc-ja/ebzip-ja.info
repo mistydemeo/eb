@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.1beta0 版です。 EB ライブラリバージョン 3.1beta0 に対
+   この文書は第 3.1beta1 版です。 EB ライブラリバージョン 3.1beta1 に対
 応しています。
 
 * Menu:
@@ -947,7 +947,7 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 3.1beta0 では、 1 (2
+     圧縮モードを表します。 EB ライブラリバージョン 3.1beta1 では、 1 (2
      進数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'

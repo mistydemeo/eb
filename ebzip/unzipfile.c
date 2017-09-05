@@ -13,109 +13,15 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
-#include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#else
-#include <sys/file.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
-#ifdef HAVE_UTIME_H
-#include <utime.h>
-#endif
-
-#ifdef ENABLE_NLS
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
-#include <libintl.h>
-#endif
-
-#include <zlib.h>
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-/*
- * Whence parameter for lseek().
- */
-#ifndef SEEK_SET
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
-#endif
-
-/*
- * stat macros.
- */
-#ifdef  STAT_MACROS_BROKEN
-#ifdef  S_ISREG
-#undef  S_ISREG
-#endif
-#ifdef  S_ISDIR
-#undef  S_ISDIR
-#endif
-#endif  /* STAT_MACROS_BROKEN */
-
-#ifndef S_ISREG
-#define S_ISREG(m)   (((m) & S_IFMT) == S_IFREG)
-#endif
-#ifndef S_ISDIR
-#define S_ISDIR(m)   (((m) & S_IFMT) == S_IFDIR)
-#endif
-
-/*
- * The maximum length of path name.
- */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX        MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX        1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
-
 #include "eb.h"
-#include "internal.h"
+#include "build-post.h"
+
+#include "ebzip.h"
 
 #include "getumask.h"
 #include "makedir.h"
 #include "samefile.h"
 #include "yesno.h"
-
-#include "ebzip.h"
-#include "ebutils.h"
 
 /*
  * Trick for function protypes.
@@ -408,7 +314,7 @@ ebzip_unzip_file(out_file_name, in_file_name, in_zio_code)
      * Set owner, group, permission, atime and mtime of `out_file'.
      * We ignore return values of `chown', `chmod' and `utime'.
      */
-#if defined(HAVE_UTIME)
+#if defined(HAVE_UTIME) && defined(HAVE_STRUCT_UTIMBUF)
     if (!ebzip_test_flag) {
 	struct utimbuf utim;
 

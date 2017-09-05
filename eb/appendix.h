@@ -70,6 +70,9 @@ EB_Error_Code eb_wide_alt_character_text EB_P((EB_Appendix *, int, char *));
 EB_Error_Code eb_forward_wide_alt_character EB_P((EB_Appendix *, int, int *));
 EB_Error_Code eb_backward_wide_alt_character EB_P((EB_Appendix *, int, int *));
 
+/* for backward compatibility */
+#define eb_initialize_all_appendix_subbooks eb_load_all_appendix_subbooks
+
 #ifdef __cplusplus
 }
 #endif

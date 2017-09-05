@@ -1,3 +1,211 @@
+2001-08-07  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.1beta1.
+
+	* eb/configure.ac (LIBEB_VERSION_INFO): Set the varaible to 5:0:0.
+
+	* eb/ebconfig.h: Renamed to `eb/build-pre.h'.
+	* eb/internal.h.in: Renamed to `eb/build-post.h'.
+
+	* ebrefile/ebrefile.c: Include "*.h" not "eb/*.h".
+	* ebrefile/Makefile.am (INCLUDES): Delete `-I$(top_srcdir)' and
+	add `-I../eb -I$(top_srcdir)/eb' instead.
+
+2001-08-06  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* missing: Import from Automake 1.4j.
+
+	* eb/defs.h (EB_Lock_Struct, EB_Lock): Define the types
+	if ENABLE_PTHREAD or EBCONF_ENABLE_PTHREAD is defined.
+
+2001-08-04  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebzip/common.c, ebzip/copyfile.c, ebzip/ebzip.c,
+	ebzip/unzipbook.c, ebzip/unzipfile.c, ebzip/zipbook.c,
+	ebzip/zipfile.c, ebzip/zipinfobook.c, ebzip/zipinfofile.c,
+	ebzip/ebzip.h: Inclusions of header files and definitions of missing
+	macros in *.c are moved to `ebzip/ebzip.h'.
+
+	* configure.ac (AC_CHECK_HEADERS): Add `pthread.h'.
+
+2001-08-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+        * eb/ebconfig.h, eb/memmove.c, eb/zio.c, libebutils/memset.c:
+        lib/memset.c: Don't define VOID if it has been defined.
+        * eb/ebconfig.h, eb/defs.h: Don't define EB_P if WIN32 is defined.
+        * configure.ac (AC_CHECK_HEADERS): Add `sys/utime.h'.
+        * win32/config.h, win32/dirent.h, win32/dirent.c, win32/funcname.h,
+        win32/unistd.h, win32/zconfig.h: Add new directory `win32' and put
+        new files on the directory.
+
+        * eb/ebconfig.h (F_): Delete the macro.
+        * eb/filename.c (eb_canonicalize_path_name): In DOS version, replace
+        all '/' in the given path with `\\'.
+        * eb/filename.c (eb_canonicalize_path_name): Use strchr() to check
+        if the given path name represents root.
+        * eb/filename.c (eb_compose_path_name, eb_compose_path_name2,
+        eb_compose_path_name3): Revised.
+
+2001-08-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/search.c (eb_initialize_search, eb_finalize_search): 
+	Delete the first argument `EB_Book *'.
+
+	* eb/bitmap.c, eb/narwalt.c, eb/font.c. eb/narwfont.c, eb/setword.c,
+	eb/subbook.c, eb/text.c:
+	Add debug codese.
+
+	* eb/book.c (eb_bind): Assign a book code at first.
+	* eb/appendix (eb_bind_appendix): Likewise.
+
+	* eb/multi.c (eb_finalie_multi_searches): Revised.
+
+	* eb/narwfont.c (eb_narrow_font_size2): Fix a bug.  Add missing
+	`return' statement.
+	
+	* eb/log.c (log_mutex): New variable.
+	* eb/log.c (eb_log): Lock `log_mutex' at invoking log function.
+
+	* eb/text.c (eb_invalidate_text_context): New function.
+	* eb/text.c (eb_read_text, eb_read_heading, eb_read_rawtext,
+	eb_forward_text, eb_forward_heading): Call eb_invalidate_text_context()
+	upon failure return.
+	
+2001-07-31  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/binary.c (eb_set_binary_mpeg): Fix a critical bug in file name
+	composition.
+
+	* eb/book.c (eb_finalize_book): Revised.
+
+	* eb/binary.c, eb/book.c, eb/copyright.c, eb/eb.c eb/endword.c,
+	eb/exactword.c, eb/hook.c, eb/keyword.c, eb/menu.c, eb/multi.c,
+	eb/stopcode.c, eb/subbook.c, eb/word.c: Add debug codes.
+
+	* eb/subbook.c: Include "binary.h".
+
+	* eb/zio.c (ZIO_ID_NONE): Defined.
+	* eb/zio.c (cache_file): Renamed to `cache_zio_id'.
+	* eb/zio.c (cache_mutex): Renamed to `zio_mutex'.
+	* eb/zio.c (zio_open): Initialize `zio' again if file descriptor
+	the given `zio' holds is active.
+	* eb/zio.c (zio_open_plain, zio_open_ebzip, zio_open_epwing,
+	zio_open_epwing6): Assign ID to `zio'.
+
+2001-07-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/appendix.c (eb_initialize_appendix_catalog): Renamed to
+	eb_load_appendix_catalog().
+	* eb/appendix.c (eb_initialize_alt_cache): Renamed to
+	eb_initialize_alt_caches().
+	* eb/appendix.c (eb_initialize_appendix): Initialize all members
+	in EB_Appendix.
+	* eb/appendix.c (eb_finalize_appendix): Revised.
+
+	* eb/appendix.h (eb_initialize_all_appendix_subbooks): Define the
+	macro for backward compatibility.
+
+	* eb/appsub.c (eb_initialize_appendix_subbook): Renamed to
+	eb_load_appendix_subbook().
+	* eb/appsub.c (eb_finalize_appendix_subbooks): New function.
+	* eb/appsub.c (eb_initialize_appendix_subbooks): New function.
+	* eb/appsub.c (eb_load_all_appendix_subbooks): New function.
+
+	* eb/binary.c (eb_initialize_binary): Renamed to 
+	eb_initialize_binary_context().  Initialize all members in
+	EB_Binary_Context.
+	* eb/binary.c (eb_finalize_binary_context): New function.
+	* eb/binary.c (eb_reset_binary_context): New function.
+
+	* eb/book.c (eb_initialize_catalog): Renamed to eb_load_catalog().
+	* eb/book.c (eb_initialize_language): Renamed to eb_load_language().
+	* eb/book.c (eb_initialize_book): Initialize all members to EB_Book.
+	* eb/book.c (eb_finalize_book): Revised.
+
+	* eb/book.h (eb_initialize_all_subbooks): Define the macro for
+	backward compatibility.
+	
+	* eb/font.c (eb_initialize_fonts): New function.
+	* eb/font.c (eb_finalize_fonts): New function.
+
+	* eb/hook.c (eb_finalize_hookset): Reset all the hooks.
+
+	* eb/internal.h.in (EB_ARRANGE_INVALID): New macro.
+
+	* eb/multi.c (eb_initialize_multi_searches): New function.
+	* eb/multi.c (eb_finalize_multi_searches): New function.
+	* eb/multi.c (eb_initialize_multi_search): Renamed to 
+	eb_load_multi_search().
+
+	* eb/narwfont.c (eb_initialize_narrow_font): Renamed to
+	eb_load_narrow_font().
+
+	* eb/search.c (eb_initialize_search): Renamed to
+	eb_initialize_search_contexts().  Initialize all members in
+	EB_Search_Context.
+	* eb/search.c (eb_finalize_search_contexts): New function.
+	* eb/search.c (eb_reset_search_contexts): New function.
+	* eb/search.c (eb_initialize_search): New function.
+	* eb/search.c (eb_finalize_search): New function.
+	* eb/search.c (eb_initialize_searches): New function.
+	* eb/search.c (eb_finalize_searches): New function.
+
+	* eb/subbook.c (eb_initialize_subbook): Renamed to eb_load_subbook().
+	* eb/subbook.c (eb_initialize_indexes): Renamed to 
+	eb_load_subbook_indexes().
+	* eb/subbook.c (eb_load_subbook_indexes): Call eb_initialize_search()
+	to initialize EB_Search.
+
+	* eb/text.c (eb_initialize_text): Renamed to
+	eb_initialize_text_context().  Initialize all members in
+	EB_Text_Context.
+	* eb/text.c (eb_finalize_text_context): New function.
+	* eb/text.c (eb_reset_text_context): New function.
+
+	* eb/appendix.c, eb/appsub.c: Add debug codes.
+	* eb/defs.h (EB_Appendix_Struct): Add member `code'.
+	* eb/appendix.c (appendix_counter): New static variable.
+
+	* eb/log.c: Include "internal.h".
+
+2001-07-25  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/search.c (eb_presearch_word): Don't set `context->entry_length'
+	to 0 at successful return.
+
+2001-07-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/zio.h (Zio_Struct): Add `id'.
+	* eb/zio.c (zio_counter): New static variable.
+	* eb/zio.c (zio_initialize): manage zio_counter, and assign the
+	counter value to `zio->id'.
+	* eb/zio.c (LOG): Defile this macro if ENABLE_DEBUG.
+
+	* eb/log.c (eb_quoted_string): Prepare multiple static buffers.
+	* eb/log.c (eb_quoted_string): Accept NULL pattern.
+	* eb/log.c (eb_quoted_string): Encode '=' character as `=3D'.
+
+2001-07-22  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/Makefile.am (libeb_la_SOURCES): Add `log.c'.
+	* eb/eb.h: Include <stdarg.h> if __STDC__ is defined.
+	* eb/error.c (error_strings): New static variable.
+	* eb/error.c (eb_error_string): New function.
+	* eb/error.c (unknown): Deleted.
+	* eb/internal.h.in (LOG): New macro.
+	* eb/match.c, eb/search.c: Output log messages.
+
+2001-07-18  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebzip/zipfile.c (ebzip_zip_file): Don't call utime() if 
+	HAVE_STRUCT_UTIMBUF is not defined.
+	* ebzip/unzipfile.c (ebzip_unzip_file): Ditto.
+	* ebzip/copyfile.c (ebzip_copy_file): Ditto.
+	* ebzip/ebzip.c (parse_skip_content_argument): Defined as `static'
+	function.
+	* ebzip/copyfile.c (ebzip_copy_files_in_directory): Fix a bug that
+	the function always returns -1.
+
 2001-07-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.1beta0.

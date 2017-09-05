@@ -13,11 +13,10 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
+#include "build-post.h"
 
 /*
  * Examine whether the current subbook in `book' supports `MENU SEARCH'
@@ -27,10 +26,8 @@ int
 eb_have_menu(book)
     EB_Book *book;
 {
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_have_menu(book=%d)", (int)book->code));
 
     /*
      * Current subbook must have been set.
@@ -44,9 +41,7 @@ eb_have_menu(book)
     if (book->subbook_current->menu.start_page == 0)
 	goto failed;
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_have_menu() = %d", 1));
     eb_unlock(&book->lock);
 
     return 1;
@@ -55,6 +50,7 @@ eb_have_menu(book)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_have_menu() = %d", 0));
     eb_unlock(&book->lock);
     return 0;
 }
@@ -71,10 +67,8 @@ eb_menu(book, position)
     EB_Error_Code error_code;
     int page;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_menu(book=%d)", (int)book->code));
 
     /*
      * Current subbook must have been set.
@@ -99,9 +93,8 @@ eb_menu(book, position)
     position->page = page;
     position->offset = 0;
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_menu(position={%d,%d}) = %s",
+	position->page, position->offset, eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -110,6 +103,7 @@ eb_menu(book, position)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_menu() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }

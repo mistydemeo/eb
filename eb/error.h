@@ -115,6 +115,7 @@ extern "C" {
  * Function declarations.
  */
 /* error.c */
+const char *eb_error_string EB_P((EB_Error_Code));
 const char *eb_error_message EB_P((EB_Error_Code));
 
 #ifdef __cplusplus

@@ -13,12 +13,11 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
 #include "font.h"
+#include "build-post.h"
 
 /*
  * Return required buffer size for a narrow font character converted
@@ -30,6 +29,8 @@ eb_narrow_font_xbm_size(height, size)
     size_t *size;
 {
     EB_Error_Code error_code;
+
+    LOG(("in: eb_narrow_font_xbm_size(height=%d)", (int)height));
 
     switch (height) {
     case EB_FONT_16:
@@ -45,6 +46,9 @@ eb_narrow_font_xbm_size(height, size)
 	goto failed;
     }
 
+    LOG(("out: eb_narrow_font_xbm_size(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
@@ -52,6 +56,7 @@ eb_narrow_font_xbm_size(height, size)
      */
   failed:
     *size = 0;
+    LOG(("out: eb_narrow_font_xbm_size() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -66,6 +71,8 @@ eb_narrow_font_xpm_size(height, size)
 {
     EB_Error_Code error_code;
 
+    LOG(("in: eb_narrow_font_xpm_size(height=%d)", (int)height));
+
     switch (height) {
     case EB_FONT_16:
         *size = EB_SIZE_NARROW_FONT_16_XPM;
@@ -80,6 +87,9 @@ eb_narrow_font_xpm_size(height, size)
 	goto failed;
     }
 
+    LOG(("out: eb_narrow_font_xpm_size(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
@@ -87,6 +97,7 @@ eb_narrow_font_xpm_size(height, size)
      */
   failed:
     *size = 0;
+    LOG(("out: eb_narrow_font_xpm_size() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -100,6 +111,8 @@ eb_narrow_font_gif_size(height, size)
     size_t *size;
 {
     EB_Error_Code error_code;
+
+    LOG(("in: eb_narrow_font_gif_size(height=%d)", (int)height));
 
     switch (height) {
     case EB_FONT_16:
@@ -115,6 +128,9 @@ eb_narrow_font_gif_size(height, size)
 	goto failed;
     }
 
+    LOG(("out: eb_narrow_font_gif_size(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
@@ -122,6 +138,7 @@ eb_narrow_font_gif_size(height, size)
      */
   failed:
     *size = 0;
+    LOG(("out: eb_narrow_font_gif_size() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -135,6 +152,8 @@ eb_wide_font_xbm_size(height, size)
     size_t *size;
 {
     EB_Error_Code error_code;
+
+    LOG(("in: eb_wide_font_xbm_size(height=%d)", (int)height));
 
     switch (height) {
     case EB_FONT_16:
@@ -150,6 +169,9 @@ eb_wide_font_xbm_size(height, size)
 	goto failed;
     }
 
+    LOG(("out: eb_wide_font_xbm_size(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
@@ -157,6 +179,7 @@ eb_wide_font_xbm_size(height, size)
      */
   failed:
     *size = 0;
+    LOG(("out: eb_wide_font_xbm_size() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -170,6 +193,8 @@ eb_wide_font_xpm_size(height, size)
     size_t *size;
 {
     EB_Error_Code error_code;
+
+    LOG(("in: eb_wide_font_xpm_size(height=%d)", (int)height));
 
     switch (height) {
     case EB_FONT_16:
@@ -185,6 +210,9 @@ eb_wide_font_xpm_size(height, size)
 	goto failed;
     }
 
+    LOG(("out: eb_wide_font_xpm_size(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
@@ -192,6 +220,7 @@ eb_wide_font_xpm_size(height, size)
      */
   failed:
     *size = 0;
+    LOG(("out: eb_wide_font_xpm_size() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -205,6 +234,8 @@ eb_wide_font_gif_size(height, size)
     size_t *size;
 {
     EB_Error_Code error_code;
+
+    LOG(("in: eb_wide_font_gif_size(height=%d)", (int)height));
 
     switch (height) {
     case EB_FONT_16:
@@ -220,6 +251,9 @@ eb_wide_font_gif_size(height, size)
 	goto failed;
     }
 
+    LOG(("out: eb_wide_font_gif_size(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
@@ -227,6 +261,7 @@ eb_wide_font_gif_size(height, size)
      */
   failed:
     *size = 0;
+    LOG(("out: eb_wide_font_gif_size() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -260,6 +295,8 @@ eb_bitmap_to_xbm(bitmap, width, height, xbm, xbm_length)
     int bitmap_size = (width + 7) / 8 * height;
     int hex;
     int i;
+
+    LOG(("in: eb_bitmap_to_xbm(width=%d, height=%d)", width, height));
 
     /*
      * Output a header.
@@ -313,6 +350,8 @@ eb_bitmap_to_xbm(bitmap, width, height, xbm, xbm_length)
     xbm_p += 3;
 
     *xbm_length = (xbm_p - xbm);
+
+    LOG(("out: eb_bitmap_to_xbm(xbm_length=%ld)", (long)*xbm_length));
 }
 
 
@@ -345,6 +384,8 @@ eb_bitmap_to_xpm(bitmap, width, height, xpm, xpm_length)
     char *xpm_p = xpm;
     const unsigned char *bitmap_p = (const unsigned char *)bitmap;
     int i, j;
+
+    LOG(("in: eb_bitmap_to_xpm(width=%d, height=%d)", width, height));
 
     /*
      * Output a header.
@@ -414,6 +455,8 @@ eb_bitmap_to_xpm(bitmap, width, height, xpm, xpm_length)
     xpm_p += 4;
 
     *xpm_length = (xpm_p - xpm);
+
+    LOG(("out: eb_bitmap_to_xpm(xpm_length=%ld)", (long)*xpm_length));
 }
 
 
@@ -502,6 +545,8 @@ eb_bitmap_to_gif(bitmap, width, height, gif, gif_length)
     unsigned char gif_preamble[GIF_PREAMBLE_LENGTH];
     int i, j;
 
+    LOG(("in: eb_bitmap_to_gif(width=%d, height=%d)", width, height));
+
     /*
      * Copy the default preamble.
      */
@@ -583,6 +628,8 @@ eb_bitmap_to_gif(bitmap, width, height, gif, gif_length)
     gif_p += 4;
 
     *gif_length = ((char *)gif_p - gif);
+
+    LOG(("out: eb_bitmap_to_gif(gif_length=%ld)", (long)*gif_length));
 }
 
 

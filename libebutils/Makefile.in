@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4h from Makefile.am.
+# Makefile.in generated automatically by automake 1.4j from Makefile.am.
 
 # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -96,8 +96,8 @@ XGETTEXT = @XGETTEXT@
 ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
-_am_include = @_am_include@
-_am_quote = @_am_quote@
+am__include = @am__include@
+am__quote = @am__quote@
 install_sh = @install_sh@
 localedir = @localedir@
 
@@ -178,7 +178,7 @@ AR = ar
 
 clean-noinstLIBRARIES:
 	-test -z "$(noinst_LIBRARIES)" || rm -f $(noinst_LIBRARIES)
-libebutils.a: $(libebutils_a_OBJECTS) $(libebutils_a_DEPENDENCIES)
+libebutils.a: $(libebutils_a_OBJECTS) $(libebutils_a_DEPENDENCIES) 
 	-rm -f libebutils.a
 	$(libebutils_a_AR) libebutils.a $(libebutils_a_OBJECTS) $(libebutils_a_LIBADD)
 	$(RANLIB) libebutils.a
@@ -189,16 +189,16 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/ebutils.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/getopt.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/getopt1.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/getumask.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/makedir.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/memset.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/samefile.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/strcasecmp.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/strerror.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/yesno.Po@_am_quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/ebutils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/getopt.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/getopt1.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/getumask.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/makedir.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/memset.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/samefile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/strcasecmp.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/strerror.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/yesno.Po@am__quote@
 
 distclean-depend:
 	-rm -rf $(DEPDIR)
@@ -250,10 +250,10 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 GTAGS:
 	here=`CDPATH=: && cd $(top_builddir) && pwd` \
 	  && cd $(top_srcdir) \
-	  && gtags -i $$here
+	  && gtags -i $(GTAGS_ARGS) $$here
 
 distclean-tags:
-	-rm -f TAGS ID
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
@@ -346,8 +346,8 @@ mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 
 uninstall-am: uninstall-info-am
 
-.PHONY: all all-am check check-am clean clean-generic clean-libtool \
-	clean-noinstLIBRARIES distclean distclean-compile \
+.PHONY: GTAGS all all-am check check-am clean clean-generic \
+	clean-libtool clean-noinstLIBRARIES distclean distclean-compile \
 	distclean-depend distclean-generic distclean-libtool \
 	distclean-tags distdir dvi dvi-am info info-am install \
 	install-am install-data install-data-am install-exec \

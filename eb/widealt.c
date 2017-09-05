@@ -13,12 +13,11 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
 #include "appendix.h"
-#include "internal.h"
+#include "build-post.h"
 
 /*
  * Unexported functions.
@@ -42,10 +41,8 @@ int
 eb_have_wide_alt(appendix)
     EB_Appendix *appendix;
 {
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_have_wide_alt(appendix=%d)", (int)appendix->code));
 
     /*
      * Current subbook must have been set.
@@ -56,9 +53,7 @@ eb_have_wide_alt(appendix)
     if (appendix->subbook_current->wide_page == 0)
 	goto failed;
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_have_wide_alt() = %d", 1));
     eb_unlock(&appendix->lock);
 
     return 1;
@@ -67,6 +62,7 @@ eb_have_wide_alt(appendix)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_have_wide_alt() = %d", 0));
     eb_unlock(&appendix->lock);
     return 0;
 }
@@ -83,10 +79,8 @@ eb_wide_alt_start(appendix, start)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_wide_alt_start(appendix=%d)", (int)appendix->code));
 
     /*
      * Current subbook must have been set.
@@ -103,9 +97,8 @@ eb_wide_alt_start(appendix, start)
 
     *start = appendix->subbook_current->wide_start;
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_wide_alt_start(start=%d) = %s", *start,
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -115,6 +108,7 @@ eb_wide_alt_start(appendix, start)
      */
   failed:
     *start = -1;
+    LOG(("out: eb_wide_alt_start() = %s", eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -131,10 +125,8 @@ eb_wide_alt_end(appendix, end)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_wide_alt_end(appendix=%d)", (int)appendix->code));
 
     /*
      * Current subbook must have been set.
@@ -151,9 +143,8 @@ eb_wide_alt_end(appendix, end)
 
     *end = appendix->subbook_current->wide_end;
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_wide_alt_end(end=%d) = %s", *end,
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -163,6 +154,7 @@ eb_wide_alt_end(appendix, end)
      */
   failed:
     *end = -1;
+    LOG(("out: eb_wide_alt_end() = %s", eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -179,10 +171,9 @@ eb_wide_alt_character_text(appendix, character_number, text)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_wide_alt_character_text(appendix=%d, character_number=%d)",
+	(int)appendix->code, character_number));
 
     /*
      * Current subbook must have been set.
@@ -210,9 +201,8 @@ eb_wide_alt_character_text(appendix, character_number, text)
     if (error_code != EB_SUCCESS)
 	goto failed;
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_wide_alt_character_text(text=%s) = %s",
+	eb_quoted_string(text), eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -222,6 +212,8 @@ eb_wide_alt_character_text(appendix, character_number, text)
      */
   failed:
     *text = '\0';
+    LOG(("out: eb_wide_alt_character_text() = %s",
+	eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -241,6 +233,10 @@ eb_wide_character_text_jis(appendix, character_number, text)
     int end;
     off_t location;
     EB_Alternation_Cache *cachep;
+
+    LOG(("in: eb_wide_alt_character_text_jis(appendix=%d, \
+character_number=%d)",
+	(int)appendix->code, character_number));
 
     start = appendix->subbook_current->wide_start;
     end = appendix->subbook_current->wide_end;
@@ -300,6 +296,8 @@ eb_wide_character_text_jis(appendix, character_number, text)
     cachep->character_number = character_number;
 
   succeeded:
+    LOG(("out: eb_wide_alt_character_text_jis(text=%s) = %s",
+	eb_quoted_string(text), eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
@@ -307,6 +305,8 @@ eb_wide_character_text_jis(appendix, character_number, text)
      */
   failed:
     *text = '\0';
+    LOG(("out: eb_wide_alt_character_text_jis() = %s",
+	eb_error_string(error_code)));
     return error_code;
 }
 
@@ -325,6 +325,10 @@ eb_wide_character_text_latin(appendix, character_number, text)
     int end;
     off_t location;
     EB_Alternation_Cache *cache_p;
+
+    LOG(("in: eb_wide_alt_character_text_latin(appendix=%d, \
+character_number=%d)",
+	(int)appendix->code, character_number));
 
     start = appendix->subbook_current->wide_start;
     end = appendix->subbook_current->wide_end;
@@ -384,6 +388,8 @@ eb_wide_character_text_latin(appendix, character_number, text)
     cache_p->character_number = character_number;
 
   succeeded:
+    LOG(("out: eb_wide_alt_character_text_latin(text=%s) = %s",
+	eb_quoted_string(text), eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
@@ -391,6 +397,8 @@ eb_wide_character_text_latin(appendix, character_number, text)
      */
   failed:
     *text = '\0';
+    LOG(("out: eb_wide_alt_character_text_latin() = %s",
+	eb_error_string(error_code)));
     return error_code;
 }
 
@@ -414,10 +422,10 @@ eb_forward_wide_alt_character(appendix, n, character_number)
 	    character_number);
     }
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_forward_wide_alt_character(appendix=%d, n=%d, \
+character_number=%d)",
+	(int)appendix->code, n, *character_number));
 
     /*
      * Current subbook must have been set.
@@ -490,9 +498,8 @@ eb_forward_wide_alt_character(appendix, n, character_number)
 	}
     }
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_forkward_wide_alt_character(character_number=%d) = %s",
+	*character_number, eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -502,6 +509,8 @@ eb_forward_wide_alt_character(appendix, n, character_number)
      */
   failed:
     *character_number = -1;
+    LOG(("out: eb_forward_wide_alt_character() = %s",
+	eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -525,10 +534,10 @@ eb_backward_wide_alt_character(appendix, n, character_number)
 	return eb_forward_wide_alt_character(appendix, -n, character_number);
     }
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_backward_wide_alt_character(appendix=%d, n=%d, \
+character_number=%d)",
+	(int)appendix->code, n, *character_number));
 
     /*
      * Current subbook must have been set.
@@ -601,9 +610,8 @@ eb_backward_wide_alt_character(appendix, n, character_number)
 	}
     }
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_backward_wide_alt_character(character_number=%d) = %s",
+	*character_number, eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -613,6 +621,8 @@ eb_backward_wide_alt_character(appendix, n, character_number)
      */
   failed:
     *character_number = -1;
+    LOG(("out: eb_backward_wide_alt_character() = %s",
+	eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }

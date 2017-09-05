@@ -13,11 +13,10 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
+#include "build-post.h"
 
 /*
  * Mutex for gettext function call.
@@ -25,6 +24,113 @@
 #if defined(ENABLE_NLS) && defined(ENABLE_PTHREAD)
 pthread_mutex_t gettext_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
+
+/*
+ * Error code strings.
+ */
+static const char * const error_strings[] = {
+    /* 0 -- 4 */
+    "EB_SUCCESS",
+    "EB_ERR_MEMORY_EXHAUSTED",
+    "EB_ERR_EMPTY_FILE_NAME",
+    "EB_ERR_TOO_LONG_FILE_NAME",
+    "EB_ERR_BAD_FILE_NAME",
+
+    /* 5 -- 9 */
+    "EB_ERR_BAD_DIR_NAME",
+    "EB_ERR_TOO_LONG_WORD",
+    "EB_ERR_BAD_WORD",
+    "EB_ERR_EMPTY_WORD",
+    "EB_ERR_FAIL_GETCWD",
+
+    /* 10 -- 14 */
+    "EB_ERR_FAIL_OPEN_CAT",
+    "EB_ERR_FAIL_OPEN_CATAPP",
+    "EB_ERR_FAIL_OPEN_TEXT",
+    "EB_ERR_FAIL_OPEN_FONT",
+    "EB_ERR_FAIL_OPEN_APP",
+
+    /* 15 -- 19 */
+    "EB_ERR_FAIL_OPEN_BINARY",
+    "EB_ERR_FAIL_READ_CAT",
+    "EB_ERR_FAIL_READ_CATAPP",
+    "EB_ERR_FAIL_READ_TEXT",
+    "EB_ERR_FAIL_READ_FONT",
+
+    /* 20 -- 24 */
+    "EB_ERR_FAIL_READ_APP",
+    "EB_ERR_FAIL_READ_BINARY",
+    "EB_ERR_FAIL_SEEK_CAT",
+    "EB_ERR_FAIL_SEEK_CATAPP",
+    "EB_ERR_FAIL_SEEK_TEXT",
+
+    /* 25 -- 29 */
+    "EB_ERR_FAIL_SEEK_FONT",
+    "EB_ERR_FAIL_SEEK_APP",
+    "EB_ERR_FAIL_SEEK_BINARY",
+    "EB_ERR_UNEXP_CAT",
+    "EB_ERR_UNEXP_CATAPP",
+
+    /* 30 -- 34 */
+    "EB_ERR_UNEXP_TEXT",
+    "EB_ERR_UNEXP_FONT",
+    "EB_ERR_UNEXP_APP",
+    "EB_ERR_UNEXP_BINARY",
+    "EB_ERR_UNBOUND_BOOK",
+
+    /* 35 -- 39 */
+    "EB_ERR_UNBOUND_APP",
+    "EB_ERR_NO_SUB",
+    "EB_ERR_NO_APPSUB",
+    "EB_ERR_NO_FONT",
+    "EB_ERR_NO_TEXT",
+
+    /* 40 -- 44 */
+    "EB_ERR_NO_CUR_SUB",
+    "EB_ERR_NO_CUR_APPSUB",
+    "EB_ERR_NO_CUR_FONT",
+    "EB_ERR_NO_CUR_BINARY",
+    "EB_ERR_NO_SUCH_SUB",
+
+    /* 45 -- 49 */
+    "EB_ERR_NO_SUCH_APPSUB",
+    "EB_ERR_NO_SUCH_FONT",
+    "EB_ERR_NO_SUCH_CHAR_BMP",
+    "EB_ERR_NO_SUCH_CHAR_TEXT",
+    "EB_ERR_NO_SUCH_SEARCH",
+
+    /* 50 -- 54 */
+    "EB_ERR_NO_SUCH_HOOK",
+    "EB_ERR_NO_SUCH_BINARY",
+    "EB_ERR_STOP_CODE",
+    "EB_ERR_DIFF_CONTENT",
+    "EB_ERR_NO_PREV_SEARCH",
+
+    /* 55 -- 59 */
+    "EB_ERR_NO_SUCH_MULTI_ID",
+    "EB_ERR_NO_SUCH_ENTRY_ID",
+    "EB_ERR_TOO_MANY_WORDS",
+    "EB_ERR_NO_WORD",
+    "EB_ERR_NO_CANDIDATES"
+};
+
+/*
+ * Look up the error message corresponding to the error code `error_code'.
+ */
+const char *
+eb_error_string(error_code)
+    EB_Error_Code error_code;
+{
+    const char *string;
+
+    if (0 <= error_code && error_code < EB_NUMBER_OF_ERRORS)
+        string = error_strings[error_code];
+    else
+        string = "EB_ERR_UNKNOWN";
+
+    return string;
+}
+
 
 /*
  * Error messages.
@@ -118,12 +224,6 @@ static const char * const error_messages[] = {
 };
 
 /*
- * "Unknown error", the special error message.
- */
-static const char *unknown = N_("unknown error");
-
-
-/*
  * Look up the error message corresponding to the error code `error_code'.
  */
 const char *
@@ -135,7 +235,7 @@ eb_error_message(error_code)
     if (0 <= error_code && error_code < EB_NUMBER_OF_ERRORS)
         message = error_messages[error_code];
     else
-        message = unknown;
+        message = N_("unknown error");
 
 #ifdef ENABLE_NLS
     message = dgettext(EB_TEXT_DOMAIN_NAME, message);

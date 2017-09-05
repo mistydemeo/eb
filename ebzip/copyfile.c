@@ -13,151 +13,8 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <signal.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <errno.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
-#include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_FCNTL_H
-#include <fcntl.h>
-#else
-#include <sys/file.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
-#ifdef HAVE_UTIME_H
-#include <utime.h>
-#endif
-
-#if HAVE_DIRENT_H
-#include <dirent.h>
-#define NAMLEN(dirent) strlen((dirent)->d_name)
-#else /* not HAVE_DIRENT_H */
-#define dirent direct
-#define NAMLEN(dirent) (dirent)->d_namlen
-#if HAVE_SYS_NDIR_H
-#include <sys/ndir.h>
-#endif /* HAVE_SYS_NDIR_H */
-#if HAVE_SYS_DIR_H
-#include <sys/dir.h>
-#endif /* HAVE_SYS_DIR_H */
-#if HAVE_NDIR_H
-#include <ndir.h>
-#endif /* HAVE_NDIR_H */
-#endif /* not HAVE_DIRENT_H */
-
-#ifdef ENABLE_NLS
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
-#include <libintl.h>
-#endif
-
-#include "ebutils.h"
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-/*
- * Whence parameter for lseek().
- */
-#ifndef SEEK_SET
-#define SEEK_SET 0
-#define SEEK_CUR 1
-#define SEEK_END 2
-#endif
-
-/*
- * stat macros.
- */
-#ifdef  STAT_MACROS_BROKEN
-#ifdef  S_ISREG
-#undef  S_ISREG
-#endif
-#ifdef  S_ISDIR
-#undef  S_ISDIR
-#endif
-#endif  /* STAT_MACROS_BROKEN */
-
-#ifndef S_ISREG
-#define S_ISREG(m)   (((m) & S_IFMT) == S_IFREG)
-#endif
-#ifndef S_ISDIR
-#define S_ISDIR(m)   (((m) & S_IFMT) == S_IFDIR)
-#endif
-
-/*
- * The maximum length of path name.
- */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX        MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX        1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
-
-#include "getumask.h"
-#include "makedir.h"
-#include "samefile.h"
-#include "yesno.h"
-
-#include "eb.h"
-#include "error.h"
-#include "internal.h"
 #include "ebzip.h"
-
-/*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#ifdef __STDC__
-#define EB_P(p) p
-#else /* not __STDC__ */
-#define EB_P(p) ()
-#endif /* not __STDC__ */
-#endif /* EB_P */
-
-/*
- * Tricks for gettext.
- */
-#ifdef ENABLE_NLS
-#define _(string) gettext(string)
-#ifdef gettext_noop
-#define N_(string) gettext_noop(string)
-#else
-#define N_(string) (string)
-#endif
-#else
-#define _(string) (string)       
-#define N_(string) (string)
-#endif
+#include "ebutils.h"
 
 /*
  * File name to be deleted and file to be closed when signal is received.
@@ -385,7 +242,7 @@ ebzip_copy_file(out_file_name, in_file_name)
      * Set owner, group, permission, atime and mtime of `out_file'.
      * We ignore return values of `chown', `chmod' and `utime'.
      */
-#if defined(HAVE_UTIME)
+#if defined(HAVE_UTIME) && defined(HAVE_STRUCT_UTIMBUF)
     {
 	struct utimbuf utim;
 
@@ -459,7 +316,7 @@ ebzip_copy_files_in_directory(out_directory_name, in_directory_name)
          */
         entry = readdir(dir);
         if (entry == NULL)
-            goto failed;
+            break;
 
 	eb_compose_path_name(in_directory_name, entry->d_name, in_path_name);
 	eb_compose_path_name(out_directory_name, entry->d_name, out_path_name);

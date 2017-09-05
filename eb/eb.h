@@ -26,6 +26,10 @@ extern "C" {
 #include <eb/defs.h>
 #endif
 
+#ifdef __STDC__
+#include <stdarg.h>
+#endif
+
 /*
  * Function declarations.
  */
@@ -65,6 +69,11 @@ EB_Error_Code eb_search_keyword EB_P((EB_Book *, const char * const []));
 /* lock.c */
 int eb_pthread_enabled EB_P((void));
 
+/* log.c */
+void eb_set_log_function EB_P((void (*functoin)(const char *, va_list)));
+void eb_log EB_P((const char *message, ...));
+void eb_log_stderr EB_P((const char *message, va_list));
+
 /* menu.c */
 int eb_have_menu EB_P((EB_Book *));
 EB_Error_Code eb_menu EB_P((EB_Book *, EB_Position *));
@@ -88,7 +97,7 @@ EB_Error_Code eb_search_multi EB_P((EB_Book *, EB_Multi_Search_Code,
 EB_Error_Code eb_hit_list EB_P((EB_Book *, int, EB_Hit *, int *));
 
 /* subbook.c */
-EB_Error_Code eb_initialize_all_subbooks EB_P((EB_Book *));
+EB_Error_Code eb_load_all_subbooks EB_P((EB_Book *));
 EB_Error_Code eb_subbook_list EB_P((EB_Book *, EB_Subbook_Code *, int *));
 EB_Error_Code eb_subbook EB_P((EB_Book *, EB_Subbook_Code *));
 EB_Error_Code eb_subbook_title EB_P((EB_Book *, char *));
@@ -102,6 +111,9 @@ void eb_unset_subbook EB_P((EB_Book *));
 /* word.c */
 int eb_have_word_search EB_P((EB_Book *));
 EB_Error_Code eb_search_word EB_P((EB_Book *, const char *));
+
+/* for backward compatibility */
+#define eb_initialize_all_subbooks eb_load_all_subbooks
 
 #ifdef __cplusplus
 }

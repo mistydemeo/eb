@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
+#include "build-pre.h"
 
 /*
  * Convert a string from JIS X 0208 to EUC JP.

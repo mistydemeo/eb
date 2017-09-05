@@ -3,12 +3,12 @@ dnl * Process this file with autoconf to produce a configure script.
 dnl *
 AC_INIT(eb/eb.c)
 AC_PREREQ(2.49)
-AM_INIT_AUTOMAKE(eb, 3.1beta0)
+AM_INIT_AUTOMAKE(eb, 3.1beta1)
 
 dnl *
 dnl * Library version info.
 dnl *
-LIBEB_VERSION_INFO=4:2:0
+LIBEB_VERSION_INFO=5:0:0
 AC_SUBST(LIBEB_VERSION_INFO)
 
 dnl *
@@ -37,6 +37,21 @@ dnl *
 dnl * GNU gettext
 dnl * 
 eb_GNU_GETTEXT
+
+dnl *
+dnl * --enable-debug option.
+dnl *
+AC_ARG_ENABLE(debug,
+[  --enable-debug         enable debug code [[no]]],
+[case "${enableval}" in
+   yes) ENABLE_DEBUG=yes  ;;
+   no)  ENABLE_DEBUG=no ;;
+   *)   AC_MSG_ERROR(invalid argument to --enable-debug) ;;
+esac], ENABLE_DEBUG=yes)
+
+if test $ENABLE_DEBUG = yes ; then
+    AC_DEFINE(ENABLE_DEBUG, 1, [Define if enabling debug codes.])
+fi
 
 dnl *
 dnl * --enable-pthread option.
@@ -204,8 +219,8 @@ AC_HEADER_STDC
 AC_HEADER_STAT
 AC_HEADER_TIME
 AC_HEADER_DIRENT
-AC_CHECK_HEADERS(direct.h fcntl.h limits.h memory.h stdlib.h string.h \
-	syslog.h unistd.h utime.h)
+AC_CHECK_HEADERS(direct.h fcntl.h limits.h memory.h pthread.h stdlib.h \
+	string.h syslog.h unistd.h utime.h sys/utime.h)
 
 dnl * 
 dnl * Structures.

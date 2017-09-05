@@ -1,29 +1,29 @@
 lib_LTLIBRARIES = libeb.la
 pkginclude_HEADERS = appendix.h binary.h defs.h eb.h error.h font.h \
 	text.h zio.h
-noinst_HEADERS = ebconfig.h
+noinst_HEADERS = build-pre.h
 
 INCLUDES = -DEB_BUILD_LIBRARY $(INTLINCS) $(ZLIBINCS)
 
 libeb_la_SOURCES = appendix.c appsub.c bcd.c binary.c bitmap.c book.c \
-   copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
-   hook.c jacode.c keyword.c lock.c match.c menu.c memmove.c multi.c \
-   narwalt.c narwfont.c search.c setword.c stopcode.c strcasecmp.c \
-   subbook.c text.c widealt.c widefont.c word.c zio.c
+	copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
+	hook.c jacode.c keyword.c lock.c log.c match.c menu.c memmove.c \
+	multi.c narwalt.c narwfont.c search.c setword.c stopcode.c \
+	strcasecmp.c subbook.c text.c widealt.c widefont.c word.c zio.c
 libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
 
-EXTRA_DIST = internal.h.in
-CLEANFILES = stamp-internal-h stamp-widealt-h stamp-widefont-h \
-   internal.h widealt.c widefont.c
-BUILT_SOURCES = internal.h widealt.c widefont.c
+EXTRA_DIST = build-post.h.in
+CLEANFILES = stamp-build-post-h stamp-widealt-h stamp-widefont-h \
+	build-post.h widealt.c widefont.c
+BUILT_SOURCES = build-post.h widealt.c widefont.c
 
-internal.h: stamp-internal-h
-stamp-internal-h: internal.h.in Makefile
-	rm -f internal.h.tmp
+build-post.h: stamp-build-post-h
+stamp-build-post-h: build-post.h.in Makefile
+	rm -f build-post.h.tmp
 	sed -e 's;\@localedir\@;$(localedir);' \
-	   $(srcdir)/internal.h.in > internal.h.tmp
-	$(top_srcdir)/move-if-change internal.h.tmp internal.h
-	@echo timestamp > stamp-internal-h
+	   $(srcdir)/build-post.h.in > build-post.h.tmp
+	$(top_srcdir)/move-if-change build-post.h.tmp build-post.h
+	@echo timestamp > stamp-build-post-h
 
 widealt.c: stamp-widealt-h
 stamp-widealt-h: narwalt.c Makefile

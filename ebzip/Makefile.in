@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4h from Makefile.am.
+# Makefile.in generated automatically by automake 1.4j from Makefile.am.
 
 # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -96,8 +96,8 @@ XGETTEXT = @XGETTEXT@
 ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
-_am_include = @_am_include@
-_am_quote = @_am_quote@
+am__include = @am__include@
+am__quote = @am__quote@
 install_sh = @install_sh@
 
 localedir = $(datadir)/locale
@@ -183,8 +183,11 @@ install-binPROGRAMS: $(bin_PROGRAMS)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(bindir)
 	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    f=`echo $$p|sed 's/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
+	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  if test -f $$p \
+	     || test -f $$p1 \
+	  ; then \
+	    f=`echo $$p1|sed '$(transform);s/$$/$(EXEEXT)/'`; \
 	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/$$f"; \
 	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(INSTALL_PROGRAM) $$p $(DESTDIR)$(bindir)/$$f; \
 	  else :; fi; \
@@ -200,7 +203,7 @@ uninstall-binPROGRAMS:
 
 clean-binPROGRAMS:
 	-test -z "$(bin_PROGRAMS)" || rm -f $(bin_PROGRAMS)
-ebzip$(EXEEXT): $(ebzip_OBJECTS) $(ebzip_DEPENDENCIES)
+ebzip$(EXEEXT): $(ebzip_OBJECTS) $(ebzip_DEPENDENCIES) 
 	@rm -f ebzip$(EXEEXT)
 	$(LINK) $(ebzip_LDFLAGS) $(ebzip_OBJECTS) $(ebzip_LDADD) $(LIBS)
 
@@ -210,15 +213,15 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/copyfile.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/ebzip.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/ebzip1.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/unzipbook.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/unzipfile.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/zipbook.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/zipfile.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/zipinfobook.Po@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/zipinfofile.Po@_am_quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/copyfile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/ebzip.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/ebzip1.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/unzipbook.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/unzipfile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/zipbook.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/zipfile.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/zipinfobook.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/zipinfofile.Po@am__quote@
 
 distclean-depend:
 	-rm -rf $(DEPDIR)
@@ -270,10 +273,10 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 GTAGS:
 	here=`CDPATH=: && cd $(top_builddir) && pwd` \
 	  && cd $(top_srcdir) \
-	  && gtags -i $$here
+	  && gtags -i $(GTAGS_ARGS) $$here
 
 distclean-tags:
-	-rm -f TAGS ID
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
@@ -366,16 +369,17 @@ mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 
 uninstall-am: uninstall-binPROGRAMS uninstall-info-am
 
-.PHONY: all all-am check check-am clean clean-binPROGRAMS clean-generic \
-	clean-libtool distclean distclean-compile distclean-depend \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-exec install-exec-am \
-	install-info install-info-am install-man install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool tags uninstall \
-	uninstall-am uninstall-binPROGRAMS uninstall-info-am
+.PHONY: GTAGS all all-am check check-am clean clean-binPROGRAMS \
+	clean-generic clean-libtool distclean distclean-compile \
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-binPROGRAMS install-data install-data-am \
+	install-exec install-exec-am install-info install-info-am \
+	install-man install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool tags uninstall uninstall-am \
+	uninstall-binPROGRAMS uninstall-info-am
 
 
 install-exec-hook:

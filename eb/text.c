@@ -13,12 +13,11 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
 #include "text.h"
+#include "build-post.h"
 
 /*
  * The maximum number of arguments for an escape sequence.
@@ -74,20 +73,81 @@ static EB_Error_Code eb_read_text_internal EB_P((EB_Book *, EB_Appendix *,
     EB_Hookset *, void *, size_t, char *, ssize_t *));
 
 /*
- * Initialize text processing status.
+ * Initialize text context of `book'.
  */
 void
-eb_initialize_text(book)
+eb_initialize_text_context(book)
     EB_Book *book;
 {
-    pthread_mutex_lock(&cache_mutex);
+    LOG(("in: eb_initialize_text_context(book=%d)", (int)book->code));
 
-    if (book->code == cache_book_code)
-	cache_book_code = EB_BOOK_NONE;
     book->text_context.code = EB_TEXT_NONE;
+    book->text_context.location = -1;
+    book->text_context.unprocessed = NULL;
+    book->text_context.is_candidate = 0;
+    book->text_context.unprocessed_size = 0;
+    book->text_context.in_step = 0;
+    book->text_context.out_step = 0;
+    book->text_context.narrow_flag = 0;
+    book->text_context.printable_count = 0;
+    book->text_context.file_end_flag = 0;
+    book->text_context.text_end_flag = 0;
+    book->text_context.skip_code = 0;
+    book->text_context.auto_stop_code = 0;
+    book->text_context.candidate[0] = '\0';
     book->text_context.is_candidate = 0;
 
-    pthread_mutex_unlock(&cache_mutex);
+    LOG(("out: eb_initialize_text_context()"));
+}
+
+
+/*
+ * Finalize text context of `book'.
+ */
+void
+eb_finalize_text_context(book)
+    EB_Book *book;
+{
+    LOG(("in: eb_finalize_text_context(book=%d)", (int)book->code));
+
+    if (book->text_context.unprocessed != NULL)
+	free(book->text_context.unprocessed);
+    book->text_context.unprocessed = NULL;
+
+    LOG(("out: eb_finalize_text_context()"));
+}
+
+
+/*
+ * Reset text context of `book'.
+ */
+void
+eb_reset_text_context(book)
+    EB_Book *book;
+{
+    LOG(("in: eb_reset_text_context(book=%d)", (int)book->code));
+
+    eb_finalize_text_context(book);
+    eb_initialize_text_context(book);
+
+    LOG(("out: eb_reset_text_context()"));
+}
+
+
+/*
+ * Invalidate text context of `book'.
+ */
+void
+eb_invalidate_text_context(book)
+    EB_Book *book;
+{
+    LOG(("in: eb_invalidate_text_context(book=%d)", (int)book->code));
+
+    eb_finalize_text_context(book);
+    eb_initialize_text_context(book);
+    book->text_context.code = EB_TEXT_INVALID;
+
+    LOG(("out: eb_invalidate_text_context()"));
 }
 
 
@@ -101,11 +161,10 @@ eb_seek_text(book, position)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock cache data and the book.
-     */
     pthread_mutex_lock(&cache_mutex);
     eb_lock(&book->lock);
+    LOG(("in: eb_seek_text(book=%d, position={%d,%d})", (int)book->code,
+	position->page, position->offset));
 
     /*
      * Current subbook must have been set and START file must be exist.
@@ -148,6 +207,7 @@ eb_seek_text(book, position)
     /*
      * Unlock cache data and the book.
      */
+    LOG(("out: eb_seek_text() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
     pthread_mutex_unlock(&cache_mutex);
 
@@ -157,6 +217,7 @@ eb_seek_text(book, position)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_seek_text() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     pthread_mutex_unlock(&cache_mutex);
     return error_code;
@@ -173,10 +234,8 @@ eb_tell_text(book, position)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_tell_text(book=%d)", (int)book->code));
 
     /*
      * Current subbook must have been set and START file must be exist.
@@ -193,9 +252,8 @@ eb_tell_text(book, position)
     position->page = book->text_context.location / EB_SIZE_PAGE + 1;
     position->offset = book->text_context.location % EB_SIZE_PAGE;
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_seek_text(position={%d,%d}) = %s", 
+	position->page, position->offset, eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -204,6 +262,7 @@ eb_tell_text(book, position)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_seek_text() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }
@@ -227,14 +286,13 @@ eb_read_text(book, appendix, hookset, container, text_max_length, text,
     const EB_Hook *hook;
     EB_Position position;
 
-    /*
-     * Lock the book, appendix and hookset.
-     */
     eb_lock(&book->lock);
     if (appendix != NULL)
 	eb_lock(&appendix->lock);
     if (hookset != NULL)
 	eb_lock(&hookset->lock);
+    LOG(("in: eb_read_text(book=%d, appendix=%d, text_max_length=%ld)",
+	(int)book->code, (int)appendix->code, (long)text_max_length));
 
     /*
      * Current subbook must have been set and START file must be exist.
@@ -306,9 +364,8 @@ eb_read_text(book, appendix, hookset, container, text_max_length, text,
     if (error_code != EB_SUCCESS)
 	goto failed;
 
-    /*
-     * Unlock the book, appendix and hookset.
-     */
+    LOG(("out: eb_read_text(text_length=%ld) = %s", (long)*text_length,
+	eb_error_string(EB_SUCCESS)));
     if (hookset != &eb_default_hookset)
 	eb_unlock(&hookset->lock);
     if (appendix != NULL)
@@ -322,7 +379,8 @@ eb_read_text(book, appendix, hookset, container, text_max_length, text,
   failed:
     *text = '\0';
     *text_length = -1;
-    book->text_context.code = EB_TEXT_INVALID;
+    eb_invalidate_text_context(book);
+    LOG(("out: eb_read_text() = %s", eb_error_string(error_code)));
     if (hookset != &eb_default_hookset)
 	eb_unlock(&hookset->lock);
     if (appendix != NULL)
@@ -349,14 +407,13 @@ eb_read_heading(book, appendix, hookset, container, text_max_length, text,
     EB_Error_Code error_code;
     const EB_Hook *hook;
 
-    /*
-     * Lock the book, appendix and hookset.
-     */
     eb_lock(&book->lock);
     if (appendix != NULL)
 	eb_lock(&appendix->lock);
     if (hookset != NULL)
 	eb_lock(&hookset->lock);
+    LOG(("in: eb_read_heading(book=%d, appendix=%d, text_max_length=%ld)",
+	(int)book->code, (int)appendix->code, (long)text_max_length));
 
     /*
      * Current subbook must have been set and START file must be exist.
@@ -417,9 +474,8 @@ eb_read_heading(book, appendix, hookset, container, text_max_length, text,
     if (error_code != EB_SUCCESS)
 	goto failed;
 
-    /*
-     * Unlock the book, appendix and hookset.
-     */
+    LOG(("out: eb_read_heading(text_length=%ld) = %s", (long)*text_length,
+	eb_error_string(EB_SUCCESS)));
     if (hookset != &eb_default_hookset)
 	eb_unlock(&hookset->lock);
     if (appendix != NULL)
@@ -433,7 +489,8 @@ eb_read_heading(book, appendix, hookset, container, text_max_length, text,
   failed:
     *text = '\0';
     *text_length = -1;
-    book->text_context.code = EB_TEXT_INVALID;
+    eb_invalidate_text_context(book);
+    LOG(("out: eb_read_heading() = %s", eb_error_string(error_code)));
     if (hookset != &eb_default_hookset)
 	eb_unlock(&hookset->lock);
     if (appendix != NULL)
@@ -455,10 +512,9 @@ eb_read_rawtext(book, text_max_length, text, text_length)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_read_rawtext(book=%d, text_max_length=%ld)",
+	(int)book->code, (long)text_max_length));
 
     /*
      * Current subbook must have been set and START file must be exist.
@@ -500,9 +556,8 @@ eb_read_rawtext(book, text_max_length, text, text_length)
 	goto failed;
     }
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_read_rawtext(text_length=%ld) = %s", (long)*text_length,
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -512,7 +567,8 @@ eb_read_rawtext(book, text_max_length, text, text_length)
      */
   failed:
     *text_length = -1;
-    book->text_context.code = EB_TEXT_INVALID;
+    eb_invalidate_text_context(book);
+    LOG(("out: eb_read_rawtext() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }
@@ -543,10 +599,10 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
     unsigned int argv[EB_MAX_ARGV];
     int argc;
 
-    /*
-     * Lock cache data.
-     */
     pthread_mutex_lock(&cache_mutex);
+    LOG(("in: eb_read_text_internal(book=%d, appendix=%d, \
+text_max_length=%ld)",
+	(int)book->code, (int)appendix->code, (long)text_max_length));
 
     /*
      * Initialize variables.
@@ -1294,9 +1350,8 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
   succeeded:
     *text_length = (context->out - text);
 
-    /*
-     * Unlock cache data.
-     */
+    LOG(("out: eb_read_text_internal(text_length=%ld) = %s",
+	(long)*text_length, eb_error_string(EB_SUCCESS)));
     pthread_mutex_unlock(&cache_mutex);
 
     return EB_SUCCESS;
@@ -1308,9 +1363,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
   failed:
     if (error_code == EB_ERR_FAIL_READ_TEXT)
 	cache_book_code = EB_BOOK_NONE;
-    *text = '\0';
-    *text_length = -1;
-    context->code = EB_TEXT_INVALID;
+    LOG(("out: eb_read_text_internal() = %s", eb_error_string(error_code)));
     pthread_mutex_unlock(&cache_mutex);
     return error_code;
 }
@@ -1324,7 +1377,11 @@ eb_write_text_byte1(book, byte1)
     EB_Book *book;
     int byte1;
 {
+    EB_Error_Code error_code;
     char stream[1];
+
+    LOG(("in: eb_write_text_byte1(book=%d, byte1=%d)",
+	(int)book->code, byte1));
 
     /*
      * If the text buffer has enough space to write `byte1',
@@ -1333,18 +1390,26 @@ eb_write_text_byte1(book, byte1)
     if (book->text_context.unprocessed != NULL
 	|| book->text_context.out_rest_length < 1) {
 	*(unsigned char *)stream = byte1;
-	return eb_write_text(book, stream, 1);
+	error_code = eb_write_text(book, stream, 1);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+    } else {
+	*(book->text_context.out) = byte1;
+	book->text_context.out++;
+	book->text_context.out_rest_length--;
+	book->text_context.out_step++;
     }
 
-    /*
-     * Write the byte.
-     */
-    *(book->text_context.out) = byte1;
-    book->text_context.out++;
-    book->text_context.out_rest_length--;
-    book->text_context.out_step++;
+    LOG(("out: eb_write_text_byte1() = %s", eb_error_string(EB_SUCCESS)));
 
     return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    LOG(("out: eb_write_text_byte1() = %s", eb_error_string(error_code)));
+    return error_code;
 }
 
 
@@ -1357,7 +1422,11 @@ eb_write_text_byte2(book, byte1, byte2)
     int byte1;
     int byte2;
 {
+    EB_Error_Code error_code;
     char stream[2];
+
+    LOG(("in: eb_write_text_byte2(book=%d, byte1=%d, byte2=%d)",
+	(int)book->code, byte1, byte2));
 
     /*
      * If the text buffer has enough space to write `byte1' and `byte2',
@@ -1367,20 +1436,28 @@ eb_write_text_byte2(book, byte1, byte2)
 	|| book->text_context.out_rest_length < 2) {
 	*(unsigned char *)stream = byte1;
 	*(unsigned char *)(stream + 1) = byte1;
-	return eb_write_text(book, stream, 2);
+	error_code = eb_write_text(book, stream, 2);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+    } else {
+	*(book->text_context.out) = byte1;
+	book->text_context.out++;
+	*(book->text_context.out) = byte2;
+	book->text_context.out++;
+	book->text_context.out_rest_length -= 2;
+	book->text_context.out_step += 2;
     }
 
-    /*
-     * Write the two bytes.
-     */
-    *(book->text_context.out) = byte1;
-    book->text_context.out++;
-    *(book->text_context.out) = byte2;
-    book->text_context.out++;
-    book->text_context.out_rest_length -= 2;
-    book->text_context.out_step += 2;
+    LOG(("out: eb_write_text_byte2() = %s", eb_error_string(EB_SUCCESS)));
 
     return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    LOG(("out: eb_write_text_byte2() = %s", eb_error_string(error_code)));
+    return error_code;
 }
 
 
@@ -1392,27 +1469,40 @@ eb_write_text_string(book, string)
     EB_Book *book;
     const char *string;
 {
+    EB_Error_Code error_code;
     size_t string_length;
+
+    LOG(("in: eb_write_text_string(book=%d, string=%s)",
+	(int)book->code, eb_quoted_string(string)));
 
     /*
      * If the text buffer has enough space to write `sting',
      * save the string in `book->text_context.unprocessed'.
      */
     string_length = strlen(string);
+
     if (book->text_context.unprocessed != NULL
 	|| book->text_context.out_rest_length < string_length) {
-	return eb_write_text(book, string, string_length);
+	error_code = eb_write_text(book, string, string_length);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+    } else {
+	memcpy(book->text_context.out, string, string_length);
+	book->text_context.out += string_length;
+	book->text_context.out_rest_length -= string_length;
+	book->text_context.out_step += string_length;
     }
 
-    /*
-     * Write the string.
-     */
-    memcpy(book->text_context.out, string, string_length);
-    book->text_context.out += string_length;
-    book->text_context.out_rest_length -= string_length;
-    book->text_context.out_step += string_length;
+    LOG(("out: eb_write_text_string() = %s", eb_error_string(EB_SUCCESS)));
 
     return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    LOG(("out: eb_write_text_string() = %s", eb_error_string(error_code)));
+    return error_code;
 }
 
 
@@ -1425,7 +1515,11 @@ eb_write_text(book, stream, stream_length)
     const char *stream;
     size_t stream_length;
 {
+    EB_Error_Code error_code;
     char *reallocated;
+
+    LOG(("in: eb_write_text(book=%d, stream=%s)",
+	(int)book->code, eb_quoted_stream(stream, stream_length)));
 
     /*
      * If the text buffer has enough space to write `stream',
@@ -1438,19 +1532,21 @@ eb_write_text(book, stream, stream_length)
 	    free(book->text_context.unprocessed);
 	    book->text_context.unprocessed = NULL;
 	    book->text_context.unprocessed_size = 0;
-	    return EB_ERR_MEMORY_EXHAUSTED;
+	    error_code = EB_ERR_MEMORY_EXHAUSTED;
+	    goto failed;
 	}
 	memcpy(reallocated + book->text_context.unprocessed_size, stream,
 	    stream_length);
 	book->text_context.unprocessed = reallocated;
 	book->text_context.unprocessed_size += stream_length;
-	return EB_SUCCESS;
 	    
     } else if (book->text_context.out_rest_length < stream_length) {
 	book->text_context.unprocessed
 	    = (char *)malloc(book->text_context.out_step + stream_length);
-	if (book->text_context.unprocessed == NULL)
-	    return EB_ERR_MEMORY_EXHAUSTED;
+	if (book->text_context.unprocessed == NULL) {
+	    error_code = EB_ERR_MEMORY_EXHAUSTED;
+	    goto failed;
+	}
 	book->text_context.unprocessed_size
 	    = book->text_context.out_step + stream_length;
 	memcpy(book->text_context.unprocessed, 
@@ -1460,18 +1556,24 @@ eb_write_text(book, stream, stream_length)
 	    stream, stream_length);
 	book->text_context.out -= book->text_context.out_step;
 	book->text_context.out_step = 0;
-	return EB_SUCCESS;
+
+    } else {
+	memcpy(book->text_context.out, stream, stream_length);
+	book->text_context.out += stream_length;
+	book->text_context.out_rest_length -= stream_length;
+	book->text_context.out_step += stream_length;
     }
 
-    /*
-     * Write the stream.
-     */
-    memcpy(book->text_context.out, stream, stream_length);
-    book->text_context.out += stream_length;
-    book->text_context.out_rest_length -= stream_length;
-    book->text_context.out_step += stream_length;
+    LOG(("out: eb_write_text() = %s", eb_error_string(EB_SUCCESS)));
 
     return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    LOG(("out: eb_write_text() = %s", eb_error_string(error_code)));
+    return error_code;
 }
 
 
@@ -1482,8 +1584,13 @@ const char *
 eb_current_candidate(book)
     EB_Book *book;
 {
+    LOG(("in: eb_current_candidate(book=%d)", (int)book->code));
+
     if (!book->text_context.is_candidate)
 	book->text_context.candidate[0] = '\0';
+
+    LOG(("out: eb_current_candidate() = %s", 
+	eb_quoted_string(book->text_context.candidate)));
 
     return book->text_context.candidate;
 }
@@ -1501,12 +1608,10 @@ eb_forward_text(book, hookset)
     char text[EB_SIZE_PAGE];
     ssize_t text_length;
 
-    /*
-     * Lock the book and hookset.
-     */
     eb_lock(&book->lock);
     if (hookset != NULL)
 	eb_lock(&hookset->lock);
+    LOG(("in: eb_forward_text(book=%d)", (int)book->code));
 
     /*
      * Current subbook must have been set and START file must be exist.
@@ -1580,6 +1685,7 @@ eb_forward_text(book, hookset)
      * Unlock the book and hookset.
      */
   succeeded:
+    LOG(("out: eb_forward_text() = %s", eb_error_string(EB_SUCCESS)));
     if (hookset != &eb_default_hookset)
 	eb_unlock(&hookset->lock);
     eb_unlock(&book->lock);
@@ -1590,7 +1696,8 @@ eb_forward_text(book, hookset)
      * Discard cache if read error occurs.
      */
   failed:
-    book->text_context.code = EB_TEXT_INVALID;
+    eb_invalidate_text_context(book);
+    LOG(("out: eb_forward_text() = %s", eb_error_string(error_code)));
     if (hookset != &eb_default_hookset)
 	eb_unlock(&hookset->lock);
     eb_unlock(&book->lock);
@@ -1610,10 +1717,8 @@ eb_forward_heading(book)
     char text[EB_SIZE_PAGE];
     ssize_t text_length;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_forward_heading(book=%d)", (int)book->code));
 
     /*
      * if the text-end flag has been set, we simply unset the flag
@@ -1659,6 +1764,7 @@ eb_forward_heading(book)
      * Unlock cache data.
      */
   succeeded:
+    LOG(("out: eb_forward_heading() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
     return EB_SUCCESS;
 
@@ -1667,7 +1773,8 @@ eb_forward_heading(book)
      * Discard cache if read error occurs.
      */
   failed:
-    book->text_context.code = EB_TEXT_INVALID;
+    eb_invalidate_text_context(book);
+    LOG(("out: eb_forward_heading() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }

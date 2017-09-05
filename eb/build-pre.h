@@ -13,8 +13,8 @@
  * GNU General Public License for more details.
  */
 
-#ifndef EB_EBCONFIG_H
-#define EB_EBCONFIG_H
+#ifndef EB_BUILD_PRE_H
+#define EB_BUILD_PRE_H
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,21 +173,14 @@ char *memset();
 #define tolower(c) (('A' <= (c) && (c) <= 'Z') ? (c) + 0x20 : (c))
 
 /*
- * Trick for difference of path notation between UNIX and DOS.
- */
-#ifndef DOS_FILE_PATH
-#define F_(path1, path2) (path1)
-#else
-#define F_(path1, path2) (path2)
-#endif
-
-/*
  * For (void *).
  */
+#ifndef VOID
 #ifdef __STDC__
 #define VOID void
 #else
 #define VOID char
+#endif
 #endif
 
 /*
@@ -213,11 +206,11 @@ char *memset();
  * Trick for function protypes.
  */
 #ifndef EB_P
-#if defined(__STDC__) || defined(__cplusplus)
+#if defined(__STDC__) || defined(__cplusplus) || defined(WIN32)
 #define EB_P(p) p
-#else /* not __STDC__ && not __cplusplus */
+#else /* not (__STDC__ && __cplusplus && WIN32) */
 #define EB_P(p) ()
-#endif /* not __STDC__ && not __cplusplus */
+#endif /* not (__STDC__ && __cplusplus && WIN32) */
 #endif /* EB_P */
 
 /*
@@ -232,4 +225,4 @@ char *memset();
 #define strncasecmp eb_strncasecmp
 #endif
 
-#endif /* EB_EBCONFIG_H */
+#endif /* EB_BUILD_PRE_H */

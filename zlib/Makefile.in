@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4h from Makefile.am.
+# Makefile.in generated automatically by automake 1.4j from Makefile.am.
 
 # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -74,8 +74,8 @@ PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
-_am_include = @_am_include@
-_am_quote = @_am_quote@
+am__include = @am__include@
+am__quote = @am__quote@
 install_sh = @install_sh@
 
 AUTOMAKE_OPTIONS = foreign
@@ -186,7 +186,7 @@ uninstall-libLTLIBRARIES:
 
 clean-libLTLIBRARIES:
 	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-libz.la: $(libz_la_OBJECTS) $(libz_la_DEPENDENCIES)
+libz.la: $(libz_la_OBJECTS) $(libz_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libz_la_LDFLAGS) $(libz_la_OBJECTS) $(libz_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
@@ -195,20 +195,20 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/adler32.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/compress.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/crc32.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/deflate.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/gzio.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/infblock.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/infcodes.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/inffast.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/inflate.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/inftrees.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/infutil.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/trees.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/uncompr.Plo@_am_quote@
-@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/zutil.Plo@_am_quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/adler32.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/compress.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/crc32.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/deflate.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/gzio.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/infblock.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/infcodes.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/inffast.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/inflate.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/inftrees.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/infutil.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/trees.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/uncompr.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@$(DEPDIR)/zutil.Plo@am__quote@
 
 distclean-depend:
 	-rm -rf $(DEPDIR)
@@ -277,10 +277,10 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 GTAGS:
 	here=`CDPATH=: && cd $(top_builddir) && pwd` \
 	  && cd $(top_srcdir) \
-	  && gtags -i $$here
+	  && gtags -i $(GTAGS_ARGS) $$here
 
 distclean-tags:
-	-rm -f TAGS ID
+	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
@@ -336,7 +336,9 @@ distcheck: dist
 	  && $(MAKE) $(AM_MAKEFLAGS) install \
 	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
 	  && $(MAKE) $(AM_MAKEFLAGS) uninstall \
-	  && test `find $$dc_install_base -type f -print | wc -l` -le 1 \
+	  && (test `find $$dc_install_base -type f -print | wc -l` -le 1 \
+	     || (echo "Error: files left after uninstall" 1>&2; \
+	         exit 1) ) \
 	  && $(MAKE) $(AM_MAKEFLAGS) dist \
 	  && $(MAKE) $(AM_MAKEFLAGS) distclean \
 	  && rm -f $(distdir).tar.gz \
@@ -419,7 +421,7 @@ mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 uninstall-am: uninstall-includeHEADERS uninstall-info-am \
 	uninstall-libLTLIBRARIES
 
-.PHONY: all all-am check check-am clean clean-generic \
+.PHONY: GTAGS all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool dist dist-all distcheck \
 	distclean distclean-compile distclean-depend distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am info \

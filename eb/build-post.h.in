@@ -13,8 +13,8 @@
  * GNU General Public License for more details.
  */
 
-#ifndef EB_INTERNAL_H
-#define EB_INTERNAL_H
+#ifndef EB_BUILD_POST_H
+#define EB_BUILD_POST_H
 
 #include "defs.h"
 
@@ -77,6 +77,7 @@
  */
 #define EB_ARRANGE_FIXED		0
 #define EB_ARRANGE_VARIABLE		1
+#define EB_ARRANGE_INVALID		-1
 
 /*
  * Binary data types.
@@ -92,6 +93,15 @@
  * The maximum index depth of search indexes.
  */
 #define EB_MAX_INDEX_DEPTH		6
+
+/*
+ * Trace log macro.
+ */
+#ifdef ENABLE_DEBUG
+#define LOG(x) do {eb_log x;} while (0)
+#else
+#define LOG(x)
+#endif
 
 /*
  * Get an unsigned value from an octet stream buffer.
@@ -125,10 +135,17 @@ extern EB_Hookset eb_default_hookset;
  * Function declarations.
  */
 /* appendix.c */
-void eb_initialize_alt_cache EB_P((EB_Appendix *));
+void eb_initialize_alt_caches EB_P((EB_Appendix *));
+void eb_finalize_alt_caches EB_P((EB_Appendix *));
+
+/* appsub.c */
+void eb_initialize_appendix_subbooks EB_P((EB_Appendix *));
+void eb_finalize_appendix_subbooks EB_P((EB_Appendix *));
 
 /* binary.c */
-void eb_initialize_binary EB_P((EB_Book *));
+void eb_initialize_binary_context EB_P((EB_Book *));
+void eb_finalize_binary_context EB_P((EB_Book *));
+void eb_reset_binary_context EB_P((EB_Book *));
 
 /* filename.c */
 EB_Error_Code eb_canonicalize_path_name EB_P((char *));
@@ -150,7 +167,8 @@ void eb_compose_path_name3 EB_P((const char *, const char *, const char *,
 void eb_path_name_zio_code EB_P((const char *, Zio_Code, Zio_Code *));
 
 /* font.c */
-EB_Error_Code eb_initialize_font EB_P((EB_Book *));
+void eb_initialize_fonts EB_P((EB_Book *));
+void eb_finalize_fonts EB_P((EB_Book *));
 
 /* hook.c */
 void eb_initialize_default_hookset EB_P((void));
@@ -172,6 +190,10 @@ void eb_unlock EB_P((EB_Lock *));
 #define eb_finalize_lock(x)
 #endif /* not ENABLE_PTHREAD */
 
+/* log.c */
+const char *eb_quoted_stream EB_P((const char *, size_t));
+const char *eb_quoted_string EB_P((const char *));
+
 /* match.c */
 int eb_match_canonicalized_word EB_P((const char *, const char *, size_t));
 int eb_exact_match_canonicalized_word EB_P((const char *, const char *,
@@ -185,13 +207,21 @@ int eb_exact_match_word_jis EB_P((const char *, const char *, size_t));
 EB_Error_Code eb_initialize_messages EB_P((EB_Book *));
 
 /* multi.c */
-EB_Error_Code eb_initialize_multi_search EB_P((EB_Book *));
+void eb_initialize_multi_searches EB_P((EB_Book *));
+void eb_finalize_multi_searches EB_P((EB_Book *));
+EB_Error_Code eb_load_multi_searches EB_P((EB_Book *));
 
 /* narwfont.c */
-EB_Error_Code eb_initialize_narrow_font EB_P((EB_Book *));
+EB_Error_Code eb_load_narrow_font EB_P((EB_Book *));
 
 /* search.c */
-void eb_initialize_search EB_P((EB_Book *));
+void eb_initialize_search_contexts EB_P((EB_Book *));
+void eb_finalize_search_contexts EB_P((EB_Book *));
+void eb_reset_search_contexts EB_P((EB_Book *));
+void eb_initialize_search EB_P((EB_Search *));
+void eb_finalize_search EB_P((EB_Search *));
+void eb_initialize_searches EB_P((EB_Book *book));
+void eb_finalize_searches EB_P((EB_Book *book));
 EB_Error_Code eb_presearch_word EB_P((EB_Book *, EB_Search_Context *));
 EB_Error_Code eb_hit_list EB_P((EB_Book *, int, EB_Hit *, int *));
 
@@ -205,12 +235,19 @@ EB_Error_Code eb_set_keyword EB_P((EB_Book *, const char *, char *, char *,
 EB_Error_Code eb_set_multiword EB_P((EB_Book *, EB_Multi_Search_Code,
     EB_Multi_Entry_Code, const char *, char *, char *, EB_Word_Code *));
 
+/* subbook.c */
+void eb_initialize_subbooks EB_P((EB_Book *book));
+void eb_finalize_subbooks EB_P((EB_Book *book));
+
 /* text.c */
-void eb_initialize_text EB_P((EB_Book *));
+void eb_initialize_text_context EB_P((EB_Book *));
+void eb_finalize_text_context EB_P((EB_Book *));
+void eb_reset_text_context EB_P((EB_Book *));
+void eb_invalidate_text_context EB_P((EB_Book *));
 EB_Error_Code eb_forward_heading EB_P((EB_Book *));
 
-/* narwfont.c */
-EB_Error_Code eb_initialize_wide_font EB_P((EB_Book *));
+/* widefont.c */
+EB_Error_Code eb_load_wide_font EB_P((EB_Book *));
 
 /* uint.c */
 unsigned eb_bcd2 EB_P((const char *));
@@ -228,4 +265,4 @@ char *eb_memmove();
 int eb_strcasecmp EB_P((const char *, const char *));
 int eb_strncasecmp EB_P((const char *, const char *, size_t));
 
-#endif /* not EB_INTERNAL_H */
+#endif /* not EB_BUILD_POST_H */

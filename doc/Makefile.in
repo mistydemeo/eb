@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4h from Makefile.am.
+# Makefile.in generated automatically by automake 1.4j from Makefile.am.
 
 # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -96,8 +96,8 @@ XGETTEXT = @XGETTEXT@
 ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
-_am_include = @_am_include@
-_am_quote = @_am_quote@
+am__include = @am__include@
+am__quote = @am__quote@
 install_sh = @install_sh@
 localedir = @localedir@
 

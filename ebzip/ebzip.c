@@ -13,120 +13,8 @@
  * GNU General Public License for more details.
  */
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
-#include <stdio.h>
-#include <sys/types.h>
-
-#if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
-#include <string.h>
-#if !defined(STDC_HEADERS) && defined(HAVE_MEMORY_H)
-#include <memory.h>
-#endif /* not STDC_HEADERS and HAVE_MEMORY_H */
-#else /* not STDC_HEADERS and not HAVE_STRING_H */
-#include <strings.h>
-#endif /* not STDC_HEADERS and not HAVE_STRING_H */
-
-#ifdef HAVE_STDLIB_H
-#include <stdlib.h>
-#endif
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef HAVE_LIMITS_H
-#include <limits.h>
-#endif
-
-#ifdef ENABLE_NLS
-#ifdef HAVE_LOCALE_H
-#include <locale.h>
-#endif
-#include <libintl.h>
-#endif
-
-#include "ebutils.h"
-
-#ifndef HAVE_STRCHR
-#define strchr index
-#define strrchr rindex
-#endif /* HAVE_STRCHR */
-
-#ifndef HAVE_STRCASECMP
-#ifdef __STDC__
-int strcasecmp(const char *, const char *);
-int strncasecmp(const char *, const char *, size_t);
-#else /* not __STDC__ */
-int strcasecmp()
-int strncasecmp();
-#endif /* not __STDC__ */
-#endif /* not HAVE_STRCASECMP */
-
-/*
- * The maximum length of path name.
- */
-#ifndef PATH_MAX
-#ifdef MAXPATHLEN
-#define PATH_MAX        MAXPATHLEN
-#else /* not MAXPATHLEN */
-#define PATH_MAX        1024
-#endif /* not MAXPATHLEN */
-#endif /* not PATH_MAX */
-
-#include "eb.h"
-#include "error.h"
-#include "internal.h"
-#include "font.h"
-
-#include "getopt.h"
-#include "getumask.h"
-#include "makedir.h"
-#include "samefile.h"
-#include "yesno.h"
-
 #include "ebzip.h"
-
-/*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#ifdef __STDC__
-#define EB_P(p) p
-#else /* not __STDC__ */
-#define EB_P(p) ()
-#endif /* not __STDC__ */
-#endif /* EB_P */
-
-/*
- * Tricks for gettext.
- */
-#ifdef ENABLE_NLS
-#define _(string) gettext(string)
-#ifdef gettext_noop
-#define N_(string) gettext_noop(string)
-#else
-#define N_(string) (string)
-#endif
-#else
-#define _(string) (string)       
-#define N_(string) (string)
-#endif
-
-/*
- * Character type tests and conversions.
- */
-#define isdigit(c) ('0' <= (c) && (c) <= '9')
-#define isupper(c) ('A' <= (c) && (c) <= 'Z')
-#define islower(c) ('a' <= (c) && (c) <= 'z')
-#define isalpha(c) (isupper(c) || islower(c))
-#define isalnum(c) (isupper(c) || islower(c) || isdigit(c))
-#define isxdigit(c) \
- (isdigit(c) || ('A' <= (c) && (c) <= 'F') || ('a' <= (c) && (c) <= 'f'))
-#define toupper(c) (('a' <= (c) && (c) <= 'z') ? (c) - 0x20 : (c))
-#define tolower(c) (('A' <= (c) && (c) <= 'Z') ? (c) + 0x20 : (c))
+#include "ebutils.h"
 
 /*
  * Program name and version.
@@ -501,7 +389,7 @@ parse_zip_level(argument, zip_level)
  * If the argument is valid form, 0 is returned.
  * Otherwise -1 is returned.
  */
-int
+static int
 parse_skip_content_argument(argument)
     const char *argument;
 {

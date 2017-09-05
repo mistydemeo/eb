@@ -118,7 +118,12 @@ typedef struct Zio_Struct Zio;
 
 struct Zio_Struct {
     /*
-     * Zio type. (PLAIN, EPWING or EBZIP)
+     * ID.
+     */
+    int id;
+
+    /*
+     * Zio type. (PLAIN, EBZIP, EPWING, EPWING6 or SEBXA)
      */
     Zio_Code code;
 

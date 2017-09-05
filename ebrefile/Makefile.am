@@ -9,5 +9,5 @@ ebrefile_SOURCES = ebrefile.c
 ebrefile_LDADD = $(LIBEBUTILS) $(LIBEB) $(ZLIBLIBS) $(INTLLIBS)
 ebrefile_DEPENDENCIES = $(LIBEBUTILS) $(LIBEB) $(ZLIBDEPS) $(INTLDEPS)
 
-INCLUDES = -I../libebutils -I$(top_srcdir)/libebutils -I$(top_srcdir) \
-	$(INTLINCS)
+INCLUDES = -I../libebutils -I$(top_srcdir)/libebutils \
+	-I../eb -I$(top_srcdir)/eb $(INTLINCS)

@@ -1,6 +1,6 @@
-#
-# Check for struct utimbuf (taken from GNU fileutils 3.16).
-#
+dnl * 
+dnl * Check for struct utimbuf (taken from GNU fileutils 3.16).
+dnl * 
 AC_DEFUN(AC_STRUCT_UTIMBUF,
 [AC_HEADER_TIME
 AC_CHECK_HEADERS(utime.h)

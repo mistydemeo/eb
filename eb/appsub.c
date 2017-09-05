@@ -13,17 +13,16 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
-#include "internal.h"
 #include "appendix.h"
+#include "build-post.h"
 
 /*
  * Unexported functions.
  */
-static EB_Error_Code eb_initialize_appendix_subbook EB_P((EB_Appendix *));
+static EB_Error_Code eb_load_appendix_subbook EB_P((EB_Appendix *));
 static EB_Error_Code eb_set_appendix_subbook_eb EB_P((EB_Appendix *,
     EB_Subbook_Code));
 static EB_Error_Code eb_set_appendix_subbook_epwing EB_P((EB_Appendix *,
@@ -32,8 +31,64 @@ static EB_Error_Code eb_set_appendix_subbook_epwing EB_P((EB_Appendix *,
 /*
  * Initialize all subbooks in `appendix'.
  */
+void
+eb_initialize_appendix_subbooks(appendix)
+    EB_Appendix *appendix;
+{
+    EB_Appendix_Subbook *subbook;
+    int i;
+
+    LOG(("in: eb_initialize_appendix_subbooks(appendix=%d)",
+	(int)appendix->code));
+
+    for (i = 0, subbook = appendix->subbooks; i < appendix->subbook_count;
+	 i++, subbook++) {
+	subbook->initialized = 0;
+	subbook->code = i;
+	subbook->directory_name[0] = '\0';
+	subbook->data_directory_name[0] = '\0';
+	subbook->file_name[0] = '\0';
+	subbook->character_code = EB_CHARCODE_INVALID;
+	subbook->narrow_start = -1;
+	subbook->wide_start = -1;
+	subbook->narrow_end = -1;
+	subbook->wide_end = -1;
+	subbook->narrow_page = 0;
+	subbook->wide_page = 0;
+	zio_initialize(&subbook->zio);
+    }
+
+    LOG(("out: eb_initialize_appendix_subbooks()"));
+}
+
+
+/*
+ * Initialize subbooks in `appendix'.
+ */
+void
+eb_finalize_appendix_subbooks(appendix)
+    EB_Appendix *appendix;
+{
+    EB_Appendix_Subbook *subbook;
+    int i;
+
+    LOG(("in: eb_finalize_appendix_subbooks(appendix=%d)",
+	(int)appendix->code));
+
+    for (i = 0, subbook = appendix->subbooks; i < appendix->subbook_count;
+	 i++, subbook++) {
+	zio_finalize(&appendix->subbooks[i].zio);
+    }
+
+    LOG(("out: eb_finalize_appendix_subbooks()"));
+}
+
+
+/*
+ * Load all subbooks in `appendix'.
+ */
 static EB_Error_Code
-eb_initialize_appendix_subbook(appendix)
+eb_load_appendix_subbook(appendix)
     EB_Appendix *appendix;
 {
     EB_Error_Code error_code;
@@ -41,6 +96,8 @@ eb_initialize_appendix_subbook(appendix)
     char buffer[16];
     int stop_code_page;
     int character_count;
+
+    LOG(("in: eb_load_appendix_subbook(appendix=%d)", (int)appendix->code));
 
     subbook = appendix->subbook_current;
 
@@ -141,24 +198,26 @@ eb_initialize_appendix_subbook(appendix)
     /*
      * Initialize the alternation text cache.
      */
-    eb_initialize_alt_cache(appendix);
+    eb_initialize_alt_caches(appendix);
 
   succeeded:
+    LOG(("out: eb_load_appendix_subbook() = %s", eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_load_appendix_subbook() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
 
 /*
- * Initialize all subbooks in the book.
+ * Load all subbooks in the book.
  */
 EB_Error_Code
-eb_initialize_all_appendix_subbooks(appendix)
+eb_load_all_appendix_subbooks(appendix)
     EB_Appendix *appendix;
 {
     EB_Error_Code error_code;
@@ -166,10 +225,9 @@ eb_initialize_all_appendix_subbooks(appendix)
     EB_Appendix_Subbook *subbook;
     int i;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_load_all_appendix_subbooks(appendix=%d)",
+	(int)appendix->code));
 
     /*
      * The appendix must have been bound.
@@ -208,9 +266,8 @@ eb_initialize_all_appendix_subbooks(appendix)
 	    goto failed;
     }
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_load_all_appendix_subbooks() = %s",
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -219,6 +276,8 @@ eb_initialize_all_appendix_subbooks(appendix)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_load_all_appendix_subbooks() = %s",
+	eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -237,10 +296,8 @@ eb_appendix_subbook_list(appendix, subbook_list, subbook_count)
     EB_Subbook_Code *list_p;
     int i;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_appendix_subbook_list(appendix=%d)", (int)appendix->code));
 
     /*
      * Check for the current status.
@@ -258,9 +315,8 @@ eb_appendix_subbook_list(appendix, subbook_list, subbook_count)
 	*list_p = i;
     *subbook_count = appendix->subbook_count;
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_appendix_subbook_list(subbook_count=%d) = %s",
+	*subbook_count, eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -270,6 +326,7 @@ eb_appendix_subbook_list(appendix, subbook_list, subbook_count)
      */
   failed:
     *subbook_count = 0;
+    LOG(("out: eb_appendix_subbook_list() = %s", eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -285,10 +342,8 @@ eb_appendix_subbook(appendix, subbook_code)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_appendix_subbook(appendix=%d)", (int)appendix->code));
 
     /*
      * Check for the current status.
@@ -303,9 +358,8 @@ eb_appendix_subbook(appendix, subbook_code)
      */
     *subbook_code = appendix->subbook_current->code;
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_appendix_subbook(subbook=%d) = %s", (int)*subbook_code,
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -315,6 +369,7 @@ eb_appendix_subbook(appendix, subbook_code)
      */
   failed:
     *subbook_code = EB_SUBBOOK_INVALID;
+    LOG(("out: eb_appendix_subbook() = %s", eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -330,10 +385,9 @@ eb_appendix_subbook_directory(appendix, directory)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_appendix_subbook_directory(appendix=%d)",
+	(int)appendix->code));
 
     /*
      * Check for the current status.
@@ -348,9 +402,8 @@ eb_appendix_subbook_directory(appendix, directory)
      */
     strcpy(directory, appendix->subbook_current->directory_name);
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_appendix_subbook_directory(directory=%s) = %s",
+	directory, eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -360,6 +413,8 @@ eb_appendix_subbook_directory(appendix, directory)
      */
   failed:
     *directory = '\0';
+    LOG(("out: eb_appendix_subbook_directory() = %s",
+	eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -376,10 +431,9 @@ eb_appendix_subbook_directory2(appendix, subbook_code, directory)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_appendix_subbook_directory2(appendix=%d, subbook=%d)",
+	(int)appendix->code, (int)subbook_code));
 
     /*
      * Check for the current status.
@@ -402,9 +456,8 @@ eb_appendix_subbook_directory2(appendix, subbook_code, directory)
      */
     strcpy(directory, (appendix->subbooks + subbook_code)->directory_name);
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_appendix_subbook_directory2(directory=%s) = %s",
+	directory, eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -414,6 +467,8 @@ eb_appendix_subbook_directory2(appendix, subbook_code, directory)
      */
   failed:
     *directory = '\0';
+    LOG(("out: eb_appendix_subbook_directory2() = %s",
+	eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -429,10 +484,9 @@ eb_set_appendix_subbook(appendix, subbook_code)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_set_appendix_subbook(appendix=%d, subbook=%d)",
+	(int)appendix->code, (int)subbook_code));
 
     /*
      * Check for the current status.
@@ -472,16 +526,14 @@ eb_set_appendix_subbook(appendix, subbook_code)
 	goto failed;
 
     /*
-     * Initialize the subbook.
+     * Load the subbook.
      */
-    error_code = eb_initialize_appendix_subbook(appendix);
+    error_code = eb_load_appendix_subbook(appendix);
     if (error_code != EB_SUCCESS)
 	goto failed;
 
-    /*
-     * Unlock the appendix.
-     */
   succeeded:
+    LOG(("out: eb_set_appendix_subbook() = %s", eb_error_string(EB_SUCCESS)));
     eb_unlock(&appendix->lock);
 
     return EB_SUCCESS;
@@ -491,6 +543,7 @@ eb_set_appendix_subbook(appendix, subbook_code)
      */
   failed:
     eb_unset_appendix_subbook(appendix);
+    LOG(("out: eb_set_appendix_subbook() = %s", eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
 }
@@ -508,6 +561,9 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
     EB_Appendix_Subbook *subbook;
     char appendix_path_name[PATH_MAX + 1];
     Zio_Code zio_code;
+
+    LOG(("in: eb_set_appendix_subbook_eb(appendix=%d, subbook=%d)",
+	(int)appendix->code, (int)subbook_code));
 
     /*
      * Set the current subbook.
@@ -533,6 +589,8 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
 	goto failed;
     }
 
+    LOG(("out: eb_set_appendix_subbook_eb() = %s",
+	eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
@@ -540,6 +598,8 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
      */
   failed:
     eb_unset_appendix_subbook(appendix);
+    LOG(("out: eb_set_appendix_subbook_eb() = %s",
+	eb_error_string(error_code)));
     return error_code;
 }
 
@@ -556,6 +616,9 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
     EB_Appendix_Subbook *subbook;
     char appendix_path_name[PATH_MAX + 1];
     Zio_Code zio_code;
+
+    LOG(("in: eb_set_appendix_subbook_epwing(appendix=%d, subbook=%d)",
+	(int)appendix->code, (int)subbook_code));
 
     /*
      * Set the current subbook.
@@ -593,6 +656,8 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
 	goto failed;
     }
 
+    LOG(("out: eb_set_appendix_subbook_epwing() = %s",
+	eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
@@ -600,6 +665,8 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
      */
   failed:
     eb_unset_appendix_subbook(appendix);
+    LOG(("out: eb_set_appendix_subbook_epwing() = %s",
+	eb_error_string(error_code)));
     return error_code;
 }
 
@@ -611,10 +678,8 @@ void
 eb_unset_appendix_subbook(appendix)
     EB_Appendix *appendix;
 {
-    /*
-     * Lock the appendix.
-     */
     eb_lock(&appendix->lock);
+    LOG(("in: eb_unset_appendix_subbook(appendix=%d)", (int)appendix->code));
 
     /*
      * Close a file for the current subbook.
@@ -624,9 +689,7 @@ eb_unset_appendix_subbook(appendix)
 	appendix->subbook_current = NULL;
     }
 
-    /*
-     * Unlock the appendix.
-     */
+    LOG(("out: eb_unset_appendix_subbook()"));
     eb_unlock(&appendix->lock);
 }
 

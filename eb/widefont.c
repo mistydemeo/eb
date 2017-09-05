@@ -13,12 +13,11 @@
  * GNU General Public License for more details.
  */
 
-#include "ebconfig.h"
-
+#include "build-pre.h"
 #include "eb.h"
 #include "error.h"
 #include "font.h"
-#include "internal.h"
+#include "build-post.h"
 
 /*
  * Unexported functions.
@@ -35,7 +34,7 @@ static EB_Error_Code eb_wide_character_bitmap_latin EB_P((EB_Book *, int,
  * Otherwise, -1 is returned.
  */
 EB_Error_Code
-eb_initialize_wide_font(book)
+eb_load_wide_font(book)
     EB_Book *book;
 {
     EB_Error_Code error_code;
@@ -45,6 +44,8 @@ eb_initialize_wide_font(book)
     int character_count;
     Zio *zio;
     Zio_Code zio_code;
+
+    LOG(("in: eb_load_wide_font(book=%d)", (int)book->code));
 
     subbook = book->subbook_current;
 
@@ -148,10 +149,8 @@ eb_have_wide_font(book)
 {
     int i;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_have_wide_font(book=%d)", (int)book->code));
 
     /*
      * Current subbook must have been set.
@@ -177,10 +176,8 @@ eb_have_wide_font(book)
     if (EB_MAX_FONTS <= i)
 	goto failed;
 
-    /*
-     * Unlock the book.
-     */
   succeeded:
+    LOG(("out: eb_have_wide_font() = %d", 1));
     eb_unlock(&book->lock);
     return 1;
 
@@ -188,6 +185,7 @@ eb_have_wide_font(book)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_have_wide_font() = %d", 0));
     eb_unlock(&book->lock);
     return 0;
 }
@@ -204,10 +202,8 @@ eb_wide_font_width(book, width)
     EB_Error_Code error_code;
     EB_Font_Code font_code;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_wide_font_width(book=%d)", (int)book->code));
 
     /*
      * Current subbook must have been set.
@@ -233,9 +229,8 @@ eb_wide_font_width(book, width)
     if (error_code != EB_SUCCESS)
 	goto failed;
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_wide_font_width(width=%d) = %s", (int)*width,
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -245,6 +240,7 @@ eb_wide_font_width(book, width)
      */
   failed:
     *width = 0;
+    LOG(("out: eb_wide_font_width() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }
@@ -259,6 +255,8 @@ eb_wide_font_width2(font_code, width)
     int *width;
 {
     EB_Error_Code error_code;
+
+    LOG(("in: eb_wide_font_width2(font_code=%d)", (int)font_code));
 
     switch (font_code) {
     case EB_FONT_16:
@@ -278,6 +276,9 @@ eb_wide_font_width2(font_code, width)
 	goto failed;
     }
 
+    LOG(("out: eb_wide_font_width2(width=%d) = %s", *width,
+	eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
@@ -285,6 +286,7 @@ eb_wide_font_width2(font_code, width)
      */
   failed:
     *width = 0;
+    LOG(("out: eb_wide_font_width2() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -303,10 +305,8 @@ eb_wide_font_size(book, size)
     int width;
     int height;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_wide_font_size(book=%d)", (int)book->code));
 
     /*
      * Current subbook must have been set.
@@ -336,9 +336,8 @@ eb_wide_font_size(book, size)
 	goto failed;
     *size = (width / 8) * height;
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_wide_font_size(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -348,6 +347,7 @@ eb_wide_font_size(book, size)
      */
   failed:
     *size = 0;
+    LOG(("out: eb_wide_font_size() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }
@@ -364,6 +364,8 @@ eb_wide_font_size2(font_code, size)
 {
     EB_Error_Code error_code;
 
+    LOG(("in: eb_wide_font_size2(font_code=%d)", (int)font_code));
+
     switch (font_code) {
     case EB_FONT_16:
 	*size = EB_SIZE_WIDE_FONT_16;
@@ -378,11 +380,17 @@ eb_wide_font_size2(font_code, size)
 	goto failed;
     }
 
+    LOG(("out: eb_wide_font_size2(size=%ld) = %s", (long)*size,
+	eb_error_string(EB_SUCCESS)));
+
+    return EB_SUCCESS;
+
     /*
      * An error occurs...
      */
   failed:
     *size = 0;
+    LOG(("out: eb_wide_font_size2() = %s", eb_error_string(error_code)));
     return error_code;
 }
 
@@ -398,10 +406,8 @@ eb_wide_font_start(book, start)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_wide_font_start(book=%d)", (int)book->code));
 
     /*
      * Current subbook must have been set.
@@ -421,9 +427,8 @@ eb_wide_font_start(book, start)
 
     *start = book->subbook_current->wide_current->start;
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_wide_font_start(start=%d) = %s", *start,
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -432,6 +437,7 @@ eb_wide_font_start(book, start)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_wide_font_start() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }
@@ -448,10 +454,8 @@ eb_wide_font_end(book, end)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_wide_font_end(book=%d)", (int)book->code));
 
     /*
      * Current subbook must have been set.
@@ -471,9 +475,8 @@ eb_wide_font_end(book, end)
 
     *end = book->subbook_current->wide_current->end;
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_wide_font_end(end=%d) = %s", *end,
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -482,6 +485,7 @@ eb_wide_font_end(book, end)
      * An error occurs...
      */
   failed:
+    LOG(("out: eb_wide_font_end() = %s", eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }
@@ -499,10 +503,9 @@ eb_wide_font_character_bitmap(book, character_number, bitmap)
 {
     EB_Error_Code error_code;
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_wide_font_character_bitmap(book=%d, character_number=%d)",
+	(int)book->code, character_number));
 
     /*
      * Current subbook must have been set.
@@ -530,9 +533,8 @@ eb_wide_font_character_bitmap(book, character_number, bitmap)
     if (error_code != EB_SUCCESS)
 	goto failed;
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_wide_font_character_bitmap() = %s",
+	eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -542,6 +544,8 @@ eb_wide_font_character_bitmap(book, character_number, bitmap)
      */
   failed:
     *bitmap = '\0';
+    LOG(("out: eb_wide_font_character_bitmap() = %s",
+	eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }
@@ -566,6 +570,10 @@ eb_wide_character_bitmap_jis(book, character_number, bitmap)
     int height;
     size_t size;
     Zio *zio;
+
+    LOG(("in: eb_wide_font_character_bitmap_jis(book=%d, \
+character_number=%d)",
+	(int)book->code, character_number));
 
     start = book->subbook_current->wide_current->start;
     end = book->subbook_current->wide_current->end;
@@ -619,6 +627,9 @@ eb_wide_character_bitmap_jis(book, character_number, bitmap)
 	goto failed;
     }
 
+    LOG(("out: eb_wide_font_character_bitmap_jis() = %s",
+	eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
@@ -626,6 +637,8 @@ eb_wide_character_bitmap_jis(book, character_number, bitmap)
      */
   failed:
     *bitmap = '\0';
+    LOG(("out: eb_wide_font_character_bitmap_jis() = %s",
+	eb_error_string(error_code)));
     return error_code;
 }
 
@@ -649,6 +662,10 @@ eb_wide_character_bitmap_latin(book, character_number, bitmap)
     int height;
     size_t size;
     Zio *zio;
+
+    LOG(("in: eb_wide_font_character_bitmap_latin(book=%d, \
+character_number=%d)",
+	(int)book->code, character_number));
 
     start = book->subbook_current->wide_current->start;
     end = book->subbook_current->wide_current->end;
@@ -702,6 +719,9 @@ eb_wide_character_bitmap_latin(book, character_number, bitmap)
 	goto failed;
     }
 
+    LOG(("out: eb_wide_font_character_bitmap_latin() = %s",
+	eb_error_string(EB_SUCCESS)));
+
     return EB_SUCCESS;
 
     /*
@@ -709,6 +729,8 @@ eb_wide_character_bitmap_latin(book, character_number, bitmap)
      */
   failed:
     *bitmap = '\0';
+    LOG(("out: eb_wide_font_character_bitmap_latin() = %s",
+	eb_error_string(error_code)));
     return error_code;
 }
 
@@ -730,10 +752,10 @@ eb_forward_wide_font_character(book, n, character_number)
     if (n < 0)
 	return eb_backward_wide_font_character(book, -n, character_number);
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_forward_wide_font_character(book=%d, n=%d, \
+character_number=%d)",
+	(int)book->code, n, *character_number));
 
     /*
      * Current subbook must have been set.
@@ -806,9 +828,8 @@ eb_forward_wide_font_character(book, n, character_number)
 	}
     }
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_forward_wide_font_character(character_number=%d) = %s",
+	*character_number, eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -818,6 +839,8 @@ eb_forward_wide_font_character(book, n, character_number)
      */
   failed:
     *character_number = -1;
+    LOG(("out: eb_forward_wide_font_character() = %s",
+	eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }
@@ -840,10 +863,10 @@ eb_backward_wide_font_character(book, n, character_number)
     if (n < 0)
 	return eb_forward_wide_font_character(book, -n, character_number);
 
-    /*
-     * Lock the book.
-     */
     eb_lock(&book->lock);
+    LOG(("in: eb_backward_wide_font_character(book=%d, n=%d, \
+character_number=%d)",
+	(int)book->code, n, *character_number));
 
     /*
      * Current subbook must have been set.
@@ -916,9 +939,8 @@ eb_backward_wide_font_character(book, n, character_number)
 	}
     }
 
-    /*
-     * Unlock the book.
-     */
+    LOG(("out: eb_backward_wide_font_character(character_number=%d) = %s",
+	*character_number, eb_error_string(EB_SUCCESS)));
     eb_unlock(&book->lock);
 
     return EB_SUCCESS;
@@ -928,6 +950,8 @@ eb_backward_wide_font_character(book, n, character_number)
      */
   failed:
     *character_number = -1;
+    LOG(("out: eb_backward_wide_font_character() = %s",
+	eb_error_string(error_code)));
     eb_unlock(&book->lock);
     return error_code;
 }

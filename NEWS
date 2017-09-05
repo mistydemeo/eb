@@ -1,6 +1,19 @@
-Major changes in release 3.1.0beta0:
+Major changes in release 3.1beta1.
 
-* Support S-EBXA compressed text.
+* Add debug codes.
+  Those codes are enabled by `configure --enable-debug'.
+* Rename eb_initialize_all_subbooks() to eb_load_all_subbooks(), and
+  eb_initialize_all_appendix_subbooks() to eb_load_all_appendix_subbooks().
+  For backward compatibility, the old function names are defined as cpp
+  macros.
+* Support for DUDEN EBG CD-ROMs is back.
+* Fix a bug in handling of CD-ROM mounted on the root directory.
+* Overhaul initialization and finalization routines in the library.
+* Fix some minor bugs.
+
+Major changes in release 3.1beta0:
+
+* Support compressed S-EBXA CD-ROM book.
   Support Nippon daihyakka zensho, accessories to Sony DataDiscMan DP-S1000.
 
 Major changes in release 3.0.1:
