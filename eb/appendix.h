@@ -38,7 +38,7 @@ int eb_is_appendix_bound EB_P((EB_Appendix *));
 EB_Error_Code eb_appendix_path EB_P((EB_Appendix *, char *));
 
 /* appsub.c */
-EB_Error_Code eb_initialize_all_appendix_subbooks EB_P((EB_Appendix *));
+EB_Error_Code eb_load_all_appendix_subbooks EB_P((EB_Appendix *));
 EB_Error_Code eb_appendix_subbook_list EB_P((EB_Appendix *,
     EB_Subbook_Code *, int *));
 EB_Error_Code eb_appendix_subbook EB_P((EB_Appendix *, EB_Subbook_Code *));

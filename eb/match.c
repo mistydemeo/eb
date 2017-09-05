@@ -147,12 +147,7 @@ eb_match_word_latin(word, pattern, length)
 	    break;
 	}
 	if (*word_p == '\0') {
-	    /* ignore spaces in the tail of the pattern */
-	    while (i < length && (*pattern_p == ' ' || *pattern_p == '\0')) {
-		pattern_p++;
-		i++;
-	    }
-	    result = (i - length);
+	    result = 0;
 	    break;
 	}
 	if (isalpha(*word_p)
@@ -281,7 +276,12 @@ eb_exact_match_word_latin(word, pattern, length)
 	    break;
 	}
 	if (*word_p == '\0') {
-	    result = 0;
+	    /* ignore spaces in the tail of the pattern */
+	    while (i < length && (*pattern_p == ' ' || *pattern_p == '\0')) {
+		pattern_p++;
+		i++;
+	    }
+	    result = (i - length);
 	    break;
 	}
 	if (isalpha(*word_p)

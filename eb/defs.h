@@ -40,7 +40,7 @@ extern "C" {
  * Library version.
  */
 #define EB_VERSION_MAJOR		3
-#define EB_VERSION_MINOR		0
+#define EB_VERSION_MINOR		1
 
 /*
  * Disc code
