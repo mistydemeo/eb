@@ -77,6 +77,11 @@ eb_epwunzip_slice(out_buffer, in_file, huffman_tree)
 
     for (;;) {
 	/*
+ 	 * Descend the huffman tree until reached to the leaf node.
+ 	 */
+ 	nodep = huffman_tree;
+ 	while (nodep->type == EB_HUFFMAN_NODE_INTERMEDIATE) {
+         /*
 	 * If no data is left in input buffer, read next chunk.
 	 */
 	if ((unsigned char *)in_buffer + in_read_length <= in_bufp) {
@@ -86,11 +91,6 @@ eb_epwunzip_slice(out_buffer, in_file, huffman_tree)
 	    in_bufp = in_buffer;
 	}
 
-	/*
-	 * Descend the huffman tree until reached to the leaf node.
-	 */
-	nodep = huffman_tree;
-	while (nodep->type == EB_HUFFMAN_NODE_INTERMEDIATE) {
 	    bit = (*in_bufp >> in_bit_index) & 0x01;
 
 	    if (bit == 1)
