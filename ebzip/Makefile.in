@@ -82,7 +82,7 @@ LIBEBUTILS = $(top_builddir)/libebutils/libebutils.a
 
 bin_PROGRAMS = ebzip
 
-ebzip_SOURCES = ebzip.c zip1.c
+ebzip_SOURCES = ebzip.c ebzip1.c filelist.c
 ebzip_LDADD = $(LIBEB) $(LIBEBUTILS) @LDADD_FOR_LIBZ@
 ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) @DEPENDENCIES_FOR_LIBZ@
 
@@ -100,7 +100,7 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-ebzip_OBJECTS =  ebzip.$(OBJEXT) zip1.$(OBJEXT)
+ebzip_OBJECTS =  ebzip.$(OBJEXT) ebzip1.$(OBJEXT) filelist.$(OBJEXT)
 ebzip_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -345,7 +345,7 @@ ebzip.o: ebzip.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/error.h \
  ../eb/internal.h ../libebutils/fakelog.h ../libebutils/getopt.h \
  ../libebutils/getumask.h ../libebutils/makedir.h \
  ../libebutils/samefile.h ../libebutils/yesno.h
-zip1.o: zip1.c ../config.h ../eb/eb.h ../eb/defs.h
+ebzip1.o: ebzip1.c ../config.h ../eb/eb.h ../eb/defs.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

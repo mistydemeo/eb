@@ -23,8 +23,13 @@
 
 #include "eb/eb.h"
 
+/*
+ * Compress a slice with the ebzip compression format.
+ *
+ * If it succeeds, 0 is returned.  Otherwise, -1 is returned.
+ */
 int
-zip_mode1(out_buffer, out_byte_length, in_buffer, in_byte_length)
+ebzip1_slice(out_buffer, out_byte_length, in_buffer, in_byte_length)
     char *out_buffer;
     size_t *out_byte_length;
     char *in_buffer;
@@ -42,7 +47,7 @@ zip_mode1(out_buffer, out_byte_length, in_buffer, in_byte_length)
     stream.next_in = (Bytef *) in_buffer;
     stream.avail_in = in_byte_length;
     stream.next_out = (Bytef *) out_buffer;
-    stream.avail_out = in_byte_length + EB_SIZE_ZIP_MARGIN;
+    stream.avail_out = in_byte_length + EB_SIZE_EBZIP_MARGIN;
 
     if (deflate(&stream, Z_FINISH) != Z_STREAM_END) {
 	*out_byte_length = in_byte_length;

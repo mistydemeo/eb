@@ -13,7 +13,7 @@
  */
 
 /*
- * Requirements for Autoconf:
+ * This program requires the following Autoconf macros:
  *   AC_C_CONST
  *   AC_HEADER_STDC
  *   AC_CHECK_HEADERS(string.h, memory.h)

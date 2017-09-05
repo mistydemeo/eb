@@ -220,14 +220,6 @@ eb_catalog_filename_internal(path, pathlen, disccode, casecode, suffixcode)
 	return 0;
     }
 
-    strcpy(endp, ".");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EB;
-	*casecode = EB_CASE_LOWER;
-	*suffixcode = EB_SUFFIX_DOT;
-	return 0;
-    }
-
     strcpy(endp, ";1");
     if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
 	*disccode = EB_DISC_EB;

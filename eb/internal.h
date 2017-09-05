@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,15 @@ extern "C" {
 #else
 #include <eb/defs.h>
 #endif
+
+/*
+ * Huffman node types.
+ */
+#define EB_HUFFMAN_NODE_INTERMEDIATE 0
+#define EB_HUFFMAN_NODE_LEAF16       1
+#define EB_HUFFMAN_NODE_LEAF8        2
+#define EB_HUFFMAN_NODE_EOF          3
+
 
 /*
  * CPP macro version of get_uint1(), get_uint2(), get_uint4().
@@ -60,6 +69,10 @@ extern "C" {
  */
 /* appendix.c */
 void eb_initialize_alt_cache EB_P((EB_Appendix *));
+/* ebunzip.c */
+int eb_ebunzip1_slice EB_P((char *, size_t, char *, size_t));
+/* epwunzip.c */
+int eb_epwunzip_slice EB_P((char *, int, EB_Huffman_Node *));
 /* font.c */
 int eb_initialize_fonts EB_P((EB_Book *));
 /* jpcode.c */
@@ -81,11 +94,10 @@ EB_Word_Code eb_set_endword EB_P((EB_Book *, char *, char *, const char *));
 int eb_initialize_subbook EB_P((EB_Book *));
 /* text.c */
 void eb_initialize_text EB_P((void));
-/* unzip.c */
-int eb_unzip_mode1 EB_P((char *, size_t, char *, size_t));
 /* zio.c */
 void eb_zclear EB_P((void));
-int eb_zopen EB_P((EB_Zip *, char *));
+int eb_zopen EB_P((EB_Zip *, const char *));
+int eb_zopen2 EB_P((EB_Zip *, const char *));
 int eb_zclose EB_P((EB_Zip *, int));
 off_t eb_zlseek EB_P((EB_Zip *, int, off_t, int));
 ssize_t eb_zread EB_P((EB_Zip *, int, char *, size_t));

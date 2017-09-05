@@ -246,7 +246,7 @@ eb_initialize_indexes(book)
     /*
      * Get start page numbers of the indexes in the subbook.
      */
-    count = eb_uint2(buf);
+    count = eb_uint1(buf + 1);
     if (EB_SIZE_PAGE / 16 - 1 <= count) {
 	eb_error = EB_ERR_UNEXP_START;
 	return -1;

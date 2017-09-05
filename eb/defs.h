@@ -36,7 +36,7 @@ extern "C" {
  * Library version.
  */
 #define EB_VERSION_MAJOR		2
-#define EB_VERSION_MINOR		2
+#define EB_VERSION_MINOR		3
 
 /*
  * Disc code
@@ -83,8 +83,9 @@ extern "C" {
 /*
  * Zip codes.
  */
+#define EB_ZIP_EPWING			-1
 #define EB_ZIP_NONE			0
-#define EB_ZIP_MODE1			1
+#define EB_ZIP_EBZIP1			1
 
 /*
  * Size and limitation.
@@ -92,8 +93,8 @@ extern "C" {
 #define EB_SIZE_PAGE			2048
 #define EB_SIZE_EB_CATALOG		40
 #define EB_SIZE_EPWING_CATALOG		164
-#define EB_SIZE_ZIP_HEADER		22
-#define EB_SIZE_ZIP_MARGIN		1024
+#define EB_SIZE_EBZIP_HEADER		22
+#define EB_SIZE_EBZIP_MARGIN		1024
 
 #define EB_MAXLEN_WORD			255
 #define EB_MAXLEN_EB_TITLE		30
@@ -115,7 +116,7 @@ extern "C" {
 #define EB_MAX_MULTI_SEARCHES		8
 #define EB_MAX_MULTI_ENTRIES		5
 #define EB_MAX_ALTERNATION_CACHE	16
-#define EB_MAX_ZIP_LEVEL		3
+#define EB_MAX_EBZIP_LEVEL		3
 
 /*
  * File and directory names.
@@ -128,6 +129,7 @@ extern "C" {
 #define EB_FILENAME_WELCOME		"WELCOME"
 #define EB_FILENAME_CATALOGS		"CATALOGS"
 #define EB_FILENAME_HONMON		"HONMON"
+#define EB_FILENAME_HONMON2		"HONMON2"
 #define EB_FILENAME_APPENDIX		"APPENDIX"
 #define EB_FILENAME_FUROKU		"FUROKU"
 
@@ -153,16 +155,42 @@ typedef int EB_Multi_Entry_Code;
 typedef int EB_Zip_Code;
 
 /*
+ * EB_Huffman_Node -- Node of static Huffman tree.
+ */
+typedef struct eb_huffman_node {
+    int type;
+    int value;
+    int frequency;
+    struct eb_huffman_node *left;
+    struct eb_huffman_node *right;
+} EB_Huffman_Node;
+
+/*
  * EB_Zip -- Compression information.
  */
 typedef struct {
     EB_Zip_Code code;
-    size_t slice_size;
-    int index_width;
+    off_t offset;
     off_t file_size;
+    size_t slice_size;
+
+    /*
+     * The following members are used in EBZIP compression only.
+     */
+    int zip_level;
+    int index_width;
     unsigned int crc;
     time_t mtime;
-    off_t offset;
+
+    /*
+     * The following members are used in EPWING compression only.
+     */
+    off_t index_location;
+    size_t index_length;
+    off_t frequencies_location;
+    size_t frequencies_length;
+    EB_Huffman_Node *huffman_nodes;
+    EB_Huffman_Node *huffman_root;
 } EB_Zip;
 
 /*

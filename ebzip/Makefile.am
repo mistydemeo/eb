@@ -5,7 +5,7 @@ LIBEBUTILS = $(top_builddir)/libebutils/libebutils.a
 
 bin_PROGRAMS = ebzip
 
-ebzip_SOURCES = ebzip.c zip1.c
+ebzip_SOURCES = ebzip.c ebzip1.c filelist.c
 ebzip_LDADD = $(LIBEB) $(LIBEBUTILS) @LDADD_FOR_LIBZ@
 ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) @DEPENDENCIES_FOR_LIBZ@
 
@@ -39,4 +39,4 @@ ebzip.o: ebzip.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/error.h \
  ../eb/internal.h ../libebutils/fakelog.h ../libebutils/getopt.h \
  ../libebutils/getumask.h ../libebutils/makedir.h \
  ../libebutils/samefile.h ../libebutils/yesno.h
-zip1.o: zip1.c ../config.h ../eb/eb.h ../eb/defs.h
+ebzip1.o: ebzip1.c ../config.h ../eb/eb.h ../eb/defs.h

@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.2.2 版です。EB ライブラリバージョン 2.2.2 に対応して
-います。
+   この文書は第 2.3beta0 版です。EB ライブラリバージョン 2.3beta0 に対
+応しています。
 
 * Menu:
 
@@ -54,11 +54,13 @@ File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 * Test::                        テスト
 * Partial Compression::         一部だけの圧縮
 * Overwrite Old Files::         古いファイルの上書き
+* Compress Compressed EPWING::  圧縮された EPWING の圧縮
 
 伸長
 
 * Uncompression Example::       伸長の実例
 * Options for Uncompression::   伸長のオプション
+* Uncompress Compressed EPWING::  圧縮された EPWING の伸長
 
 情報出力
 
@@ -188,6 +190,7 @@ CD-ROM 書籍の圧縮を行います。
 * Test::                        テスト
 * Partial Compression::         一部だけの圧縮
 * Overwrite Old Files::         古いファイルの上書き
+* Compress Compressed EPWING::  圧縮された EPWING の圧縮
 
 
 File: ebzip-ja.info,  Node: Compression Example 1,  Next: Compression Example 2,  Prev: Compression,  Up: Compression
@@ -219,11 +222,12 @@ File: ebzip-ja.info,  Node: Compression Example 1,  Next: Compression Example 2,
 
      ==> compress /dict/kanji/start <==
      output to ./dict/kanji/start.ebz
-      1.4% done: 2097152 -> 941887 bytes (44.9%)
-      2.7% done: 4194304 -> 1865181 bytes (44.5%)
-      4.1% done: 6291456 -> 2728150 bytes (43.4%)
+      1.0% done (2097152 / 220069888 bytes)
+      1.9% done (4194304 / 220069888 bytes)
+      2.9% done (6291456 / 220069888 bytes)
              : (略)
-     total: 154290176 -> 54881862 bytes (35.6%)
+     completed (220069888 / 220069888 bytes)
+     220069888 -> 78163751 bytes (35.5%)
 
 圧縮が完了すると、`/dict' の下のディレクトリ構成は少し変化しています。
 
@@ -429,7 +433,7 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
 圧縮されます。
 
 
-File: ebzip-ja.info,  Node: Overwrite Old Files,  Prev: Partial Compression,  Up: Compression
+File: ebzip-ja.info,  Node: Overwrite Old Files,  Next: Compress Compressed EPWING,  Prev: Partial Compression,  Up: Compression
 
 古いファイルの上書き
 ====================
@@ -452,6 +456,17 @@ File: ebzip-ja.info,  Node: Overwrite Old Files,  Prev: Partial Compression,  Up
 ます。
 
 
+File: ebzip-ja.info,  Node: Compress Compressed EPWING,  Prev: Overwrite Old Files,  Up: Compression
+
+圧縮された EPWING 書籍の圧縮
+============================
+
+   `ebzip' は EPWING 圧縮形式で圧縮された CD-ROM 書籍を圧縮することがで
+きます。`ebzip' は書籍を伸長してから、ebzip の圧縮形式で圧縮します。
+一般に ebzip の圧縮形式の方が EPWING 圧縮形式よりも良好なので、
+`ebzip' によって圧縮された書籍は元のものよりも小さくなります。
+
+
 File: ebzip-ja.info,  Node: Uncompression,  Next: Information,  Prev: Compression,  Up: Top
 
 伸長
@@ -464,6 +479,7 @@ File: ebzip-ja.info,  Node: Uncompression,  Next: Information,  Prev: Compressio
 
 * Uncompression Example::       伸長の実例
 * Options for Uncompression::   伸長のオプション
+* Uncompress Compressed EPWING::  圧縮された EPWING の伸長
 
 
 File: ebzip-ja.info,  Node: Uncompression Example,  Next: Options for Uncompression,  Prev: Uncompression,  Up: Uncompression
@@ -494,11 +510,12 @@ File: ebzip-ja.info,  Node: Uncompression Example,  Next: Options for Uncompress
 
      ==> uncompress /dict/kanji/start.ebz <==
      output to ./kanji/start.ebz
-      1.4% done: 941887 -> 2097152 bytes
-      2.7% done: 1865181 -> 4194304 bytes
-      4.1% done: 2728150 -> 6291456 bytes
+      5.1% done (4194304 / 82460672 bytes)
+     10.2% done (8388608 / 82460672 bytes)
+     15.3% done (12582912 / 82460672 bytes)
              : (略)
-     total: 54881862 -> 154290176 bytes
+     completed (82460672 / 82460672 bytes)
+     25681439 -> 82460672 bytes
 
 伸長の間、`ebunzip' は、すでに存在するファイルを上書きしても良いかどう
 か確認を求めてきます。
@@ -520,7 +537,7 @@ File: ebzip-ja.info,  Node: Uncompression Example,  Next: Options for Uncompress
 ます。
 
 
-File: ebzip-ja.info,  Node: Options for Uncompression,  Prev: Uncompression Example,  Up: Uncompression
+File: ebzip-ja.info,  Node: Options for Uncompression,  Next: Uncompress Compressed EPWING,  Prev: Uncompression Example,  Up: Uncompression
 
 伸長のオプション
 ================
@@ -554,6 +571,17 @@ Adjust Filenames.)。
 
    `ebunzip' は、`--level' オプションを無視します。伸長時に `--level'
 オプションを指定する必要はありません。
+
+
+File: ebzip-ja.info,  Node: Uncompress Compressed EPWING,  Prev: Options for Uncompression,  Up: Uncompression
+
+圧縮された EPWING CD-ROM 書籍の伸長
+===================================
+
+   `ebzip' は EPWING 圧縮形式で圧縮された CD-ROM 書籍を伸長することがで
+きます。しかしながら、伸長した書籍を圧縮し直して、元の書籍を復元するこ
+とはできません。`ebzip' は EPWING 圧縮形式の伸長には対応していますが、
+圧縮には対応していません。
 
 
 File: ebzip-ja.info,  Node: Information,  Next: Delete a Book,  Prev: Uncompression,  Up: Top
@@ -758,7 +786,7 @@ File: ebzip-ja.info,  Node: Comparision Result,  Next: Compressed File Format,  
 果:
 
 圧縮レベル                    ファイルサイズ         圧縮率                 
-(非圧縮)                      154476544 bytes        100.0%                 
+(元のファイル)                154476544 bytes        100.0%                 
 レベル 0                      54922039 bytes         35.6%                  
 レベル 1                      49615791 bytes         32.1%                  
 レベル 2                      45983464 bytes         29.8%                  
@@ -768,22 +796,30 @@ File: ebzip-ja.info,  Node: Comparision Result,  Next: Compressed File Format,  
    ある英々辞典 (EBG) の `START' ファイルを圧縮した結果:
 
 圧縮レベル                    ファイルサイズ         圧縮率                 
-(非圧縮)                      55511040 bytes         100.0%                 
+(元のファイル)                55511040 bytes         100.0%                 
 レベル 0                      25866491 bytes         46.6%                  
 レベル 1                      24419066 bytes         44.0%                  
 レベル 2                      23453212 bytes         42.2%                  
 レベル 3                      22748840 bytes         41.0%                  
 (参考: gzip -6)               20930009 bytes         37.7%                  
 
-   ある国語辞典 (EPWING) の `HONMON' ファイルを圧縮した結果:
+   ある国語辞典 (EPWING V1) の `HONMON' ファイルを圧縮した結果:
 
 圧縮レベル                    ファイルサイズ         圧縮率                 
-(非圧縮)                      23642112 bytes         100.0%                 
+(元のファイル)                23642112 bytes         100.0%                 
 レベル 0                      9927048 bytes          42.0%                  
 レベル 1                      9213184 bytes          39.0%                  
 レベル 2                      8767603 bytes          37.1%                  
 レベル 3                      8495563 bytes          35.9%                  
 (参考: gzip -6)               8114658 bytes          34.3%                  
+
+   ある国語辞典 (EPWING V5) の `HONMON2' ファイルを圧縮した結果:
+
+圧縮レベル                    ファイルサイズ         圧縮率                 
+(非圧縮)                      220069888 bytes        100.0%                 
+(元のファイル)                149139690 bytes        67.8%                  
+レベル 0                      82973263 bytes         37.7%                  
+レベル 1                      78163751 bytes         35.5%                  
 
 
 File: ebzip-ja.info,  Node: Compressed File Format,  Prev: Comparision Result,  Up: Top
@@ -965,8 +1001,8 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。EB ライブラリバージョン 2.2.2 では、1 (2 進
-     数で 0001) だけが規定されています。
+     圧縮モードを表します。EB ライブラリバージョン 2.3beta0 では、1 (2
+     進数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
      圧縮レベルを表します。
@@ -1004,30 +1040,32 @@ significant bit) を含んでいます。`zip モード' が 1 で、`圧縮レベル' が
 
 Tag Table:
 Node: Top1030
-Node: Introduction2478
-Node: Action and Command Name3822
-Node: Invoking ebzip5532
-Node: Compression6164
-Node: Compression Example 16707
-Node: Compression Example 28260
-Node: Compression Level9814
-Node: Adjust Filenames10324
-Node: Test12457
-Node: Partial Compression12804
-Node: Overwrite Old Files15350
-Node: Uncompression16111
-Node: Uncompression Example16439
-Node: Options for Uncompression17919
-Node: Information19420
-Node: Information Example19759
-Node: Options for Information20465
-Node: Delete a Book21034
-Node: Summary of Options21330
-Node: Comparision Result25771
-Node: Compressed File Format27736
-Node: Format Overview28140
-Node: Data Part28997
-Node: Index Part31684
-Node: Header Part34542
+Node: Introduction2600
+Node: Action and Command Name3944
+Node: Invoking ebzip5654
+Node: Compression6286
+Node: Compression Example 16886
+Node: Compression Example 28460
+Node: Compression Level10014
+Node: Adjust Filenames10524
+Node: Test12657
+Node: Partial Compression13004
+Node: Overwrite Old Files15550
+Node: Compress Compressed EPWING16346
+Node: Uncompression16778
+Node: Uncompression Example17165
+Node: Options for Uncompression18685
+Node: Uncompress Compressed EPWING20223
+Node: Information20652
+Node: Information Example20991
+Node: Options for Information21697
+Node: Delete a Book22266
+Node: Summary of Options22562
+Node: Comparision Result27003
+Node: Compressed File Format29422
+Node: Format Overview29827
+Node: Data Part30684
+Node: Index Part33371
+Node: Header Part36229
 
 End Tag Table

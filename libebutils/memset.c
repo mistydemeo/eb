@@ -13,7 +13,7 @@
  */
 
 /*
- * Requirements for Autoconf:
+ * This program requires the following Autoconf macros:
  *   AC_TYPE_SIZE_T
  */
 

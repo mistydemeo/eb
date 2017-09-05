@@ -81,6 +81,7 @@ This is edition @value{EDITION}, for EB Library version @value{VERSION}.
 * Comparision Result::          Comparision of Compression Results.
 * Compressed File Format::      Compressed File Format.
 
+@detailmenu
  --- The Detailed Node Listing ---
 
 Compression
@@ -92,11 +93,13 @@ Compression
 * Test::                        Test.
 * Partial Compression::         Partial Compression.
 * Overwrite Old Files::         Overwrite Old Files.
+* Compress Compressed EPWING::  Compress Compressed EPWING.
 
 Uncompression
 
 * Uncompression Example::       Example of Uncompression.
 * Options for Uncompression::   Options for Uncompression.
+* Uncompress Compressed EPWING::  Uncompress Compressed EPWING.
 
 Information
 
@@ -109,6 +112,8 @@ Compressed File Format
 * Data Part::                   Data Part
 * Index Part::                  Index Part
 * Header Part::                 Header Part
+
+@end detailmenu
 @end menu
 
 @c ===================================================================
@@ -259,6 +264,7 @@ In this case, it is assumed that the current working directory
 * Test::                        Test.
 * Partial Compression::         Partial Compression.
 * Overwrite Old Files::         Overwrite Old Files.
+* Compress Compressed EPWING::  Compress Compressed EPWING.
 @end menu
 
 @c -------------------------------------------------------------------
@@ -304,11 +310,12 @@ follows:
 @group
 ==> compress /dict/kanji/start <==
 output to ./dict/kanji/start.ebz
- 1.4% done: 2097152 -> 941887 bytes (44.9%)
- 2.7% done: 4194304 -> 1865181 bytes (44.5%)
- 4.1% done: 6291456 -> 2728150 bytes (43.4%)
+ 1.0% done (2097152 / 220069888 bytes)
+ 1.9% done (4194304 / 220069888 bytes)
+ 2.9% done (6291456 / 220069888 bytes)
         : (snip)
-total: 154290176 -> 54881862 bytes (35.6%)
+completed (220069888 / 220069888 bytes)
+220069888 -> 78163751 bytes (35.5%)
 @end group
 @end example
 
@@ -583,7 +590,7 @@ Regardless of the @samp{--subbook} option, the @file{LANGUAGE} file is
 always compressed.
 
 @c -------------------------------------------------------------------
-@node Overwrite Old Files,  , Partial Compression, Compression
+@node Overwrite Old Files, Compress Compressed EPWING, Partial Compression, Compression
 @section Overwrite Old Files
 
 @code{ebzip} asks you whether a file may be overwritten or not when the
@@ -608,6 +615,18 @@ overwrites existed files without confirmation.
 Similary, when the @samp{--no-overwrite} option is specified,
 @code{ebzip} skips the file without confirmation.
 
+@c -------------------------------------------------------------------
+@node Compress Compressed EPWING,  , Overwrite Old Files, Compression
+@section Compress Compressed EPWING CD-ROM Book
+
+@code{ebzip} can compress a CD-ROM book compressed with the EPWING
+compression format.
+It uncompress the book, and then compresses the book with the ebzip
+compression format.
+Since the ebzip compression is generally better than the EPWING
+compression format, the book compressed by @code{ebzip} is smaller than
+original.
+
 @c ===================================================================
 @node Uncompression, Information, Compression, Top
 @chapter Uncompression
@@ -619,6 +638,7 @@ by @code{ebzip}.
 @menu
 * Uncompression Example::       Example of Uncompression.
 * Options for Uncompression::   Options for Uncompression.
+* Uncompress Compressed EPWING::  Uncompress Compressed EPWING.
 @end menu
 
 @c -------------------------------------------------------------------
@@ -662,11 +682,12 @@ as follows:
 @group
 ==> uncompress /dict/kanji/start.ebz <==
 output to ./kanji/start.ebz
- 1.4% done: 941887 -> 2097152 bytes
- 2.7% done: 1865181 -> 4194304 bytes
- 4.1% done: 2728150 -> 6291456 bytes
+ 5.1% done (4194304 / 82460672 bytes)
+10.2% done (8388608 / 82460672 bytes)
+15.3% done (12582912 / 82460672 bytes)
         : (snip)
-total: 54881862 -> 154290176 bytes
+completed (82460672 / 82460672 bytes)
+25681439 -> 82460672 bytes
 @end group
 @end example
 
@@ -702,7 +723,7 @@ Uncompressed files change their filenames;
 the suffix @samp{.ebz} is removed from them.
 
 @c -------------------------------------------------------------------
-@node Options for Uncompression,  , Uncompression Example, Uncompression
+@node Options for Uncompression, Uncompress Compressed EPWING, Uncompression Example, Uncompression
 @section Options for Uncompression
 
 Most options have the same meanings at compression and uncompression.
@@ -735,6 +756,17 @@ the case and suffix styles of filenames of uncompressed files.
 
 @code{ebunzip} ignores the @samp{--level} option.
 You don't have to specify the @samp{--level} option at uncompression.
+
+@c -------------------------------------------------------------------
+@node Uncompress Compressed EPWING,  , Options for Uncompression, Uncompression
+@section Uncompress Compressed EPWING CD-ROM Book
+
+@code{ebzip} can uncompress a CD-ROM book compressed with the EPWING
+compression format.
+However, @code{ebzip} cannot restore the original compressed book by
+compressing the uncompressed book again.
+@code{ebzip} support uncompression of the EPWING compression format,
+but doesn't support compression.
 
 @c ===================================================================
 @node Information, Delete a Book, Uncompression, Top
@@ -962,7 +994,6 @@ and Japanese-English dictionary (EBXA):
 @item level 1               @tab  49615791 bytes   @tab  32.1%
 @item level 2               @tab  45983464 bytes   @tab  29.8%
 @item level 3               @tab  43431397 bytes   @tab  28.1%
-@c @item level 4            @tab  41542738 bytes   @tab  26.9%
 @item (reference: gzip -6)  @tab  38712247 bytes   @tab  25.0%
 @end multitable
 
@@ -976,12 +1007,11 @@ dictionary (EBG):
 @item level 1               @tab  24419066 bytes  @tab  44.0%
 @item level 2               @tab  23453212 bytes  @tab  42.2%
 @item level 3               @tab  22748840 bytes  @tab  41.0%
-@c @item level 4            @tab  22139989 bytes  @tab  39.9%
 @item (reference: gzip -6)  @tab  20930009 bytes  @tab  37.7%
 @end multitable
 
 Compression result of the @file{HONMON} file in a certain Japanese
-dictionary (EPWING):
+dictionary (EPWING V1):
 
 @multitable @columnfractions .4 .3 .3
 @item compression level     @tab  file size       @tab  ratio
@@ -990,8 +1020,17 @@ dictionary (EPWING):
 @item level 1               @tab   9213184 bytes  @tab  39.0%
 @item level 2               @tab   8767603 bytes  @tab  37.1%
 @item level 3               @tab   8495563 bytes  @tab  35.9%
-@c @item level 4            @tab   8336185 bytes  @tab  35.3%
 @item (reference: gzip -6)  @tab   8114658 bytes  @tab  34.3%
+@end multitable
+
+Compression result of the @file{HONMON2} file in a certain Japanese
+dictionary (EPWING V5):
+
+@multitable @columnfractions .4 .3 .3
+@item compression level     @tab  file size        @tab  ratio
+@item (uncompressed)        @tab  220069888 bytes  @tab 100.0%
+@item (original)            @tab  149139690 bytes  @tab  67.8%
+@item level 1               @tab   78163751 bytes  @tab  35.5%
 @end multitable
 
 @c ===================================================================

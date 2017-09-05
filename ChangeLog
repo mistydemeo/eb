@@ -1,13 +1,70 @@
 1999-03-07  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
-	* Version 2.2.2.
+	* Version 2.3beta0.
 
 	* eb/ebrefile.in: Find catalog file in the same order as
 	ebzip does.
 
+	* eb/zio.c (eb_zopen2): Defined.
+	* eb/zio.c (eb_zclose): Dispose memory for huffman nodes.
+
+	* ebzip/ebzip.c (zip_book, unzip_book, zipinfo_book): Support
+	CD-ROM book compressed with EPWING compression format.
+	* ebzip/ebzip.c (zip_book, unzip_book, zipinfo_book): Support
+	CD-ROM book compressed with EPWING compression format.
+	* ebzip/ebzip.c (zip_file, unzip_file): Argument formats are
+	changed. `in_filename' are changed to `in_filename_list'.
+	* ebzip/ebzip.c (zipinfo_file): Argument format is changed.
+	`ebz_filename' and `orig_filename' are unified to `filename_list'.
+	* ebzip/ebzip.c (zip_file, unzip_file, zipinfo_file): Use
+	eb_zopen2(), eb_zlseek(), eb_zread() and eb_zclose() for input
+	files.
+
+	* ebzip/ebzip.c (fix_filename, zip_file, unzip_file, zipinfo_file):
+	`eb_canonicalize_filename()' are called at `fix_filename()', not
+	elsewhere.
+	
+1999-02-27  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/zio.c (eb_read_all): Return the number of read bytes so far
+	when it receives an EOF.
+	
+1999-02-26  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/internal.h (EB_HUFFMAN_NODE_INTERMEDIATE, EB_HUFFMAN_NODE_LEAF8,
+	EB_HUFFMAN_NODE_LEAF16, EB_HUFFMAN_NODE_EOF): Defined.
+
+1999-02-25  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/unzip1.c: Renamed to `ebunzip1.c'.
+	* eb/ebunzip1.c (eb_unzip_mode1): Renamed to `eb_ebunzip1_slice'.
+
+	* ebzip/zip1.c: Renamed to `ebzip1.c'.
+	* ebzip/ebzip1.c (zip_mode1): Renamed to `ebzip1_slice'.
+	
+	* eb/def.h (EB_SIZE_ZIP_HEADER): Renamed to `EB_SIZE_EBZIP_HEADER'.
+	* eb/def.h (EB_SIZE_ZIP_MARGIN): Renamed to `EB_SIZE_EBZIP_MARGIN'.
+	* eb/def.h (EB_SIZE_ZIP_LEVEL): Renamed to `EB_SIZE_EBZIP_LEVEL'.
+	* eb/def.h (EB_ZIP_MODE1): Renamed to `EB_ZIP_EBZIP1'.
+	* eb/def.h (EB_ZIP_EPWING): Defined.
+	* eb/defs.h (EB_Huffman_Node): Defined.
+	* eb/defs.h (EB_Zip): Add some members for EPWING compression: 
+	`index_location', `index_length', `frequencies_location', 
+	`frequencies_length', `huffman_nodes' and `huffman_root'.
+
+	* eb/zio.c (eb_zopen): Split this function into `eb_zopen()' and
+	`eb_zopen_ebzipped()'.
+	* eb/zio.c (eb_zopen): Split this function into `eb_zread()' and
+	`eb_zread_ebzipped()'.
+	* eb/zio.c (eb_zopen_epwzipped, eb_zread_epwzipped): Defined.
+	* eb/zio.c (eb_fix_ebzip_filename): Removed.  The procedures in
+	this function are moved into `eb_open_ebzipped'.
+
 1999-02-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 2.2.1.
+
+	* eb/jpcode.c: Renamed to `eb/jacode.c'.
 
 	* configure.in (AC_CYGWIN, AC_MINGW32, AC_EXEEXT, AC_OBJEXT): 
 	Added.

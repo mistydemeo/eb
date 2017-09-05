@@ -82,6 +82,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 * Comparision Result::          圧縮結果の比較
 * Compressed File Format::      圧縮ファイルの形式
 
+@detailmenu
  --- The Detailed Node Listing ---
 
 圧縮
@@ -93,11 +94,13 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 * Test::                        テスト
 * Partial Compression::         一部だけの圧縮
 * Overwrite Old Files::         古いファイルの上書き
+* Compress Compressed EPWING::  圧縮された EPWING の圧縮
 
 伸長
 
 * Uncompression Example::       伸長の実例
 * Options for Uncompression::   伸長のオプション
+* Uncompress Compressed EPWING::  圧縮された EPWING の伸長
 
 情報出力
 
@@ -110,6 +113,8 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 * Data Part::                   データ部
 * Index Part::                  インデックス部
 * Header Part::                 ヘッダ部
+
+@end detailmenu
 @end menu
 
 @c ===================================================================
@@ -255,6 +260,7 @@ ebzipinfo --uncompress
 * Test::                        テスト
 * Partial Compression::         一部だけの圧縮
 * Overwrite Old Files::         古いファイルの上書き
+* Compress Compressed EPWING::  圧縮された EPWING の圧縮
 @end menu
 
 @c -------------------------------------------------------------------
@@ -300,11 +306,12 @@ CD-ROM 書籍がすでに @file{/dict} にコピーされているものの、まだ圧縮
 @group
 ==> compress /dict/kanji/start <==
 output to ./dict/kanji/start.ebz
- 1.4% done: 2097152 -> 941887 bytes (44.9%)
- 2.7% done: 4194304 -> 1865181 bytes (44.5%)
- 4.1% done: 6291456 -> 2728150 bytes (43.4%)
+ 1.0% done (2097152 / 220069888 bytes)
+ 1.9% done (4194304 / 220069888 bytes)
+ 2.9% done (6291456 / 220069888 bytes)
         : (略)
-total: 154290176 -> 54881862 bytes (35.6%)
+completed (220069888 / 220069888 bytes)
+220069888 -> 78163751 bytes (35.5%)
 @end group
 @end example
 
@@ -582,7 +589,7 @@ subbook 3:
 ルは常に圧縮されます。
 
 @c -------------------------------------------------------------------
-@node Overwrite Old Files,  , Partial Compression, Compression
+@node Overwrite Old Files, Compress Compressed EPWING, Partial Compression, Compression
 @section 古いファイルの上書き
 
 書き込もうとしたファイルがすでに存在するとき、@code{ebzip} は上書きし
@@ -607,6 +614,16 @@ do you wish to overwrite (y or n)?
 同様に、@samp{--no-overwrite} オプションを指定すると、@code{ebzip} は
 確認なしにそのファイルを飛ばして次に進みます。
 
+@c -------------------------------------------------------------------
+@node Compress Compressed EPWING,  , Overwrite Old Files, Compression
+@section 圧縮された EPWING 書籍の圧縮
+
+@code{ebzip} は EPWING 圧縮形式で圧縮された CD-ROM 書籍を圧縮すること
+ができます。
+@code{ebzip} は書籍を伸長してから、ebzip の圧縮形式で圧縮します。
+一般に ebzip の圧縮形式の方が EPWING 圧縮形式よりも良好なので、
+@code{ebzip} によって圧縮された書籍は元のものよりも小さくなります。
+
 @c ===================================================================
 @node Uncompression, Information, Compression, Top
 @chapter 伸長
@@ -617,6 +634,7 @@ do you wish to overwrite (y or n)?
 @menu
 * Uncompression Example::       伸長の実例
 * Options for Uncompression::   伸長のオプション
+* Uncompress Compressed EPWING::  圧縮された EPWING の伸長
 @end menu
 
 @c -------------------------------------------------------------------
@@ -660,11 +678,12 @@ do you wish to overwrite (y or n)?
 @group
 ==> uncompress /dict/kanji/start.ebz <==
 output to ./kanji/start.ebz
- 1.4% done: 941887 -> 2097152 bytes
- 2.7% done: 1865181 -> 4194304 bytes
- 4.1% done: 2728150 -> 6291456 bytes
+ 5.1% done (4194304 / 82460672 bytes)
+10.2% done (8388608 / 82460672 bytes)
+15.3% done (12582912 / 82460672 bytes)
         : (略)
-total: 54881862 -> 154290176 bytes
+completed (82460672 / 82460672 bytes)
+25681439 -> 82460672 bytes
 @end group
 @end example
 
@@ -700,7 +719,7 @@ do you wish to overwrite (y or n)?
 拡張子 @samp{.ebz} が取り除かれています。
 
 @c -------------------------------------------------------------------
-@node Options for Uncompression,  , Uncompression Example, Uncompression
+@node Options for Uncompression, Uncompress Compressed EPWING, Uncompression Example, Uncompression
 @section 伸長のオプション
 
 多くのオプションは、圧縮時と伸長時とで同じ意味を持っています。
@@ -735,6 +754,17 @@ do you wish to overwrite (y or n)?
 
 @code{ebunzip} は、@samp{--level} オプションを無視します。
 伸長時に @samp{--level} オプションを指定する必要はありません。
+
+@c -------------------------------------------------------------------
+@node Uncompress Compressed EPWING,  , Options for Uncompression, Uncompression
+@section 圧縮された EPWING CD-ROM 書籍の伸長
+
+@code{ebzip} は EPWING 圧縮形式で圧縮された CD-ROM 書籍を伸長すること
+ができます。
+しかしながら、伸長した書籍を圧縮し直して、元の書籍を復元することはでき
+ません。
+@code{ebzip} は EPWING 圧縮形式の伸長には対応していますが、圧縮には対
+応していません。
 
 @c ===================================================================
 @node Information, Delete a Book, Uncompression, Top
@@ -964,12 +994,11 @@ CD-ROM 書籍を圧縮します。
 @group
 @multitable @columnfractions .4 .3 .3
 @item 圧縮レベル             @tab  ファイルサイズ   @tab  圧縮率
-@item (非圧縮)               @tab  154476544 bytes  @tab  100.0%
+@item (元のファイル)         @tab  154476544 bytes  @tab  100.0%
 @item レベル 0               @tab  54922039 bytes   @tab  35.6%
 @item レベル 1               @tab  49615791 bytes   @tab  32.1%
 @item レベル 2               @tab  45983464 bytes   @tab  29.8%
 @item レベル 3               @tab  43431397 bytes   @tab  28.1%
-@c @item レベル 4            @tab  41542738 bytes   @tab  26.9%
 @item (参考: gzip -6)        @tab  38712247 bytes   @tab  25.0%
 @end multitable
 @end group
@@ -979,30 +1008,38 @@ CD-ROM 書籍を圧縮します。
 @group
 @multitable @columnfractions .4 .3 .3
 @item 圧縮レベル             @tab  ファイルサイズ  @tab  圧縮率
-@item (非圧縮)               @tab  55511040 bytes  @tab  100.0%
+@item (元のファイル)         @tab  55511040 bytes  @tab  100.0%
 @item レベル 0               @tab  25866491 bytes  @tab  46.6%
 @item レベル 1               @tab  24419066 bytes  @tab  44.0%
 @item レベル 2               @tab  23453212 bytes  @tab  42.2%
 @item レベル 3               @tab  22748840 bytes  @tab  41.0%
-@c @item レベル 4            @tab  22139989 bytes  @tab  39.9%
 @item (参考: gzip -6)        @tab  20930009 bytes  @tab  37.7%
 @end multitable
 @end group
 
-ある国語辞典 (EPWING) の @file{HONMON} ファイルを圧縮した結果:
+ある国語辞典 (EPWING V1) の @file{HONMON} ファイルを圧縮した結果:
 
 @group
 @multitable @columnfractions .4 .3 .3
 @item 圧縮レベル             @tab  ファイルサイズ  @tab  圧縮率
-@item (非圧縮)               @tab  23642112 bytes  @tab  100.0%
+@item (元のファイル)         @tab  23642112 bytes  @tab  100.0%
 @item レベル 0               @tab   9927048 bytes  @tab  42.0%
 @item レベル 1               @tab   9213184 bytes  @tab  39.0%
 @item レベル 2               @tab   8767603 bytes  @tab  37.1%
 @item レベル 3               @tab   8495563 bytes  @tab  35.9%
-@c @item レベル 4            @tab   8336185 bytes  @tab  35.3%
 @item (参考: gzip -6)        @tab   8114658 bytes  @tab  34.3%
 @end multitable
 @end group
+
+ある国語辞典 (EPWING V5) の @file{HONMON2} ファイルを圧縮した結果:
+
+@multitable @columnfractions .4 .3 .3
+@item 圧縮レベル             @tab  ファイルサイズ   @tab  圧縮率
+@item (非圧縮)               @tab  220069888 bytes  @tab  100.0%
+@item (元のファイル)         @tab  149139690 bytes  @tab  67.8%
+@item レベル 0               @tab   82973263 bytes  @tab  37.7%
+@item レベル 1               @tab   78163751 bytes  @tab  35.5%
+@end multitable
 
 @c ===================================================================
 @node Compressed File Format,  , Comparision Result, Top

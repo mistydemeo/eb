@@ -13,7 +13,7 @@
  */
 
 /*
- * Requirements for Autoconf:
+ * This program requires the following Autoconf macros:
  *   AC_C_CONST
  */
 
@@ -37,7 +37,7 @@ is_same_file(filename1, filename2)
 {
     struct stat st1, st2;
 
-    if (stat(filename1, &st1) || stat(filename2, &st2) != 0)
+    if (stat(filename1, &st1) != 0 || stat(filename2, &st2) != 0)
 	return 0;
 
 #ifndef DOS_FILE_PATH

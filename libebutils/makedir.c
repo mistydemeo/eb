@@ -13,7 +13,7 @@
  */
 
 /*
- * Requirements for Autoconf:
+ * This program requires the following Autoconf macros:
  *   AC_C_CONST
  *   AC_TYPE_MODE_T
  *   AC_HEADER_STDC

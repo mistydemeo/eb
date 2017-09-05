@@ -5,11 +5,11 @@ pkginclude_HEADERS = appendix.h defs.h eb.h error.h font.h language.h \
 	text.h
 noinst_HEADERS = internal.h
 
-libeb_la_SOURCES = appendix.c appsub.c bitmap.c copyright.c eb.c error.c \
-	filename.c font.c graphic.c hook.c jacode.c keyword.c language.c \
-	match.c menu.c message.c multi.c narwalt.c narwfont.c search.c \
-	setword.c stopcode.c subbook.c text.c uint.c unzip1.c widealt.c \
-	widefont.c zio.c
+libeb_la_SOURCES = appendix.c appsub.c bitmap.c copyright.c eb.c ebunzip1.c \
+	epwunzip.c error.c filename.c font.c graphic.c hook.c jacode.c \
+	keyword.c language.c match.c menu.c message.c multi.c narwalt.c \
+	narwfont.c search.c setword.c stopcode.c subbook.c text.c uint.c \
+	widealt.c widefont.c zio.c
 
 libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
 
@@ -27,6 +27,8 @@ appsub.o: appsub.c ../config.h eb.h defs.h error.h internal.h \
 bitmap.o: bitmap.c ../config.h eb.h defs.h error.h font.h
 copyright.o: copyright.c ../config.h eb.h defs.h error.h
 eb.o: eb.c ../config.h eb.h defs.h error.h internal.h language.h
+ebunzip1.o: ebunzip1.c ../config.h defs.h
+epwunzip1.o: epwunzip1.c ../config.h defs.h
 error.o: error.c ../config.h eb.h defs.h error.h
 filename.o: filename.c ../config.h eb.h defs.h error.h
 font.o: font.c ../config.h eb.h defs.h error.h font.h internal.h
@@ -52,7 +54,6 @@ stopcode.o: stopcode.c ../config.h eb.h defs.h appendix.h error.h \
 subbook.o: subbook.c ../config.h eb.h defs.h error.h font.h internal.h
 text.o: text.c ../config.h eb.h defs.h error.h internal.h text.h
 uint.o: uint.c ../config.h eb.h defs.h error.h
-unzip1.o: unzip1.c ../config.h defs.h
 widealt.o: widealt.c ../config.h eb.h defs.h error.h appendix.h \
  internal.h
 widefont.o: widefont.c ../config.h eb.h defs.h error.h font.h \
@@ -67,6 +68,8 @@ appsub.lo: appsub.c ../config.h eb.h defs.h error.h internal.h \
 bitmap.lo: bitmap.c ../config.h eb.h defs.h error.h font.h
 copyright.lo: copyright.c ../config.h eb.h defs.h error.h
 eb.lo: eb.c ../config.h eb.h defs.h error.h internal.h language.h
+ebunzip1.lo: ebunzip1.c ../config.h defs.h
+epwunzip1.lo: epwunzip1.c ../config.h defs.h
 error.lo: error.c ../config.h eb.h defs.h error.h
 filename.lo: filename.c ../config.h eb.h defs.h error.h
 font.lo: font.c ../config.h eb.h defs.h error.h font.h internal.h
@@ -92,7 +95,6 @@ stopcode.lo: stopcode.c ../config.h eb.h defs.h appendix.h error.h \
 subbook.lo: subbook.c ../config.h eb.h defs.h error.h font.h internal.h
 text.lo: text.c ../config.h eb.h defs.h error.h internal.h text.h
 uint.lo: uint.c ../config.h eb.h defs.h error.h
-unzip1.lo: unzip1.c ../config.h defs.h
 widealt.lo: widealt.c ../config.h eb.h defs.h error.h appendix.h \
  internal.h
 widefont.lo: widefont.c ../config.h eb.h defs.h error.h font.h \
