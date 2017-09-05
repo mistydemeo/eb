@@ -543,7 +543,14 @@ ebnet_open(const char *url)
 	goto failed;
     }
 
+#if defined(HAVE_ATOLL)
     file_size = atoll(line);
+#elif defined(HAVE__ATOI64)
+    file_size = _atoi64(line);
+#else
+    file_size = atol(line);
+#endif
+
     if (file_size < 0)
 	goto failed;
     ebnet_set_file_size(new_file, file_size);

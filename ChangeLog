@@ -1,3 +1,15 @@
+2010-03-08  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.4.3.
+
+	* configure.ac (AC_INIT): Set version to 4.4.3.
+	* eb/ebnet.c (ebnet_open): Use _atoi64() or atol(), when atoll()
+	is not available.
+	* configure.ac (LIBEB_VERSION_INFO): 
+	EB Library verison 4.2.2 sets LIBEB_VERSION_INFO to 15:0:2,
+	but it is wrong.  To avoid the confusion, I decide to update
+	LIBEB_VERSION_INFO to 16:0:0.
+
 2010-01-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.4.2.
