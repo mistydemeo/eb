@@ -121,7 +121,7 @@ eb_finalize_text_context(book)
 
 /*
  * Reset text context of `book'.
- * Note that `contexxt_code' and `context_location' are unchanged.
+ * Note that `context_code' and `context_location' are unchanged.
  */
 void
 eb_reset_text_context(book)
@@ -1895,14 +1895,17 @@ eb_backward_text(book, appendix)
     /*
      * Determine stop-code.
      */
-    if (appendix == NULL
-	|| appendix->subbook_current == NULL
-	|| appendix->subbook_current->stop_code0 == 0) {
+    if (appendix != NULL
+	&& appendix->subbook_current != NULL
+	&& appendix->subbook_current->stop_code0 != 0) {
+	stop_code0 = appendix->subbook_current->stop_code0;
+	stop_code1 = appendix->subbook_current->stop_code1;
+    } else if (0 <= book->text_context.auto_stop_code) {
 	stop_code0 = 0x1f41;
 	stop_code1 = book->text_context.auto_stop_code;
     } else {
-	stop_code0 = appendix->subbook_current->stop_code0;
-	stop_code1 = appendix->subbook_current->stop_code1;
+	error_code = EB_ERR_END_OF_CONTENT;
+	goto failed;
     }
 
     /*
@@ -1935,16 +1938,16 @@ eb_backward_text(book, appendix)
 	/*
 	 * Seek and read text.
 	 *
-	 * Since a stop code occupies 4 bytes and we start scanning
-	 * stop-code at preceding byte of the current location, we read
-	 * text in front of the current location and following 3 bytes.
+	 * Since a stop code occupies 4 bytes, we read EP_SIZE_PAGE - 3
+	 * bytes in front of the current location plus 3 bytes behind
+	 * the current location.
 	 * 
-	 *                  start scanning
-	 *                  |    current location
+	 *                  *    current location
 	 *                  |    |
 	 *    [..] [..] [..] [1F] [41] [00] [01]
 	 *                   ===================
-	 *                    may be stop-code
+	 *                   If this is stop-code, the backward location
+	 *                   is `*'.
 	 */
 	if (book->text_context.location < EB_SIZE_PAGE + 3)
 	    read_location = 0;
@@ -1992,6 +1995,7 @@ eb_backward_text(book, appendix)
 
 	    eb_reset_text_context(book);
 	    book->text_context.location = read_location + i;
+	    book->text_context.auto_stop_code = stop_code1;
 	    error_code = eb_read_text_internal(book, appendix,
 		&eb_default_hookset, NULL, EB_SIZE_PAGE, NULL, NULL, 1);
 	    if (error_code != EB_SUCCESS

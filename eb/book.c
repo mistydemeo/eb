@@ -540,8 +540,10 @@ eb_load_catalog_epwing(book, catalog_path)
 	     * Skip this entry if the first character of the file name
 	     * is not valid.
 	     */
-	    if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p))
+	    if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p)) {
+		buffer_p += EB_MAX_DIRECTORY_NAME_LENGTH;
 		continue;
+	    }
 	    strncpy(font->file_name, buffer_p, EB_MAX_DIRECTORY_NAME_LENGTH);
 	    font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
 	    font->font_code = j;
@@ -562,8 +564,10 @@ eb_load_catalog_epwing(book, catalog_path)
 	     * Skip this entry if the first character of the file name
 	     * is not valid.
 	     */
-	    if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p))
+	    if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p)) {
+		buffer_p += EB_MAX_DIRECTORY_NAME_LENGTH;
 		continue;
+	    }
 	    strncpy(font->file_name, buffer_p, EB_MAX_DIRECTORY_NAME_LENGTH);
 	    font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
 	    font->font_code = j;

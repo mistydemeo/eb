@@ -411,6 +411,11 @@ struct EB_Font_Struct {
     EB_Font_Code font_code;
 
     /*
+     * Whether the object has been initialized.
+     */
+    int initialized;
+
+    /*
      * Character numbers of the start and end of the font.
      */
     int start;
@@ -505,8 +510,7 @@ struct EB_Multi_Search_Struct {
  */
 struct EB_Subbook_Struct {
     /*
-     * Whether information about the subbook have been loaded in this
-     * structure.
+     * Whether the object has been initialized.
      */
     int initialized;
 

@@ -198,6 +198,7 @@ void eb_path_name_zio_code EB_P((const char *, Zio_Code, Zio_Code *));
 
 /* font.c */
 void eb_initialize_fonts EB_P((EB_Book *));
+void eb_load_fonts EB_P((EB_Book *));
 void eb_finalize_fonts EB_P((EB_Book *));
 
 /* hook.c */

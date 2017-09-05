@@ -1,3 +1,8 @@
+Major changes in release 3.3beta2.
+
+* Fix some serious and minor bugs.
+* Install `eb3.m4' in `$(datadir)/aclocal'.
+
 Major changes in release 3.3beta1.
 
 * Fix some bugs.

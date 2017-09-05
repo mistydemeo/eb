@@ -1,3 +1,48 @@
+2002-10-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.3beta2.
+
+	* configure.ac (AC_INIT): Set version to 3.3beta2.
+
+	* eb/bitmap.c (eb_narrow_font_xbm_size, eb_narrow_font_xpm_size,
+	eb_narrow_font_gif_size, eb_narrow_font_bmp_size,
+	eb_wide_font_xbm_size, eb_wide_font_xpm_size,
+	eb_wide_font_gif_size, eb_wide_font_bmp_size): Fix bugs that
+	those functions always return EB_ERR_NO_SUCH_FONT, reported by
+	NISHIKAWA.
+
+	* m4/Makefile.am: Install `eb3.m4' in `$(datadir)/aclocal',
+	rathar than `$(pkgdatadir)', suggested by Takashi NEMOTO.
+
+	* eb/book.c (eb_load_catalog_epwing): Fix minor bugs, reported
+	by Takashi NEMOTO.
+
+2002-10-08  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/subbook.c (eb_load_subbook_indexes): Get index location
+	using `subbook->index_page'.
+
+2002-10-07  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/appsub.c (eb_set_appendix_subbook, eb_set_appendix_subbook_eb,
+	eb_set_appendix_subbook_epwing): Fix error recovery codes.
+	* eb/subbook.c (eb_set_subbook, eb_set_subbook_eb, 
+	eb_set_subbook_epwing): Ditto.
+	* eb/narwfont.c (eb_load_narrow_font): Ditto.
+	* eb/font.c (eb_set_font): Ditto.
+
+2002-10-06  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h.in (EB_Subbook_Struct): add the `initialized' member.
+	* eb/font.c (eb_initialize_fonts): Reset `font->initialized'.
+	* eb/font.c (eb_load_fonts): New internal function.
+	* eb/narwfont.c (eb_load_narrow_font): Don't complain if it cannot
+	open a font file.  Set `font->initialized' upon success.
+	* eb/subbook.c (eb_set_subbook): Call eb_load_fonts().
+
+	* eb/subbook.c (eb_set_subbook, eb_load_subbook): Set 
+	`subbook->initialized' by eb_set_subbook().
+
 2002-09-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.3beta1.

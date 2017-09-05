@@ -98,7 +98,7 @@ main(argc, argv)
     }
 
     /* 単語検索のリクエストを送出。*/
-    error_code = eb_search_endword(&book, argv[3]);
+    error_code = eb_search_word(&book, argv[3]);
     if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to search for the word, %s: %s\n",
             argv[0], eb_error_message(error_code), argv[3]);

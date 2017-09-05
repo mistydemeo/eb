@@ -601,7 +601,9 @@ eb_set_appendix_subbook(appendix, subbook_code)
      * An error occurs...
      */
   failed:
-    eb_unset_appendix_subbook(appendix);
+    if (appendix->subbook_current != NULL)
+	zio_close(&appendix->subbook_current->zio);
+    appendix->subbook_current = NULL;
     LOG(("out: eb_set_appendix_subbook() = %s", eb_error_string(error_code)));
     eb_unlock(&appendix->lock);
     return error_code;
@@ -656,7 +658,6 @@ eb_set_appendix_subbook_eb(appendix, subbook_code)
      * An error occurs...
      */
   failed:
-    eb_unset_appendix_subbook(appendix);
     LOG(("out: eb_set_appendix_subbook_eb() = %s",
 	eb_error_string(error_code)));
     return error_code;
@@ -723,7 +724,6 @@ eb_set_appendix_subbook_epwing(appendix, subbook_code)
      * An error occurs...
      */
   failed:
-    eb_unset_appendix_subbook(appendix);
     LOG(("out: eb_set_appendix_subbook_epwing() = %s",
 	eb_error_string(error_code)));
     return error_code;

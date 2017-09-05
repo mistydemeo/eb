@@ -53,38 +53,52 @@ eb_load_narrow_font(book)
      * If the book is EBWING, open the narrow font file.
      * (In EB books, font data are stored in the `START' file.)
      */
+    zio_code = ZIO_INVALID;
+
     if (book->disc_code == EB_DISC_EB) {
-	if (zio_mode(&subbook->narrow_current->zio) != ZIO_INVALID)
-	    zio_code = ZIO_REOPEN;
-	else
+	if (subbook->narrow_current->initialized) {
+	    if (zio_mode(&subbook->narrow_current->zio) != ZIO_INVALID)
+		zio_code = ZIO_REOPEN;
+	} else {
 	    zio_code = zio_mode(&subbook->text_zio);
-	eb_compose_path_name2(book->path, subbook->directory_name, 
-	    subbook->text_file_name, font_path_name);
+	    eb_compose_path_name2(book->path, subbook->directory_name, 
+		subbook->text_file_name, font_path_name);
+	}
 
     } else {
-	if (zio_mode(&subbook->narrow_current->zio) != ZIO_INVALID)
-	    zio_code = ZIO_REOPEN;
-	else {
+	if (subbook->narrow_current->initialized) {
+	    if (zio_mode(&subbook->narrow_current->zio) != ZIO_INVALID)
+		zio_code = ZIO_REOPEN;
+	    eb_compose_path_name3(book->path, subbook->directory_name,
+		subbook->gaiji_directory_name,
+		subbook->narrow_current->file_name, font_path_name);
+	} else {
 	    eb_canonicalize_file_name(subbook->narrow_current->file_name);
-	    if (eb_find_file_name3(book->path,
-		subbook->directory_name, subbook->gaiji_directory_name,
+	    if (eb_find_file_name3(book->path, subbook->directory_name,
+		subbook->gaiji_directory_name,
 		subbook->narrow_current->file_name, 
 		subbook->narrow_current->file_name) != EB_SUCCESS) {
-		error_code = EB_ERR_FAIL_OPEN_FONT;
-		goto failed;
+		subbook->narrow_current->font_code = EB_FONT_INVALID;
+		subbook->narrow_current = NULL;
+		goto succeeded;
 	    }
+
+	    eb_compose_path_name3(book->path, subbook->directory_name,
+		subbook->gaiji_directory_name,
+		subbook->narrow_current->file_name, font_path_name);
+	    eb_path_name_zio_code(font_path_name, ZIO_PLAIN, &zio_code);
 	}
-	eb_compose_path_name3(book->path, subbook->directory_name,
-	    subbook->gaiji_directory_name, subbook->narrow_current->file_name,
-	    font_path_name);
-	eb_path_name_zio_code(font_path_name, ZIO_PLAIN, &zio_code);
     }
 
-    if (zio_open(&subbook->narrow_current->zio, font_path_name,
-	zio_code) < 0) {
+    if (zio_code != ZIO_INVALID
+	&& zio_open(&subbook->narrow_current->zio, font_path_name, zio_code)
+	< 0) {
 	error_code = EB_ERR_FAIL_OPEN_FONT;
 	goto failed;
     }
+
+    if (subbook->narrow_current->initialized)
+	goto succeeded;
 
     /*
      * Read information from the text file.
@@ -149,6 +163,8 @@ eb_load_narrow_font(book)
     }
 
   succeeded:
+    if (subbook->narrow_current != NULL)
+	subbook->narrow_current->initialized = 1;
     LOG(("out: eb_load_narrow_font()", eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 

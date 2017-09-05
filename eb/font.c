@@ -36,6 +36,7 @@ eb_initialize_fonts(book)
 
     for (i = 0, font = subbook->narrow_fonts; i < EB_MAX_FONTS; i++, font++) {
 	font->font_code = EB_FONT_INVALID;
+	font->initialized = 0;
 	font->start = -1;
 	font->end = -1;
 	font->page = 0;
@@ -44,6 +45,7 @@ eb_initialize_fonts(book)
 
     for (i = 0, font = subbook->wide_fonts; i < EB_MAX_FONTS; i++, font++) {
 	font->font_code = EB_FONT_INVALID;
+	font->initialized = 0;
 	font->start = -1;
 	font->end = -1;
 	font->page = 0;
@@ -51,6 +53,25 @@ eb_initialize_fonts(book)
     }
 
     LOG(("out: eb_initialize_fonts()"));
+}
+
+
+/*
+ * Load font files.
+ */
+void
+eb_load_fonts(book)
+    EB_Book *book;
+{
+    int i;
+
+    LOG(("in: eb_load_fonts(book=%d)", (int)book->code));
+
+    for (i = 0; i < EB_MAX_FONTS; i++)
+	 eb_set_font(book, i);
+    eb_unset_font(book);
+
+    LOG(("out: eb_load_fonts()"));
 }
 
 
@@ -176,7 +197,7 @@ eb_set_font(book, font_code)
     }
     if (subbook->wide_current != NULL) {
 	if (subbook->wide_current->font_code == font_code)
-	    return 0;
+	    goto succeeded;
 	if (book->disc_code == EB_DISC_EPWING)
 	    zio_close(&subbook->wide_current->zio);
 	subbook->wide_current = NULL;
