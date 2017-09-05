@@ -89,11 +89,13 @@ eb_search_exactword(book, input_word)
     context = book->search_contexts;
     context->code = EB_SEARCH_EXACTWORD;
     if (book->character_code == EB_CHARCODE_ISO8859_1) {
+	context->compare_pre    = eb_exact_pre_match_word_latin;
 	context->compare_single = eb_exact_match_word_latin;
-	context->compare_group = eb_exact_match_word_latin;
+	context->compare_group  = eb_exact_match_word_latin;
     } else {
+	context->compare_pre    = eb_exact_pre_match_word_jis;
 	context->compare_single = eb_exact_match_word_jis;
-	context->compare_group = eb_exact_match_word_jis_kana;
+	context->compare_group  = eb_exact_match_word_jis_kana;
     }
 
     /*

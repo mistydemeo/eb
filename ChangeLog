@@ -1,4 +1,18 @@
+2003-09-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.0beta2.
+
+	* eb/defs.h.in (EB_Search_Context_Struct): Add `compare_pre'.
+	* eb/match.c (eb_pre_match_word, eb_exact_pre_match_word_jis,
+	eb_exact_pre_match_word_latin): New functions for pre-search.
+	*eb/search.c (eb_presearch_word): Use `compare_pre' for comparision.
+
+	* eb/match.c (eb_match_word_jis_kana, eb_match_exactword_jis_kana):
+	Fix bugs in comparision of Kana characters.
+
 2003-08-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.0beta1.
 
 	* eb/error.c, eb/error.h: Add EB_ERR_NO_ALT and EB_ERR_NO_STOPCODE.
 	* eb/stopcode.c: Set stop_code[0] and stop_code[1] to -1 if an error

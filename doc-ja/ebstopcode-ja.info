@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebstopcode-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta1 版です。 EB ライブラリバージョン 4.0beta1 に対
+   この文書は第 4.0beta2 版です。 EB ライブラリバージョン 4.0beta2 に対
 応しています。
 
 * Menu:
@@ -58,7 +58,7 @@ File: ebstopcode-ja.info,  Node: Introduction,  Next: Invoking ebstopcode,  Prev
    `ebstopcode' コマンドは、CD-ROM 書籍の本文の区切りコードを解析する
 ためのツールです。
 
-   この文書は第 4.0beta1 版です。 EB ライブラリバージョン 4.0beta1 に対
+   この文書は第 4.0beta2 版です。 EB ライブラリバージョン 4.0beta2 に対
 応しています。
 
 
@@ -157,7 +157,7 @@ File: ebstopcode-ja.info,  Node: Summary of Options,  Prev: Invoking ebstopcode,
 
 `-c コード'
 `--code コード'
-     コードを区切りコードに指定する (例 : "0x1f09 0x0001")。
+     コードを区切りコードに指定します (例 : "0x1f09 0x0001")。
      `ebstopcode' は、コードを見つけるまで本文を出力します。
 
 `-h'

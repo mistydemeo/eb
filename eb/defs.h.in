@@ -790,6 +790,7 @@ struct EB_Search_Context_Struct {
     /*
      * Function which compares word to search and pattern in an index page.
      */
+    int (*compare_pre) EB_P((const char *, const char *, size_t));
     int (*compare_single) EB_P((const char *, const char *, size_t));
     int (*compare_group) EB_P((const char *, const char *, size_t));
 

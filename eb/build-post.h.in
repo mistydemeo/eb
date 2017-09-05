@@ -248,8 +248,11 @@ const char *eb_quoted_string EB_P((const char *));
 
 /* match.c */
 int eb_match_word EB_P((const char *, const char *, size_t));
+int eb_pre_match_word EB_P((const char *, const char *, size_t));
 int eb_exact_match_word_jis EB_P((const char *, const char *, size_t));
+int eb_exact_pre_match_word_jis EB_P((const char *, const char *, size_t));
 int eb_exact_match_word_latin EB_P((const char *, const char *, size_t));
+int eb_exact_pre_match_word_latin EB_P((const char *, const char *, size_t));
 int eb_match_word_jis_kana EB_P((const char *, const char *, size_t));
 int eb_exact_match_word_jis_kana EB_P((const char *, const char *, size_t));
 

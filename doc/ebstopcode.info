@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebstopcode.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 4.0beta1, for EB Library version 4.0beta1.
+   This is edition 4.0beta2, for EB Library version 4.0beta2.
 
 * Menu:
 
@@ -57,7 +57,7 @@ In that case, you have to tell EB Library a correct stop code using
    The `ebstopcode' command is a utility to analyze text stop code in a
 CD-ROM book.
 
-   This is edition 4.0beta1, for EB Library version 4.0beta1.
+   This is edition 4.0beta2, for EB Library version 4.0beta2.
 
 
 File: ebstopcode.info,  Node: Invoke ebstopcode,  Next: Summary of Options,  Prev: Introduction,  Up: Top

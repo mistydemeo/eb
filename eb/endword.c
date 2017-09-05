@@ -89,11 +89,13 @@ eb_search_endword(book, input_word)
     context = book->search_contexts;
     context->code = EB_SEARCH_ENDWORD;
     if (book->character_code == EB_CHARCODE_ISO8859_1) {
+	context->compare_pre    = eb_pre_match_word;
 	context->compare_single = eb_match_word;
-	context->compare_group = eb_match_word;
+	context->compare_group  = eb_match_word;
     } else {
+	context->compare_pre    = eb_pre_match_word;
 	context->compare_single = eb_match_word;
-	context->compare_group = eb_match_word_jis_kana;
+	context->compare_group  = eb_match_word_jis_kana;
     }
 
     /*

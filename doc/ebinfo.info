@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 4.0beta1, for EB Library version 4.0beta1.
+   This is edition 4.0beta2, for EB Library version 4.0beta2.
 
 * Menu:
 
@@ -56,7 +56,7 @@ _without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 4.0beta1, for EB Library version 4.0beta1.
+   This is edition 4.0beta2, for EB Library version 4.0beta2.
 
 
 File: ebinfo.info,  Node: Invoke ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
@@ -242,7 +242,7 @@ long as they are unique.
 
 `-l'
 `--book-list'
-     Suppress  normal output; instead output a list of books that an
+     Suppress normal output; instead output a list of books that an
      EBNET server provides.  BOOK-PATH command line argument must be a
      remote access identifer.
 

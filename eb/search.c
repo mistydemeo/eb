@@ -306,7 +306,7 @@ entry_arrangement=%d, entry_count=%d)",
 		error_code = EB_ERR_UNEXP_TEXT;
 		goto failed;
 	    }
-	    if (context->compare_single(context->canonicalized_word, cache_p,
+	    if (context->compare_pre(context->canonicalized_word, cache_p,
 		(size_t)context->entry_length) <= 0) {
 		next_page = eb_uint4(cache_p + context->entry_length);
 		break;

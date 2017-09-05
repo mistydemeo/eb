@@ -225,7 +225,7 @@ A
 @table @code
 @item -c @var{コード}
 @itemx --code @var{コード}
-@var{コード} を区切りコードに指定する (例: "0x1f09 0x0001")。
+@var{コード} を区切りコードに指定します (例: "0x1f09 0x0001")。
 @code{ebstopcode} は、@var{コード} を見つけるまで本文を出力します。
 
 @item -h

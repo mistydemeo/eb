@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta1 版です。 EB ライブラリバージョン 4.0beta1 に対
+   この文書は第 4.0beta2 版です。 EB ライブラリバージョン 4.0beta2 に対
 応しています。
 
 * Menu:
@@ -205,7 +205,7 @@ EBNET サーバの書籍一覧
 ます。 たとえば、
 
      % ebinfo --book-list ebnet://dict.example.com
-     Name             Title
+     名前             題名
      encycl           ブラウンコンサイス百科事典
      encycl.app       ブラウンコンサイス百科事典 (appendix)
      crossword        クロスワードパズル辞典
@@ -241,6 +241,12 @@ File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Book list on EBNET server
 `--help'
      ヘルプメッセージを標準出力に出力して、終了します。
 
+`-l'
+`--book-list'
+     通常の出力の代わりに、EBNET サーバが公開している書籍の一覧を出力し
+     ます。 コマンド行引数 BOOK-PATH は遠隔アクセス識別子でなければなり
+     ません。
+
 `-m'
 `--multi-search'
      複合検索 (multi search) に関する情報も、合わせて出力します。
@@ -257,6 +263,6 @@ Node: Introduction1466
 Node: Invoke ebinfo2209
 Node: Details about Information4161
 Node: Book list on EBNET server5890
-Node: Options to ebinfo7147
+Node: Options to ebinfo7146
 
 End Tag Table

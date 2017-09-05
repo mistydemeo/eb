@@ -275,7 +275,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @example
 @group
 % ebinfo --book-list ebnet://dict.example.com
-Name             Title
+名前             題名
 encycl           ブラウンコンサイス百科事典
 encycl.app       ブラウンコンサイス百科事典 (appendix)
 crossword        クロスワードパズル辞典
@@ -320,6 +320,11 @@ travel           ワールドトラベルガイド
 @item -h
 @itemx --help
 ヘルプメッセージを標準出力に出力して、終了します。
+
+@item -l
+@itemx --book-list
+通常の出力の代わりに、EBNET サーバが公開している書籍の一覧を出力します。
+コマンド行引数 @var{book-path} は遠隔アクセス識別子でなければなりません。
 
 @item -m
 @itemx --multi-search

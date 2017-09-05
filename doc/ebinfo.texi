@@ -322,7 +322,7 @@ Output help message to standard out, then exit.
 
 @item -l
 @itemx --book-list
-Suppress  normal output; instead output a list of books that an EBNET
+Suppress normal output; instead output a list of books that an EBNET
 server provides.
 @var{book-path} command line argument must be a remote access identifer.
 
