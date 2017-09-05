@@ -489,7 +489,7 @@ ebnet_open(const char *url)
     Line_Buffer line_buffer;
     char line[EBNET_MAX_LINE_LENGTH + 1];
     ssize_t read_result;
-    ssize_t file_size;
+    off_t file_size;
     int new_file;
     int lost_sync;
     int retry_count = 0;
@@ -543,7 +543,7 @@ ebnet_open(const char *url)
 	goto failed;
     }
 
-    file_size = atoi(line);
+    file_size = atoll(line);
     if (file_size < 0)
 	goto failed;
     ebnet_set_file_size(new_file, file_size);
@@ -591,7 +591,7 @@ ebnet_close(int file)
 off_t
 ebnet_lseek(int file, off_t offset, int whence)
 {
-    ssize_t file_size;
+    off_t file_size;
     off_t new_offset = 0;
 
     LOG(("in: ebnet_lseek(file=%d, location=%ld, whence=%d)", file,
@@ -669,8 +669,16 @@ ebnet_read(int *file, char *buffer, size_t length)
 	goto failed;
 
     bind_file_to_line_buffer(&line_buffer, *file);
-    sprintf(line, "READ %s /%s %ld %ld\r\n", book_name, url_path,
-	(long)offset, (long)length);
+#if defined(PRINTF_LL_MODIFIER)
+    sprintf(line, "READ %s /%s %llu %ld\r\n", book_name, url_path,
+	(unsigned long long) offset, (long) length);
+#elif defined(PRINTF_I64_MODIFIER)
+    sprintf(line, "READ %s /%s %I64u %ld\r\n", book_name, url_path,
+	(unsigned __int64) offset, (long) length);
+#else
+    sprintf(line, "READ %s /%s %lu %ld\r\n", book_name, url_path,
+	(unsigned long) offset, (long) length);
+#endif
     if (write_string_all(*file, EBNET_TIMEOUT_SECONDS, line) <= 0) {
 	lost_sync = 1;
 	goto failed;
@@ -695,7 +703,7 @@ ebnet_read(int *file, char *buffer, size_t length)
 	    lost_sync = 1;
 	    goto failed;
 	} else if (strcmp(line + 1, "-1") == 0) {
-	    ebnet_set_offset(*file, offset + received_length);
+	  ebnet_set_offset(*file, (off_t) offset + received_length);
 	    goto failed;
 	} else if (strcmp(line + 1, "0") == 0) {
 	    break;
@@ -715,7 +723,7 @@ ebnet_read(int *file, char *buffer, size_t length)
 	received_length += chunk_length;
     }
 
-    ebnet_set_offset(*file, offset + received_length);
+    ebnet_set_offset(*file, (off_t) offset + received_length);
     finalize_line_buffer(&line_buffer);
     LOG(("out: ebnet_read(*file=%d) = %ld", *file, (long)received_length));
     return received_length;

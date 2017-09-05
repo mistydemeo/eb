@@ -190,7 +190,7 @@ eb_load_subbook(EB_Book *book)
 	 * Rewind the file descriptor of the start file.
 	 */
 	if (zio_lseek(&subbook->text_zio,
-	    (subbook->index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	    ((off_t) subbook->index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
 	}
@@ -288,8 +288,8 @@ eb_load_subbook_indexes(EB_Book *book)
     /*
      * Read the index table in the subbook.
      */
-    if (zio_lseek(&subbook->text_zio, (subbook->index_page - 1) * EB_SIZE_PAGE,
-	SEEK_SET) < 0) {
+    if (zio_lseek(&subbook->text_zio,
+	    ((off_t) subbook->index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_TEXT;
 	goto failed;
     }
@@ -850,6 +850,8 @@ eb_set_subbook(EB_Book *book, EB_Subbook_Code subbook_code)
 	error_code = eb_set_subbook_eb(book, subbook_code);
     else
 	error_code = eb_set_subbook_epwing(book, subbook_code);
+    if (error_code != EB_SUCCESS)
+	goto failed;
 
     /*
      * Load the subbook.
@@ -1041,7 +1043,6 @@ eb_set_subbook_epwing(EB_Book *book, EB_Subbook_Code subbook_code)
 
     /*
      * Open a graphic file if exists.
-     *
      */
     graphic_zio_code = ZIO_INVALID;
 

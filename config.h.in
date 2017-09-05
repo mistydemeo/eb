@@ -15,6 +15,9 @@
 /* Define if command names have the suffix \`.exe' */
 #undef EXEEXT_EXE
 
+/* Define to 1 if you have the `atoll' function. */
+#undef HAVE_ATOLL
+
 /* Define to 1 if you have the <direct.h> header file. */
 #undef HAVE_DIRECT_H
 
@@ -117,6 +120,9 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
+/* Define to 1 if you have the `_atoi64' function. */
+#undef HAVE__ATOI64
+
 /* Define to 1 if you have the `_getdcwd' function. */
 #undef HAVE__GETDCWD
 
@@ -125,6 +131,10 @@
 
 /* Define to 1 if `in6addr_loopback' is declared by <netinet/in.h> */
 #undef IN6ADDR_LOOPBACK_DECLARED
+
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#undef LT_OBJDIR
 
 /* Mailing address */
 #undef MAILING_ADDRESS
@@ -147,11 +157,23 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
+/* Define to `1' if printf() recognizes "I64" modifier for __int64 */
+#undef PRINTF_I64_MODIFIER
+
+/* Define to `1' if printf() recognizes "ll" modifier for long long */
+#undef PRINTF_LL_MODIFIER
+
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
 /* Version number of package */
 #undef VERSION
+
+/* Number of bits in a file offset, on hosts where this is settable. */
+#undef _FILE_OFFSET_BITS
+
+/* Define for large files, on AIX-style hosts. */
+#undef _LARGE_FILES
 
 /* Define to `unsigned char', `unsigned short', `unsigned int' or `unsigned
    long' according with size of `sin_port' in `struct sockaddr_in', if

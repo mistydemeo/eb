@@ -152,7 +152,8 @@ eb_load_wide_font_header(EB_Book *book, EB_Font_Code font_code)
     /*
      * Read information from the text file.
      */
-    if (zio_lseek(zio, (wide_font->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (zio_lseek(zio, ((off_t) wide_font->page - 1) * EB_SIZE_PAGE,
+	SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_FONT;
 	goto failed;
     }
@@ -277,7 +278,8 @@ eb_load_wide_font_glyphs(EB_Book *book, EB_Font_Code font_code)
     /*
      * Read glyphs.
      */
-    if (zio_lseek(zio, wide_font->page * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (zio_lseek(zio, (off_t) wide_font->page * EB_SIZE_PAGE, SEEK_SET)
+	< 0) {
 	error_code = EB_ERR_FAIL_SEEK_FONT;
 	goto failed;
     }
@@ -762,7 +764,8 @@ character_number=%d)",
     if (wide_current->glyphs == NULL) {
 	zio = &wide_current->zio;
 
-	if (zio_lseek(zio, wide_current->page * EB_SIZE_PAGE + offset,
+	if (zio_lseek(zio,
+		(off_t) wide_current->page * EB_SIZE_PAGE + offset,
 		SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_FONT;
 	    goto failed;
@@ -849,7 +852,8 @@ character_number=%d)",
     if (wide_current->glyphs == NULL) {
 	zio = &wide_current->zio;
 
-	if (zio_lseek(zio, wide_current->page * EB_SIZE_PAGE + offset,
+	if (zio_lseek(zio,
+		(off_t) wide_current->page * EB_SIZE_PAGE + offset,
 		SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_FONT;
 	    goto failed;

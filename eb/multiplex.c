@@ -112,7 +112,7 @@ struct EBNet_Socket_Entry_Struct {
     off_t offset;
 
     /* file size */
-    size_t file_size;
+    off_t file_size;
 };
 
 static EBNet_Socket_Entry *ebnet_socket_entries;
@@ -935,7 +935,7 @@ ebnet_get_offset(int file)
  * Set file size.
  */
 int
-ebnet_set_file_size(int file, size_t file_size)
+ebnet_set_file_size(int file, off_t file_size)
 {
     EBNet_Socket_Entry *entry;
 
@@ -951,7 +951,7 @@ ebnet_set_file_size(int file, size_t file_size)
 /*
  * Get file size.
  */
-ssize_t
+off_t
 ebnet_get_file_size(int file)
 {
     EBNet_Socket_Entry *entry;

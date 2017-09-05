@@ -1,4 +1,87 @@
-2009-12-25  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+2009-02-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.4.
+
+	* configure.ac (AC_CHECK_FUNCS): Also checks atoll() and _atoi64().
+	* eb/ebnet.c (ebnet_open, ebnet_lseek, ebnet_read): 
+	Support large files.
+	* eb/multiplex.c (EBNet_Socket_Entry_Struct, ebnet_get_file_size): 
+	Likewise.
+	* eb/ebnet.h: Likewise.
+	
+2009-01-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/zio.c (zio_open_ebzip): Always set zio->code to ZIO_EBZIP1,
+	regardless of ebzip-mode value in an EBZIP header.
+
+	* ebzip/zipfile.c (ebzip_zip_file_internal): Improve compression
+	progress messages.  Don't output a message with the same percent
+	as the previous.
+	* ebzip/unzipfile.c (ebzip_unzip_file_internal): Also improve
+	uncompression messages.
+
+	* ebzip/zipbook.c (ebzip_zip_book_eb, ebzip_zip_book_epwing):
+	Output an error message when make_missing_directory() fails.
+	* ebzip/unzipbook.c (ebzip_unzip_book_eb, ebzip_unzip_book_epwing):
+	Ditto.
+	* ebzip/copyfile.c (ebzip_copy_files_in_directory): Ditto.
+
+2009-01-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* INSTALL: Describe `--enable-largefile' option of configure.
+
+	* eb/subbook.c (eb_set_subbook): If eb_set_subbook_eb() or
+	eb_set_subbook_epwing() returns -1, also this function returns -1.
+
+	* ebzip/zipbook.c (ebzip_zip_book_eb, ebzip_zip_book_epwing): 
+	Output a warning mesage when eb_load_all_subbooks() fails.
+	* ebzip/unzipbook.c (ebzip_unzip_book_eb,
+	ebzip_unzip_book_epwing): Ditto.
+	* ebzip/zipinfobook.c (ebzip_zipinfo_book_eb,
+	ebzip_zipinfo_book_epwing): Ditto.
+
+	* ebzip/zipfile.c (ebzip_zip_file_internal): Don't output
+	strerror(errno) in an error message when zio_open(), zio_lseek() or
+	zio_read() fails, since errno may be 0.
+	* ebzip/unzipfile.c (ebzip_unzip_file_internal): Likewise.
+	* ebzip/sppedup.c (ebzip_zipinfo_file_internal): Likewise.
+
+2009-01-08  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.ac (AC_INIT): Set version to 4.4.
+	* configure.ac (EB_VERSION_MINOR): Set EB_VERSION_MINOR to 4.
+	* configure.ac (LIBEB_VERSION_INFO): Set LIBEB_VERSION_INFO to 13:0:0.
+	
+	* configure.ac (eb_SYS_LARGEFILE): Added.
+	* m4/largefile.m4: New file. It defines macros to check
+	large file support.
+
+	* m4/libtool.m4, m4/m4/ltdl.m4, m4/ltoptions.m4, m4/ltsugar.m4,
+	m4/ltversion.m4, m4/lt~obsolete.m4, ltmain.sh, config.guess,
+	config.sub: Import from libtool-2.2.6.
+
+	* depcomp, missing, compile, install-sh: Import from Autoconf-1.63.
+	* po-eb/Makefile.in, po-ebutils/Makefile.in (datarootdir):
+	Set `datarootdir' macro.
+
+	* m4/eb.m4 (AC_C_CONST, AC_C_PROTOTYPES, AC_HEADER_TIME):
+	Don't call those obsolete macros any longer.
+
+	* po-ep/Makefile.in, po-ebutils/Makefile.in (datarootdir): Defined.
+
+2009-01-07  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/build-post.h.in (off_t_is_large): New macro.
+	* eb/zio.c (off_t_is_large): Likewise.
+
+	* ebzip/zipinfofile.c, ebzip/sebxa.c, ebzip/zipfile.c,
+	ebzip/speedup.c, ebzip/unzipfile.c, ebzip/copyfile.c:
+	Support large files (over 2GB).
+
+	* eb/narwfont.c, eb/zio.c, eb/subbook.c, eb/readtext.c, eb/binary.c,
+	eb/appsub.c, eb/multi.c, eb/search.c: Likewise.
+
+2008-12-25  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.3.3.
 
@@ -6,9 +89,8 @@
 
 	* m4/gettext.m4 (eb_GNU_GETTEXT): Fix a bug of iconv() and
 	iconv_open() checks. Don't add '-liconv' to LIBS at all times.
-	* m4/gettext.m4 (eb_GNU_GETTEXT): No longer check libiconv_open().
 
-2009-09-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+2008-09-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.3.3.
 
@@ -17,7 +99,7 @@
 	* ltmain.sh, m4/libtool.m4, config.guess, config.sub: Import from
 	libtool-1.5.26.
 
-2009-09-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+2008-09-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* eb/Makefile.am (libeb_la_LDFLAGS): Add `-no-undefined' option
 	Add $(ZLIBLIBS) and $(INTLLIBS) arguments.

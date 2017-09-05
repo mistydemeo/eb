@@ -125,6 +125,7 @@ ebzip_zip_book_eb(EB_Book *book, const char *out_top_path,
     const char *book_path, EB_Subbook_Code *subbook_list, int subbook_count)
 {
     EB_Subbook *subbook;
+    EB_Error_Code error_code;
     String_List string_list;
     char in_path_name[PATH_MAX + 1];
     char out_sub_path[PATH_MAX + 1];
@@ -149,8 +150,13 @@ ebzip_zip_book_eb(EB_Book *book, const char *out_top_path,
      * Initialize variables.
      */
     out_directory_mode = 0777 ^ get_umask();
-    eb_load_all_subbooks(book);
     string_list_initialize(&string_list);
+
+    error_code = eb_load_all_subbooks(book);
+    if (error_code != EB_SUCCESS) {
+	fprintf(stderr, "%s: %s\n", invoked_name,
+	    eb_error_message(error_code));
+    }
 
     /*
      * Compress a book.
@@ -164,8 +170,11 @@ ebzip_zip_book_eb(EB_Book *book, const char *out_top_path,
 	eb_compose_path_name(out_top_path, subbook->directory_name,
 	    out_sub_path);
 	if (!ebzip_test_flag
-	    && make_missing_directory(out_sub_path, out_directory_mode) < 0)
+	    && make_missing_directory(out_sub_path, out_directory_mode) < 0) {
+	    fprintf(stderr, _("%s: failed to create a directory, %s: %s\n"),
+		invoked_name, strerror(errno), out_sub_path);
 	    goto failed;
+	}
 
 	/*
 	 * Compress START file.
@@ -238,8 +247,9 @@ ebzip_zip_book_epwing(EB_Book *book, const char *out_top_path,
     const char *book_path, EB_Subbook_Code *subbook_list, int subbook_count)
 {
     EB_Subbook *subbook;
-    String_List string_list;
+    EB_Error_Code error_code;
     EB_Font *font;
+    String_List string_list;
     char in_path_name[PATH_MAX + 1];
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
@@ -262,8 +272,13 @@ ebzip_zip_book_epwing(EB_Book *book, const char *out_top_path,
      * Initialize variables.
      */
     out_directory_mode = 0777 ^ get_umask();
-    eb_load_all_subbooks(book);
     string_list_initialize(&string_list);
+
+    error_code = eb_load_all_subbooks(book);
+    if (error_code != EB_SUCCESS) {
+	fprintf(stderr, "%s: %s\n", invoked_name,
+	    eb_error_message(error_code));
+    }
 
     /*
      * Compress a book.
@@ -277,8 +292,11 @@ ebzip_zip_book_epwing(EB_Book *book, const char *out_top_path,
 	eb_compose_path_name(out_top_path, subbook->directory_name,
 	    out_sub_path);
 	if (!ebzip_test_flag
-	    && make_missing_directory(out_sub_path, out_directory_mode) < 0)
+	    && make_missing_directory(out_sub_path, out_directory_mode) < 0) {
+	    fprintf(stderr, _("%s: failed to create a directory, %s: %s\n"),
+		invoked_name, strerror(errno), out_sub_path);
 	    goto failed;
+	}
 
 	/*
 	 * Make `data' sub directory for the current subbook.
@@ -286,9 +304,11 @@ ebzip_zip_book_epwing(EB_Book *book, const char *out_top_path,
 	eb_compose_path_name2(out_top_path, subbook->directory_name,
 	    subbook->data_directory_name, out_sub_path);
 	if (!ebzip_test_flag
-	    && make_missing_directory(out_sub_path, out_directory_mode) < 0)
+	    && make_missing_directory(out_sub_path, out_directory_mode) < 0) {
+	    fprintf(stderr, _("%s: failed to create a directory, %s: %s\n"),
+		invoked_name, strerror(errno), out_sub_path);
 	    goto failed;
-
+	}
 	/*
 	 * Compress HONMON/HONMON2 file.
 	 */
@@ -363,6 +383,9 @@ ebzip_zip_book_epwing(EB_Book *book, const char *out_top_path,
 	    if (!ebzip_test_flag
 		&& make_missing_directory(out_sub_path, out_directory_mode)
 		< 0) {
+		fprintf(stderr,
+		    _("%s: failed to create a directory, %s: %s\n"),
+		    invoked_name, strerror(errno), out_sub_path);
 		goto failed;
 	    }
 

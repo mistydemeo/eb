@@ -57,7 +57,8 @@ eb_load_multi_searches(EB_Book *book)
 	 * Read the index table page of the multi search.
 	 */
 	if (zio_lseek(&subbook->text_zio,
-	    (multi->search.start_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	    ((off_t) multi->search.start_page - 1) * EB_SIZE_PAGE, SEEK_SET)
+	    < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
 	}
@@ -212,7 +213,8 @@ eb_load_multi_titles(EB_Book *book)
      * Read the page of the multi search.
      */
     if (zio_lseek(&subbook->text_zio,
-	(subbook->search_title_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	((off_t) subbook->search_title_page - 1) * EB_SIZE_PAGE, SEEK_SET)
+	< 0) {
 	error_code = EB_ERR_FAIL_SEEK_TEXT;
 	goto failed;
     }

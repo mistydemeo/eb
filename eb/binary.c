@@ -197,7 +197,7 @@ width=%d, height=%d)",
 	char buffer[22];
 
 	if (zio_lseek(&book->subbook_current->text_zio,
-	    (position->page - 1) * EB_SIZE_PAGE + position->offset,
+	    ((off_t) position->page - 1) * EB_SIZE_PAGE + position->offset,
 	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
@@ -450,7 +450,7 @@ width=%d, height=%d)",
 	char buffer[22];
 
 	if (zio_lseek(&book->subbook_current->text_zio,
-	    (position->page - 1) * EB_SIZE_PAGE + position->offset,
+	    ((off_t) position->page - 1) * EB_SIZE_PAGE + position->offset,
 	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
@@ -677,8 +677,8 @@ end_position={%d,%d})",
 	    context->size = 0;
     } else {
 	if (zio_lseek(context->zio,
-	    (book->subbook_current->sound.start_page - 1) * EB_SIZE_PAGE + 32,
-	    SEEK_SET) < 0) {
+	    ((off_t) book->subbook_current->sound.start_page - 1)
+		* EB_SIZE_PAGE + 32, SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
 	}
@@ -1205,7 +1205,7 @@ eb_read_binary_mono_graphic(EB_Book *book, size_t binary_max_length,
 	 */
 	if (context->offset != 0
 	    && context->offset % line_length == 0
-	    && zio_lseek(context->zio, (off_t)line_length * -2, SEEK_CUR)
+	    && zio_lseek(context->zio, (off_t) line_length * -2, SEEK_CUR)
 	    < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
@@ -1336,7 +1336,7 @@ eb_read_binary_gray_graphic(EB_Book *book, size_t binary_max_length,
 	 */
 	if (context->offset != 0
 	    && context->offset % line_length == 0
-	    && zio_lseek(context->zio, (off_t)line_length * -2, SEEK_CUR)
+	    && zio_lseek(context->zio, (off_t) line_length * -2, SEEK_CUR)
 	    < 0) {
 		error_code = EB_ERR_FAIL_SEEK_BINARY;
 		goto failed;

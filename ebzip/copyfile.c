@@ -49,7 +49,7 @@ int
 ebzip_copy_file(const char *out_file_name, const char *in_file_name)
 {
     unsigned char buffer[EB_SIZE_PAGE];
-    size_t total_length;
+    off_t total_length;
     struct stat in_status, out_status;
     int in_file = -1, out_file = -1;
     ssize_t in_length;
@@ -92,9 +92,19 @@ ebzip_copy_file(const char *out_file_name, const char *in_file_name)
      * When test mode, return immediately.
      */
     if (ebzip_test_flag) {
+#if defined(PRINTF_LL_MODIFIER)
+	fprintf(stderr, _("completed (%llu / %llu bytes)\n"),
+	    (unsigned long long) in_status.st_size,
+	    (unsigned long long) in_status.st_size);
+#elif defined(PRINTF_I64_MODIFIER)
+	fprintf(stderr, _("completed (%I64u / %I64u bytes)\n"),
+	    (unsigned __int64) in_status.st_size,
+	    (unsigned __int64) in_status.st_size);
+#else
 	fprintf(stderr, _("completed (%lu / %lu bytes)\n"),
-	    (unsigned long)in_status.st_size,
-	    (unsigned long)in_status.st_size);
+	    (unsigned long) in_status.st_size,
+	    (unsigned long) in_status.st_size);
+#endif
 	fputc('\n', stderr);
 	fflush(stderr);
 	return 0;
@@ -206,9 +216,22 @@ ebzip_copy_file(const char *out_file_name, const char *in_file_name)
 	 * Output status information unless `quiet' mode.
 	 */
 	if (!ebzip_quiet_flag && (i + 1) % progress_interval == 0) {
+#if defined(PRINTF_LL_MODIFIER)
+	    fprintf(stderr, _("%4.1f%% done (%llu / %llu bytes)\n"),
+		(double) (i + 1) * 100.0 / (double) total_slices,
+		(unsigned long long) total_length,
+		(unsigned long long) in_status.st_size);
+#elif defined(PRINTF_I64_MODIFIER)
+	    fprintf(stderr, _("%4.1f%% done (%I64u / %I64u bytes)\n"),
+		(double) (i + 1) * 100.0 / (double) total_slices,
+		(unsigned __int64) total_length,
+		(unsigned __int64) in_status.st_size);
+#else
 	    fprintf(stderr, _("%4.1f%% done (%lu / %lu bytes)\n"),
-		(double)(i + 1) * 100.0 / (double)total_slices,
-		(unsigned long)total_length, (unsigned long)in_status.st_size);
+		(double) (i + 1) * 100.0 / (double) total_slices,
+		(unsigned long) total_length,
+		(unsigned long) in_status.st_size);
+#endif
 	    fflush(stderr);
 	}
     }
@@ -217,8 +240,19 @@ ebzip_copy_file(const char *out_file_name, const char *in_file_name)
      * Output the result unless quiet mode.
      */
     if (!ebzip_quiet_flag) {
+#if defined(PRINTF_LL_MODIFIER)
+	fprintf(stderr, _("completed (%llu / %llu bytes)\n"),
+	    (unsigned long long) total_length,
+	    (unsigned long long) in_status.st_size);
+#elif defined(PRINTF_I64_MODIFIER)
+	fprintf(stderr, _("completed (%I64u / %I64u bytes)\n"),
+	    (unsigned __int64) total_length,
+	    (unsigned __int64) in_status.st_size);
+#else
 	fprintf(stderr, _("completed (%lu / %lu bytes)\n"),
-	    (unsigned long)total_length, (unsigned long)in_status.st_size);
+	    (unsigned long) total_length,
+	    (unsigned long) in_status.st_size);
+#endif
 	fputc('\n', stderr);
 	fflush(stderr);
     }
@@ -306,8 +340,12 @@ ebzip_copy_files_in_directory(const char *out_directory_name,
      * Make the output directory if missing.
      */
     if (!ebzip_test_flag
-	&& make_missing_directory(out_directory_name, 0777 ^ get_umask()) < 0)
+	&& make_missing_directory(out_directory_name, 0777 ^ get_umask())
+	< 0) {
+	fprintf(stderr, _("%s: failed to create a directory, %s: %s\n"),
+	    invoked_name, strerror(errno), out_directory_name);
 	goto failed;
+    }
 
     /*
      * Open the directory `path'.

@@ -97,7 +97,7 @@ ebzip_unzip_file_internal(const char *out_file_name, const char *in_file_name,
 {
     Zio in_zio;
     unsigned char *buffer = NULL;
-    size_t total_length;
+    off_t total_length;
     int out_file = -1;
     ssize_t length;
     struct stat in_status, out_status;
@@ -187,8 +187,8 @@ ebzip_unzip_file_internal(const char *out_file_name, const char *in_file_name,
      * Open files.
      */
     if (zio_open(&in_zio, in_file_name, in_zio_code) < 0) {
-	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
-	    invoked_name, strerror(errno), in_file_name);
+	fprintf(stderr, _("%s: failed to open the file: %s\n"),
+	    invoked_name, in_file_name);
 	goto failed;
     }
     if (in_zio_code == ZIO_SEBXA) {
@@ -225,8 +225,8 @@ ebzip_unzip_file_internal(const char *out_file_name, const char *in_file_name,
 	out_file = creat(out_file_name, 0666 ^ get_umask());
 #endif
 	if (out_file < 0) {
-	    fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
-		invoked_name, strerror(errno), out_file_name);
+	    fprintf(stderr, _("%s: failed to open the file: %s\n"),
+		invoked_name, out_file_name);
 	    goto failed;
 	}
 	trap_file = out_file;
@@ -240,20 +240,22 @@ ebzip_unzip_file_internal(const char *out_file_name, const char *in_file_name,
     total_slices = (in_zio.file_size + in_zio.slice_size - 1)
 	/ in_zio.slice_size;
     progress_interval = EBZIP_PROGRESS_INTERVAL_FACTOR;
+    if (((total_slices + 999) / 1000) > progress_interval)
+	progress_interval = ((total_slices + 999) / 1000);
 
     for (i = 0; i < total_slices; i++) {
 	/*
 	 * Read a slice.
 	 */
 	if (zio_lseek(&in_zio, total_length, SEEK_SET) < 0) {
-	    fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
-		invoked_name, strerror(errno), in_file_name);
+	    fprintf(stderr, _("%s: failed to seek the file: %s\n"),
+		invoked_name, in_file_name);
 	    goto failed;
 	}
 	length = zio_read(&in_zio, (char *)buffer, in_zio.slice_size);
 	if (length < 0) {
-	    fprintf(stderr, _("%s: failed to read from the file, %s: %s\n"),
-		invoked_name, strerror(errno), in_file_name);
+	    fprintf(stderr, _("%s: failed to read from the file: %s\n"),
+		invoked_name, in_file_name);
 	    goto failed;
 	} else if (length == 0) {
 	    fprintf(stderr, _("%s: unexpected EOF: %s\n"),
@@ -288,9 +290,22 @@ ebzip_unzip_file_internal(const char *out_file_name, const char *in_file_name,
 	 * Output status information unless `quiet' mode.
 	 */
 	if (!ebzip_quiet_flag && (i + 1) % progress_interval == 0) {
+#if defined(PRINTF_LL_MODIFIER)
+	    fprintf(stderr, _("%4.1f%% done (%llu / %llu bytes)\n"),
+		(double) (i + 1) * 100.0 / (double) total_slices,
+		(unsigned long long) total_length,
+		(unsigned long long) in_zio.file_size);
+#elif defined(PRINTF_I64_MODIFIER)
+	    fprintf(stderr, _("%4.1f%% done (%I64u / %I64u bytes)\n"),
+		(double) (i + 1) * 100.0 / (double) total_slices,
+		(unsigned __int64) total_length,
+		(unsigned __int64) in_zio.file_size);
+#else
 	    fprintf(stderr, _("%4.1f%% done (%lu / %lu bytes)\n"),
-		(double)(i + 1) * 100.0 / (double)total_slices,
-		(unsigned long)total_length, (unsigned long)in_zio.file_size);
+		(double) (i + 1) * 100.0 / (double) total_slices,
+		(unsigned long) total_length,
+		(unsigned long) in_zio.file_size);
+#endif
 	    fflush(stderr);
 	}
     }
@@ -299,10 +314,19 @@ ebzip_unzip_file_internal(const char *out_file_name, const char *in_file_name,
      * Output the result unless quiet mode.
      */
     if (!ebzip_quiet_flag) {
-	fprintf(stderr, _("completed (%lu / %lu bytes)\n"),
-	    (unsigned long)in_zio.file_size, (unsigned long)in_zio.file_size);
+#if defined(PRINTF_LL_MODIFIER)
+	fprintf(stderr, _("completed (%llu / %llu bytes)\n"),
+	    (unsigned long long) in_zio.file_size,
+	    (unsigned long long) in_zio.file_size);
+#elif defined(PRINTF_I64_MODIFIER)
+	fprintf(stderr, _("completed (%I64u / %I64u bytes)\n"),
+	    (unsigned __int64) in_zio.file_size,
+	    (unsigned __int64) in_zio.file_size);
+#else
 	fprintf(stderr, _("%lu -> %lu bytes\n\n"),
-	    (unsigned long)in_status.st_size, (unsigned long)total_length);
+	    (unsigned long) in_status.st_size,
+	    (unsigned long) total_length);
+#endif
 	fflush(stderr);
     }
 

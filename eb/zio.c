@@ -99,10 +99,16 @@ extern void eb_log(const char *, ...);
         + (*(const unsigned char *)((p) + 1) << 8) \
         + (*(const unsigned char *)((p) + 2)))
 
-#define zio_uint4(p) ((*(const unsigned char *)(p) << 24) \
+#define zio_uint4(p) (((off_t) *(const unsigned char *)(p) << 24) \
         + (*(const unsigned char *)((p) + 1) << 16) \
         + (*(const unsigned char *)((p) + 2) << 8) \
         + (*(const unsigned char *)((p) + 3)))
+
+#define zio_uint5(p) (((off_t) (*(const unsigned char *)(p)) << 32) \
+	+ ((off_t) (*(const unsigned char *)((p) + 1)) << 24) \
+	+ (*(const unsigned char *)((p) + 2) << 16) \
+	+ (*(const unsigned char *)((p) + 3) << 8) \
+	+ (*(const unsigned char *)((p) + 4)))
 
 /*
  * Test whether the path is URL with the `ebnet' scheme.
@@ -160,6 +166,12 @@ static int zio_counter = 0;
 #ifdef ENABLE_PTHREAD
 static pthread_mutex_t zio_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
+
+/*
+ * Test whether `off_t' represents a large integer.
+ */
+#define off_t_is_large \
+	((((off_t) 1 << 41) + ((off_t) 1 << 40) + 1) % 9999991 == 7852006)
 
 /*
  * Unexported function.
@@ -435,6 +447,7 @@ static int
 zio_open_ebzip(Zio *zio, const char *file_name)
 {
     char header[ZIO_SIZE_EBZIP_HEADER];
+    int ebzip_mode;
 
     LOG(("in: zio_open_ebzip(zio=%d, file_name=%s)", (int)zio->id, file_name));
 
@@ -450,28 +463,38 @@ zio_open_ebzip(Zio *zio, const char *file_name)
     if (zio_read_raw(zio, header, ZIO_SIZE_EBZIP_HEADER)
 	!= ZIO_SIZE_EBZIP_HEADER)
 	goto failed;
-    zio->code = zio_uint1(header + 5) >> 4;
+    ebzip_mode = zio_uint1(header + 5) >> 4;
+    zio->code = ZIO_EBZIP1;
     zio->zip_level = zio_uint1(header + 5) & 0x0f;
     zio->slice_size = ZIO_SIZE_PAGE << zio->zip_level;
-    zio->file_size = zio_uint4(header + 10);
+    zio->file_size = zio_uint5(header +  9);
     zio->crc = zio_uint4(header + 14);
     zio->mtime = zio_uint4(header + 18);
     zio->location = 0;
 
-    if (zio->file_size < 1 << 16)
+    if (zio->file_size      < (off_t) 1 << 16)
 	zio->index_width = 2;
-    else if (zio->file_size < 1 << 24)
+    else if (zio->file_size < (off_t) 1 << 24)
 	zio->index_width = 3;
-    else
+    else if (zio->file_size < (off_t) 1 << 32 || !off_t_is_large)
 	zio->index_width = 4;
+    else
+	zio->index_width = 5;
 
     /*
      * Check zio header information.
      */
     if (memcmp(header, "EBZip", 5) != 0
-	|| zio->code != ZIO_EBZIP1
 	|| ZIO_SIZE_PAGE << ZIO_MAX_EBZIP_LEVEL < zio->slice_size)
 	goto failed;
+
+    if (off_t_is_large) {
+	if (ebzip_mode != 1 && ebzip_mode != 2)
+	    goto failed;
+    } else {
+	if (ebzip_mode != 1)
+	    goto failed;
+    }
 
     /*
      * Assign ID.
@@ -552,12 +575,12 @@ zio_open_epwing(Zio *zio, const char *file_name)
      * is 0x0000, we assumes the data corresponding with the index
      * doesn't exist.
      */
-    if (zio_lseek_raw(zio, zio->index_location + (zio->index_length - 36) / 36
-	* 36, SEEK_SET) < 0)
+    if (zio_lseek_raw(zio, zio->index_location
+	    + ((off_t) zio->index_length - 36) / 36 * 36, SEEK_SET) < 0)
 	goto failed;
     if (zio_read_raw(zio, buffer, 36) != 36)
 	goto failed;
-    zio->file_size = (zio->index_length / 36) * (ZIO_SIZE_PAGE * 16);
+    zio->file_size = ((off_t) zio->index_length / 36) * (ZIO_SIZE_PAGE * 16);
     for (i = 1, buffer_p = buffer + 4 + 2; i < 16; i++, buffer_p += 2) {
 	if (zio_uint2(buffer_p) == 0)
 	    break;
@@ -714,12 +737,12 @@ zio_open_epwing6(Zio *zio, const char *file_name)
      * is 0x0000, we assumes the data corresponding with the index
      * doesn't exist.
      */
-    if (zio_lseek_raw(zio, zio->index_location + (zio->index_length - 36) / 36
-	* 36, SEEK_SET) < 0)
+    if (zio_lseek_raw(zio, zio->index_location
+	+ ((off_t) zio->index_length - 36) / 36 * 36, SEEK_SET) < 0)
 	goto failed;
     if (zio_read_raw(zio, buffer, 36) != 36)
 	goto failed;
-    zio->file_size = (zio->index_length / 36) * (ZIO_SIZE_PAGE * 16);
+    zio->file_size = ((off_t) zio->index_length / 36) * (ZIO_SIZE_PAGE * 16);
     for (i = 1, buffer_p = buffer + 4 + 2; i < 16; i++, buffer_p += 2) {
 	if (zio_uint2(buffer_p) == 0)
 	    break;
@@ -1183,6 +1206,10 @@ zio_read_ebzip(Zio *zio, char *buffer, size_t length)
 		slice_location = zio_uint4(temporary_buffer);
 		next_slice_location = zio_uint4(temporary_buffer + 4);
 		break;
+	    case 5:
+		slice_location = zio_uint5(temporary_buffer);
+		next_slice_location = zio_uint5(temporary_buffer + 5);
+		break;
 	    default:
 		goto failed;
 	    }
@@ -1393,7 +1420,7 @@ zio_read_sebxa(Zio *zio, char *buffer, size_t length)
 		if (slice_index == 0)
 		    slice_location = zio->index_base;
 		else {
-		    if (zio_lseek_raw(zio, (slice_index - 1) * 4
+		    if (zio_lseek_raw(zio, ((off_t) slice_index - 1) * 4
 			+ zio->index_location, SEEK_SET) < 0)
 			goto failed;
 		    if (zio_read_raw(zio, temporary_buffer, 4) != 4)

@@ -74,7 +74,7 @@ rewrite_sebxa_start(const char *file_name, int index_page)
     /*
      * Read index page.
      */
-    if (lseek(file, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (lseek(file, ((off_t) index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), file_name);
 	goto failed;
@@ -126,7 +126,7 @@ rewrite_sebxa_start(const char *file_name, int index_page)
     /*
      * Write back the index page.
      */
-    if (lseek(file, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (lseek(file, ((off_t) index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), file_name);
 	goto failed;
@@ -148,8 +148,19 @@ rewrite_sebxa_start(const char *file_name, int index_page)
     }
 
     if (!ebzip_quiet_flag) {
+#if defined(PRINTF_LL_MODIFIER)
+	fprintf(stderr, _("completed (%llu / %llu bytes)\n"),
+	    (unsigned long long) done_length,
+	    (unsigned long long) done_length);
+#elif defined(PRINTF_I64_MODIFIER)
+	fprintf(stderr, _("completed (%I64u / %I64u bytes)\n"),
+	    (unsigned __int64) done_length,
+	    (unsigned __int64) done_length);
+#else
 	fprintf(stderr, _("completed (%lu / %lu bytes)\n"),
-	    (unsigned long)done_length, (unsigned long)done_length);
+	    (unsigned long) done_length,
+	    (unsigned long) done_length);
+#endif
 	fputc('\n', stderr);
 	fflush(stderr);
     }
@@ -205,7 +216,7 @@ get_sebxa_indexes(const char *file_name, int index_page, off_t *index_location,
     /*
      * Read index page.
      */
-    if (lseek(file, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (lseek(file, ((off_t) index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 	    invoked_name, strerror(errno), file_name);
 	goto failed;
@@ -243,14 +254,16 @@ get_sebxa_indexes(const char *file_name, int index_page, off_t *index_location,
 
 	switch (*index_p) {
 	case 0x00:
-	    *zio_start_location = (page - 1) * EB_SIZE_PAGE;
-	    *zio_end_location = (page + page_count - 1) * EB_SIZE_PAGE - 1;
+	  *zio_start_location
+	      = ((off_t) page - 1) * EB_SIZE_PAGE;
+	  *zio_end_location
+	      = ((off_t) page + page_count - 1) * EB_SIZE_PAGE - 1;
 	    break;
 	case 0x21:
-	    *index_base = (page - 1) * EB_SIZE_PAGE;
+	  *index_base = ((off_t) page - 1) * EB_SIZE_PAGE;
 	    break;
 	case 0x22:
-	    *index_location = (page - 1) * EB_SIZE_PAGE;
+	  *index_location = ((off_t) page - 1) * EB_SIZE_PAGE;
 	    break;
 	}
     }

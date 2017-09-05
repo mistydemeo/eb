@@ -213,7 +213,7 @@ eb_seek_text(EB_Book *book, const EB_Position *position)
      */
     eb_reset_text_context(book);
     book->text_context.code = EB_TEXT_SEEKED;
-    book->text_context.location = (position->page - 1) * EB_SIZE_PAGE
+    book->text_context.location = ((off_t) position->page - 1) * EB_SIZE_PAGE
 	+ position->offset;
 
     /*

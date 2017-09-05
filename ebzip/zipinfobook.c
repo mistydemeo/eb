@@ -126,6 +126,7 @@ ebzip_zipinfo_book_eb(EB_Book *book, const char *book_path,
     EB_Subbook_Code *subbook_list, int subbook_count)
 {
     EB_Subbook *subbook;
+    EB_Error_Code error_code;
     char in_path_name[PATH_MAX + 1];
     char catalog_file_name[EB_MAX_FILE_NAME_LENGTH];
     char language_file_name[EB_MAX_FILE_NAME_LENGTH];
@@ -141,7 +142,11 @@ ebzip_zipinfo_book_eb(EB_Book *book, const char *book_path,
     /*
      * Initialize variables.
      */
-    eb_load_all_subbooks(book);
+    error_code = eb_load_all_subbooks(book);
+    if (error_code != EB_SUCCESS) {
+	fprintf(stderr, "%s: %s\n", invoked_name,
+	    eb_error_message(error_code));
+    }
 
     /*
      * Inspect a book.
@@ -191,6 +196,7 @@ ebzip_zipinfo_book_epwing(EB_Book *book, const char *book_path,
     EB_Subbook_Code *subbook_list, int subbook_count)
 {
     EB_Subbook *subbook;
+    EB_Error_Code error_code;
     EB_Font *font;
     char in_path_name[PATH_MAX + 1];
     char in_movie_path_name[PATH_MAX + 1];
@@ -208,7 +214,11 @@ ebzip_zipinfo_book_epwing(EB_Book *book, const char *book_path,
     /*
      * Initialize variables.
      */
-    eb_load_all_subbooks(book);
+    error_code = eb_load_all_subbooks(book);
+    if (error_code != EB_SUCCESS) {
+	fprintf(stderr, "%s: %s\n", invoked_name,
+	    eb_error_message(error_code));
+    }
 
     /*
      * Inspect a book.

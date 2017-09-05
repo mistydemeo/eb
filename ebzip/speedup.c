@@ -76,18 +76,19 @@ ebzip_set_zip_speedup(Zip_Speedup *speedup, const char *file_name,
      * Open the file and read it's index page.
      */
     if (zio_open(&zio, file_name, zio_code) < 0) {
-	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
-	    invoked_name, strerror(errno), file_name);
+	fprintf(stderr, _("%s: failed to open the file: %s\n"),
+	    invoked_name, file_name);
 	goto failed;
     }
-    if (zio_lseek(&zio, (index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
-	fprintf(stderr, _("%s: failed to read the file, %s: %s\n"),
-	    invoked_name, strerror(errno), file_name);
+    if (zio_lseek(&zio, ((off_t) index_page - 1) * EB_SIZE_PAGE, SEEK_SET)
+	< 0) {
+	fprintf(stderr, _("%s: failed to read the file: %s\n"),
+	    invoked_name, file_name);
 	goto failed;
     }
     if (zio_read(&zio, buffer, EB_SIZE_PAGE) != EB_SIZE_PAGE) {
-	fprintf(stderr, _("%s: failed to read the file, %s: %s\n"),
-	    invoked_name, strerror(errno), file_name);
+	fprintf(stderr, _("%s: failed to read the file: %s\n"),
+	    invoked_name, file_name);
 	goto failed;
     }
 
@@ -113,14 +114,15 @@ ebzip_set_zip_speedup(Zip_Speedup *speedup, const char *file_name,
      */
     for (i = 0; i < speedup->region_count; i++) {
 	start_page = speedup->regions[i].start_page;
-	if (zio_lseek(&zio, (start_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
-	    fprintf(stderr, _("%s: failed to read the file, %s: %s\n"),
-		invoked_name, strerror(errno), file_name);
+	if (zio_lseek(&zio, ((off_t) start_page - 1) * EB_SIZE_PAGE, SEEK_SET)
+	    < 0) {
+	    fprintf(stderr, _("%s: failed to read the file: %s\n"),
+		invoked_name, file_name);
 	    goto failed;
 	}
 	if (zio_read(&zio, buffer, EB_SIZE_PAGE) != EB_SIZE_PAGE) {
-	    fprintf(stderr, _("%s: failed to read the file, %s: %s\n"),
-		invoked_name, strerror(errno), file_name);
+	    fprintf(stderr, _("%s: failed to read the file: %s\n"),
+		invoked_name, file_name);
 	    goto failed;
 	}
 

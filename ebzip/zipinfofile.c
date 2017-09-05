@@ -101,8 +101,8 @@ ebzip_zipinfo_file_internal(const char *in_file_name, Zio_Code in_zio_code,
 	in_file = zio_open(&in_zio, in_file_name, in_zio_code);
 
     if (in_file < 0) {
-	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
-	    invoked_name, strerror(errno), in_file_name);
+	fprintf(stderr, _("%s: failed to open the file: %s\n"),
+	    invoked_name, in_file_name);
 	goto failed;
     }
     if (in_zio_code == ZIO_SEBXA) {
@@ -128,11 +128,30 @@ ebzip_zipinfo_file_internal(const char *in_file_name, Zio_Code in_zio_code,
      * Output information.
      */
     if (in_zio.code == ZIO_PLAIN) {
+#if defined(PRINTF_LL_MODIFIER)
+	printf(_("%llu bytes (not compressed)\n"),
+	    (unsigned long long) in_status.st_size);
+#elif defined(PRINTF_I64_MODIFIER)
+	printf(_("%I64u bytes (not compressed)\n"),
+	    (unsigned __int64) in_status.st_size);
+#else
 	printf(_("%lu bytes (not compressed)\n"),
-	    (unsigned long)in_status.st_size);
+	    (unsigned long) in_status.st_size);
+#endif
     } else {
+#if defined(PRINTF_LL_MODIFIER)
+	printf(_("%llu -> %llu bytes "),
+	    (unsigned long long) in_zio.file_size,
+	    (unsigned long long) in_status.st_size);
+#elif defined(PRINTF_I64_MODIFIER)
+	printf(_("%I64u -> %I64u bytes "),
+	    (unsigned __int64) in_zio.file_size,
+	    (unsigned __int64) in_status.st_size);
+#else
 	printf(_("%lu -> %lu bytes "),
-	    (unsigned long)in_zio.file_size, (unsigned long)in_status.st_size);
+	    (unsigned long) in_zio.file_size,
+	    (unsigned long) in_status.st_size);
+#endif
 	if (in_zio.file_size == 0)
 	    fputs(_("(empty original file, "), stdout);
 	else {

@@ -241,7 +241,7 @@ eb_load_appendix_subbook(EB_Appendix *appendix)
     }
     stop_code_page = eb_uint4(buffer);
     if (0 < stop_code_page) {
-	if (zio_lseek(&subbook->zio, (stop_code_page - 1) * EB_SIZE_PAGE,
+      if (zio_lseek(&subbook->zio, ((off_t) stop_code_page - 1) * EB_SIZE_PAGE,
 	    SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_APP;
 	    goto failed;

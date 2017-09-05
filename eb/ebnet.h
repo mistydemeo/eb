@@ -86,8 +86,8 @@ int ebnet_set_file_path(int file, const char *file_path);
 const char *ebnet_get_file_path(int file);
 int ebnet_set_offset(int file, off_t offset);
 off_t ebnet_get_offset(int file);
-int ebnet_set_file_size(int file, size_t file_size);
-ssize_t ebnet_get_file_size(int file);
+int ebnet_set_file_size(int file, off_t file_size);
+off_t ebnet_get_file_size(int file);
 
 /* ebnet.c */
 void ebnet_initialize(void);

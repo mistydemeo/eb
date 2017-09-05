@@ -1,7 +1,7 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT(eb, 4.3.4)
+AC_INIT(eb, 4.4)
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.54)
 AM_INIT_AUTOMAKE
@@ -9,11 +9,11 @@ AM_INIT_AUTOMAKE
 dnl *
 dnl * Library version info.
 dnl *
-LIBEB_VERSION_INFO=12:7:0
+LIBEB_VERSION_INFO=13:0:0
 AC_SUBST(LIBEB_VERSION_INFO)
 
 EB_VERSION_MAJOR=4
-EB_VERSION_MINOR=3
+EB_VERSION_MINOR=4
 AC_SUBST(EB_VERSION_MAJOR)
 AC_SUBST(EB_VERSION_MINOR)
 
@@ -37,6 +37,11 @@ if test "$PERL" = no; then
     AC_MSG_WARN(perl not found)
     PERL=/usr/bin/perl
 fi
+
+dnl *
+dnl * large file support.
+dnl *
+eb_SYS_LARGEFILE
 
 dnl * 
 dnl * GNU gettext
@@ -242,7 +247,7 @@ AC_CHECK_LIB(socket, socket)
 dnl * 
 dnl * Library Functions.
 dnl * 
-AC_CHECK_FUNCS(nl_langinfo _getdcwd)
+AC_CHECK_FUNCS(nl_langinfo _getdcwd atoll _atoi64)
 AC_REPLACE_FUNCS(strcasecmp)
 
 dnl * 

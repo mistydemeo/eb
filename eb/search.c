@@ -299,7 +299,7 @@ eb_presearch_word(EB_Book *book, EB_Search_Context *context)
 	 * Seek and read a page.
 	 */
 	if (zio_lseek(&book->subbook_current->text_zio,
-	    (context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	    ((off_t) context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	    cache_book_code = EB_BOOK_NONE;
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
@@ -603,7 +603,7 @@ eb_hit_list_word(EB_Book *book, EB_Search_Context *context, int max_hit_count,
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
 	    if (zio_lseek(&book->subbook_current->text_zio,
-		(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+		((off_t) context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
@@ -929,7 +929,7 @@ eb_hit_list_keyword(EB_Book *book, EB_Search_Context *context,
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
 	    if (zio_lseek(&book->subbook_current->text_zio,
-		(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+		((off_t) context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
@@ -1261,7 +1261,7 @@ eb_hit_list_multi(EB_Book *book, EB_Search_Context *context, int max_hit_count,
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
 	    if (zio_lseek(&book->subbook_current->text_zio,
-		(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+		((off_t) context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
