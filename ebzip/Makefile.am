@@ -1,5 +1,3 @@
-@SET_MAKE@
-
 localedir = $(datadir)/locale
 
 LIBEB = $(top_builddir)/eb/libeb.la
@@ -39,9 +37,9 @@ uninstall-hook:
 
 ### *.o dependencies ###
 ebzip.o: ebzip.c ../config.h ../libebutils/ebutils.h ../eb/eb.h \
- ../eb/error.h ../eb/internal.h ../eb/font.h ../libebutils/fakelog.h \
- ../libebutils/getopt.h ../libebutils/getumask.h \
- ../libebutils/makedir.h ../libebutils/samefile.h \
- ../libebutils/yesno.h
-ebzip1.o: ebzip1.c ../config.h ../eb/eb.h
-filename.o: filename.c ../config.h ../eb/eb.h
+ ../eb/defs.h ../eb/zio.h ../eb/error.h ../eb/internal.h ../eb/font.h \
+ ../libebutils/fakelog.h ../libebutils/getopt.h \
+ ../libebutils/getumask.h ../libebutils/makedir.h \
+ ../libebutils/samefile.h ../libebutils/yesno.h
+ebzip1.o: ebzip1.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h
+filename.o: filename.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h

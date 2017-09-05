@@ -1,5 +1,3 @@
-@SET_MAKE@
-
 localedir = $(datadir)/locale
 
 LIBEB = $(top_builddir)/eb/libeb.la
@@ -15,6 +13,6 @@ INCLUDES = -I$(top_srcdir) -I../libebutils -I$(top_srcdir)/libebutils \
 	$(INTLINCS)
 
 ### *.o dependencies ###
-ebinfo.o: ebinfo.c ../config.h ../eb/eb.h ../eb/error.h ../eb/font.h \
- ../libebutils/fakelog.h ../libebutils/getopt.h \
- ../libebutils/ebutils.h
+ebinfo.o: ebinfo.c ../config.h ../eb/eb.h ../eb/defs.h ../eb/zio.h \
+ ../eb/error.h ../eb/font.h ../libebutils/fakelog.h \
+ ../libebutils/getopt.h ../libebutils/ebutils.h

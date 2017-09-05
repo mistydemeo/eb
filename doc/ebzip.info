@@ -8,7 +8,7 @@ END-INFO-DIR-ENTRY
    ebzip: Utility for compressing and uncompressing CD-ROM books, by
 Motoyuki Kasahara.
 
-   Copyright (C) 1998, 99, 2000  Motoyuki Kasahara
+   Copyright (C) 1998, 99, 2000, 01  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
+   This is edition 3.0alpha4, for EB Library version 3.0alpha4.
 
 * Menu:
 
@@ -101,7 +101,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
+   This is edition 3.0alpha4, for EB Library version 3.0alpha4.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -930,7 +930,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     3.0alpha3, only 1 (0001 in binary digits) can be prescribed as
+     3.0alpha4, only 1 (0001 in binary digits) can be prescribed as
      this version.
 
 `compression level (4 bits of the least-significant-bit side)'
@@ -967,32 +967,32 @@ significant byte first.
 
 
 Tag Table:
-Node: Top1038
-Node: Introduction2741
-Node: Action and Command Name4134
-Node: Invoking ebzip5744
-Node: Compression6515
-Node: Compression Example 17122
-Node: Compression Example 28702
-Node: Compression Level10245
-Node: Test10836
-Node: Partial Compression11182
-Node: Overwrite Old Files13779
-Node: Compress Compressed EPWING14527
-Node: Uncompression15026
-Node: Uncompression Example15468
-Node: Options for Uncompression17025
-Node: Uncompress Compressed EPWING18191
-Node: Information18693
-Node: Information Example19080
-Node: Options for Information19733
-Node: Delete a Book20310
-Node: Summary of Options20608
-Node: Comparision Result23804
-Node: Compressed File Format25908
-Node: Format Overview26333
-Node: Data Part27189
-Node: Index Part29855
-Node: Header Part32182
+Node: Top1042
+Node: Introduction2745
+Node: Action and Command Name4138
+Node: Invoking ebzip5748
+Node: Compression6519
+Node: Compression Example 17126
+Node: Compression Example 28706
+Node: Compression Level10249
+Node: Test10840
+Node: Partial Compression11186
+Node: Overwrite Old Files13783
+Node: Compress Compressed EPWING14531
+Node: Uncompression15030
+Node: Uncompression Example15472
+Node: Options for Uncompression17029
+Node: Uncompress Compressed EPWING18195
+Node: Information18697
+Node: Information Example19084
+Node: Options for Information19737
+Node: Delete a Book20314
+Node: Summary of Options20612
+Node: Comparision Result23808
+Node: Compressed File Format25912
+Node: Format Overview26337
+Node: Data Part27193
+Node: Index Part29859
+Node: Header Part32186
 
 End Tag Table

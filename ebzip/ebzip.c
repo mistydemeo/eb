@@ -1,5 +1,6 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1998, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1998, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -315,17 +316,17 @@ static int trap_file = -1;
 static int parse_zip_level EB_P((const char *));
 static void output_help EB_P((void));
 static int zip_book EB_P((EB_Book *, const char *, const char *));
-static int zip_eb_book EB_P((EB_Book *, const char *, const char *));
-static int zip_epwing_book EB_P((EB_Book *, const char *, const char *));
+static int zip_book_eb EB_P((EB_Book *, const char *, const char *));
+static int zip_book_epwing EB_P((EB_Book *, const char *, const char *));
 static int unzip_book EB_P((EB_Book *, const char *, const char *));
-static int unzip_eb_book EB_P((EB_Book *, const char *, const char *));
-static int unzip_epwing_book EB_P((EB_Book *, const char *, const char *));
+static int unzip_book_eb EB_P((EB_Book *, const char *, const char *));
+static int unzip_book_epwing EB_P((EB_Book *, const char *, const char *));
 static int zipinfo_book EB_P((EB_Book *, const char *));
-static int zipinfo_eb_book EB_P((EB_Book *, const char *));
-static int zipinfo_epwing_book EB_P((EB_Book *, const char *));
-static int zip_file EB_P((const char *, const char *, EB_Zip_Code));
-static int unzip_file EB_P((const char *, const char *, EB_Zip_Code));
-static int zipinfo_file EB_P((const char *, EB_Zip_Code));
+static int zipinfo_book_eb EB_P((EB_Book *, const char *));
+static int zipinfo_book_epwing EB_P((EB_Book *, const char *));
+static int zip_file EB_P((const char *, const char *, Zio_Code));
+static int unzip_file EB_P((const char *, const char *, Zio_Code));
+static int zipinfo_file EB_P((const char *, Zio_Code));
 static int copy_file EB_P((const char *, const char *));
 static RETSIGTYPE trap EB_P((int));
 
@@ -647,7 +648,7 @@ parse_zip_level(argument)
 
     zip_level = (int)strtol(argument, &end_p, 10);
     if (!isdigit(*argument) || *end_p != '\0'
-	|| zip_level < 0 || EB_MAX_EBZIP_LEVEL < zip_level) {
+	|| zip_level < 0 || ZIO_MAX_EBZIP_LEVEL < zip_level) {
 	fprintf(stderr, _("%s: invalid compression level `%s'\n"),
 	    invoked_name, argument);
 	fflush(stderr);
@@ -672,7 +673,7 @@ output_help()
     printf(_("  -k  --keep                 keep (don't delete) original files\n"));
     printf(_("  -l INTEGER  --level INTEGER\n"));
     printf(_("                             compression level; 0..%d\n"),
-	EB_MAX_EBZIP_LEVEL);
+	ZIO_MAX_EBZIP_LEVEL);
     printf(_("                             (default: %d)\n"),
 	DEFAULT_EBZIP_LEVEL);
     printf(_("  -n  --no-overwrite         don't overwrite output files\n"));
@@ -718,9 +719,9 @@ zip_book(book, out_top_path, book_path)
     const char *book_path;
 {
     if (book->disc_code == EB_DISC_EB)
-	return zip_eb_book(book, out_top_path, book_path);
+	return zip_book_eb(book, out_top_path, book_path);
     else
-	return zip_epwing_book(book, out_top_path, book_path);
+	return zip_book_epwing(book, out_top_path, book_path);
 }
 
 
@@ -729,7 +730,7 @@ zip_book(book, out_top_path, book_path)
  * This is used to compress an EB book.
  */
 static int
-zip_eb_book(book, out_top_path, book_path)
+zip_book_eb(book, out_top_path, book_path)
     EB_Book *book;
     const char *out_top_path;
     const char *book_path;
@@ -740,7 +741,7 @@ zip_eb_book(book, out_top_path, book_path)
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
     mode_t out_directory_mode;
-    EB_Zip_Code in_zip_code;
+    Zio_Code in_zio_code;
     int i;
 
     /*
@@ -781,7 +782,7 @@ zip_eb_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_START);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_zip_code = EB_ZIP_NONE;
+		in_zio_code = ZIO_NONE;
 		break;
 	    }
 
@@ -789,24 +790,24 @@ zip_eb_book(book, out_top_path, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_zip_code = EB_ZIP_EBZIP1;
+		in_zio_code = ZIO_EBZIP1;
 		break;
 	    }
 
 	    /* No START file exists. */
 	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_zip_code = EB_ZIP_INVALID;
+	    in_zio_code = ZIO_INVALID;
 	} while (0);
 
 	compose_existent_path_name2(book->path, subbook->directory_name,
 	    in_file_name, in_path_name);
 	compose_out_path_name2(out_top_path, subbook->directory_name,
 	    in_file_name, EB_SUFFIX_EBZ, out_path_name);
-	if (in_zip_code == EB_ZIP_INVALID) {
+	if (in_zio_code == ZIO_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    zip_file(out_path_name, in_path_name, in_zip_code);
+	    zip_file(out_path_name, in_path_name, in_zio_code);
 	}
     }
 
@@ -817,30 +818,30 @@ zip_eb_book(book, out_top_path, book_path)
 	/* Try `START' for input. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_zip_code = EB_ZIP_NONE;
+	    in_zio_code = ZIO_NONE;
 	    break;
 	}
 
 	/* Try `START.EBZ' for input. */
 	strcat(in_file_name, EB_SUFFIX_EBZ);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_zip_code = EB_ZIP_EBZIP1;
+	    in_zio_code = ZIO_EBZIP1;
 	    break;
 	}
 
 	/* No START file exists. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
-	in_zip_code = EB_ZIP_INVALID;
+	in_zio_code = ZIO_INVALID;
     } while (0);
 
     compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_EBZ,
 	out_path_name);
-    if (in_zip_code == EB_ZIP_INVALID) {
+    if (in_zio_code == ZIO_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	zip_file(out_path_name, in_path_name, in_zip_code);
+	zip_file(out_path_name, in_path_name, in_zio_code);
     }
 
     /*
@@ -848,13 +849,13 @@ zip_eb_book(book, out_top_path, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOG);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_zip_code = EB_ZIP_NONE;
+	in_zio_code = ZIO_NONE;
     else
-	in_zip_code = EB_ZIP_INVALID;
+	in_zio_code = ZIO_INVALID;
     compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_zip_code == EB_ZIP_INVALID) {
+    if (in_zio_code == ZIO_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
@@ -870,7 +871,7 @@ zip_eb_book(book, out_top_path, book_path)
  * This is used to compress an EPWING book.
  */
 static int
-zip_epwing_book(book, out_top_path, book_path)
+zip_book_epwing(book, out_top_path, book_path)
     EB_Book *book;
     const char *out_top_path;
     const char *book_path;
@@ -882,7 +883,7 @@ zip_epwing_book(book, out_top_path, book_path)
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
     mode_t out_directory_mode;
-    EB_Zip_Code in_zip_code;
+    Zio_Code in_zio_code;
     int i, j;
 
     /*
@@ -933,9 +934,9 @@ zip_epwing_book(book, out_top_path, book_path)
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
 		if (book->version < 6)
-		    in_zip_code = EB_ZIP_EPWING;
+		    in_zio_code = ZIO_EPWING;
 		else 
-		    in_zip_code = EB_ZIP_EPWING6;
+		    in_zio_code = ZIO_EPWING6;
 		break;
 	    }
 
@@ -943,7 +944,7 @@ zip_epwing_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_HONMON);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_zip_code = EB_ZIP_NONE;
+		in_zio_code = ZIO_NONE;
 		break;
 	    }
 
@@ -951,13 +952,13 @@ zip_epwing_book(book, out_top_path, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_zip_code = EB_ZIP_EBZIP1;
+		in_zio_code = ZIO_EBZIP1;
 		break;
 	    }
 
 	    /* No HONMON file exists. */
-	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_zip_code = EB_ZIP_INVALID;
+	    strcpy(in_file_name, EB_FILE_NAME_HONMON);
+	    in_zio_code = ZIO_INVALID;
 	} while (0);
 
 	compose_existent_path_name3(book->path, subbook->directory_name,
@@ -965,11 +966,11 @@ zip_epwing_book(book, out_top_path, book_path)
 	compose_out_path_name3(out_top_path, subbook->directory_name,
 	    subbook->data_directory_name, in_file_name, EB_SUFFIX_EBZ,
 	    out_path_name);
-	if (in_zip_code == EB_ZIP_INVALID) {
+	if (in_zio_code == ZIO_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    zip_file(out_path_name, in_path_name, in_zip_code);
+	    zip_file(out_path_name, in_path_name, in_zio_code);
 	}
 
 	/*
@@ -994,7 +995,7 @@ zip_epwing_book(book, out_top_path, book_path)
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_NONE;
+		    in_zio_code = ZIO_NONE;
 		    break;
 		}
 
@@ -1002,13 +1003,13 @@ zip_epwing_book(book, out_top_path, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_EBZIP1;
+		    in_zio_code = ZIO_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_zip_code = EB_ZIP_INVALID;
+		in_zio_code = ZIO_INVALID;
 	    } while (0);
 
 	    compose_existent_path_name3(book->path, subbook->directory_name,
@@ -1016,11 +1017,11 @@ zip_epwing_book(book, out_top_path, book_path)
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_EBZ,
 		out_path_name);
-	    if (in_zip_code == EB_ZIP_INVALID) {
+	    if (in_zio_code == ZIO_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		zip_file(out_path_name, in_path_name, in_zip_code);
+		zip_file(out_path_name, in_path_name, in_zio_code);
 	    }
 	}
 
@@ -1037,7 +1038,7 @@ zip_epwing_book(book, out_top_path, book_path)
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_NONE;
+		    in_zio_code = ZIO_NONE;
 		    break;
 		}
 
@@ -1045,13 +1046,13 @@ zip_epwing_book(book, out_top_path, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_EBZIP1;
+		    in_zio_code = ZIO_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_zip_code = EB_ZIP_INVALID;
+		in_zio_code = ZIO_INVALID;
 	    } while (0);
 
 	    compose_existent_path_name3(book->path, subbook->directory_name,
@@ -1059,11 +1060,11 @@ zip_epwing_book(book, out_top_path, book_path)
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_EBZ,
 		out_path_name);
-	    if (in_zip_code == EB_ZIP_INVALID) {
+	    if (in_zio_code == ZIO_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		zip_file(out_path_name, in_path_name, in_zip_code);
+		zip_file(out_path_name, in_path_name, in_zio_code);
 	    }
 	}
     }
@@ -1073,13 +1074,13 @@ zip_epwing_book(book, out_top_path, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOGS);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_zip_code = EB_ZIP_NONE;
+	in_zio_code = ZIO_NONE;
     else
-	in_zip_code = EB_ZIP_INVALID;
+	in_zio_code = ZIO_INVALID;
     compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_zip_code == EB_ZIP_INVALID) {
+    if (in_zio_code == ZIO_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
@@ -1101,9 +1102,9 @@ unzip_book(book, out_top_path, book_path)
     const char *book_path;
 {
     if (book->disc_code == EB_DISC_EB)
-	return unzip_eb_book(book, out_top_path, book_path);
+	return unzip_book_eb(book, out_top_path, book_path);
     else
-	return unzip_epwing_book(book, out_top_path, book_path);
+	return unzip_book_epwing(book, out_top_path, book_path);
 }
 
 
@@ -1112,7 +1113,7 @@ unzip_book(book, out_top_path, book_path)
  * This is used to compress an EB book.
  */
 static int
-unzip_eb_book(book, out_top_path, book_path)
+unzip_book_eb(book, out_top_path, book_path)
     EB_Book *book;
     const char *out_top_path;
     const char *book_path;
@@ -1123,7 +1124,7 @@ unzip_eb_book(book, out_top_path, book_path)
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
     mode_t out_directory_mode;
-    EB_Zip_Code in_zip_code;
+    Zio_Code in_zio_code;
     int i;
 
     /*
@@ -1164,7 +1165,7 @@ unzip_eb_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_START);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_zip_code = EB_ZIP_NONE;
+		in_zio_code = ZIO_NONE;
 		break;
 	    }
 
@@ -1172,24 +1173,24 @@ unzip_eb_book(book, out_top_path, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_zip_code = EB_ZIP_EBZIP1;
+		in_zio_code = ZIO_EBZIP1;
 		break;
 	    }
 
 	    /* No START file exists. */
 	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_zip_code = EB_ZIP_INVALID;
+	    in_zio_code = ZIO_INVALID;
 	} while (0);
 
 	compose_existent_path_name2(book->path, subbook->directory_name,
 	    in_file_name, in_path_name);
 	compose_out_path_name2(out_top_path, subbook->directory_name,
 	    in_file_name, EB_SUFFIX_NONE, out_path_name);
-	if (in_zip_code == EB_ZIP_INVALID) {
+	if (in_zio_code == ZIO_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    unzip_file(out_path_name, in_path_name, in_zip_code);
+	    unzip_file(out_path_name, in_path_name, in_zio_code);
 	}
     }
 
@@ -1200,28 +1201,28 @@ unzip_eb_book(book, out_top_path, book_path)
 	/* Try `START' for input. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_zip_code = EB_ZIP_NONE;
+	    in_zio_code = ZIO_NONE;
 	    break;
 	}
 	/* Try `START.EBZ' for input. */
 	strcat(in_file_name, EB_SUFFIX_EBZ);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_zip_code = EB_ZIP_EBZIP1;
+	    in_zio_code = ZIO_EBZIP1;
 	    break;
 	}
 	/* No START file exists. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
-	in_zip_code = EB_ZIP_INVALID;
+	in_zio_code = ZIO_INVALID;
     } while (0);
 
     compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_zip_code == EB_ZIP_INVALID) {
+    if (in_zio_code == ZIO_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	unzip_file(out_path_name, in_path_name, in_zip_code);
+	unzip_file(out_path_name, in_path_name, in_zio_code);
     }
 
     /*
@@ -1229,13 +1230,13 @@ unzip_eb_book(book, out_top_path, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOG);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_zip_code = EB_ZIP_NONE;
+	in_zio_code = ZIO_NONE;
     else
-	in_zip_code = EB_ZIP_INVALID;
+	in_zio_code = ZIO_INVALID;
     compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_zip_code == EB_ZIP_INVALID) {
+    if (in_zio_code == ZIO_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
@@ -1251,7 +1252,7 @@ unzip_eb_book(book, out_top_path, book_path)
  * This is used to compress an EPWING book.
  */
 static int
-unzip_epwing_book(book, out_top_path, book_path)
+unzip_book_epwing(book, out_top_path, book_path)
     EB_Book *book;
     const char *out_top_path;
     const char *book_path;
@@ -1263,7 +1264,7 @@ unzip_epwing_book(book, out_top_path, book_path)
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
     mode_t out_directory_mode;
-    EB_Zip_Code in_zip_code;
+    Zio_Code in_zio_code;
     int i, j;
 
     /*
@@ -1314,9 +1315,9 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
 		if (book->version < 6)
-		    in_zip_code = EB_ZIP_EPWING;
+		    in_zio_code = ZIO_EPWING;
 		else 
-		    in_zip_code = EB_ZIP_EPWING6;
+		    in_zio_code = ZIO_EPWING6;
 		break;
 	    }
 
@@ -1324,7 +1325,7 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_HONMON);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_zip_code = EB_ZIP_NONE;
+		in_zio_code = ZIO_NONE;
 		break;
 	    }
 
@@ -1332,13 +1333,13 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_zip_code = EB_ZIP_EBZIP1;
+		in_zio_code = ZIO_EBZIP1;
 		break;
 	    }
 
 	    /* No HONMON file exists. */
-	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_zip_code = EB_ZIP_INVALID;
+	    strcpy(in_file_name, EB_FILE_NAME_HONMON);
+	    in_zio_code = ZIO_INVALID;
 	} while (0);
 
 	compose_existent_path_name3(book->path, subbook->directory_name,
@@ -1346,11 +1347,11 @@ unzip_epwing_book(book, out_top_path, book_path)
 	compose_out_path_name3(out_top_path, subbook->directory_name,
 	    subbook->data_directory_name, in_file_name, EB_SUFFIX_NONE,
 	    out_path_name);
-	if (in_zip_code == EB_ZIP_INVALID) {
+	if (in_zio_code == ZIO_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    unzip_file(out_path_name, in_path_name, in_zip_code);
+	    unzip_file(out_path_name, in_path_name, in_zio_code);
 	}
 
 	/*
@@ -1375,7 +1376,7 @@ unzip_epwing_book(book, out_top_path, book_path)
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_NONE;
+		    in_zio_code = ZIO_NONE;
 		    break;
 		}
 
@@ -1383,13 +1384,13 @@ unzip_epwing_book(book, out_top_path, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_EBZIP1;
+		    in_zio_code = ZIO_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_zip_code = EB_ZIP_INVALID;
+		in_zio_code = ZIO_INVALID;
 	    } while (0);
 
 	    compose_existent_path_name3(book->path, subbook->directory_name,
@@ -1397,11 +1398,11 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_NONE,
 		out_path_name);
-	    if (in_zip_code == EB_ZIP_INVALID) {
+	    if (in_zio_code == ZIO_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		unzip_file(out_path_name, in_path_name, in_zip_code);
+		unzip_file(out_path_name, in_path_name, in_zio_code);
 	    }
 	}
 
@@ -1418,7 +1419,7 @@ unzip_epwing_book(book, out_top_path, book_path)
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_NONE;
+		    in_zio_code = ZIO_NONE;
 		    break;
 		}
 
@@ -1426,13 +1427,13 @@ unzip_epwing_book(book, out_top_path, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_EBZIP1;
+		    in_zio_code = ZIO_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_zip_code = EB_ZIP_INVALID;
+		in_zio_code = ZIO_INVALID;
 	    } while (0);
 
 	    compose_existent_path_name3(book->path, subbook->directory_name,
@@ -1440,11 +1441,11 @@ unzip_epwing_book(book, out_top_path, book_path)
 	    compose_out_path_name3(out_top_path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, EB_SUFFIX_NONE,
 		out_path_name);
-	    if (in_zip_code == EB_ZIP_INVALID) {
+	    if (in_zio_code == ZIO_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		unzip_file(out_path_name, in_path_name, in_zip_code);
+		unzip_file(out_path_name, in_path_name, in_zio_code);
 	    }
 	}
     }
@@ -1454,13 +1455,13 @@ unzip_epwing_book(book, out_top_path, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOGS);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_zip_code = EB_ZIP_NONE;
+	in_zio_code = ZIO_NONE;
     else
-	in_zip_code = EB_ZIP_INVALID;
+	in_zio_code = ZIO_INVALID;
     compose_existent_path_name(book->path, in_file_name, in_path_name);
     compose_out_path_name(out_top_path, in_file_name, EB_SUFFIX_NONE,
 	out_path_name);
-    if (in_zip_code == EB_ZIP_INVALID) {
+    if (in_zio_code == ZIO_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
@@ -1481,9 +1482,9 @@ zipinfo_book(book, book_path)
     const char *book_path;
 {
     if (book->disc_code == EB_DISC_EB)
-	return zipinfo_eb_book(book, book_path);
+	return zipinfo_book_eb(book, book_path);
     else
-	return zipinfo_epwing_book(book, book_path);
+	return zipinfo_book_epwing(book, book_path);
 }
 
 
@@ -1492,14 +1493,14 @@ zipinfo_book(book, book_path)
  * This is used to list files in an EB book.
  */
 static int
-zipinfo_eb_book(book, book_path)
+zipinfo_book_eb(book, book_path)
     EB_Book *book;
     const char *book_path;
 {
     EB_Subbook *subbook;
     char in_path_name[PATH_MAX + 1];
     char in_file_name[EB_MAX_FILE_NAME_LENGTH];
-    EB_Zip_Code in_zip_code;
+    Zio_Code in_zio_code;
     int i;
 
     /*
@@ -1528,7 +1529,7 @@ zipinfo_eb_book(book, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_START);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_zip_code = EB_ZIP_NONE;
+		in_zio_code = ZIO_NONE;
 		break;
 	    }
 
@@ -1536,22 +1537,22 @@ zipinfo_eb_book(book, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name2(book->path, subbook->directory_name, 
 		in_file_name) == 0) {
-		in_zip_code = EB_ZIP_EBZIP1;
+		in_zio_code = ZIO_EBZIP1;
 		break;
 	    }
 
 	    /* No START file exists. */
 	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_zip_code = EB_ZIP_INVALID;
+	    in_zio_code = ZIO_INVALID;
 	} while (0);
 
 	compose_existent_path_name2(book->path, subbook->directory_name,
 	    in_file_name, in_path_name);
-	if (in_zip_code == EB_ZIP_INVALID) {
+	if (in_zio_code == ZIO_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    zipinfo_file(in_path_name, in_zip_code);
+	    zipinfo_file(in_path_name, in_zio_code);
 	}
     }
 
@@ -1562,26 +1563,26 @@ zipinfo_eb_book(book, book_path)
 	/* Try `START' for input. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_zip_code = EB_ZIP_NONE;
+	    in_zio_code = ZIO_NONE;
 	    break;
 	}
 	/* Try `START.EBZ' for input. */
 	strcat(in_file_name, EB_SUFFIX_EBZ);
 	if (eb_fix_file_name(book->path, in_file_name) == 0) {
-	    in_zip_code = EB_ZIP_EBZIP1;
+	    in_zio_code = ZIO_EBZIP1;
 	    break;
 	}
 	/* No START file exists. */
 	strcpy(in_file_name, EB_FILE_NAME_LANGUAGE);
-	in_zip_code = EB_ZIP_INVALID;
+	in_zio_code = ZIO_INVALID;
     } while (0);
 
     compose_existent_path_name(book->path, in_file_name, in_path_name);
-    if (in_zip_code == EB_ZIP_INVALID) {
+    if (in_zio_code == ZIO_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	zipinfo_file(in_path_name, in_zip_code);
+	zipinfo_file(in_path_name, in_zio_code);
     }
 
     /*
@@ -1589,15 +1590,15 @@ zipinfo_eb_book(book, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOG);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_zip_code = EB_ZIP_NONE;
+	in_zio_code = ZIO_NONE;
     else
-	in_zip_code = EB_ZIP_INVALID;
+	in_zio_code = ZIO_INVALID;
     compose_existent_path_name(book->path, in_file_name, in_path_name);
-    if (in_zip_code == EB_ZIP_INVALID) {
+    if (in_zio_code == ZIO_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	zipinfo_file(in_path_name, in_zip_code);
+	zipinfo_file(in_path_name, in_zio_code);
     }
 
     return 0;
@@ -1609,7 +1610,7 @@ zipinfo_eb_book(book, book_path)
  * This is used to list files in an EPWING book.
  */
 static int
-zipinfo_epwing_book(book, book_path)
+zipinfo_book_epwing(book, book_path)
     EB_Book *book;
     const char *book_path;
 {
@@ -1617,7 +1618,7 @@ zipinfo_epwing_book(book, book_path)
     EB_Font *font;
     char in_path_name[PATH_MAX + 1];
     char in_file_name[EB_MAX_FILE_NAME_LENGTH];
-    EB_Zip_Code in_zip_code;
+    Zio_Code in_zio_code;
     int i, j;
 
     /*
@@ -1647,9 +1648,9 @@ zipinfo_epwing_book(book, book_path)
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
 		if (book->version < 6)
-		    in_zip_code = EB_ZIP_EPWING;
+		    in_zio_code = ZIO_EPWING;
 		else 
-		    in_zip_code = EB_ZIP_EPWING6;
+		    in_zio_code = ZIO_EPWING6;
 		break;
 	    }
 
@@ -1657,7 +1658,7 @@ zipinfo_epwing_book(book, book_path)
 	    strcpy(in_file_name, EB_FILE_NAME_HONMON);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_zip_code = EB_ZIP_NONE;
+		in_zio_code = ZIO_NONE;
 		break;
 	    }
 
@@ -1665,22 +1666,22 @@ zipinfo_epwing_book(book, book_path)
 	    strcat(in_file_name, EB_SUFFIX_EBZ);
 	    if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		subbook->data_directory_name, in_file_name) == 0) {
-		in_zip_code = EB_ZIP_EBZIP1;
+		in_zio_code = ZIO_EBZIP1;
 		break;
 	    }
 
 	    /* No HONMON file exists. */
-	    strcpy(in_file_name, EB_FILE_NAME_START);
-	    in_zip_code = EB_ZIP_INVALID;
+	    strcpy(in_file_name, EB_FILE_NAME_HONMON);
+	    in_zio_code = ZIO_INVALID;
 	} while (0);
 
 	compose_existent_path_name3(book->path, subbook->directory_name,
 	    subbook->data_directory_name, in_file_name, in_path_name);
-	if (in_zip_code == EB_ZIP_INVALID) {
+	if (in_zio_code == ZIO_INVALID) {
 	    fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		in_path_name);
 	} else {
-	    zipinfo_file(in_path_name, in_zip_code);
+	    zipinfo_file(in_path_name, in_zio_code);
 	}
 
 	/*
@@ -1696,7 +1697,7 @@ zipinfo_epwing_book(book, book_path)
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_NONE;
+		    in_zio_code = ZIO_NONE;
 		    break;
 		}
 
@@ -1704,22 +1705,22 @@ zipinfo_epwing_book(book, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_EBZIP1;
+		    in_zio_code = ZIO_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_zip_code = EB_ZIP_INVALID;
+		in_zio_code = ZIO_INVALID;
 	    } while (0);
 
 	    compose_existent_path_name3(book->path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, in_path_name);
-	    if (in_zip_code == EB_ZIP_INVALID) {
+	    if (in_zio_code == ZIO_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		zipinfo_file(in_path_name, in_zip_code);
+		zipinfo_file(in_path_name, in_zio_code);
 	    }
 	}
 
@@ -1736,7 +1737,7 @@ zipinfo_epwing_book(book, book_path)
 		strcpy(in_file_name, font->file_name);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_NONE;
+		    in_zio_code = ZIO_NONE;
 		    break;
 		}
 
@@ -1744,22 +1745,22 @@ zipinfo_epwing_book(book, book_path)
 		strcat(in_file_name, EB_SUFFIX_EBZ);
 		if (eb_fix_file_name3(book->path, subbook->directory_name, 
 		    subbook->gaiji_directory_name, in_file_name) == 0) {
-		    in_zip_code = EB_ZIP_EBZIP1;
+		    in_zio_code = ZIO_EBZIP1;
 		    break;
 		}
 
 		/* No font file exists. */
 		strcpy(in_file_name, font->file_name);
-		in_zip_code = EB_ZIP_INVALID;
+		in_zio_code = ZIO_INVALID;
 	    } while (0);
 
 	    compose_existent_path_name3(book->path, subbook->directory_name,
 		subbook->gaiji_directory_name, in_file_name, in_path_name);
-	    if (in_zip_code == EB_ZIP_INVALID) {
+	    if (in_zio_code == ZIO_INVALID) {
 		fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 		    in_path_name);
 	    } else {
-		zipinfo_file(in_path_name, in_zip_code);
+		zipinfo_file(in_path_name, in_zio_code);
 	    }
 	}
     }
@@ -1769,15 +1770,15 @@ zipinfo_epwing_book(book, book_path)
      */
     strcpy(in_file_name, EB_FILE_NAME_CATALOGS);
     if (eb_fix_file_name(book->path, in_file_name) == 0)
-	in_zip_code = EB_ZIP_NONE;
+	in_zio_code = ZIO_NONE;
     else
-	in_zip_code = EB_ZIP_INVALID;
+	in_zio_code = ZIO_INVALID;
     compose_existent_path_name(book->path, in_file_name, in_path_name);
-    if (in_zip_code == EB_ZIP_INVALID) {
+    if (in_zio_code == ZIO_INVALID) {
 	fprintf(stderr, _("%s: no such file: %s\n"), invoked_name,
 	    in_path_name);
     } else {
-	zipinfo_file(in_path_name, in_zip_code);
+	zipinfo_file(in_path_name, in_zio_code);
     }
 
     return 0;
@@ -1790,15 +1791,14 @@ zipinfo_epwing_book(book, book_path)
  * If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 static int
-zip_file(out_file_name, in_file_name, in_zip_code)
+zip_file(out_file_name, in_file_name, in_zio_code)
     const char *out_file_name;
     const char *in_file_name;
-    EB_Zip_Code in_zip_code;
+    Zio_Code in_zio_code;
 {
-    EB_Zip in_zip, out_zip;
+    Zio in_zio, out_zio;
     unsigned char *in_buffer = NULL, *out_buffer = NULL;
     size_t in_total_length, out_total_length;
-    int in_file = -1, out_file = -1;
     ssize_t in_length;
     size_t out_length;
     struct stat in_status, out_status;
@@ -1808,6 +1808,9 @@ zip_file(out_file_name, in_file_name, in_zip_code)
     int information_interval;
     int total_slices;
     int i;
+
+    zio_initialize(&in_zio);
+    zio_initialize(&out_zio);
 
     /*
      * Output information.
@@ -1841,14 +1844,14 @@ zip_file(out_file_name, in_file_name, in_zip_code)
     /*
      * Allocate memories for in/out buffers.
      */
-    in_buffer = (unsigned char *)malloc(EB_SIZE_PAGE << EB_MAX_EBZIP_LEVEL);
+    in_buffer = (unsigned char *)malloc(EB_SIZE_PAGE << ZIO_MAX_EBZIP_LEVEL);
     if (in_buffer == NULL) {
 	fprintf(stderr, _("%s: memory exhausted\n"), invoked_name);
 	goto failed;
     }
 
-    out_buffer = (unsigned char *) malloc((EB_SIZE_PAGE << EB_MAX_EBZIP_LEVEL)
-	+ EB_SIZE_EBZIP_MARGIN);
+    out_buffer = (unsigned char *) malloc((EB_SIZE_PAGE << ZIO_MAX_EBZIP_LEVEL)
+	+ ZIO_SIZE_EBZIP_MARGIN);
     if (out_buffer == NULL) {
 	fprintf(stderr, _("%s: memory exhausted\n"), invoked_name);
 	goto failed;
@@ -1887,8 +1890,7 @@ zip_file(out_file_name, in_file_name, in_zip_code)
     /*
      * Open files.
      */
-    in_file = eb_zopen(&in_zip, in_file_name, in_zip_code);
-    if (in_file < 0) {
+    if (zio_open(&in_zio, in_file_name, in_zio_code) < 0) {
 	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
 	    invoked_name, strerror(errno), in_file_name);
 	goto failed;
@@ -1907,34 +1909,34 @@ zip_file(out_file_name, in_file_name, in_zip_code)
 #endif
 
 #ifdef O_CREAT
-	out_file = open(out_file_name, O_CREAT | O_TRUNC | O_WRONLY | O_BINARY,
-	    0666 ^ get_umask());
+	out_zio.file = open(out_file_name,
+	    O_CREAT | O_TRUNC | O_WRONLY | O_BINARY, 0666 ^ get_umask());
 #else
-	out_file = creat(out_file_name, 0666 ^ get_umask());
+	out_zio.file = creat(out_file_name, 0666 ^ get_umask());
 #endif
-	if (out_file < 0) {
+	if (out_zio.file < 0) {
 	    fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
 		invoked_name, strerror(errno), out_file_name);
 	    goto failed;
 	}
-	trap_file = out_file;
+	trap_file = out_zio.file;
     }
 
     /*
      * Initialize `zip'.
      */
-    out_zip.code = EB_ZIP_EBZIP1;
-    out_zip.slice_size = EB_SIZE_PAGE << zip_level;
-    out_zip.file_size = in_zip.file_size;
-    out_zip.crc = 1;
-    out_zip.mtime = in_status.st_mtime;
+    out_zio.code = ZIO_EBZIP1;
+    out_zio.slice_size = EB_SIZE_PAGE << zip_level;
+    out_zio.file_size = in_zio.file_size;
+    out_zio.crc = 1;
+    out_zio.mtime = in_status.st_mtime;
 
-    if (out_zip.file_size < 1 << 16)
-	out_zip.index_width = 2;
-    else if (out_zip.file_size < 1 << 24)
-	out_zip.index_width = 3;
+    if (out_zio.file_size < 1 << 16)
+	out_zio.index_width = 2;
+    else if (out_zio.file_size < 1 << 24)
+	out_zio.index_width = 3;
     else 
-	out_zip.index_width = 4;
+	out_zio.index_width = 4;
 
     /*
      * Fill header and index part with `\0'.
@@ -1959,23 +1961,23 @@ zip_file(out_file_name, in_file_name, in_zip_code)
      *     total_slices = N = (file_size + slice_size - 1) / slice_size
      *     index_length = (N + 1) * index_width
      */
-    total_slices = (out_zip.file_size + out_zip.slice_size - 1)
-	/ out_zip.slice_size;
-    index_length = (total_slices + 1) * out_zip.index_width;
-    memset(out_buffer, '\0', out_zip.slice_size);
+    total_slices = (out_zio.file_size + out_zio.slice_size - 1)
+	/ out_zio.slice_size;
+    index_length = (total_slices + 1) * out_zio.index_width;
+    memset(out_buffer, '\0', out_zio.slice_size);
 
     if (!test_flag) {
-	for (i = index_length + EB_SIZE_EBZIP_HEADER;
-	     out_zip.slice_size <= i; i -= out_zip.slice_size) {
-	    if (write(out_file, out_buffer, out_zip.slice_size)
-		!= out_zip.slice_size) {
+	for (i = index_length + ZIO_SIZE_EBZIP_HEADER;
+	     out_zio.slice_size <= i; i -= out_zio.slice_size) {
+	    if (write(out_zio.file, out_buffer, out_zio.slice_size)
+		!= out_zio.slice_size) {
 		fprintf(stderr, _("%s: failed to write to the file: %s\n"),
 		    invoked_name, out_file_name);
 		goto failed;
 	    }
 	}
 	if (0 < i) {
-	    if (write(out_file, out_buffer, i) != i) {
+	    if (write(out_zio.file, out_buffer, i) != i) {
 		fprintf(stderr, _("%s: failed to write to the file: %s\n"),
 		    invoked_name, out_file_name);
 		goto failed;
@@ -1994,13 +1996,12 @@ zip_file(out_file_name, in_file_name, in_zip_code)
 	/*
 	 * Read a slice from the original file.
 	 */
-	if (eb_zlseek(&in_zip, in_file, in_total_length, SEEK_SET) < 0) {
+	if (zio_lseek(&in_zio, in_total_length, SEEK_SET) < 0) {
 	    fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		invoked_name, strerror(errno), in_file_name);
 	    goto failed;
 	}
-	in_length = eb_zread(&in_zip, in_file, (char *)in_buffer,
-	    out_zip.slice_size);
+	in_length = zio_read(&in_zio, (char *)in_buffer, out_zio.slice_size);
 	if (in_length < 0) {
 	    fprintf(stderr, _("%s: failed to read from the file, %s: %s\n"),
 		invoked_name, strerror(errno), in_file_name);
@@ -2009,8 +2010,8 @@ zip_file(out_file_name, in_file_name, in_zip_code)
 	    fprintf(stderr, _("%s: unexpected EOF: %s\n"), 
 		invoked_name, in_file_name);
 	    goto failed;
-	} else if (in_length != out_zip.slice_size
-	    && in_total_length + in_length != out_zip.file_size) {
+	} else if (in_length != out_zio.slice_size
+	    && in_total_length + in_length != out_zio.file_size) {
 	    fprintf(stderr, _("%s: unexpected EOF: %s\n"), 
 		invoked_name, in_file_name);
 	    goto failed;
@@ -2019,30 +2020,30 @@ zip_file(out_file_name, in_file_name, in_zip_code)
 	/*
 	 * Update CRC.  (Calculate adler32 again.)
 	 */
-	out_zip.crc = adler32((uLong)out_zip.crc, (Bytef *)in_buffer,
+	out_zio.crc = adler32((uLong)out_zio.crc, (Bytef *)in_buffer,
 	    (uInt)in_length);
 
 	/*
 	 * If this is last slice and its length is shorter than
 	 * `slice_size', fill `\0'.
 	 */
-	if (in_length < out_zip.slice_size) {
+	if (in_length < out_zio.slice_size) {
 	    memset(in_buffer + in_length, '\0',
-		out_zip.slice_size - in_length);
-	    in_length = out_zip.slice_size;
+		out_zio.slice_size - in_length);
+	    in_length = out_zio.slice_size;
 	}
 
 	/*
 	 * Compress the slice.
 	 */
 	if (ebzip1_slice((char *)out_buffer, &out_length, (char *)in_buffer,
-	    out_zip.slice_size) < 0) {
+	    out_zio.slice_size) < 0) {
 	    fprintf(stderr, _("%s: memory exhausted\n"), invoked_name);
 	    goto failed;
 	}
-	if (out_zip.slice_size <= out_length) {
-	    memcpy(out_buffer, in_buffer, out_zip.slice_size);
-	    out_length = out_zip.slice_size;
+	if (out_zio.slice_size <= out_length) {
+	    memcpy(out_buffer, in_buffer, out_zio.slice_size);
+	    out_length = out_zio.slice_size;
 	}
 
 	/*
@@ -2051,13 +2052,13 @@ zip_file(out_file_name, in_file_name, in_zip_code)
 	 * original, write orignal slice.
 	 */
 	if (!test_flag) {
-	    slice_location = lseek(out_file, 0, SEEK_END);
+	    slice_location = lseek(out_zio.file, 0, SEEK_END);
 	    if (slice_location < 0) {
 		fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		    invoked_name, strerror(errno), out_file_name);
 		goto failed;
 	    }
-	    if (write(out_file, out_buffer, out_length) != out_length) {
+	    if (write(out_zio.file, out_buffer, out_length) != out_length) {
 		fprintf(stderr, _("%s: failed to write to the file: %s\n"),
 		    invoked_name, out_file_name);
 		goto failed;
@@ -2068,7 +2069,7 @@ zip_file(out_file_name, in_file_name, in_zip_code)
 	 * Write an index for the slice.
 	 */
 	next_location = slice_location + out_length;
-	switch (out_zip.index_width) {
+	switch (out_zio.index_width) {
 	case 2:
 	    out_buffer[0] = (slice_location >> 8) & 0xff;
 	    out_buffer[1] = slice_location & 0xff;
@@ -2096,14 +2097,15 @@ zip_file(out_file_name, in_file_name, in_zip_code)
 	}
 
 	if (!test_flag) {
-	    if (lseek(out_file, EB_SIZE_EBZIP_HEADER + i * out_zip.index_width,
+	    if (lseek(out_zio.file,
+		ZIO_SIZE_EBZIP_HEADER + i * out_zio.index_width,
 		SEEK_SET) < 0) {
 		fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		    invoked_name, strerror(errno), out_file_name);
 		goto failed;
 	    }
-	    if (write(out_file, out_buffer, out_zip.index_width * 2)
-		!= out_zip.index_width * 2) {
+	    if (write(out_zio.file, out_buffer, out_zio.index_width * 2)
+		!= out_zio.index_width * 2) {
 		fprintf(stderr, _("%s: failed to write to the file, %s: %s\n"),
 		    invoked_name, strerror(errno), out_file_name);
 		goto failed;
@@ -2111,7 +2113,7 @@ zip_file(out_file_name, in_file_name, in_zip_code)
 	}
 
 	in_total_length += in_length;
-	out_total_length += out_length + out_zip.index_width;
+	out_total_length += out_length + out_zio.index_width;
 
 	/*
 	 * Output status information unless `quiet' mode.
@@ -2121,7 +2123,7 @@ zip_file(out_file_name, in_file_name, in_zip_code)
 	    printf(_("%4.1f%% done (%lu / %lu bytes)\n"),
 		(double)(i + 1) * 100.0 / (double)total_slices,
 		(unsigned long)in_total_length,
-		(unsigned long)in_zip.file_size);
+		(unsigned long)in_zio.file_size);
 	    fflush(stdout);
 	}
     }
@@ -2137,32 +2139,32 @@ zip_file(out_file_name, in_file_name, in_zip_code)
      *     mtime		4   bytes  (18 ... 21)
      */
     memcpy(out_buffer, "EBZip", 5);
-    out_buffer[ 5] = (EB_ZIP_EBZIP1 << 4) + (zip_level & 0x0f);
+    out_buffer[ 5] = (ZIO_EBZIP1 << 4) + (zip_level & 0x0f);
     out_buffer[ 6] = 0;
     out_buffer[ 7] = 0;
     out_buffer[ 8] = 0;
     out_buffer[ 9] = 0;
-    out_buffer[10] = (out_zip.file_size >> 24) & 0xff;
-    out_buffer[11] = (out_zip.file_size >> 16) & 0xff;
-    out_buffer[12] = (out_zip.file_size >> 8) & 0xff;
-    out_buffer[13] = out_zip.file_size & 0xff;
-    out_buffer[14] = (out_zip.crc >> 24) & 0xff;
-    out_buffer[15] = (out_zip.crc >> 16) & 0xff;
-    out_buffer[16] = (out_zip.crc >> 8) & 0xff;
-    out_buffer[17] = out_zip.crc & 0xff;
-    out_buffer[18] = (out_zip.mtime >> 24) & 0xff;
-    out_buffer[19] = (out_zip.mtime >> 16) & 0xff;
-    out_buffer[20] = (out_zip.mtime >> 8) & 0xff;
-    out_buffer[21] = out_zip.mtime & 0xff;
+    out_buffer[10] = (out_zio.file_size >> 24) & 0xff;
+    out_buffer[11] = (out_zio.file_size >> 16) & 0xff;
+    out_buffer[12] = (out_zio.file_size >> 8) & 0xff;
+    out_buffer[13] = out_zio.file_size & 0xff;
+    out_buffer[14] = (out_zio.crc >> 24) & 0xff;
+    out_buffer[15] = (out_zio.crc >> 16) & 0xff;
+    out_buffer[16] = (out_zio.crc >> 8) & 0xff;
+    out_buffer[17] = out_zio.crc & 0xff;
+    out_buffer[18] = (out_zio.mtime >> 24) & 0xff;
+    out_buffer[19] = (out_zio.mtime >> 16) & 0xff;
+    out_buffer[20] = (out_zio.mtime >> 8) & 0xff;
+    out_buffer[21] = out_zio.mtime & 0xff;
 
     if (!test_flag) {
-	if (lseek(out_file, 0, SEEK_SET) < 0) {
+	if (lseek(out_zio.file, 0, SEEK_SET) < 0) {
 	    fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		invoked_name, strerror(errno), out_file_name);
 	    goto failed;
 	}
-	if (write(out_file, out_buffer, EB_SIZE_EBZIP_HEADER)
-	    != EB_SIZE_EBZIP_HEADER) {
+	if (write(out_zio.file, out_buffer, ZIO_SIZE_EBZIP_HEADER)
+	    != ZIO_SIZE_EBZIP_HEADER) {
 	    fprintf(stderr, _("%s: failed to write to the file, %s: %s\n"),
 		invoked_name, strerror(errno), out_file_name);
 	    goto failed;
@@ -2172,15 +2174,15 @@ zip_file(out_file_name, in_file_name, in_zip_code)
     /*
      * Output the result information unless quiet mode.
      */
-    out_total_length += EB_SIZE_EBZIP_HEADER + out_zip.index_width;
+    out_total_length += ZIO_SIZE_EBZIP_HEADER + out_zio.index_width;
     if (!quiet_flag) {
 	printf(_("completed (%lu / %lu bytes)\n"),
-	    (unsigned long)in_zip.file_size, (unsigned long)in_zip.file_size);
+	    (unsigned long)in_zio.file_size, (unsigned long)in_zio.file_size);
 	if (in_total_length != 0) {
 	    printf(_("%lu -> %lu bytes (%4.1f%%)\n\n"),
-		(unsigned long)in_zip.file_size,
+		(unsigned long)in_zio.file_size,
 		(unsigned long)out_total_length, 
-		(double)out_total_length * 100.0 / (double)in_zip.file_size);
+		(double)out_total_length * 100.0 / (double)in_zio.file_size);
 	}
 	fflush(stdout);
     }
@@ -2188,12 +2190,12 @@ zip_file(out_file_name, in_file_name, in_zip_code)
     /*
      * Close files.
      */
-    eb_zclose(&in_zip, in_file);
-    in_file = -1;
+    zio_close(&in_zio);
+    zio_finalize(&in_zio);
 
     if (!test_flag) {
-	close(out_file);
-	out_file = -1;
+	close(out_zio.file);
+	zio_finalize(&out_zio);
 	trap_file = -1;
 	trap_file_name = NULL;
 #ifdef SIGHUP
@@ -2211,14 +2213,14 @@ zip_file(out_file_name, in_file_name, in_zip_code)
     /*
      * Delete an original file unless `keep_flag' is set.
      */
-    if (!test_flag  && !keep_flag && unlink(in_file_name) < 0) {
+    if (!test_flag && !keep_flag && unlink(in_file_name) < 0) {
 	fprintf(stderr, _("%s: failed to unlink the file: %s\n"), invoked_name,
 	    in_file_name);
 	goto failed;
     }
 
     /*
-     * Set owner, group, permission, atime and utime of `out_file'.
+     * Set owner, group, permission, atime and utime of `out_zio.file'.
      * We ignore return values of `chown', `chmod' and `utime'.
      */
     if (!test_flag) {
@@ -2254,10 +2256,12 @@ zip_file(out_file_name, in_file_name, in_zip_code)
     if (out_buffer != NULL)
 	free(out_buffer);
 
-    if (0 <= in_file)
-	close(in_file);
-    if (0 <= out_file) {
-	close(out_file);
+    zio_close(&in_zio);
+    zio_finalize(&in_zio);
+
+    if (0 <= out_zio.file) {
+	close(out_zio.file);
+	zio_finalize(&out_zio);
 	trap_file = -1;
 	trap_file_name = NULL;
 #ifdef SIGHUP
@@ -2285,15 +2289,15 @@ zip_file(out_file_name, in_file_name, in_zip_code)
  * list.  If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 static int
-unzip_file(out_file_name, in_file_name, in_zip_code)
+unzip_file(out_file_name, in_file_name, in_zio_code)
     const char *out_file_name;
     const char *in_file_name;
-    EB_Zip_Code in_zip_code;
+    Zio_Code in_zio_code;
 {
-    EB_Zip in_zip;
+    Zio in_zio;
     unsigned char *buffer = NULL;
     size_t total_length;
-    int in_file = -1, out_file = -1;
+    int out_file = -1;
     size_t length;
     struct stat in_status, out_status;
     unsigned int crc = 1;
@@ -2301,10 +2305,12 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
     int total_slices;
     int i;
 
+    zio_initialize(&in_zio);
+
     /*
      * Simply copy a file, when an input file is not compressed.
      */
-    if (in_zip_code == EB_ZIP_NONE)
+    if (in_zio_code == ZIO_NONE)
 	return copy_file(out_file_name, in_file_name);
 
     /*
@@ -2339,7 +2345,7 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
     /*
      * Allocate memories for in/out buffers.
      */
-    buffer = (unsigned char *)malloc(EB_SIZE_PAGE << EB_MAX_EBZIP_LEVEL);
+    buffer = (unsigned char *)malloc(EB_SIZE_PAGE << ZIO_MAX_EBZIP_LEVEL);
     if (buffer == NULL) {
 	fprintf(stderr, _("%s: memory exhausted\n"), invoked_name);
 	goto failed;
@@ -2378,8 +2384,7 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
     /*
      * Open files.
      */
-    in_file = eb_zopen(&in_zip, in_file_name, in_zip_code);
-    if (in_file < 0) {
+    if (zio_open(&in_zio, in_file_name, in_zio_code) < 0) {
 	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
 	    invoked_name, strerror(errno), in_file_name);
 	goto failed;
@@ -2416,8 +2421,8 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
      * and then write it to the output file.
      */
     total_length = 0;
-    total_slices = (in_zip.file_size + in_zip.slice_size - 1)
-	/ in_zip.slice_size;
+    total_slices = (in_zio.file_size + in_zio.slice_size - 1)
+	/ in_zio.slice_size;
     information_interval = INFORMATION_INTERVAL_FACTOR;
     for (i = 0; i < total_slices; i++) {
 	/*
@@ -2425,12 +2430,12 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
 	 * We assumes the slice is not compressed if its length is
 	 * equal to `slice_size'.
 	 */
-	if (eb_zlseek(&in_zip, in_file, total_length, SEEK_SET) < 0) {
+	if (zio_lseek(&in_zio, total_length, SEEK_SET) < 0) {
 	    fprintf(stderr, _("%s: failed to seek the file, %s: %s\n"),
 		invoked_name, strerror(errno), in_file_name);
 	    goto failed;
 	}
-	length = eb_zread(&in_zip, in_file, (char *)buffer, in_zip.slice_size);
+	length = zio_read(&in_zio, (char *)buffer, in_zio.slice_size);
 	if (length < 0) {
 	    fprintf(stderr, _("%s: failed to read from the file, %s: %s\n"),
 		invoked_name, strerror(errno), in_file_name);
@@ -2439,8 +2444,8 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
 	    fprintf(stderr, _("%s: unexpected EOF: %s\n"), 
 		invoked_name, in_file_name);
 	    goto failed;
-	} else if (length != in_zip.slice_size
-	    && total_length + length != in_zip.file_size) {
+	} else if (length != in_zio.slice_size
+	    && total_length + length != in_zio.file_size) {
 	    fprintf(stderr, _("%s: unexpected EOF: %s\n"), 
 		invoked_name, in_file_name);
 	    goto failed;
@@ -2449,7 +2454,7 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
 	/*
 	 * Update CRC.  (Calculate adler32 again.)
 	 */
-	if (in_zip.code == EB_ZIP_EBZIP1)
+	if (in_zio.code == ZIO_EBZIP1)
 	    crc = adler32((uLong)crc, (Bytef *)buffer, (uInt)length);
 
 	/*
@@ -2471,7 +2476,7 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
 	    == information_interval) {
 	    printf(_("%4.1f%% done (%lu / %lu bytes)\n"),
 		(double)(i + 1) * 100.0 / (double)total_slices,
-		(unsigned long)total_length, (unsigned long)in_zip.file_size);
+		(unsigned long)total_length, (unsigned long)in_zio.file_size);
 	    fflush(stdout);
 	}
     }
@@ -2481,7 +2486,7 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
      */
     if (!quiet_flag) {
 	printf(_("completed (%lu / %lu bytes)\n"),
-	    (unsigned long)in_zip.file_size, (unsigned long)in_zip.file_size);
+	    (unsigned long)in_zio.file_size, (unsigned long)in_zio.file_size);
 	printf(_("%lu -> %lu bytes\n\n"),
 	    (unsigned long)in_status.st_size, (unsigned long)total_length);
 	fflush(stdout);
@@ -2490,8 +2495,8 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
     /*
      * Close files.
      */
-    eb_zclose(&in_zip, in_file);
-    in_file = -1;
+    zio_close(&in_zio);
+    zio_finalize(&in_zio);
 
     if (!test_flag) {
 	close(out_file);
@@ -2513,7 +2518,7 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
     /*
      * Check for CRC.
      */
-    if (in_zip.code == EB_ZIP_EBZIP1 && in_zip.crc != crc) {
+    if (in_zio.code == ZIO_EBZIP1 && in_zio.crc != crc) {
 	fprintf(stderr, _("%s: CRC error: %s\n"), invoked_name, out_file_name);
 	goto failed;
     }
@@ -2555,8 +2560,9 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
     if (buffer != NULL)
 	free(buffer);
 
-    if (0 <= in_file)
-	close(in_file);
+    zio_close(&in_zio);
+    zio_finalize(&in_zio);
+
     if (0 <= out_file) {
 	close(out_file);
 	trap_file = -1;
@@ -2587,11 +2593,11 @@ unzip_file(out_file_name, in_file_name, in_zip_code)
  * If it succeeds, 0 is returned.  Otherwise -1 is returned.
  */
 static int
-zipinfo_file(in_file_name, in_zip_code)
+zipinfo_file(in_file_name, in_zio_code)
     const char *in_file_name;
-    EB_Zip_Code in_zip_code;
+    Zio_Code in_zio_code;
 {
-    EB_Zip in_zip;
+    Zio in_zio;
     int in_file = -1;
     struct stat in_status;
 
@@ -2605,7 +2611,7 @@ zipinfo_file(in_file_name, in_zip_code)
      * Open the file.
      */
     if (stat(in_file_name, &in_status) == 0 && S_ISREG(in_status.st_mode))
-	in_file = eb_zopen(&in_zip, in_file_name, in_zip_code);
+	in_file = zio_open(&in_zio, in_file_name, in_zio_code);
 
     if (in_file < 0) {
 	fprintf(stderr, _("%s: failed to open the file, %s: %s\n"),
@@ -2621,20 +2627,20 @@ zipinfo_file(in_file_name, in_zip_code)
     /*
      * Output information.
      */
-    if (in_zip.code == EB_ZIP_NONE) {
+    if (in_zio.code == ZIO_NONE) {
 	printf(_("%lu bytes (not compressed)\n"),
 	    (unsigned long)in_status.st_size);
     } else {
 	printf(_("%lu -> %lu bytes "),
-	    (unsigned long)in_zip.file_size, (unsigned long)in_status.st_size);
-	if (in_zip.file_size == 0)
+	    (unsigned long)in_zio.file_size, (unsigned long)in_status.st_size);
+	if (in_zio.file_size == 0)
 	    fputs(_("(empty original file, "), stdout);
 	else {
 	    printf("(%4.1f%%, ", (double)in_status.st_size * 100.0
-		/ (double)in_zip.file_size);
+		/ (double)in_zio.file_size);
 	}
-	if (in_zip.code == EB_ZIP_EBZIP1)
-	    printf(_("ebzip level %d compression)\n"), in_zip.zip_level);
+	if (in_zio.code == ZIO_EBZIP1)
+	    printf(_("ebzip level %d compression)\n"), in_zio.zip_level);
 	else
 	    printf(_("EPWING compression)\n"));
     }

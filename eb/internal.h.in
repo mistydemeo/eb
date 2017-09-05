@@ -1,5 +1,6 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +40,8 @@
 #define EB_FILE_NAME_CATALOGS		"catalogs"
 #define EB_FILE_NAME_HONMON		"honmon"
 #define EB_FILE_NAME_HONMON2		"honmon2"
+#define EB_FILE_NAME_HONMONG		"honmong"
+#define EB_FILE_NAME_HONMONS		"honmons"
 #define EB_FILE_NAME_APPENDIX		"appendix"
 #define EB_FILE_NAME_FUROKU		"furoku"
 
@@ -49,15 +52,6 @@
 
 #define EB_SUFFIX_NONE			""
 #define EB_SUFFIX_EBZ			".ebz"
-
-/*
- * Huffman node types.
- */
-#define EB_HUFFMAN_NODE_INTERMEDIATE	0
-#define EB_HUFFMAN_NODE_EOF		1
-#define EB_HUFFMAN_NODE_LEAF8		2
-#define EB_HUFFMAN_NODE_LEAF16		3
-#define EB_HUFFMAN_NODE_LEAF32		4
 
 /*
  * Search word types.
@@ -74,16 +68,6 @@
 #define EB_INDEX_STYLE_ASIS		1
 #define EB_INDEX_STYLE_REVERSED_CONVERT	2
 #define EB_INDEX_STYLE_DELETE		2
-
-/*
- * Compression type codes.
- */
-#define EB_ZIP_NONE			0
-#define EB_ZIP_EBZIP1			1
-#define EB_ZIP_EPWING			100
-#define EB_ZIP_EPWING6			101
-#define EB_ZIP_SEBXA			200
-#define EB_ZIP_INVALID        		-1
 
 /*
  * Text content currently read.
@@ -116,12 +100,7 @@
 #define EB_MAX_INDEX_DEPTH		6
 
 /*
- * Maximum ebzip compression level.
- */
-#define EB_MAX_EBZIP_LEVEL		3
-
-/*
- * CPP macro version of get_uint1(), ... get_uint4().
+ * Get an unsigned value from an octet stream buffer.
  */
 #define eb_uint1(p) (*(const unsigned char *)(p))
 
@@ -137,6 +116,11 @@
         + (*(const unsigned char *)((p) + 2) << 8) \
         + (*(const unsigned char *)((p) + 3)))
 
+#define eb_uint4_le(p) ((*(const unsigned char *)(p)) \
+        + (*(const unsigned char *)((p) + 1) << 8) \
+        + (*(const unsigned char *)((p) + 2) << 16) \
+        + (*(const unsigned char *)((p) + 3) << 24))
+
 /*
  * External variable declarations.
  */
@@ -149,19 +133,24 @@ extern EB_Hookset eb_default_hookset;
 /* appendix.c */
 void eb_initialize_alt_cache EB_P((EB_Appendix *));
 
+/* binary.c */
+void eb_initialize_binary EB_P((EB_Book *));
+
 /* filename.c */
 EB_Error_Code eb_canonicalize_path_name EB_P((char *));
-int eb_fix_directory_name EB_P((const char *, char *));
-int eb_fix_directory_name2 EB_P((const char *, const char *, char *));
-int eb_fix_file_name EB_P((const char *, char *));
-int eb_fix_file_name2 EB_P((const char *, const char *, char *));
-int eb_fix_file_name3 EB_P((const char *, const char *, const char *, char *));
-int eb_compose_path_name EB_P((const char *, const char *, const char *,
+EB_Error_Code eb_fix_directory_name EB_P((const char *, char *));
+EB_Error_Code eb_fix_directory_name2 EB_P((const char *, const char *,
     char *));
-int eb_compose_path_name2 EB_P((const char *, const char *, const char *,
+EB_Error_Code eb_fix_file_name EB_P((const char *, char *));
+EB_Error_Code eb_fix_file_name2 EB_P((const char *, const char *, char *));
+EB_Error_Code eb_fix_file_name3 EB_P((const char *, const char *,
     const char *, char *));
-int eb_compose_path_name3 EB_P((const char *, const char *, const char *,
+EB_Error_Code eb_compose_path_name EB_P((const char *, const char *,
+    const char *, char *));
+EB_Error_Code eb_compose_path_name2 EB_P((const char *, const char *,
     const char *, const char *, char *));
+EB_Error_Code eb_compose_path_name3 EB_P((const char *, const char *,
+    const char *, const char *, const char *, char *));
 
 /* font.c */
 EB_Error_Code eb_initialize_font EB_P((EB_Book *));
@@ -224,21 +213,10 @@ EB_Error_Code eb_forward_heading EB_P((EB_Book *));
 /* narwfont.c */
 EB_Error_Code eb_initialize_wide_font EB_P((EB_Book *));
 
-/* unzebzip.c */
-int eb_unzip_slice_ebzip1 EB_P((char *, size_t, char *, size_t));
-
-/* unzepwing.c */
-int eb_unzip_slice_epwing EB_P((char *, int, EB_Huffman_Node *));
-int eb_unzip_slice_epwing6 EB_P((char *, int, EB_Huffman_Node *));
-
-/* zio.c */
-int eb_zinitialize EB_P((void));
-void eb_zfinalize EB_P((void));
-int eb_zopen EB_P((EB_Zip *, const char *, EB_Zip_Code));
-int eb_zclose EB_P((EB_Zip *, int));
-off_t eb_zlseek EB_P((EB_Zip *, int, off_t, int));
-ssize_t eb_zread EB_P((EB_Zip *, int, char *, size_t));
-ssize_t eb_read_all EB_P((int, void *, size_t nbyte));
+/* uint.c */
+unsigned eb_bcd2 EB_P((const char *));
+unsigned eb_bcd4 EB_P((const char *));
+unsigned eb_bcd6 EB_P((const char *));
 
 /* memmove.c */
 #ifdef __STDC__

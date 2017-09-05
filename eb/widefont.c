@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,8 +43,8 @@ eb_initialize_wide_font(book)
     char font_path_name[PATH_MAX + 1];
     char buffer[16];
     int character_count;
-    EB_Zip *zip;
-    int font_file;
+    Zio *zio;
+    Zio_Code zio_code;
 
     subbook = book->subbook_current;
 
@@ -52,78 +53,76 @@ eb_initialize_wide_font(book)
      * (In EB books, font data are stored in the `START' file.)
      */
     if (book->disc_code == EB_DISC_EPWING) {
-	subbook->wide_current->font_file = -1;
-
 	if (eb_compose_path_name3(book->path, subbook->directory_name, 
 	    subbook->gaiji_directory_name, subbook->wide_current->file_name,
 	    EB_SUFFIX_NONE, font_path_name) == 0) {
-	    subbook->wide_current->font_file 
-		= eb_zopen(&subbook->wide_current->zip, font_path_name,
-		    EB_ZIP_NONE);
+	    zio_code = ZIO_NONE;
 	} else if (eb_compose_path_name3(book->path, subbook->directory_name,
 	    subbook->gaiji_directory_name, subbook->wide_current->file_name,
 	    EB_SUFFIX_EBZ, font_path_name) == 0) {
-	    subbook->wide_current->font_file
-		= eb_zopen(&subbook->wide_current->zip, font_path_name,
-		    EB_ZIP_EBZIP1);
+	    zio_code = ZIO_EBZIP1;
+	} else {
+	    error_code = EB_ERR_FAIL_OPEN_FONT;
+	    goto failed;
 	}
 
-	if (subbook->wide_current->font_file < 0) {
+	if (zio_open(&subbook->wide_current->zio, font_path_name,
+	    zio_code) < 0) {
 	    error_code = EB_ERR_FAIL_OPEN_FONT;
 	    goto failed;
 	}
     }
 
     /*
-     * Set `zip' and `font_file' accroding with disc type.
+     * Set `zio' accroding with disc type.
      */
-    if (book->disc_code == EB_DISC_EB) {
-	zip = &book->subbook_current->text_zip;
-	font_file = book->subbook_current->text_file;
-    } else {
-	zip = &book->subbook_current->wide_current->zip;
-	font_file = book->subbook_current->wide_current->font_file;
-    }
+    if (book->disc_code == EB_DISC_EB)
+	zio = &book->subbook_current->text_zio;
+    else
+	zio = &book->subbook_current->wide_current->zio;
 
     /*
      * Read information from the text file.
      */
-    if (eb_zlseek(zip, font_file, (off_t)(subbook->wide_current->page - 1)
-	* EB_SIZE_PAGE, SEEK_SET) < 0) {
+    if (zio_lseek(zio, 
+	(off_t)(subbook->wide_current->page - 1) * EB_SIZE_PAGE,
+	SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_FONT;
 	goto failed;
     }
-    if (eb_zread(zip, font_file, buffer, 16) != 16) {
+    if (zio_read(zio, buffer, 16) != 16) {
 	error_code = EB_ERR_FAIL_READ_FONT;
 	goto failed;
     }
 
     /*
-     * Set the information.
-     * (If the number of characters (`character_count') is 0,
-     * the font is unavailable).
+     * If the number of characters (`character_count') is 0, the font
+     * is unavailable).
      */
     character_count = eb_uint2(buffer + 12);
     if (character_count == 0) {
 	subbook->wide_current->font_code = EB_FONT_INVALID;
 	subbook->wide_current = NULL;
-    } else {
-	subbook->wide_current->start = eb_uint2(buffer + 10);
-	if (book->character_code == EB_CHARCODE_ISO8859_1) {
-	    subbook->wide_current->end = subbook->wide_current->start
-		+ ((character_count / 0xfe) << 8) + (character_count % 0xfe)
-		- 1;
-	    if (0xfe < (subbook->wide_current->end & 0xff))
-		subbook->wide_current->end += 3;
-	} else {
-	    subbook->wide_current->end = subbook->wide_current->start
-		+ ((character_count / 0x5e) << 8) + (character_count % 0x5e)
-		- 1;
-	    if (0x7e < (subbook->wide_current->end & 0xff))
-		subbook->wide_current->end += 0xa3;
-	}
+	goto succeeded;
     }
 
+    /*
+     * Set the information.
+     */
+    subbook->wide_current->start = eb_uint2(buffer + 10);
+    if (book->character_code == EB_CHARCODE_ISO8859_1) {
+	subbook->wide_current->end = subbook->wide_current->start
+	    + ((character_count / 0xfe) << 8) + (character_count % 0xfe) - 1;
+	if (0xfe < (subbook->wide_current->end & 0xff))
+	    subbook->wide_current->end += 3;
+    } else {
+	subbook->wide_current->end = subbook->wide_current->start
+	    + ((character_count / 0x5e) << 8) + (character_count % 0x5e) - 1;
+	if (0x7e < (subbook->wide_current->end & 0xff))
+	    subbook->wide_current->end += 0xa3;
+    }
+
+  succeeded:
     return EB_SUCCESS;
 
     /*
@@ -560,8 +559,7 @@ eb_wide_character_bitmap_jis(book, character_number, bitmap)
     int width;
     int height;
     size_t size;
-    EB_Zip *zip;
-    int font_file;
+    Zio *zio;
 
     start = book->subbook_current->wide_current->start;
     end = book->subbook_current->wide_current->end;
@@ -601,18 +599,16 @@ eb_wide_character_bitmap_jis(book, character_number, bitmap)
     /*
      * Read bitmap data.
      */
-    if (book->disc_code == EB_DISC_EB) {
-	zip = &book->subbook_current->text_zip;
-	font_file = book->subbook_current->text_file;
-    } else {
-	zip = &book->subbook_current->wide_current->zip;
-	font_file = book->subbook_current->wide_current->font_file;
-    }
-    if (eb_zlseek(zip, font_file, location, SEEK_SET) < 0) {
+    if (book->disc_code == EB_DISC_EB)
+	zio = &book->subbook_current->text_zio;
+    else
+	zio = &book->subbook_current->wide_current->zio;
+
+    if (zio_lseek(zio, location, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_FONT;
 	goto failed;
     }
-    if (eb_zread(zip, font_file, bitmap, size) != size) {
+    if (zio_read(zio, bitmap, size) != size) {
 	error_code = EB_ERR_FAIL_READ_FONT;
 	goto failed;
     }
@@ -646,8 +642,7 @@ eb_wide_character_bitmap_latin(book, character_number, bitmap)
     int width;
     int height;
     size_t size;
-    EB_Zip *zip;
-    int font_file;
+    Zio *zio;
 
     start = book->subbook_current->wide_current->start;
     end = book->subbook_current->wide_current->end;
@@ -687,18 +682,16 @@ eb_wide_character_bitmap_latin(book, character_number, bitmap)
     /*
      * Read bitmap data.
      */
-    if (book->disc_code == EB_DISC_EB) {
-	zip = &book->subbook_current->text_zip;
-	font_file = book->subbook_current->text_file;
-    } else {
-	zip = &book->subbook_current->wide_current->zip;
-	font_file = book->subbook_current->wide_current->font_file;
-    }
-    if (eb_zlseek(zip, font_file, location, SEEK_SET) < 0) {
+    if (book->disc_code == EB_DISC_EB)
+	zio = &book->subbook_current->text_zio;
+    else
+	zio = &book->subbook_current->wide_current->zio;
+
+    if (zio_lseek(zio, location, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_FONT;
 	goto failed;
     }
-    if (eb_zread(zip, font_file, bitmap, size) != size) {
+    if (zio_read(zio, bitmap, size) != size) {
 	error_code = EB_ERR_FAIL_READ_FONT;
 	goto failed;
     }

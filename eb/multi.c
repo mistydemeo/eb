@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,14 +44,14 @@ eb_initialize_multi_search(book)
 	/*
 	 * Read the index table page of the multi search.
 	 */
-	if (eb_zlseek(&subbook->text_zip, subbook->text_file,
+	if (zio_lseek(&subbook->text_zio, 
 	    (off_t)(multi->search.index_page - 1) * EB_SIZE_PAGE, SEEK_SET)
 	    < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
 	}
-	if (eb_zread(&subbook->text_zip, subbook->text_file, buffer,
-	    EB_SIZE_PAGE) != EB_SIZE_PAGE) {
+	if (zio_read(&subbook->text_zio, buffer, EB_SIZE_PAGE)
+	    != EB_SIZE_PAGE) {
 	    error_code = EB_ERR_FAIL_READ_TEXT;
 	    goto failed;
 	}

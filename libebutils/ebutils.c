@@ -1,5 +1,6 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,7 +128,8 @@ void
 output_version()
 {
     printf("%s (EB Library) version %s\n", program_name, program_version);
-    printf("Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara\n\n");
+    printf("Copyright (c) 1997, 98, 99, 2000, 01\n");
+    printf("   Motoyuki Kasahara\n\n");
     printf("This is free software; you can redistribute it and/or modify\n");
     printf("it under the terms of the GNU General Public License as published by\n");
     printf("the Free Software Foundation; either version 2, or (at your option)\n");

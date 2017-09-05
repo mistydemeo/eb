@@ -9,7 +9,7 @@ END-INFO-DIR-ENTRY
    ebrefile: Refile a catalog file in a CD-ROM book, by Motoyuki
 Kasahara.
 
-   Copyright (C) 1998, 99, 2000  Motoyuki Kasahara
+   Copyright (C) 1998, 99, 2000, 01  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
+   This is edition 3.0alpha4, for EB Library version 3.0alpha4.
 
 * Menu:
 
@@ -91,7 +91,7 @@ Though `ebzip' is free software, your books may not be free.
 `ebrefile' modifies contents of a certain file in a CD-ROM book.
 Please be careful.
 
-   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
+   This is edition 3.0alpha4, for EB Library version 3.0alpha4.
 
 
 File: ebrefile.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -336,12 +336,12 @@ allowed as long as they are unique.
 
 
 Tag Table:
-Node: Top1032
-Node: Introduction1568
-Node: Invoking ebrefile3639
-Node: Select Subbooks4335
-Node: Adjust Filename8057
-Node: Combination with ebzip9691
-Node: Summary of Options11003
+Node: Top1036
+Node: Introduction1572
+Node: Invoking ebrefile3643
+Node: Select Subbooks4339
+Node: Adjust Filename8061
+Node: Combination with ebzip9695
+Node: Summary of Options11007
 
 End Tag Table

@@ -1,7 +1,7 @@
 #
 # Check for struct utimbuf (taken from GNU fileutils 3.16).
 #
-AC_DEFUN(AX_HAVE_STRUCT_UTIMBUF,
+AC_DEFUN(AC_STRUCT_UTIMBUF,
 [AC_HEADER_TIME
 AC_CHECK_HEADERS(utime.h)
 AC_CACHE_CHECK(for struct utimbuf, ax_cv_have_struct_utimbuf,

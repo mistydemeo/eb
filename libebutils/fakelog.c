@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -271,7 +272,7 @@ fakelog(priority, message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
 		if (*(message_p + 1) == 'm') {
 		    if (buffer_rest_length < error_string_length)
 			break;
-		    strcpy(buffer_p, error_string);
+		    memcpy(buffer_p, error_string, error_string_length);
 		    buffer_p += error_string_length;
 		    message_p += 2;
 		    buffer_rest_length -= error_string_length;

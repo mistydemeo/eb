@@ -1,3 +1,9 @@
+Major changes in release 3.0alpha4:
+
+* Support EPWING movie, and color graphic, data.
+* For EB Library application, provide M4 macro file `eb3.m4'.
+  (autoconf 2.49 is required.)
+
 Major changes in release 3.0alpha3:
 
 * Text hook API is revised.

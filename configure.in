@@ -2,8 +2,8 @@ dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
 AC_INIT(eb/eb.c)
-AC_PREREQ(2.12)
-AM_INIT_AUTOMAKE(eb, 3.0alpha3)
+AC_PREREQ(2.49)
+AM_INIT_AUTOMAKE(eb, 3.0alpha4)
 
 dnl *
 dnl * Library version info.
@@ -18,11 +18,22 @@ MAILING_ADDRESS='m-kasahr@sra.co.jp'
 AC_SUBST(MAILING_ADDRESS)
 AC_DEFINE_UNQUOTED(MAILING_ADDRESS, "$MAILING_ADDRESS", [Mailing address])
 
+dnl * 
+dnl * GNU gettext
+dnl * 
+ALL_LINGUAS="ja"
+AM_GNU_GETTEXT_HACKED(po eb/po)
+
+dnl * 
+dnl * GNU libtool
+dnl * 
+AC_PROG_LIBTOOL
+
 dnl *
 dnl * --enable-pthread option.
 dnl *
 AC_ARG_ENABLE(pthread,
-[  --enable-pthread       build pthread safe libraries [default=no]],
+[  --enable-pthread       build pthread safe libraries \[no\]],
 [case "${enableval}" in
    yes) ENABLE_PTHREAD=yes  ;;
    no)  ENABLE_PTHREAD=no ;;
@@ -89,14 +100,14 @@ if test $ENABLE_PTHREAD = yes ; then
    LDFLAGS="$LDFLAGS $PTHREAD_LDFLAGS"
 fi
 if test $ENABLE_PTHREAD = yes ; then
-   AC_DEFINE(ENABLE_PTHREAD, 1, 
+   AC_DEFINE(EBCONF_ENABLE_PTHREAD, 1, 
       [Define if EB Library is built with pthread support.])
 fi
 
 dnl *
 dnl * --with-included-zlib option.
 dnl *
-AC_ARG_WITH(zlib,
+AC_ARG_WITH(included-zlib,
 [  --with-included-zlib    use zlib included here],
 [case "${withval}" in
    yes|no) included_zlib=${withval} ;;
@@ -181,69 +192,12 @@ AC_PROG_CC
 AC_PROG_RANLIB
 AC_PROG_LN_S
 AC_PROG_INSTALL
-AM_PROG_LIBTOOL
 
 AC_PATH_PROG(PERL, perl, no)
 if test "$PERL" = no ; then
    AC_MSG_WARN(perl not found)
    PERL=/usr/bin/perl
 fi
-
-dnl * 
-dnl * --with-gettext-includes option
-dnl * 
-AC_ARG_WITH(gettext-includes,
-[  --with-gettext-includes=DIR
-                          gettext include files are in DIR],
-[gettext_includedir="${withval}"], [gettext_includedir=''])
-
-if test "X$gettext_includedir" != X ; then
-   INTLINCS="-I$gettext_includedir"
-else
-   INTLINCS=
-fi
-AC_SUBST(INTLINCS)
-
-dnl * 
-dnl * --with-gettext-libraries option
-dnl * 
-AC_ARG_WITH(gettext-libraries,
-[  --with-gettext-libraries=DIR
-                          gettext library files are in DIR],
-[gettext_libdir="${withval}"], [gettext_libdir=''])
-
-if test "X$gettext_libdir" != X ; then
-   INTLLIBS="-L$gettext_libdir -lintl"
-   INTLDEPS=
-fi
-
-dnl * 
-dnl * GNU gettext
-dnl * 
-save_CPPFLAGS=$CPPFLAGS
-save_LIBS=$LIBS
-CPPFLAGS="$CPPFLAGS $INTLINCS"
-LIBS="$LIBS $INTLLIBS"
-ALL_LINGUAS="ja"
-AM_GNU_GETTEXT
-CPPFLAGS=$save_CPPFLAGS
-LIBS=$save_LIBS
-if test X$USE_INCLUDED_LIBINTL = Xyes ; then
-   INTLINCS='-I$(top_srcdir)/intl'
-   INTLLIBS='$(top_builddir)/intl/libintl.la'
-   INTLDEPS='$(top_builddir)/intl/libintl.la'
-fi
-AM_CONDITIONAL(INCLUDED_LIBINTL, test X$USE_INCLUDED_LIBINTL = Xyes)
-
-dnl *
-dnl * Since gettext sets bogus localedir, we fix it.
-dnl *
-if test $DATADIRNAME = 'share' ; then
-   localedir='$(datadir)/locale'
-else
-   localedir='$(libdir)/locale'
-fi
-AC_SUBST(localedir)
 
 dnl * 
 dnl * Compiler Characteristics.
@@ -263,7 +217,7 @@ AC_CHECK_HEADERS(direct.h fcntl.h limits.h memory.h stdlib.h string.h \
 dnl * 
 dnl * Structures.
 dnl * 
-AX_HAVE_STRUCT_UTIMBUF
+AC_STRUCT_UTIMBUF
 
 dnl * 
 dnl * Library Functions.
@@ -278,7 +232,7 @@ dnl *
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_TYPE_MODE_T
-AC_CHECK_TYPE(ssize_t, int)
+AC_TYPE_SSIZE_T
 
 AC_TYPE_SIGNAL
 if test "$ac_cv_type_signal" = void; then
@@ -292,8 +246,8 @@ AC_CYGWIN
 AC_MINGW32
 AC_EXEEXT
 AC_OBJEXT
-AM_CONDITIONAL(EXEEXT_EXE, test $ac_cv_exeext = yes)
-if test $ac_cv_exeext = .exe ; then
+AM_CONDITIONAL(EXEEXT_EXE, test X$ac_exeext = Xyes)
+if test X$ac_exeext = X.exe ; then
    AC_DEFINE(EXEEXT_EXE, 1, [Define if command names have the suffix \`.exe'])
 fi
 
@@ -315,7 +269,7 @@ AC_SUBST(PTHREAD_CPPFLAGS)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LDFLAGS)
 
-if test $USE_INCLUDED_LIBINTL = yes ; then
+if test $INCLUDED_GETTEXT = yes ; then
    EBCONF_INTLINCS='-I$(includedir)'
    EBCONF_INTLLIBS='-L$(libdir) -lintl'
 else
@@ -333,15 +287,9 @@ AC_SUBST(EBCONF_EBLIBS)
 dnl * 
 dnl * Output Files.
 dnl * 
-AC_OUTPUT_COMMANDS([rm -f intl/libintl.h])
-AC_OUTPUT_COMMANDS([cp $srcdir/intl/libgettext.h intl/libintl.h])
-AC_OUTPUT_COMMANDS(
-[case "$CONFIG_FILES" in *eb/po/Makefile.in*)
-   sed -e "/POTFILES =/r eb/po/POTFILES" eb/po/Makefile.in > eb/po/Makefile
-esac])
 AM_CONFIG_HEADER(config.h)
 AC_OUTPUT(Makefile intl/Makefile eb/Makefile libebutils/Makefile \
 	ebappendix/Makefile ebfont/Makefile ebinfo/Makefile \
 	ebrefile/Makefile ebzip/Makefile doc/Makefile doc-ja/Makefile \
-	eb/po/Makefile.in po/Makefile.in)
+	eb/po/Makefile po/Makefile m4/Makefile)
 

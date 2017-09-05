@@ -1,5 +1,3 @@
-@SET_MAKE@
-
 bin_SCRIPTS = ebrefile
 
 EXTRA_DIST = ebrefile.in

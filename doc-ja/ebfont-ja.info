@@ -9,7 +9,7 @@ END-INFO-DIR-ENTRY
    ebfont: Utility for generating font files of local characters in a
 CD-ROM book, by Motoyuki Kasahara.
 
-   Copyright (C) 1998, 1999  Motoyuki Kasahara
+   Copyright (C) 1998, 1999, 2000, 01  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.0alpha3 版です。 EB ライブラリバージョン 3.0alpha3 に
+   この文書は第 3.0alpha4 版です。 EB ライブラリバージョン 3.0alpha4 に
 対応しています。
 
 * Menu:
@@ -300,13 +300,13 @@ File: ebfont-ja.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: To
 
 
 Tag Table:
-Node: Top1052
-Node: Introduction1592
-Node: What is Local Character2410
-Node: Invoking ebfont3965
-Node: Image Formats5309
-Node: Heights6167
-Node: Subbooks6985
-Node: Summary of Options8856
+Node: Top1062
+Node: Introduction1602
+Node: What is Local Character2420
+Node: Invoking ebfont3975
+Node: Image Formats5319
+Node: Heights6177
+Node: Subbooks6995
+Node: Summary of Options8866
 
 End Tag Table

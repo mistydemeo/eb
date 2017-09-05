@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -320,8 +321,6 @@ output_information(book_path, multi_flag)
 	    fputs(_("keyword "), stdout);
 	if (eb_have_multi_search(&book))
 	    fputs(_("multi "), stdout);
-	if (eb_have_graphic_search(&book))
-	    fputs(_("graphic "), stdout);
 	if (eb_have_menu(&book))
 	    fputs(_("menu "), stdout);
 	if (eb_have_copyright(&book))

@@ -1,5 +1,6 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,15 +22,10 @@ extern "C" {
 
 #include <sys/types.h>
 
-#if TIME_WITH_SYS_TIME
-# include <sys/time.h>
-# include <time.h>
+#ifdef EB_BUILD_LIBRARY
+#include "zio.h"
 #else
-# if HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# else
-#  include <time.h>
-# endif
+#include <eb/zio.h>
 #endif
 
 #ifdef ENABLE_PTHREAD
@@ -191,7 +187,7 @@ extern "C" {
 /*
  * The number of text hooks.
  */
-#define EB_NUMBER_OF_HOOKS		27
+#define EB_NUMBER_OF_HOOKS		39
 
 /*
  * The number of search contexts required by a book.
@@ -228,7 +224,6 @@ typedef int EB_Search_Code;
 typedef int EB_Text_Code;
 typedef int EB_Multi_Search_Code;
 typedef int EB_Multi_Entry_Code;
-typedef int EB_Zip_Code;
 typedef int EB_Hook_Code;
 
 /*
@@ -238,8 +233,6 @@ typedef int EB_Hook_Code;
 typedef struct EB_Lock_Struct              EB_Lock;
 #endif
 typedef struct EB_Position_Struct          EB_Position;
-typedef struct EB_Huffman_Node_Struct      EB_Huffman_Node;
-typedef struct EB_Zip_Struct               EB_Zip;
 typedef struct EB_Alternation_Cache_Struct EB_Alternation_Cache;
 typedef struct EB_Appendix_Subbook_Struct  EB_Appendix_Subbook;
 typedef struct EB_Appendix_Struct          EB_Appendix;
@@ -249,6 +242,7 @@ typedef struct EB_Search_Struct            EB_Search;
 typedef struct EB_Multi_Search_Struct      EB_Multi_Search;
 typedef struct EB_Subbook_Struct           EB_Subbook;
 typedef struct EB_Text_Context_Struct      EB_Text_Context;
+typedef struct EB_Binary_Context_Struct    EB_Binary_Context;
 typedef struct EB_Search_Context_Struct    EB_Search_Context;
 typedef struct EB_Book_Struct              EB_Book;
 typedef struct EB_Hit_Struct               EB_Hit;
@@ -293,122 +287,6 @@ struct EB_Position_Struct {
 };
 
 /*
- * A node of static Huffman tree.
- */
-struct EB_Huffman_Node_Struct {
-    /*
-     * node type (ITNERMEDIATE, LEAF8, LEAF16, LEAF32 or EOF).
-     */
-    int type;
-
-    /*
-     * Value of a leaf node.
-     */
-    unsigned int value;
-
-    /*
-     * Frequency of a node.
-     */
-    int frequency;
-
-    /*
-     * Left child.
-     */
-    EB_Huffman_Node *left;
-
-    /*
-     * Right child.
-     */
-    EB_Huffman_Node *right;
-};
-
-/*
- * Compression information of a book.
- */
-struct EB_Zip_Struct {
-    /*
-     * Zip type. (NONE, EPWING or EBZIP)
-     */
-    EB_Zip_Code code;
-
-    /*
-     * Current location.
-     */
-    off_t location;
-
-    /*
-     * Size of an Uncopressed file.
-     */
-    off_t file_size;
-
-    /*
-     * Slice size of an EBZIP compressed file.
-     */
-    size_t slice_size;
-
-    /*
-     * Compression level. (EBZIP compression only)
-     */
-    int zip_level;
-
-    /*
-     * Length of an index. (EBZIP compression only)
-     */
-    int index_width;
-
-    /*
-     * Adler-32 check sum of an uncompressed file. (EBZIP compression only)
-     */
-    unsigned int crc;
-
-    /*
-     * mtime of an uncompressed file. (EBZIP compression only)
-     */
-    time_t mtime;
-
-    /*
-     * Location of an index table. (EPWING and S-EBXA compression only)
-     */
-    off_t index_location;
-
-    /*
-     * Length of an index table. (EPWING and S-EBXA compression only)
-     */
-    size_t index_length;
-
-    /*
-     * Location of a frequency table. (EPWING compression only)
-     */
-    off_t frequencies_location;
-
-    /*
-     * Length of a frequency table. (EPWING compression only)
-     */
-    size_t frequencies_length;
-
-    /*
-     * Huffman tree nodes. (EPWING compression only)
-     */
-    EB_Huffman_Node *huffman_nodes;
-
-    /*
-     * Root node of a Huffman tree. (EPWING compression only)
-     */
-    EB_Huffman_Node *huffman_root;
-
-    /*
-     * Region of compressed pages. (S-EBXA compression only)
-     */
-    off_t zip_start_location;
-    off_t zip_end_location;
-
-    /*
-     * Add this value to offset written in index. (S-EBXA compression only)
-     */
-    off_t index_base;
-};
-
-/*
  * Chace of aternation text.
  */
 struct EB_Alternation_Cache_Struct {
@@ -449,11 +327,6 @@ struct EB_Appendix_Subbook_Struct {
     char data_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
 
     /*
-     * File descriptor for the appendix file.
-     */
-    int appendix_file;
-
-    /*
      * Character code of the book.
      */
     EB_Character_Code character_code;
@@ -485,7 +358,7 @@ struct EB_Appendix_Subbook_Struct {
     /*
      * Compression Information for appendix file.
      */
-    EB_Zip appendix_zip;
+    Zio zio;
 };
 
 /*
@@ -563,11 +436,6 @@ struct EB_Font_Struct {
     int page;
 
     /*
-     * File descriptor of the font file. (EPWING only)
-     */
-    int font_file;
-
-    /*
      * File name of the font. (EPWING only)
      */
     char file_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
@@ -575,7 +443,7 @@ struct EB_Font_Struct {
     /*
      * Compression Information.
      */
-    EB_Zip zip;
+    Zio zio;
 };
 
 /*
@@ -679,9 +547,24 @@ struct EB_Subbook_Struct {
     EB_Subbook_Code code;
 
     /*
-     * File descriptor for the subbook file.
+     * File descriptor and compression information for text file.
      */
-    int text_file;
+    Zio text_zio;
+
+    /*
+     * File descriptor and compression information for graphic file.
+     */
+    Zio graphic_zio;
+
+    /*
+     * File descriptor and compression information for sound file.
+     */
+    Zio sound_zio;
+
+    /*
+     * File descriptor and compression information for movie file.
+     */
+    Zio movie_zio;
 
     /*
      * Title of the subbook.
@@ -699,14 +582,13 @@ struct EB_Subbook_Struct {
     char data_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
     char gaiji_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
     char movie_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
-    char stream_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
 
     /*
-     * File names. (EPWING only)
+     * File names.
      */
-    char text_file_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
-    char graphic_file_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
-    char sound_file_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+    char text_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+    char graphic_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+    char sound_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
 
     /*
      * The top page of search methods.
@@ -719,8 +601,8 @@ struct EB_Subbook_Struct {
     EB_Search endword_kana;
     EB_Search keyword;
     EB_Search menu;
-    EB_Search graphic;
     EB_Search copyright;
+    EB_Search sound;
 
     /*
      * The number of multi-search methods the subbook has.
@@ -743,11 +625,54 @@ struct EB_Subbook_Struct {
      */
     EB_Font *narrow_current;
     EB_Font *wide_current;
+};
+
+/*
+ * Length of cache buffer in a binary context.
+ * It must be greater than 38, size of GIF preamble.
+ * It must be greater than 44, size of WAVE sound header.
+ */
+#define EB_SIZE_BINARY_CACHE_BUFFER	64
+
+/*
+ * Context parameters for binary data.
+ */
+struct EB_Binary_Context_Struct {
+    /*
+     * Compress information.
+     */
+    Zio *zio;
 
     /*
-     * Compression Information for text file.
+     * Location of the the binary data, relative to the start of the file.
      */
-    EB_Zip text_zip;
+    off_t location;
+
+    /*
+     * Data size.
+     * Size zero means that the binary has no size information.
+     */
+    size_t size;
+
+    /*
+     * The current offset of binary data.
+     */
+    size_t offset;
+
+    /*
+     * Cache buffer.
+     */
+    char cache_buffer[EB_SIZE_BINARY_CACHE_BUFFER];
+
+    /*
+     * Length of cached data.
+     */
+    size_t cache_length;
+
+    /*
+     * Current offset of cached data.
+     */
+    size_t cache_offset;
 };
 
 /*
@@ -985,6 +910,11 @@ struct EB_Book_Struct {
      * Context parameters for text reading.
      */
     EB_Text_Context text_context;
+
+    /*
+     * Context parameters for binary reading.
+     */
+    EB_Binary_Context binary_context;
 
     /*
      * Context parameters for text reading.

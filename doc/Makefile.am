@@ -1,5 +1,3 @@
-@SET_MAKE@
-
 info_TEXINFOS = ebfont.texi ebinfo.texi ebrefile.texi ebzip.texi
 ebfont_TEXINFOS = ebfont-ver.texi
 ebinfo_TEXINFOS = ebinfo-ver.texi

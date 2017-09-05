@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000, 01
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,14 +18,6 @@
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
-
-/*
- * Undefine CPP macro version.
- */
-#undef eb_uint1
-#undef eb_uint2
-#undef eb_uint3
-#undef eb_uint4
 
 /*
  * Get a BCD (binary coded decimal) packed integer with 2 bytes
@@ -94,46 +87,4 @@ eb_bcd6(stream)
     return value;
 }
 
-
-/*
- * Get unsigned integer with 1 byte from an octet stream.
- */
-unsigned
-eb_uint1(stream)
-    const char *stream;
-{
-    const unsigned char *s = (const unsigned char *)stream;
-
-    return *s;
-}
-
-
-/*
- * Get unsigned integer with 2 byte from an octet stream.
- */
-unsigned
-eb_uint2(stream)
-    const char *stream;
-{
-    unsigned value;
-    const unsigned char *s = (const unsigned char *)stream;
-
-    value = (*s << 8) + (*(s + 1));
-    return value;
-}
-
-
-/*
- * Get unsigned integer with 4 byte from an octet stream.
- */
-unsigned
-eb_uint4(stream)
-    const char *stream;
-{
-    unsigned value;
-    const unsigned char *s = (const unsigned char *)stream;
-
-    value = (*s << 24) + (*(s + 1) << 16) + (*(s + 2) << 8) + (*(s + 3));
-    return value;
-}
 

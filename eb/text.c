@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +23,12 @@
 /*
  * The maximum number of arguments for an escape sequence.
  */
-#define EB_MAX_ARGV 	4
+#define EB_MAX_ARGV 	6
 
 /*
  * Read next when the length of cached data is shorter than this value.
  */
-#define SIZE_FEW_REST	16
+#define SIZE_FEW_REST	48
 
 /*
  * Special skip-code that represents `no skip-code is set'.
@@ -113,7 +114,7 @@ eb_seek_text(book, position)
 	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
     }
-    if (book->subbook_current->text_file < 0) {
+    if (zio_file(&book->subbook_current->text_zio) < 0) {
 	error_code = EB_ERR_NO_TEXT;
 	goto failed;
     }
@@ -184,7 +185,7 @@ eb_tell_text(book, position)
 	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
     }
-    if (book->subbook_current->text_file < 0) {
+    if (zio_file(&book->subbook_current->text_zio) < 0) {
 	error_code = EB_ERR_NO_TEXT;
 	goto failed;
     }
@@ -241,7 +242,7 @@ eb_read_text(book, appendix, hookset, container, text_max_length, text,
 	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
     }
-    if (book->subbook_current->text_file < 0) {
+    if (zio_file(&book->subbook_current->text_zio) < 0) {
 	error_code = EB_ERR_NO_TEXT;
 	goto failed;
     }
@@ -352,7 +353,7 @@ eb_read_heading(book, appendix, hookset, container, text_max_length, text,
 	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
     }
-    if (book->subbook_current->text_file < 0) {
+    if (zio_file(&book->subbook_current->text_zio) < 0) {
 	error_code = EB_ERR_NO_TEXT;
 	goto failed;
     }
@@ -454,7 +455,7 @@ eb_read_rawtext(book, text_max_length, text, text_length)
 	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
     }
-    if (book->subbook_current->text_file < 0) {
+    if (zio_file(&book->subbook_current->text_zio) < 0) {
 	error_code = EB_ERR_NO_TEXT;
 	goto failed;
     }
@@ -474,14 +475,13 @@ eb_read_rawtext(book, text_max_length, text, text_length)
     /*
      * Seek START file and read data.
      */
-    if (eb_zlseek(&book->subbook_current->text_zip, 
-	book->subbook_current->text_file, book->text_context.location,
-	SEEK_SET) == -1) {
+    if (zio_lseek(&book->subbook_current->text_zio, 
+	book->text_context.location, SEEK_SET) == -1) {
 	error_code = EB_ERR_FAIL_SEEK_TEXT;
 	goto failed;
     }
-    *text_length = eb_zread(&book->subbook_current->text_zip,
-	book->subbook_current->text_file, text, text_max_length);
+    *text_length = zio_read(&book->subbook_current->text_zio, text,
+	text_max_length);
     book->text_context.location += *text_length;
     if (*text_length < 0) {
 	error_code = EB_ERR_FAIL_READ_TEXT;
@@ -625,15 +625,13 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 
 	    if (0 < cache_rest_length)
 		memmove(cache_buffer, cache_p, cache_rest_length);
-	    if (eb_zlseek(&book->subbook_current->text_zip, 
-		book->subbook_current->text_file, 
+	    if (zio_lseek(&book->subbook_current->text_zio, 
 		context->location + cache_rest_length, SEEK_SET) == -1) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
 
-	    read_result = eb_zread(&book->subbook_current->text_zip, 
-		book->subbook_current->text_file,
+	    read_result = zio_read(&book->subbook_current->text_zio, 
 		cache_buffer + cache_rest_length,
 		EB_SIZE_PAGE - cache_rest_length);
 	    if (read_result < 0) {
@@ -801,23 +799,31 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		break;
 
 	    case 0x32:
-		/* beginning of an anchor of the picture */
+		/* beginning of monochrome graphic */
 		context->in_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_BITMAP;
 		break;
 
-	    case 0x33:
-		/* beginning of an anchor of the sound */
-		context->in_step = 2;
+	    case 0x39:
+		/* beginning of MPEG movie */
+		context->in_step = 46;
+		argc = 6;
+		argv[1] = eb_uint4(cache_p + 2);
+		argv[2] = eb_uint4(cache_p + 22);
+		argv[3] = eb_uint4(cache_p + 26);
+		argv[4] = eb_uint4(cache_p + 30);
+		argv[5] = eb_uint4(cache_p + 34);
+		hook = hookset->hooks + EB_HOOK_BEGIN_MPEG;
 		break;
 
-	    case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: case 0x3a:
+	    case 0x35: case 0x36: case 0x37: case 0x38: case 0x3a:
 	    case 0x3b: case 0x3c: case 0x3d: case 0x3e: case 0x3f:
 		context->in_step = 2;
 		context->skip_code = eb_uint1(cache_p + 1) + 0x20;
 		break;
 
 	    case 0x41:
-		/* beginning of the keyword */
+		/* beginning of keyword */
 		context->in_step = 4;
 		if (cache_rest_length < context->in_step) {
 		    error_code = EB_ERR_UNEXP_TEXT;
@@ -845,7 +851,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		break;
 
 	    case 0x42:
-		/* beginning of the reference */
+		/* beginning of reference */
 		context->in_step = 4;
 		if (cache_rest_length < context->in_step) {
 		    error_code = EB_ERR_UNEXP_TEXT;
@@ -869,12 +875,18 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		break;
 
 	    case 0x44:
-		/* beginning of an anchor of the picture (old style?) */
+		/* beginning of monochrome graphic */
 		context->in_step = 12;
 		if (cache_rest_length < context->in_step) {
 		    error_code = EB_ERR_UNEXP_TEXT;
 		    goto failed;
 		}
+		argc = 4;
+		argv[1] = eb_uint2(cache_p + 2);
+		argv[2] = eb_bcd4(cache_p + 4);
+		argv[3] = eb_bcd4(cache_p + 8);
+		if (0 < argv[2] && 0 < argv[3])
+		    hook = hookset->hooks + EB_HOOK_BEGIN_BITMAP;
 		break;
 
 	    case 0x45:
@@ -890,14 +902,46 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		}
 		break;
 
-	    case 0x49: case 0x4a: case 0x4b: case 0x4c: case 0x4d: case 0x4e:
-	    case 0x4f:
+	    case 0x4a:
+		/* beginning of WAVE sound */
+		context->in_step = 18;
+		if (cache_rest_length < context->in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		argc = 6;
+		argv[1] = eb_uint4(cache_p + 2);
+		argv[2] = eb_bcd4(cache_p + 6);
+		argv[3] = eb_bcd2(cache_p + 10);
+		argv[4] = eb_bcd4(cache_p + 12);
+		argv[5] = eb_bcd2(cache_p + 16);
+		hook = hookset->hooks + EB_HOOK_BEGIN_WAVE;
+		break;
+
+	    case 0x4d:
+		/* beginning of color graphic (BMP or JPEG) */
+		context->in_step = 20;
+		if (cache_rest_length < context->in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		argc = 4;
+		argv[1] = eb_uint2(cache_p + 2);
+		argv[2] = eb_bcd4(cache_p + 14);
+		argv[3] = eb_bcd2(cache_p + 18);
+		if (argv[1] >> 8 == 0x00)
+		    hook = hookset->hooks + EB_HOOK_BEGIN_BMP;
+		else
+		    hook = hookset->hooks + EB_HOOK_BEGIN_JPEG;
+		break;
+
+	    case 0x49: case 0x4b: case 0x4c: case 0x4e: case 0x4f:
 		context->in_step = 2;
 		context->skip_code = eb_uint1(cache_p + 1) + 0x20;
 		break;
 
 	    case 0x52:
-		/* end of the picture */
+		/* end of monochrome graphic */
 		context->in_step = 8;
 		if (cache_rest_length < context->in_step) {
 		    error_code = EB_ERR_UNEXP_TEXT;
@@ -906,25 +950,27 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		argc = 3;
 		argv[1] = eb_bcd4(cache_p + 2);
 		argv[2] = eb_bcd2(cache_p + 6);
+		hook = hookset->hooks + EB_HOOK_END_BITMAP;
 		break;
 
-	    case 0x53:
-		/* end of the sound */
-		context->in_step = 10;
+	    case 0x59:
+		/* end of MPEG movie */
+		context->in_step = 2;
 		if (cache_rest_length < context->in_step) {
 		    error_code = EB_ERR_UNEXP_TEXT;
 		    goto failed;
 		}
+		hook = hookset->hooks + EB_HOOK_END_MPEG;
 		break;
 
 	    case 0x61:
-		/* end of the keyword */
+		/* end of keyword */
 		context->in_step = 2;
 		hook = hookset->hooks + EB_HOOK_END_KEYWORD;
 		break;
 
 	    case 0x62:
-		/* end of the reference */
+		/* end of reference */
 		context->in_step = 8;
 		if (cache_rest_length < context->in_step) {
 		    error_code = EB_ERR_UNEXP_TEXT;
@@ -953,7 +999,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		break;
 
 	    case 0x64:
-		/* end of the picture (old style?) */
+		/* end of monochrome graphic */
 		context->in_step = 8;
 		if (cache_rest_length < context->in_step) {
 		    error_code = EB_ERR_UNEXP_TEXT;
@@ -962,6 +1008,28 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		argc = 3;
 		argv[1] = eb_bcd4(cache_p + 2);
 		argv[2] = eb_bcd2(cache_p + 6);
+		if (0 < argv[1] && 0 < argv[2])
+		    hook = hookset->hooks + EB_HOOK_END_BITMAP;
+		break;
+
+	    case 0x6a:
+		/* end of WAVE sound */
+		context->in_step = 2;
+		if (cache_rest_length < context->in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		hook = hookset->hooks + EB_HOOK_END_WAVE;
+		break;
+
+	    case 0x6d:
+		/* end of color graphic (BMP or JPEG) */
+		context->in_step = 2;
+		if (cache_rest_length < context->in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		hook = hookset->hooks + EB_HOOK_END_COLOR_GRAPHIC;
 		break;
 
 	    case 0x70: case 0x71: case 0x72: case 0x73: case 0x74: case 0x75:
@@ -1004,7 +1072,7 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 	     * Post process.  Clean a candidate.
 	     */
 	    if (c2 == 0x63) {
-		/* end of an entry of the candidate */
+		/* end of an entry of candidate */
 		context->is_candidate = 0;
 	    }
 
@@ -1422,7 +1490,7 @@ eb_forward_text(book, hookset)
 	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
     }
-    if (book->subbook_current->text_file < 0) {
+    if (zio_file(&book->subbook_current->text_zio) < 0) {
 	error_code = EB_ERR_NO_TEXT;
 	goto failed;
     }

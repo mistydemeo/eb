@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This programs is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -140,6 +141,9 @@ eb_strncasecmp(string1, string2, n)
     const unsigned char *string2_p = (const unsigned char *)string2;
     size_t i = n;
     int comparison_result;
+
+    if (i == 0)
+	return 0;
 
     while (*string1_p != '\0') {
 	if (i-- <= 0)

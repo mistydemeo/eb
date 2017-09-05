@@ -1,5 +1,6 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,22 +65,20 @@ extern "C" {
 
 #define EB_HOOK_GB2312			25
 #define EB_HOOK_STOP_CODE		26
+#define EB_HOOK_BEGIN_BITMAP		27
+#define EB_HOOK_END_BITMAP		28
+#define EB_HOOK_BEGIN_BMP		29
 
-/*
- * CPP macro version of get_uint1(), get_uint2(), get_uint4().
- * If EB_UINT_FUNCTION is defined, function version is used, instead.
- */
-#if !defined(EB_UINT_FUNCTION) && !defined(EB_BUILD_LIBRARY)
-#define eb_uint1(p) (*(const unsigned char *)(p))
+#define EB_HOOK_BEGIN_JPEG		30
+#define EB_HOOK_END_COLOR_GRAPHIC	31
+#define EB_HOOK_BEGIN_IN_BMP		32
+#define EB_HOOK_BEGIN_IN_JPEG		33
+#define EB_HOOK_END_IN_COLOR_GRAPHIC	34
 
-#define eb_uint2(p) ((*(const unsigned char *)(p) << 8) \
-	+ (*(const unsigned char *)((p) + 1)))
-
-#define eb_uint4(p) ((*(const unsigned char *)(p) << 24) \
-	+ (*(const unsigned char *)((p) + 1) << 16) \
-	+ (*(const unsigned char *)((p) + 2) << 8) \
-	+ (*(const unsigned char *)((p) + 3)))
-#endif /* !EB_UINT_FUNCTION && !EB_BUILD_LIBRARY */
+#define EB_HOOK_BEGIN_WAVE		35
+#define EB_HOOK_END_WAVE		36
+#define EB_HOOK_BEGIN_MPEG		37
+#define EB_HOOK_END_MPEG		38
 
 /*
  * Function declarations.
@@ -117,16 +116,6 @@ EB_Error_Code eb_write_text_string EB_P((EB_Book *, const char *));
 EB_Error_Code eb_write_text EB_P((EB_Book *, const char *, size_t));
 const char *eb_current_candidate EB_P((EB_Book *));
 EB_Error_Code eb_forward_text EB_P((EB_Book *, EB_Hookset *));
-
-/* uint.c */
-#ifdef EB_UINT_FUNCTION
-unsigned eb_uint1 EB_P((const char *));
-unsigned eb_uint2 EB_P((const char *));
-unsigned eb_uint4 EB_P((const char *));
-#endif /* EB_UINT_FUNCTION */
-unsigned eb_bcd2 EB_P((const char *));
-unsigned eb_bcd4 EB_P((const char *));
-unsigned eb_bcd6 EB_P((const char *));
 
 #ifdef __cplusplus
 }

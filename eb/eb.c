@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2000  Motoyuki Kasahara
+ * Copyright (c) 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,7 +31,7 @@ eb_initialize_library()
 #ifdef ENABLE_NLS
     bindtextdomain(EB_TEXT_DOMAIN_NAME, LOCALEDIR);
 #endif
-    if (eb_zinitialize() < 0) {
+    if (zio_initialize_library() < 0) {
 	error_code = EB_ERR_MEMORY_EXHAUSTED;
 	goto failed;
     }
@@ -50,5 +51,5 @@ eb_initialize_library()
 void
 eb_finalize_library()
 {
-    eb_zfinalize();
+    zio_finalize_library();
 }

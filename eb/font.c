@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -113,33 +114,25 @@ eb_set_font(book, font_code)
     if (subbook->narrow_current != NULL) {
 	if (subbook->narrow_current->font_code == font_code)
 	    goto succeeded;
-	if (book->disc_code == EB_DISC_EPWING) {
-	    eb_zclose(&subbook->narrow_current->zip,
-		subbook->narrow_current->font_file);
-	}
+	if (book->disc_code == EB_DISC_EPWING)
+	    zio_close(&subbook->narrow_current->zio);
 	subbook->narrow_current = NULL;
     }
     if (subbook->wide_current != NULL) {
 	if (subbook->wide_current->font_code == font_code)
 	    return 0;
-	if (book->disc_code == EB_DISC_EPWING) {
-	    eb_zclose(&subbook->wide_current->zip,
-		subbook->wide_current->font_file);
-	}
+	if (book->disc_code == EB_DISC_EPWING)
+	    zio_close(&subbook->wide_current->zio);
 	subbook->wide_current = NULL;
     }
 
     /*
      * Set the current font.
      */
-    if (subbook->narrow_fonts[font_code].font_code != EB_FONT_INVALID) {
+    if (subbook->narrow_fonts[font_code].font_code != EB_FONT_INVALID)
 	subbook->narrow_current = subbook->narrow_fonts + font_code;
-	subbook->narrow_current->font_file = -1;
-    }
-    if (subbook->wide_fonts[font_code].font_code != EB_FONT_INVALID) {
+    if (subbook->wide_fonts[font_code].font_code != EB_FONT_INVALID)
 	subbook->wide_current = subbook->wide_fonts + font_code;
-	subbook->wide_current->font_file = -1;
-    }
 
     if (subbook->narrow_current == NULL && subbook->wide_current == NULL) {
 	error_code = EB_ERR_NO_SUCH_FONT;
@@ -197,16 +190,10 @@ eb_unset_font(book)
 	 * opened.
 	 */
 	if (book->disc_code == EB_DISC_EPWING) {
-	    if (book->subbook_current->narrow_current != NULL
-		&& 0 <= book->subbook_current->narrow_current->font_file) {
-		eb_zclose(&book->subbook_current->narrow_current->zip,
-		    book->subbook_current->narrow_current->font_file);
-	    }
-	    if (book->subbook_current->wide_current != NULL
-		&& 0 <= book->subbook_current->wide_current->font_file) {
-		eb_zclose(&book->subbook_current->wide_current->zip,
-		    book->subbook_current->wide_current->font_file);
-	    }
+	    if (book->subbook_current->narrow_current != NULL)
+		zio_close(&book->subbook_current->narrow_current->zio);
+	    if (book->subbook_current->wide_current != NULL)
+		zio_close(&book->subbook_current->wide_current->zio);
 	}
 
 	book->subbook_current->narrow_current = NULL;

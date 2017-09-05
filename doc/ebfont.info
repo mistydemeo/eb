@@ -8,7 +8,7 @@ END-INFO-DIR-ENTRY
    ebfont: Utility for getting font data in a CD-ROM book, by Motoyuki
 Kasahara.
 
-   Copyright (C) 1998, 99, 2000  Motoyuki Kasahara
+   Copyright (C) 1998, 99, 2000, 01  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
+   This is edition 3.0alpha4, for EB Library version 3.0alpha4.
 
 * Menu:
 
@@ -65,7 +65,7 @@ _without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 3.0alpha3, for EB Library version 3.0alpha3.
+   This is edition 3.0alpha4, for EB Library version 3.0alpha4.
 
 
 File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
@@ -304,13 +304,13 @@ long as they are unique.
 
 
 Tag Table:
-Node: Top1026
-Node: Introduction1585
-Node: What is Local Character2463
-Node: Invoking ebfont4033
-Node: Image Formats5454
-Node: Heights6348
-Node: Subbooks7109
-Node: Summary of Options9048
+Node: Top1030
+Node: Introduction1589
+Node: What is Local Character2467
+Node: Invoking ebfont4037
+Node: Image Formats5458
+Node: Heights6352
+Node: Subbooks7113
+Node: Summary of Options9052
 
 End Tag Table

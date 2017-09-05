@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -142,26 +143,18 @@ eb_canonicalize_path_name(path_name)
 
 /*
  * Rewrite `directory_name' to a real directory name in the `path' directory.
- * If a directory matched to `directory_name' exists, then 0 is returned,
- * and `directory_name' is rewritten to that name.
- * Otherwise -1 is returned.
+ * 
+ * If a directory matched to `directory_name' exists, then EB_SUCCESS is
+ * returned, and `directory_name' is rewritten to that name.  Otherwise
+ * EB_ERR_BAD_DIR_NAME is returned.
  */
-int
+EB_Error_Code
 eb_fix_directory_name(path, directory_name)
     const char *path;
     char *directory_name;
 {
     struct dirent *entry;
     DIR *dir;
-    size_t directory_name_length;
-    int have_dot;
-
-    directory_name_length = strlen(directory_name);
-
-    /*
-     * Check whether `directory_name' contains a dot.
-     */
-    have_dot = (strchr(directory_name, '.') != NULL);
 
     /*
      * Open the directory `path'.
@@ -176,22 +169,15 @@ eb_fix_directory_name(path, directory_name)
          */
         entry = readdir(dir);
         if (entry == NULL)
-            break;
+            goto failed;
 
-	if (EB_MAX_FILE_NAME_LENGTH < NAMLEN(entry))
-	    continue;
-
-	if (strncasecmp(entry->d_name, directory_name, directory_name_length)
-	    == 0)
+	if (strcasecmp(entry->d_name, directory_name) == 0)
 	    break;
     }
 
-    if (entry == NULL)
-	goto failed;
-
     strcpy(directory_name, entry->d_name);
     closedir(dir);
-    return 0;
+    return EB_SUCCESS;
 
     /*
      * An error occurs...
@@ -199,18 +185,19 @@ eb_fix_directory_name(path, directory_name)
   failed:
     if (dir != NULL)
 	closedir(dir);
-    return -1;
+    return EB_ERR_BAD_DIR_NAME;
 }
 
 
 /*
  * Rewrite `sub_directory_name' to a real sub directory name in the
  * `path/directory_name' directory.
- * If a directory matched to `sub_directory_name' exists, then 0 is
- * returned, and `directory_name' is rewritten to that name.
- * Otherwise -1 is returned.
+ * 
+ * If a directory matched to `sub_directory_name' exists, then EB_SUCCESS
+ * is returned, and `directory_name' is rewritten to that name.  Otherwise
+ * EB_ERR_BAD_FILE_NAME is returned.
  */
-int
+EB_Error_Code
 eb_fix_directory_name2(path, directory_name, sub_directory_name)
     const char *path;
     const char *directory_name;
@@ -225,11 +212,12 @@ eb_fix_directory_name2(path, directory_name, sub_directory_name)
 
 /*
  * Rewrite `file_name' to a real file name in the `path_name' directory.
- * If a file matched to `file_name' exists, then 0 is returned,
- * and `file_name' is rewritten to that name.
- * Otherwise -1 is returned.
+ * 
+ * If a file matched to `file_name' exists, then EB_SUCCESS is returned,
+ * and `file_name' is rewritten to that name.  Otherwise EB_ERR_BAD_FILE_NAME
+ * is returned.
  */
-int
+EB_Error_Code
 eb_fix_file_name(path_name, file_name)
     const char *path_name;
     char *file_name;
@@ -260,7 +248,7 @@ eb_fix_file_name(path_name, file_name)
          */
         entry = readdir(dir);
         if (entry == NULL)
-            break;
+            goto failed;
 
 	if (EB_MAX_FILE_NAME_LENGTH < NAMLEN(entry))
 	    continue;
@@ -289,12 +277,9 @@ eb_fix_file_name(path_name, file_name)
 	}
     }
 
-    if (entry == NULL)
-	goto failed;
-
     strcpy(file_name, entry->d_name);
     closedir(dir);
-    return 0;
+    return EB_SUCCESS;
 
     /*
      * An error occurs...
@@ -302,7 +287,7 @@ eb_fix_file_name(path_name, file_name)
   failed:
     if (dir != NULL)
 	closedir(dir);
-    return -1;
+    return EB_ERR_BAD_FILE_NAME;
 }
 
 
@@ -310,11 +295,11 @@ eb_fix_file_name(path_name, file_name)
  * Rewrite `file_name' to a real file name in the directory
  * `path_name/sub_directory_name'.
  *
- * If a file matched to `file_name' exists, then 0 is returned,
- * and `file_name' is rewritten to that name.
- * Otherwise -1 is returned.
+ * If a file matched to `file_name' exists, then EB_SUCCESS is returned,
+ * and `file_name' is rewritten to that name.  Otherwise EB_ERR_BAD_FILE_NAME
+ * is returned.
  */
-int
+EB_Error_Code
 eb_fix_file_name2(path_name, sub_directory_name, file_name)
     const char *path_name;
     const char *sub_directory_name;
@@ -333,11 +318,11 @@ eb_fix_file_name2(path_name, sub_directory_name, file_name)
  * Rewrite `file_name' to a real file name. in the directory
  *    `path_name/sub_directory_name/sub2_directory_name'
  *
- * If a file matched to `file_name' exists, then 0 is returned,
- * and `file_name' is rewritten to that name.
- * Otherwise -1 is returned.
+ * If a file matched to `file_name' exists, then EB_SUCCESS is returned,
+ * and `file_name' is rewritten to that name.  Otherwise EB_ERR_BAD_FILE_NAME
+ * is returned.
  */
-int
+EB_Error_Code
 eb_fix_file_name3(path_name, sub_directory_name, sub2_directory_name,
     file_name)
     const char *path_name;
@@ -358,10 +343,10 @@ eb_fix_file_name3(path_name, sub_directory_name, sub2_directory_name,
  *     `path_name/file_name.suffix'
  * and copy it into `composed_path_name'.
  *
- * If a file `composed_path_name' exists, then 0 is returned.
- * Otherwise -1 is returned.
+ * If a file `composed_path_name' exists, then EB_SUCCESS is returned.
+ * Otherwise EB_ERR_BAD_FILE_NAME is returned.
  */
-int
+EB_Error_Code
 eb_compose_path_name(path_name, file_name, suffix, composed_path_name)
     const char *path_name;
     const char *file_name;
@@ -371,13 +356,13 @@ eb_compose_path_name(path_name, file_name, suffix, composed_path_name)
     char fixed_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
 
     sprintf(fixed_file_name, "%s%s", file_name, suffix);
-    if (eb_fix_file_name(path_name, fixed_file_name) == 0) {
+    if (eb_fix_file_name(path_name, fixed_file_name) == EB_SUCCESS) {
 	sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
 	    path_name, fixed_file_name);
-	return 0;
+	return EB_SUCCESS;
     }
 
-    return -1;
+    return EB_ERR_BAD_FILE_NAME;
 }
 
 
@@ -386,10 +371,10 @@ eb_compose_path_name(path_name, file_name, suffix, composed_path_name)
  *     `path_name/sub_directory/file_name.suffix'
  * and copy it into `composed_path_name'.
  *
- * If a file `composed_path_name' exists, then 0 is returned.
- * Otherwise -1 is returned.
+ * If a file `composed_path_name' exists, then EB_SUCCESS is returned.
+ * Otherwise EB_ERR_BAD_FILE_NAME is returned.
  */
-int
+EB_Error_Code
 eb_compose_path_name2(path_name, sub_directory_name, file_name, suffix,
     composed_path_name)
     const char *path_name;
@@ -405,13 +390,13 @@ eb_compose_path_name2(path_name, sub_directory_name, file_name, suffix,
     sprintf(sub_path_name, F_("%s/%s", "%s\\%s"),
 	path_name, sub_directory_name);
 
-    if (eb_fix_file_name(sub_path_name, fixed_file_name) == 0) {
+    if (eb_fix_file_name(sub_path_name, fixed_file_name) == EB_SUCCESS) {
 	sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
 	    sub_path_name, fixed_file_name);
-	return 0;
+	return EB_SUCCESS;
     }
 
-    return -1;
+    return EB_ERR_BAD_FILE_NAME;
 }
 
 
@@ -420,10 +405,10 @@ eb_compose_path_name2(path_name, sub_directory_name, file_name, suffix,
  *     `path_name/sub_directory/sub2_directory/file_name.suffix'
  * and copy it into `composed_path_name'.
  *
- * If a file `composed_path_name' exists, then 0 is returned.
- * Otherwise -1 is returned.
+ * If a file `composed_path_name' exists, then EB_SUCCESS is returned.
+ * Otherwise EB_ERR_BAD_FILE_NAME is returned.
  */
-int
+EB_Error_Code
 eb_compose_path_name3(path_name, sub_directory_name, sub2_directory_name,
     file_name, suffix, composed_path_name)
     const char *path_name;
@@ -440,13 +425,122 @@ eb_compose_path_name3(path_name, sub_directory_name, sub2_directory_name,
     sprintf(sub2_path_name, F_("%s/%s/%s", "%s\\%s\\%s"),
 	path_name, sub_directory_name, sub2_directory_name);
 
-    if (eb_fix_file_name(sub2_path_name, fixed_file_name) == 0) {
+    if (eb_fix_file_name(sub2_path_name, fixed_file_name) == EB_SUCCESS) {
 	sprintf(composed_path_name, F_("%s/%s", "%s\\%s"),
 	    sub2_path_name, fixed_file_name);
-	return 0;
+	return EB_SUCCESS;
     }
 
-    return -1;
+    return EB_ERR_BAD_FILE_NAME;
+}
+
+
+/*
+ * Compose movie file name from argv[], and copy the result to
+ * `composed_file_name'.  Note that upper letters are converted to lower
+ * letters.
+ *
+ * If a file `composed_path_name' exists, then EB_SUCCESS is returned.
+ * Otherwise EB_ERR_BAD_FILE_NAME is returned.
+ */
+EB_Error_Code
+eb_compose_movie_file_name(argv, composed_file_name)
+    const unsigned int *argv;
+    char *composed_file_name;
+{
+    unsigned short jis_characters[EB_MAX_DIRECTORY_NAME_LENGTH];
+    const unsigned int *arg_p;
+    char *composed_p;
+    unsigned short c;
+    int i;
+
+    /*
+     * Initialize `jis_characters[]'.
+     */
+    for (i = 0, arg_p = argv;
+	 i + 1 < EB_MAX_DIRECTORY_NAME_LENGTH; i += 2, arg_p++) {
+	jis_characters[i]     = (*arg_p >> 16) & 0xffff;
+	jis_characters[i + 1] = (*arg_p)       & 0xffff;
+    }
+    if (i < EB_MAX_DIRECTORY_NAME_LENGTH)
+	jis_characters[i]     = (*arg_p >> 16) & 0xffff;
+
+    /*
+     * Compose file name.
+     */
+    for (i = 0, composed_p = composed_file_name;
+	 i < EB_MAX_DIRECTORY_NAME_LENGTH; i++, composed_p++) {
+	c = jis_characters[i];
+	if (c == 0x2121 || c == 0x0000)
+	    break;
+	if ((0x2330 <= c && c <= 0x2339) || (0x2361 <= c && c <= 0x237a))
+	    *composed_p = c & 0xff;
+	else if (0x2341 <= c && c <= 0x235a)
+	    *composed_p = (c | 0x20) & 0xff;
+	else
+	    return EB_ERR_BAD_FILE_NAME;
+    }
+
+    *composed_p = '\0';
+
+    return EB_SUCCESS;
+}
+
+
+/*
+ * Decompose movie file name into argv[].  This is the reverse of
+ * eb_compose_movie_file_name().  Note that lower letters are converted
+ * to upper letters.
+ *
+ * EB_SUCCESS is returned upon success, EB_ERR_BAD_FILE_NAME otherwise.
+ */
+EB_Error_Code
+eb_decompose_movie_file_name(argv, composed_file_name)
+    unsigned int *argv;
+    const char *composed_file_name;
+{
+    unsigned short jis_characters[EB_MAX_DIRECTORY_NAME_LENGTH];
+    unsigned int *arg_p;
+    const char *composed_p;
+    int i;
+
+    /*
+     * Initialize `jis_characters[]'.
+     */
+    for (i = 0; i < EB_MAX_DIRECTORY_NAME_LENGTH; i++)
+	jis_characters[i] = 0x0000;
+
+    /*
+     * Set jis_characters[].
+     */
+    for (i = 0, composed_p = composed_file_name;
+	 i < EB_MAX_DIRECTORY_NAME_LENGTH && *composed_p != '\0';
+	 i++, composed_p++) {
+	if ('0' <= *composed_p && *composed_p <= '9')
+	    jis_characters[i] = 0x2330 + (*composed_p - '0');
+	else if ('A' <= *composed_p && *composed_p <= 'Z')
+	    jis_characters[i] = 0x2341 + (*composed_p - 'A');
+	else if ('a' <= *composed_p && *composed_p <= 'z')
+	    jis_characters[i] = 0x2341 + (*composed_p - 'a');
+	else
+	    return EB_ERR_BAD_FILE_NAME;
+    }
+    if (*composed_p != '\0')
+	return EB_ERR_BAD_FILE_NAME;
+
+    /*
+     * Compose file name.
+     */
+    for (i = 0, arg_p = argv;
+	 i + 1 < EB_MAX_DIRECTORY_NAME_LENGTH; i += 2, arg_p++) {
+	*arg_p = (jis_characters[i] << 16) | jis_characters[i + 1];
+    }
+    if (i < EB_MAX_DIRECTORY_NAME_LENGTH) {
+	*arg_p++ = jis_characters[i] << 16;
+    }
+    *arg_p = '\0';
+
+    return EB_SUCCESS;
 }
 
 

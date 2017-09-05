@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000, 01
+      Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -66,12 +67,18 @@ void
 eb_finalize_appendix(appendix)
     EB_Appendix *appendix;
 {
+    int i;
+
     /*
      * Dispose memories and unset struct members.
      */
     eb_unset_appendix_subbook(appendix);
-    if (appendix->subbooks != NULL)
+    if (appendix->subbooks != NULL) {
+	for (i = 0; i < appendix->subbook_count; i++)
+	    zio_finalize(&(appendix->subbooks + i)->zio);
+
 	free(appendix->subbooks);
+    }
 
     if (appendix->path != NULL)
 	free(appendix->path);
@@ -149,7 +156,7 @@ eb_bind_appendix(appendix, path)
     strcpy(appendix->path, temporary_path);
 
     /*
-     * Read information from the `CATALOG(S)' file.
+     * Read information from the catalog file.
      */
     error_code = eb_initialize_appendix_catalog(appendix);
     if (error_code != EB_SUCCESS)
@@ -187,8 +194,10 @@ eb_initialize_appendix_catalog(appendix)
     EB_Appendix_Subbook *subbook;
     size_t catalog_size;
     size_t title_size;
-    int file = -1;
+    Zio zio;
     int i;
+
+    zio_initialize(&zio);
 
     /*
      * Find a catalog file.
@@ -211,8 +220,7 @@ eb_initialize_appendix_catalog(appendix)
     /*
      * Open the catalog file.
      */
-    file = open(catalog_path_name, O_RDONLY | O_BINARY);
-    if (file < 0) {
+    if (zio_open(&zio, catalog_path_name, ZIO_NONE) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_CATAPP;
 	goto failed;
     }
@@ -220,7 +228,7 @@ eb_initialize_appendix_catalog(appendix)
     /*
      * Get the number of subbooks in the appendix.
      */
-    if (eb_read_all(file, buffer, 16) != 16) {
+    if (zio_read(&zio, buffer, 16) != 16) {
 	error_code = EB_ERR_FAIL_READ_CATAPP;
 	goto failed;
     }
@@ -250,7 +258,7 @@ eb_initialize_appendix_catalog(appendix)
 	/*
 	 * Read data from the catalog file.
 	 */
-	if (eb_read_all(file, buffer, catalog_size) != catalog_size) {
+	if (zio_read(&zio, buffer, catalog_size) != catalog_size) {
 	    error_code = EB_ERR_FAIL_READ_CAT;
 	    goto failed;
 	}
@@ -268,20 +276,22 @@ eb_initialize_appendix_catalog(appendix)
 
 	subbook->initialized = 0;
 	subbook->code = i;
+	zio_initialize(&subbook->zio);
     }
 
     /*
      * Close the catalog file.
      */
-    close(file);
+    zio_close(&zio);
+    zio_finalize(&zio);
     return EB_SUCCESS;
 
     /*
      * An error occurs...
      */
   failed:
-    if (0 <= file)
-	close(file);
+    zio_close(&zio);
+    zio_finalize(&zio);
     if (appendix->subbooks != NULL) {
 	free(appendix->subbooks);
 	appendix->subbooks = NULL;

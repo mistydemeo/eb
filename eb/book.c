@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +37,11 @@ static EB_Book_Code counter = 0;
 #ifdef ENABLE_PTHREAD
 static pthread_mutex_t counter_mutex = PTHREAD_MUTEX_INITIALIZER;
 #endif
+
+/*
+ * Unexported functions.
+ */
+static void eb_fix_misleaded_book EB_P((EB_Book *));
 
 /*
  * Initialize `book'.
@@ -161,6 +167,9 @@ void
 eb_finalize_book(book)
     EB_Book *book;
 {
+    EB_Subbook *subbook;
+    int i;
+
     /*
      * Dispose memories and unset struct members.
      */
@@ -170,8 +179,26 @@ eb_finalize_book(book)
     if (book->languages != NULL)
 	free(book->languages);
 
-    if (book->subbooks != NULL)
+    if (book->subbooks != NULL) {
+	for (i = 0, subbook = book->subbooks; i < book->subbook_count;
+	     i++, subbook++) {
+	    zio_finalize(&subbook->text_zio);
+	    zio_finalize(&subbook->graphic_zio);
+	    zio_finalize(&subbook->sound_zio);
+	    zio_finalize(&subbook->movie_zio);
+
+	    zio_finalize(&subbook->narrow_fonts[EB_FONT_16].zio);
+	    zio_finalize(&subbook->narrow_fonts[EB_FONT_24].zio);
+	    zio_finalize(&subbook->narrow_fonts[EB_FONT_30].zio);
+	    zio_finalize(&subbook->narrow_fonts[EB_FONT_48].zio);
+
+	    zio_finalize(&subbook->wide_fonts[EB_FONT_16].zio);
+	    zio_finalize(&subbook->wide_fonts[EB_FONT_24].zio);
+	    zio_finalize(&subbook->wide_fonts[EB_FONT_30].zio);
+	    zio_finalize(&subbook->wide_fonts[EB_FONT_48].zio);
+	}
 	free(book->subbooks);
+    }
 
     if (book->messages != NULL)
 	free(book->messages);
@@ -212,8 +239,32 @@ static const char * const misleaded_book_table[] = {
 
     /* EB Kagakugijutsu Yougo Daijiten (YRRS-048) */
     "#E#B2J3X5;=QMQ8lBg<-E5",
+
     NULL
 };
+
+/*
+ * Fix chachacter-code of the book if misleaded.
+ */
+static void
+eb_fix_misleaded_book(book)
+    EB_Book *book;
+{
+    const char * const * misleaded;
+    EB_Subbook *subbook;
+    int i;
+
+    for (misleaded = misleaded_book_table; *misleaded != NULL; misleaded++) {
+	if (strcmp(book->subbooks->title, *misleaded) == 0) {
+	    book->character_code = EB_CHARCODE_JISX0208;
+	    for (i = 0, subbook = book->subbooks; i < book->subbook_count;
+		 i++, subbook++) {
+		eb_jisx0208_to_euc(subbook->title, subbook->title);
+	    }
+	    break;
+	}
+    }
+}
 
 /*
  * Read information from the `CATALOG(S)' file in 'book'.
@@ -230,9 +281,10 @@ eb_initialize_catalog(book)
     EB_Subbook *subbook;
     size_t catalog_size;
     size_t title_size;
-    const char * const *misleaded;
-    int file = -1;
+    Zio zio;
     int i;
+
+    zio_initialize(&zio);
 
     /*
      * Find a catalog file.
@@ -255,8 +307,7 @@ eb_initialize_catalog(book)
     /*
      * Open a catalog file.
      */
-    file = open(catalog_path_name, O_RDONLY | O_BINARY);
-    if (file < 0) {
+    if (zio_open(&zio, catalog_path_name, ZIO_NONE) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_CAT;
 	goto failed;
     }
@@ -264,7 +315,7 @@ eb_initialize_catalog(book)
     /*
      * Get the number of subbooks in this book.
      */
-    if (eb_read_all(file, buffer, 16) != 16) {
+    if (zio_read(&zio, buffer, 16) != 16) {
 	error_code = EB_ERR_FAIL_READ_CAT;
 	goto failed;
     }
@@ -300,7 +351,7 @@ eb_initialize_catalog(book)
 	/*
 	 * Read data from the catalog file.
 	 */
-	if (eb_read_all(file, buffer, catalog_size) != catalog_size) {
+	if (zio_read(&zio, buffer, catalog_size) != catalog_size) {
 	    error_code = EB_ERR_FAIL_READ_CAT;
 	    goto failed;
 	}
@@ -342,10 +393,29 @@ eb_initialize_catalog(book)
 	subbook->narrow_fonts[EB_FONT_24].font_code = EB_FONT_INVALID;
 	subbook->narrow_fonts[EB_FONT_30].font_code = EB_FONT_INVALID;
 	subbook->narrow_fonts[EB_FONT_48].font_code = EB_FONT_INVALID;
+
 	subbook->wide_fonts[EB_FONT_16].font_code = EB_FONT_INVALID;
 	subbook->wide_fonts[EB_FONT_24].font_code = EB_FONT_INVALID;
 	subbook->wide_fonts[EB_FONT_30].font_code = EB_FONT_INVALID;
 	subbook->wide_fonts[EB_FONT_48].font_code = EB_FONT_INVALID;
+
+	/*
+	 * Initiazlie file managers.
+	 */
+	zio_initialize(&subbook->text_zio);
+	zio_initialize(&subbook->graphic_zio);
+	zio_initialize(&subbook->sound_zio);
+	zio_initialize(&subbook->movie_zio);
+
+	zio_initialize(&subbook->narrow_fonts[EB_FONT_16].zio);
+	zio_initialize(&subbook->narrow_fonts[EB_FONT_24].zio);
+	zio_initialize(&subbook->narrow_fonts[EB_FONT_30].zio);
+	zio_initialize(&subbook->narrow_fonts[EB_FONT_48].zio);
+
+	zio_initialize(&subbook->wide_fonts[EB_FONT_16].zio);
+	zio_initialize(&subbook->wide_fonts[EB_FONT_24].zio);
+	zio_initialize(&subbook->wide_fonts[EB_FONT_30].zio);
+	zio_initialize(&subbook->wide_fonts[EB_FONT_48].zio);
 
 	/*
 	 * If the book is EPWING, get font file names.
@@ -409,21 +479,13 @@ eb_initialize_catalog(book)
     /*
      * Close the catalog file.
      */
-    close(file);
+    zio_close(&zio);
+    zio_finalize(&zio);
 
     /*
      * Fix chachacter-code of the book.
      */
-    for (misleaded = misleaded_book_table; *misleaded != NULL; misleaded++) {
-	if (strcmp(book->subbooks->title, *misleaded) == 0) {
-	    book->character_code = EB_CHARCODE_JISX0208;
-	    for (i = 0, subbook = book->subbooks; i < book->subbook_count;
-		 i++, subbook++) {
-		eb_jisx0208_to_euc(subbook->title, subbook->title);
-	    }
-	    break;
-	}
-    }
+    eb_fix_misleaded_book(book);
 
     return EB_SUCCESS;
 
@@ -431,8 +493,8 @@ eb_initialize_catalog(book)
      * An error occurs...
      */
   failed:
-    if (0 <= file)
-	close(file);
+    zio_close(&zio);
+    zio_finalize(&zio);
     if (book->subbooks != NULL) {
 	free(book->subbooks);
 	book->subbooks = NULL;

@@ -1,3 +1,346 @@
+2001-02-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.0alpha4.
+
+	* po/Makefile.in, eb/po/Makefile (DISTFILES): Distribute
+	`Makefile.in', not `Makefile.in.in'.  Add `$(CATALOGS)'.
+	* po/Makefile.in, eb/po/Makefile (distclean): Don't delete `Makefil.in'
+	itself.
+	* eb/text.c (eb_read_text_internal): Dispatch the BEGIN_WAVE hook.
+
+2001-01-31  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h (EB_Appendix_Subbook_Struct): Rename `appendix_zio' to
+	`zio'.
+	* eb/defs.h (EB_Font_Struct): Rename `font_zio' to `zio'.
+
+	* eb/graphic.c: Removed.
+	* eb/Makefile.am (libeb_la_SOURCES): Remove `eb/graphic.c'.
+	* eb/defs.h (EB_Subbook_Struct): The member `graphic' is removed.
+	* eb/ebinfo.c (output_information): Delete `graphic search'
+	information.
+
+	* eb/defs.h (EB_Subbook_Struct): The member `sound' is added.
+	* eb/subbook.c (eb_initialize_indexes): Recognize 0xd8 as sound data.
+
+	* eb/defs.h (EB_Binary_Context_Struct): Add the members;
+	`cache_buffer', `cache_length' and `cache_offset'.
+	* eb/binary.c (eb_set_binary_wave): Add the argument `type'.
+	* eb/binary.c (eb_est_binary_wave, eb_set_binary_color_graphic,
+	eb_set_binary_mpeg, eb_read_binary, eb_unset_binary): Update cache
+	data.
+
+	* eb/Makefile.am (pkginclude_HEADERS): Add `zio.h'.
+
+2001-01-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebfont/ebfont.c (make_subbook_size_image_fonts): Fix typo.
+
+	* eb/uint.c: Renamed to `eb/bcd.c'.
+	* eb/uint.c: Delete definition of eb_uint1(), eb_uint2(), eb_uint4()
+	and eb_uint4_le().
+
+	* eb/zio.h: New file.
+	* eb/defs.h (EB_Zip_Code ,EB_Huffman_Node): Move declaration of 
+	these types to `eb/zio.h'.
+	* eb/defs.h (EB_SIZE_EBZIP_HEADER, EB_SIZE_EBZIP_MARGIN, 
+	EB_MAX_EBZIP_LEVEL, EB_HUFFMAN_NODE_INTERMEDIATE,
+	EB_HUFFMAN_NODE_EOF, EB_HUFFMAN_NODE_LEAF8, EB_HUFFMAN_NODE_LEAF16,
+	EB_HUFFMAN_NODE_LEAF32, EB_ZIO_NONE, EB_ZIO_EBZIP1, EB_ZIO_EPWING,
+	EB_ZIO_EPWING6, EB_ZIO_SEBXA, EB_ZIO_INVALID): Move definition of
+	these cpp macros to `eb/zio.h'.
+	* eb/zio.c: Include `eb/zio.h'.
+	* eb/defs.h: Include `eb/zio.h'.
+	
+	* eb/zio.h (EB_Zip): Renamed to `Zio'.
+	* eb/zio.h (EB_Zip_Code): Renamed to `Zio_Code'.
+	* eb/defs.h (EB_SIZE_EBZIP_HEADER): Renamed to `ZIO_SIZE_EBZIP_HEADER'.
+	* eb/defs.h (EB_SIZE_EBZIP_MARGIN): Renamed to `ZIO_SIZE_EBZIP_MARGIN'.
+	* eb/defs.h (EB_MAX_EBZIP_LEVEL): Renamed to `ZIO_MAX_EBZIP_LEVEL'.
+	* eb/defs.h (EB_HUFFMAN_NODE_INTERMEDIATE): Renamed to
+	`ZIO_HUFFMAN_NODE_INTERMEDIATE'.
+	* eb/defs.h (EB_HUFFMAN_NODE_EOF): Renamed to `ZIO_HUFFMAN_NODE_EOF'.
+	* eb/defs.h (EB_HUFFMAN_NODE_LEAF8): Renamed to
+	`ZIO_HUFFMAN_NODE_LEAF8'.
+	* eb/defs.h (EB_HUFFMAN_NODE_LEAF16): Renamed to
+	`ZIO_HUFFMAN_NODE_LEAF16'.
+	* eb/defs.h (EB_HUFFMAN_NODE_LEAF32): Renamed to
+	`ZIO_HUFFMAN_NODE_LEAF32'.
+	* eb/defs.h (EB_ZIO_NONE): Renamed to `ZIO_NONE'.
+	* eb/defs.h (EB_ZIO_EBZIP1): Renamed to `ZIO_EBZIP1'.
+	* eb/defs.h (EB_ZIO_EPWING): Renamed to `ZIO_EPWING'.
+	* eb/defs.h (EB_ZIO_EPWING6): Renamed to `ZIO_EPWING6'.
+	* eb/defs.h (EB_ZIO_SEBXA): Renamed to `ZIO_SEBXA'.
+	* eb/defs.h (EB_ZIO_INVALID): Renamed to `ZIO_INVALID'.
+
+	* eb/unebzip.c, eb/unzepwng.c, eb/unzsebxa.c: Removed.
+	The contents of those files are moved to `eb/zio.c'.
+
+	* eb/defs.h (EB_Appendix_Subbook_Struct): Rename `appendix_zip' to
+	`appendix_zio'.
+	* eb/defs.h (EB_Appendix_Subbook_Struct): Remove `appendix_file'.
+	* eb/defs.h (EB_Font_Struct): Rename `font_zip' to `font_zio'.
+	* eb/defs.h (EB_Font_Struct): Delete `font_file'.
+	* eb/defs.h (EB_Subbook_Struct): Rename `text_zip' to `text_zio'.
+	* eb/defs.h (EB_Subbook_Struct): Delete `text_file'.
+	* eb/defs.h (EB_Subbook_Struct): Rename `graphic_zip' to `graphic_zio'.
+	* eb/defs.h (EB_Subbook_Struct): Delete `graphic_file'.
+	* eb/defs.h (EB_Subbook_Struct): Rename `sound_zip' to `sound_zio'.
+	* eb/defs.h (EB_Subbook_Struct): Delete `sound_file'.
+	* eb/defs.h (EB_Subbook_Struct): Add `movie_zip'.
+	* eb/defs.h (EB_Binary_Context_Struct): Delete `file'.
+	* eb/defs.h (EB_Binary_Context_Struct): Rename `zip' to `zio'.
+
+	* eb/zio.c: Don't include `ebconfig.h', `errorh.h' nor `internal.h'.
+	* eb/zio.c (eb_zinitialize): Renamed to `zio_initialize_library'.
+	* eb/zio.c (eb_zfinalize): Renamed to `zio_finalize_library'.
+	* eb/zio.c (eb_zopen): Renamed to `zio_open'.
+	* eb/zio.c (eb_zopen_none): Renamed to `zio_open_none'.
+	* eb/zio.c (eb_zopen_ebzip): Renamed to `zio_open_ebzip'.
+	* eb/zio.c (eb_zopen_epwing): Renamed to `zio_open_epwing'.
+	* eb/zio.c (eb_zopen_epwing6): Renamed to `zio_open_epwing6'.
+	* eb/zio.c (eb_zopen_sebxa): Renamed to `zio_open_sebxa'.
+	* eb/zio.c (eb_zclose): Renamed to `zio_close'.
+	* eb/zio.c (eb_zlseek): Renamed to `zio_lseek'.
+	* eb/zio.c (eb_zread): Renamed to `zio_read'.
+	* eb/zio.c (eb_zread_ebzip): Renamed to `zio_read_ebzip'.
+	* eb/zio.c (eb_zread_epwing): Renamed to `zio_epwing'.
+	* eb/zio.c (eb_make_epwing_huffman_tree): Renamed to
+	`zio_make_epwing_huffman_tree'.
+	* eb/zio.c (eb_unzip_slice_ebzip1): Renamed to
+	`zio_unzip_slice_ebzip1'.
+	* eb/zio.c (eb_unzip_slice_epwing): Renamed to
+	`zio_unzip_slice_epwing'.
+	* eb/zio.c (eb_unzip_slice_epwing6): Renamed to
+	`zio_unzip_slice_epwing6'.
+	* eb/zio.c (eb_initialize, eb_finalize, eb_reopen, eb_file):
+	New functions.
+	* eb/zio.c (eb_read_all): Renamed to `zio_read_raw'.
+
+	* eb/zio.c (Zio): Add the member `file'.
+
+	* eb/zio.c (zio_close, zio_lseek, zio_read, zio_read_ebzip,
+	eb_zread_epwing, eb_zread_sebxa): Delete 2nd argument `file'.
+
+	* eb/zio.c (zio_uint1, zio_uint2, zio_uint4): Defined.
+	Don't use eb_uint1, eb_uint2 or zio_uint4.
+
+	* eb/appendix.c (eb_finalize_appendix): Finalize `appendix_zio'
+	in all subbooks.
+	* eb/book.c (eb_finalize_book): Ditto.
+
+	* eb/appendix.c (eb_initialize_appendix_catalog): Use zio to
+	open a catalog file.
+	* eb/book.c (eb_initialize_catalog): Ditto.
+
+	* eb/book.c (eb_fix_misleaded_book): New function.
+	* eb/book.c (eb_initialize_catalog): Fix chachacter-code information
+	by calling eb_fix_misleaded_book().
+
+	* eb/appendix.c (eb_initialize_catalog): Initialize `appendix_zio' in
+	an EB_Appendix_Subbook Object.
+	* eb/book.c (eb_initialize_catalog): Initialize `text_zio', 
+	`graphic_zio', `sound_zio and movie_zio' in an EB_Book_Subbook object.
+
+2001-01-27  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/error.h: Rivse error codes.
+	* eb/error.c (error_messages): Revised.
+	* eb/binary.c (eb_set_binary_mpeg): Fix a bug in initialization of
+	binary context.
+	* eb/filename.c (eb_decompose_movie_file_name): New function.
+	* eb/filename.c (eb_compose_movie_file_name): Don't believe file name
+	consists of 8 characters.
+	
+	* eb/text.c (SIZE_FEW_REST): Change the value from 40 to 48.
+	* eb/text.c (eb_read_text_internal): BEGIN_MPEG hook was not called
+	correctly. Fixed.
+
+	* eb/subbook.c (eb_set_subbook_epwing): Don't suppose graphic or
+	sound data are in HONMON file if EPWING version is 5 or later.
+
+2001-01-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/error.h (EB_ERR_BAD_FILE_NAME, EB_ERR_BAD_DIR_NAME): Add these
+	error codes.
+
+	* eb/filename.c (eb_fix_directory_name, eb_fix_directory_name2,
+	eb_fix_file_name, eb_fix_file_name2, eb_fix_file_name3, 
+	eb_compose_path_name, eb_compose_path_name2, eb_compose_path_name3): 
+	eb_compose_movie_file_name): Return EB_Error_Code, not {0 or -1}.
+	
+2001-01-21  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/error.h, eb/error.c (EB_ERR_FAIL_OPEN_BIANRY,
+	EB_ERR_FAIL_READ_BINARY, EB_ERR_FAIL_SEEK_BINARY, EB_ERR_UNEXP_BINARY,
+	EB_ERR_NO_CUR_BINARY, EB_ERR_NO_SUCH_BINARY): Add these error codes.
+
+	* eb/binary.h: New file.
+	* eb/Makefile.am (pkginclude_HEADERS): Add binary.h.
+
+	* eb/text.h, eb/internal.h.in: Move function declaration of
+	eb_uint1(), eb_uint2(), eb_uint4(), eb_bcd2(), eb_bcd4() and eb_bcd6()
+	from eb/text.h to eb/internal.h.in.
+
+2001-01-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.in, m4/gettext.m4 (AM_GNU_GETTEXT): renamed to
+	AM_GNU_GETTEXT_HACKED.
+	* m4/gettext.m4: Use the language `en' instead of `fr' in the test
+	program.
+
+	* eb/defs.h (EB_Subbook_Struct): Fix array length of `text_file_name',
+	`graphic_file_name' and `sound_file_name'.
+
+	* eb/internal.h.in: Declare eb_intialize_binary().
+	* eb/binary.c: Added.
+	* eb/subbook.c: Call eb_initialize_binary() to initialize a binary
+	context.
+
+	* eb/Makefile.am (libeb_la_SOURCES): Add `binary.c'.
+
+2001-01-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/text.c (EB_MAX_ARGV): Change the value from 4 to 6.
+
+	* eb/filename.c (eb_compose_movie_file_name): Defined.
+
+	* ebzip/ebzip.c (zip_eb_book): Renamed to zip_book_eb().
+	* ebzip/ebzip.c (zip_epwing_book): Renamed to zip_book_epwing().
+	* ebzip/ebzip.c (unzip_eb_book): Renamed to unzip_book_eb().
+	* ebzip/ebzip.c (unzip_epwing_book): Renamed to unzip_book_epwing().
+	* ebzip/ebzip.c (zipinfo_eb_book): Renamed to zipinfo_book_eb().
+	* ebzip/ebzip.c (zipinfo_epwing_book): Renamed to
+	zipinfo_book_epwing().
+
+	* eb/defs.h (EB_Subbook_Struct): Add the following members;
+	`graphic_file', `graphic_zip', `sound_file' and `sound_zip'.
+	* eb/internal.h.in (EB_FILE_NAME_HONMONG, EB_FILE_NAME_HONMONS):
+	Defined.
+	* eb/subbook.c (eb_set_subbook): Split this function into
+	eb_set_subbook(), eb_set_subbook_eb() and eb_set_subbook_epwing().
+	* eb/subook.c (eb_set_subbook_epwing): Try opening graphic and sound
+	files.
+
+	* eb/uint.c, eb/internal.h.in (eb_uint4_le): Defined.
+
+	* eb/defs.h (EB_Binary_Context_Struct, EB_Binary_Context): Defined.
+	* eb/defs.h (EB_Book_Struct): Add the member `binary_context'.
+
+	* eb/text.h: (EB_HOOK_BEGIN_BITMAP, EB_HOOK_END_BITMAP,
+	EB_HOOK_BEGIN_BMP, EB_HOOK_BEGIN_JPEG, EB_HOOK_END_COLOR_GRAPHIC,
+	EB_HOOK_BEGIN_IN_BMP, EB_HOOK_BEGIN_IN_JPEG,
+	EB_HOOK_END_IN_COLOR_GRAPHIC, EB_HOOK_BEGIN_WAVE, EB_HOOK_END_WAVE,
+	EB_HOOK_BEGIN_MPEG, EB_HOOK_END_MPEG): Defined.
+	* eb/defs.h (EB_NUMBER_OF_HOOKS): Updated.
+
+2001-01-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/internal.h (EB_Subbook_Struct): Remove the member
+	`stream_directory_name'.
+	* eb/subbook.c (eb_set_subbook): Don't initialize
+	`subbook->stream_directory_name'.
+
+	* eb/text.h (EB_HOOK_STOP_CODE, EB_HOOK_BEGIN_BITMAP,
+	EB_HOOK_END_BITMAP, EB_HOOK_BEGIN_BMP, EB_HOOK_BEGIN_JPEG,
+	EB_HOOK_END_IMAGE, EB_HOOK_BEGIN_IN_BMP, EB_HOOK_BEGIN_IN_JPEG,
+	EB_HOOK_END_IN_IMAGE, EB_HOOK_BEGIN_WAVE, EB_HOOK_END_WAVE,
+	EB_HOOK_BEGIN_MPEG, EB_HOOK_END_MPEG): Define new text hooks.
+
+	* eb/text.c (SIZE_FEW_REST): Change the value from 16 to 40.
+
+2001-01-14  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h (EB_Binary_Context_Struct, EB_Binary_Context,
+	EB_Binary_Code): Defined.
+
+2001-01-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* m4/gettext.m4 (AM_GNU_GETTEXT): Set LC_ALL to `fr', and set LANGUAGE
+	to empty string.
+
+	* ebzip/ebzip.c (zip_epwing_book, unzip_epwing_book,
+	zipinfo_epwing_book): Fix filenames in error messages.
+
+2001-01-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* lib/strcasecmp.c (strncasecmp): Fix a bug that the function returns
+	wrong result when comparison length is 0.
+	* libebutils/strcasecmp.c (strncasecmp): Ditto.
+
+	* eb/Makefile.am (SUBDIRS): Don't use @POSUB@.
+
+2001-01-02  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.in (AC_ARG_WITH): Fix a bug that configure cannot
+	recognize --with-included-zlib option.  Reported by Kazuhiko.
+
+2001-01-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* po/Makefile.in.in, eb/po/Makefile.in.in: Use `ENABLE_NLS', not
+	`USE_NLS'.
+
+	* eb/Makefile.am (SUBDIRS): Set to `po', not `@POSUB@'.
+
+2000-12-31  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* intl/Makefile.am (noinst_HEADERS): Remove `libgettext.h'.  Add 
+	`libintl.h' instead.
+	* intl/Makefile.am (BUILT_SOURCES): Remove libintl.h.
+	* intl/Makefile.am (DISTCLEANFILES): Remove libintl.h.
+
+	* po/Makefile.in.in, eb/po/Makefile.in.in (ja_JP.SJIS): Remove the
+	target.
+
+	* gttest.po, gttest.mo: New files.
+	* Makefile.am (EXTRA_DIST): Add `gttest.mo' and `gttest.po'.
+	* Makefile.am (gttest.mo): New target.
+	* m4/gettext.m4: Fully revised.
+	* configure.in (AC_OUTPUT): Fix an output file name.
+
+2000-12-30  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* libebutils/Makefile.am (EXTRA_DIST): Delete `memset.c', `strerror.c'
+	and `strcasecmp.c'.  Automake recognizes them as distirbution files.
+
+2000-12-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Makefile.am (ACLOCAL_AMFLAGS): Defined.
+
+	* m4/ssizet.m4 (AX_TYPE_SSIZE_T): Renamed to `AC_TYPE_SSIZE_T'.
+	* m4/utimbuf.m4 (AX_HAVE_STRUCT_UTIMBUF): Renamed to
+	`AC_STRUCT_UTIMBUF'.
+	* configure.in: Use new macro names described above.
+
+	* m4/libtool.m4: New file.
+	(This file will be removed when a bug in libtool.m4 distributed
+	with Libtool is fixed.)
+	* m4/Makefile.am (EXTRA_DIST): Add `libtool.m4'.
+
+2000-12-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Use autoconf 2.49b, automake 1.4b, and libtool 1.3c (checkout
+	2000-12-18).
+	* depcomp: New file.
+
+	* configure.in: Call `AX_TYPE_SSIZE_T' instead of
+	`AC_CHECK_TYPE(ssize_t, int)'.
+
+	* lib/fakelog.c (fakelog): Use memcpy() instead of strcpy() to
+	expand `%m'.
+
+	* m4/Makefile.am, m4/eb3.m4, m4/gettext.m4, m4/lcmessage.m4,
+	m4/ssize_t.m4, m4/utimbuf.m4: New files.
+	* configure.in (AC_OUTPUT): Add `m4/Makefile.in'.
+	* Makefile.am (SUBDIRS): Add `m4'.
+
+	* acconfig.h, acinclude.m4: Removed.
+
+	* intl/Makefile.am, eb/Makefile.am, libebutils/Makefile.am,
+	ebfont/Makefile.am, ebinfo/Makefile.am, ebzip/Makefile.am,
+	doc/Makefile.am, doc-ja/Makefile.am:
+	Remove @MAKE_SET@.
+	
 2000-12-06  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.0alpha3.

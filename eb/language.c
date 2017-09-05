@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,24 +32,30 @@ eb_initialize_languages(book)
 {
     EB_Error_Code error_code;
     EB_Language *language;
-    EB_Zip zip;
-    int file = -1;
+    Zio zio;
+    Zio_Code zio_code;
     char language_path_name[PATH_MAX + 1];
     char buffer[EB_SIZE_PAGE];
     char *buffer_p;
     int i;
+
+    zio_initialize(&zio);
 
     /*
      * Open the language file.
      */
     if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_NONE, language_path_name) == 0) {
-	file = eb_zopen(&zip, language_path_name, EB_ZIP_NONE);
+	zio_code = ZIO_NONE;
     } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_EBZ, language_path_name) == 0) {
-	file = eb_zopen(&zip, language_path_name, EB_ZIP_EBZIP1);
+	zio_code = ZIO_EBZIP1;
+    } else {
+	error_code = EB_ERR_FAIL_OPEN_LANG;
+	goto failed;
     }
-    if (file < 0) {
+
+    if (zio_open(&zio, language_path_name, zio_code) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;
     }
@@ -57,7 +64,7 @@ eb_initialize_languages(book)
      * Get a character code of the book, and get the number of langueages
      * in the file.
      */
-    if (eb_zread(&zip, file, buffer, 16) != 16) {
+    if (zio_read(&zio, buffer, 16) != 16) {
 	error_code = EB_ERR_FAIL_READ_LANG;
 	goto failed;
     }
@@ -91,7 +98,7 @@ eb_initialize_languages(book)
     /*
      * Get languege names.
      */
-    if (eb_zread(&zip, file, buffer,
+    if (zio_read(&zio, buffer,
 	(EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count)
 	!= (EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count) {
 	error_code = EB_ERR_FAIL_READ_LANG;
@@ -107,16 +114,16 @@ eb_initialize_languages(book)
 	*(language->name + EB_MAX_LANGUAGE_NAME_LENGTH) = '\0';
     }
 
+    zio_finalize(&zio);
+
     return EB_SUCCESS;
 
     /*
      * An error occurs...
      */
   failed:
-    if (0 <= file) {
-	eb_zclose(&zip, file);
-	file = -1;
-    }
+    zio_close(&zio);
+    zio_finalize(&zio);
     if (book->languages != NULL) {
 	free(book->languages);
 	book->languages = NULL;
@@ -386,12 +393,14 @@ eb_set_language(book, language_code)
     EB_Language_Code language_code;
 {
     EB_Error_Code error_code;
-    EB_Zip zip;
+    Zio zio;
+    Zio_Code zio_code;
     EB_Language *language;
     char language_path_name[PATH_MAX + 1];
     char *message;
-    int file = -1;
     int i;
+
+    zio_initialize(&zio);
 
     /*
      * Lock the book.
@@ -444,12 +453,16 @@ eb_set_language(book, language_code)
      */
     if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_NONE, language_path_name) == 0) {
-	file = eb_zopen(&zip, language_path_name, EB_ZIP_NONE);
+	zio_code = ZIO_NONE;
     } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
 	EB_SUFFIX_EBZ, language_path_name) == 0) {
-	file = eb_zopen(&zip, language_path_name, EB_ZIP_EBZIP1);
+	zio_code = ZIO_EBZIP1;
+    } else {
+	error_code = EB_ERR_FAIL_OPEN_LANG;
+	goto failed;
     }
-    if (file < 0) {
+
+    if (zio_open(&zio, language_path_name, zio_code) < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;
     }
@@ -458,14 +471,14 @@ eb_set_language(book, language_code)
      * Read messages.
      * Appends '\0' to each message.
      */
-    if (eb_zlseek(&zip, file, language->location, SEEK_SET) < 0) {
+    if (zio_lseek(&zio, language->location, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_LANG;
 	goto failed;
     }
     for (i = 0, message = book->messages;
 	 i < language->message_count;
 	 i++, message += EB_MAX_MESSAGE_LENGTH + 2) {
-	if (eb_zread(&zip, file, message, EB_MAX_MESSAGE_LENGTH + 1)
+	if (zio_read(&zio, message, EB_MAX_MESSAGE_LENGTH + 1)
 	    != EB_MAX_MESSAGE_LENGTH + 1) {
 	    error_code = EB_ERR_FAIL_READ_LANG;
 	    goto failed;
@@ -486,21 +499,22 @@ eb_set_language(book, language_code)
     /*
      * Close the language file.
      */
-    eb_zclose(&zip, file);
+    zio_close(&zio);
 
     /*
      * Unlock the book.
      */
   succeeded:
     eb_unlock(&book->lock);
+    zio_finalize(&zio);
     return EB_SUCCESS;
 
     /*
      * An error occurs...
      */
   failed:
-    if (0 <= file)
-	eb_zclose(&zip, file);
+    zio_close(&zio);
+    zio_finalize(&zio);
     book->language_current = NULL;
     eb_unlock(&book->lock);
     return error_code;

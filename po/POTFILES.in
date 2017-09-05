@@ -1,6 +1,0 @@
-libebutils/ebutils.c
-libebutils/getopt.c
-ebfont/ebfont.c
-ebinfo/ebinfo.c
-ebzip/ebzip.c
-ebzip/ebzip1.c

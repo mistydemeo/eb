@@ -1,6 +1,7 @@
-# Makefile.in generated automatically by automake 1.4 from Makefile.am
+# Makefile.in generated automatically by automake 1.4b from Makefile.am
 
-# Copyright (C) 1994, 1995-8, 1999 Free Software Foundation, Inc.
+# Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000
+# Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -9,7 +10,6 @@
 # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
-
 
 SHELL = @SHELL@
 
@@ -32,8 +32,6 @@ mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
 
-DESTDIR =
-
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -46,9 +44,10 @@ AUTOMAKE = @AUTOMAKE@
 AUTOHEADER = @AUTOHEADER@
 
 INSTALL = @INSTALL@
-INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(AM_INSTALL_PROGRAM_FLAGS)
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_STRIP_FLAG =
 transform = @program_transform_name@
 
 NORMAL_INSTALL = :
@@ -57,13 +56,19 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
+
+@SET_MAKE@
 host_alias = @host_alias@
 host_triplet = @host@
+AMDEP = @AMDEP@
+AMTAR = @AMTAR@
 AS = @AS@
-CATALOGS = @CATALOGS@
-CATOBJEXT = @CATOBJEXT@
+AWK = @AWK@
 CC = @CC@
-DATADIRNAME = @DATADIRNAME@
+CPP = @CPP@
+CXX = @CXX@
+CXXCPP = @CXXCPP@
+DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 EBCONF_EBINCS = @EBCONF_EBINCS@
 EBCONF_EBLIBS = @EBCONF_EBLIBS@
@@ -71,62 +76,62 @@ EBCONF_INTLINCS = @EBCONF_INTLINCS@
 EBCONF_INTLLIBS = @EBCONF_INTLLIBS@
 EBCONF_ZLIBINCS = @EBCONF_ZLIBINCS@
 EBCONF_ZLIBLIBS = @EBCONF_ZLIBLIBS@
+ECHO = @ECHO@
+ENABLE_NLS = @ENABLE_NLS@
 ENABLE_PTHREAD = @ENABLE_PTHREAD@
 EXEEXT = @EXEEXT@
-GENCAT = @GENCAT@
-GMOFILES = @GMOFILES@
-GMSGFMT = @GMSGFMT@
-GT_NO = @GT_NO@
-GT_YES = @GT_YES@
-INCLUDE_LOCALE_H = @INCLUDE_LOCALE_H@
-INSTOBJEXT = @INSTOBJEXT@
 INTLDEPS = @INTLDEPS@
 INTLINCS = @INTLINCS@
 INTLLIBS = @INTLLIBS@
-INTLOBJS = @INTLOBJS@
 LIBEB_VERSION_INFO = @LIBEB_VERSION_INFO@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAILING_ADDRESS = @MAILING_ADDRESS@
 MAKEINFO = @MAKEINFO@
-MKINSTALLDIRS = @MKINSTALLDIRS@
 MSGFMT = @MSGFMT@
+MSGMERGE = @MSGMERGE@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PERL = @PERL@
-POFILES = @POFILES@
-POSUB = @POSUB@
 PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
 PTHREAD_CPPFLAGS = @PTHREAD_CPPFLAGS@
 PTHREAD_LDFLAGS = @PTHREAD_LDFLAGS@
 RANLIB = @RANLIB@
-USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
-USE_NLS = @USE_NLS@
+STRIP = @STRIP@
 VERSION = @VERSION@
+XGETTEXT = @XGETTEXT@
 ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
-l = @l@
+install_sh = @install_sh@
 localedir = @localedir@
 
-SUBDIRS = @POSUB@
+
+SUBDIRS = po
 
 lib_LTLIBRARIES = libeb.la
-pkginclude_HEADERS = appendix.h defs.h eb.h error.h font.h language.h 	libintl_r.h text.h
+pkginclude_HEADERS = appendix.h binary.h defs.h eb.h error.h font.h \
+	language.h libintl_r.h text.h zio.h
 
 noinst_HEADERS = ebconfig.h
 
 INCLUDES = -DEB_BUILD_LIBRARY $(INTLINCS) $(ZLIBINCS)
 
-libeb_la_SOURCES = appendix.c appsub.c bitmap.c book.c copyright.c    eb.c endword.c error.c exactword.c filename.c font.c graphic.c hook.c    jacode.c keyword.c language.c libintl_r.c lock.c match.c menu.c    memmove.c message.c multi.c narwalt.c narwfont.c search.c setword.c    stopcode.c strcasecmp.c subbook.c text.c uint.c unzebzip.c unzepwing.c    widealt.c widefont.c word.c zio.c
+libeb_la_SOURCES = appendix.c appsub.c bcd.c binary.c bitmap.c book.c \
+   copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
+   hook.c jacode.c keyword.c language.c libintl_r.c lock.c match.c menu.c \
+   memmove.c message.c multi.c narwalt.c narwfont.c search.c setword.c \
+   stopcode.c strcasecmp.c subbook.c text.c widealt.c widefont.c word.c zio.c
 
 libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
 
 EXTRA_DIST = internal.h.in
-CLEANFILES = stamp-internal-h stamp-widealt-h stamp-widefont-h    internal.h widealt.c widefont.c
+CLEANFILES = stamp-internal-h stamp-widealt-h stamp-widefont-h \
+   internal.h widealt.c widefont.c
 
 BUILT_SOURCES = internal.h widealt.c widefont.c
+subdir = eb
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -138,34 +143,38 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libeb_la_LIBADD = 
-libeb_la_OBJECTS =  appendix.lo appsub.lo bitmap.lo book.lo copyright.lo \
-eb.lo endword.lo error.lo exactword.lo filename.lo font.lo graphic.lo \
-hook.lo jacode.lo keyword.lo language.lo libintl_r.lo lock.lo match.lo \
-menu.lo memmove.lo message.lo multi.lo narwalt.lo narwfont.lo search.lo \
-setword.lo stopcode.lo strcasecmp.lo subbook.lo text.lo uint.lo \
-unzebzip.lo unzepwing.lo widealt.lo widefont.lo word.lo zio.lo
-CFLAGS = @CFLAGS@
+am_libeb_la_OBJECTS =  appendix.lo appsub.lo bcd.lo binary.lo bitmap.lo \
+book.lo copyright.lo eb.lo endword.lo error.lo exactword.lo filename.lo \
+font.lo hook.lo jacode.lo keyword.lo language.lo libintl_r.lo lock.lo \
+match.lo menu.lo memmove.lo message.lo multi.lo narwalt.lo narwfont.lo \
+search.lo setword.lo stopcode.lo strcasecmp.lo subbook.lo text.lo \
+widealt.lo widefont.lo word.lo zio.lo
+libeb_la_OBJECTS =  $(am_libeb_la_OBJECTS)
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CFLAGS = @CFLAGS@
 CCLD = $(CC)
-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(LDFLAGS) -o $@
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
+DIST_SOURCES =  $(libeb_la_SOURCES)
 HEADERS =  $(noinst_HEADERS) $(pkginclude_HEADERS)
 
-DIST_COMMON =  Makefile.am Makefile.in
+depcomp = 
+DIST_COMMON =  $(noinst_HEADERS) $(pkginclude_HEADERS) Makefile.am \
+Makefile.in
 
 
-DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
 GZIP_ENV = --best
+DIST_SUBDIRS =  $(SUBDIRS)
 SOURCES = $(libeb_la_SOURCES)
-OBJECTS = $(libeb_la_OBJECTS)
+OBJECTS = $(am_libeb_la_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
-.SUFFIXES: .S .c .lo .o .obj .s
+.SUFFIXES: .c .lo .o .obj
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps eb/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --ignore-deps eb/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -186,30 +195,17 @@ install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
 	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "$(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p"; \
-	    $(LIBTOOL)  --mode=install $(INSTALL) $$p $(DESTDIR)$(libdir)/$$p; \
+	    echo " $(LIBTOOL)  --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$p"; \
+	    $(LIBTOOL)  --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$p; \
 	  else :; fi; \
 	done
 
 uninstall-libLTLIBRARIES:
 	@$(NORMAL_UNINSTALL)
-	list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+	  echo " $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p"; \
 	  $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
 	done
-
-.c.o:
-	$(COMPILE) -c $<
-
-# FIXME: We should only use cygpath when building on Windows,
-# and only if it is available.
-.c.obj:
-	$(COMPILE) -c `cygpath -w $<`
-
-.s.o:
-	$(COMPILE) -c $<
-
-.S.o:
-	$(COMPILE) -c $<
 
 mostlyclean-compile:
 	-rm -f *.o core *.core
@@ -221,15 +217,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 maintainer-clean-compile:
-
-.c.lo:
-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
-
-.s.lo:
-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
-
-.S.lo:
-	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -243,20 +230,29 @@ maintainer-clean-libtool:
 
 libeb.la: $(libeb_la_OBJECTS) $(libeb_la_DEPENDENCIES)
 	$(LINK) -rpath $(libdir) $(libeb_la_LDFLAGS) $(libeb_la_OBJECTS) $(libeb_la_LIBADD) $(LIBS)
+.c.o:
+	$(COMPILE) -c $<
+.c.obj:
+	$(COMPILE) -c `cygpath -w $<`
+.c.lo:
+	$(LTCOMPILE) -c -o $@ $<
 
 install-pkgincludeHEADERS: $(pkginclude_HEADERS)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(pkgincludedir)
 	@list='$(pkginclude_HEADERS)'; for p in $$list; do \
 	  if test -f "$$p"; then d= ; else d="$(srcdir)/"; fi; \
-	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p"; \
-	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$p; \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$f"; \
+	  $(INSTALL_DATA) $$d$$p $(DESTDIR)$(pkgincludedir)/$$f; \
 	done
 
 uninstall-pkgincludeHEADERS:
 	@$(NORMAL_UNINSTALL)
-	list='$(pkginclude_HEADERS)'; for p in $$list; do \
-	  rm -f $(DESTDIR)$(pkgincludedir)/$$p; \
+	@list='$(pkginclude_HEADERS)'; for p in $$list; do \
+	  f="`echo $$p | sed -e 's|^.*/||'`"; \
+	  echo " rm -f $(DESTDIR)$(pkgincludedir)/$$f"; \
+	  rm -f $(DESTDIR)$(pkgincludedir)/$$f; \
 	done
 
 # This directory's subdirectories are mostly independent; you can cd
@@ -265,8 +261,6 @@ uninstall-pkgincludeHEADERS:
 # (1) if the variable is set in `config.status', edit `config.status'
 #     (which will cause the Makefiles to be regenerated when you run `make');
 # (2) otherwise, pass the desired values on the `make' command line.
-
-@SET_MAKE@
 
 all-recursive install-data-recursive install-exec-recursive \
 installdirs-recursive install-recursive uninstall-recursive  \
@@ -293,11 +287,16 @@ mostlyclean-recursive clean-recursive distclean-recursive \
 maintainer-clean-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
 	dot_seen=no; \
-	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
-	  rev="$$subdir $$rev"; \
-	  test "$$subdir" = "." && dot_seen=yes; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	rev=''; for subdir in $$list; do \
+	  if test "$$subdir" = "."; then :; else \
+	    rev="$$subdir $$rev"; \
+	  fi; \
 	done; \
-	test "$$dot_seen" = "no" && rev=". $$rev"; \
+	rev="$$rev ."; \
 	target=`echo $@ | sed s/-recursive//`; \
 	for subdir in $$rev; do \
 	  echo "Making $$target in $$subdir"; \
@@ -316,15 +315,17 @@ tags-recursive:
 
 tags: TAGS
 
-ID: $(HEADERS) $(SOURCES) $(LISP)
-	list='$(SOURCES) $(HEADERS)'; \
-	unique=`for i in $$list; do echo $$i; done | \
-	  awk '    { files[$$0] = 1; } \
+ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
+	list='$(SOURCES) $(HEADERS) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
-	here=`pwd` && cd $(srcdir) \
-	  && mkid -f$$here/ID $$unique $(LISP)
+	mkid -fID $$unique $(LISP)
 
-TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
 	list='$(SUBDIRS)'; for subdir in $$list; do \
@@ -332,12 +333,19 @@ TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) $(LISP)
 	    test -f $$subdir/TAGS && tags="$$tags -i $$here/$$subdir/TAGS"; \
    fi; \
 	done; \
-	list='$(SOURCES) $(HEADERS)'; \
-	unique=`for i in $$list; do echo $$i; done | \
-	  awk '    { files[$$0] = 1; } \
+	list='$(SOURCES) $(HEADERS) $(TAGS_FILES)'; \
+	unique=`for i in $$list; do \
+	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
+	  done | \
+	  $(AWK) '    { files[$$0] = 1; } \
 	       END { for (i in files) print i; }'`; \
 	test -z "$(ETAGS_ARGS)$$unique$(LISP)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags  $$unique $(LISP) -o $$here/TAGS)
+	  || etags $(ETAGS_ARGS) $$tags  $$unique $(LISP)
+
+GTAGS:
+	here=`CDPATH=: && cd $(top_builddir) && pwd` \
+	  && cd $(top_srcdir) \
+	  && gtags -i $$here
 
 mostlyclean-tags:
 
@@ -350,17 +358,16 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = eb
-
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$/$$file $(distdir)/$$file; \
+	    cp -pR $$d/$$file $(distdir) \
+	    || exit 1; \
 	  else \
 	    test -f $(distdir)/$$file \
-	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
-	    || cp -p $$d/$$file $(distdir)/$$file || :; \
+	    || cp -p $$d/$$file $(distdir)/$$file \
+	    || exit 1; \
 	  fi; \
 	done
 	for subdir in $(SUBDIRS); do \
@@ -368,7 +375,6 @@ distdir: $(DISTFILES)
 	    test -d $(distdir)/$$subdir \
 	    || mkdir $(distdir)/$$subdir \
 	    || exit 1; \
-	    chmod 777 $(distdir)/$$subdir; \
 	    (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) top_distdir=../$(top_distdir) distdir=../$(distdir)/$$subdir distdir) \
 	      || exit 1; \
 	  fi; \
@@ -381,6 +387,9 @@ check-am: all-am
 check: check-recursive
 installcheck-am:
 installcheck: installcheck-recursive
+all-recursive-am: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+
 install-exec-am: install-libLTLIBRARIES
 install-exec: install-exec-recursive
 
@@ -393,9 +402,9 @@ install: install-recursive
 uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgincludeHEADERS
 uninstall: uninstall-recursive
 all-am: Makefile $(LTLIBRARIES) $(HEADERS)
-all-redirect: all-recursive
+all-redirect: all-recursive-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
 installdirs: installdirs-recursive
 installdirs-am:
 	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(pkgincludedir)
@@ -411,6 +420,7 @@ distclean-generic:
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
+	-rm -f Makefile.in
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 mostlyclean-am:  mostlyclean-libLTLIBRARIES mostlyclean-compile \
 		mostlyclean-libtool mostlyclean-tags \
@@ -445,21 +455,20 @@ uninstall-libLTLIBRARIES install-libLTLIBRARIES mostlyclean-compile \
 distclean-compile clean-compile maintainer-clean-compile \
 mostlyclean-libtool distclean-libtool clean-libtool \
 maintainer-clean-libtool uninstall-pkgincludeHEADERS \
-install-pkgincludeHEADERS install-data-recursive \
-uninstall-data-recursive install-exec-recursive \
+install-pkgincludeHEADERS install-recursive uninstall-recursive \
+install-data-recursive uninstall-data-recursive install-exec-recursive \
 uninstall-exec-recursive installdirs-recursive uninstalldirs-recursive \
 all-recursive check-recursive installcheck-recursive info-recursive \
 dvi-recursive mostlyclean-recursive distclean-recursive clean-recursive \
 maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir info-am info \
-dvi-am dvi check check-am installcheck-am installcheck install-exec-am \
-install-exec install-data-am install-data install-am install \
-uninstall-am uninstall all-redirect all-am all installdirs-am \
-installdirs mostlyclean-generic distclean-generic clean-generic \
-maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+dvi-am dvi check check-am installcheck-am installcheck all-recursive-am \
+install-exec-am install-exec install-data-am install-data install-am \
+install uninstall-am uninstall all-redirect all-am all install-strip \
+installdirs-am installdirs mostlyclean-generic distclean-generic \
+clean-generic maintainer-clean-generic clean mostlyclean distclean \
+maintainer-clean
 
-
-@SET_MAKE@
 
 internal.h: stamp-internal-h
 stamp-internal-h: internal.h.in Makefile
@@ -486,146 +495,136 @@ stamp-widefont-h: narwfont.c Makefile
 	@echo timestamp > stamp-widefont-h
 
 ### *.o dependencies ###
-appendix.o: appendix.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- appendix.h internal.h defs.h
-appsub.o: appsub.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h appendix.h
-bitmap.o: bitmap.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h font.h
-book.o: book.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h font.h language.h
+appendix.o: appendix.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h appendix.h internal.h
+appsub.o: appsub.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h appendix.h
+bcd.o: bcd.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+binary.o: binary.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h binary.h
+bitmap.o: bitmap.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h font.h
+book.o: book.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h font.h language.h
 copyright.o: copyright.c ebconfig.h ../config.h libintl_r.h eb.h \
- error.h internal.h defs.h
-eb.o: eb.c ebconfig.h ../config.h libintl_r.h eb.h error.h internal.h \
- defs.h
-endword.o: endword.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-error.o: error.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
+ defs.h zio.h error.h internal.h
+eb.o: eb.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+endword.o: endword.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h
+error.o: error.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
 exactword.o: exactword.c ebconfig.h ../config.h libintl_r.h eb.h \
- error.h internal.h defs.h
-filename.o: filename.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-font.o: font.c ebconfig.h ../config.h libintl_r.h eb.h error.h font.h \
- internal.h defs.h
-graphic.o: graphic.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-hook.o: hook.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h text.h appendix.h
+ defs.h zio.h error.h internal.h
+filename.o: filename.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h
+font.o: font.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h font.h internal.h
+hook.o: hook.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h text.h appendix.h
 jacode.o: jacode.c ebconfig.h ../config.h libintl_r.h
-keyword.o: keyword.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-language.o: language.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h language.h
+keyword.o: keyword.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h
+language.o: language.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h language.h
 libintl_r.o: libintl_r.c ../config.h
-lock.o: lock.c ebconfig.h ../config.h libintl_r.h defs.h
+lock.o: lock.c ebconfig.h ../config.h libintl_r.h defs.h zio.h
 match.o: match.c ebconfig.h ../config.h libintl_r.h
 memmove.o: memmove.c ../config.h
-menu.o: menu.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-message.o: message.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h language.h
-multi.o: multi.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-narwalt.o: narwalt.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- appendix.h internal.h defs.h
-narwfont.o: narwfont.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- font.h internal.h defs.h
-search.o: search.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h text.h
-setword.o: setword.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-stopcode.o: stopcode.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h appendix.h text.h
+menu.o: menu.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+message.o: message.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h language.h
+multi.o: multi.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+narwalt.o: narwalt.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h appendix.h internal.h
+narwfont.o: narwfont.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h font.h internal.h
+search.o: search.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h text.h
+setword.o: setword.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h
+stopcode.o: stopcode.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h appendix.h text.h
 strcasecmp.o: strcasecmp.c ../config.h
-subbook.o: subbook.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- font.h internal.h defs.h
-text.o: text.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h text.h
+subbook.o: subbook.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h font.h internal.h
+text.o: text.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h text.h
 texttable.o: texttable.c ../config.h
-uint.o: uint.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-unzebzip.o: unzebzip.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-unzepwing.o: unzepwing.c ebconfig.h ../config.h libintl_r.h eb.h \
- error.h internal.h defs.h
-unzsebxa.o: unzsebxa.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-word.o: word.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-zio.o: zio.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
+uint.o: uint.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+word.o: word.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+zio.o: zio.c ../config.h zio.h
 
 ### *.lo dependencies ###
-appendix.lo: appendix.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- appendix.h internal.h defs.h
-appsub.lo: appsub.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h appendix.h
-bitmap.lo: bitmap.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h font.h
-book.lo: book.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h font.h language.h
+appendix.lo: appendix.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h appendix.h internal.h
+appsub.lo: appsub.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h appendix.h
+bcd.lo: bcd.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+binary.lo: binary.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h binary.h
+bitmap.lo: bitmap.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h font.h
+book.lo: book.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h font.h language.h
 copyright.lo: copyright.c ebconfig.h ../config.h libintl_r.h eb.h \
- error.h internal.h defs.h
-eb.lo: eb.c ebconfig.h ../config.h libintl_r.h eb.h error.h internal.h \
- defs.h
-endword.lo: endword.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-error.lo: error.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
+ defs.h zio.h error.h internal.h
+eb.lo: eb.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+endword.lo: endword.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h
+error.lo: error.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
 exactword.lo: exactword.c ebconfig.h ../config.h libintl_r.h eb.h \
- error.h internal.h defs.h
-filename.lo: filename.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-font.lo: font.c ebconfig.h ../config.h libintl_r.h eb.h error.h font.h \
- internal.h defs.h
-graphic.lo: graphic.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-hook.lo: hook.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h text.h appendix.h
+ defs.h zio.h error.h internal.h
+filename.lo: filename.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h
+font.lo: font.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h font.h internal.h
+hook.lo: hook.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h text.h appendix.h
 jacode.lo: jacode.c ebconfig.h ../config.h libintl_r.h
-keyword.lo: keyword.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-language.lo: language.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h language.h
+keyword.lo: keyword.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h
+language.lo: language.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h language.h
 libintl_r.lo: libintl_r.c ../config.h
-lock.lo: lock.c ebconfig.h ../config.h libintl_r.h defs.h
+lock.lo: lock.c ebconfig.h ../config.h libintl_r.h defs.h zio.h
 match.lo: match.c ebconfig.h ../config.h libintl_r.h
 memmove.lo: memmove.c ../config.h
-menu.lo: menu.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-message.lo: message.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h language.h
-multi.lo: multi.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-narwalt.lo: narwalt.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- appendix.h internal.h defs.h
-narwfont.lo: narwfont.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- font.h internal.h defs.h
-search.lo: search.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h text.h
-setword.lo: setword.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-stopcode.lo: stopcode.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h appendix.h text.h
+menu.lo: menu.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+message.lo: message.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h language.h
+multi.lo: multi.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+narwalt.lo: narwalt.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h appendix.h internal.h
+narwfont.lo: narwfont.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h font.h internal.h
+search.lo: search.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h text.h
+setword.lo: setword.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h
+stopcode.lo: stopcode.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h internal.h appendix.h text.h
 strcasecmp.lo: strcasecmp.c ../config.h
-subbook.lo: subbook.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- font.h internal.h defs.h
-text.lo: text.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h text.h
+subbook.lo: subbook.c ebconfig.h ../config.h libintl_r.h eb.h defs.h \
+ zio.h error.h font.h internal.h
+text.lo: text.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h text.h
 texttable.lo: texttable.c ../config.h
-uint.lo: uint.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-unzebzip.lo: unzebzip.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-unzepwing.lo: unzepwing.c ebconfig.h ../config.h libintl_r.h eb.h \
- error.h internal.h defs.h
-unzsebxa.lo: unzsebxa.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-word.lo: word.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
-zio.lo: zio.c ebconfig.h ../config.h libintl_r.h eb.h error.h \
- internal.h defs.h
+uint.lo: uint.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+word.lo: word.c ebconfig.h ../config.h libintl_r.h eb.h defs.h zio.h \
+ error.h internal.h
+zio.lo: zio.c ../config.h zio.h
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,16 +119,14 @@ eb_presearch_word(book, context)
 	/*
 	 * Seek and read a page.
 	 */
-	if (eb_zlseek(&book->subbook_current->text_zip, 
-	    book->subbook_current->text_file,
+	if (zio_lseek(&book->subbook_current->text_zio, 
 	    (off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	    cache_book_code = EB_BOOK_NONE;
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
 	}
-	if (eb_zread(&book->subbook_current->text_zip,
-	    book->subbook_current->text_file, cache_buffer, EB_SIZE_PAGE)
-	    != EB_SIZE_PAGE) {
+	if (zio_read(&book->subbook_current->text_zio, cache_buffer,
+	    EB_SIZE_PAGE) != EB_SIZE_PAGE) {
 	    cache_book_code = EB_BOOK_NONE;
 	    error_code = EB_ERR_FAIL_READ_TEXT;
 	    goto failed;
@@ -417,15 +416,13 @@ eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
 	 * must not update the context!
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
-	    if (eb_zlseek(&book->subbook_current->text_zip,
-		book->subbook_current->text_file,
+	    if (zio_lseek(&book->subbook_current->text_zio,
 		(off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
-	    if (eb_zread(&book->subbook_current->text_zip,
-		book->subbook_current->text_file, cache_buffer, EB_SIZE_PAGE)
-		!= EB_SIZE_PAGE) {
+	    if (zio_read(&book->subbook_current->text_zio,
+		cache_buffer, EB_SIZE_PAGE) != EB_SIZE_PAGE) {
 		error_code = EB_ERR_FAIL_READ_TEXT;
 		goto failed;
 	    }
@@ -740,15 +737,13 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
 	 * must not update the context!
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
-	    if (eb_zlseek(&book->subbook_current->text_zip,
-		book->subbook_current->text_file,
+	    if (zio_lseek(&book->subbook_current->text_zio,
 		(off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
-	    if (eb_zread(&book->subbook_current->text_zip,
-		book->subbook_current->text_file, cache_buffer, EB_SIZE_PAGE)
-		!= EB_SIZE_PAGE) {
+	    if (zio_read(&book->subbook_current->text_zio, cache_buffer,
+		EB_SIZE_PAGE) != EB_SIZE_PAGE) {
 		error_code = EB_ERR_FAIL_READ_TEXT;
 		goto failed;
 	    }
@@ -1069,15 +1064,13 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
 	 * must not update the context!
 	 */
 	if (cache_book_code != book->code || cache_page != context->page) {
-	    if (eb_zlseek(&book->subbook_current->text_zip,
-		book->subbook_current->text_file,
+	    if (zio_lseek(&book->subbook_current->text_zio,
 		(off_t)(context->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
-	    if (eb_zread(&book->subbook_current->text_zip,
-		book->subbook_current->text_file, cache_buffer, EB_SIZE_PAGE)
-		!= EB_SIZE_PAGE) {
+	    if (zio_read(&book->subbook_current->text_zio, cache_buffer,
+		EB_SIZE_PAGE) != EB_SIZE_PAGE) {
 		error_code = EB_ERR_FAIL_READ_TEXT;
 		goto failed;
 	    }

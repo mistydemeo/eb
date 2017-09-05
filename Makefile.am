@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I $(srcdir)/m4
+
 if INCLUDED_ZLIB
 ZLIB_SUBDIR = zlib
 else
@@ -5,9 +7,10 @@ ZLIB_SUBDIR =
 endif
 
 SUBDIRS = $(ZLIB_SUBDIR) intl eb libebutils ebappendix ebfont ebinfo \
-   ebrefile ebzip doc doc-ja po
+   ebrefile ebzip doc doc-ja po m4
 
-EXTRA_DIST = ChangeLog.0 INSTALL-ja README-ja move-if-change eb.conf.in
+EXTRA_DIST = ChangeLog.0 INSTALL-ja README-ja move-if-change eb.conf.in \
+   gttest.mo gttest.po
 CLEANFILES = eb.conf
 
 appendixdir = $(pkgdatadir)/appendix
@@ -33,4 +36,5 @@ eb.conf: eb.conf.in Makefile
 	chmod 644 $@
 	rm -f $@.tmp
 
-
+gttest.mo: gttest.po
+	$(MSGFMT) -o gttest.mo gttest.po

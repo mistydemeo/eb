@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000, 01  
+ *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -975,7 +976,7 @@ character=0x%04x\n",
 		goto failed;
 	    }
 	    (image_formats[image].function)(bitmap_data, image_width,
-		image_height, bitmap_data, &image_size);
+		image_height, image_data, &image_size);
 	    if (save_image_file(file_name, image_data, image_size) < 0)
 		goto failed;
 
@@ -1039,7 +1040,7 @@ character=0x%04x\n",
 		goto failed;
 	    }
 	    (image_formats[image].function)(bitmap_data, image_width,
-		image_height, bitmap_data, &image_size);
+		image_height, image_data, &image_size);
 	    if (save_image_file(file_name, image_data, image_size) < 0)
 		goto failed;
 

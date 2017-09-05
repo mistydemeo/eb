@@ -4,7 +4,7 @@
 # Created: 1993-05-16
 # Public domain
 
-# $Id: mkinstalldirs,v 1.1.1.1 2000/10/20 02:10:15 m-kasahr Exp $
+# $Id: mkinstalldirs,v 1.2 2000/12/22 14:10:27 m-kasahr Exp $
 
 errstatus=0
 

@@ -14,7 +14,7 @@
 @ifinfo
 ebrefile: CD-ROM 書籍のカタログファイルの再構築ツール, 笠原基之
 
-Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
+Copyright @copyright{} 1998, 99, 2000, 01  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice

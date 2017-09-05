@@ -8,7 +8,7 @@ END-INFO-DIR-ENTRY
 
    ebrefile: CD-ROM 書籍のカタログファイルの再構築ツール, 笠原基之
 
-   Copyright (C) 1998, 1999  Motoyuki Kasahara
+   Copyright (C) 1998, 99, 2000, 01  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.0alpha3 版です。 EB ライブラリバージョン 3.0alpha3 に
+   この文書は第 3.0alpha4 版です。 EB ライブラリバージョン 3.0alpha4 に
 対応しています。
 
 * Menu:
@@ -92,7 +92,7 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 使えるものであるとは限りません。 `ebrefile' は、CD-ROM 書籍のあるファ
 イルの内容に変更を加えます。 ご注意下さい。
 
-   この文書は第 3.0alpha3 版です。 EB ライブラリバージョン 3.0alpha3 に
+   この文書は第 3.0alpha4 版です。 EB ライブラリバージョン 3.0alpha4 に
 対応しています。
 
 
@@ -342,12 +342,12 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 
 
 Tag Table:
-Node: Top1026
-Node: Introduction1559
-Node: Invoking ebrefile3714
-Node: Select Subbooks4408
-Node: Adjust Filename8021
-Node: Combination with ebzip9867
-Node: Summary of Options11088
+Node: Top1034
+Node: Introduction1567
+Node: Invoking ebrefile3722
+Node: Select Subbooks4416
+Node: Adjust Filename8029
+Node: Combination with ebzip9875
+Node: Summary of Options11096
 
 End Tag Table
