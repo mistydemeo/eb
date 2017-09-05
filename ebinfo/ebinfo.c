@@ -215,8 +215,8 @@ output_information(book_path, multi_flag)
     EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
     EB_Font_Code font_list[EB_MAX_FONTS];
     char title[EB_MAX_TITLE_LENGTH + 1];
-    char directory[EB_MAX_BASE_NAME_LENGTH + 1];
-    int font_start, font_end;
+    char directory[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+    int font_height, font_start, font_end;
     int subbook_count;
     int font_count;
     int i, j;
@@ -333,8 +333,11 @@ output_information(book_path, multi_flag)
 		eb_error_message(error_code));
 	    fflush(stderr);
 	} else {
-	    for (j = 0; j < font_count; j++)
-		printf("%d ", (int)font_list[j]);
+	    for (j = 0; j < font_count; j++) {
+		error_code = eb_font_height2(font_list[j], &font_height);
+		if (error_code == EB_SUCCESS)
+		    printf("%d ", font_height);
+	    }
 	    fputc('\n', stdout);
 	}
 

@@ -136,54 +136,6 @@ output_version()
 
 
 /*
- * Parse an argument to option `--case (-c)'.
- * If the argument is valid form, 0 is returned.
- * Otherwise -1 is returned.
- */
-int
-parse_case_argument(argument, fcase)
-    const char *argument;
-    EB_Case_Code *fcase;
-{
-    if (strcasecmp(argument, "upper") == 0)
-	*fcase = EB_CASE_UPPER;
-    else if (strcasecmp(argument, "lower") == 0)
-	*fcase = EB_CASE_LOWER;
-    else {
-	fprintf(stderr, _("%s: unknown file name case `%s'\n"),
-	    invoked_name, argument);
-	exit(1);
-    }
-}
-
-
-/*
- * Parse an argument to option `--suffix (-s)'.
- * If the argument is valid form, 0 is returned.
- * Otherwise -1 is returned.
- */
-int
-parse_suffix_argument(argument, fsuffix)
-    const char *argument;
-    EB_Suffix_Code *fsuffix;
-{
-    if (strcasecmp(argument, "none") == 0)
-	*fsuffix = EB_SUFFIX_NONE;
-    else if (strcasecmp(argument, "dot") == 0)
-	*fsuffix = EB_SUFFIX_DOT;
-    else if (strcasecmp(argument, "version") == 0)
-	*fsuffix = EB_SUFFIX_VERSION;
-    else if (strcasecmp(argument, "both") == 0)
-	*fsuffix = EB_SUFFIX_BOTH;
-    else {
-	fprintf(stderr, _("%s: unknown file name suffix `%s'\n"),
-	    invoked_name, argument);
-	exit(1);
-    }
-}
-
-
-/*
  * Parse an argument to option `--subbook (-S)'.
  * If the argument is valid form, 0 is returned.
  * Otherwise -1 is returned.
@@ -191,11 +143,11 @@ parse_suffix_argument(argument, fsuffix)
 int
 parse_subbook_name_argument(argument, name_list, name_count)
     const char *argument;
-    char name_list[][EB_MAX_BASE_NAME_LENGTH + 1];
+    char name_list[][EB_MAX_DIRECTORY_NAME_LENGTH + 1];
     int *name_count;
 {
     const char *argument_p = argument;
-    char name[EB_MAX_BASE_NAME_LENGTH + 1];
+    char name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
     char *name_p;
     int i;
 
@@ -215,7 +167,7 @@ parse_subbook_name_argument(argument, name_list, name_count)
 	i = 0;
 	name_p = name;
 	while (*argument_p != ',' && *argument_p != '\0'
-	    && i < EB_MAX_BASE_NAME_LENGTH) {
+	    && i < EB_MAX_DIRECTORY_NAME_LENGTH) {
 		*name_p = toupper(*argument_p);
 	    i++;
 	    name_p++;
@@ -261,7 +213,7 @@ find_subbook(book, directory)
 {
     EB_Error_Code error_code;
     EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
-    char directory2[EB_MAX_BASE_NAME_LENGTH + 1];
+    char directory2[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
     int subbook_count;
     int i;
 
@@ -287,63 +239,6 @@ find_subbook(book, directory)
     fflush(stderr);
 
     return EB_SUBBOOK_INVALID;
-}
-
-
-/*
- * Adjust case and suffix of a file name.
- *
- * `file_name' is a file name to be adjusted.
- * Upon return, `file_name' are converted to upper or lower case,
- * and a suffix is added according with `fcase' and 'fsuffix'.
- */
-void
-fix_file_name(file_name, fcase, fsuffix)
-    char *file_name;
-    EB_Case_Code fcase;
-    EB_Suffix_Code fsuffix;
-{
-    char *p;
-    char *rslash;
-    int have_dot;
-
-    /*
-     * Check whether `file_name' contains `.', or not.
-     */
-    rslash = strrchr(file_name, '/');
-    if (rslash == NULL)
-	rslash = file_name;
-    have_dot = (strchr(rslash, '.') != NULL);
-
-    /*
-     * Add a suffix.
-     */
-    if (!have_dot && (fsuffix == EB_SUFFIX_DOT || fsuffix == EB_SUFFIX_BOTH))
-	strcat(file_name, ".");
-    if (fsuffix == EB_SUFFIX_VERSION || fsuffix == EB_SUFFIX_BOTH)
-	strcat(file_name, ";1");
-
-    /*
-     * Convert characters in the file name to upper or lower case.
-     */
-    if (fcase == EB_CASE_UPPER) {
-	for (p = file_name; *p != '\0'; p++) {
-	    if (islower(*p))
-		*p = toupper(*p);
-	}
-    } else {
-	for (p = file_name; *p != '\0'; p++) {
-	    if (isupper(*p))
-		*p = tolower(*p);
-	}
-    }
-
-#ifdef DOS_FILE_PATH
-    for (p = file_name; *p != '\0'; p++) {
-	if (*p == '/')
-	    *p = '\\';
-    }
-#endif
 }
 
 

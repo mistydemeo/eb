@@ -37,6 +37,23 @@
 #include <limits.h>
 #endif
 
+#if HAVE_DIRENT_H
+#include <dirent.h>
+#define NAMLEN(dirent) strlen((dirent)->d_name)
+#else /* not HAVE_DIRENT_H */
+#define dirent direct
+#define NAMLEN(dirent) (dirent)->d_namlen
+#if HAVE_SYS_NDIR_H
+#include <sys/ndir.h>
+#endif /* HAVE_SYS_NDIR_H */
+#if HAVE_SYS_DIR_H
+#include <sys/dir.h>
+#endif /* HAVE_SYS_DIR_H */
+#if HAVE_NDIR_H
+#include <ndir.h>
+#endif /* HAVE_NDIR_H */
+#endif /* not HAVE_DIRENT_H */
+
 #ifdef ENABLE_PTHREAD
 #include <pthread.h>
 #endif
@@ -103,332 +120,54 @@ char *memset();
 #endif /* not MAXPATHLEN */
 #endif /* not PATH_MAX */
 
-/*
- * Unexported functions.
- */
-static EB_Error_Code eb_catalog_file_name_internal EB_P((const char *, size_t,
-    EB_Disc_Code *, EB_Case_Code *, EB_Suffix_Code *));
-static EB_Error_Code eb_canonicalize_file_name_internal EB_P((char *));
-static void eb_fix_file_name_internal EB_P((char *, size_t, EB_Case_Code,
-    EB_Suffix_Code));
-
-/*
- * Inspect file name mode and disctype of `book'.
- */
-EB_Error_Code
-eb_catalog_file_name(book)
-    EB_Book *book;
-{
-    EB_Error_Code error_code;
-
-    error_code = eb_catalog_file_name_internal(book->path, book->path_length,
-	&book->disc_code, &book->case_code, &book->suffix_code);
-    if (error_code != EB_SUCCESS)
-	goto failed;
-
-    return EB_SUCCESS;
-
-    /*
-     * An error occurs...
-     */
-  failed:
-    return EB_ERR_FAIL_OPEN_CAT;
-}
-
-
-/*
- * Inspect file name mode and disctype of `appendix'.
- */
-EB_Error_Code
-eb_appendix_catalog_file_name(appendix)
-    EB_Appendix *appendix;
-{
-    EB_Error_Code error_code;
-
-    error_code = eb_catalog_file_name_internal(appendix->path,
-	appendix->path_length, &appendix->disc_code, &appendix->case_code,
-	&appendix->suffix_code);
-    if (error_code != EB_SUCCESS)
-	goto failed;
-
-    return EB_SUCCESS;
-
-    /*
-     * An error occurs...
-     */
-  failed:
-    return EB_ERR_FAIL_OPEN_CATAPP;
-}
-
-
-/*
- * Subcontractor function for eb_catalog_file_name() and
- * eb_appendix_catalog_file_name().
- */
-static EB_Error_Code
-eb_catalog_file_name_internal(path, path_length, disc_code, case_code,
-    suffix_code)
-    const char *path;
-    size_t path_length;
-    EB_Disc_Code *disc_code;
-    EB_Case_Code *case_code;
-    EB_Suffix_Code *suffix_code;
-{
-    struct stat status;
-    char catalog_file_name[PATH_MAX + 1];
-    char *case_p;
-    char *end_p;
-
-    /*
-     * Open a catalog file, and check for disc type.
-     * At first, it is assumed that this book is EB*.
-     */
-    sprintf(catalog_file_name, "%s/%s", path, EB_FILE_NAME_CATALOG);
-    eb_canonicalize_file_name_internal(catalog_file_name);
-    end_p = catalog_file_name + strlen(catalog_file_name);
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*case_code = EB_CASE_UPPER;
-	*suffix_code = EB_SUFFIX_NONE;
-	*disc_code = EB_DISC_EB;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ".");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EB;
-	*case_code = EB_CASE_UPPER;
-	*suffix_code = EB_SUFFIX_DOT;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ";1");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EB;
-	*case_code = EB_CASE_UPPER;
-	*suffix_code = EB_SUFFIX_VERSION;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ".;1");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EB;
-	*case_code = EB_CASE_UPPER;
-	*suffix_code = EB_SUFFIX_BOTH;
-	return EB_SUCCESS;
-    }
-
-    sprintf(catalog_file_name, "%s/%s", path, EB_FILE_NAME_CATALOG);
-    eb_canonicalize_file_name_internal(catalog_file_name);
-    end_p = catalog_file_name + strlen(catalog_file_name);
-    for (case_p = catalog_file_name + path_length + 1; *case_p != '\0';
-	 case_p++) {
-	if ('A' <= *case_p && *case_p <= 'Z')
-	    *case_p += ('a' - 'A');
-    }
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EB;
-	*case_code = EB_CASE_LOWER;
-	*suffix_code = EB_SUFFIX_NONE;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ".");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EB;
-	*case_code = EB_CASE_LOWER;
-	*suffix_code = EB_SUFFIX_DOT;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ";1");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EB;
-	*case_code = EB_CASE_LOWER;
-	*suffix_code = EB_SUFFIX_VERSION;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ".;1");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EB;
-	*case_code = EB_CASE_LOWER;
-	*suffix_code = EB_SUFFIX_BOTH;
-	return EB_SUCCESS;
-    }
-
-    /*
-     * Next, it is assumed that this books is EPWING.
-     */
-    sprintf(catalog_file_name, "%s/%s", path, EB_FILE_NAME_CATALOGS);
-    eb_canonicalize_file_name_internal(catalog_file_name);
-    end_p = catalog_file_name + strlen(catalog_file_name);
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EPWING;
-	*case_code = EB_CASE_UPPER;
-	*suffix_code = EB_SUFFIX_NONE;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ".");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EPWING;
-	*case_code = EB_CASE_UPPER;
-	*suffix_code = EB_SUFFIX_DOT;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ";1");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EPWING;
-	*case_code = EB_CASE_UPPER;
-	*suffix_code = EB_SUFFIX_VERSION;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ".;1");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EPWING;
-	*case_code = EB_CASE_UPPER;
-	*suffix_code = EB_SUFFIX_BOTH;
-	return EB_SUCCESS;
-    }
-
-    sprintf(catalog_file_name, "%s/%s", path, EB_FILE_NAME_CATALOGS);
-    eb_canonicalize_file_name_internal(catalog_file_name);
-    end_p = catalog_file_name + strlen(catalog_file_name);
-    for (case_p = catalog_file_name + path_length + 1; *case_p != '\0';
-	 case_p++) {
-	if ('A' <= *case_p && *case_p <= 'Z')
-	    *case_p += ('a' - 'A');
-    }
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EPWING;
-	*case_code = EB_CASE_LOWER;
-	*suffix_code = EB_SUFFIX_NONE;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ".");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EPWING;
-	*case_code = EB_CASE_LOWER;
-	*suffix_code = EB_SUFFIX_DOT;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ";1");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EPWING;
-	*case_code = EB_CASE_LOWER;
-	*suffix_code = EB_SUFFIX_VERSION;
-	return EB_SUCCESS;
-    }
-
-    strcpy(end_p, ".;1");
-    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
-	*disc_code = EB_DISC_EPWING;
-	*case_code = EB_CASE_LOWER;
-	*suffix_code = EB_SUFFIX_BOTH;
-	return EB_SUCCESS;
-    }
-
-    /*
-     * No catalog file is availabe.  Give up.
-     */
-    return EB_ERR_FAIL_OPEN_CAT;
-}
-
-
-/*
- * Canonicalize `file_name' of a file in a book.
- */
-EB_Error_Code
-eb_canonicalize_file_name(book, file_name)
-    EB_Book *book;
-    char *file_name;
-{
-    EB_Error_Code error_code;
-
-    error_code = eb_canonicalize_file_name_internal(file_name);
-    if (error_code != EB_SUCCESS)
-	goto failed;
-
-    /*
-     * An error occurs...
-     */
-  failed:
-    return error_code;
-}
-
-
-/*
- * Canonicalize `file_name' of a file in an appendix.
- */
-EB_Error_Code
-eb_canonicalize_appendix_file_name(appendix, file_name)
-    EB_Appendix *appendix;
-    char *file_name;
-{
-    EB_Error_Code error_code;
-
-    error_code = eb_canonicalize_file_name_internal(file_name);
-    if (error_code != EB_SUCCESS)
-	goto failed;
-
-    /*
-     * An error occurs...
-     */
-  failed:
-    return error_code;
-}
 
 #ifndef DOS_FILE_PATH
 
 /*
- * Canonicalize `file_name' (UNIX version).
- * Replace `/./' and `/../' in `file_name' to equivalent straight
+ * Canonicalize `path_name' (UNIX version).
+ * Replace `/./' and `/../' in `path_name' to equivalent straight
  * form.  If an error occurs, -1 is returned and the error code
  * is set to `error'.  Otherwise 0 is returned.
  */
-static EB_Error_Code
-eb_canonicalize_file_name_internal(file_name)
-    char *file_name;
+EB_Error_Code
+eb_canonicalize_path_name(path_name)
+    char *path_name;
 {
     char cwd[PATH_MAX + 1];
     char *source;
     char *destination;
     char *slash;
-    size_t file_name_length;
+    size_t path_name_length;
     size_t cwd_length;
     int i;
 
-    if (*file_name != '/') {
+    if (*path_name != '/') {
 	/*
-	 * `file_name' is an relative path.  Convert to an absolute
+	 * `path_name' is an relative path.  Convert to an absolute
 	 * path.
 	 */
 	if (getcwd(cwd, PATH_MAX + 1) == NULL)
 	    return EB_ERR_FAIL_GETCWD;
 	cwd_length = strlen(cwd);
-	file_name_length = strlen(file_name);
-	if (PATH_MAX < cwd_length + 1 + file_name_length)
+	path_name_length = strlen(path_name);
+	if (PATH_MAX < cwd_length + 1 + path_name_length)
 	    return EB_ERR_TOO_LONG_FILE_NAME;
 
-	source = file_name + file_name_length;
-	destination = file_name + cwd_length + 1 + file_name_length;
-	for (i = 0; i <= file_name_length; i++)
+	source = path_name + path_name_length;
+	destination = path_name + cwd_length + 1 + path_name_length;
+	for (i = 0; i <= path_name_length; i++)
 	    *destination-- = *source--;
 	*destination = '/';
 
-	memcpy(file_name, cwd, cwd_length);
+	memcpy(path_name, cwd, cwd_length);
     }
 
     /*
      * Canonicalize book->path.
      * Replace `.' and `..' segments in the path.
      */
-    source = file_name;
-    destination = file_name;
+    source = path_name;
+    destination = path_name;
     while (*source != '\0') {
 	if (*source != '/') {
 	    *destination++ = *source++;
@@ -457,9 +196,9 @@ eb_canonicalize_file_name_internal(file_name)
 	     */
 	    source += 3;
 	    *destination = '\0';
-	    slash = strrchr(file_name, '/');
+	    slash = strrchr(path_name, '/');
 	    if (slash == NULL)
-		destination = file_name;
+		destination = path_name;
 	    else
 		destination = slash;
 	} else
@@ -470,9 +209,9 @@ eb_canonicalize_file_name_internal(file_name)
     /*
      * When the path comes to be empty, set the path to `/'.
      */
-    if (*(file_name) == '\0') {
-	*(file_name) = '/';
-	*(file_name + 1) = '\0';
+    if (*(path_name) == '\0') {
+	*(path_name) = '/';
+	*(path_name + 1) = '\0';
     }
 
     return EB_SUCCESS;
@@ -481,97 +220,97 @@ eb_canonicalize_file_name_internal(file_name)
 #else /* DOS_FILE_PATH */
 
 /*
- * Canonicalize `file_name' (DOS version).
- * Replace `\.\' and `\..\' in `file_name' to equivalent straight
+ * Canonicalize `path_name' (DOS version).
+ * Replace `\.\' and `\..\' in `path_name' to equivalent straight
  * form.  If an error occurs, -1 is returned and the error code
  * is set to `error'.  Otherwise 0 is returned.
  *
- * eb_canonicalize_file_name_internal() for MSDOS by KSK Jan/30/1998
+ * eb_canonicalize_path_name_internal() for MSDOS by KSK Jan/30/1998
  */
-static EB_Error_Code
-eb_canonicalize_file_name_internal(file_name)
-    char *file_name;
+EB_Error_Code
+eb_canonicalize_path_name(path_name)
+    char *path_name;
 {
     char cwd[PATH_MAX + 1];
     char *source;
     char *destination;
     char *slash;
-    size_t file_name_length;
+    size_t path_name_length;
     size_t cwd_length;
-    char *pfile_name;		/* file_name without drive letter */
+    char *ppath_name;		/* path_name without drive letter */
     int current_drive;
-    int is_unc;			/* is `file_name' UNC path? */
+    int is_unc;			/* is `path_name' UNC path? */
     int i;
 
     /* canonicalize path name separator into '\' */
-    for (destination = file_name; *destination != '\0'; destination++) {
-	/* forget about SJIS file_name :-p */
+    for (destination = path_name; *destination != '\0'; destination++) {
+	/* forget about SJIS path_name :-p */
 	if (*destination == '/') 
 	    *destination = '\\';
     }
     /* check a drive letter and UNC path */
-    file_name_length = strlen(file_name);
+    path_name_length = strlen(path_name);
     current_drive = 0;
     is_unc = 0;
-    pfile_name = file_name;
-    if (file_name_length >= 2) {
-	if ('a' <= *file_name && *file_name <= 'z'
-	    && *(file_name + 1) == ':') {
-	    current_drive = *file_name - 'a' + 1;
-	    pfile_name = file_name + 2;
-	} else if ('A' <= *file_name && *file_name <= 'Z'
-	    && *(file_name + 1) == ':') {
-	    current_drive = *file_name - 'A' + 1;
-	    pfile_name = file_name + 2;
-	} else if (*file_name == '\\' && *(file_name + 1) == '\\') {
+    ppath_name = path_name;
+    if (path_name_length >= 2) {
+	if ('a' <= *path_name && *path_name <= 'z'
+	    && *(path_name + 1) == ':') {
+	    current_drive = *path_name - 'a' + 1;
+	    ppath_name = path_name + 2;
+	} else if ('A' <= *path_name && *path_name <= 'Z'
+	    && *(path_name + 1) == ':') {
+	    current_drive = *path_name - 'A' + 1;
+	    ppath_name = path_name + 2;
+	} else if (*path_name == '\\' && *(path_name + 1) == '\\') {
 	    is_unc = 1;
-	    pfile_name = file_name + 1;
+	    ppath_name = path_name + 1;
 	}
     }
 
     if (!is_unc) {
-	if (*pfile_name != '\\' || current_drive == 0) {
-	    /* `file_name' is a relative path or has no drive letter */
+	if (*ppath_name != '\\' || current_drive == 0) {
+	    /* `path_name' is a relative path or has no drive letter */
 
 	    if (current_drive == 0) {
-		/* `file_name' has no drive letter */
+		/* `path_name' has no drive letter */
 		if (getcwd(cwd, PATH_MAX + 1) == NULL)
 		    return EB_ERR_FAIL_GETCWD;
-		if (*pfile_name == '\\') {
+		if (*ppath_name == '\\') {
 		    /*
-		     * `file_name' is a absolute path and has no
+		     * `path_name' is a absolute path and has no
 		     * drive letter use only a drive letter
 		     */
 		    cwd[2] = '\0';
 		}
 	    } else {
-		/* `file_name' is a relative path with a drive letter  */
+		/* `path_name' is a relative path with a drive letter  */
 		if (getdcwd(current_drive, cwd, PATH_MAX + 1) == NULL) {
 		    return EB_ERR_FAIL_GETCWD;
 		}
 	    }
 
 	    cwd_length = strlen(cwd);
-	    file_name_length = strlen(pfile_name);
-	    if (PATH_MAX < cwd_length + 1 + file_name_length)
+	    path_name_length = strlen(ppath_name);
+	    if (PATH_MAX < cwd_length + 1 + path_name_length)
 		return EB_ERR_TOO_LONG_FILE_NAME;
 
-	    source = pfile_name + file_name_length;
-	    destination = file_name + cwd_length + 1 + file_name_length;
-	    for (i = 0; i <= file_name_length; i++) {
+	    source = ppath_name + path_name_length;
+	    destination = path_name + cwd_length + 1 + path_name_length;
+	    for (i = 0; i <= path_name_length; i++) {
 		*destination-- = *source--;
 	    }
 	    *destination = '\\';
-	    memcpy(file_name, cwd, cwd_length);
-	    pfile_name = file_name + 2;
+	    memcpy(path_name, cwd, cwd_length);
+	    ppath_name = path_name + 2;
 	}
     }
     /*
      * Canonicalize book->path.
      * Replace "." and ".." segments in the path.
      */
-    source = pfile_name;
-    destination = pfile_name;
+    source = ppath_name;
+    destination = ppath_name;
     while (*source != '\0') {
 	if (*source != '\\') {
 	    *destination++ = *source++;
@@ -600,9 +339,9 @@ eb_canonicalize_file_name_internal(file_name)
 	     */
 	    source += 3;
 	    *destination = '\0';
-	    slash = strrchr(pfile_name, '\\');
+	    slash = strrchr(ppath_name, '\\');
 	    if (slash == NULL)
-		destination = pfile_name;
+		destination = ppath_name;
 	    else
 		destination = slash;
 	} else
@@ -613,9 +352,9 @@ eb_canonicalize_file_name_internal(file_name)
     /*
      * When the path comes to be empty, set the path to `\\'.
      */
-    if (*(pfile_name) == '\0') {
-	*(pfile_name) = '\\';
-	*(pfile_name + 1) = '\0';
+    if (*(ppath_name) == '\0') {
+	*(ppath_name) = '\\';
+	*(ppath_name + 1) = '\0';
     }
 
     return EB_SUCCESS;
@@ -625,66 +364,308 @@ eb_canonicalize_file_name_internal(file_name)
 
 
 /*
- * Fix cases and suffix of `file_name' to adapt to `book'.
+ * Rewrite `directory_name' in the `path' directory to a real directory name.
+ * If a directory matched to `directory_name' exists, then 0 is returned,
+ * and `directory_name' is rewritten to that name.
+ * Otherwise -1 is returned.
  */
-void
-eb_fix_file_name(book, file_name)
-    EB_Book *book;
-    char *file_name;
+int
+eb_fix_directory_name(path, directory_name)
+    const char *path;
+    char *directory_name;
 {
-    eb_fix_file_name_internal(file_name, book->path_length, book->case_code,
-	book->suffix_code);
-}
+    struct dirent *entry;
+    DIR *dir;
+    size_t directory_name_length;
+    int have_dot;
 
-
-/*
- * Fix cases and suffix of `file_name' to adapt to `appendix'.
- */
-void
-eb_fix_appendix_file_name(appendix, file_name)
-    EB_Appendix *appendix;
-    char *file_name;
-{
-    eb_fix_file_name_internal(file_name, appendix->path_length,
-	appendix->case_code, appendix->suffix_code);
-}
-
-
-/*
- * Subcontractor function for eb_fix_file_name() and
- * eb_fix_appendix_file_name().
- */
-static void
-eb_fix_file_name_internal(file_name, path_length, case_code, suffix_code)
-    char *file_name;
-    size_t path_length;
-    EB_Case_Code case_code;
-    EB_Suffix_Code suffix_code;
-{
-    char *p;
+    directory_name_length = strlen(directory_name);
 
     /*
-     * Change cases of the file_name under `path' to lower cases, if needed.
+     * Check whether `directory_name' contains a dot.
      */
-    if (case_code == EB_CASE_LOWER) {
-	for (p = file_name + path_length + 1; *p != '\0'; p++) {
-	    if ('A' <= *p && *p <= 'Z')
-		*p += ('a' - 'A');
+    have_dot = (strchr(directory_name, '.') != NULL);
+
+    /*
+     * Open the directory `path'.
+     */
+    dir = opendir(path);
+    if (dir == NULL)
+        goto failed;
+
+    for (;;) {
+        /*
+         * Read the directory entry.
+         */
+        entry = readdir(dir);
+        if (entry == NULL)
+            break;
+
+	if (EB_MAX_FILE_NAME_LENGTH < NAMLEN(entry))
+	    continue;
+
+	if (strncasecmp(entry->d_name, directory_name, directory_name_length)
+	    == 0)
+	    break;
+    }
+
+    if (entry == NULL)
+	goto failed;
+
+    strcpy(directory_name, entry->d_name);
+    closedir(dir);
+    return 0;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    if (dir != NULL)
+	closedir(dir);
+    return -1;
+}
+
+
+/*
+ * Rewrite `sub_directory_name' in the `path/directory_name' directory
+ * to a real sub directory name.
+ * If a directory matched to `sub_directory_name' exists, then 0 is
+ * returned, and `directory_name' is rewritten to that name.
+ * Otherwise -1 is returned.
+ */
+int
+eb_fix_directory_name2(path, directory_name, sub_directory_name)
+    const char *path;
+    const char *directory_name;
+    char *sub_directory_name;
+{
+    char sub_path[PATH_MAX + 1];
+
+    sprintf(sub_path, "%s/%s", path, directory_name);
+    return eb_fix_directory_name(sub_path, sub_directory_name);
+}
+
+
+/*
+ * Rewrite `file_name' in the `path_name' directory to a real file name.
+ * If a file matched to `file_name' exists, then 0 is returned,
+ * and `file_name' is rewritten to that name.
+ * Otherwise -1 is returned.
+ */
+int
+eb_fix_file_name(path_name, file_name)
+    const char *path_name;
+    char *file_name;
+{
+    struct dirent *entry;
+    DIR *dir;
+    size_t file_name_length;
+    const char *suffix;
+    int have_dot;
+
+    file_name_length = strlen(file_name);
+
+    /*
+     * Check whether `file_name' contains a dot.
+     */
+    have_dot = (strchr(file_name, '.') != NULL);
+
+    /*
+     * Open the directory `path_name'.
+     */
+    dir = opendir(path_name);
+    if (dir == NULL)
+        goto failed;
+
+    for (;;) {
+        /*
+         * Read the directory entry.
+         */
+        entry = readdir(dir);
+        if (entry == NULL)
+            break;
+
+	if (EB_MAX_FILE_NAME_LENGTH < NAMLEN(entry))
+	    continue;
+
+	/*
+	 * Compare the given file name and the entry file name.
+	 * We consider they are matched when:
+	 *      <given name>       == <entry name>,
+	 *   or <given name>+";1'  == <entry name>,
+	 *   or <given name>+"."   == <entry name> if no "." in <given name>,
+	 *   or <given name>+".;1" == <entry name> if no "." in <given name>.
+	 *
+	 * All the comparisons are done without case sensitivity.
+	 * We support version number ";1" only.
+	 */
+	if (strncasecmp(entry->d_name, file_name, file_name_length) == 0) {
+	    suffix = entry->d_name + file_name_length;
+	    if (*suffix == '\0')
+		break;
+	    else if (strcmp(suffix, ";1") == 0)
+		break;
+	    else if (!have_dot && strcmp(suffix, ".") == 0)
+		break;
+	    else if (!have_dot && strcmp(suffix, ".;1") == 0)
+		break;
 	}
     }
 
-    /*
-     * Append `.', `;1', or `.;1' to the file_name if needed.
-     */
-    if (suffix_code == EB_SUFFIX_DOT)
-	strcat(file_name, ".");
-    else if (suffix_code == EB_SUFFIX_VERSION)
-	strcat(file_name, ";1");
-    else if (suffix_code == EB_SUFFIX_BOTH)
-	strcat(file_name, ".;1");
+    if (entry == NULL)
+	goto failed;
+
+    strcpy(file_name, entry->d_name);
+    closedir(dir);
+    return 0;
 
     /*
-     * Trim successive slashes (`/').
+     * An error occurs...
      */
-    eb_canonicalize_file_name_internal(file_name);
+  failed:
+    if (dir != NULL)
+	closedir(dir);
+    return -1;
 }
+
+
+/*
+ * Rewrite `file_name' in the directory
+ *    `path_name/sub_directory_name' 
+ * to a real file name.
+ *
+ * If a file matched to `file_name' exists, then 0 is returned,
+ * and `file_name' is rewritten to that name.
+ * Otherwise -1 is returned.
+ */
+int
+eb_fix_file_name2(path_name, sub_directory_name, file_name)
+    const char *path_name;
+    const char *sub_directory_name;
+    char *file_name;
+{
+    char sub_path_name[PATH_MAX + 1];
+
+    sprintf(sub_path_name, "%s/%s", path_name, sub_directory_name);
+    return eb_fix_file_name(sub_path_name, file_name);
+}
+
+
+/*
+ * Rewrite `file_name' in the directory
+ *    `path_name/sub_directory_name/sub2_directory_name' 
+ * to a real file name.
+ *
+ * If a file matched to `file_name' exists, then 0 is returned,
+ * and `file_name' is rewritten to that name.
+ * Otherwise -1 is returned.
+ */
+int
+eb_fix_file_name3(path_name, sub_directory_name, sub2_directory_name,
+    file_name)
+    const char *path_name;
+    const char *sub_directory_name;
+    const char *sub2_directory_name;
+    char *file_name;
+{
+    char sub2_path_name[PATH_MAX + 1];
+
+    sprintf(sub2_path_name, "%s/%s/%s", path_name, sub_directory_name,
+	sub2_directory_name);
+    return eb_fix_file_name(sub2_path_name, file_name);
+}
+
+
+/*
+ * Compose a file name
+ *     `path_name/file_name.suffix'
+ * and copy it into `composed_path_name'.
+ *
+ * If a file `composed_path_name' exists, then 0 is returned.
+ * Otherwise -1 is returned.
+ */
+int
+eb_compose_path_name(path_name, file_name, suffix, composed_path_name)
+    const char *path_name;
+    const char *file_name;
+    const char *suffix;
+    char *composed_path_name;
+{
+    char fixed_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+
+    sprintf(fixed_file_name, "%s%s", file_name, suffix);
+    if (eb_fix_file_name(path_name, fixed_file_name) == 0) {
+	sprintf(composed_path_name, "%s/%s", path_name, fixed_file_name);
+	return 0;
+    }
+
+    return -1;
+}
+
+
+/*
+ * Compose a file name
+ *     `path_name/sub_directory/file_name.suffix'
+ * and copy it into `composed_path_name'.
+ *
+ * If a file `composed_path_name' exists, then 0 is returned.
+ * Otherwise -1 is returned.
+ */
+int
+eb_compose_path_name2(path_name, sub_directory_name, file_name, suffix,
+    composed_path_name)
+    const char *path_name;
+    const char *sub_directory_name;
+    const char *file_name;
+    const char *suffix;
+    char *composed_path_name;
+{
+    char fixed_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+    char sub_path_name[PATH_MAX + 1];
+
+    sprintf(fixed_file_name, "%s%s", file_name, suffix);
+    sprintf(sub_path_name, "%s/%s", path_name, sub_directory_name);
+
+    if (eb_fix_file_name(sub_path_name, fixed_file_name) == 0) {
+	sprintf(composed_path_name, "%s/%s", sub_path_name, fixed_file_name);
+	return 0;
+    }
+
+    return -1;
+}
+
+
+/*
+ * Compose a file name
+ *     `path_name/sub_directory/sub2_directory/file_name.suffix'
+ * and copy it into `composed_path_name'.
+ *
+ * If a file `composed_path_name' exists, then 0 is returned.
+ * Otherwise -1 is returned.
+ */
+int
+eb_compose_path_name3(path_name, sub_directory_name, sub2_directory_name,
+    file_name, suffix, composed_path_name)
+    const char *path_name;
+    const char *sub_directory_name;
+    const char *sub2_directory_name;
+    const char *file_name;
+    const char *suffix;
+    char *composed_path_name;
+{
+    char fixed_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+    char sub2_path_name[PATH_MAX + 1];
+
+    sprintf(fixed_file_name, "%s%s", file_name, suffix);
+    sprintf(sub2_path_name, "%s/%s/%s", path_name, sub_directory_name,
+	sub2_directory_name);
+
+    if (eb_fix_file_name(sub2_path_name, fixed_file_name) == 0) {
+	sprintf(composed_path_name, "%s/%s", sub2_path_name, fixed_file_name);
+	return 0;
+    }
+
+    return -1;
+}
+
+

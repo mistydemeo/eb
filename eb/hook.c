@@ -294,9 +294,6 @@ eb_hook_stop_code(book, appendix, workbuf, hook_code, argc, argv)
     if (appendix == NULL
 	|| appendix->subbook_current == NULL
 	|| appendix->subbook_current->stop0 == 0) {
-	printf("%04x<=>0x1f41 && %04x<=>%04x --> %d\n", argv[0], argv[1],
-	    book->text_context.auto_stop_code, 
-	    (argv[0] == 0x1f41 && argv[1] == book->text_context.auto_stop_code));
 	if (argv[0] == 0x1f41 && argv[1] == book->text_context.auto_stop_code)
 	    is_stop_code = -1;
     } else {

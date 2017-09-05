@@ -15,13 +15,13 @@
 #ifndef EB_INTERNAL_H
 #define EB_INTERNAL_H
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <sys/types.h>
 
-#ifdef EB_BUILD_LIBRARY
 #include "defs.h"
-#else
-#include <eb/defs.h>
-#endif
 
 /*
  * Text domain name.
@@ -44,12 +44,95 @@
 #endif
 
 /*
+ * File and directory names.
+ */
+#define EB_FILE_NAME_START		"start"
+#define EB_FILE_NAME_SOUND		"sound"
+#define EB_FILE_NAME_CATALOG		"catalog"
+#define EB_FILE_NAME_LANGUAGE		"language"
+#define EB_FILE_NAME_VTOC		"vtoc"
+#define EB_FILE_NAME_WELCOME		"welcome"
+#define EB_FILE_NAME_CATALOGS		"catalogs"
+#define EB_FILE_NAME_HONMON		"honmon"
+#define EB_FILE_NAME_HONMON2		"honmon2"
+#define EB_FILE_NAME_APPENDIX		"appendix"
+#define EB_FILE_NAME_FUROKU		"furoku"
+
+#define EB_DIRECTORY_NAME_DATA		"data"
+#define EB_DIRECTORY_NAME_GAIJI		"gaiji"
+#define EB_DIRECTORY_NAME_STREAM	"stream"
+#define EB_DIRECTORY_NAME_MOVIE		"movie"
+
+#define EB_SUFFIX_NONE			""
+#define EB_SUFFIX_EBZ			".ebz"
+
+/*
  * Huffman node types.
  */
 #define EB_HUFFMAN_NODE_INTERMEDIATE	0
-#define EB_HUFFMAN_NODE_LEAF16		1
+#define EB_HUFFMAN_NODE_EOF		1
 #define EB_HUFFMAN_NODE_LEAF8		2
-#define EB_HUFFMAN_NODE_EOF		3
+#define EB_HUFFMAN_NODE_LEAF16		3
+#define EB_HUFFMAN_NODE_LEAF32		4
+
+/*
+ * Search word types.
+ */
+#define EB_WORD_ALPHABET		0
+#define EB_WORD_KANA			1
+#define EB_WORD_OTHER			2
+#define EB_WORD_INVALID			-1
+
+/*
+ * Index Style flags.
+ */
+#define EB_INDEX_STYLE_CONVERT		0
+#define EB_INDEX_STYLE_ASIS		1
+#define EB_INDEX_STYLE_DELETE		2
+
+/*
+ * Compression type codes.
+ */
+#define EB_ZIP_NONE			0
+#define EB_ZIP_EBZIP1			1
+#define EB_ZIP_EPWING			100
+#define EB_ZIP_EPWING6			101
+#define EB_ZIP_SEBXA			200
+
+/*
+ * Text content currently read.
+ */
+#define EB_TEXT_TEXT            	1
+#define EB_TEXT_HEADING         	2
+#define EB_TEXT_RAWTEXT         	3
+#define EB_TEXT_NONE           		0
+#define EB_TEXT_INVALID        		-1
+
+/*
+ * Search method currently processed.
+ */
+#define EB_SEARCH_EXACTWORD            	0
+#define EB_SEARCH_WORD         		1
+#define EB_SEARCH_ENDWORD         	2
+#define EB_SEARCH_KEYWORD         	3
+#define EB_SEARCH_MULTI         	4
+#define EB_SEARCH_NONE           	-1
+
+/*
+ * Arrangement style of entries in a search index page.
+ */
+#define EB_ARRANGE_FIXED		0
+#define EB_ARRANGE_VARIABLE		1
+
+/*
+ * The maximum index depth of search indexes.
+ */
+#define EB_MAX_INDEX_DEPTH		6
+
+/*
+ * Maximum ebzip compression level.
+ */
+#define EB_MAX_EBZIP_LEVEL		3
 
 /*
  * CPP macro version of get_uint1(), ... get_uint4().
@@ -78,9 +161,6 @@
 /*
  * External variable declarations.
  */
-/* eb*.c */
-extern int eb_option;
-
 /* hook.c */
 extern EB_Hookset eb_default_hookset;
 
@@ -90,22 +170,22 @@ extern EB_Hookset eb_default_hookset;
 /* appendix.c */
 void eb_initialize_alt_cache EB_P((EB_Appendix *));
 
-/* ebunzip.c */
-int eb_ebunzip1_slice EB_P((char *, size_t, char *, size_t));
-
-/* epwunzip.c */
-int eb_epwunzip_slice EB_P((char *, int, EB_Huffman_Node *));
-
 /* filename.c */
-EB_Error_Code eb_catalog_file_name EB_P((EB_Book *));
-EB_Error_Code eb_appendix_catalog_file_name EB_P((EB_Appendix *));
-EB_Error_Code eb_canonicalize_file_name EB_P((EB_Book *, char *));
-EB_Error_Code eb_canonicalize_appendix_file_name EB_P((EB_Appendix *, char *));
-void eb_fix_file_name EB_P((EB_Book *, char *));
-void eb_fix_appendix_file_name EB_P((EB_Appendix *, char *));
+EB_Error_Code eb_canonicalize_path_name EB_P((char *));
+int eb_fix_directory_name EB_P((const char *, char *));
+int eb_fix_directory_name2 EB_P((const char *, const char *, char *));
+int eb_fix_file_name EB_P((const char *, char *));
+int eb_fix_file_name2 EB_P((const char *, const char *, char *));
+int eb_fix_file_name3 EB_P((const char *, const char *, const char *, char *));
+int eb_compose_path_name EB_P((const char *, const char *, const char *,
+    char *));
+int eb_compose_path_name2 EB_P((const char *, const char *, const char *,
+    const char *, char *));
+int eb_compose_path_name3 EB_P((const char *, const char *, const char *,
+    const char *, const char *, char *));
 
 /* font.c */
-EB_Error_Code eb_initialize_fonts EB_P((EB_Book *));
+EB_Error_Code eb_initialize_font EB_P((EB_Book *));
 
 /* hook.c */
 void eb_initialize_default_hookset EB_P((void));
@@ -126,6 +206,9 @@ EB_Error_Code eb_initialize_messages EB_P((EB_Book *));
 
 /* multi.c */
 EB_Error_Code eb_initialize_multi_search EB_P((EB_Book *));
+
+/* narwfont.c */
+EB_Error_Code eb_initialize_narrow_font EB_P((EB_Book *));
 
 /* search.c */
 void eb_initialize_search EB_P((EB_Book *));
@@ -149,11 +232,24 @@ EB_Error_Code eb_initialize_subbook EB_P((EB_Book *));
 void eb_initialize_text EB_P((EB_Book *));
 EB_Error_Code eb_forward_heading EB_P((EB_Book *));
 
+/* narwfont.c */
+EB_Error_Code eb_initialize_wide_font EB_P((EB_Book *));
+
+/* unzebzip.c */
+int eb_unzip_slice_ebzip1 EB_P((char *, size_t, char *, size_t));
+
+/* unzepwing.c */
+int eb_unzip_slice_epwing EB_P((char *, int, EB_Huffman_Node *));
+int eb_unzip_slice_epwing6 EB_P((char *, int, EB_Huffman_Node *));
+
 /* zio.c */
 int eb_zinitialize EB_P((void));
 void eb_zfinalize EB_P((void));
-int eb_zopen EB_P((EB_Zip *, const char *));
-int eb_zopen2 EB_P((EB_Zip *, const char *));
+int eb_zopen_none EB_P((EB_Zip *, const char *));
+int eb_zopen_ebzip EB_P((EB_Zip *, const char *));
+int eb_zopen_epwing EB_P((EB_Zip *, const char *));
+int eb_zopen_epwing6 EB_P((EB_Zip *, const char *));
+int eb_zopen_sebxa EB_P((EB_Zip *, const char *));
 int eb_zclose EB_P((EB_Zip *, int));
 off_t eb_zlseek EB_P((EB_Zip *, int, off_t, int));
 ssize_t eb_zread EB_P((EB_Zip *, int, char *, size_t));
@@ -164,6 +260,22 @@ ssize_t eb_read_all EB_P((int, void *, size_t nbyte));
 void *eb_memmove(void *, const void *, size_t);
 #else
 char *eb_memmove();
+#endif
+
+/* strcasecmp.c */
+int eb_strcasecmp EB_P((const char *, const char *));
+int eb_strncasecmp EB_P((const char *, const char *, size_t));
+
+/*
+ * Fake missing function names.
+ */
+#ifndef HAVE_MEMMOVE
+#define memmove eb_memmove
+#endif
+
+#ifndef HAVE_STRCASECMP
+#define strcasecmp eb_strcasecmp
+#define strncasecmp eb_strncasecmp
 #endif
 
 #endif /* not EB_INTERNAL_H */

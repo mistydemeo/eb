@@ -46,7 +46,7 @@ static pthread_mutex_t gettext_mutex = PTHREAD_MUTEX_INITIALIZER;
 /*
  * Error messages.
  */
-static const char *error_messages[] = {
+static const char * const error_messages[] = {
     /* 0 -- 4 */
     N_("no error"),
     N_("memory exhausted"),

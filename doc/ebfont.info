@@ -1,5 +1,4 @@
-This is Info file ebfont.info, produced by Makeinfo version 1.68 from
-the input file ebfont.texi.
+This is ebfont.info, produced by makeinfo version 4.0 from ebfont.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -28,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 3.0alpha0, for EB Library version 3.0alpha0.
+   This is edition 3.0alpha1, for EB Library version 3.0alpha1.
 
 * Menu:
 
@@ -37,7 +36,7 @@ File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 * Invoking ebfont::             Invoking `ebfont'.
 * Summary of Options::          Summary of Options to `ebfont'.
 
- -- The Detailed Node Listing --
+ --- The Detailed Node Listing ---
 
 Invoking `ebfont'
 
@@ -62,11 +61,11 @@ Free Software Foundation; either version 2, or (at your option) any
 later version.
 
    `ebfont' is distributed in the hope that it will be useful, but
-*without any warranty*; without even the implied warranty of
+_without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 3.0alpha0, for EB Library version 3.0alpha0.
+   This is edition 3.0alpha1, for EB Library version 3.0alpha1.
 
 
 File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
@@ -95,11 +94,11 @@ characters of both types.
 for local characters, for both narrow and wide types.  Their witdths,
 heights and sizes are follows:
 
-height                   narrow                   wide                     
-16                       8x16                     16x16                    
-24                       16x24                    24x24                    
-30                       16x30                    32x30                    
-48                       24x48                    48x48                    
+height                   narrow                   wide
+16                       8x16                     16x16
+24                       16x24                    24x24
+30                       16x30                    32x30
+48                       24x48                    48x48
 
 By deafult, `ebfont' generates image files for fonts with the height of
 16 pixels.
@@ -305,13 +304,13 @@ long as they are unique.
 
 
 Tag Table:
-Node: Top1052
-Node: Introduction1609
-Node: What is Local Character2487
-Node: Invoking ebfont4158
-Node: Image Formats5579
-Node: Heights6473
-Node: Subbooks7234
-Node: Summary of Options9173
+Node: Top1026
+Node: Introduction1585
+Node: What is Local Character2463
+Node: Invoking ebfont4033
+Node: Image Formats5454
+Node: Heights6348
+Node: Subbooks7109
+Node: Summary of Options9048
 
 End Tag Table

@@ -1,6 +1,12 @@
 gnulocaledir = $(datadir)/locale
 
-lib_LTLIBRARIES = libintl.la
+if INCLUDED_LIBINTL
+INTL_LTLIB = libintl.la 
+else
+INTL_LTLIB = 
+endif
+
+lib_LTLIBRARIES = $(INTL_LTLIB)
 libintl_la_SOURCES = bindtextdom.c dcgettext.c dgettext.c gettext.c \
    finddomain.c loadmsgcat.c localealias.c textdomain.c l10nflist.c \
    explodename.c intl-compat.c
@@ -16,6 +22,10 @@ INCLUDES = -DLOCALEDIR=\"$(localedir)\" -DGNULOCALEDIR=\"$(gnulocaledir)\" \
 EXTRA_DIST = ChangeLog VERSION po2tbl.sed.in
 
 DISTCLEANFILES = libintl.h po2tbl.sed
+
+libintl.h: $(srcdir)/libgettext.h
+	rm -f $@
+	$(LN_S) $(srcdir)/libgettext.h libintl.h
 
 ### *.o dependencies ###
 bindtextdom.o: bindtextdom.c libgettext.h gettext.h gettextP.h \

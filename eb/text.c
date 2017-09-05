@@ -51,10 +51,6 @@ char *memset();
 #endif /* not __STDC__ */
 #endif
 
-#ifndef HAVE_MEMMOVE
-#define memmove eb_memmove
-#endif
-
 #ifndef ENABLE_PTHREAD
 #define pthread_mutex_lock(m)
 #define pthread_mutex_unlock(m)
@@ -478,13 +474,13 @@ eb_read_rawtext(book, text_max_length, text, text_length)
     /*
      * Seek START file and read data.
      */
-    if (eb_zlseek(&(book->subbook_current->zip), 
+    if (eb_zlseek(&book->subbook_current->text_zip, 
 	book->subbook_current->text_file, book->text_context.location,
 	SEEK_SET) == -1) {
 	error_code = EB_ERR_FAIL_SEEK_TEXT;
 	goto failed;
     }
-    *text_length = eb_zread(&(book->subbook_current->zip),
+    *text_length = eb_zread(&book->subbook_current->text_zip,
 	book->subbook_current->text_file, text, text_max_length);
     book->text_context.location += *text_length;
     if (*text_length < 0) {
@@ -598,14 +594,14 @@ eb_read_text_internal(book, appendix, hookset, text_max_length, text,
 
 	    if (0 < cache_rest_length)
 		memmove(cache_buffer, cache_p, cache_rest_length);
-	    if (eb_zlseek(&(book->subbook_current->zip), 
+	    if (eb_zlseek(&book->subbook_current->text_zip, 
 		book->subbook_current->text_file, book->text_context.location,
 		SEEK_SET) == -1) {
 		error_code = EB_ERR_FAIL_SEEK_TEXT;
 		goto failed;
 	    }
 
-	    read_result = eb_zread(&(book->subbook_current->zip), 
+	    read_result = eb_zread(&book->subbook_current->text_zip, 
 		book->subbook_current->text_file,
 		cache_buffer + cache_rest_length,
 		EB_SIZE_PAGE - cache_rest_length);

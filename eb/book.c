@@ -53,6 +53,7 @@
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
+#include "font.h"
 #include "language.h"
 
 #ifndef O_BINARY
@@ -141,7 +142,7 @@ eb_bind(book, path)
     const char *path;
 {
     EB_Error_Code error_code;
-    char tmp_path[PATH_MAX + 1];
+    char temporary_path[PATH_MAX + 1];
 
     /*
      * Lock the book.
@@ -163,14 +164,14 @@ eb_bind(book, path)
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;
 	goto failed;
     }
-    strcpy(tmp_path, path);
-    error_code = eb_canonicalize_file_name(book, tmp_path);
+    strcpy(temporary_path, path);
+    error_code = eb_canonicalize_path_name(temporary_path);
     if (error_code != EB_SUCCESS)
 	goto failed;
 
-    book->path_length = strlen(tmp_path);
-    if (PATH_MAX < book->path_length + (1 + EB_MAX_BASE_NAME_LENGTH + 1
-	+ EB_MAX_BASE_NAME_LENGTH + 1 + EB_MAX_BASE_NAME_LENGTH + 6)) {
+    book->path_length = strlen(temporary_path);
+    if (PATH_MAX < book->path_length + 1 + EB_MAX_DIRECTORY_NAME_LENGTH + 1
+	+ EB_MAX_DIRECTORY_NAME_LENGTH + 1 + EB_MAX_FILE_NAME_LENGTH) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;
 	goto failed;
     }
@@ -180,14 +181,7 @@ eb_bind(book, path)
 	error_code = EB_ERR_MEMORY_EXHAUSTED;
 	goto failed;
     }
-    strcpy(book->path, tmp_path);
-
-    /*
-     * Get disc type and file name mode.
-     */
-    error_code = eb_catalog_file_name(book);
-    if (error_code != EB_SUCCESS)
-	goto failed;
+    strcpy(book->path, temporary_path);
 
     /*
      * Read information from the `LANGUAGE' file.
@@ -278,7 +272,7 @@ eb_finalize_book(book)
  * We fix the character of the books.  The following table lists
  * titles of the first subbook in those books.
  */
-static const char *misleaded_book_table[] = {
+static const char * const misleaded_book_table[] = {
     /* SONY DataDiskMan (DD-DR1) accessories. */
     "%;%s%A%e%j!\\%S%8%M%9!\\%/%i%&%s",
 
@@ -300,34 +294,41 @@ eb_initialize_catalog(book)
 {
     EB_Error_Code error_code;
     char buffer[EB_SIZE_PAGE];
-    char catalog_file_name[PATH_MAX + 1];
+    char catalog_path_name[PATH_MAX + 1];
     char *space;
     EB_Subbook *subbook;
     size_t catalog_size;
     size_t title_size;
-    const char **misleaded;
+    const char * const *misleaded;
     int file = -1;
     int i;
 
-    if (book->disc_code == EB_DISC_EB) {
+    /*
+     * Find a catalog file.
+     */
+    if (eb_compose_path_name(book->path, EB_FILE_NAME_CATALOG, EB_SUFFIX_NONE,
+	catalog_path_name) == 0) {
+	book->disc_code = EB_DISC_EB;
 	catalog_size = EB_SIZE_EB_CATALOG;
 	title_size = EB_MAX_EB_TITLE_LENGTH;
-    } else {
+    } else if (eb_compose_path_name(book->path, EB_FILE_NAME_CATALOGS,
+	EB_SUFFIX_NONE, catalog_path_name) == 0) {
+	book->disc_code = EB_DISC_EPWING;
 	catalog_size = EB_SIZE_EPWING_CATALOG;
 	title_size = EB_MAX_EPWING_TITLE_LENGTH;
+    } else {
+	error_code = EB_ERR_FAIL_OPEN_CAT;
+	goto failed;
     }
-	
+
     /*
      * Open a catalog file.
      */
-    if (book->disc_code == EB_DISC_EB)
-	sprintf(catalog_file_name, "%s/%s", book->path, EB_FILE_NAME_CATALOG);
-    else
-	sprintf(catalog_file_name, "%s/%s", book->path, EB_FILE_NAME_CATALOGS);
-    eb_fix_file_name(book, catalog_file_name);
-    file = open(catalog_file_name, O_RDONLY | O_BINARY);
-    if (file < 0)
+    file = open(catalog_path_name, O_RDONLY | O_BINARY);
+    if (file < 0) {
+	error_code = EB_ERR_FAIL_OPEN_CAT;
 	goto failed;
+    }
 
     /*
      * Get the number of subbooks in this book.
@@ -343,6 +344,12 @@ eb_initialize_catalog(book)
 	error_code = EB_ERR_UNEXP_CAT;
 	goto failed;
     }
+
+    /*
+     * Get EPWING format version.
+     */
+    if (book->disc_code == EB_DISC_EPWING)
+	book->version = eb_uint1(buffer + 3);
 
     /*
      * Allocate memories for subbook entries.
@@ -370,12 +377,13 @@ eb_initialize_catalog(book)
 	/*
 	 * Set a directory name.
 	 */
-	strncpy(subbook->directory, buffer + 2 + title_size,
-	    EB_MAX_BASE_NAME_LENGTH);
-	subbook->directory[EB_MAX_BASE_NAME_LENGTH] = '\0';
-	space = strchr(subbook->directory, ' ');
+	strncpy(subbook->directory_name, buffer + 2 + title_size,
+	    EB_MAX_DIRECTORY_NAME_LENGTH);
+	subbook->directory_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+	space = strchr(subbook->directory_name, ' ');
 	if (space != NULL)
 	    *space = '\0';
+	eb_fix_directory_name(book->path, subbook->directory_name);
 
 	/*
 	 * Set an index page.
@@ -383,8 +391,9 @@ eb_initialize_catalog(book)
 	if (book->disc_code == EB_DISC_EB)
 	    subbook->index_page = 1;
 	else {
-	    subbook->index_page = eb_uint2(buffer + (2
-		+ EB_MAX_EPWING_TITLE_LENGTH + EB_MAX_BASE_NAME_LENGTH + 4));
+	    subbook->index_page = eb_uint2(buffer + 2
+		+ EB_MAX_EPWING_TITLE_LENGTH + EB_MAX_DIRECTORY_NAME_LENGTH
+		+ 4);
 	}
 
 	/*
@@ -396,31 +405,70 @@ eb_initialize_catalog(book)
 	    eb_jisx0208_to_euc(subbook->title, subbook->title);
 
 	/*
+	 * Initialize font availability information.
+	 */
+	subbook->narrow_fonts[EB_FONT_16].font_code = EB_FONT_INVALID;
+	subbook->narrow_fonts[EB_FONT_24].font_code = EB_FONT_INVALID;
+	subbook->narrow_fonts[EB_FONT_30].font_code = EB_FONT_INVALID;
+	subbook->narrow_fonts[EB_FONT_48].font_code = EB_FONT_INVALID;
+	subbook->wide_fonts[EB_FONT_16].font_code = EB_FONT_INVALID;
+	subbook->wide_fonts[EB_FONT_24].font_code = EB_FONT_INVALID;
+	subbook->wide_fonts[EB_FONT_30].font_code = EB_FONT_INVALID;
+	subbook->wide_fonts[EB_FONT_48].font_code = EB_FONT_INVALID;
+
+	/*
 	 * If the book is EPWING, get font file names.
 	 */
 	if (book->disc_code == EB_DISC_EPWING) {
-	    EB_Font *font = subbook->fonts;
-	    char *bufp;
+	    EB_Font *font;
+	    char *buffer_p;
 	    int j;
-	    int font_count = 0;
 
-	    for (j = 0, bufp = buffer + 2 + title_size + 18;
-		 j < EB_MAX_FONTS * 2; j++, bufp += EB_MAX_BASE_NAME_LENGTH) {
+	    /*
+	     * Narrow font file names.
+	     */
+	    buffer_p = buffer + 2 + title_size + 50;
+	    for (font = subbook->narrow_fonts, j = 0; j < EB_MAX_FONTS;
+		 j++, font++) {
 		/*
 		 * Skip this entry if the first character of the file name
 		 * is not valid.
 		 */
-		if (*bufp == '\0' || 0x80 <= *((unsigned char *)bufp))
+		if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p))
 		    continue;
-		strncpy(font->file_name, bufp, EB_MAX_BASE_NAME_LENGTH);
-		font->file_name[EB_MAX_BASE_NAME_LENGTH] = '\0';
+		strncpy(font->file_name, buffer_p,
+		    EB_MAX_DIRECTORY_NAME_LENGTH);
+		font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+		font->font_code = i;
+		font->page = 1;
 		space = strchr(font->file_name, ' ');
 		if (space != NULL)
 		    *space = '\0';
-		font++;
-		font_count++;
+		buffer_p += EB_MAX_DIRECTORY_NAME_LENGTH;
 	    }
-	    subbook->font_count = font_count;
+
+	    /*
+	     * Wide font file names.
+	     */
+	    buffer_p = buffer + 2 + title_size + 18;
+	    for (font = subbook->wide_fonts, j = 0; j < EB_MAX_FONTS;
+		 j++, font++) {
+		/*
+		 * Skip this entry if the first character of the file name
+		 * is not valid.
+		 */
+		if (*buffer_p == '\0' || 0x80 <= *((unsigned char *)buffer_p))
+		    continue;
+		strncpy(font->file_name, buffer_p,
+		    EB_MAX_DIRECTORY_NAME_LENGTH);
+		font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+		font->font_code = i;
+		font->page = 1;
+		space = strchr(font->file_name, ' ');
+		if (space != NULL)
+		    *space = '\0';
+		buffer_p += EB_MAX_DIRECTORY_NAME_LENGTH;
+	    }
 	}
 
 	subbook->initialized = 0;

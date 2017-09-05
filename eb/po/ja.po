@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: eb VERSION\n"
-"POT-Creation-Date: 2000-05-24 23:03+0900\n"
+"POT-Creation-Date: 2000-06-13 16:02+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"

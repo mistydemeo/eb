@@ -114,8 +114,6 @@ eb_initialize_subbook(book)
     subbook->narrow_current = NULL;
     subbook->wide_current = NULL;
     subbook->multi_count = 0;
-    if (book->disc_code == EB_DISC_EB)
-	subbook->font_count = 0;
 
     /*
      * Initialize search method information.
@@ -138,25 +136,21 @@ eb_initialize_subbook(book)
 	/*
 	 * Read index information.
 	 */
-	if (eb_initialize_indexes(book) < 0)
+	error_code = eb_initialize_indexes(book);
+	if (error_code != EB_SUCCESS)
 	    goto failed;
 
 	/*
 	 * Read font information.
 	 */
-	if (eb_initialize_fonts(book) < 0)
-	    goto failed;
-
-	/*
-	 * Read font information.
-	 */
-	if (eb_initialize_multi_search(book) < 0)
+	error_code = eb_initialize_multi_search(book);
+	if (error_code != EB_SUCCESS)
 	    goto failed;
 
 	/*
 	 * Rewind the file descriptor of the start file.
 	 */
-	if (eb_zlseek(&(subbook->zip), subbook->text_file, 
+	if (eb_zlseek(&subbook->text_zip, subbook->text_file, 
 	    (subbook->index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
@@ -184,9 +178,10 @@ eb_initialize_all_subbooks(book)
     EB_Book *book;
 {
     EB_Error_Code error_code;
-    EB_Subbook_Code current_code;
+    EB_Subbook_Code subbook_code;
+    EB_Font_Code font_code;
     EB_Subbook *subbook;
-    int i;
+    int i, j;
 
     /*
      * Lock the book.
@@ -202,29 +197,57 @@ eb_initialize_all_subbooks(book)
     }
 
     /*
-     * Get the current subbook.
+     * Get the current subbook and the current font.
      */
-    if (book->subbook_current != NULL)
-	current_code = book->subbook_current->code;
-    else
-	current_code = -1;
+    if (book->subbook_current != NULL) {
+	subbook_code = book->subbook_current->code;
+	if (book->subbook_current->narrow_current != NULL)
+	    font_code = book->subbook_current->narrow_current->font_code;
+	else if (book->subbook_current->wide_current != NULL)
+	    font_code = book->subbook_current->wide_current->font_code;
+	else
+	    font_code = EB_FONT_INVALID;
+    } else {
+	subbook_code = EB_SUBBOOK_INVALID;
+	font_code = EB_FONT_INVALID;
+    }
 
     /*
      * Initialize each subbook.
      */
     for (i = 0, subbook = book->subbooks; i < book->subbook_count;
 	 i++, subbook++) {
-	if (eb_set_subbook(book, subbook->code) < 0)
+	error_code = eb_set_subbook(book, subbook->code);
+	if (error_code != EB_SUCCESS)
 	    goto failed;
+
+	/*
+	 * Initialize each font.
+	 */
+	for (j = 0; j < EB_MAX_FONTS; j++) {
+	    if (subbook->narrow_fonts[j].font_code == EB_FONT_INVALID
+		&& subbook->wide_fonts[j].font_code == EB_FONT_INVALID)
+		continue;
+	    if (eb_set_font(book, j) != EB_SUCCESS)
+		goto failed;
+	}
     }
 
     /*
-     * Restore the current subbook.
+     * Restore the current subbook and the current font.
      */
-    if (current_code < 0)
+    if (subbook_code == EB_SUBBOOK_INVALID)
 	eb_unset_subbook(book);
     else {
-	error_code = eb_set_subbook(book, current_code);
+	error_code = eb_set_subbook(book, subbook_code);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+    }
+
+    if (font_code == EB_FONT_INVALID)
+	eb_unset_font(book);
+    else {
+	error_code = eb_set_font(book, font_code);
 	if (error_code != EB_SUCCESS)
 	    goto failed;
     }
@@ -240,6 +263,7 @@ eb_initialize_all_subbooks(book)
      * An error occurs...
      */
   failed:
+    eb_unset_subbook(book);
     eb_unlock(&book->lock);
     return error_code;
 }
@@ -269,11 +293,11 @@ eb_initialize_indexes(book)
     /*
      * Read the index table in the subbook.
      */
-    if (eb_zlseek(&(subbook->zip), subbook->text_file, 0, SEEK_SET) < 0) {
+    if (eb_zlseek(&subbook->text_zip, subbook->text_file, 0, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_TEXT;
 	goto failed;
     }
-    if (eb_zread(&(subbook->zip), subbook->text_file, buffer, EB_SIZE_PAGE)
+    if (eb_zread(&subbook->text_zip, subbook->text_file, buffer, EB_SIZE_PAGE)
 	!= EB_SIZE_PAGE) {
 	error_code = EB_ERR_FAIL_READ_TEXT;
 	goto failed;
@@ -374,12 +398,51 @@ eb_initialize_indexes(book)
 	    memcpy(&subbook->word_alphabet, &search, sizeof(EB_Search));
 	    break;
 	case 0xf1:
+	    if (book->disc_code == EB_DISC_EB) {
+		subbook->wide_fonts[EB_FONT_16].page = search.index_page;
+		subbook->wide_fonts[EB_FONT_16].font_code = EB_FONT_16;
+	    }
+	    break;
 	case 0xf2:
+	    if (book->disc_code == EB_DISC_EB) {
+		subbook->narrow_fonts[EB_FONT_16].page = search.index_page;
+		subbook->narrow_fonts[EB_FONT_16].font_code = EB_FONT_16;
+	    }
+	    break;
 	case 0xf3:
+	    if (book->disc_code == EB_DISC_EB) {
+		subbook->wide_fonts[EB_FONT_24].page = search.index_page;
+		subbook->wide_fonts[EB_FONT_24].font_code = EB_FONT_24;
+	    }
+	    break;
 	case 0xf4:
-	    if (book->disc_code == EB_DISC_EB
-		&& subbook->font_count < EB_MAX_FONTS * 2) {
-		subbook->fonts[subbook->font_count++].page = search.index_page;
+	    if (book->disc_code == EB_DISC_EB) {
+		subbook->narrow_fonts[EB_FONT_24].page = search.index_page;
+		subbook->narrow_fonts[EB_FONT_24].font_code = EB_FONT_24;
+	    }
+	    break;
+	case 0xf5:
+	    if (book->disc_code == EB_DISC_EB) {
+		subbook->wide_fonts[EB_FONT_30].page = search.index_page;
+		subbook->wide_fonts[EB_FONT_30].font_code = EB_FONT_30;
+	    }
+	    break;
+	case 0xf6:
+	    if (book->disc_code == EB_DISC_EB) {
+		subbook->narrow_fonts[EB_FONT_30].page = search.index_page;
+		subbook->narrow_fonts[EB_FONT_30].font_code = EB_FONT_30;
+	    }
+	    break;
+	case 0xf7:
+	    if (book->disc_code == EB_DISC_EB) {
+		subbook->wide_fonts[EB_FONT_48].page = search.index_page;
+		subbook->wide_fonts[EB_FONT_48].font_code = EB_FONT_48;
+	    }
+	    break;
+	case 0xf8:
+	    if (book->disc_code == EB_DISC_EB) {
+		subbook->narrow_fonts[EB_FONT_48].page = search.index_page;
+		subbook->narrow_fonts[EB_FONT_48].font_code = EB_FONT_48;
 	    }
 	    break;
 	case 0xff:
@@ -592,6 +655,7 @@ eb_subbook_directory(book, directory)
     char *directory;
 {
     EB_Error_Code error_code;
+    char *p;
 
     /*
      * Lock the book.
@@ -606,7 +670,15 @@ eb_subbook_directory(book, directory)
 	goto failed;
     }
 
-    strcpy(directory, book->subbook_current->directory);
+    /*
+     * Copy directory name.
+     * Lower letters are converted to upper letters.
+     */
+    strcpy(directory, book->subbook_current->directory_name);
+    for (p = directory; *p != '\0'; p++) {
+	if ('a' <= *p && *p <= 'z')
+	    *p = *p - ('a' - 'A');
+    }
 
     /*
      * Unlock the book.
@@ -635,6 +707,7 @@ eb_subbook_directory2(book, subbook_code, directory)
     char *directory;
 {
     EB_Error_Code error_code;
+    char *p;
 
     /*
      * Lock the book.
@@ -657,7 +730,15 @@ eb_subbook_directory2(book, subbook_code, directory)
 	goto failed;
     }
 
-    strcpy(directory, (book->subbooks + subbook_code)->directory);
+    /*
+     * Copy directory name.
+     * Lower letters are converted to upper letters.
+     */
+    strcpy(directory, (book->subbooks + subbook_code)->directory_name);
+    for (p = directory; *p != '\0'; p++) {
+	if ('a' <= *p && *p <= 'z')
+	    *p = *p - ('a' - 'A');
+    }
 
     /*
      * Unlock the book.
@@ -685,7 +766,8 @@ eb_set_subbook(book, subbook_code)
     EB_Subbook_Code subbook_code;
 {
     EB_Error_Code error_code;
-    char text_file_name[PATH_MAX + 1];
+    EB_Subbook *subbook;
+    char text_path_name[PATH_MAX + 1];
 
     /*
      * Lock the book.
@@ -720,20 +802,76 @@ eb_set_subbook(book, subbook_code)
     }
 
     /*
-     * Open `START' file if exists.
+     * Set the current subbook.
      */
     book->subbook_current = book->subbooks + subbook_code;
-    if (book->disc_code == EB_DISC_EB) {
-	sprintf(text_file_name, "%s/%s/%s", book->path,
-	    book->subbook_current->directory, EB_FILE_NAME_START);
-    } else {
-	sprintf(text_file_name, "%s/%s/%s/%s", book->path,
-	    book->subbook_current->directory, EB_DIRECTORY_NAME_DATA,
-	    EB_FILE_NAME_HONMON);
+    subbook = book->subbook_current;
+
+    /*
+     * Adjust directory names.
+     */
+    if (book->disc_code == EB_DISC_EPWING) {
+	strcpy(subbook->data_directory_name, EB_DIRECTORY_NAME_DATA);
+	eb_fix_directory_name2(book->path, subbook->directory_name,
+	    subbook->data_directory_name);
+
+	strcpy(subbook->gaiji_directory_name, EB_DIRECTORY_NAME_GAIJI);
+	eb_fix_directory_name2(book->path, subbook->directory_name,
+	    subbook->gaiji_directory_name);
+
+	strcpy(subbook->stream_directory_name, EB_DIRECTORY_NAME_STREAM);
+	eb_fix_directory_name2(book->path, subbook->directory_name,
+	    subbook->stream_directory_name);
+
+	strcpy(subbook->movie_directory_name, EB_DIRECTORY_NAME_MOVIE);
+	eb_fix_directory_name2(book->path, subbook->directory_name,
+	    subbook->movie_directory_name);
     }
-    eb_fix_file_name(book, text_file_name);
-    book->subbook_current->text_file
-	= eb_zopen(&(book->subbook_current->zip), text_file_name);
+
+    /*
+     * Open a text file if exists.
+     */
+    subbook->text_file = -1;
+
+    if (book->disc_code == EB_DISC_EB) {
+	if (eb_compose_path_name2(book->path, subbook->directory_name, 
+	    EB_FILE_NAME_START, EB_SUFFIX_NONE, text_path_name) == 0) {
+	    subbook->text_file = eb_zopen_none(&subbook->text_zip, 
+		text_path_name);
+	} else if (eb_compose_path_name2(book->path, subbook->directory_name, 
+	    EB_FILE_NAME_START, EB_SUFFIX_EBZ, text_path_name) == 0) {
+	    subbook->text_file = eb_zopen_ebzip(&subbook->text_zip, 
+		text_path_name);
+	}
+    } else {
+	if (eb_compose_path_name3(book->path, subbook->directory_name,
+	    subbook->data_directory_name, EB_FILE_NAME_HONMON2,
+	    EB_SUFFIX_NONE, text_path_name) == 0) {
+	    if (book->version < 6) {
+		subbook->text_file = eb_zopen_epwing(&subbook->text_zip, 
+		    text_path_name);
+	    } else {
+		subbook->text_file = eb_zopen_epwing6(&subbook->text_zip, 
+		    text_path_name);
+	    }
+	} else if (eb_compose_path_name3(book->path, subbook->directory_name,
+	    subbook->data_directory_name, EB_FILE_NAME_HONMON,
+	    EB_SUFFIX_NONE, text_path_name) == 0) {
+	    subbook->text_file = eb_zopen_none(&subbook->text_zip, 
+		text_path_name);
+	} else if (eb_compose_path_name3(book->path, subbook->directory_name,
+	    subbook->data_directory_name, EB_FILE_NAME_HONMON,
+	    EB_SUFFIX_EBZ, text_path_name) == 0) {
+	    subbook->text_file = eb_zopen_ebzip(&subbook->text_zip,
+		text_path_name);
+	}
+    }
+
+    if (subbook->text_file < 0) {
+	subbook = NULL;
+	error_code = EB_ERR_FAIL_OPEN_TEXT;
+	goto failed;
+    }
 
     /*
      * Initialize the subbook.
@@ -747,7 +885,6 @@ eb_set_subbook(book, subbook_code)
      */
   succeeded:
     eb_unlock(&book->lock);
-
     return EB_SUCCESS;
 
     /*
@@ -755,7 +892,6 @@ eb_set_subbook(book, subbook_code)
      */
   failed:
     eb_unset_subbook(book);
-    eb_unlock(&book->lock);
     return error_code;
 }
 
@@ -778,7 +914,7 @@ eb_unset_subbook(book)
     if (book->subbook_current != NULL) {
 	eb_unset_font(book);
 	if (0 <= book->subbook_current->text_file) {
-	    eb_zclose(&(book->subbook_current->zip),
+	    eb_zclose(&book->subbook_current->text_zip,
 		book->subbook_current->text_file);
 	}
 	book->subbook_current = NULL;

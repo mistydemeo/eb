@@ -306,13 +306,13 @@ eb_wide_character_text_jis(appendix, character_number, text)
     /*
      * Read the alternation data.
      */
-    if (eb_zlseek(&(appendix->subbook_current->zip), 
+    if (eb_zlseek(&appendix->subbook_current->appendix_zip, 
 	appendix->subbook_current->appendix_file, location, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
     cachep->character_number = -1;
-    if (eb_zread(&(appendix->subbook_current->zip), 
+    if (eb_zread(&appendix->subbook_current->appendix_zip, 
 	appendix->subbook_current->appendix_file, cachep->text, 
 	EB_MAX_ALTERNATION_TEXT_LENGTH + 1)
 	!= EB_MAX_ALTERNATION_TEXT_LENGTH + 1) {
@@ -388,13 +388,13 @@ eb_wide_character_text_latin(appendix, character_number, text)
     /*
      * Read the alternation data.
      */
-    if (eb_zlseek(&(appendix->subbook_current->zip), 
+    if (eb_zlseek(&appendix->subbook_current->appendix_zip, 
 	appendix->subbook_current->appendix_file, location, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
     cache_p->character_number = -1;
-    if (eb_zread(&(appendix->subbook_current->zip), 
+    if (eb_zread(&appendix->subbook_current->appendix_zip, 
 	appendix->subbook_current->appendix_file, cache_p->text, 
 	EB_MAX_ALTERNATION_TEXT_LENGTH + 1)
 	!= EB_MAX_ALTERNATION_TEXT_LENGTH + 1) {

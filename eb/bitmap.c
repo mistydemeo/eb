@@ -75,6 +75,7 @@ eb_narrow_font_xbm_size(height, size)
     case EB_FONT_48:
         *size = EB_SIZE_NARROW_FONT_48_XBM;
     default:
+	error_code = EB_ERR_NO_SUCH_FONT;
 	goto failed;
     }
 
@@ -109,6 +110,7 @@ eb_narrow_font_xpm_size(height, size)
     case EB_FONT_48:
         *size = EB_SIZE_NARROW_FONT_48_XPM;
     default:
+	error_code = EB_ERR_NO_SUCH_FONT;
 	goto failed;
     }
 
@@ -143,6 +145,7 @@ eb_narrow_font_gif_size(height, size)
     case EB_FONT_48:
         *size = EB_SIZE_NARROW_FONT_48_GIF;
     default:
+	error_code = EB_ERR_NO_SUCH_FONT;
 	goto failed;
     }
 
@@ -177,6 +180,7 @@ eb_wide_font_xbm_size(height, size)
     case EB_FONT_48:
         *size = EB_SIZE_NARROW_FONT_48_XBM;
     default:
+	error_code = EB_ERR_NO_SUCH_FONT;
 	goto failed;
     }
 
@@ -211,6 +215,7 @@ eb_wide_font_xpm_size(height, size)
     case EB_FONT_48:
         *size = EB_SIZE_NARROW_FONT_48_XPM;
     default:
+	error_code = EB_ERR_NO_SUCH_FONT;
 	goto failed;
     }
 
@@ -245,6 +250,7 @@ eb_wide_font_gif_size(height, size)
     case EB_FONT_48:
         *size = EB_SIZE_NARROW_FONT_48_GIF;
     default:
+	error_code = EB_ERR_NO_SUCH_FONT;
 	goto failed;
     }
 

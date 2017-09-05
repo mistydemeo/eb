@@ -59,7 +59,7 @@ int eb_have_graphic_search EB_P((EB_Book *));
 
 /* keyword.c */
 int eb_have_keyword_search EB_P((EB_Book *));
-EB_Error_Code eb_search_keyword EB_P((EB_Book *, const char *[]));
+EB_Error_Code eb_search_keyword EB_P((EB_Book *, const char * const []));
 
 /* menu.c */
 int eb_have_menu EB_P((EB_Book *));
@@ -78,7 +78,7 @@ int eb_multi_entry_have_candidates EB_P((EB_Book *, EB_Multi_Search_Code,
 EB_Error_Code eb_multi_entry_candidates EB_P((EB_Book *, 
     EB_Multi_Search_Code, EB_Multi_Entry_Code, EB_Position *));
 EB_Error_Code eb_search_multi EB_P((EB_Book *, EB_Multi_Search_Code,
-    const char *[]));
+    const char * const []));
 
 /* search.c */
 EB_Error_Code eb_hit_list EB_P((EB_Book *, int, EB_Hit *, int *));

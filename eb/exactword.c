@@ -94,8 +94,10 @@ eb_search_exactword(book, input_word)
     /*
      * Current subbook must have been set.
      */
-    if (book->subbook_current == NULL)
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
 	goto failed;
+    }
 
     /*
      * Initialize search context.

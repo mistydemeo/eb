@@ -64,10 +64,6 @@ char *memset();
 #endif /* not __STDC__ */
 #endif
 
-#ifndef HAVE_MEMMOVE
-#define memmove eb_memmove
-#endif
-
 /*
  * The maximum length of path name.
  */
@@ -96,7 +92,7 @@ eb_initialize_messages(book)
     ssize_t read_length;
     off_t offset;
     int max_messages;
-    char language_file_name[PATH_MAX + 1];
+    char language_path_name[PATH_MAX + 1];
     char buffer[EB_SIZE_PAGE];
     char *buffer_p;
     int i;
@@ -104,9 +100,13 @@ eb_initialize_messages(book)
     /*
      * Open the language file.
      */
-    sprintf(language_file_name, "%s/%s", book->path, EB_FILE_NAME_LANGUAGE);
-    eb_fix_file_name(book, language_file_name);
-    file = eb_zopen(&zip, language_file_name);
+    if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
+	EB_SUFFIX_NONE, language_path_name) == 0) {
+	file = eb_zopen_none(&zip, language_path_name);
+    } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
+	EB_SUFFIX_EBZ, language_path_name) == 0) {
+	file = eb_zopen_ebzip(&zip, language_path_name);
+    }
     if (file < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;

@@ -47,23 +47,7 @@ extern "C" {
  */
 #define EB_DISC_EB			0
 #define EB_DISC_EPWING			1
-
-/*
- * Case of file names (upper or lower).
- */
-#define EB_CASE_UNCHANGE		-1
-#define EB_CASE_UPPER			0
-#define EB_CASE_LOWER			1
-
-/*
- * Suffix to be added to file names (none, `.', or `.;1').
- */
-#define EB_SUFFIX_UNCHANGE		-1
-#define EB_SUFFIX_NONE			0
-#define EB_SUFFIX_DOT			1
-#define EB_SUFFIX_PERIOD		1
-#define EB_SUFFIX_VERSION		2
-#define EB_SUFFIX_BOTH			3
+#define EB_DISC_INVALID			-1
 
 /*
  * Character codes.
@@ -74,53 +58,6 @@ extern "C" {
 #define EB_CHARCODE_INVALID		-1
 
 /*
- * Search word types.
- */
-#define EB_WORD_ALPHABET		0
-#define EB_WORD_KANA			1
-#define EB_WORD_OTHER			2
-#define EB_WORD_INVALID			-1
-
-/*
- * Index Style flags.
- */
-#define EB_INDEX_STYLE_CONVERT		0
-#define EB_INDEX_STYLE_ASIS		1
-#define EB_INDEX_STYLE_DELETE		2
-
-/*
- * Compression type codes.
- */
-#define EB_ZIP_EPWING			-1
-#define EB_ZIP_NONE			0
-#define EB_ZIP_EBZIP1			1
-
-/*
- * Text content currently read.
- */
-#define EB_TEXT_TEXT            	1
-#define EB_TEXT_HEADING         	2
-#define EB_TEXT_RAWTEXT         	3
-#define EB_TEXT_NONE           		0
-#define EB_TEXT_INVALID        		-1
-
-/*
- * Search method currently processed.
- */
-#define EB_SEARCH_EXACTWORD            	0
-#define EB_SEARCH_WORD         		1
-#define EB_SEARCH_ENDWORD         	2
-#define EB_SEARCH_KEYWORD         	3
-#define EB_SEARCH_MULTI         	4
-#define EB_SEARCH_NONE           	-1
-
-/*
- * Arrangement style of entries in a search index page.
- */
-#define EB_ARRANGE_FIXED		0
-#define EB_ARRANGE_VARIABLE		1
-
-/*
  * Special book ID for cache to represent "no cache data for any book".
  */
 #define EB_BOOK_NONE			-1
@@ -129,7 +66,6 @@ extern "C" {
  * Special disc code, subbook code, multi search ID, and multi search
  * entry ID, for representing error state.
  */
-#define EB_DISC_INVALID			-1
 #define EB_SUBBOOK_INVALID		-1
 #define EB_MULTI_INVALID		-1
 #define EB_MULTI_ENTRY_INVALID		-1
@@ -182,9 +118,15 @@ extern "C" {
 #define EB_MAX_TITLE_LENGTH		80
 
 /*
- * The maximum length of a base name of a file name.
+ * The maximum length of a directory name.
  */
-#define EB_MAX_BASE_NAME_LENGTH		8
+#define EB_MAX_DIRECTORY_NAME_LENGTH	8
+
+/*
+ * The maximum length of a file name under a certain directory.
+ * prefix(8 chars) + '.' + suffix(3 chars) + ';' + digit(1 char)
+ */
+#define EB_MAX_FILE_NAME_LENGTH		14
 
 /*
  * The maximum length of a language name.
@@ -227,11 +169,6 @@ extern "C" {
 #define EB_MAX_MESSAGES			32
 
 /*
- * The maximum index depth of search indexes.
- */
-#define EB_MAX_INDEX_DEPTH		6
-
-/*
  * The maximum number of entries in a keyword search.
  */
 #define EB_MAX_KEYWORDS			5
@@ -252,11 +189,6 @@ extern "C" {
 #define EB_MAX_ALTERNATION_CACHE	16
 
 /*
- * Maximum ebzip compression level.
- */
-#define EB_MAX_EBZIP_LEVEL		3
-
-/*
  * Maximum length of a text work buffer.
  */
 #define EB_MAX_TEXT_WORK_LENGTH		255
@@ -270,24 +202,6 @@ extern "C" {
  * The number of search contexts required by a book.
  */
 #define EB_NUMBER_OF_SEARCH_CONTEXTS	5
-
-/*
- * File and directory names.
- */
-#define EB_FILE_NAME_START		"START"
-#define EB_FILE_NAME_SOUND		"SOUND"
-#define EB_FILE_NAME_CATALOG		"CATALOG"
-#define EB_FILE_NAME_LANGUAGE		"LANGUAGE"
-#define EB_FILE_NAME_VTOC		"VTOC"
-#define EB_FILE_NAME_WELCOME		"WELCOME"
-#define EB_FILE_NAME_CATALOGS		"CATALOGS"
-#define EB_FILE_NAME_HONMON		"HONMON"
-#define EB_FILE_NAME_HONMON2		"HONMON2"
-#define EB_FILE_NAME_APPENDIX		"APPENDIX"
-#define EB_FILE_NAME_FUROKU		"FUROKU"
-
-#define EB_DIRECTORY_NAME_DATA		"DATA"
-#define EB_DIRECTORY_NAME_GAIJI		"GAIJI"
 
 /*
  * Trick for function protypes.
@@ -388,14 +302,14 @@ struct EB_Position_Struct {
  */
 struct EB_Huffman_Node_Struct {
     /*
-     * node type (INTERMEDIATE, LEAF8, LEAF16 or EOF).
+     * node type (ITNERMEDIATE, LEAF8, LEAF16, LEAF32 or EOF).
      */
     int type;
 
     /*
      * Value of a leaf node.
      */
-    int value;
+    unsigned int value;
 
     /*
      * Frequency of a node.
@@ -521,7 +435,12 @@ struct EB_Appendix_Subbook_Struct {
     /*
      * Directory name.
      */
-    char directory[EB_MAX_BASE_NAME_LENGTH + 1];
+    char directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+
+    /*
+     * Sub-directory name. (EPWING only)
+     */
+    char data_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
 
     /*
      * File descriptor for the appendix file.
@@ -558,9 +477,9 @@ struct EB_Appendix_Subbook_Struct {
     int stop1;
 
     /*
-     * Compression Information.
+     * Compression Information for appendix file.
      */
-    EB_Zip zip;
+    EB_Zip appendix_zip;
 };
 
 /*
@@ -581,16 +500,6 @@ struct EB_Appendix_Struct {
      * Disc type.  EB (EB/EBG/EBXA/EBXA-C/S-EBXA) or EPWING.
      */
     EB_Disc_Code disc_code;
-
-    /*
-     * Cases of the file names; upper or lower.
-     */
-    EB_Case_Code case_code;
-
-    /*
-     * Suffix to be added to file names. (None, ".", or ".;1")
-     */
-    EB_Suffix_Code suffix_code;
 
     /*
      * The number of subbooks the book has.
@@ -626,10 +535,14 @@ struct EB_Appendix_Struct {
  */
 struct EB_Font_Struct {
     /*
-     * Width and height.
+     * Font Code.
      */
-    int width;
-    int height;
+    EB_Font_Code font_code;
+
+    /*
+     * Avaiable or not.
+     */
+    int available;
 
     /*
      * Character numbers of the start and end of the font.
@@ -651,7 +564,7 @@ struct EB_Font_Struct {
     /*
      * File name of the font. (EPWING only)
      */
-    char file_name[EB_MAX_BASE_NAME_LENGTH + 1];
+    char file_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
 
     /*
      * Compression Information.
@@ -770,9 +683,24 @@ struct EB_Subbook_Struct {
     char title[EB_MAX_TITLE_LENGTH + 1];
 
     /*
-     * Directory name.
+     * Subbook directory name.
      */
-    char directory[EB_MAX_BASE_NAME_LENGTH + 1];
+    char directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+
+    /*
+     * Sub-directory names. (EPWING only)
+     */
+    char data_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+    char gaiji_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+    char movie_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+    char stream_directory_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+
+    /*
+     * File names. (EPWING only)
+     */
+    char text_file_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+    char graphic_file_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
+    char sound_file_name[EB_MAX_DIRECTORY_NAME_LENGTH + 1];
 
     /*
      * The top page of search methods.
@@ -799,14 +727,10 @@ struct EB_Subbook_Struct {
     EB_Multi_Search multis[EB_MAX_MULTI_SEARCHES];
 
     /*
-     * The number of fonts the subbook has.
-     */
-    int font_count;
-
-    /*
      * Font list.
      */
-    EB_Font fonts[EB_MAX_FONTS * 2];
+    EB_Font narrow_fonts[EB_MAX_FONTS];
+    EB_Font wide_fonts[EB_MAX_FONTS];
 
     /*
      * Current narrow and wide fonts.
@@ -815,9 +739,9 @@ struct EB_Subbook_Struct {
     EB_Font *wide_current;
 
     /*
-     * Compression Information.
+     * Compression Information for text file.
      */
-    EB_Zip zip;
+    EB_Zip text_zip;
 };
 
 /*
@@ -973,6 +897,11 @@ struct EB_Book_Struct {
     EB_Disc_Code disc_code;
 
     /*
+     * Format version. (EPWING only)
+     */
+    int version;
+
+    /*
      * Character code of the book.
      */
     EB_Character_Code character_code;
@@ -986,16 +915,6 @@ struct EB_Book_Struct {
      * The length of the path.
      */
     size_t path_length;
-
-    /*
-     * Cases of the file names; upper or lower.
-     */
-    EB_Case_Code case_code;
-
-    /*
-     * Suffix to be added to file names. (None, ".", ";1" or ".;1")
-     */
-    EB_Suffix_Code suffix_code;
 
     /*
      * The number of subbooks the book has.

@@ -186,13 +186,13 @@ eb_bind_appendix(appendix, path)
 	goto failed;
     }
     strcpy(temporary_path, path);
-    error_code = eb_canonicalize_appendix_file_name(appendix, temporary_path);
+    error_code = eb_canonicalize_path_name(temporary_path);
     if (error_code != EB_SUCCESS)
 	goto failed;
     appendix->path_length = strlen(temporary_path);
 
-    if (PATH_MAX < appendix->path_length + (1 + EB_MAX_BASE_NAME_LENGTH + 1
-	+ EB_MAX_BASE_NAME_LENGTH + 1 + EB_MAX_BASE_NAME_LENGTH + 3)) {
+    if (PATH_MAX < appendix->path_length + 1 + EB_MAX_DIRECTORY_NAME_LENGTH
+	+ 1 + EB_MAX_DIRECTORY_NAME_LENGTH + 1 + EB_MAX_FILE_NAME_LENGTH) {
 	error_code = EB_ERR_TOO_LONG_FILE_NAME;
 	goto failed;
     }
@@ -203,13 +203,6 @@ eb_bind_appendix(appendix, path)
 	goto failed;
     }
     strcpy(appendix->path, temporary_path);
-
-    /*
-     * Get disc type and file name mode.
-     */
-    error_code = eb_appendix_catalog_file_name(appendix);
-    if (error_code != EB_SUCCESS)
-	goto failed;
 
     /*
      * Read information from the `CATALOG(S)' file.
@@ -245,7 +238,7 @@ eb_initialize_appendix_catalog(appendix)
 {
     EB_Error_Code error_code;
     char buffer[EB_SIZE_PAGE];
-    char catalog_file_name[PATH_MAX + 1];
+    char catalog_path_name[PATH_MAX + 1];
     char *space;
     EB_Appendix_Subbook *subbook;
     size_t catalog_size;
@@ -254,27 +247,31 @@ eb_initialize_appendix_catalog(appendix)
     int i;
 
     /*
-     * Check for the current status.
+     * Find a catalog file.
      */
-    if (appendix->disc_code == EB_DISC_EB) {
+    if (eb_compose_path_name(appendix->path, EB_FILE_NAME_CATALOG,
+	EB_SUFFIX_NONE, catalog_path_name) == 0) {
+	appendix->disc_code = EB_DISC_EB;
 	catalog_size = EB_SIZE_EB_CATALOG;
 	title_size = EB_MAX_EB_TITLE_LENGTH;
-	sprintf(catalog_file_name, "%s/%s", appendix->path,
-	    EB_FILE_NAME_CATALOG);
-    } else {
+    } else if (eb_compose_path_name(appendix->path, EB_FILE_NAME_CATALOGS,
+	EB_SUFFIX_NONE, catalog_path_name) == 0) {
+	appendix->disc_code = EB_DISC_EPWING;
 	catalog_size = EB_SIZE_EPWING_CATALOG;
 	title_size = EB_MAX_EPWING_TITLE_LENGTH;
-	sprintf(catalog_file_name, "%s/%s", appendix->path,
-	    EB_FILE_NAME_CATALOGS);
+    } else {
+	error_code = EB_ERR_FAIL_OPEN_CATAPP;
+	goto failed;
     }
-	
+
     /*
      * Open the catalog file.
      */
-    eb_fix_appendix_file_name(appendix, catalog_file_name);
-    file = open(catalog_file_name, O_RDONLY | O_BINARY);
-    if (file < 0) 
+    file = open(catalog_path_name, O_RDONLY | O_BINARY);
+    if (file < 0) {
+	error_code = EB_ERR_FAIL_OPEN_CATAPP;
 	goto failed;
+    }
 
     /*
      * Get the number of subbooks in the appendix.
@@ -317,12 +314,13 @@ eb_initialize_appendix_catalog(appendix)
 	/*
 	 * Set a directory name of the subbook.
 	 */
-	strncpy(subbook->directory, buffer + 2 + title_size,
-	    EB_MAX_BASE_NAME_LENGTH);
-	subbook->directory[EB_MAX_BASE_NAME_LENGTH] = '\0';
-	space = strchr(subbook->directory, ' ');
+	strncpy(subbook->directory_name, buffer + 2 + title_size,
+	    EB_MAX_DIRECTORY_NAME_LENGTH);
+	subbook->directory_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
+	space = strchr(subbook->directory_name, ' ');
 	if (space != NULL)
 	    *space = '\0';
+	eb_fix_directory_name(appendix->path, subbook->directory_name);
 
 	subbook->initialized = 0;
 	subbook->code = i;

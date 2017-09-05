@@ -69,6 +69,7 @@ eb_initialize_appendix_subbook(appendix)
     EB_Appendix *appendix;
 {
     EB_Error_Code error_code;
+    EB_Appendix_Subbook *subbook = appendix->subbook_current;
     char buffer[16];
     int stop_code_page;
     int character_count;
@@ -76,7 +77,7 @@ eb_initialize_appendix_subbook(appendix)
     /*
      * Check for the current status.
      */
-    if (appendix->subbook_current == NULL) {
+    if (subbook == NULL) {
 	error_code = EB_ERR_NO_CUR_APPSUB;
 	goto failed;
     }
@@ -84,14 +85,23 @@ eb_initialize_appendix_subbook(appendix)
     /*
      * If the subbook has already initialized, return immediately.
      */
-    if (appendix->subbook_current->initialized != 0)
+    if (subbook->initialized != 0)
 	goto succeeded;
+
+    /*
+     * Adjust a directory name.
+     */
+    if (appendix->disc_code == EB_DISC_EPWING) {
+	strcpy(subbook->data_directory_name, EB_DIRECTORY_NAME_DATA);
+	eb_fix_directory_name2(appendix->path, subbook->directory_name,
+	    subbook->data_directory_name);
+    }
 
     /*
      * Rewind the APPENDIX file.
      */
-    if (eb_zlseek(&(appendix->subbook_current->zip), 
-	appendix->subbook_current->appendix_file, 0, SEEK_SET) < 0) {
+    if (eb_zlseek(&subbook->appendix_zip, subbook->appendix_file, 0, SEEK_SET)
+	< 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
@@ -99,79 +109,77 @@ eb_initialize_appendix_subbook(appendix)
     /*
      * Set character code used in the appendix.
      */
-    if (eb_zread(&(appendix->subbook_current->zip),
-	appendix->subbook_current->appendix_file, buffer, 16) != 16) {
+    if (eb_zread(&subbook->appendix_zip, subbook->appendix_file, buffer, 16)
+	!= 16) {
 	error_code = EB_ERR_FAIL_READ_APP;
 	goto failed;
     }
-    appendix->subbook_current->character_code = eb_uint2(buffer + 2);
+    subbook->character_code = eb_uint2(buffer + 2);
 
     /*
      * Set information about alternation text of wide font.
      */
-    if (eb_zread(&(appendix->subbook_current->zip), 
-	appendix->subbook_current->appendix_file, buffer, 16) != 16) {
+    if (eb_zread(&subbook->appendix_zip, subbook->appendix_file, buffer, 16)
+	!= 16) {
 	error_code = EB_ERR_FAIL_READ_APP;
 	goto failed;
     }
     character_count = eb_uint2(buffer + 12);
-    appendix->subbook_current->narrow_page = eb_uint4(buffer);
-    appendix->subbook_current->narrow_start = eb_uint2(buffer + 10);
-    appendix->subbook_current->narrow_end
-	= appendix->subbook_current->narrow_start
+    subbook->narrow_page = eb_uint4(buffer);
+    subbook->narrow_start = eb_uint2(buffer + 10);
+    subbook->narrow_end = subbook->narrow_start
 	+ ((character_count / 0x5e) << 8) + (character_count % 0x5e) - 1;
-    if (0x7e < (appendix->subbook_current->narrow_end & 0xff))
-	appendix->subbook_current->narrow_end += 0xa3;
+    if (0x7e < (subbook->narrow_end & 0xff))
+	subbook->narrow_end += 0xa3;
 
     /*
      * Set information about alternation text of wide font.
      */
-    if (eb_zread(&(appendix->subbook_current->zip),
-	appendix->subbook_current->appendix_file, buffer, 16) != 16) {
+    if (eb_zread(&subbook->appendix_zip, subbook->appendix_file, buffer, 16)
+	!= 16) {
 	error_code = EB_ERR_FAIL_READ_APP;
 	goto failed;
     }
     character_count = eb_uint2(buffer + 12);
-    appendix->subbook_current->wide_page = eb_uint4(buffer);
-    appendix->subbook_current->wide_start = eb_uint2(buffer + 10);
-    appendix->subbook_current->wide_end = appendix->subbook_current->wide_start
+    subbook->wide_page = eb_uint4(buffer);
+    subbook->wide_start = eb_uint2(buffer + 10);
+    subbook->wide_end = subbook->wide_start
 	+ ((character_count / 0x5e) << 8) + (character_count % 0x5e) - 1;
-    if (0x7e < (appendix->subbook_current->wide_end & 0xff))
-	appendix->subbook_current->wide_end += 0xa3;
+    if (0x7e < (subbook->wide_end & 0xff))
+	subbook->wide_end += 0xa3;
     
     /*
      * Set stop-code.
      */
-    if (eb_zread(&(appendix->subbook_current->zip),
-	appendix->subbook_current->appendix_file, buffer, 16) != 16) {
+    if (eb_zread(&subbook->appendix_zip, subbook->appendix_file, buffer, 16)
+	!= 16) {
 	error_code = EB_ERR_FAIL_READ_APP;
 	goto failed;
     }
     stop_code_page = eb_uint4(buffer);
-    if (eb_zlseek(&(appendix->subbook_current->zip), 
-	appendix->subbook_current->appendix_file,
+    if (eb_zlseek(&subbook->appendix_zip, subbook->appendix_file,
 	(stop_code_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
-    if (eb_zread(&(appendix->subbook_current->zip), 
-	appendix->subbook_current->appendix_file, buffer, 16) != 16) {
+    if (eb_zread(&subbook->appendix_zip, subbook->appendix_file, buffer, 16)
+	!= 16) {
 	error_code = EB_ERR_FAIL_READ_APP;
 	goto failed;
     }
     if (eb_uint2(buffer) != 0) {
-	appendix->subbook_current->stop0 = eb_uint2(buffer + 2);
-	appendix->subbook_current->stop1 = eb_uint2(buffer + 4);
+	subbook->stop0 = eb_uint2(buffer + 2);
+	subbook->stop1 = eb_uint2(buffer + 4);
     } else {
-	appendix->subbook_current->stop0 = 0;
-	appendix->subbook_current->stop1 = 0;
+	subbook->stop0 = 0;
+	subbook->stop1 = 0;
     }
 
     /*
      * Rewind the file descriptor, again.
      */
-    if (eb_zlseek(&(appendix->subbook_current->zip), 
-	appendix->subbook_current->appendix_file, 0, SEEK_SET) < 0) {
+    if (eb_zlseek(&subbook->appendix_zip, subbook->appendix_file, 0, SEEK_SET)
+	< 0) {
 	error_code = EB_ERR_FAIL_SEEK_APP;
 	goto failed;
     }
@@ -384,7 +392,7 @@ eb_appendix_subbook_directory(appendix, directory)
     /*
      * Copy the directory name to `directory'.
      */
-    strcpy(directory, appendix->subbook_current->directory);
+    strcpy(directory, appendix->subbook_current->directory_name);
 
     /*
      * Unlock the appendix.
@@ -438,7 +446,7 @@ eb_appendix_subbook_directory2(appendix, subbook_code, directory)
     /*
      * Copy the directory name to `directory'.
      */
-    strcpy(directory, (appendix->subbooks + subbook_code)->directory);
+    strcpy(directory, (appendix->subbooks + subbook_code)->directory_name);
 
     /*
      * Unlock the appendix.
@@ -466,7 +474,8 @@ eb_set_appendix_subbook(appendix, subbook_code)
     EB_Subbook_Code subbook_code;
 {
     EB_Error_Code error_code;
-    char appendix_file_name[PATH_MAX + 1];
+    EB_Appendix_Subbook *subbook;
+    char appendix_path_name[PATH_MAX + 1];
 
     /*
      * Lock the appendix.
@@ -500,22 +509,42 @@ eb_set_appendix_subbook(appendix, subbook_code)
     }
 
     /*
-     * Open the subbook.
+     * Set the current subbook.
      */
     appendix->subbook_current = appendix->subbooks + subbook_code;
+    subbook = appendix->subbook_current;
+
+    /*
+     * Open an appendix file.
+     */
+    subbook->appendix_file = -1;
     if (appendix->disc_code == EB_DISC_EB) {
-	sprintf(appendix_file_name, "%s/%s/%s", appendix->path,
-	    appendix->subbook_current->directory, EB_FILE_NAME_APPENDIX);
+	if (eb_compose_path_name2(appendix->path, subbook->directory_name, 
+	    EB_FILE_NAME_APPENDIX, EB_SUFFIX_NONE, appendix_path_name) == 0) {
+	    subbook->appendix_file = eb_zopen_none(&subbook->appendix_zip,
+		appendix_path_name);
+	} else if (eb_compose_path_name2(appendix->path,
+	    subbook->directory_name, EB_FILE_NAME_APPENDIX, EB_SUFFIX_EBZ,
+	    appendix_path_name) == 0) {
+	    subbook->appendix_file = eb_zopen_ebzip(&subbook->appendix_zip,
+		appendix_path_name);
+	}
     } else {
-	sprintf(appendix_file_name, "%s/%s/%s/%s", appendix->path,
-	    appendix->subbook_current->directory, EB_DIRECTORY_NAME_DATA,
-	    EB_FILE_NAME_FUROKU);
+	if (eb_compose_path_name3(appendix->path, subbook->directory_name,
+	    subbook->data_directory_name, EB_FILE_NAME_FUROKU, EB_SUFFIX_NONE,
+	    appendix_path_name) == 0) {
+	    subbook->appendix_file = eb_zopen_none(&subbook->appendix_zip, 
+		appendix_path_name);
+	} else if (eb_compose_path_name3(appendix->path,
+	    subbook->directory_name, subbook->data_directory_name,
+	    EB_FILE_NAME_FUROKU, EB_SUFFIX_EBZ, appendix_path_name) == 0) {
+	    subbook->appendix_file = eb_zopen_ebzip(&subbook->appendix_zip,
+		appendix_path_name);
+	}
     }
-    eb_fix_appendix_file_name(appendix, appendix_file_name);
-    appendix->subbook_current->appendix_file
-	= eb_zopen(&(appendix->subbook_current->zip), appendix_file_name);
-    if (appendix->subbook_current->appendix_file < 0) {
-	appendix->subbook_current = NULL;
+
+    if (subbook->appendix_file < 0) {
+	subbook = NULL;
 	error_code = EB_ERR_FAIL_OPEN_APP;
 	goto failed;
     }
@@ -561,7 +590,7 @@ eb_unset_appendix_subbook(appendix)
      * Close a file for the current subbook.
      */
     if (appendix->subbook_current != NULL) {
-	eb_zclose(&(appendix->subbook_current->zip),
+	eb_zclose(&appendix->subbook_current->appendix_zip,
 	    appendix->subbook_current->appendix_file);
 	appendix->subbook_current = NULL;
     }

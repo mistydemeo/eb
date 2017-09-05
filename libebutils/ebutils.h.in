@@ -43,12 +43,9 @@ extern const char *invoked_name;
  */
 void output_try_help EB_P((void));
 void output_version EB_P((void));
-int parse_case_argument EB_P((const char *, EB_Case_Code *));
-int parse_suffix_argument EB_P((const char *, EB_Suffix_Code *));
 int parse_subbook_name_argument EB_P((const char *,
-    char [][EB_MAX_BASE_NAME_LENGTH  + 1], int *));
+    char [][EB_MAX_DIRECTORY_NAME_LENGTH  + 1], int *));
 EB_Subbook_Code find_subbook EB_P((EB_Book *, const char *));
-void fix_file_name EB_P((char *, EB_Case_Code, EB_Suffix_Code));
 void canonicalize_path EB_P((char *));
 
 #endif /* not EBUTILS_H */

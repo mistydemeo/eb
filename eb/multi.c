@@ -78,12 +78,12 @@ eb_initialize_multi_search(book)
 	/*
 	 * Read the index table page of the multi search.
 	 */
-	if (eb_zlseek(&(sub->zip), sub->text_file,
+	if (eb_zlseek(&sub->text_zip, sub->text_file,
 	    (multi->search.index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_TEXT;
 	    goto failed;
 	}
-	if (eb_zread(&(sub->zip), sub->text_file, buffer, EB_SIZE_PAGE)
+	if (eb_zread(&sub->text_zip, sub->text_file, buffer, EB_SIZE_PAGE)
 	    != EB_SIZE_PAGE) {
 	    error_code = EB_ERR_FAIL_READ_TEXT;
 	    goto failed;
@@ -522,7 +522,7 @@ EB_Error_Code
 eb_search_multi(book, multi_id, input_words)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
-    const char *input_words[];
+    const char * const input_words[];
 {
     EB_Error_Code error_code;
     EB_Search_Context *context;

@@ -107,7 +107,7 @@ static const unsigned char comparison_table[] = {
  * Cases in the strings are insensitive.
  */
 int
-strcasecmp(string1, string2)
+eb_strcasecmp(string1, string2)
     const char *string1;
     const char *string2;
 {
@@ -131,7 +131,7 @@ strcasecmp(string1, string2)
  * Cases in the strings are insensitive.
  */
 int
-strncasecmp(string1, string2, n)
+eb_strncasecmp(string1, string2, n)
     const char *string1;
     const char *string2;
     size_t n;

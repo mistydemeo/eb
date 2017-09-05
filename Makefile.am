@@ -4,13 +4,7 @@ else
 ZLIB_SUBDIR = 
 endif
 
-if INCLUDED_LIBINTL
-LIBINTL_SUBDIR = intl
-else
-LIBINTL_SUBDIR = 
-endif
-
-SUBDIRS = $(ZLIB_SUBDIR) $(LIBINTL_SUBDIR) eb libebutils ebappendix ebfont ebinfo \
+SUBDIRS = $(ZLIB_SUBDIR) intl eb libebutils ebappendix ebfont ebinfo \
    ebrefile ebzip doc doc-ja po
 
 EXTRA_DIST = ChangeLog.0 INSTALL-ja README-ja move-if-change eb.conf.in
@@ -38,3 +32,5 @@ eb.conf: eb.conf.in Makefile
 	cp $@.tmp $@
 	chmod 644 $@
 	rm -f $@.tmp
+
+

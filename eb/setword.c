@@ -458,7 +458,7 @@ eb_fix_word_jis(book, input_word, word, word_code)
     unsigned char *wp = (unsigned char *) word;
     const unsigned char *inp = (const unsigned char *) input_word;
     const unsigned char *tail;
-    unsigned char c1, c2;
+    unsigned char c1 = 0, c2 = 0;
     int kana_count = 0;
     int alphabet_count = 0;
     int kanji_count = 0;

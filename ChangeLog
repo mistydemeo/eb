@@ -1,4 +1,300 @@
+2000-07-21  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.0alpha1.
+
+	* eb/defs.h (EB_Huffman_Node_Struct): The type of the member `value'
+	is changed to `unsigned int'.
+
+	* eb/epwunzip.c (eb_unzip_slice_epwing6): New function.
+
+	* libebutils/ebutils.c (fix_file_name, parse_case_argument,
+	parse_suffix_argument): Removed.
+
+	* eb/internal.h.in: Include `config.h'.
+	* eb/internal.h.in: Always includes `defs.h'.
+	* eb/internal.h: Delete extern declaration of `eb_option'.
+
+	* eb/font.c, eb/message.c, eb/search.c, eb/text.c: Remove cpp macro
+	definition of `memmove'.
+	* eb/internal.h.in: Add cpp macro definition of `memmove'.
+	* eb/filename.c: Remove cpp macro definition of `strcasecmp' and
+	`strncasecmp'.
+	* eb/internal.h.in: Add cpp macro definition of `strcasecmp' and
+	`strncasecmp'.
+
+	* ebzip/ebzip.c (short_options, long_options): Delete `--suffix'
+	and `--case' options.
+
+2000-07-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/filename.c (eb_fix_file_name2, eb_fix_file_name3): New functions.
+	* ebzip/filename.c (compose_out_file_name, compose_out_file_name2, 
+	compose_out_file_name3): New functions, New file.
+	* eb/Makefile.am (ebzip_SOURCES): Add `filename.c'.
+	* ebzip/ebzip.c (zip_book, unzip_book, zipinfo_book): Rewritten.
+	* ebzip/ebzip.c: Delete `--case' and `--suffix' options.
+
+	* eb/defs.h (EB_ZIP_EPWING): Assign the value `100'.
+	* eb/defs.h (EB_ZIP_EPWING6, EB_ZIP_SEBXA): New macros.
+
+	* eb/internal.h.in (EB_HUFFMAN_NODE_EOF, EB_HUFFMAN_NODE_LEAF8,
+	EB_HUFFMAN_NODE_LEAF16): Assign new values.
+	* eb/internal.h.in (EB_HUFFMAN_NODE_LEAF32): Defined.
+
+	* eb/zio.c (eb_zread_ebzipped): Renamed to eb_zread_ebzip().
+	* eb/zio.c (eb_zread_epwzipped): Renamed to eb_zread_epwing().
+	* eb/ebunzip1.c (eb_ebunzip1_slice): Renamed to
+	eb_unzip_slice_ebzip1()..
+	* eb/epwunzip.c (eb_epwunzip_slice): Renamed to
+	eb_unzip_slice_epwing().
+
+	* eb/ebunzip1.c: Renamed to eb/unzebzip.c.
+	* eb/epwunzip.c: Renamed to eb/unzepwing.c.
+	* eb/unzsebxa.c: New file.
+
+2000-07-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/subbook.c (eb_initialize_all_subbooks): Also set each font.
+	* eb/subbook.c (eb_initialize_all_subbooks): Call eb_unset_subbook()
+	if an error occurs.
+
+	* ebzip/Makefile.am (ebzip_SOURCES): Remove `filelist.c'.
+	* ebzip/ebzip.c: Remove function declarations of
+	initialize_file_name_list(), finalize_file_name_list() and
+	add_file_name_list().
+
+2000-07-09  Motoyuki Kasahara  <m-kasahr@sra.eco.jp>
+
+	* eb/narwfont.c (eb_narrow_font_file_name, eb_narrow_font_file_name2):
+	Removed.
+	* eb/widefont.c (eb_wide_font_file_name, eb_wide_font_file_name2):
+	Removed.
+
+	* eb/font.c (eb_initialize_fonts, eb_initialize_eb_fonts,
+	eb_initialize_epwing_fonts): Removed.
+	* eb/font.c (eb_initialize_font): New function.
+	* eb/narwfont.c (eb_initialize_narrow_font): New function.
+	* eb/widefont.c (eb_initialize_wide_font): New function.
+	* eb/appendix.c (eb_initialize_appendix_catalog): Adapt to new
+	file name composition rule.
+	* eb/appsub.c (eb_set_subbook): Likewise.
+	* eb/book.c (eb_initialize_catalog): Likewise.
+	* eb/font.c (eb_set_font): Likewise.
+	* eb/language.c (eb_initialize_language): Likewise.
+	* eb/language.c (eb_set_language): Likewise.
+	* eb/subbook.c (eb_set_subbook): Likewise.
+
+	* eb/zio.c (eb_zopen, eb_zopen2): Removed.
+	* eb/zio.c (eb_zopen_none): New function.
+	* eb/zio.c (eb_zopen_ebzipped): Renamed to `eb_zopen_ebzip' and
+	changed to non-static.
+	* eb/zio.c (eb_zopen_epwing): Renamed to `eb_zopen_epwing' and
+	changed to non-static.
+
+	* eb/appendix.c (eb_initialize_appendix_catalog): Adjuts subbook
+	directory names.
+	* eb/book.c (eb_initialize_catalog): Likewise.
+	* eb/appsub.c (eb_initialize_appendix_subbook): Adjust data directory
+	name.
+	* eb/subbook.c (eb_initialize_subbook): Adjust date, gaiji, stream
+	and movie directory names.
+
+	* configure.in (AC_HEADER_DIRENT): Added.
+
+	* eb/subbook.c (eb_initialize_subbook): Don't call
+	eb_initialize_fonts().
+
+	* eb/defs.h (EB_CASE_UNCHANGE, EB_CASE_UPPER, EB_CASE_LOWER): Deleted.
+	* eb/defs.h (EB_SUFFIX_UNCHANGE, EB_SUFFIX_NONE, EB_SUFFIX_DOT,
+	EB_SUFFIX_PERIOD, EB_SUFFIX_VERSION, EB_SUFFIX_BOTH): Deleted.
+	* eb/ebzip.c (CASE_UNCHANGE, CASE_UPPER, CASE_LOWER): Defined.
+	* eb/ebzip.c (SUFFIX_UNCHANGE, SUFFIX_NONE, SUFFIX_DOT, 
+	SUFFIX_VERSION, SUFFIX_BOTH): Defined.
+
+	* eb/defs.h (EB_FILE_NAME_START, EB_FILE_NAME_SOUND,
+	EB_FILE_NAME_CATALOG, EB_FILE_NAME_LANGUAGE, EB_FILE_NAME_WELCOME,
+	EB_FILE_NAME_CATALOGS, EB_FILE_NAME_HONMON, EB_FILE_NAME_HONMON2,
+	EB_FILE_NAME_APPENDIX, EB_FILE_NAME_FUROKU, EB_DIRECTORY_NAME_DATA,
+	EB_DIRECTORY_NAME_GAIJI, EB_DIRECTORY_NAME_STREAM,
+	EB_DIRECTORY_NAME_MOVIE): Move these definitions to `eb/internal.h.in'
+	and convert their values to lower cases.
+	* eb/internal.h.in (EB_SUFFIX_EBZ): Defined.
+	* eb/internal.h.in (EB_SUFFIX_NONE): Defined.
+	* eb/internal.h.in (EB_FILE_NAME_HONMONS): Defined.
+	* eb/internal.h.in (EB_FILE_NAME_HONMONG): Defined.
+	* eb/internal.h.in (EB_FILE_NAME_VTOC): Removed.
+
+	* eb/ebinfo.c (output_information): Adapt to new EB_FONT_* macro
+	values.  They were 16, 24, 30, 48, but now they are 0, 1, 2, 3.
+	
+2000-07-08  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h (EB_MAX_BASE_NAME_LENGTH): Renamed to
+	EB_MAX_DIRECTORY_NAME_LENGTH.
+	* eb/defs.h (EB_MAX_FILE_NAME_LENGTH): Defined.
+
+	* eb/defs.h (EB_Subbook_Struct): Add the member `version'.
+	* eb/book.c (eb_initialize_catalog): Set format version.
+
+        * eb/zio.c (eb_zopen_epwzipped): Check if least frequent node
+        is found or not after scanning a node list.
+
+	* eb/strcasecmp.c: New file.
+	* eb/Makefile.am (libeb_la_SOURCES): Add `strcasecmp.c'.
+
+	* libebutil/strcasecmp.c: Include `sys/type.h'.
+
+	* eb/defs.h (EB_Subbook_Struct): Rename the member `directory' to
+	`directory_name',
+	* eb/defs.h (EB_Subbook_Struct): Add the member `data_directory_name',
+	`gaiji_directory_name', `movie_directory_name',
+	`stream_directory_name', `text_file_name', `graphic_file_name',
+	and `sound_file_name'.
+	* eb/defs.h (EB_Book_Struct): Remove the member `case_code' and
+	`suffix_code'.
+	* eb/defs.h (EB_Appendix_Struct): Add the member `data_directory_name',
+	and `appendix_file_name'.
+	* eb/defs.h (EB_Appendix_Subbook_Struct): Rename the member
+	`directory' to `directory_name',
+	* eb/defs.h (EB_APpendix_Subbook_Struct): Remove the member
+	`case_code' and `suffix_code'.
+
+	* eb/filename.c (eb_catalog_file_name): Removed.
+	* eb/filename.c (eb_appendix_catalog_file_name): Removed.
+	* eb/filename.c (eb_canonicalize_appendix_file_name): Removed.
+	* eb/filename.c (eb_canonicalize_file_name_internal): Renamed to 
+	`eb_canonicalize_file_name'.  The original `eb_canonicalize_file_name'
+	is overwritten.
+	* eb/filename.c (eb_fix_file_name): Removed.
+	* eb/filename.c (eb_fix_appendix_file_name): Removed.
+	* eb/filename.c (eb_fix_file_name_internal): Removed.
+	* eb/filename.c (eb_fix_directory_name, eb_fix_sub_directory_name):
+	New functions.
+	* eb/filename.c (eb_fix_file_name, eb_compose_file_name,
+	eb_compose_file_name2, eb_compose_file_name3): New functions.
+
+	* eb/defs.h (EB_DIRECTORY_NAME_DATA, EB_DIRECTORY_NAME_GAIJI,
+	EB_DIRECTORY_NAME_STREAM): Moved to eb/internal.h.in.
+	* eb/internal.h.in (EB_DIRECTORY_NAME_STREAM, 
+	EB_DIRECTORY_NAME_MOVIE): Defined.
+
+	* eb/font.h (EB_FONT_16, EB_FONT_24, EB_FONT_30, EB_FONT_48):
+	Change their integer values.
+
+	* eb/defs.h (EB_Font_Struct): Remove the memeber `width' and `height'.
+	* eb/defs.h (EB_Font_Struct): Add the memeber `available' and
+	`font_code'.
+	* eb/defs.h (EB_Subbook_Struct): Remove the memeber `font_count'.
+	* eb/defs.h (EB_Subbook_Struct): Split the memeber `fonts' into
+	`narrow_fonts' and `wide_fonts'.
+	* eb/book.c (eb_initialize_catalog): Assume that the order of font
+	names is always wide-16, -24, -30, -48, narrow-16, -24, -30, -48.
+
+	* eb/font.c (eb_initialize_eb_fonts, eb_initialize_epwing_fonts,
+	eb_font, eb_set_font, eb_unset_font, eb_font_list, eb_have_font):
+	Catch up with new EB_Font_Struct.
+	* eb/narwfont.c (eb_have_narrow_font, eb_narrow_font_width,
+	eb_narrow_font_width2, eb_narrow_font_size, eb_narrow_font_size2,
+	eb_narrow_font_file_name, eb_narrow_font_file_name2,
+	eb_narrow_font_start, eb_narrow_font_end,
+	eb_narrow_character_bitmap_jis, eb_narrow_character_bitmap_latin):
+	Likewise.
+	* eb/widefont.c (eb_have_wide_font, eb_wide_font_width,
+	eb_wide_font_width2, eb_wide_font_size, eb_wide_font_size2,
+	eb_wide_font_file_name, eb_wide_font_file_name2,
+	eb_wide_font_start, eb_wide_font_end,
+	eb_wide_character_bitmap_jis, eb_wide_character_bitmap_latin):
+	Likewise.
+	* eb/subbook.c (eb_initialize_indexes): Likewise.
+
+	* eb/font.c (eb_font_height, eb_font_height2): New functions.
+	* eb/font.h (EB_HEIGHT_FONT_16, EB_HEIGHT_FONT_24, EB_HEIGHT_FONT_30,
+	EB_HEIGHT_FONT_48): Defined.
+	
+	* eb/defs.h (EB_Subbook_Struct): Rename the member `zip' to
+	`text_zip'.
+	* eb/defs.h (EB_Appendix_Subbook_Struct): Rename the member `zip' to
+	`appendix_zip'.
+
+2000-06-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/subbook.c (eb_initialize_subbook): Fix bugs that EB 2.x API
+	are remained.
+
+	* eb/setword.c (eb_fix_word_jis): Initialize `c1' and `c2' to
+	avoid GCC warning `might be used uninitialized...'.
+
+	* eb/search.c (eb_presearch_word): Return EB_ERR_FAIL_SEEK_TEXT
+	when eb_zlseek() failed, and EB_ERR_FAIL_READ_TEXT when eb_zread().
+
+	* eb/exactword.c (eb_search_exactword): Return EB_ERR_NO_SUCH_FONT
+	when invalid font height is given.
+
+	* eb/bitmap.c (eb_narrow_font_xbm_size): Return EB_ERR_NO_SUCH_FONT
+	when invalid font height is given.
+	* eb/bitmap.c (eb_narrow_font_xpm_size): Likewise.
+	* eb/bitmap.c (eb_narrow_font_gif_size): Likewise.
+	* eb/bitmap.c (eb_wide_font_xbm_size): Likewise.
+	* eb/bitmap.c (eb_wide_font_xpm_size): Likewise.
+	* eb/bitmap.c (eb_wide_font_gif_size): Likewise.
+
+	* eb/appendix.c (eb_initialize_appendix_catalog): Return
+	EB_ERR_FAIL_OPEN_CATAPP when failed to open the catalog file.
+	* eb/book.c (eb_initialize_catalog): Return EB_ERR_FAIL_OPEN_CAT when
+	failed to open the catalog file.
+
+	* eb/hook.c: Include appendix.h.
+
+	* configure.in (AC_OUTPUT_COMMANDS): Remove `libintl.h', linked
+	from `libgettext.h' by gettext.m4.
+	* intl/Makefile.am: Make a symlink from `libgettext.h' to `libintl.h'.
+
+	* eb/zio.c (eb_zopen, eb_zopen2): Support DOS style path, reported
+	by Kazuhiro Ito.
+
+	* Makefile.am (SUBDIRS): Don't use ${INTL_SUBDIR} for `intl'
+	because automake complains.
+	* intl/Makefile.am (INCLUDED_LIBINTL): Use this conditional
+	to determine whether we build `libintl.la' or not.
+	* Makefile.am (intl/lib_LTLIBRARIES): Set to $(INTL_LTLIB).
+
+2000-06-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebrefile/ebrefile.in: Fix a bug that ebrefile fills the reserved-1
+	with 0x00, reported by Takashi NEMOTO
+
+2000-06-13  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/keyword.c (eb_search_keyword): Type of 2nd argument is changed
+	from `const *[]' to `const * const []'.
+	* eb/multi.c (eb_search_multi): Likewise.
+
+	* configure.in (ZLIBLIBS): Fixed a bug that this variable was not
+	set when zlib was built from included sources,reported by Kazuhiro
+	Ito.
+	* eb/filename.c (eb_canonicalize_file_name_internal for DOS):
+	EB Library 2.x API code was remained, reported by Kazuhiro Ito.
+	Fixed.
+
+2000-06-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebzip/ebzip.c (zip_file): Type of 2nd argument is changed from
+	`const char **' to `const char * const *'.
+	* ebzip/ebzip.c (unzip_file): Likewise
+	* ebzip/ebzip.c (zip_finfo): Likewise.
+
+	* libebutils/ebutils.c (parse_case_argument): Control reached end of
+	non-void function.  Fixed.
+	* libebutils/ebzip.c (parse_suffix_argument): Likewise.
+	* libebutils/getumask.c: Include `sys/stat.h'.
+
+	* eb/book.c (misleaded_book_table): Type is changed from
+	`const char *[]' to `const char * const[]'.
+	* eb/error.c (error_messages): Likewise.
+
 2000-05-27  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.0alpha0.
 
 	* configure.in: Add `--enable-pthread', `--with-pthread-cppflags',
 	`--with-pthread-cflags' and ``--with-pthread-ldflags'.
@@ -270,7 +566,7 @@
 2000-02-10  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* eb/zio.c (eb_zopen_epwzipped): Fix offset passed to lseek().
-	Reported by Nemoto san.
+	Reported by Takashi NEMOTO.
 
 2000-01-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
@@ -684,12 +980,6 @@
 
 	* eb/text.h: Use `EB_UINT_FUNCTION', not `EB_UINT_FUNC'.
 
-	* eb/Makefile.am, libebutils/Makefile.am, ebappendix/Makefile.am,
-	ebfont/Makefile.am, ebinfo/Makefile.am, ebrefile/Makefile.am, 
-	ebzip/Makefile.am, doc/Makefile.am, doc-ja/Makefile.am, 
-	samples/Makefile.am (@SET_MAKE@): Removed. (Old automake requires
-	this, but automake-2.13 doesn't).
-
 1999-12-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* eb/bitmap.c (gif_preamble): Renamed to `gif_default_preamble'.
@@ -811,4 +1101,4 @@
 
 	* eb/text.c (eb_text_internal): Don't go to `at_end' when
 	no enough space is left on the text buffer.
-	* eb/text.c (eb_text_internal): At `at_end', 
+

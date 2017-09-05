@@ -89,7 +89,6 @@ Compression
 * Compression Example 1::       Example of Compression (1).
 * Compression Example 2::       Example of Compression (2).
 * Compression Level::           Compression Level.
-* Adjust Filenames::            Adjust Filenames.
 * Test::                        Test.
 * Partial Compression::         Partial Compression.
 * Overwrite Old Files::         Overwrite Old Files.
@@ -260,7 +259,6 @@ In this case, it is assumed that the current working directory
 * Compression Example 1::       Example of Compression (1).
 * Compression Example 2::       Example of Compression (2).
 * Compression Level::           Compression Level.
-* Adjust Filenames::            Adjust Filenames.
 * Test::                        Test.
 * Partial Compression::         Partial Compression.
 * Overwrite Old Files::         Overwrite Old Files.
@@ -407,7 +405,7 @@ directory.
 @code{ebzip} ignores files and directories not supported by EB Library.
 
 @c -------------------------------------------------------------------
-@node Compression Level, Adjust Filenames, Compression Example 2, Compression
+@node Compression Level, Test, Compression Example 2, Compression
 @section Compression Level
 
 @code{ebzip} supports four compression levels, from 0 to 3.
@@ -425,68 +423,7 @@ The compression level is set by the @samp{--level} (@samp{-l}) option.
 The default level is 0 (fastest but worst).
 
 @c -------------------------------------------------------------------
-@node Adjust Filenames, Test, Compression Level, Compression
-@section Adjust Filenames
-
-Let's go back to the previous example.
-Again, supporsed that you have already copied a CD-ROM book to @file{/dict}
-on a hard disk, but it is not compressed.
-The book has the following files under @file{/dict}.
-However, unlike the previous example, file and directory names under
-@file{/dict} consist of upper case letters, and filenames have the
-version number @samp{;1} in their tails.
-
-@example
-@group
-/dict/CATALOG;1
-/dict/LANGUAGE;1
-/dict/GERMAN/START;1
-/dict/FRENCH/START;1
-/dict/ITALIAN/START;1
-@end group
-@end example
-
-After the compression by @code{ebzip}, they will be as the following:
-
-@example
-@group
-/dict/CATALOG;1
-/dict/LANGUAGE.EBZ;1
-/dict/GERMAN/START.EBZ;1
-/dict/FRENCH/START.EBZ;1
-/dict/ITALIAN/START.EBZ;1
-@end group
-@end example
-
-@noindent
-@code{ebzip} keeps @dfn{case} (upper or lower) and @dfn{suffix} of
-filenames as original form.
-The following table displayes how a filename of @file{start} file changes.
-
-@multitable @columnfractions .4 .3 .3
-@item case/suffix       @tab before compression @tab after compresssion
-@item lower/none        @tab start              @tab start.ebz
-@item lower/dot         @tab start.             @tab start.ebz
-@item lower/version     @tab start;1            @tab start.ebz;1
-@item lower/dot+version @tab start.;1           @tab start.ebz;1
-@item upper/none        @tab START              @tab START.EBZ
-@item upper/dot         @tab START.             @tab START.EBZ
-@item upper/version     @tab START;1            @tab START.EBZ;1
-@item upper/dot+version @tab START.;1           @tab START.EBZ;1
-@end multitable
-
-The @samp{--case} and @samp{--suffix} options allows you to
-modify these case and suffix styles of output filenames.
-The @samp{--case} option takes an argument, and it must be @samp{upper}
-or @samp{lower}.
-The option sets the case of output filenames to upper or lower.
-Also the @samp{--suffix} option takes an argument, and it must be
-@samp{none}, @samp{dot}, @samp{version} or @samp{both}.
-The option sets the suffix style of output filenames to none, dot,
-version or both (dot+version).
-
-@c -------------------------------------------------------------------
-@node Test, Partial Compression, Adjust Filenames, Compression
+@node Test, Partial Compression, Compression Level, Compression
 @section Test
 
 Invoking @code{ebzip} with the @code{--test} (@code{-t}) option,
@@ -747,13 +684,6 @@ for overwriting.
 @xref{Overwrite Old Files}, for more details about the
 @samp{--force-overwrite} and @samp{--no-overwrite} options.
 
-By default, case (upper or lower) and suffix styles of filenames of
-uncompressed files are the same as those of compressed files.
-The @samp{--case} and @samp{--suffix} options allows you to modify
-the case and suffix styles of filenames of uncompressed files.
-@xref{Adjust Filenames}, for more details about the @samp{--case} and 
-@samp{--suffix} options.
-
 @code{ebunzip} ignores the @samp{--level} option.
 You don't have to specify the @samp{--level} option at uncompression.
 
@@ -823,8 +753,8 @@ only, in addition with @file{LANGUAGE}, @file{CATALOG} and @file{CATALOGS}.
 
 @code{ebzipinfo} ignores the following options; @samp{--force-overwrite},
 @samp{--keep}, @samp{--level}, @samp{--no-overwrite},
-@samp{--output-directory}, @samp{--quiet}, @samp{--silence}, @code{--suffix}
-and @samp{--test}.
+@samp{--output-directory}, @samp{--quiet}, @samp{--silence} and
+@samp{--test}.
 
 @c ===================================================================
 @node Delete a Book, Summary of Options, Information, Top
@@ -851,18 +781,6 @@ Long option names are indicated with @samp{--} instead of @samp{-}.
 Abbreviations for option names are allowed as long as they are unique.
 
 @table @code
-@item -c @var{case}
-@itemx --case @var{case}
-Output files which have filenames with upper or lower @var{case}
-letters.
-@var{case} must be @samp{upper} or @samp{lower}.
-When this option is not specified, the case of filenames of the output
-files comes to be the same as filenames of files in the input book.
-This option is ignored when the action is information, or when you
-specify the @samp{--test} (@samp{-t}) option.
-
-(@xref{Adjust Filenames}, for more details).
-
 @item -f
 @itemx --force-overwrite
 Overwrite existed files without confirmation.
@@ -926,23 +844,6 @@ file may be overwritten or not.
 To supress this question, specify the @samp{--force-overwrite} (@samp{-f})
 or @samp{--no-overwrite} (@samp{-n}) option.
 This option is ignored when the action is uncompression or information.
-
-@item -s @var{suffix}
-@itemx --suffix @var{suffix}
-Specify the suffix of filenames of output files.
-@var{suffix} must be @samp{none}, @samp{dot}, @samp{version} or @samp{both}.
-When @var{suffix} is @samp{none}, no suffix is appended.
-When @var{suffix} is @samp{dot}, a dot (@samp{.}) is appended.
-When @var{suffix} is @samp{version}, a version number 1 (@samp{;1}) is
-appended.
-When @var{suffix} is @samp{both}, dot and version number 1 (@samp{.;1})
-is appended.
-If this option is not specified, suffixes of filenames of the output
-files comes to be the same as filenames of files in the input book.
-This option is ignored when the action is information, or when you
-specify the @samp{--test} (@samp{-t}) option.
-
-(@xref{Adjust Filenames}, for more details).
 
 @item -S @var{subbooks}
 @itemx --subbook @var{subbooks}

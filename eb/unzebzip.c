@@ -31,7 +31,7 @@
  * If it succeeds, 0 is returned.  Otherwise, -1 is returned.
  */
 int
-eb_ebunzip1_slice(out_buffer, out_byte_length, in_buffer, in_byte_length)
+eb_unzip_slice_ebzip1(out_buffer, out_byte_length, in_buffer, in_byte_length)
     char *out_buffer;
     size_t out_byte_length;
     char *in_buffer;

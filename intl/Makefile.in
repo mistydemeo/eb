@@ -111,8 +111,10 @@ l = @l@
 localedir = @localedir@
 
 gnulocaledir = $(datadir)/locale
+@INCLUDED_LIBINTL_TRUE@INTL_LTLIB = libintl.la 
+@INCLUDED_LIBINTL_FALSE@INTL_LTLIB = 
 
-lib_LTLIBRARIES = libintl.la
+lib_LTLIBRARIES = $(INTL_LTLIB)
 libintl_la_SOURCES = bindtextdom.c dcgettext.c dgettext.c gettext.c    finddomain.c loadmsgcat.c localealias.c textdomain.c l10nflist.c    explodename.c intl-compat.c
 
 libintl_la_LDFLAGS = -version-info 1:0:0
@@ -379,6 +381,10 @@ all-redirect all-am all installdirs mostlyclean-generic \
 distclean-generic clean-generic maintainer-clean-generic clean \
 mostlyclean distclean maintainer-clean
 
+
+libintl.h: $(srcdir)/libgettext.h
+	rm -f $@
+	$(LN_S) $(srcdir)/libgettext.h libintl.h
 
 ### *.o dependencies ###
 bindtextdom.o: bindtextdom.c libgettext.h gettext.h gettextP.h \

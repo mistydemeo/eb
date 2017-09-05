@@ -71,7 +71,7 @@ eb_have_keyword_search(book)
 EB_Error_Code
 eb_search_keyword(book, input_words)
     EB_Book *book;
-    const char *input_words[];
+    const char * const input_words[];
 {
     EB_Error_Code error_code;
     EB_Search_Context *context;

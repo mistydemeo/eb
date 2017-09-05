@@ -90,7 +90,7 @@ eb_initialize_languages(book)
     EB_Language *language;
     EB_Zip zip;
     int file = -1;
-    char language_file_name[PATH_MAX + 1];
+    char language_path_name[PATH_MAX + 1];
     char buffer[EB_SIZE_PAGE];
     char *buffer_p;
     int i;
@@ -98,9 +98,13 @@ eb_initialize_languages(book)
     /*
      * Open the language file.
      */
-    sprintf(language_file_name, "%s/%s", book->path, EB_FILE_NAME_LANGUAGE);
-    eb_fix_file_name(book, language_file_name);
-    file = eb_zopen(&zip, language_file_name);
+    if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
+	EB_SUFFIX_NONE, language_path_name) == 0) {
+	file = eb_zopen_none(&zip, language_path_name);
+    } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
+	EB_SUFFIX_EBZ, language_path_name) == 0) {
+	file = eb_zopen_ebzip(&zip, language_path_name);
+    }
     if (file < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;
@@ -144,8 +148,8 @@ eb_initialize_languages(book)
     /*
      * Get languege names.
      */
-    if (eb_zread(&zip, file, buffer, (EB_MAX_LANGUAGE_NAME_LENGTH + 1)
-	* book->language_count)
+    if (eb_zread(&zip, file, buffer,
+	(EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count)
 	!= (EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count) {
 	error_code = EB_ERR_FAIL_READ_LANG;
 	goto failed;
@@ -160,19 +164,16 @@ eb_initialize_languages(book)
 	*(language->name + EB_MAX_LANGUAGE_NAME_LENGTH) = '\0';
     }
 
-    /*
-     * Close the language file.
-     */
-    eb_zclose(&zip, file);
-
     return EB_SUCCESS;
 
     /*
      * An error occurs...
      */
   failed:
-    if (0 <= file)
+    if (0 <= file) {
 	eb_zclose(&zip, file);
+	file = -1;
+    }
     if (book->languages != NULL) {
 	free(book->languages);
 	book->languages = NULL;
@@ -444,7 +445,7 @@ eb_set_language(book, language_code)
     EB_Error_Code error_code;
     EB_Zip zip;
     EB_Language *language;
-    char language_file_name[PATH_MAX + 1];
+    char language_path_name[PATH_MAX + 1];
     char *message;
     int file = -1;
     int i;
@@ -497,11 +498,14 @@ eb_set_language(book, language_code)
 
     /*
      * Open the language file.
-     * Length of the book path and subdir must be checked by caller.
      */
-    sprintf(language_file_name, "%s/%s", book->path, EB_FILE_NAME_LANGUAGE);
-    eb_fix_file_name(book, language_file_name);
-    file = eb_zopen(&zip, language_file_name);
+    if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
+	EB_SUFFIX_NONE, language_path_name) == 0) {
+	file = eb_zopen_none(&zip, language_path_name);
+    } else if (eb_compose_path_name(book->path, EB_FILE_NAME_LANGUAGE,
+	EB_SUFFIX_EBZ, language_path_name) == 0) {
+	file = eb_zopen_ebzip(&zip, language_path_name);
+    }
     if (file < 0) {
 	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;

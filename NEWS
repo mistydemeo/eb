@@ -1,3 +1,11 @@
+Major changes in release 3.0alpha1:
+
+* Supprt EPWING V6 compression format.
+* Ignore case and suffix inconsistency between file and/or directory names.
+* Delete `--suffix' and `--case' options from ebzip.
+* Font API is slightly changed.
+* Fix lots of minor bugs.
+
 Major changes in release 3.0alpha0:
 
 * Support multi search.

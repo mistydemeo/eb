@@ -111,10 +111,8 @@ l = @l@
 localedir = @localedir@
 @INCLUDED_ZLIB_TRUE@ZLIB_SUBDIR = zlib
 @INCLUDED_ZLIB_FALSE@ZLIB_SUBDIR = 
-@INCLUDED_LIBINTL_TRUE@LIBINTL_SUBDIR = intl
-@INCLUDED_LIBINTL_FALSE@LIBINTL_SUBDIR = 
 
-SUBDIRS = $(ZLIB_SUBDIR) $(LIBINTL_SUBDIR) eb libebutils ebappendix ebfont ebinfo    ebrefile ebzip doc doc-ja po
+SUBDIRS = $(ZLIB_SUBDIR) intl eb libebutils ebappendix ebfont ebinfo    ebrefile ebzip doc doc-ja po
 
 
 EXTRA_DIST = ChangeLog.0 INSTALL-ja README-ja move-if-change eb.conf.in

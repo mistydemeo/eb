@@ -51,11 +51,6 @@
 #include <pthread.h>
 #endif
 
-#ifndef HAVE_STRCHR
-#define strchr index
-#define strrchr rindex
-#endif /* HAVE_STRCHR */
-
 #ifndef HAVE_MEMCPY
 #define memcpy(d, s, n) bcopy((s), (d), (n))
 #ifdef __STDC__
@@ -136,10 +131,9 @@ static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
 /*
  * Unexported function.
  */
-static int eb_zopen_ebzipped EB_P((EB_Zip *zip, const char *));
-static int eb_zopen_epwzipped EB_P((EB_Zip *zip, const char *));
-static ssize_t eb_zread_ebzipped EB_P((EB_Zip *, int, char *, size_t));
-static ssize_t eb_zread_epwzipped EB_P((EB_Zip *, int, char *, size_t));
+static int eb_make_epwing_huffman_tree EB_P((EB_Zip *, int));
+static ssize_t eb_zread_ebzip EB_P((EB_Zip *, int, char *, size_t));
+static ssize_t eb_zread_epwing EB_P((EB_Zip *, int, char *, size_t));
 
 /*
  * Initialize `cache_buffer'.
@@ -188,249 +182,30 @@ eb_zfinalize()
 
 
 /*
- * Open `file_name' for reading.
- * The file may have been compressed.
- * We also adjust the suffix of the file name.
+ * Open an non-compressed file.
  */
 int
-eb_zopen(zip, file_name)
+eb_zopen_none(zip, file_name)
     EB_Zip *zip;
     const char *file_name;
 {
-    char zipped_file_name[PATH_MAX + 1];
-    size_t file_name_length;
-    EB_Case_Code case_code;
-    const char *p;
     int file;
 
-    /*
-     * Try to open an uncompressed file.
-     * If succeeds, return immediately.
-     */
     file = open(file_name, O_RDONLY | O_BINARY);
     if (0 <= file) {
 	zip->code = EB_ZIP_NONE;
 	return file;
     }
 
-    /*
-     * Determine the letter case of the suffix of the zip file name.
-     */
-    file_name_length = strlen(file_name);
-    for (p = file_name, case_code = EB_CASE_UPPER; *p != '\0'; p++) {
-	if ('A' <= *p && *p <= 'Z')
-	    case_code = EB_CASE_UPPER;
-	else if ('a' <= *p && *p <= 'z')
-	    case_code = EB_CASE_LOWER;
-    }
-	
-    /*
-     * Copy `file_name' to `zipped_file_name' and appennd a suffix (`.EBZ'
-     * or `.ebz') to `zipped_file_name'.
-     *
-     * Though the length of `zipped_file_name' is increased, it never
-     * overrun the buffer (PATH_MAX).  See eb_bind().
-     */
-    strcpy(zipped_file_name, file_name);
-    if (*(file_name + file_name_length - 3) == '.') {
-	if (case_code == EB_CASE_UPPER)
-	    strcpy(zipped_file_name + file_name_length - 2, "EBZ;1");
-	else
-	    strcpy(zipped_file_name + file_name_length - 2, "ebz;1");
-    } else if (*(file_name + file_name_length - 2) == ';') {
-	if (case_code == EB_CASE_UPPER)
-	    strcpy(zipped_file_name + file_name_length - 2, ".EBZ;1");
-	else
-	    strcpy(zipped_file_name + file_name_length - 2, ".ebz;1");
-    } else if (*(file_name + file_name_length - 1) == '.') {
-	if (case_code == EB_CASE_UPPER)
-	    strcpy(zipped_file_name + file_name_length, "EBZ");
-	else 
-	    strcpy(zipped_file_name + file_name_length, "ebz");
-    } else {
-	if (case_code == EB_CASE_UPPER)
-	    strcpy(zipped_file_name + file_name_length, ".EBZ");
-	else 
-	    strcpy(zipped_file_name + file_name_length, ".ebz");
-    }
-
-    /*
-     * Try to open a `*.EBZ' file.
-     */
-    file = eb_zopen_ebzipped(zip, zipped_file_name);
-    if (0 <= file)
-	return file;
-
-    /*
-     * Check for the base name of `file_name'.
-     * It must be `.../DATA/HONMON' or `.../data/honmon'.
-     * If it is, add the suffix `2' to `zipped_file_name'
-     * (e.g. `HONMON;1' -> `HONMON2;1').
-     */
-    strcpy(zipped_file_name, file_name);
-    if (12 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 12, "/DATA/HONMON") == 0
-	    || strcmp(file_name + file_name_length - 12, "/data/honmon")
-	    == 0)) {
-	strcpy(zipped_file_name + file_name_length, "2");
-    } else if (13 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 13, "/DATA/HONMON.") == 0
-	    || strcmp(file_name + file_name_length - 13, "/data/honmon.")
-	    == 0)) {
-	strcpy(zipped_file_name + file_name_length - 1, "2.");
-    } else if (14 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 14, "/DATA/HONMON;1") == 0
-	    || strcmp(file_name + file_name_length - 14, "/data/honmon;1")
-	    == 0)) {
-	strcpy(zipped_file_name + file_name_length - 2, "2;1");
-    } else if (15 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 15, "/DATA/HONMON.;1") == 0
-	    || strcmp(file_name + file_name_length - 15, "/data/honmon.;1")
-	    == 0)) {
-	strcpy(zipped_file_name + file_name_length - 3, "2;1");
-    } else {
-	zipped_file_name[0] = '\0';
-    }
-
-    /*
-     * Try to open a `HONMON2' file instead of `HONMON'.
-     */
-    if (zipped_file_name[0] != '\0') {
-	file = eb_zopen_epwzipped(zip, zipped_file_name);
-	if (0 <= file)
-	    return file;
-    }
-
-    /*
-     * In some CD-ROM book discs, file_name suffix is inconsistent.
-     * We remove or append `.' to the file name and try to open the
-     * file again.
-     */
-    strcpy(zipped_file_name, file_name);
-    if (*(file_name + file_name_length - 3) == '.') {
-	*(zipped_file_name + file_name_length - 3) = ';';
-	*(zipped_file_name + file_name_length - 2) = '1';
-	*(zipped_file_name + file_name_length - 1) = '\0';
-    } else if (*(file_name + file_name_length - 2) == ';') {
-	*(zipped_file_name + file_name_length - 2) = '.';
-	*(zipped_file_name + file_name_length - 1) = ';';
-	*(zipped_file_name + file_name_length)     = '1';
-	*(zipped_file_name + file_name_length + 1) = '\0';
-    } else if (*(file_name + file_name_length - 1) == '.') {
-	*(zipped_file_name + file_name_length - 1) = '\0';
-    } else {
-	*(zipped_file_name + file_name_length)     = '.';
-	*(zipped_file_name + file_name_length + 1) = '\0';
-    }
-    file = open(file_name, O_RDONLY | O_BINARY);
-    if (0 <= file) {
-	zip->code = EB_ZIP_NONE;
-	return file;
-    }
-
-    /*
-     * No file has been opened.
-     */
     return -1;
 }
 
 
 /*
- * Open `file_name' for reading.
- * The file may have been compressed.
- * Unlink `eb_zopen', we never adjust the suffix of the file name.
+ * Open an EBZIP compression file.
  */
 int
-eb_zopen2(zip, file_name)
-    EB_Zip *zip;
-    const char *file_name;
-{
-    int file;
-    int is_ebzipped;
-    int is_epwzipped;
-    size_t file_name_length;
-
-    /*
-     * Get the length of `file_name'.
-     */
-    file_name_length = strlen(file_name);
-
-    /*
-     * Try to open a `*.EBZ' file.
-     */
-    is_ebzipped = 0;
-    if (4 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 4, ".EBZ") == 0
-	    || strcmp(file_name + file_name_length - 4, ".ebz") == 0)) {
-	is_ebzipped = 1;
-    } else if (6 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 6, ".EBZ;1") == 0
-	    || strcmp(file_name + file_name_length - 6, ".ebz;1") == 0)) {
-	is_ebzipped = 1;
-    }
-    if (is_ebzipped) {
-	file = eb_zopen_ebzipped(zip, file_name);
-	return file;
-    }
-
-    /*
-     * Try to open a `HONMON2' file instead of `HONMON'.
-     */
-    is_epwzipped = 0;
-    if (13 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 13, "/DATA/HONMON2") == 0
-	    || strcmp(file_name + file_name_length - 13, "/data/honmon2")
-	    == 0)) {
-	is_epwzipped = 1;
-    } else if (14 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 14, "/DATA/HONMON2.") == 0
-	    || strcmp(file_name + file_name_length - 14, "/data/honmon2.")
-	    == 0)) {
-	is_epwzipped = 1;
-    } else if (15 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 15, "/DATA/HONMON2;1") == 0
-	    || strcmp(file_name + file_name_length - 15, "/data/honmon2;1")
-	    == 0)) {
-	is_epwzipped = 1;
-    } else if (16 <= file_name_length
-	&& (strcmp(file_name + file_name_length - 16, "/DATA/HONMON2.;1") == 0
-	    || strcmp(file_name + file_name_length - 16, "/data/honmon2.;1")
-	    == 0)) {
-	is_epwzipped = 1;
-    }
-    if (is_epwzipped) {
-	file = eb_zopen_epwzipped(zip, file_name);
-	return file;
-    }
-
-    /*
-     * Try to open an uncompressed file.
-     * If succeeds, return immediately.
-     */
-    file = open(file_name, O_RDONLY | O_BINARY);
-    if (0 <= file) {
-	zip->code = EB_ZIP_NONE;
-	zip->slice_size = EB_SIZE_PAGE;
-	zip->file_size = lseek(file, 0, SEEK_END);
-	if (zip->file_size < 0 || lseek(file, 0, SEEK_SET) < 0) {
-	    close(file);
-	    return -1;
-	}
-	return file;
-    }
-
-    /*
-     * No file has been opened.
-     */
-    return -1;
-}
-
-
-/*
- * Try to open an EBZIP compression file `*.EBZ'.
- */
-static int
-eb_zopen_ebzipped(zip, file_name)
+eb_zopen_ebzip(zip, file_name)
     EB_Zip *zip;
     const char *file_name;
 {
@@ -468,7 +243,8 @@ eb_zopen_ebzipped(zip, file_name)
     /*
      * Check zip header information.
      */
-    if (memcmp(header, "EBZip", 5) != 0 || zip->code != EB_ZIP_EBZIP1
+    if (memcmp(header, "EBZip", 5) != 0
+	|| zip->code != EB_ZIP_EBZIP1
 	|| EB_SIZE_PAGE << EB_MAX_EBZIP_LEVEL < zip->slice_size)
 	goto failed;
 
@@ -485,29 +261,28 @@ eb_zopen_ebzipped(zip, file_name)
 
 
 /*
- * The buffer size must be 512 bytes or larger, and multiple of 4.
+ * The buffer size must be 512 bytes, the number of 8 bit nodes.
  */
-#define EPWZIP_BUFFER_SIZE 512
+#define EPWING_BUFFER_SIZE 512
 
 /*
- * Try to open an EPWING compression file `HONMON2'.
+ * Open an EPWING compression file.
  */
-static int
-eb_zopen_epwzipped(zip, file_name)
+int
+eb_zopen_epwing(zip, file_name)
     EB_Zip *zip;
     const char *file_name;
 {
     int file = -1;
     int leaf16_count;
     int leaf_count;
-    char buffer[EPWZIP_BUFFER_SIZE];
+    char buffer[EPWING_BUFFER_SIZE];
     char *buffer_p;
+    size_t read_length;
     EB_Huffman_Node *tail_node_p;
     int i;
 
-    /*
-     * Initialize `huffman_nodes' in `zip'.
-     */
+    zip->code = EB_ZIP_EPWING;
     zip->huffman_nodes = NULL;
 
     /*
@@ -568,14 +343,13 @@ eb_zopen_epwzipped(zip, file_name)
      */
     if (lseek(file, zip->frequencies_location, SEEK_SET) < 0)
 	goto failed;
-    if (eb_read_all(file, buffer, EPWZIP_BUFFER_SIZE) != EPWZIP_BUFFER_SIZE)
+    if (eb_read_all(file, buffer, read_length) != read_length)
 	goto failed;
 
     buffer_p = buffer;
     for (i = 0; i < leaf16_count; i++) {
-	if (buffer + EPWZIP_BUFFER_SIZE <= buffer_p) {
-	    if (eb_read_all(file, buffer, EPWZIP_BUFFER_SIZE)
-		!= EPWZIP_BUFFER_SIZE)
+	if (buffer + read_length <= buffer_p) {
+	    if (eb_read_all(file, buffer, read_length) != read_length)
 		goto failed;
 	    buffer_p = buffer;
 	}
@@ -591,8 +365,8 @@ eb_zopen_epwzipped(zip, file_name)
     /*
      * Make leafs for 8bit character.
      */
-    if (lseek(file, zip->frequencies_location + zip->frequencies_length - 512,
-	SEEK_SET) < 0)
+    if (lseek(file, zip->frequencies_location + leaf16_count * 4, SEEK_SET)
+	< 0)
 	goto failed;
     if (eb_read_all(file, buffer, 512) != 512)
 	goto failed;
@@ -617,90 +391,10 @@ eb_zopen_epwzipped(zip, file_name)
     tail_node_p++;
     
     /*
-     * Sort the leaf nodes in frequency order.
+     * Make a huffman tree.
      */
-    for (i = 0; i < leaf_count - 1; i++) {
-        EB_Huffman_Node *target_node = zip->huffman_nodes + i;
-        EB_Huffman_Node *most_node = target_node;
-        EB_Huffman_Node *nodep = zip->huffman_nodes + i + 1;
-        EB_Huffman_Node tmp_node;
-	int j;
-  
-        for (j = i + 1; j < leaf_count; j++) {
-            if (most_node->frequency < nodep->frequency)
-                most_node = nodep;
-            nodep++;
-        } 
-
-        tmp_node.type = most_node->type;
-        tmp_node.value = most_node->value;
-        tmp_node.frequency = most_node->frequency;
-
-        most_node->type = target_node->type;
-        most_node->value = target_node->value;
-        most_node->frequency = target_node->frequency;
-
-        target_node->type = tmp_node.type;
-        target_node->value = tmp_node.value;
-        target_node->frequency = tmp_node.frequency;
-    }
-
-    /*
-     * Make intermediate nodes of the huffman tree.
-     * The number of intermediate nodes of the tree is <the number of
-     * leaf nodes> - 1.
-     */
-    for (i = 1; i < leaf_count; i++) {
-	EB_Huffman_Node *least_nodep;
-	EB_Huffman_Node *nodep;
-
-	/*
-	 * Initialize a new intermediate node.
-	 */
-	tail_node_p->type = EB_HUFFMAN_NODE_INTERMEDIATE;
-	tail_node_p->left = NULL;
-	tail_node_p->right = NULL;
-
-	/*
-	 * Find for a least frequent node.
-	 * That node becomes a left child of the new intermediate node.
-	 */
-	least_nodep = NULL;
-	for (nodep = zip->huffman_nodes; nodep < tail_node_p; nodep++) {
-	    if (nodep->frequency == 0)
-		continue;
-	    if (least_nodep == NULL
-		|| nodep->frequency <= least_nodep->frequency)
-		least_nodep = nodep;
-	}
-	tail_node_p->left = least_nodep;
-	tail_node_p->frequency = least_nodep->frequency;
-	least_nodep->frequency = 0;
-
-	/*
-	 * Find for a next least frequent node.
-	 * That node becomes a right child of the new intermediate node.
-	 */
-	least_nodep = NULL;
-	for (nodep = zip->huffman_nodes; nodep < tail_node_p; nodep++) {
-	    if (nodep->frequency == 0)
-		continue;
-	    if (least_nodep == NULL
-		|| nodep->frequency <= least_nodep->frequency)
-		least_nodep = nodep;
-	}
-	tail_node_p->right = least_nodep;
-	tail_node_p->frequency += least_nodep->frequency;
-	least_nodep->frequency = 0;
-
-	tail_node_p++;
-    }
-
-    /*
-     * Set a root node of the huffman tree.
-     */ 
-    zip->huffman_root = tail_node_p - 1;
-    zip->code = EB_ZIP_EPWING;
+    if (eb_make_epwing_huffman_tree(zip, leaf_count) < 0)
+	goto failed;
 
     return file;
 
@@ -715,6 +409,291 @@ eb_zopen_epwzipped(zip, file_name)
     zip->huffman_root = NULL;
 
     return -1;
+}
+
+
+/*
+ * Open an EPWING compression file.
+ */
+int
+eb_zopen_epwing6(zip, file_name)
+    EB_Zip *zip;
+    const char *file_name;
+{
+    int file = -1;
+    int leaf32_count;
+    int leaf16_count;
+    int leaf_count;
+    char buffer[EPWING_BUFFER_SIZE];
+    char *buffer_p;
+    size_t read_length;
+    EB_Huffman_Node *tail_node_p;
+    int i;
+
+    zip->code = EB_ZIP_EPWING6;
+    zip->huffman_nodes = NULL;
+
+    /*
+     * Open `HONMON2'.
+     */
+    file = open(file_name, O_RDONLY | O_BINARY);
+    if (file < 0)
+	goto failed;
+
+    /*
+     * Read a header of `HONMON2' (48 bytes).
+     * When `frequencies_length' is shorter than 512, we assumes the
+     * file is broken.
+     */
+    if (eb_read_all(file, buffer, 48) != 48)
+	goto failed;
+    zip->offset = 0;
+    zip->slice_size = EB_SIZE_PAGE;
+    zip->index_location = eb_uint4(buffer);
+    zip->index_length = eb_uint4(buffer + 4);
+    zip->frequencies_location = eb_uint4(buffer + 8);
+    zip->frequencies_length = eb_uint4(buffer + 12);
+    leaf16_count = 0x400;
+    leaf32_count = (zip->frequencies_length - (leaf16_count * 4) - (256 * 2))
+	/ 6;
+    leaf_count = leaf32_count + leaf16_count + 256 + 1;
+    if (zip->index_length < 36 || zip->frequencies_length < 512)
+	goto failed;
+
+    /*
+     * Check for the length of an uncompressed file.
+     *
+     * If the index of the non-first page in the last index group
+     * is 0x0000, we assumes the data corresponding with the index
+     * doesn't exist.
+     */
+    if (lseek(file, zip->index_location + (zip->index_length - 36) / 36 * 36,
+	SEEK_SET) < 0)
+	goto failed;
+    if (eb_read_all(file, buffer, 36) != 36)
+	goto failed;
+    zip->file_size = (zip->index_length / 36) * (EB_SIZE_PAGE * 16);
+    for (i = 1, buffer_p = buffer + 4 + 2; i < 16; i++, buffer_p += 2) {
+	if (eb_uint2(buffer_p) == 0)
+	    break;
+    }
+    zip->file_size -= EB_SIZE_PAGE * (16 - i);
+    
+    /*
+     * Allocate memory for huffman nodes.
+     */
+    zip->huffman_nodes = (EB_Huffman_Node *) malloc(sizeof(EB_Huffman_Node)
+	* leaf_count * 2);
+    if (zip->huffman_nodes == NULL)
+	goto failed;
+    tail_node_p = zip->huffman_nodes;
+
+    /*
+     * Make leafs for 32bit character.
+     */
+    read_length = EPWING_BUFFER_SIZE - (EPWING_BUFFER_SIZE % 6);
+    if (lseek(file, zip->frequencies_location, SEEK_SET) < 0)
+	goto failed;
+    if (eb_read_all(file, buffer, read_length) != read_length)
+	goto failed;
+
+    buffer_p = buffer;
+    for (i = 0; i < leaf32_count; i++) {
+	if (buffer + read_length <= buffer_p) {
+	    if (eb_read_all(file, buffer, read_length) != read_length)
+		goto failed;
+	    buffer_p = buffer;
+	}
+	tail_node_p->type = EB_HUFFMAN_NODE_LEAF32;
+	tail_node_p->value = eb_uint4(buffer_p);
+	tail_node_p->frequency = eb_uint2(buffer_p + 4);
+	tail_node_p->left = NULL;
+	tail_node_p->right = NULL;
+	buffer_p += 6;
+	tail_node_p++;
+    }
+
+    /*
+     * Make leafs for 16bit character.
+     */
+    read_length = EPWING_BUFFER_SIZE - (EPWING_BUFFER_SIZE % 4);
+    if (lseek(file, zip->frequencies_location + leaf32_count * 6, SEEK_SET)
+	< 0)
+	goto failed;
+    if (eb_read_all(file, buffer, read_length) != read_length)
+	goto failed;
+
+    buffer_p = buffer;
+    for (i = 0; i < leaf16_count; i++) {
+	if (buffer + read_length <= buffer_p) {
+	    if (eb_read_all(file, buffer, read_length) != read_length)
+		goto failed;
+	    buffer_p = buffer;
+	}
+	tail_node_p->type = EB_HUFFMAN_NODE_LEAF16;
+	tail_node_p->value = eb_uint2(buffer_p);
+	tail_node_p->frequency = eb_uint2(buffer_p + 2);
+	tail_node_p->left = NULL;
+	tail_node_p->right = NULL;
+	buffer_p += 4;
+	tail_node_p++;
+    }
+
+    /*
+     * Make leafs for 8bit character.
+     */
+    if (lseek(file,
+	zip->frequencies_location + leaf32_count * 6 + leaf16_count * 4,
+	SEEK_SET) < 0)
+	goto failed;
+    if (eb_read_all(file, buffer, 512) != 512)
+	goto failed;
+
+    buffer_p = buffer;
+    for (i = 0; i < 256; i++) {
+	tail_node_p->type = EB_HUFFMAN_NODE_LEAF8;
+	tail_node_p->value = i;
+	tail_node_p->frequency = eb_uint2(buffer_p);
+	tail_node_p->left = NULL;
+	tail_node_p->right = NULL;
+	buffer_p += 2;
+	tail_node_p++;
+    }
+
+    /*
+     * Make a leaf for the end-of-page character.
+     */
+    tail_node_p->type = EB_HUFFMAN_NODE_EOF;
+    tail_node_p->value = 256;
+    tail_node_p->frequency = 1;
+    tail_node_p++;
+
+    /*
+     * Make a huffman tree.
+     */
+    if (eb_make_epwing_huffman_tree(zip, leaf_count) < 0)
+	goto failed;
+
+    return file;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    if (0 <= file)
+	close(file);
+    if (zip->huffman_nodes != NULL)
+	free(zip->huffman_nodes);
+    zip->huffman_root = NULL;
+
+    return -1;
+}
+
+
+/*
+ * Make a huffman tree for decompressing EPWING compression data.
+ */
+static int
+eb_make_epwing_huffman_tree(zip, leaf_count)
+    EB_Zip *zip;
+    int leaf_count;
+{    
+    EB_Huffman_Node *target_node;
+    EB_Huffman_Node *most_node;
+    EB_Huffman_Node *node_p;
+    EB_Huffman_Node temporary_node;
+    EB_Huffman_Node *least_node_p;
+    EB_Huffman_Node *tail_node_p;
+    int i;
+    int j;
+
+    tail_node_p = zip->huffman_nodes + leaf_count;
+
+    /*
+     * Sort the leaf nodes in frequency order.
+     */
+    for (i = 0; i < leaf_count - 1; i++) {
+        target_node = zip->huffman_nodes + i;
+        most_node = target_node;
+        node_p = zip->huffman_nodes + i + 1;
+  
+        for (j = i + 1; j < leaf_count; j++) {
+            if (most_node->frequency < node_p->frequency)
+                most_node = node_p;
+            node_p++;
+        } 
+
+        temporary_node.type = most_node->type;
+        temporary_node.value = most_node->value;
+        temporary_node.frequency = most_node->frequency;
+
+        most_node->type = target_node->type;
+        most_node->value = target_node->value;
+        most_node->frequency = target_node->frequency;
+
+        target_node->type = temporary_node.type;
+        target_node->value = temporary_node.value;
+        target_node->frequency = temporary_node.frequency;
+    }
+
+    /*
+     * Make intermediate nodes of the huffman tree.
+     * The number of intermediate nodes of the tree is <the number of
+     * leaf nodes> - 1.
+     */
+    for (i = 1; i < leaf_count; i++) {
+	/*
+	 * Initialize a new intermediate node.
+	 */
+	tail_node_p->type = EB_HUFFMAN_NODE_INTERMEDIATE;
+	tail_node_p->left = NULL;
+	tail_node_p->right = NULL;
+
+	/*
+	 * Find for a least frequent node.
+	 * That node becomes a left child of the new intermediate node.
+	 */
+	least_node_p = NULL;
+	for (node_p = zip->huffman_nodes; node_p < tail_node_p; node_p++) {
+	    if (node_p->frequency == 0)
+		continue;
+	    if (least_node_p == NULL
+		|| node_p->frequency <= least_node_p->frequency)
+		least_node_p = node_p;
+	}
+	if (least_node_p == NULL)
+	    return -1;
+	tail_node_p->left = least_node_p;
+	tail_node_p->frequency = least_node_p->frequency;
+	least_node_p->frequency = 0;
+
+	/*
+	 * Find for a next least frequent node.
+	 * That node becomes a right child of the new intermediate node.
+	 */
+	least_node_p = NULL;
+	for (node_p = zip->huffman_nodes; node_p < tail_node_p; node_p++) {
+	    if (node_p->frequency == 0)
+		continue;
+	    if (least_node_p == NULL
+		|| node_p->frequency <= least_node_p->frequency)
+		least_node_p = node_p;
+	}
+	if (least_node_p == NULL)
+	    return -1;
+	tail_node_p->right = least_node_p;
+	tail_node_p->frequency += least_node_p->frequency;
+	least_node_p->frequency = 0;
+
+	tail_node_p++;
+    }
+
+    /*
+     * Set a root node of the huffman tree.
+     */ 
+    zip->huffman_root = tail_node_p - 1;
+
+    return 0;
 }
 
 
@@ -822,9 +801,11 @@ eb_zread(zip, file, buffer, length)
     if (zip->code == EB_ZIP_NONE)
 	read_length = eb_read_all(file, buffer, length);
     else if (zip->code == EB_ZIP_EBZIP1)
-	read_length = eb_zread_ebzipped(zip, file, buffer, length);
+	read_length = eb_zread_ebzip(zip, file, buffer, length);
     else if (zip->code == EB_ZIP_EPWING)
-	read_length = eb_zread_epwzipped(zip, file, buffer, length);
+	read_length = eb_zread_epwing(zip, file, buffer, length);
+    else if (zip->code == EB_ZIP_EPWING6)
+	read_length = eb_zread_epwing(zip, file, buffer, length);
     else
 	read_length = -1;
 
@@ -836,7 +817,7 @@ eb_zread(zip, file, buffer, length)
  * Read data from `file' compressed with the ebzip compression format.
  */
 static ssize_t
-eb_zread_ebzipped(zip, file, buffer, length)
+eb_zread_ebzip(zip, file, buffer, length)
     EB_Zip *zip;
     int file;
     char *buffer;
@@ -911,7 +892,7 @@ eb_zread_ebzipped(zip, file, buffer, length)
 		goto failed;
 	    if (zip->slice_size == zipped_slice_size)
 		memcpy(cache_buffer, temporary_buffer, zip->slice_size);
-	    else if (eb_ebunzip1_slice(cache_buffer, zip->slice_size,
+	    else if (eb_unzip_slice_ebzip1(cache_buffer, zip->slice_size,
 		temporary_buffer, zipped_slice_size) < 0)
 		goto failed;
 
@@ -946,10 +927,11 @@ eb_zread_ebzipped(zip, file, buffer, length)
 
 
 /*
- * Read data from `file' compressed with the EPWING compression format.
+ * Read data from `file' compressed with the EPWING or EPWING V6 
+ * compression format.
  */
 static ssize_t
-eb_zread_epwzipped(zip, file, buffer, length)
+eb_zread_epwing(zip, file, buffer, length)
     EB_Zip *zip;
     int file;
     char *buffer;
@@ -991,13 +973,18 @@ eb_zread_epwzipped(zip, file, buffer, length)
 
 	    /*
 	     * Read a compressed page from `file' and uncompress it.
-	     * The data is not compressed if its size is equals to
-	     * page size.
 	     */
 	    if (lseek(file, page_location, SEEK_SET) < 0)
 		goto failed;
-	    if (eb_epwunzip_slice(cache_buffer, file, zip->huffman_root) < 0)
-		goto failed;
+	    if (zip->code == EB_ZIP_EPWING) {
+		if (eb_unzip_slice_epwing(cache_buffer, file,
+		    zip->huffman_root) < 0)
+		    goto failed;
+	    } else {
+		if (eb_unzip_slice_epwing6(cache_buffer, file,
+		    zip->huffman_root) < 0)
+		    goto failed;
+	    }
 
 	    cache_file = file;
 	}
