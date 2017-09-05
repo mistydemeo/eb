@@ -263,8 +263,10 @@ int eb_exact_match_word_jis EB_P((const char *, const char *, size_t));
 int eb_exact_pre_match_word_jis EB_P((const char *, const char *, size_t));
 int eb_exact_match_word_latin EB_P((const char *, const char *, size_t));
 int eb_exact_pre_match_word_latin EB_P((const char *, const char *, size_t));
-int eb_match_word_jis_kana EB_P((const char *, const char *, size_t));
-int eb_exact_match_word_jis_kana EB_P((const char *, const char *, size_t));
+int eb_match_word_kana_single EB_P((const char *, const char *, size_t));
+int eb_match_word_kana_group EB_P((const char *, const char *, size_t));
+int eb_exact_match_word_kana_single EB_P((const char *, const char *, size_t));
+int eb_exact_match_word_kana_group EB_P((const char *, const char *, size_t));
 
 /* message.c */
 EB_Error_Code eb_initialize_messages EB_P((EB_Book *));

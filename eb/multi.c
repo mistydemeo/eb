@@ -838,7 +838,7 @@ eb_search_multi(book, multi_id, input_words)
 	    } else {
 		context->compare_pre    = eb_pre_match_word;
 		context->compare_single = eb_match_word;
-		context->compare_group  = eb_match_word_jis_kana;
+		context->compare_group  = eb_match_word_kana_group;
 	    }
 	} else {
 	    if (book->character_code == EB_CHARCODE_ISO8859_1) {
@@ -848,7 +848,7 @@ eb_search_multi(book, multi_id, input_words)
 	    } else {
 		context->compare_pre    = eb_exact_pre_match_word_jis;
 		context->compare_single = eb_exact_match_word_jis;
-		context->compare_group  = eb_exact_match_word_jis_kana;
+		context->compare_group  = eb_exact_match_word_kana_group;
 	    }
 	}
 	context->page = entry->start_page;

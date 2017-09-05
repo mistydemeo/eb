@@ -331,10 +331,16 @@ eb_exact_pre_match_word_latin(word, pattern, length)
  * Compare `word' and `pattern' in JIS X 0208.
  *
  * This function is equivalent to eb_match_word() except that this function
- * ignores differences of kana (katakana and hiragana).
+ * ignores differences of kana (katakana and hiragana).  The order of
+ * hiragana and katakana characters is:
+ * 
+ * If `word' and `pattern' differ, the function compares their characters
+ * with the following rule:
+ *
+ *    HIRAGANA `KA' < HIRAGANA `GA' < KATAKANA `KA' < KATAKANA `GA'
  */
 int
-eb_match_word_jis_kana(word, pattern, length)
+eb_match_word_kana_group(word, pattern, length)
     const char *word;
     const char *pattern;
     size_t length;
@@ -345,7 +351,7 @@ eb_match_word_jis_kana(word, pattern, length)
     unsigned char wc0, wc1, pc0, pc1;
     int result;
 
-    LOG(("in: eb_match_word_jis_kana(word=%s, pattern=%s)",
+    LOG(("in: eb_match_word_kana_group(word=%s, pattern=%s)",
 	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
 	eb_quoted_stream(pattern, length)));
 
@@ -369,8 +375,10 @@ eb_match_word_jis_kana(word, pattern, length)
 	pc1 = *(pattern_p + 1);
 
 	if ((wc0 == 0x24 || wc0 == 0x25) && (pc0 == 0x24 || pc0 == 0x25)) {
-	    if (wc1 != pc1)
+	    if (wc1 != pc1) {
 		result = ((wc0 << 8) + wc1) - ((pc0 << 8) + pc1);
+		break;
+	    }
 	} else {
 	    if (wc0 != pc0 || wc1 != pc1) {
 		result = ((wc0 << 8) + wc1) - ((pc0 << 8) + pc1);
@@ -382,7 +390,7 @@ eb_match_word_jis_kana(word, pattern, length)
 	i += 2;
     }
 
-    LOG(("out: eb_match_word_jis_kana() = %d", result));
+    LOG(("out: eb_match_word_kana_group() = %d", result));
     return result;
 }
 
@@ -390,11 +398,17 @@ eb_match_word_jis_kana(word, pattern, length)
 /*
  * Compare `word' and `pattern' in JIS X 0208.
  *
- * This function is equivalent to eb_exact_match_word_jis() except that
- * this function ignores differences of kana (katakana and hiragana).
+ * This function is equivalent to eb_match_word() except that this function
+ * ignores differences of kana (katakana and hiragana).  The order of
+ * hiragana and katakana characters is:
+ * 
+ * If `word' and `pattern' differ, the function compares their characters
+ * with the following rule:
+ *
+ *    HIRAGANA `KA' == KATAKANA `KA' < HIRAGANA `GA' == KATAKANA `GA'.
  */
 int
-eb_exact_match_word_jis_kana(word, pattern, length)
+eb_match_word_kana_single(word, pattern, length)
     const char *word;
     const char *pattern;
     size_t length;
@@ -405,7 +419,74 @@ eb_exact_match_word_jis_kana(word, pattern, length)
     unsigned char wc0, wc1, pc0, pc1;
     int result;
 
-    LOG(("in: eb_exact_match_word_jis_kana(word=%s, pattern=%s)",
+    LOG(("in: eb_match_word_kana_single(word=%s, pattern=%s)",
+	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
+	eb_quoted_stream(pattern, length)));
+
+    for (;;) {
+	if (length <= i) {
+	    result = *word_p;
+	    break;
+	}
+	if (*word_p == '\0') {
+	    result = 0;
+	    break;
+	}
+	if (length <= i + 1 || *(word_p + 1) == '\0') {
+	    result = *word_p - *pattern_p;
+	    break;
+	}
+
+	wc0 = *word_p;
+	wc1 = *(word_p + 1);
+	pc0 = *pattern_p;
+	pc1 = *(pattern_p + 1);
+
+	if ((wc0 == 0x24 || wc0 == 0x25) && (pc0 == 0x24 || pc0 == 0x25)) {
+	    if (wc1 != pc1) {
+		result = wc1 - pc1;
+		break;
+	    }
+	} else {
+	    if (wc0 != pc0 || wc1 != pc1) {
+		result = ((wc0 << 8) + wc1) - ((pc0 << 8) + pc1);
+		break;
+	    }
+	}
+	word_p += 2;
+	pattern_p += 2;
+	i += 2;
+    }
+
+    LOG(("out: eb_match_word_kana_single() = %d", result));
+    return result;
+}
+
+
+/*
+ * Compare `word' and `pattern' in JIS X 0208.
+ *
+ * This function is equivalent to eb_exact_match_word_jis() except that
+ * this function ignores differences of kana (katakana and hiragana).
+ * 
+ * If `word' and `pattern' differ, the function compares their characters
+ * with the following rule:
+ * 
+ *    HIRAGANA `KA' < HIRAGANA `GA' < KATAKANA `KA' < KATAKANA `GA'
+ */
+int
+eb_exact_match_word_kana_group(word, pattern, length)
+    const char *word;
+    const char *pattern;
+    size_t length;
+{
+    int i = 0;
+    unsigned char *word_p = (unsigned char *)word;
+    unsigned char *pattern_p = (unsigned char *)pattern;
+    unsigned char wc0, wc1, pc0, pc1;
+    int result;
+
+    LOG(("in: eb_exact_match_word_kana_group(word=%s, pattern=%s)",
 	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
 	eb_quoted_stream(pattern, length)));
 
@@ -443,7 +524,74 @@ eb_exact_match_word_jis_kana(word, pattern, length)
 	i += 2;
     }
 
-    LOG(("out: eb_exact_match_word_jis_kana() = %d", result));
+    LOG(("out: eb_exact_match_word_kana_group() = %d", result));
+    return result;
+}
+
+
+/*
+ * Compare `word' and `pattern' in JIS X 0208.
+ *
+ * This function is equivalent to eb_exact_match_word_jis() except that
+ * this function ignores differences of kana (katakana and hiragana).
+ * The order of hiragana and katakana characters is:
+ * 
+ * If `word' and `pattern' differ, the function compares their characters
+ * with the following rule:
+ * 
+ *    HIRAGANA `KA' == KATAKANA `KA' < HIRAGANA `GA' == KATAKANA `GA'.
+ */
+int
+eb_exact_match_word_kana_single(word, pattern, length)
+    const char *word;
+    const char *pattern;
+    size_t length;
+{
+    int i = 0;
+    unsigned char *word_p = (unsigned char *)word;
+    unsigned char *pattern_p = (unsigned char *)pattern;
+    unsigned char wc0, wc1, pc0, pc1;
+    int result;
+
+    LOG(("in: eb_exact_match_word_kana_single(word=%s, pattern=%s)",
+	eb_quoted_stream(word, EB_MAX_WORD_LENGTH),
+	eb_quoted_stream(pattern, length)));
+
+    for (;;) {
+	if (length <= i) {
+	    result = *word_p;
+	    break;
+	}
+	if (*word_p == '\0') {
+	    result = - *pattern_p;
+	    break;
+	}
+	if (length <= i + 1 || *(word_p + 1) == '\0') {
+	    result = *word_p - *pattern_p;
+	    break;
+	}
+	wc0 = *word_p;
+	wc1 = *(word_p + 1);
+	pc0 = *pattern_p;
+	pc1 = *(pattern_p + 1);
+
+	if ((wc0 == 0x24 || wc0 == 0x25) && (pc0 == 0x24 || pc0 == 0x25)) {
+	    if (wc1 != pc1) {
+		result = wc1 - pc1;
+		break;
+	    }
+	} else {
+	    if (wc0 != pc0 || wc1 != pc1) {
+		result = ((wc0 << 8) + wc1) - ((pc0 << 8) + pc1);
+		break;
+	    }
+	}
+	word_p += 2;
+	pattern_p += 2;
+	i += 2;
+    }
+
+    LOG(("out: eb_exact_match_word_kana_single() = %d", result));
     return result;
 }
 
