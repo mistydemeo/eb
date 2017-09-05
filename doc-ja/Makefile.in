@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4d from Makefile.am
+# Makefile.in generated automatically by automake 1.4f from Makefile.am.
 
 # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -10,6 +10,8 @@
 # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
+
+@SET_MAKE@
 
 SHELL = @SHELL@
 
@@ -31,11 +33,9 @@ infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
-
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-
 top_builddir = ..
 
 ACLOCAL = @ACLOCAL@
@@ -47,21 +47,16 @@ INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
-INSTALL_STRIP_FLAG =
 INSTALL_HEADER = $(INSTALL_DATA)
 transform = @program_transform_name@
-
 NORMAL_INSTALL = :
 PRE_INSTALL = :
 POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-
-@SET_MAKE@
 host_alias = @host_alias@
 host_triplet = @host@
-AMDEP = @AMDEP@
 AMTAR = @AMTAR@
 AS = @AS@
 AWK = @AWK@
@@ -78,13 +73,13 @@ ECHO = @ECHO@
 ENABLE_NLS = @ENABLE_NLS@
 ENABLE_PTHREAD = @ENABLE_PTHREAD@
 EXEEXT = @EXEEXT@
+INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 INTLINCS = @INTLINCS@
 INTLLIBS = @INTLLIBS@
 LIBEB_VERSION_INFO = @LIBEB_VERSION_INFO@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAILING_ADDRESS = @MAILING_ADDRESS@
-MAKEINFO = @MAKEINFO@
 MSGFMT = @MSGFMT@
 MSGMERGE = @MSGMERGE@
 OBJDUMP = @OBJDUMP@
@@ -102,9 +97,9 @@ ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
 _am_include = @_am_include@
+_am_quote = @_am_quote@
 install_sh = @install_sh@
 localedir = @localedir@
-
 
 info_TEXINFOS = ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi ebzip-ja.texi
 ebfont_ja_TEXINFOS = ebfont-ver.texi
@@ -120,49 +115,38 @@ EXTRA_DIST = texinfo-ja.tex stamp-ebfont stamp-ebinfo \
 
 subdir = doc-ja
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../config.h
-CONFIG_CLEAN_FILES = 
-DIST_SOURCES = 
-TEXI2DVI = texi2dvi
+CONFIG_HEADER = $(top_builddir)/config.h
+CONFIG_CLEAN_FILES =
+DIST_SOURCES =
 INFO_DEPS = ebfont-ja.info ebinfo-ja.info ebrefile-ja.info ebzip-ja.info
 DVIS = ebfont-ja.dvi ebinfo-ja.dvi ebrefile-ja.dvi ebzip-ja.dvi
 TEXINFOS = ebfont-ja.texi ebinfo-ja.texi ebrefile-ja.texi ebzip-ja.texi
-DIST_COMMON =  $(ebfont_ja_TEXINFOS) $(ebinfo_ja_TEXINFOS) \
-$(ebrefile_ja_TEXINFOS) $(ebzip_ja_TEXINFOS) Makefile.am Makefile.in \
-mdate-sh texinfo.tex
-
-
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-
-GZIP_ENV = --best
+DIST_COMMON = $(ebfont_ja_TEXINFOS) $(ebinfo_ja_TEXINFOS) \
+	$(ebrefile_ja_TEXINFOS) $(ebzip_ja_TEXINFOS) Makefile.am \
+	Makefile.in mdate-sh texinfo.tex
 all: all-am
+
 .SUFFIXES:
-.SUFFIXES: .dvi .info .ps .texi .texinfo .txi
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu doc-ja/Makefile
-
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
-
+.SUFFIXES: .dvi .info .ps .texi
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+	cd $(top_srcdir) && \
+	  $(AUTOMAKE) --gnu  doc-ja/Makefile
+Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) && \
+	  CONFIG_HEADERS= CONFIG_LINKS= \
+	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
 
 ebfont-ja.info: ebfont-ja.texi $(ebfont_ja_TEXINFOS)
 ebfont-ja.dvi: ebfont-ja.texi $(ebfont_ja_TEXINFOS)
 
-
 ebinfo-ja.info: ebinfo-ja.texi $(ebinfo_ja_TEXINFOS)
 ebinfo-ja.dvi: ebinfo-ja.texi $(ebinfo_ja_TEXINFOS)
-
 
 ebrefile-ja.info: ebrefile-ja.texi $(ebrefile_ja_TEXINFOS)
 ebrefile-ja.dvi: ebrefile-ja.texi $(ebrefile_ja_TEXINFOS)
 
-
 ebzip-ja.info: ebzip-ja.texi $(ebzip_ja_TEXINFOS)
 ebzip-ja.dvi: ebzip-ja.texi $(ebzip_ja_TEXINFOS)
-
-
-DVIPS = dvips
 
 .texi.info:
 	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
@@ -178,61 +162,16 @@ DVIPS = dvips
 	cd $(srcdir) \
 	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
 
-.texinfo.info:
-	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
-	cd $(srcdir) \
-	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
-
-.texinfo:
-	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
-	cd $(srcdir) \
-	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
-
-.texinfo.dvi:
-	TEXINPUTS=$(srcdir):$$TEXINPUTS \
-	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
-
-.txi.info:
-	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
-	cd $(srcdir) \
-	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
-
-.txi.dvi:
-	TEXINPUTS=$(srcdir):$$TEXINPUTS \
-	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
-
-.txi:
-	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
-	cd $(srcdir) \
-	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
+MAKEINFO = @MAKEINFO@
+TEXI2DVI = texi2dvi
+DVIPS = dvips
 .dvi.ps:
 	$(DVIPS) $< -o $@
 
-install-info-am: $(INFO_DEPS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(infodir)
-	@list='$(INFO_DEPS)'; \
-	for file in $$list; do \
-	  d=$(srcdir); \
-	  for ifile in `CDPATH=: && cd $$d && echo $$file $$file-[0-9] $$file-[0-9][0-9]`; do \
-	    if test -f $$d/$$ifile; then \
-	      echo " $(INSTALL_DATA) $$d/$$ifile $(DESTDIR)$(infodir)/$$ifile"; \
-	      $(INSTALL_DATA) $$d/$$ifile $(DESTDIR)$(infodir)/$$ifile; \
-	    else : ; fi; \
-	  done; \
-	done
-	@$(POST_INSTALL)
-	@if $(SHELL) -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
-	  list='$(INFO_DEPS)'; \
-	  for file in $$list; do \
-	    echo " install-info --info-dir=$(DESTDIR)$(infodir) $(DESTDIR)$(infodir)/$$file";\
-	    install-info --info-dir=$(DESTDIR)$(infodir) $(DESTDIR)$(infodir)/$$file || :;\
-	  done; \
-	else : ; fi
-
-uninstall-info:
+uninstall-info-am:
 	$(PRE_UNINSTALL)
-	@if $(SHELL) -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
+	@if (install-info --version && \
+	     install-info --version | fgrep -i -v debian) >/dev/null 2>&1; then \
 	  list='$(INFO_DEPS)'; \
 	  for file in $$list; do \
 	    echo " install-info --info-dir=$(DESTDIR)$(infodir) --remove $(DESTDIR)$(infodir)/$$file"; \
@@ -259,29 +198,17 @@ dist-info: $(INFO_DEPS)
 	done
 
 mostlyclean-aminfo:
-	-rm -f ebfont-ja.aux ebfont-ja.cp ebfont-ja.cps ebfont-ja.dvi \
-	  ebfont-ja.fn ebfont-ja.fns ebfont-ja.pgs ebfont-ja.ky \
-	  ebfont-ja.kys ebfont-ja.ps ebfont-ja.log ebfont-ja.pg \
-	  ebfont-ja.toc ebfont-ja.tp ebfont-ja.tps ebfont-ja.vr \
-	  ebfont-ja.vrs ebfont-ja.op ebfont-ja.tr ebfont-ja.cv \
-	  ebfont-ja.cn ebfont-ja.cm ebfont-ja.ov ebinfo-ja.aux \
-	  ebinfo-ja.cp ebinfo-ja.cps ebinfo-ja.dvi ebinfo-ja.fn \
-	  ebinfo-ja.fns ebinfo-ja.pgs ebinfo-ja.ky ebinfo-ja.kys \
-	  ebinfo-ja.ps ebinfo-ja.log ebinfo-ja.pg ebinfo-ja.toc \
-	  ebinfo-ja.tp ebinfo-ja.tps ebinfo-ja.vr ebinfo-ja.vrs \
-	  ebinfo-ja.op ebinfo-ja.tr ebinfo-ja.cv ebinfo-ja.cn \
-	  ebinfo-ja.cm ebinfo-ja.ov ebrefile-ja.aux ebrefile-ja.cp \
-	  ebrefile-ja.cps ebrefile-ja.dvi ebrefile-ja.fn \
-	  ebrefile-ja.fns ebrefile-ja.pgs ebrefile-ja.ky \
-	  ebrefile-ja.kys ebrefile-ja.ps ebrefile-ja.log ebrefile-ja.pg \
-	  ebrefile-ja.toc ebrefile-ja.tp ebrefile-ja.tps ebrefile-ja.vr \
-	  ebrefile-ja.vrs ebrefile-ja.op ebrefile-ja.tr ebrefile-ja.cv \
-	  ebrefile-ja.cn ebrefile-ja.cm ebrefile-ja.ov ebzip-ja.aux \
-	  ebzip-ja.cp ebzip-ja.cps ebzip-ja.dvi ebzip-ja.fn \
-	  ebzip-ja.fns ebzip-ja.pgs ebzip-ja.ky ebzip-ja.kys \
-	  ebzip-ja.ps ebzip-ja.log ebzip-ja.pg ebzip-ja.toc ebzip-ja.tp \
-	  ebzip-ja.tps ebzip-ja.vr ebzip-ja.vrs ebzip-ja.op ebzip-ja.tr \
-	  ebzip-ja.cv ebzip-ja.cn ebzip-ja.cm ebzip-ja.ov
+	-rm -f ebfont-ja.aux ebfont-ja.cp ebfont-ja.dvi ebfont-ja.fn ebfont-ja.ky \
+	  ebfont-ja.log ebfont-ja.pg ebfont-ja.ps ebfont-ja.toc \
+	  ebfont-ja.tp ebfont-ja.vr ebinfo-ja.aux ebinfo-ja.cp \
+	  ebinfo-ja.dvi ebinfo-ja.fn ebinfo-ja.ky ebinfo-ja.log \
+	  ebinfo-ja.pg ebinfo-ja.ps ebinfo-ja.toc ebinfo-ja.tp \
+	  ebinfo-ja.vr ebrefile-ja.aux ebrefile-ja.cp ebrefile-ja.dvi \
+	  ebrefile-ja.fn ebrefile-ja.ky ebrefile-ja.log ebrefile-ja.pg \
+	  ebrefile-ja.ps ebrefile-ja.toc ebrefile-ja.tp ebrefile-ja.vr \
+	  ebzip-ja.aux ebzip-ja.cp ebzip-ja.dvi ebzip-ja.fn ebzip-ja.ky \
+	  ebzip-ja.log ebzip-ja.pg ebzip-ja.ps ebzip-ja.toc ebzip-ja.tp \
+	  ebzip-ja.vr
 
 maintainer-clean-aminfo:
 	cd $(srcdir) && \
@@ -295,12 +222,18 @@ tags: TAGS
 TAGS:
 
 
-distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
+top_distdir = ..
+distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
-	  d=$(srcdir); \
+	  if test -f $$file; then d=.; else d=$(srcdir); fi; \
+	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
+	  if test "$$dir" != "$$file" && test "$$dir" != "."; then \
+	    $(mkinstalldirs) "$(distdir)/$$dir"; \
+	  fi; \
 	  if test -d $$d/$$file; then \
 	    cp -pR $$d/$$file $(distdir) \
 	    || exit 1; \
@@ -310,46 +243,40 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-	$(MAKE) $(AM_MAKEFLAGS) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-info
-info-am: $(INFO_DEPS)
-info: info-am
-dvi-am: $(DVIS)
-dvi: dvi-am
+	$(MAKE) $(AM_MAKEFLAGS) \
+	  top_distdir="${top_distdir}" distdir="$(distdir)" \
+	  dist-info
 check-am: all-am
 check: check-am
-installcheck-am:
-installcheck: installcheck-am
-install-exec-am:
-install-exec: install-exec-am
+all-am: Makefile $(INFO_DEPS)
 
-install-data-am: install-info-am
+installdirs:
+	$(mkinstalldirs) $(DESTDIR)$(infodir)
+
+install: install-am
+install-exec: install-exec-am
 install-data: install-data-am
+uninstall: uninstall-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-install: install-am
-uninstall-am: uninstall-info
-uninstall: uninstall-am
-all-am: Makefile $(INFO_DEPS)
+
+installcheck: installcheck-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
-installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(infodir)
-
-
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
+	  `test -z '$(STRIP)' || \
+	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
 
 clean-generic:
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
-	-rm -f Makefile $(CONFIG_CLEAN_FILES)
-	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-rm -f Makefile.in
 clean: clean-am
 
 clean-am: clean-generic mostlyclean-am
@@ -357,6 +284,46 @@ clean-am: clean-generic mostlyclean-am
 distclean: distclean-am
 
 distclean-am: clean-am distclean-generic
+
+dvi: dvi-am
+
+dvi-am: $(DVIS)
+
+info: info-am
+
+info-am: $(INFO_DEPS)
+
+install-data-am: install-info-am
+
+install-exec-am:
+
+install-info: install-info-am
+
+install-info-am: $(INFO_DEPS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(infodir)
+	@list='$(INFO_DEPS)'; \
+	for file in $$list; do \
+	  d=$(srcdir); \
+	  for ifile in `CDPATH=: && cd $$d && echo $$file $$file-[0-9] $$file-[0-9][0-9]`; do \
+	    if test -f $$d/$$ifile; then \
+	      echo " $(INSTALL_DATA) $$d/$$ifile $(DESTDIR)$(infodir)/$$ifile"; \
+	      $(INSTALL_DATA) $$d/$$ifile $(DESTDIR)$(infodir)/$$ifile; \
+	    else : ; fi; \
+	  done; \
+	done
+	@$(POST_INSTALL)
+	@if (install-info --version && \
+	     install-info --version | fgrep -i -v debian) >/dev/null 2>&1; then \
+	  list='$(INFO_DEPS)'; \
+	  for file in $$list; do \
+	    echo " install-info --info-dir=$(DESTDIR)$(infodir) $(DESTDIR)$(infodir)/$$file";\
+	    install-info --info-dir=$(DESTDIR)$(infodir) $(DESTDIR)$(infodir)/$$file || :;\
+	  done; \
+	else : ; fi
+install-man:
+
+installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 
@@ -367,13 +334,18 @@ mostlyclean: mostlyclean-am
 
 mostlyclean-am: mostlyclean-aminfo mostlyclean-generic
 
-.PHONY: check check-am clean clean-generic distclean distclean-generic \
-	distdir dvi dvi-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info-am \
+uninstall-am: uninstall-info-am
+
+uninstall-info: uninstall-info-am
+
+.PHONY: all all-am check check-am clean clean-generic dist-info \
+	distclean distclean-generic distdir dvi dvi-am info info-am \
+	install install-am install-data install-data-am install-exec \
+	install-exec-am install-info install-info-am install-man \
 	install-strip installcheck installcheck-am installdirs \
 	maintainer-clean maintainer-clean-aminfo \
 	maintainer-clean-generic mostlyclean mostlyclean-aminfo \
-	mostlyclean-generic uninstall uninstall-am uninstall-info
+	mostlyclean-generic uninstall uninstall-am uninstall-info-am
 
 
 ebfont-ver.texi: stamp-ebfont
@@ -427,7 +399,6 @@ stamp-ebzip: ebzip-ja.texi $(top_srcdir)/configure.ac
 	  || (echo "Updating $(srcdir)/stamp-ebzip"; \
 	      cp vti.tmp $(srcdir)/stamp-ebzip)
 	-@rm -f vti.tmp
-
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -1,4 +1,43 @@
+2001-06-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.0.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to 3.0.
+
+	* eb/error.h (EB_ERR_FAIL_OPEN_LANG, EB_ERR_FAIL_READ_LANG,
+	EB_ERR_FAIL_SEEK_LANG, EB_ERR_UNEXP_LANG, EB_ERR_NO_LANG,
+	EB_ERR_NO_MSG, EB_ERR_NO_CUR_LANG, EB_ERR_NO_SUCH_LANG,
+	EB_ERR_NO_SUCH_MSG): Removed.
+	* eb/error.c (error_messages): Ditto.
+
+	* eb/book.c (eb_initialize_language): Not to return a value.
+
+2001-05-19  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/book.c: Function declaration of eb_initialize_catalog() is
+	duplicated.  Fixed.
+	* eb/book.c: 
+	* eb/language.c, eb/message.c: Removed.
+	All functions in the files except for eb_initialize_languages()
+	are removed.
+	eb_initialize_languages() is renamed to eb_initialize_languages()
+	and it is now placed in eb/book.c.
+	* eb/defs.h (EB_MAX_LANGUAGE_NAME_LENGTH, EB_MAX_MESSAGE_LENGTH,
+	EB_MAX_LANGUAGES, EB_MAX_MESSAGES): Deleted.
+	* eb/defs.h (EB_Language_Code, EB_Message_Code, EB_Language_Struct):
+	Removed.
+	* eb/defs.h (EB_Book_Struct): Delete `language_file_name', 
+	`language_zio', `language_count', `languages', `language_current',
+	and `messages' from the structure.
+	* eb/zipbook.c (eb_zip_book_eb): Find LANGUAGE file by itself.
+	* eb/unzipbook.c (eb_unzip_book_eb): Ditto.
+	* eb/zipinfobook.c (eb_zipinfo_book_eb): Ditto.
+
 2001-05-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.0beta1.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to 3.0beta1.
 
 	* eb/Makefile, libebutils/Makefile, ebfont/Makefile, ebinfo/Makefile,
 	ebrefile/Makefile, ebzip/Makefile: Delete dependencies between *.c

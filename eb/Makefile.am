@@ -1,15 +1,15 @@
 lib_LTLIBRARIES = libeb.la
 pkginclude_HEADERS = appendix.h binary.h defs.h eb.h error.h font.h \
-	language.h text.h zio.h
+	text.h zio.h
 noinst_HEADERS = ebconfig.h
 
 INCLUDES = -DEB_BUILD_LIBRARY $(INTLINCS) $(ZLIBINCS)
 
 libeb_la_SOURCES = appendix.c appsub.c bcd.c binary.c bitmap.c book.c \
    copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
-   hook.c jacode.c keyword.c language.c lock.c match.c menu.c memmove.c \
-   message.c multi.c narwalt.c narwfont.c search.c setword.c stopcode.c \
-   strcasecmp.c subbook.c text.c widealt.c widefont.c word.c zio.c
+   hook.c jacode.c keyword.c lock.c match.c menu.c memmove.c multi.c \
+   narwalt.c narwfont.c search.c setword.c stopcode.c strcasecmp.c \
+   subbook.c text.c widealt.c widefont.c word.c zio.c
 libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
 
 EXTRA_DIST = internal.h.in

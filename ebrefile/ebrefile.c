@@ -213,10 +213,6 @@ const char *program_version = VERSION;
 const char *invoked_name;
 
 /*
- * A list of subbook names to be compressed/uncompressed.
- */
-
-/*
  * File name to be deleted and file to be closed when signal is received.
  */
 static const char *trap_file_name = NULL;

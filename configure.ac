@@ -3,7 +3,7 @@ dnl * Process this file with autoconf to produce a configure script.
 dnl *
 AC_INIT(eb/eb.c)
 AC_PREREQ(2.49)
-AM_INIT_AUTOMAKE(eb, 3.0beta1)
+AM_INIT_AUTOMAKE(eb, 3.0)
 
 dnl *
 dnl * Library version info.

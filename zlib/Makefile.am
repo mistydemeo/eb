@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = foreign
-ACLOCAL_AMFLAGS = -I $(srcdir)
+ACLOCAL_AMFLAGS = -I .
 
 lib_LTLIBRARIES = libz.la
 libz_la_SOURCES = adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c \

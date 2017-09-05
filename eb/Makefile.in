@@ -1,4 +1,4 @@
-# Makefile.in generated automatically by automake 1.4d from Makefile.am
+# Makefile.in generated automatically by automake 1.4f from Makefile.am.
 
 # Copyright 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001
 # Free Software Foundation, Inc.
@@ -10,6 +10,8 @@
 # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
+
+@SET_MAKE@
 
 SHELL = @SHELL@
 
@@ -31,11 +33,9 @@ infodir = @infodir@
 mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
-
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-
 top_builddir = ..
 
 ACLOCAL = @ACLOCAL@
@@ -47,21 +47,16 @@ INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
-INSTALL_STRIP_FLAG =
 INSTALL_HEADER = $(INSTALL_DATA)
 transform = @program_transform_name@
-
 NORMAL_INSTALL = :
 PRE_INSTALL = :
 POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-
-@SET_MAKE@
 host_alias = @host_alias@
 host_triplet = @host@
-AMDEP = @AMDEP@
 AMTAR = @AMTAR@
 AS = @AS@
 AWK = @AWK@
@@ -78,13 +73,13 @@ ECHO = @ECHO@
 ENABLE_NLS = @ENABLE_NLS@
 ENABLE_PTHREAD = @ENABLE_PTHREAD@
 EXEEXT = @EXEEXT@
+INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 INTLINCS = @INTLINCS@
 INTLLIBS = @INTLLIBS@
 LIBEB_VERSION_INFO = @LIBEB_VERSION_INFO@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAILING_ADDRESS = @MAILING_ADDRESS@
-MAKEINFO = @MAKEINFO@
 MSGFMT = @MSGFMT@
 MSGMERGE = @MSGMERGE@
 OBJDUMP = @OBJDUMP@
@@ -102,13 +97,13 @@ ZLIBDEPS = @ZLIBDEPS@
 ZLIBINCS = @ZLIBINCS@
 ZLIBLIBS = @ZLIBLIBS@
 _am_include = @_am_include@
+_am_quote = @_am_quote@
 install_sh = @install_sh@
 localedir = @localedir@
 
-
 lib_LTLIBRARIES = libeb.la
 pkginclude_HEADERS = appendix.h binary.h defs.h eb.h error.h font.h \
-	language.h text.h zio.h
+	text.h zio.h
 
 noinst_HEADERS = ebconfig.h
 
@@ -116,9 +111,9 @@ INCLUDES = -DEB_BUILD_LIBRARY $(INTLINCS) $(ZLIBINCS)
 
 libeb_la_SOURCES = appendix.c appsub.c bcd.c binary.c bitmap.c book.c \
    copyright.c eb.c endword.c error.c exactword.c filename.c font.c \
-   hook.c jacode.c keyword.c language.c lock.c match.c menu.c memmove.c \
-   message.c multi.c narwalt.c narwfont.c search.c setword.c stopcode.c \
-   strcasecmp.c subbook.c text.c widealt.c widefont.c word.c zio.c
+   hook.c jacode.c keyword.c lock.c match.c menu.c memmove.c multi.c \
+   narwalt.c narwfont.c search.c setword.c stopcode.c strcasecmp.c \
+   subbook.c text.c widealt.c widefont.c word.c zio.c
 
 libeb_la_LDFLAGS = -version-info @LIBEB_VERSION_INFO@
 
@@ -129,96 +124,93 @@ CLEANFILES = stamp-internal-h stamp-widealt-h stamp-widefont-h \
 BUILT_SOURCES = internal.h widealt.c widefont.c
 subdir = eb
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../config.h
-CONFIG_CLEAN_FILES = 
-LTLIBRARIES =  $(lib_LTLIBRARIES)
+CONFIG_HEADER = $(top_builddir)/config.h
+CONFIG_CLEAN_FILES =
+LTLIBRARIES = $(lib_LTLIBRARIES)
 
+libeb_la_LIBADD =
+am_libeb_la_OBJECTS = appendix.lo appsub.lo bcd.lo binary.lo bitmap.lo \
+	book.lo copyright.lo eb.lo endword.lo error.lo exactword.lo \
+	filename.lo font.lo hook.lo jacode.lo keyword.lo lock.lo \
+	match.lo menu.lo memmove.lo multi.lo narwalt.lo narwfont.lo \
+	search.lo setword.lo stopcode.lo strcasecmp.lo subbook.lo \
+	text.lo widealt.lo widefont.lo word.lo zio.lo
+libeb_la_OBJECTS = $(am_libeb_la_OBJECTS)
 
-DEFS = @DEFS@ -I. -I$(srcdir) -I..
+DEFS = @DEFS@
+DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-libeb_la_LIBADD = 
-am_libeb_la_OBJECTS =  appendix.lo appsub.lo bcd.lo binary.lo bitmap.lo \
-book.lo copyright.lo eb.lo endword.lo error.lo exactword.lo filename.lo \
-font.lo hook.lo jacode.lo keyword.lo language.lo lock.lo match.lo \
-menu.lo memmove.lo message.lo multi.lo narwalt.lo narwfont.lo search.lo \
-setword.lo stopcode.lo strcasecmp.lo subbook.lo text.lo widealt.lo \
-widefont.lo word.lo zio.lo
-libeb_la_OBJECTS =  $(am_libeb_la_OBJECTS)
-COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CFLAGS = @CFLAGS@
-CCLD = $(CC)
-LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES =  $(libeb_la_SOURCES)
-HEADERS =  $(noinst_HEADERS) $(pkginclude_HEADERS)
-
 depcomp = $(SHELL) $(top_srcdir)/depcomp
-@AMDEP@DEP_FILES =  $(DEPDIR)/appendix.Plo $(DEPDIR)/appsub.Plo \
-@AMDEP@$(DEPDIR)/bcd.Plo $(DEPDIR)/binary.Plo $(DEPDIR)/bitmap.Plo \
-@AMDEP@$(DEPDIR)/book.Plo $(DEPDIR)/copyright.Plo $(DEPDIR)/eb.Plo \
-@AMDEP@$(DEPDIR)/endword.Plo $(DEPDIR)/error.Plo \
-@AMDEP@$(DEPDIR)/exactword.Plo $(DEPDIR)/filename.Plo \
-@AMDEP@$(DEPDIR)/font.Plo $(DEPDIR)/hook.Plo $(DEPDIR)/jacode.Plo \
-@AMDEP@$(DEPDIR)/keyword.Plo $(DEPDIR)/language.Plo $(DEPDIR)/lock.Plo \
-@AMDEP@$(DEPDIR)/match.Plo $(DEPDIR)/memmove.Plo $(DEPDIR)/menu.Plo \
-@AMDEP@$(DEPDIR)/message.Plo $(DEPDIR)/multi.Plo $(DEPDIR)/narwalt.Plo \
-@AMDEP@$(DEPDIR)/narwfont.Plo $(DEPDIR)/search.Plo \
-@AMDEP@$(DEPDIR)/setword.Plo $(DEPDIR)/stopcode.Plo \
-@AMDEP@$(DEPDIR)/strcasecmp.Plo $(DEPDIR)/subbook.Plo \
-@AMDEP@$(DEPDIR)/text.Plo $(DEPDIR)/widealt.Plo $(DEPDIR)/widefont.Plo \
-@AMDEP@$(DEPDIR)/word.Plo $(DEPDIR)/zio.Plo
-DIST_COMMON =  $(noinst_HEADERS) $(pkginclude_HEADERS) Makefile.am \
-Makefile.in
+@AMDEP_TRUE@DEP_FILES = $(DEPDIR)/appendix.Plo $(DEPDIR)/appsub.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/bcd.Plo $(DEPDIR)/binary.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/bitmap.Plo $(DEPDIR)/book.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/copyright.Plo $(DEPDIR)/eb.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/endword.Plo $(DEPDIR)/error.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/exactword.Plo $(DEPDIR)/filename.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/font.Plo $(DEPDIR)/hook.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/jacode.Plo $(DEPDIR)/keyword.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/lock.Plo $(DEPDIR)/match.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/memmove.Plo $(DEPDIR)/menu.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/multi.Plo $(DEPDIR)/narwalt.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/narwfont.Plo $(DEPDIR)/search.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/setword.Plo $(DEPDIR)/stopcode.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/strcasecmp.Plo $(DEPDIR)/subbook.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/text.Plo $(DEPDIR)/widealt.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/widefont.Plo $(DEPDIR)/word.Plo \
+@AMDEP_TRUE@	$(DEPDIR)/zio.Plo
+COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) \
+	$(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+CCLD = $(CC)
+LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+CFLAGS = @CFLAGS@
+DIST_SOURCES = $(libeb_la_SOURCES)
+HEADERS = $(noinst_HEADERS) $(pkginclude_HEADERS)
 
-
-DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-
-GZIP_ENV = --best
+DIST_COMMON = $(noinst_HEADERS) $(pkginclude_HEADERS) Makefile.am \
+	Makefile.in
 SOURCES = $(libeb_la_SOURCES)
-OBJECTS = $(am_libeb_la_OBJECTS)
 
-all: all-redirect
+all: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) all-am
+
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
-$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu eb/Makefile
-
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= CONFIG_LINKS= $(SHELL) ./config.status
-
-
-mostlyclean-libLTLIBRARIES:
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-
-distclean-libLTLIBRARIES:
-
-maintainer-clean-libLTLIBRARIES:
-
+$(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+	cd $(top_srcdir) && \
+	  $(AUTOMAKE) --gnu  eb/Makefile
+Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) && \
+	  CONFIG_HEADERS= CONFIG_LINKS= \
+	  CONFIG_FILES=$(subdir)/$@ $(SHELL) ./config.status
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
 	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo " $(LIBTOOL)  --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$p"; \
-	    $(LIBTOOL)  --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$p; \
+	    echo " $(LIBTOOL) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$p"; \
+	    $(LIBTOOL) --mode=install $(INSTALL) $(INSTALL_STRIP_FLAG) $$p $(DESTDIR)$(libdir)/$$p; \
 	  else :; fi; \
 	done
 
 uninstall-libLTLIBRARIES:
 	@$(NORMAL_UNINSTALL)
 	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  echo " $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p"; \
-	  $(LIBTOOL)  --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
+	  echo " $(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p"; \
+	  $(LIBTOOL) --mode=uninstall rm -f $(DESTDIR)$(libdir)/$$p; \
 	done
 
+clean-libLTLIBRARIES:
+	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+libeb.la: $(libeb_la_OBJECTS) $(libeb_la_DEPENDENCIES)
+	$(LINK) -rpath $(libdir) $(libeb_la_LDFLAGS) $(libeb_la_OBJECTS) $(libeb_la_LIBADD) $(LIBS)
+
 mostlyclean-compile:
-	-rm -f *.o core *.core
-	-rm -f *.$(OBJEXT)
+	-rm -f *.$(OBJEXT) core *.core
 
 distclean-compile:
 	-rm -f *.tab.c
@@ -232,9 +224,62 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 
-libeb.la: $(libeb_la_OBJECTS) $(libeb_la_DEPENDENCIES)
-	$(LINK) -rpath $(libdir) $(libeb_la_LDFLAGS) $(libeb_la_OBJECTS) $(libeb_la_LIBADD) $(LIBS)
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/appendix.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/appsub.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/bcd.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/binary.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/bitmap.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/book.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/copyright.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/eb.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/endword.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/error.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/exactword.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/filename.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/font.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/hook.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/jacode.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/keyword.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/lock.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/match.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/memmove.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/menu.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/multi.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/narwalt.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/narwfont.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/search.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/setword.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/stopcode.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/strcasecmp.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/subbook.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/text.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/widealt.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/widefont.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/word.Plo@_am_quote@
+@AMDEP_TRUE@@_am_include@ @_am_quote@$(DEPDIR)/zio.Plo@_am_quote@
 
+distclean-depend:
+	-rm -rf $(DEPDIR)
+
+.c.o:
+@AMDEP_TRUE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(COMPILE) -c `test -f $< || echo '$(srcdir)/'`$<
+
+.c.obj:
+@AMDEP_TRUE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(COMPILE) -c `cygpath -w $<`
+
+.c.lo:
+@AMDEP_TRUE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
+@AMDEP_TRUE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+	$(LTCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
+CCDEPMODE = @CCDEPMODE@
+uninstall-info-am:
 install-pkgincludeHEADERS: $(pkginclude_HEADERS)
 	@$(NORMAL_INSTALL)
 	$(mkinstalldirs) $(DESTDIR)$(pkgincludedir)
@@ -264,7 +309,7 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	       END { for (i in files) print i; }'`; \
 	mkid -fID $$unique $(LISP)
 
-TAGS: $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
@@ -285,72 +330,18 @@ GTAGS:
 distclean-tags:
 	-rm -f TAGS ID
 
-@AMDEP@@_am_include@ $(DEPDIR)/appendix.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/appsub.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/bcd.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/binary.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/bitmap.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/book.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/copyright.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/eb.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/endword.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/error.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/exactword.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/filename.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/font.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/hook.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/jacode.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/keyword.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/language.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/lock.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/match.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/memmove.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/menu.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/message.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/multi.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/narwalt.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/narwfont.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/search.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/setword.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/stopcode.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/strcasecmp.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/subbook.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/text.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/widealt.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/widefont.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/word.Plo
-@AMDEP@@_am_include@ $(DEPDIR)/zio.Plo
+DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-distclean-depend:
-	-rm -rf $(DEPDIR)
-
-@AMDEP@CCDEPMODE = @CCDEPMODE@
-
-.c.o:
-@AMDEP@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
-@AMDEP@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(COMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
-
-.c.lo:
-@AMDEP@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
-@AMDEP@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
-@AMDEP@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(LTCOMPILE) -c -o $@ `test -f $< || echo '$(srcdir)/'`$<
-
-.c.obj:
-@AMDEP@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
-@AMDEP@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
-@AMDEP@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-	$(COMPILE) -c -o $@ `cygpath -w $<`
-
-
-distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
-
+top_distdir = ..
+distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
-	  d=$(srcdir); \
+	  if test -f $$file; then d=.; else d=$(srcdir); fi; \
+	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
+	  if test "$$dir" != "$$file" && test "$$dir" != "."; then \
+	    $(mkinstalldirs) "$(distdir)/$$dir"; \
+	  fi; \
 	  if test -d $$d/$$file; then \
 	    cp -pR $$d/$$file $(distdir) \
 	    || exit 1; \
@@ -360,48 +351,37 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-info-am:
-info: info-am
-dvi-am:
-dvi: dvi-am
 check-am: all-am
 check: check-am
-installcheck-am:
-installcheck: installcheck-am
-all-redirect: $(BUILT_SOURCES)
-	$(MAKE) $(AM_MAKEFLAGS) all-am
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 
-install-exec-am: install-libLTLIBRARIES
+installdirs:
+	$(mkinstalldirs) $(DESTDIR)$(libdir) $(DESTDIR)$(pkgincludedir)
+
+install: install-am
 install-exec: install-exec-am
-
-install-data-am: install-pkgincludeHEADERS
 install-data: install-data-am
+uninstall: uninstall-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
-install: install-am
-uninstall-am: uninstall-libLTLIBRARIES uninstall-pkgincludeHEADERS
-uninstall: uninstall-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+
+installcheck: installcheck-am
 install-strip:
-	$(MAKE) $(AM_MAKEFLAGS) INSTALL_STRIP_FLAG=-s install
-installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(libdir) $(DESTDIR)$(pkgincludedir)
-
-
+	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
+	  `test -z '$(STRIP)' || \
+	    echo "INSTALL_PROGRAM_ENV=STRIPPROG='$(STRIP)'"` install
 mostlyclean-generic:
 
 clean-generic:
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
-	-rm -f Makefile $(CONFIG_CLEAN_FILES)
-	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-rm -f Makefile $(CONFIG_CLEAN_FILES) stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-	-rm -f Makefile.in
 	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-am
 
@@ -411,32 +391,52 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 distclean: distclean-am
 
 distclean-am: clean-am distclean-compile distclean-depend \
-	distclean-generic distclean-libLTLIBRARIES distclean-libtool \
-	distclean-tags
+	distclean-generic distclean-libtool distclean-tags
+
+dvi: dvi-am
+
+dvi-am:
+
+info: info-am
+
+info-am:
+
+install-data-am: install-pkgincludeHEADERS
+
+install-exec-am: install-libLTLIBRARIES
+
+install-info: install-info-am
+
+install-man:
+
+installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 
-maintainer-clean-am: distclean-am maintainer-clean-generic \
-	maintainer-clean-libLTLIBRARIES
+maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-am
 
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libLTLIBRARIES mostlyclean-libtool
+	mostlyclean-libtool
 
-.PHONY: all-redirect check check-am clean clean-generic \
-	clean-libLTLIBRARIES clean-libtool distclean distclean-compile \
-	distclean-depend distclean-generic distclean-libLTLIBRARIES \
-	distclean-libtool distclean-tags distdir dvi dvi-am info \
-	info-am install install-am install-data install-data-am \
-	install-exec install-exec-am install-libLTLIBRARIES \
-	install-pkgincludeHEADERS install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic maintainer-clean-libLTLIBRARIES \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libLTLIBRARIES mostlyclean-libtool tags uninstall \
-	uninstall-am uninstall-libLTLIBRARIES \
+uninstall-am: uninstall-info-am uninstall-libLTLIBRARIES \
 	uninstall-pkgincludeHEADERS
+
+uninstall-info: uninstall-info-am
+
+.PHONY: all all-am check check-am clean clean-generic \
+	clean-libLTLIBRARIES clean-libtool distclean distclean-compile \
+	distclean-depend distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am info info-am install \
+	install-am install-data install-data-am install-exec \
+	install-exec-am install-info install-info-am \
+	install-libLTLIBRARIES install-man install-pkgincludeHEADERS \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	tags uninstall uninstall-am uninstall-info-am \
+	uninstall-libLTLIBRARIES uninstall-pkgincludeHEADERS
 
 
 internal.h: stamp-internal-h
@@ -462,7 +462,6 @@ stamp-widefont-h: narwfont.c Makefile
 	   $(srcdir)/narwfont.c > widefont.c.tmp
 	$(top_srcdir)/move-if-change widefont.c.tmp widefont.c
 	@echo timestamp > stamp-widefont-h
-
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

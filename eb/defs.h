@@ -125,16 +125,6 @@ extern "C" {
 #define EB_MAX_FILE_NAME_LENGTH		14
 
 /*
- * The maximum length of a language name.
- */
-#define EB_MAX_LANGUAGE_NAME_LENGTH	15
-
-/*
- * The maximum length of a message.
- */
-#define EB_MAX_MESSAGE_LENGTH		31
-
-/*
  * The maximum length of a label for multi-search entry.
  */
 #define EB_MAX_MULTI_LABEL_LENGTH	30
@@ -153,16 +143,6 @@ extern "C" {
  * The maximum number of subbooks in a book.
  */
 #define EB_MAX_SUBBOOKS			50
-
-/*
- * The maximum number of languages.
- */
-#define EB_MAX_LANGUAGES		20
-
-/*
- * The maximum number of messages in a languages.
- */
-#define EB_MAX_MESSAGES			32
 
 /*
  * The maximum number of entries in a keyword search.
@@ -216,8 +196,6 @@ typedef int EB_Suffix_Code;
 typedef int EB_Character_Code;
 typedef int EB_Font_Code;
 typedef int EB_Word_Code;
-typedef int EB_Language_Code;
-typedef int EB_Message_Code;
 typedef int EB_Subbook_Code;
 typedef int EB_Index_Style_Code;
 typedef int EB_Search_Code;
@@ -238,7 +216,6 @@ typedef struct EB_Alternation_Cache_Struct EB_Alternation_Cache;
 typedef struct EB_Appendix_Subbook_Struct  EB_Appendix_Subbook;
 typedef struct EB_Appendix_Struct          EB_Appendix;
 typedef struct EB_Font_Struct              EB_Font;
-typedef struct EB_Language_Struct          EB_Language;
 typedef struct EB_Search_Struct            EB_Search;
 typedef struct EB_Multi_Search_Struct      EB_Multi_Search;
 typedef struct EB_Subbook_Struct           EB_Subbook;
@@ -446,31 +423,6 @@ struct EB_Font_Struct {
      * Compression Information.
      */
     Zio zio;
-};
-
-/*
- * A language in a book. (EB* only)
- */
-struct EB_Language_Struct {
-    /*
-     * Language ID.
-     */
-    EB_Language_Code code;
-
-    /*
-     * Location of the messages in the language file.
-     */
-    off_t location;
-
-    /*
-     * The number of messages the language file has.
-     */
-    int message_count;
-
-    /*
-     * Language name.
-     */
-    char name[EB_MAX_LANGUAGE_NAME_LENGTH + 1];
 };
 
 /*
@@ -908,36 +860,6 @@ struct EB_Book_Struct {
      * Current subbook.
      */
     EB_Subbook *subbook_current;
-
-    /*
-     * Language file name.
-     */
-    char language_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
-
-    /*
-     * File descriptor and compression information for language file.
-     */
-    Zio language_zio;
-
-    /*
-     * The number of languages the book supports.
-     */
-    int language_count;
-
-    /*
-     * Language list.
-     */
-    EB_Language *languages;
-
-    /*
-     * Current language.
-     */
-    EB_Language *language_current;
-
-    /*
-     * Messages in the current language.
-     */
-    char *messages;
 
     /*
      * Context parameters for text reading.

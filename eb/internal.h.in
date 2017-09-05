@@ -159,9 +159,6 @@ void eb_initialize_default_hookset EB_P((void));
 void eb_jisx0208_to_euc EB_P((char *, const char *));
 void eb_sjis_to_euc EB_P((char *, const char *));
 
-/* language.c */
-EB_Error_Code eb_initialize_languages EB_P((EB_Book *));
-
 /* lock.c */
 #ifdef ENABLE_PTHREAD
 void eb_initialize_lock EB_P((EB_Lock *));

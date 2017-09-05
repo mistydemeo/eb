@@ -101,6 +101,11 @@ static int ebzip_zipinfo_book_eb EB_P((EB_Book *, const char *,
 static int ebzip_zipinfo_book_epwing EB_P((EB_Book *, const char *,
     EB_Subbook_Code *, int));
 
+/*
+ * Hints of language file names in a book.
+ */
+#define EB_HINT_INDEX_LANGUAGE		0
+#define EB_HINT_INDEX_LANGUAGE_EBZ	1
 
 /*
  * List compressed book information.
@@ -181,6 +186,7 @@ ebzip_zipinfo_book(book_path, subbook_name_list, subbook_name_count)
  * This is used to list files in an EB book.
  */
 static const char *catalog_hint_list[] = {"catalog", NULL};
+static const char *language_hint_list[] = {"language", "language.ebz", NULL};
 
 static int
 ebzip_zipinfo_book_eb(book, book_path, subbook_list, subbook_count)
@@ -192,7 +198,9 @@ ebzip_zipinfo_book_eb(book, book_path, subbook_list, subbook_count)
     EB_Subbook *subbook;
     char in_path_name[PATH_MAX + 1];
     char catalog_file_name[EB_MAX_FILE_NAME_LENGTH];
+    char language_file_name[EB_MAX_FILE_NAME_LENGTH];
     Zio_Code in_zio_code;
+    int hint_index;
     int i;
 
     /*
@@ -223,9 +231,12 @@ ebzip_zipinfo_book_eb(book, book_path, subbook_list, subbook_count)
     /*
      * Inspect a language file.
      */
-    in_zio_code = zio_mode(&book->language_zio);
-    eb_compose_path_name(book->path, book->language_file_name, in_path_name);
+    if (eb_find_file_name(book->path, language_hint_list, language_file_name,
+	&hint_index) == EB_SUCCESS) {
+	in_zio_code = (hint_index == 0) ? ZIO_NONE : ZIO_EBZIP1;
+	eb_compose_path_name(book->path, language_file_name, in_path_name);
 	ebzip_zipinfo_file(in_path_name, in_zio_code);
+    }
 
     /*
      * Inspect CATALOG file.

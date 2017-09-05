@@ -186,6 +186,7 @@ ebzip_unzip_book(out_top_path, book_path, subbook_name_list,
  * This is used to compress an EB book.
  */
 static const char *catalog_hint_list[] = {"catalog", NULL};
+static const char *language_hint_list[] = {"language", "language.ebz", NULL};
 
 static int
 ebzip_unzip_book_eb(book, out_top_path, book_path, subbook_list,
@@ -201,8 +202,10 @@ ebzip_unzip_book_eb(book, out_top_path, book_path, subbook_list,
     char out_sub_path[PATH_MAX + 1];
     char out_path_name[PATH_MAX + 1];
     char catalog_file_name[EB_MAX_FILE_NAME_LENGTH];
+    char language_file_name[EB_MAX_FILE_NAME_LENGTH];
     mode_t out_directory_mode;
     Zio_Code in_zio_code;
+    int hint_index;
     int i;
 
     /*
@@ -253,13 +256,11 @@ ebzip_unzip_book_eb(book, out_top_path, book_path, subbook_list,
     /*
      * Uncompress a language file.
      */
-    in_zio_code = zio_mode(&book->language_zio);
-
-    if (in_zio_code != ZIO_INVALID) {
-	eb_compose_path_name(book->path, book->language_file_name,
-	    in_path_name);
-	eb_compose_path_name(out_top_path, book->language_file_name,
-	    out_path_name);
+    if (eb_find_file_name(book->path, language_hint_list, language_file_name,
+	&hint_index) == EB_SUCCESS) {
+	in_zio_code = (hint_index == 0) ? ZIO_NONE : ZIO_EBZIP1;
+	eb_compose_path_name(book->path, language_file_name, in_path_name);
+	eb_compose_path_name(out_top_path, language_file_name, out_path_name);
 	eb_fix_path_name_suffix(out_path_name, EBZIP_SUFFIX_NONE);
 	ebzip_unzip_file(out_path_name, in_path_name, in_zio_code);
     }

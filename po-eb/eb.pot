@@ -6,303 +6,269 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2001-03-31 22:10+0900\n"
+"POT-Creation-Date: 2001-06-03 17:53+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
+"Content-Transfer-Encoding: 8-bit\n"
 
 #. 0 -- 4
-#: ../../eb/error.c:34
+#: ../eb/error.c:34
 msgid "no error"
 msgstr ""
 
-#: ../../eb/error.c:35
+#: ../eb/error.c:35
 msgid "memory exhausted"
 msgstr ""
 
-#: ../../eb/error.c:36
+#: ../eb/error.c:36
 msgid "an empty file name"
 msgstr ""
 
-#: ../../eb/error.c:37
+#: ../eb/error.c:37
 msgid "too long file name"
 msgstr ""
 
-#: ../../eb/error.c:38
+#: ../eb/error.c:38
 msgid "bad file name"
 msgstr ""
 
 #. 5 -- 9
-#: ../../eb/error.c:41
+#: ../eb/error.c:41
 msgid "bad directory name"
 msgstr ""
 
-#: ../../eb/error.c:42
+#: ../eb/error.c:42
 msgid "too long word"
 msgstr ""
 
-#: ../../eb/error.c:43
+#: ../eb/error.c:43
 msgid "a word contains bad character"
 msgstr ""
 
-#: ../../eb/error.c:44
+#: ../eb/error.c:44
 msgid "an empty word"
 msgstr ""
 
-#: ../../eb/error.c:45
+#: ../eb/error.c:45
 msgid "failed to get the current working directory"
 msgstr ""
 
 #. 10 -- 14
-#: ../../eb/error.c:48
+#: ../eb/error.c:48
 msgid "failed to open a catalog file"
 msgstr ""
 
-#: ../../eb/error.c:49
+#: ../eb/error.c:49
 msgid "failed to open an appendix catalog file"
 msgstr ""
 
-#: ../../eb/error.c:50
-msgid "failed to open a language file"
-msgstr ""
-
-#: ../../eb/error.c:51
+#: ../eb/error.c:50
 msgid "failed to open a text file"
 msgstr ""
 
-#: ../../eb/error.c:52
+#: ../eb/error.c:51
 msgid "failed to open a font file"
 msgstr ""
 
-#. 15 -- 19
-#: ../../eb/error.c:55
+#: ../eb/error.c:52
 msgid "failed to open an appendix file"
 msgstr ""
 
-#: ../../eb/error.c:56
+#. 15 -- 19
+#: ../eb/error.c:55
 msgid "failed to open a binary file"
 msgstr ""
 
-#: ../../eb/error.c:57
+#: ../eb/error.c:56
 msgid "failed to read a catalog file"
 msgstr ""
 
-#: ../../eb/error.c:58
+#: ../eb/error.c:57
 msgid "failed to read an appendix catalog file"
 msgstr ""
 
-#: ../../eb/error.c:59
-msgid "failed to read a language file"
-msgstr ""
-
-#. 20 -- 24
-#: ../../eb/error.c:62
+#: ../eb/error.c:58
 msgid "failed to read a text file"
 msgstr ""
 
-#: ../../eb/error.c:63
+#: ../eb/error.c:59
 msgid "failed to read a font file"
 msgstr ""
 
-#: ../../eb/error.c:64
+#. 20 -- 24
+#: ../eb/error.c:62
+msgid "failed to read an appendix file"
+msgstr ""
+
+#: ../eb/error.c:63
 msgid "failed to read a binary file"
 msgstr ""
 
-#: ../../eb/error.c:65 ../../eb/error.c:73
-msgid "failed to seek an appendix file"
-msgstr ""
-
-#: ../../eb/error.c:66
+#: ../eb/error.c:64
 msgid "failed to seek a catalog file"
 msgstr ""
 
-#. 25 -- 29
-#: ../../eb/error.c:69
+#: ../eb/error.c:65
 msgid "failed to seek an appendix catalog file"
 msgstr ""
 
-#: ../../eb/error.c:70
-msgid "failed to seek a language file"
-msgstr ""
-
-#: ../../eb/error.c:71
+#: ../eb/error.c:66
 msgid "failed to seek a text file"
 msgstr ""
 
-#: ../../eb/error.c:72
+#. 25 -- 29
+#: ../eb/error.c:69
 msgid "failed to seek a font file"
 msgstr ""
 
-#. 30 -- 34
-#: ../../eb/error.c:76
+#: ../eb/error.c:70
+msgid "failed to seek an appendix file"
+msgstr ""
+
+#: ../eb/error.c:71
 msgid "failed to seek a binary file"
 msgstr ""
 
-#: ../../eb/error.c:77
+#: ../eb/error.c:72
 msgid "unexpected format in a catalog file"
 msgstr ""
 
-#: ../../eb/error.c:78
+#: ../eb/error.c:73
 msgid "unexpected format in an appendix catalog file"
 msgstr ""
 
-#: ../../eb/error.c:79
-msgid "unexpected format in a language file"
-msgstr ""
-
-#: ../../eb/error.c:80
+#. 30 -- 34
+#: ../eb/error.c:76
 msgid "unexpected format in a text file"
 msgstr ""
 
-#. 35 -- 39
-#: ../../eb/error.c:83
+#: ../eb/error.c:77
 msgid "unexpected format in a font file"
 msgstr ""
 
-#: ../../eb/error.c:84
+#: ../eb/error.c:78
 msgid "unexpected format in an appendix file"
 msgstr ""
 
-#: ../../eb/error.c:85
+#: ../eb/error.c:79
 msgid "unexpected format in a binary file"
 msgstr ""
 
-#: ../../eb/error.c:86
+#: ../eb/error.c:80
 msgid "book not bound"
 msgstr ""
 
-#: ../../eb/error.c:87
+#. 35 -- 39
+#: ../eb/error.c:83
 msgid "appendix not bound"
 msgstr ""
 
-#. 40 -- 44
-#: ../../eb/error.c:90
-msgid "no language"
-msgstr ""
-
-#: ../../eb/error.c:91
+#: ../eb/error.c:84
 msgid "no subbook"
 msgstr ""
 
-#: ../../eb/error.c:92
+#: ../eb/error.c:85
 msgid "no subbook in the appendix"
 msgstr ""
 
-#: ../../eb/error.c:93
-msgid "no message"
-msgstr ""
-
-#: ../../eb/error.c:94
+#: ../eb/error.c:86
 msgid "no font"
 msgstr ""
 
-#. 45 -- 49
-#: ../../eb/error.c:97
+#: ../eb/error.c:87
 msgid "no text file"
 msgstr ""
 
-#: ../../eb/error.c:98
-msgid "no current language"
-msgstr ""
-
-#: ../../eb/error.c:99
+#. 40 -- 44
+#: ../eb/error.c:90
 msgid "no current subbook"
 msgstr ""
 
-#: ../../eb/error.c:100
+#: ../eb/error.c:91
 msgid "no current appendix subbook"
 msgstr ""
 
-#: ../../eb/error.c:101
+#: ../eb/error.c:92
 msgid "no current font"
 msgstr ""
 
-#. 50 -- 54
-#: ../../eb/error.c:104
+#: ../eb/error.c:93
 msgid "no current binary"
 msgstr ""
 
-#: ../../eb/error.c:105
-msgid "no such language"
-msgstr ""
-
-#: ../../eb/error.c:106
+#: ../eb/error.c:94
 msgid "no such subbook"
 msgstr ""
 
-#: ../../eb/error.c:107
+#. 45 -- 49
+#: ../eb/error.c:97
 msgid "no such appendix subbook"
 msgstr ""
 
-#: ../../eb/error.c:108
-msgid "no such message"
-msgstr ""
-
-#. 55 -- 59
-#: ../../eb/error.c:111
+#: ../eb/error.c:98
 msgid "no such font"
 msgstr ""
 
-#: ../../eb/error.c:112
+#: ../eb/error.c:99
 msgid "no such character bitmap"
 msgstr ""
 
-#: ../../eb/error.c:113
+#: ../eb/error.c:100
 msgid "no such character text"
 msgstr ""
 
-#: ../../eb/error.c:114
+#: ../eb/error.c:101
 msgid "no such search method"
 msgstr ""
 
-#: ../../eb/error.c:115
+#. 50 -- 54
+#: ../eb/error.c:104
 msgid "no such hook"
 msgstr ""
 
-#. 60 -- 64
-#: ../../eb/error.c:118
+#: ../eb/error.c:105
 msgid "no such binary"
 msgstr ""
 
-#: ../../eb/error.c:119
+#: ../eb/error.c:106
 msgid "stop code found"
 msgstr ""
 
-#: ../../eb/error.c:120
+#: ../eb/error.c:107
 msgid "different content type"
 msgstr ""
 
-#: ../../eb/error.c:121
+#: ../eb/error.c:108
 msgid "no previous search"
 msgstr ""
 
-#: ../../eb/error.c:122
+#. 55 -- 59
+#: ../eb/error.c:111
 msgid "no such multi search"
 msgstr ""
 
-#. 65 -- 69
-#: ../../eb/error.c:125
+#: ../eb/error.c:112
 msgid "no such multi search entry"
 msgstr ""
 
-#: ../../eb/error.c:126
+#: ../eb/error.c:113
 msgid "too many words specified"
 msgstr ""
 
-#: ../../eb/error.c:127
+#: ../eb/error.c:114
 msgid "no word specified"
 msgstr ""
 
-#: ../../eb/error.c:128
+#: ../eb/error.c:115
 msgid "no candidates"
 msgstr ""
 
 #.
 #. * "Unknown error", the special error message.
 #.
-#: ../../eb/error.c:135
+#: ../eb/error.c:123
 msgid "unknown error"
 msgstr ""

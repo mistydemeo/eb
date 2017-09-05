@@ -19,12 +19,6 @@
 #include "error.h"
 #include "internal.h"
 #include "font.h"
-#include "language.h"
-
-/*
- * Unexported functions.
- */
-static EB_Error_Code eb_initialize_catalog EB_P((EB_Book *));
 
 /*
  * Book ID counter.
@@ -42,6 +36,8 @@ static pthread_mutex_t counter_mutex = PTHREAD_MUTEX_INITIALIZER;
  * Unexported functions.
  */
 static void eb_fix_misleaded_book EB_P((EB_Book *));
+static EB_Error_Code eb_initialize_catalog EB_P((EB_Book *));
+static void eb_initialize_language EB_P((EB_Book *));
 
 /*
  * Initialize `book'.
@@ -57,10 +53,6 @@ eb_initialize_book(book)
     book->path = NULL;
     book->subbook_current = NULL;
     book->subbooks = NULL;
-    book->languages = NULL;
-    book->language_current = NULL;
-    zio_initialize(&book->language_zio);
-    book->messages = NULL;
     book->text_context.unprocessed = NULL;
     book->text_context.unprocessed_size = 0;
 }
@@ -120,8 +112,7 @@ eb_bind(book, path)
      * Read information from the `LANGUAGE' file.
      * If failed to initialize, JIS X 0208 is assumed.
      */
-    if (eb_initialize_languages(book) != EB_SUCCESS)
-	book->character_code = EB_CHARCODE_JISX0208;
+    eb_initialize_language(book);
 
     /*
      * Read information from the `CATALOG(S)' file.
@@ -156,7 +147,6 @@ eb_suspend(book)
 {
     eb_lock(&book->lock);
     eb_unset_subbook(book);
-    eb_unset_language(book);
     eb_unlock(&book->lock);
 }
 
@@ -175,10 +165,6 @@ eb_finalize_book(book)
      * Dispose memories and unset struct members.
      */
     eb_unset_subbook(book);
-    eb_unset_language(book);
-
-    if (book->languages != NULL)
-	free(book->languages);
 
     if (book->subbooks != NULL) {
 	for (i = 0, subbook = book->subbooks; i < book->subbook_count;
@@ -200,9 +186,6 @@ eb_finalize_book(book)
 	free(book->subbooks);
     }
 
-    if (book->messages != NULL)
-	free(book->messages);
-
     if (book->path != NULL)
 	free(book->path);
 
@@ -212,13 +195,8 @@ eb_finalize_book(book)
     book->path = NULL;
     book->subbook_current = NULL;
     book->subbooks = NULL;
-    book->languages = NULL;
-    book->language_current = NULL;
-    book->messages = NULL;
     book->text_context.unprocessed = NULL;
     book->text_context.unprocessed_size = 0;
-
-    zio_finalize(&book->language_zio);
 
     eb_finalize_lock(&book->lock);
 }
@@ -522,6 +500,79 @@ eb_initialize_catalog(book)
 	book->subbooks = NULL;
     }
     return error_code;
+}
+
+
+/*
+ * Hints of language file names.
+ */
+#define EB_HINT_INDEX_LANGUAGE		0
+#define EB_HINT_INDEX_LANGUAGE_EBZ	1
+
+static const char *language_hint_list[] = {
+    "language", "language.ebz", NULL
+};
+
+/*
+ * Read information from the `LANGUAGE' file in `book'.
+ */
+static void
+eb_initialize_language(book)
+    EB_Book *book;
+{
+    Zio zio;
+    Zio_Code zio_code;
+    char language_path_name[PATH_MAX + 1];
+    char language_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+    char buffer[16];
+    int hint_index;
+
+    zio_initialize(&zio);
+    book->character_code = EB_CHARCODE_JISX0208;
+
+    /*
+     * Open the language file.
+     */
+    eb_find_file_name(book->path, language_hint_list, language_file_name,
+	&hint_index);
+
+    switch (hint_index) {
+    case EB_HINT_INDEX_LANGUAGE:
+	zio_code = ZIO_NONE;
+	break;
+    case EB_HINT_INDEX_LANGUAGE_EBZ:
+	zio_code = ZIO_EBZIP1;
+	break;
+    default:
+	goto failed;
+    }
+    eb_compose_path_name(book->path, language_file_name, language_path_name);
+
+    if (zio_open(&zio, language_path_name, zio_code) < 0)
+	goto failed;
+
+    /*
+     * Get a character code of the book, and get the number of langueages
+     * in the file.
+     */
+    if (zio_read(&zio, buffer, 16) != 16)
+	goto failed;
+
+    book->character_code = eb_uint2(buffer);
+    if (book->character_code != EB_CHARCODE_ISO8859_1
+	&& book->character_code != EB_CHARCODE_JISX0208
+	&& book->character_code != EB_CHARCODE_JISX0208_GB2312) {
+	goto failed;
+    }
+
+    zio_close(&zio);
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    zio_close(&zio);
 }
 
 

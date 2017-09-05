@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.0beta1 版です。 EB ライブラリバージョン 3.0beta1 に対
-応しています。
+   この文書は第 3.0 版です。 EB ライブラリバージョン 3.0 に対応していま
+す。
 
 * Menu:
 
@@ -947,8 +947,8 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 3.0beta1 では、 1 (2
-     進数で 0001) だけが規定されています。
+     圧縮モードを表します。 EB ライブラリバージョン 3.0 では、1 (2 進数
+     で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
      圧縮レベルを表します。
@@ -986,31 +986,31 @@ significant bit) を含んでいます。 `zip モード' が 1 で、 `圧縮レベル' が
 
 Tag Table:
 Node: Top1018
-Node: Introduction2542
-Node: Action and Command Name3894
-Node: Invoking ebzip5635
-Node: Compression6268
-Node: Compression Example 16820
-Node: Compression Example 28404
-Node: Compression Level9968
-Node: Test10467
-Node: Partial Compression10817
-Node: Overwrite Old Files13570
-Node: Compress Compressed EPWING14366
-Node: Uncompression15036
-Node: Uncompression Example15423
-Node: Options for Uncompression16948
-Node: Uncompress Compressed EPWING18124
-Node: Information18586
-Node: Information Example18925
-Node: Options for Information19614
-Node: Delete a Book20113
-Node: Summary of Options20409
-Node: Comparision Result23975
-Node: Compressed File Format25935
-Node: Format Overview26339
-Node: Data Part27193
-Node: Index Part29768
-Node: Header Part32435
+Node: Introduction2532
+Node: Action and Command Name3884
+Node: Invoking ebzip5625
+Node: Compression6258
+Node: Compression Example 16810
+Node: Compression Example 28394
+Node: Compression Level9958
+Node: Test10457
+Node: Partial Compression10807
+Node: Overwrite Old Files13560
+Node: Compress Compressed EPWING14356
+Node: Uncompression15026
+Node: Uncompression Example15413
+Node: Options for Uncompression16938
+Node: Uncompress Compressed EPWING18114
+Node: Information18576
+Node: Information Example18915
+Node: Options for Information19604
+Node: Delete a Book20103
+Node: Summary of Options20399
+Node: Comparision Result23965
+Node: Compressed File Format25925
+Node: Format Overview26329
+Node: Data Part27183
+Node: Index Part29758
+Node: Header Part32425
 
 End Tag Table
