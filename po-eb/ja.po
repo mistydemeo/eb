@@ -31,7 +31,6 @@ msgid "too long file name"
 msgstr "ファイル名が長すぎます"
 
 #: ../eb/error.c:149
-#, fuzzy
 msgid "bad file name"
 msgstr "不正なファイル名です"
 
@@ -100,7 +99,6 @@ msgstr "フォントファイルが読めませんでした"
 
 #. 20 -- 24
 #: ../eb/error.c:173
-#, fuzzy
 msgid "failed to read an appendix file"
 msgstr "付録ファイルが開けませんでした"
 
@@ -264,13 +262,11 @@ msgid "no candidates"
 msgstr "候補はありません"
 
 #: ../eb/error.c:226
-#, fuzzy
 msgid "end of content"
 msgstr "本文は終わりです"
 
 #. 60 -- 64
 #: ../eb/error.c:229
-#, fuzzy
 msgid "no previous seek"
 msgstr "検索方式が前もって指定されていません"
 

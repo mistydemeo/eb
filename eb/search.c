@@ -368,7 +368,6 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
     EB_Hit temporary_hit_lists[EB_NUMBER_OF_SEARCH_CONTEXTS][EB_TMP_MAX_HITS];
     int temporary_hit_counts[EB_NUMBER_OF_SEARCH_CONTEXTS];
     int more_hit_count;
-    int last_temporary_hit_count;
     int i;
 
     /*
@@ -413,7 +412,7 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
 	 * In case of keyword search.
 	 */
 	for (;;) {
-	    last_temporary_hit_count = 0;
+	    int search_is_over = 0;
 
 	    for (i = 0; i < EB_MAX_KEYWORDS; i++) {
 		if (book->search_contexts[i].code != EB_SEARCH_KEYWORD)
@@ -422,15 +421,15 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
 		    sizeof(EB_Search_Context));
 		error_code = eb_hit_list_keyword(book, &temporary_context,
 		    EB_TMP_MAX_HITS, temporary_hit_lists[i],
-		    &last_temporary_hit_count);
+		    temporary_hit_counts + i);
 		if (error_code != EB_SUCCESS)
 		    goto failed;
-		temporary_hit_counts[i] = last_temporary_hit_count;
-		if (last_temporary_hit_count == 0) {
+		if (temporary_hit_counts[i] == 0) {
+		    search_is_over = 1;
 		    break;
 		}
 	    }
-	    if (last_temporary_hit_count == 0)
+	    if (search_is_over)
 		break;
 
 	    eb_and_hit_lists(hit_list + *hit_count, &more_hit_count,
@@ -438,11 +437,11 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
 		temporary_hit_counts);
 
 	    for (i = 0; i < EB_MAX_MULTI_ENTRIES; i++) {
-		if ((book->search_contexts + i)->code != EB_SEARCH_KEYWORD)
+		if (book->search_contexts[i].code != EB_SEARCH_KEYWORD)
 		    break;
 		error_code = eb_hit_list_keyword(book,
 		    book->search_contexts + i, temporary_hit_counts[i],
-		    temporary_hit_lists[i], &last_temporary_hit_count);
+		    temporary_hit_lists[i], temporary_hit_counts + i);
 		if (error_code != EB_SUCCESS)
 		    goto failed;
 	    }
@@ -458,7 +457,7 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
 	 * In case of multi search.
 	 */
 	for (;;) {
-	    last_temporary_hit_count = 0;
+	    int search_is_over = 0;
 
 	    for (i = 0; i < EB_MAX_MULTI_ENTRIES; i++) {
 		if (book->search_contexts[i].code != EB_SEARCH_MULTI)
@@ -467,15 +466,15 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
 		    sizeof(EB_Search_Context));
 		error_code = eb_hit_list_multi(book, &temporary_context,
 		    EB_TMP_MAX_HITS, temporary_hit_lists[i],
-		    &last_temporary_hit_count);
+		    temporary_hit_counts + i);
 		if (error_code != EB_SUCCESS)
 		    goto failed;
-		temporary_hit_counts[i] = last_temporary_hit_count;
-		if (last_temporary_hit_count == 0) {
+		if (temporary_hit_counts[i] == 0) {
+		    search_is_over = 1;
 		    break;
 		}
 	    }
-	    if (last_temporary_hit_count == 0)
+	    if (search_is_over)
 		break;
 
 	    eb_and_hit_lists(hit_list + *hit_count, &more_hit_count,
@@ -483,11 +482,11 @@ eb_hit_list(book, max_hit_count, hit_list, hit_count)
 		temporary_hit_counts);
 
 	    for (i = 0; i < EB_MAX_MULTI_ENTRIES; i++) {
-		if ((book->search_contexts + i)->code != EB_SEARCH_MULTI)
+		if (book->search_contexts[i].code != EB_SEARCH_MULTI)
 		    break;
 		error_code = eb_hit_list_multi(book,
 		    book->search_contexts + i, temporary_hit_counts[i],
-		    temporary_hit_lists[i], &last_temporary_hit_count);
+		    temporary_hit_lists[i], temporary_hit_counts + i);
 		if (error_code != EB_SUCCESS)
 		    goto failed;
 	    }
@@ -552,7 +551,7 @@ eb_hit_list_word(book, context, max_hit_count, hit_list, hit_count)
      * If the result of previous comparison is negative value, all
      * matched entries have been found.
      */
-    if (context->comparison_result < 0)
+    if (context->comparison_result < 0 || max_hit_count <= 0)
 	goto succeeded;
 
     for (;;) {
@@ -884,7 +883,7 @@ eb_hit_list_keyword(book, context, max_hit_count, hit_list, hit_count)
      * If the result of previous comparison is negative value, all
      * matched entries have been found.
      */
-    if (context->comparison_result < 0)
+    if (context->comparison_result < 0 || max_hit_count <= 0)
 	goto succeeded;
 
     for (;;) {
@@ -1222,7 +1221,7 @@ eb_hit_list_multi(book, context, max_hit_count, hit_list, hit_count)
      * If the result of previous comparison is negative value, all
      * matched entries have been found.
      */
-    if (context->comparison_result < 0)
+    if (context->comparison_result < 0 || max_hit_count <= 0)
 	goto succeeded;
 
     for (;;) {

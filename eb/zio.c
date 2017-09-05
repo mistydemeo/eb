@@ -366,20 +366,28 @@ zio_open(zio, file_name, zio_code)
 	zio_initialize(zio);
     }
 
-    if (zio_code == ZIO_REOPEN)
+    switch (zio_code) {
+    case ZIO_REOPEN:
 	result = zio_reopen(zio, file_name);
-    else if (zio_code == ZIO_PLAIN)
+	break;
+    case ZIO_PLAIN:
 	result = zio_open_plain(zio, file_name);
-    else if (zio_code == ZIO_EBZIP1)
+	break;
+    case ZIO_EBZIP1:
 	result = zio_open_ebzip(zio, file_name);
-    else if (zio_code == ZIO_EPWING)
+	break;
+    case ZIO_EPWING:
 	result = zio_open_epwing(zio, file_name);
-    else if (zio_code == ZIO_EPWING6)
+	break;
+    case ZIO_EPWING6:
 	result = zio_open_epwing6(zio, file_name);
-    else if (zio_code == ZIO_SEBXA)
+	break;
+    case ZIO_SEBXA:
 	result = zio_open_plain(zio, file_name);
-    else
+	break;
+    default:
 	result = -1;
+    }
 
   succeeded:
     LOG(("out: zio_open() = %d", result));

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 98, 2000, 01
+ * Copyright (c) 1997, 98, 2000, 01, 02
  *    Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
@@ -139,37 +139,40 @@ eb_load_appendix_subbook(appendix)
 	error_code = EB_ERR_FAIL_READ_APP;
 	goto failed;
     }
-
     character_count = eb_uint2(buffer + 12);
-    subbook->narrow_page = eb_uint4(buffer);
-    subbook->narrow_start = eb_uint2(buffer + 10);
-    if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
-	subbook->narrow_end = subbook->narrow_start
-	    + ((character_count / 0xfe) << 8) + (character_count % 0xfe) - 1;
-	if (0xfe < (subbook->narrow_end & 0xff))
-	    subbook->narrow_end += 3;
-    } else {
-	subbook->narrow_end = subbook->narrow_start
-	    + ((character_count / 0x5e) << 8) + (character_count % 0x5e) - 1;
-	if (0x7e < (subbook->narrow_end & 0xff))
-	    subbook->narrow_end += 0xa3;
-    }
 
-    if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
-	if ((subbook->narrow_start & 0xff) < 0x01
-	    || 0xfe < (subbook->narrow_start & 0xff)
-	    || subbook->narrow_start < 0x0001
-	    || 0x1efe < subbook->narrow_end) {
-	    error_code = EB_ERR_UNEXP_APP;
-	    goto failed;
-	}
-    } else {
-	if ((subbook->narrow_start & 0xff) < 0x21
-	    || 0x7e < (subbook->narrow_start & 0xff)
-	    || subbook->narrow_start < 0xa121
-	    || 0xfe7e < subbook->narrow_end) {
-	    error_code = EB_ERR_UNEXP_APP;
-	    goto failed;
+    if (0 < character_count) {
+	subbook->narrow_page = eb_uint4(buffer);
+	subbook->narrow_start = eb_uint2(buffer + 10);
+
+	if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
+	    subbook->narrow_end = subbook->narrow_start
+		+ ((character_count / 0xfe) << 8) + (character_count % 0xfe)
+		- 1;
+	    if (0xfe < (subbook->narrow_end & 0xff))
+		subbook->narrow_end += 3;
+
+	    if ((subbook->narrow_start & 0xff) < 0x01
+		|| 0xfe < (subbook->narrow_start & 0xff)
+		|| subbook->narrow_start < 0x0001
+		|| 0x1efe < subbook->narrow_end) {
+		error_code = EB_ERR_UNEXP_APP;
+		goto failed;
+	    }
+	} else {
+	    subbook->narrow_end = subbook->narrow_start
+		+ ((character_count / 0x5e) << 8) + (character_count % 0x5e)
+		- 1;
+	    if (0x7e < (subbook->narrow_end & 0xff))
+		subbook->narrow_end += 0xa3;
+
+	    if ((subbook->narrow_start & 0xff) < 0x21
+		|| 0x7e < (subbook->narrow_start & 0xff)
+		|| subbook->narrow_start < 0xa121
+		|| 0xfe7e < subbook->narrow_end) {
+		error_code = EB_ERR_UNEXP_APP;
+		goto failed;
+	    }
 	}
     }
 
@@ -180,37 +183,40 @@ eb_load_appendix_subbook(appendix)
 	error_code = EB_ERR_FAIL_READ_APP;
 	goto failed;
     }
-
     character_count = eb_uint2(buffer + 12);
-    subbook->wide_page = eb_uint4(buffer);
-    subbook->wide_start = eb_uint2(buffer + 10);
-    if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
-	subbook->wide_end = subbook->wide_start
-	    + ((character_count / 0xfe) << 8) + (character_count % 0xfe) - 1;
-	if (0xfe < (subbook->wide_end & 0xff))
-	    subbook->wide_end += 3;
-    } else {
-	subbook->wide_end = subbook->wide_start
-	    + ((character_count / 0x5e) << 8) + (character_count % 0x5e) - 1;
-	if (0x7e < (subbook->wide_end & 0xff))
-	    subbook->wide_end += 0xa3;
-    }
+
+    if (0 < character_count) {
+	subbook->wide_page = eb_uint4(buffer);
+	subbook->wide_start = eb_uint2(buffer + 10);
+
+	if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
+	    subbook->wide_end = subbook->wide_start
+		+ ((character_count / 0xfe) << 8) + (character_count % 0xfe)
+		- 1;
+	    if (0xfe < (subbook->wide_end & 0xff))
+		subbook->wide_end += 3;
+
+	    if ((subbook->wide_start & 0xff) < 0x01
+		|| 0xfe < (subbook->wide_start & 0xff)
+		|| subbook->wide_start < 0x0001
+		|| 0x1efe < subbook->wide_end) {
+		error_code = EB_ERR_UNEXP_APP;
+		goto failed;
+	    }
+	} else {
+	    subbook->wide_end = subbook->wide_start
+		+ ((character_count / 0x5e) << 8) + (character_count % 0x5e)
+		- 1;
+	    if (0x7e < (subbook->wide_end & 0xff))
+		subbook->wide_end += 0xa3;
     
-    if (subbook->character_code == EB_CHARCODE_ISO8859_1) {
-	if ((subbook->wide_start & 0xff) < 0x01
-	    || 0xfe < (subbook->wide_start & 0xff)
-	    || subbook->wide_start < 0x0001
-	    || 0x1efe < subbook->wide_end) {
-	    error_code = EB_ERR_UNEXP_APP;
-	    goto failed;
-	}
-    } else {
-	if ((subbook->wide_start & 0xff) < 0x21
-	    || 0x7e < (subbook->wide_start & 0xff)
-	    || subbook->wide_start < 0xa121
-	    || 0xfe7e < subbook->wide_end) {
-	    error_code = EB_ERR_UNEXP_APP;
-	    goto failed;
+	    if ((subbook->wide_start & 0xff) < 0x21
+		|| 0x7e < (subbook->wide_start & 0xff)
+		|| subbook->wide_start < 0xa121
+		|| 0xfe7e < subbook->wide_end) {
+		error_code = EB_ERR_UNEXP_APP;
+		goto failed;
+	    }
 	}
     }
 

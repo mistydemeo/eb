@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ebutils 3.0\n"
-"POT-Creation-Date: 2002-01-19 23:11+0900\n"
+"POT-Creation-Date: 2002-06-09 12:25+0900\n"
 "PO-Revision-Date: 2001-03-18 23:28+0900\n"
 "Last-Translator: Motoyuki Kasahara <m-kasahr@sra.co.jp>\n"
 "Language-Team: \n"
@@ -18,47 +18,47 @@ msgstr ""
 msgid "try `%s --help' for more information\n"
 msgstr "`%s --help' でより詳しい情報が得られます\n"
 
-#: ../libebutils/ebutils.c:154
+#: ../libebutils/ebutils.c:146
 #, c-format
 msgid "%s: too many subbooks\n"
 msgstr "%s: 副本の数が多すぎます\n"
 
-#: ../libebutils/ebutils.c:175
+#: ../libebutils/ebutils.c:167
 #, c-format
 msgid "%s: invalid subbook name `%s...'\n"
 msgstr "%s: `%s...' という副本の名称が不正です\n"
 
-#: ../libebutils/getopt.c:119
+#: ../libebutils/getopt.c:128
 #, c-format
 msgid "%s: option requires an argument -- %c\n"
 msgstr "%s: オプションには引数が必要です -- %c\n"
 
-#: ../libebutils/getopt.c:121
+#: ../libebutils/getopt.c:130
 #, c-format
 msgid "%s: option `%.*s' requires an argument\n"
 msgstr "%s: オプション `%.*s' には引数が必要です\n"
 
-#: ../libebutils/getopt.c:123
+#: ../libebutils/getopt.c:132
 #, c-format
 msgid "%s: option `--%.*s' is ambiguous\n"
 msgstr "%s: オプション `--%.*s' は曖昧です\n"
 
-#: ../libebutils/getopt.c:125
+#: ../libebutils/getopt.c:134
 #, c-format
 msgid "%s: option `--%.*s' doesn't allow an argument\n"
 msgstr "%s: オプション `--%.*s' は引数を持てません\n"
 
-#: ../libebutils/getopt.c:127
+#: ../libebutils/getopt.c:136
 #, c-format
 msgid "%s: illegal option -- %c\n"
 msgstr "%s: 不正なオプションです -- %c\n"
 
-#: ../libebutils/getopt.c:129
+#: ../libebutils/getopt.c:138
 #, c-format
 msgid "%s: invalid option -- %c\n"
 msgstr "%s: 不正なオプションです -- %c\n"
 
-#: ../libebutils/getopt.c:131
+#: ../libebutils/getopt.c:140
 #, c-format
 msgid "%s: unrecognized option `--%.*s'\n"
 msgstr "%s: `--%.*s' は未知のオプションです\n"

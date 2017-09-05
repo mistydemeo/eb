@@ -41,7 +41,7 @@ ebzip_copy_file(out_file_name, in_file_name)
     size_t total_length;
     struct stat in_status, out_status;
     int in_file = -1, out_file = -1;
-    size_t in_length;
+    ssize_t in_length;
     int information_interval;
     int total_slices;
     int i;

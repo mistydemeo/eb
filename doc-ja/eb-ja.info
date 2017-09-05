@@ -26,7 +26,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.2.1 版です。
+   この文書は第 3.2.2 版です。
 
 * Menu:
 
@@ -158,9 +158,9 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 3.2.1 に対応しています。 本書の
+   この文書は、EB ライブラリバージョン 3.2.2 に対応しています。 本書の
 内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成する
-には、お使用いのシステムに EB ライブラリバージョン 3.2.1 と C コンパイ
+には、お使用いのシステムに EB ライブラリバージョン 3.2.2 と C コンパイ
 ラをインストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
@@ -357,7 +357,8 @@ X 0208 (日本語のかな漢字) で書かれており、 JIS X 0208 を 0x2121 〜
      　　　　　　　　　│　　│　　　　　│　　│　　　　　││
      　　　　　　　　　│　　│　　　　　│　　│　　　　　││
      　　　　　　　　　│　　│　　　　　│　　│　　　　　││
-     　　　　　　　ｆｅ└──┴─────┴──┴─────┴┘
+     　　　　　　　ｆｅ├──┼─────┼──┼─────┼┤
+     　　　　　　　　　└──┴─────┴──┴─────┴┘
 
 EB ライブラリでは JIS X 0208 部分を日本語 EUC (EUC-JP) にエンコードし
 て、アプリケーションとのやり取りも日本語 EUC で行います。 したがって、
@@ -385,7 +386,8 @@ JIS X 0208 部分は 0xa1a1 〜 0xfefe にマッピングされます。
      　　　　　　　　　│　　│ＧＢ　　　│　　│　　　　　││
      　　　　　　　　　│　　│２３１２　│　　│　　　　　││
      　　　　　　　　　│　　│　　　　　│　　│　　　　　││
-     　　　　　　　ｆｅ└──┴─────┴──┴─────┴┘
+     　　　　　　　ｆｅ├──┼─────┼──┼─────┼┤
+     　　　　　　　　　└──┴─────┴──┴─────┴┘
 
 EB ライブラリでは、アプリケーションとのやり取りに使う文字コードは、 日
 本語 EUC および中国語 EUC (EUC-ZH) です。 したがって、そのままでは JIS
@@ -511,7 +513,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 3.2.1 のソースードを展開します。
+  1. EB ライブラリ 3.2.2 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -3726,7 +3728,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_GRAY_GRAPHIC:
  - EB_HOOK_END_GRAY_GRAPHIC:
      これらのフック名称は、グレースケール図版のために予約されていますが、
-     EB ライブラリ 3.2.1 ではまだ対応していません。
+     EB ライブラリ 3.2.2 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_COLOR_BMP:
  - EB_HOOK_BEGIN_COLOR_JPEG:
@@ -3759,7 +3761,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_IN_COLOR_JPEG:
  - EB_HOOK_END_IN_COLOR_GRAPHIC:
      これらのフック名称は、インラインカラー図版のために予約されています
-     が、 EB ライブラリ 3.2.1 ではまだ対応していません。
+     が、 EB ライブラリ 3.2.2 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_WAVE:
  - EB_HOOK_END_WAVE:
@@ -5387,68 +5389,68 @@ Node: Construction of This Book7750
 Node: Features8889
 Node: Header Files9872
 Node: Character Code10811
-Node: Compressed Book14724
-Node: Traditional System15697
-Node: Compilation16717
-Node: Compilation Simple Way18070
-Node: Compilation with Autoconf21454
-Node: Init and Exit23526
-Node: Init and Exit Sample24314
-Node: Init and Exit Functions25358
-Node: EB_Book27020
-Node: EB_Book Explanation27692
-Node: EB_Book Sample29947
-Node: EB_Book Data Types32414
-Node: EB_Book Functions34679
-Node: Error Handling39035
-Node: Error Code and Message39872
-Node: Tolerance to Error41625
-Node: Error Data Types42978
-Node: Error Code List43699
-Node: Error Functions51686
-Node: Subbook53343
-Node: Subbook Code54614
-Node: Current Subbook56224
-Node: Subbook Sample58259
-Node: Subbook Data Types60829
-Node: Subbook Functions61568
-Node: Search67357
-Node: Word Search68449
-Node: Keyword Search71329
-Node: Multi Search72785
-Node: EB_Hit76252
-Node: Get Remained Entries77838
-Node: Search Data Types79132
-Node: Search Functions81064
-Node: Text Data92558
-Node: Seek and Read Text Data94015
-Node: Text Data Format97880
-Node: Hook100567
-Node: Hook and Character Code104724
-Node: Copyright Notice106818
-Node: Menu107963
-Node: Multi Candidates111872
-Node: Stop Code Issue115809
-Node: Text Data Sample118233
-Node: Text Data Types122664
-Node: Hook Function Details124517
-Node: Hook Code List126891
-Node: Hookset Access Functions141835
-Node: Builtin Hook Functions144911
-Node: Text Data Functions148087
-Node: Local Character164474
-Node: Narrow & Wide Font166205
-Node: Font Size and Font Code168342
-Node: Current Font Height169903
-Node: Get Font172475
-Node: Convert Font175103
-Node: Local Character in Text176266
-Node: Font Data Types176922
-Node: Font Constants177665
-Node: Font Data Functions181728
-Node: Index195799
-Node: Data Type Index196027
-Node: Function Index196876
-Node: Variable Index203115
+Node: Compressed Book14852
+Node: Traditional System15825
+Node: Compilation16845
+Node: Compilation Simple Way18198
+Node: Compilation with Autoconf21582
+Node: Init and Exit23654
+Node: Init and Exit Sample24442
+Node: Init and Exit Functions25486
+Node: EB_Book27148
+Node: EB_Book Explanation27820
+Node: EB_Book Sample30075
+Node: EB_Book Data Types32542
+Node: EB_Book Functions34807
+Node: Error Handling39163
+Node: Error Code and Message40000
+Node: Tolerance to Error41753
+Node: Error Data Types43106
+Node: Error Code List43827
+Node: Error Functions51814
+Node: Subbook53471
+Node: Subbook Code54742
+Node: Current Subbook56352
+Node: Subbook Sample58387
+Node: Subbook Data Types60957
+Node: Subbook Functions61696
+Node: Search67485
+Node: Word Search68577
+Node: Keyword Search71457
+Node: Multi Search72913
+Node: EB_Hit76380
+Node: Get Remained Entries77966
+Node: Search Data Types79260
+Node: Search Functions81192
+Node: Text Data92686
+Node: Seek and Read Text Data94143
+Node: Text Data Format98008
+Node: Hook100695
+Node: Hook and Character Code104852
+Node: Copyright Notice106946
+Node: Menu108091
+Node: Multi Candidates112000
+Node: Stop Code Issue115937
+Node: Text Data Sample118361
+Node: Text Data Types122792
+Node: Hook Function Details124645
+Node: Hook Code List127019
+Node: Hookset Access Functions141963
+Node: Builtin Hook Functions145039
+Node: Text Data Functions148215
+Node: Local Character164602
+Node: Narrow & Wide Font166333
+Node: Font Size and Font Code168470
+Node: Current Font Height170031
+Node: Get Font172603
+Node: Convert Font175231
+Node: Local Character in Text176394
+Node: Font Data Types177050
+Node: Font Constants177793
+Node: Font Data Functions181856
+Node: Index195927
+Node: Data Type Index196155
+Node: Function Index197004
+Node: Variable Index203243
 
 End Tag Table

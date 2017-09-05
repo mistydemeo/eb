@@ -1,3 +1,25 @@
+2002-06-10  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.2.2.
+
+	* configure.ac (AM_INIT_AUTOMAKE): Set version to 3.2.2.
+	* configure.ac (LIBEB_VERSION_INFO): Change the version info from
+	6:1:0 to 6:2:0.
+
+	* eb/appsub.c (eb_load_appendix_subbook): Fix a bug that EB Library
+	complains about absenseof alternation text definition.
+
+	* missing, install-sh, mkinstalldirs, depcomp, doc/mdate-sh,
+	doc-ja/mdate-sh: Imported from automake-1.6.1.
+
+	* libebutils/ebutils.c (output_version): Shorten the version info
+	massage.
+
+2002-03-21  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebzip/copyfile.c (ebzip_copy_file): fix type of the variable
+	`in_length'.
+
 2002-03-13  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.2.1.
