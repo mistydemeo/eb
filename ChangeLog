@@ -1,3 +1,28 @@
+2003-03-01  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.3.1.
+
+	* configure.ac (LIBEB_VERSION_INFO): Change LIBEB_VERSION_INFO from
+	7:0:1 to 7:0:2.
+	* configure.ac (AC_INIT): Set version to 3.3.1.
+
+2003-02-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/match.c (eb_match_canonicalized_word,
+	eb_exact_match_canonicalized_word): If first `length' characters
+	of `canonicalized_word' and `pattern' are equivalent, the functions
+	return 0.  This change is for EPWING Genius Eiwa Daijiten.
+
+2003-02-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/readtext.c (eb_read_text, eb_read_heading, eb_read_text_internal,
+	eb_forward_text, eb_backward_text): Fix bugs in call of LOG().
+
+2003-02-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/multi.c (eb_initialize_multi_searches): Fix a bug that it
+	doesn't initialize multi search entries correctly.
+
 2003-02-07  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.3.

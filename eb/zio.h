@@ -128,7 +128,7 @@ struct Zio_Struct {
     Zio_Code code;
 
     /*
-     * File descriptor. (EPWING)
+     * File descriptor.
      */
     int file;
 
@@ -138,7 +138,7 @@ struct Zio_Struct {
     off_t location;
 
     /*
-     * Size of an Uncopressed file.
+     * Size of an uncompressed file.
      */
     off_t file_size;
 

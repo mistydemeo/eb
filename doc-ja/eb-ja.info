@@ -26,7 +26,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3 版です。
+   この文書は第 3.3.1 版です。
 
 * Menu:
 
@@ -169,10 +169,10 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 3.3 に対応しています。 本書の内
-容に沿って EB ライブラリを使ったアプリケーションプログラムを作成するに
-は、お使用いのシステムに EB ライブラリバージョン 3.3 と C コンパイラを
-インストールしておいて下さい。
+   この文書は、EB ライブラリバージョン 3.3.1 に対応しています。 本書の
+内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成する
+には、お使用いのシステムに EB ライブラリバージョン 3.3.1 と C コンパイ
+ラをインストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
 Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
@@ -524,7 +524,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 3.3 のソースードを展開します。
+  1. EB ライブラリ 3.3.1 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -3825,7 +3825,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_GRAY_GRAPHIC:
  - EB_HOOK_END_GRAY_GRAPHIC:
      これらのフック名称は、グレースケール図版のために予約されていますが、
-     EB ライブラリ 3.3 ではまだ対応していません。
+     EB ライブラリ 3.3.1 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_COLOR_BMP:
  - EB_HOOK_BEGIN_COLOR_JPEG:
@@ -5941,82 +5941,82 @@ File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Index
 
 Tag Table:
 Node: Top1012
-Node: Introduction5118
-Node: Electronic Book and EPWING6955
-Node: Construction of This Book8070
-Node: Features9209
-Node: Header Files10192
-Node: Character Code11131
-Node: Compressed Book15172
-Node: Traditional System16145
-Node: Compilation17165
-Node: Compilation Simple Way18578
-Node: Compilation with Autoconf21960
-Node: Debug EB Library24057
-Node: Init and Exit26356
-Node: Init and Exit Sample27144
-Node: Init and Exit Functions28188
-Node: EB_Book29850
-Node: EB_Book Explanation30522
-Node: EB_Book Sample32777
-Node: EB_Book Data Types35244
-Node: EB_Book Functions37509
-Node: Error Handling41865
-Node: Error Code and Message42702
-Node: Tolerance to Error44455
-Node: Error Data Types45808
-Node: Error Code List46529
-Node: Error Functions54516
-Node: Subbook56173
-Node: Subbook Code57444
-Node: Current Subbook59054
-Node: Subbook Sample61089
-Node: Subbook Data Types63659
-Node: Subbook Functions64398
-Node: Search70187
-Node: Word Search71279
-Node: Keyword Search74159
-Node: Multi Search75615
-Node: EB_Hit79082
-Node: Get Remained Entries80668
-Node: Search Data Types81962
-Node: Search Functions83894
-Node: Text Data95388
-Node: Seek and Read Text Data96845
-Node: Text Data Format100968
-Node: Hook103655
-Node: Hook and Character Code107812
-Node: Copyright Notice109906
-Node: Menu111051
-Node: Multi Candidates114960
-Node: Stop Code Issue118897
-Node: Text Data Sample121321
-Node: Text Data Types125752
-Node: Hook Function Details127605
-Node: Hook Code List129979
-Node: Hookset Access Functions146705
-Node: Builtin Hook Functions149781
-Node: Text Data Functions152957
-Node: Local Character169746
-Node: Narrow & Wide Font171499
-Node: Font Size and Font Code173636
-Node: Current Font Height175197
-Node: Get Font177769
-Node: Convert Font180398
-Node: Local Character in Text181561
-Node: Font Data Types182217
-Node: Font Constants182960
-Node: Font Functions187018
-Node: Font Sample201104
-Node: Binary Data205797
-Node: Monochrome Image207802
-Node: Color Image210617
-Node: WAVE Sound213034
-Node: MPEG Movie214219
-Node: Binary Data Functions215415
-Node: Index216666
-Node: Data Type Index216890
-Node: Function Index217739
-Node: Variable Index224231
+Node: Introduction5120
+Node: Electronic Book and EPWING6961
+Node: Construction of This Book8076
+Node: Features9215
+Node: Header Files10198
+Node: Character Code11137
+Node: Compressed Book15178
+Node: Traditional System16151
+Node: Compilation17171
+Node: Compilation Simple Way18584
+Node: Compilation with Autoconf21968
+Node: Debug EB Library24065
+Node: Init and Exit26364
+Node: Init and Exit Sample27152
+Node: Init and Exit Functions28196
+Node: EB_Book29858
+Node: EB_Book Explanation30530
+Node: EB_Book Sample32785
+Node: EB_Book Data Types35252
+Node: EB_Book Functions37517
+Node: Error Handling41873
+Node: Error Code and Message42710
+Node: Tolerance to Error44463
+Node: Error Data Types45816
+Node: Error Code List46537
+Node: Error Functions54524
+Node: Subbook56181
+Node: Subbook Code57452
+Node: Current Subbook59062
+Node: Subbook Sample61097
+Node: Subbook Data Types63667
+Node: Subbook Functions64406
+Node: Search70195
+Node: Word Search71287
+Node: Keyword Search74167
+Node: Multi Search75623
+Node: EB_Hit79090
+Node: Get Remained Entries80676
+Node: Search Data Types81970
+Node: Search Functions83902
+Node: Text Data95396
+Node: Seek and Read Text Data96853
+Node: Text Data Format100976
+Node: Hook103663
+Node: Hook and Character Code107820
+Node: Copyright Notice109914
+Node: Menu111059
+Node: Multi Candidates114968
+Node: Stop Code Issue118905
+Node: Text Data Sample121329
+Node: Text Data Types125760
+Node: Hook Function Details127613
+Node: Hook Code List129987
+Node: Hookset Access Functions146715
+Node: Builtin Hook Functions149791
+Node: Text Data Functions152967
+Node: Local Character169756
+Node: Narrow & Wide Font171509
+Node: Font Size and Font Code173646
+Node: Current Font Height175207
+Node: Get Font177779
+Node: Convert Font180408
+Node: Local Character in Text181571
+Node: Font Data Types182227
+Node: Font Constants182970
+Node: Font Functions187028
+Node: Font Sample201114
+Node: Binary Data205807
+Node: Monochrome Image207812
+Node: Color Image210627
+Node: WAVE Sound213044
+Node: MPEG Movie214229
+Node: Binary Data Functions215425
+Node: Index216676
+Node: Data Type Index216900
+Node: Function Index217749
+Node: Variable Index224241
 
 End Tag Table

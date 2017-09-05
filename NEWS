@@ -1,3 +1,9 @@
+Major changes in release 3.3.1.
+
+* Support for EPWING Geinus Eiwa Daijiten.
+* Fix a bug in handling of multi-search.
+* Fix a bug of debug mode.
+
 Major changes in release 3.3.
 
 * Fix a bug of eb_read_binary_mpeg().

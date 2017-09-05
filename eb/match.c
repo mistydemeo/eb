@@ -43,7 +43,7 @@ eb_match_canonicalized_word(canonicalized_word, pattern, length)
 
     for (;;) {
 	if (length <= i) {
-	    result = *word_p;
+	    result = 0;
 	    break;
 	}
 	if (*word_p == '\0') {
@@ -92,7 +92,7 @@ eb_exact_match_canonicalized_word(canonicalized_word, pattern, length)
 
     for (;;) {
 	if (length <= i) {
-	    result = *word_p;
+	    result = 0;
 	    break;
 	}
 	if (*word_p == '\0') {
