@@ -168,17 +168,21 @@ $indir =~ s/\/$//;
 $outdir =~ s/\/$//;
 
 #
-# Determine filenames CATALOG files.
+# Determine a filename of the CATALOG file.
 #
 $infile = '';
-foreach $i (keys(%catalogs)) {
-    if (-f "$indir/$catalogs{$i}") {
-	$infile = "$indir/$catalogs{$i}";
-	@_ = split(/[ \t]+/, $i);
-	$disc = $_[0];
-	$case = $_[1] if (!$case);
-	$suffix = $_[2] if (!$suffix);
-	break;
+loop: foreach $i ('eb', 'epwing') {
+    foreach $j ('upper', 'lower') {
+	foreach $k ('none', 'period', 'version', 'both') {
+	    $_ = "$i $j $k";
+	    if (-f "$indir/$catalogs{$_}") {
+		$infile = "$indir/$catalogs{$_}";
+		$disc = $i;
+		$case = $j;
+		$suffix = $k;
+		last loop;
+	    }
+	}
     }
 }
 if ($infile eq '') {

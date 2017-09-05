@@ -1,3 +1,10 @@
+1999-03-07  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 2.2.2.
+
+	* eb/ebrefile.in: Find catalog file in the same order as
+	ebzip does.
+
 1999-02-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 2.2.1.

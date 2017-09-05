@@ -1,3 +1,8 @@
+Major changes in release 2.2.2:
+
+* Fix a bug in `ebrefile'.
+  `ebrefile' didn't find catalog file in the same order as `ebzip' does.
+
 Major changes in release 2.2.1:
 
 * Merge samples and samples-ja.
