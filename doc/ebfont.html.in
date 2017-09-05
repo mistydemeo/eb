@@ -4,19 +4,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=euc-jp">
 <link rel="stylesheet" type="text/css" href="ebutils.css">
 <link rev="made" href="mailto:m-kasahr@sra.co.jp">
-<title>ebfont ���ޥ��</title>
+<title>ebfont コマンド</title>
 </head>
 
 <body>
-<h1><a name="toc">ebfont ���ޥ��</a></h1>
+<h1><a name="toc">ebfont コマンド</a></h1>
 <p>
-����ʸ��� EB �饤�֥��С������
+この文書は EB ライブラリバージョン
 <!-- #include "version.html" -->
-���б����Ƥ��ޤ���
+に対応しています。
 </p>
 
 <p>
-�ܼ�:
+目次:
 </p>
 
 <!-- #include "ebfont-toc.html" -->
@@ -26,51 +26,51 @@ Copyright (c) 1998-2006  Motoyuki Kasahara
 </p>
 
 <!-- ================================================================ -->
-<h2><a name="introduction">�Ϥ����</a></h2>
+<h2><a name="introduction">はじめに</a></h2>
 
 <p>
-<code>ebfont</code> ���ޥ�ɤϡ�CD-ROM ���Ҥγ����Υӥåȥޥåץǡ�����
-�ɤ߹��ߡ��������ꤵ�줿�����������Ѵ������ե�����˽񤭽Ф��ޤ���
-<code>ebfont</code> �� EB �饤�֥�����Ѥ��Ƥ��ꡢ�饤�֥��Ȱ���
-���ۤ���Ƥ��ޤ���
+<code>ebfont</code> コマンドは、CD-ROM 書籍の外字のビットマップデータを
+読み込み、それを指定された画像形式に変換し、ファイルに書き出します。
+<code>ebfont</code> は EB ライブラリを使用しており、ライブラリと一緒に
+配布されています。
 </p>
 
 <!-- ================================================================ -->
-<h2><a name="what-is-local-character">�����Ȥ�</a></h2>
+<h2><a name="what-is-local-character">外字とは</a></h2>
 
 <p>
-CD-ROM ���Ҥ�¿���ϡ����Ҹ�ͭ��ʸ�������� (local characters) ���������
-���ޤ���
-���Ȥ��С�CD-ROM ���Ҥ˻Ȥ���ʸ�����åȤ�ȯ���������äƤ��ʤ����ᡢ
-���¼������ˤ�ȯ�������������Ƥ����Τ�����ޤ���
+CD-ROM 書籍の多くは、書籍固有の文字、外字 (local characters) を定義して
+います。
+たとえば、CD-ROM 書籍に使われる文字セットは発音記号を持っていないため、
+英和辞書の中には発音記号を定義しているものがあります。
 </p>
 
 <p>
-CD-ROM ���Ҥϡ������Υӥåȥޥåץǡ�������äƤ��ޤ���
-<code>ebfont</code> ���ޥ�ɤϡ�CD-ROM ���ҤΥӥåȥޥåץǡ������ɤߡ�
-�������ꤵ�줿�����������Ѵ������ե�����˽񤭽Ф��ޤ���
-<code>ebfont</code> �ϡ�XBM��XPM��GIF��BMP��PNG �Τ����Τ����줫��
-�ޤ���ʣ���β����ե�������������뤳�Ȥ��Ǥ��ޤ���
-�ä˻��꤬�ʤ���С�XBM ���������򤵤�ޤ���
+CD-ROM 書籍は、外字のビットマップデータも持っています。
+<code>ebfont</code> コマンドは、CD-ROM 書籍のビットマップデータを読み、
+それを指定された画像形式に変換し、ファイルに書き出します。
+<code>ebfont</code> は、XBM、XPM、GIF、BMP、PNG のうちのいずれか、
+または複数の画像ファイルを生成することができます。
+特に指定がなければ、XBM 形式が選択されます。
 </p>
 
 <p>
-�����ϡ�<dfn>Ⱦ��</dfn> (<dfn>narrow</dfn>) �� <dfn>����</dfn>
-(<dfn>wide</dfn>) �� 2 �����ʬ�व��ޤ���
-Ⱦ�Ѥ�ʸ���Υӥåȥޥåץǡ����Ǥϡ��⤵��������Ⱦʬ�Ǥ���
-���Ѥ�ʸ���Υӥåȥޥåץǡ����Ǥϡ��⤵�����Ϥۤ�Ʊ���Ǥ���
-CD-ROM ���Ҥϡ���������ξ���μ���γ�����������뤳�Ȥ���ǽ�ǡ�
-<code>ebfont</code> ��ξ���μ���β����ե�������������ޤ���
+外字は、<dfn>半角</dfn> (<dfn>narrow</dfn>) と <dfn>全角</dfn>
+(<dfn>wide</dfn>) の 2 種類に分類されます。
+半角の文字のビットマップデータでは、高さは幅の約半分です。
+全角の文字のビットマップデータでは、高さと幅はほぼ同じです。
+CD-ROM 書籍は、一冊の中に両方の種類の外字を定義することが可能で、
+<code>ebfont</code> は両方の種類の画像ファイルを生成します。
 </p>
 
 <p>
-CD-ROM ���Ҥ����������λ��ͽ�Ǥϡ�Ⱦ�Ѥ����Ѥ�ξ���γ������Ф���
-4 ����Υ�������������Ƥ��ޤ���
-�����������⤵���������ϼ����̤�Ǥ���
+CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して
+4 種類のサイズを定義しています。
+外字の幅、高さ、サイズは次の通りです。
 </p>
 
-<table summary="�����������⤵����������ɽ">
-<tr><td>�⤵  <td>  Ⱦ��   <td>  ����</tr>
+<table summary="外字の幅、高さ、サイズの表">
+<tr><td>高さ  <td>  半角   <td>  全角</tr>
 <tr><td>16    <td>   8x16  <td>  16x16</tr>
 <tr><td>24    <td>  16x24  <td>  24x24</tr>
 <tr><td>30    <td>  16x30  <td>  32x30</tr>
@@ -78,31 +78,31 @@ CD-ROM ���Ҥ����������λ��ͽ�Ǥϡ�Ⱦ�Ѥ����Ѥ�ξ���γ������Ф���
 </table>
 
 <p>
-�ä˻��꤬�ʤ���С�<code>ebfont</code> �Ϲ⤵�� 16 �ԥ�����Υե���Ȥ�
-�����ե�������������ޤ���
+特に指定がなければ、<code>ebfont</code> は高さが 16 ピクセルのフォントの
+画像ファイルを生成します。
 </p>
 
 <!-- ================================================================ -->
-<h2><a name="invoke-ebfont"><code>ebfont</code> �μ¹�</a></h2>
+<h2><a name="invoke-ebfont"><code>ebfont</code> の実行</a></h2>
 
 <p>
-<code>ebfont</code> �ΰ���Ū�ʵ�ư��ˡ�ϼ����̤�Ǥ���
+<code>ebfont</code> の一般的な起動方法は次の通りです。
 </p>
 
 <blockquote>
 <pre>
-% ebfont <var>���ҤؤΥѥ�</var>
+% ebfont <var>書籍へのパス</var>
 </pre>
 </blockquote>
 
 <p>
-<var>���ҤؤΥѥ�</var> �ˤϡ�CD-ROM ���ҤΥȥåץǥ��쥯�ȥꡢ�Ĥޤ� 
-<code>catalog</code> �ޤ��� <code>catalogs</code> �ե����뤬¸�ߤ���
-�ǥ��쥯�ȥ����ꤷ�ޤ���
-�ѥ��ϡ���������ʥѥ� (��: <samp>/mnt/dict</samp>) �Ǥ��֥����������̻�
-(��: <samp>ebnet://localhost/dict</samp>) �Ǥ⹽���ޤ���
-ʣ���Υѥ���񤯤��ȤϤǤ��ޤ��󤬡��ʲ��Τ褦�ˡ��ѥ��λ����ʤ����Ȥ�
-�Ǥ��ޤ���
+<var>書籍へのパス</var> には、CD-ROM 書籍のトップディレクトリ、つまり 
+<code>catalog</code> または <code>catalogs</code> ファイルが存在する
+ディレクトリを指定します。
+パスは、ローカルなパス (例: <samp>/mnt/dict</samp>) でも遠隔アクセス識別子
+(例: <samp>ebnet://localhost/dict</samp>) でも構いません。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
 </p>
 
 <blockquote>
@@ -112,23 +112,23 @@ CD-ROM ���Ҥ����������λ��ͽ�Ǥϡ�Ⱦ�Ѥ����Ѥ�ξ���γ������Ф���
 </blockquote>
 
 <p>
-���ξ�硢<code>ebfont</code> �ϥ����ȥǥ��쥯�ȥ�β��˲����ե������
-�������ޤ���
-���ΤȤ����ե�����̾�ΰ��̷����ϼ����̤�Ǥ���
+この場合、<code>ebfont</code> はカレントディレクトリの下に画像ファイルを
+生成します。
+このとき、ファイル名の一般形式は次の通りです。
 </p>
 
 <blockquote>
 <pre>
-<var>����</var>/<var>�⤵</var>/narrow/<var>ʸ���ֹ�</var>.<var>��ĥ��</var>
-<var>����</var>/<var>�⤵</var>/wide/<var>ʸ���ֹ�</var>.<var>��ĥ��</var>
+<var>副本</var>/<var>高さ</var>/narrow/<var>文字番号</var>.<var>拡張子</var>
+<var>副本</var>/<var>高さ</var>/wide/<var>文字番号</var>.<var>拡張子</var>
 </pre>
 </blockquote>
 
 <p>
-<var>��ĥ��</var> �� <samp>xbm</samp>��<samp>xpm</samp>��<samp>gif</samp>��
-<samp>bmp</samp> <samp>png</samp> �Τ����줫�ǡ�<var>ʸ���ֹ�</var> ��
-16 �ʿ� 4 �� (<samp>0</samp> ���� <samp>9</samp> �� <samp>a</samp> ����
-<samp>f</samp>) �ǡ����Τ褦�ˤʤ�ޤ���
+<var>拡張子</var> は <samp>xbm</samp>、<samp>xpm</samp>、<samp>gif</samp>、
+<samp>bmp</samp> <samp>png</samp> のいずれかで、<var>文字番号</var> は
+16 進数 4 桁 (<samp>0</samp> から <samp>9</samp> と <samp>a</samp> から
+<samp>f</samp>) で、次のようになります。
 </p>
 
 <blockquote>
@@ -139,159 +139,159 @@ ejdict/16/wide/a321.xbm
 </blockquote>
 
 <p>
-<code>ejdict/16/xbm/narrow</code> �ʤɤ���֤Υǥ��쥯�ȥ�ϡ��⤷
-̵����� <code>ebfont</code> ���������ޤ���
+<code>ejdict/16/xbm/narrow</code> などの中間のディレクトリは、もし
+無ければ <code>ebfont</code> が生成します。
 </p>
 
 <p>
-<samp>--output-directory</samp> ���ץ�������ꤹ�뤳�Ȥǡ�
-<code>ebfont</code> �ϥ����ȥǥ��쥯�ȥ�ʳ��Υǥ��쥯�ȥ��
-�����ե��������Ϥ��뤳�Ȥ��Ǥ��ޤ���
-���Υȥåץǥ��쥯�ȥ�ϡ�<code>ebfont</code> ��¹Ԥ������˺��������
-���ʤ���Фʤ�ޤ���
+<samp>--output-directory</samp> オプションを指定することで、
+<code>ebfont</code> はカレントディレクトリ以外のディレクトリに
+画像ファイルを出力することができます。
+そのトップディレクトリは、<code>ebfont</code> を実行する前に作成されて
+いなければなりません。
 </p>
 
 <blockquote>
 <pre>
-% ebfont --output-directory <var>�ǥ��쥯�ȥ�</var> <var>���ҤؤΥѥ�</var>
+% ebfont --output-directory <var>ディレクトリ</var> <var>書籍へのパス</var>
 </pre>
 </blockquote>
 
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="image-formats">��������</a></h3>
+<h3><a name="image-formats">画像形式</a></h3>
 
 <p>
-<code>ebfont</code> �� XBM, XPM, GIF89a, BMP, PNG �����β����ե������
-�������뤳�Ȥ��Ǥ��ޤ���
-���������� <samp>--image-format</samp> (<samp>-i</samp>) ���ץ�����
-���ꤷ�ޤ���
-<samp>--image-format</samp> ���ץ����ϰ������ļ�ꡢ�����˥����
-(<samp>,</samp>) �Ƕ��ڤäơ�����������̾�����¤٤ƽ񤭤ޤ���
-���Ȥ��С��ʲ��Υ��ޥ�ɤ�¹Ԥ���ȡ�<code>ebfont</code> �� XPM ������
-GIF �����β����ե�������������ޤ���
+<code>ebfont</code> は XBM, XPM, GIF89a, BMP, PNG 形式の画像ファイルを
+生成することができます。
+画像形式は <samp>--image-format</samp> (<samp>-i</samp>) オプションで
+指定します。
+<samp>--image-format</samp> オプションは引数を一つ取り、そこにカンマ
+(<samp>,</samp>) で区切って、画像形式の名前を並べて書きます。
+たとえば、以下のコマンドを実行すると、<code>ebfont</code> は XPM 形式と
+GIF 形式の画像ファイルを生成します。
 </p>
 
 <blockquote>
 <pre>
-% ebfont --image-format xpm,gif <var>���ҤؤΥѥ�</var>
+% ebfont --image-format xpm,gif <var>書籍へのパス</var>
 </pre>
 </blockquote>
 
 <p>
-<samp>--image-format</samp> �ΰ����ϡ����Τ褦��ʬ���ƽ񤯤��Ȥ�Ǥ��ޤ���
+<samp>--image-format</samp> の引数は、次のように分けて書くこともできます。
 </p>
 
 <blockquote>
 <pre>
-% ebfont --image-format xpm --image-format gif <var>���ҤؤΥѥ�</var>
+% ebfont --image-format xpm --image-format gif <var>書籍へのパス</var>
 </pre>
 </blockquote>
 
 <p>
-XPM, GIF, PNG �����Ǥϡ����ʿ��Ϲ� (RGB �� <samp>#000000</samp>) �ˡ�
-�طʿ���Ʃ���ˤʤ�ޤ���
-BMP �����Ǥϡ����ʿ��Ϲ��ˡ��طʿ����� (RGB �� <samp>#ffffff</samp>) ��
-�ʤ�ޤ���
+XPM, GIF, PNG 形式では、前景色は黒 (RGB の <samp>#000000</samp>) に、
+背景色は透明になります。
+BMP 形式では、前景色は黒に、背景色は白 (RGB の <samp>#ffffff</samp>) に
+なります。
 </p>
 
 <p>
-<code>ebzip</code> �� GIF �β�������������ݤ� LZW ���̥��르�ꥺ���
-�Ȥ�ʤ����ᡢ�ե�����Υ������������礭���ʤ�ޤ���
+<code>ebzip</code> は GIF の画像を生成する際に LZW 圧縮アルゴリズムを
+使わないため、ファイルのサイズは相当大きくなります。
 </p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="heights">�⤵</a></h3>
+<h3><a name="heights">高さ</a></h3>
 
 <p>
-�ä˻��꤬�ʤ���С�<code>ebfont</code> �ϡ�Ⱦ�Ѥ����Ѥ��줾��ˤĤ��ơ�
-�⤵ 16 �ԥ�����Υե���Ȥβ����ե�������������ޤ���
-<samp>--font-height</samp> (<samp>-f</samp>) ���ץ�������Ѥ��뤳�Ȥǡ�
-¾�ι⤵�Υե���Ȥβ����ե�������������뤳�Ȥ��Ǥ��ޤ���
-<samp>--font-height</samp> ���ץ����ϰ������ļ�ꡢ�����˥����
-(<samp>,</samp>) �Ƕ��ڤäơ��ե���Ȥι⤵���¤٤ƽ񤭤ޤ���
-�ե���Ȥι⤵�ϡ�<samp>16</samp>��<samp>24</samp>��<samp>30</samp>��
-<samp>48</samp> �Τ����줫�Ǥʤ��ƤϤ����ޤ���
-���Ȥ��С��ʲ��Υ��ޥ�ɤ�¹Ԥ���ȡ�<code>ebfont</code> �Ϲ⤵
-16 �ԥ������ 24 �ԥ�����Υե���Ȥβ����ե�������������ޤ���
+特に指定がなければ、<code>ebfont</code> は、半角と全角それぞれについて、
+高さ 16 ピクセルのフォントの画像ファイルを生成します。
+<samp>--font-height</samp> (<samp>-f</samp>) オプションを使用することで、
+他の高さのフォントの画像ファイルを生成することができます。
+<samp>--font-height</samp> オプションは引数を一つ取り、そこにカンマ
+(<samp>,</samp>) で区切って、フォントの高さを並べて書きます。
+フォントの高さは、<samp>16</samp>、<samp>24</samp>、<samp>30</samp>、
+<samp>48</samp> のいずれかでなくてはいけません。
+たとえば、以下のコマンドを実行すると、<code>ebfont</code> は高さ
+16 ピクセルと 24 ピクセルのフォントの画像ファイルを生成します。
 </p>
 
 <blockquote>
 <pre>
-% ebfont --font-height 16,24 <var>���ҤؤΥѥ�</var>
+% ebfont --font-height 16,24 <var>書籍へのパス</var>
 </pre>
 </blockquote>
 
 <p>
-<samp>--font-height</samp> �ΰ����ϡ����Τ褦��ʬ���ƽ񤯤��Ȥ�Ǥ��ޤ���
+<samp>--font-height</samp> の引数は、次のように分けて書くこともできます。
 </p>
 
 <blockquote>
 <pre>
-% ebfont --font-height 16 --font-height 24 <var>���ҤؤΥѥ�</var>
+% ebfont --font-height 16 --font-height 24 <var>書籍へのパス</var>
 </pre>
 </blockquote>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
-<h3><a name="subbooks">����</a></h3>
+<h3><a name="subbooks">副本</a></h3>
 
 <p>
-�ʤˤ����ꤷ�ʤ��ȡ�<code>ebzip</code> �Ϥ��٤Ƥ����� (subbook) ���оݤ�
-���Ʋ����ե�������������ޤ�����<samp>--subbook</samp> (<samp>-S</samp>)
-���ץ�����Ȥ��ȡ����ꤷ�����ܤβ����ե�����������������뤳�Ȥ��Ǥ��ޤ���
+なにも設定しないと、<code>ebzip</code> はすべての副本 (subbook) を対象に
+して画像ファイルを生成しますが、<samp>--subbook</samp> (<samp>-S</samp>)
+オプションを使うと、指定した副本の画像ファイルだけを生成することができます。
 </p>
 
 <p>
-<samp>--subbook</samp> ���ץ����ϰ������ļ�ꡢ�����˥����
-(<samp>,</samp>) �Ƕ��ڤäơ����ܤΥǥ��쥯�ȥ�̾���¤٤ƽ񤭤ޤ���
-<code>ebinfo</code> ���ޥ�ɤ��Ѥ���ȡ����ʤ��ν�ͭ���Ƥ�����Ҥ�
-�ɤΤ褦�����ܤ��ޤޤ�Ƥ���Τ����Τ뤳�Ȥ��Ǥ��ޤ���
+<samp>--subbook</samp> オプションは引数を一つ取り、そこにカンマ
+(<samp>,</samp>) で区切って、副本のディレクトリ名を並べて書きます。
+<code>ebinfo</code> コマンドを用いると、あなたの所有している書籍に
+どのような副本が含まれているのかを知ることができます。
 </p>
 
 <blockquote>
 <pre>
 % ebinfo /mnt/cdrom
-�ǥ������η���: EB/EBG/EBXA/EBXA-C/S-EBXA
-ʸ��������: JIS X 0208
-���ܤο�: 3
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 3
 
-���� 1:
-  ��̾: �����¼�ŵ������ǡ�
-  �ǥ��쥯�ȥ�: english
-  ��������: �������� �������� ��� ��˥塼
-  �ե���Ȥ��礭��: 16 24 30 48
-  Ⱦ�ѥե���Ȥ�ʸ��: 0xa121 -- 0xa24e
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa27e
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: english
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
 
-���� 2:
-  ��̾: CD-ROM ʩ�¼�ŵ���軰�ǡ�
-  �ǥ��쥯�ȥ�: french
-  ��������: �������� �������� ��� ��˥塼
-  �ե���Ȥ��礭��: 16 24 30 48
-  Ⱦ�ѥե���Ȥ�ʸ��: 
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa27e
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: french
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
 
-���� 3:
-  ��̾: �ݥ��å����¼�ŵ���軰�ǡ�
-  �ǥ��쥯�ȥ�: german
-  ��������: ��˥塼
-  �ե���Ȥ��礭��: 16 24 30 48
-  Ⱦ�ѥե���Ȥ�ʸ��: 
-  ���ѥե���Ȥ�ʸ��: 0xa321 -- 0xa27e
+副本 3:
+  題名: ポケット独和辞典（第三版）
+  ディレクトリ: german
+  検索方式: メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
 </pre>
 </blockquote>
 
 <p>
-(<code>ebinfo</code> ���ޥ�ɤ˴ؤ��Ƥξܺ٤ϡ�
-<a href="ebinfo.html">ebinfo ���ޥ�ɤΥޥ˥奢��</a> �򻲾ȤΤ��ȡ�)
-������Ǥϡ�3 �Ĥ����ܤ����Ҥˤϴޤޤ�Ƥ��ꡢ���Υǥ��쥯�ȥ�̾��
+(<code>ebinfo</code> コマンドに関しての詳細は、
+<a href="ebinfo.html">ebinfo コマンドのマニュアル</a> を参照のこと。)
+この例では、3 つの副本が書籍には含まれており、そのディレクトリ名は
 <code>english</code>, <code>french</code>, <code>german</code> 
-���Ȥ������Ȥ�ʬ����ޤ���
+だということが分かります。
 </p>
 
 <p>
-���Υ��ޥ�ɤ�¹Ԥ����, <code>ebfont</code> �� <code>english</code> ��
-<code>french</code> �β����ե�����������������ޤ���
+次のコマンドを実行すると, <code>ebfont</code> は <code>english</code> と
+<code>french</code> の画像ファイルだけを生成します。
 </p>
 
 <blockquote>
@@ -301,8 +301,8 @@ BMP �����Ǥϡ����ʿ��Ϲ��ˡ��طʿ����� (RGB �� <samp>#ffffff</samp>) ��
 </blockquote>
 
 <p>
-�ǥ��쥯�ȥ�̾����ʸ������ʸ���ΰ㤤�ϡ����̤���ޤ���
-<samp>--subbook</samp> �ΰ����ϡ����Τ褦��ʬ���ƽ񤯤��Ȥ�Ǥ��ޤ���
+ディレクトリ名の大文字・小文字の違いは、区別されません。
+<samp>--subbook</samp> の引数は、次のように分けて書くこともできます。
 </p>
 
 <blockquote>
@@ -312,14 +312,14 @@ BMP �����Ǥϡ����ʿ��Ϲ��ˡ��طʿ����� (RGB �� <samp>#ffffff</samp>) ��
 </blockquote>
 
 <!-- ================================================================ -->
-<h2><a name="summary-of-options"><code>ebfont</code> �Υ��ץ�������</a></h2>
+<h2><a name="summary-of-options"><code>ebfont</code> のオプション一覧</a></h2>
 
 <p>
-<code>ebzip</code> ���ޥ�ɤϡ�����Ū�ʰ�ʸ�����ץ����̾�ȳФ��䤹��Ĺ��
-���ץ����̾��ξ���򰷤����Ȥ��Ǥ��ޤ���
-Ĺ�����ץ����̾��ɽ���ˤϡ�<samp>-</samp> �ǤϤʤ� <samp>--</samp> ��
-�Ѥ��ޤ���
-���ץ����̾����դ˷�ޤ��ϰ���ǡ�̾���θ�����ʬ���ά���뤳�Ȥ��Ǥ��ޤ���
+<code>ebzip</code> コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、<samp>-</samp> ではなく <samp>--</samp> を
+用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができます。
 </p>
 
 <dl>
@@ -327,60 +327,60 @@ BMP �����Ǥϡ����ʿ��Ϲ��ˡ��طʿ����� (RGB �� <samp>#ffffff</samp>) ��
 <dt><code>--debug</code></dt>
 <dt><code>--verbose</code></dt>
 <dd>
-�ǥХå��Ѥξ����ɸ�२�顼���Ϥ˽��Ϥ��ޤ���
+デバッグ用の情報を、標準エラー出力に出力します。
 
-<dt><code>-f <var>�⤵</var></code></dt>
-<dt><code>--font-height <var>�⤵</var></code></dt>
+<dt><code>-f <var>高さ</var></code></dt>
+<dt><code>--font-height <var>高さ</var></code></dt>
 <dd>
-�⤵�� <var>�⤵</var> �γ����β����ե�������������ޤ���
-<var>�⤵</var> �ϡ��⤵�򥫥�� (<samp>,</samp>) �Ƕ��ڤä��¤٤���Τ�
-�ʤ��ƤϤʤ�ޤ���
-�⤵�λ���Ȥ��Ƶ������Τϡ�<samp>16</samp>��<samp>24</samp>��
-<samp>30</samp>��<samp>48</samp> �Ǥ���
-���꤬�ʤ���С�<code>ebfont</code> �Ϲ⤵�� 16 �ԥ�����Υե���ȤΤ�Τ�
-�������ޤ���
-(�ܤ����ϡ�<a href="#heights">�ֹ⤵��</a>�򻲾ȤΤ��ȡ�)
+高さが <var>高さ</var> の外字の画像ファイルを生成します。
+<var>高さ</var> は、高さをカンマ (<samp>,</samp>) で区切って並べたもので
+なくてはなりません。
+高さの指定として許されるのは、<samp>16</samp>、<samp>24</samp>、
+<samp>30</samp>、<samp>48</samp> です。
+指定がなければ、<code>ebfont</code> は高さが 16 ピクセルのフォントのものを
+生成します。
+(詳しくは、<a href="#heights">「高さ」</a>を参照のこと。)
 
 <dt><code>-h</code></dt>
 <dt><code>--help</code></dt>
 <dd>
-�إ�ץ�å�������ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+ヘルプメッセージを標準出力に出力して、終了します。
 
-<dt><code>-i <var>��������</var></code></dt>
-<dt><code>--image-format <var>��������</var></code></dt>
+<dt><code>-i <var>画像形式</var></code></dt>
+<dt><code>--image-format <var>画像形式</var></code></dt>
 <dd>
-<var>��������</var> �����β����ե�������������ޤ���
-<var>��������</var> �ϡ���������̾�򥫥�� (<samp>,</samp>) �Ƕ��ڤä�
-�¤٤���ΤǤʤ��ƤϤʤ�ޤ���
-�б����Ƥ������������̾���� <samp>xbm</samp>��<samp>xpm</samp>��
-<samp>gif</samp>��<samp>bmp</samp>��<samp>gif</samp>��<samp>png</samp>
-�Ǥ���
-���ꤷ�ʤ��ä��Ȥ��ϡ�<samp>ebfont</samp> �� XBM �����β����ե������
-�������ޤ���
-(�ܤ����ϡ�<a href="#image-formats">�ֲ���������</a>�򻲾ȤΤ��ȡ�)
+<var>画像形式</var> 形式の画像ファイルを生成します。
+<var>画像形式</var> は、画像形式名をカンマ (<samp>,</samp>) で区切って
+並べたものでなくてはなりません。
+対応している画像形式の名前は <samp>xbm</samp>、<samp>xpm</samp>、
+<samp>gif</samp>、<samp>bmp</samp>、<samp>gif</samp>、<samp>png</samp>
+です。
+指定しなかったときは、<samp>ebfont</samp> は XBM 形式の画像ファイルを
+生成します。
+(詳しくは、<a href="#image-formats">「画像形式」</a>を参照のこと。)
 
-<dt><code>-o <var>�ǥ��쥯�ȥ�</var></code></dt>
-<dt><code>--output-directory <var>�ǥ��쥯�ȥ�</var></code></dt>
+<dt><code>-o <var>ディレクトリ</var></code></dt>
+<dt><code>--output-directory <var>ディレクトリ</var></code></dt>
 <dd>
-�����ե������ <var>�ǥ��쥯�ȥ�</var> �ʲ��˽��Ϥ��ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ�<code>ebfont</code> �ϥ����ȥǥ��쥯�ȥ�
-(<code>.</code>) �β��˲����ե�������������ޤ���
-(�ܤ����ϡ�<a href="#invoke-ebfont">��<code>ebfont</code> �μ¹ԡ�</a>
-�򻲾ȤΤ��ȡ�)
+画像ファイルを <var>ディレクトリ</var> 以下に出力します。
+指定しなかったときは、<code>ebfont</code> はカレントディレクトリ
+(<code>.</code>) の下に画像ファイルを生成します。
+(詳しくは、<a href="#invoke-ebfont">「<code>ebfont</code> の実行」</a>
+を参照のこと。)
 
-<dt><code>-S <var>����</var></code></dt>
-<dt><code>--subbook <var>����</var></code></dt>
+<dt><code>-S <var>副本</var></code></dt>
+<dt><code>--subbook <var>副本</var></code></dt>
 <dd>
-<code>ebfont</code> �ˡ��ɤ����ܤγ���������������Τ�����ꤷ�ޤ���
-<var>����</var> �ϡ����ܤΥǥ��쥯�ȥ�̾�򥫥�� (<samp>,</samp>) ��
-���ڤä��¤٤���ΤǤʤ��ƤϤʤ�ޤ���
-���ꤷ�ʤ��ä��Ȥ��ϡ����٤Ƥ����ܤ��������оݤˤʤ�ޤ���
-(�ܤ����ϡ�<a href="#subbooks">�����ܡ�</a>�򻲾ȤΤ��ȡ�)
+<code>ebfont</code> に、どの副本の外字を生成させるのかを指定します。
+<var>副本</var> は、副本のディレクトリ名をカンマ (<samp>,</samp>) で
+区切って並べたものでなくてはなりません。
+指定しなかったときは、すべての副本が生成の対象になります。
+(詳しくは、<a href="#subbooks">「副本」</a>を参照のこと。)
 
 <dt><code>-v</code></dt>
 <dt><code>--version</code></dt>
 <dd>
-�С�������ֹ��ɸ����Ϥ˽��Ϥ��ơ���λ���ޤ���
+バージョン番号を標準出力に出力して、終了します。
 </dl>
 
 </body>
