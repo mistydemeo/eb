@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3.3 版です。
+   この文書は第 3.3.4 版です。
 
 * Menu:
 
@@ -170,9 +170,9 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 3.3.3 に対応しています。 本書の
+   この文書は、EB ライブラリバージョン 3.3.4 に対応しています。 本書の
 内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成する
-には、お使用いのシステムに EB ライブラリバージョン 3.3.3 と C コンパイ
+には、お使用いのシステムに EB ライブラリバージョン 3.3.4 と C コンパイ
 ラをインストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
@@ -525,7 +525,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 3.3.3 のソースードを展開します。
+  1. EB ライブラリ 3.3.4 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -3827,7 +3827,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_GRAY_GRAPHIC:
  - EB_HOOK_END_GRAY_GRAPHIC:
      これらのフック名称は、グレースケール図版のために予約されていますが、
-     EB ライブラリ 3.3.3 ではまだ対応していません。
+     EB ライブラリ 3.3.4 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_COLOR_BMP:
  - EB_HOOK_BEGIN_COLOR_JPEG:

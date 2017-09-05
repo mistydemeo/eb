@@ -314,6 +314,14 @@ eb_load_subbook_indexes(book)
 	 * Set index style.
 	 */
 	eb_initialize_search(&search);
+
+	search.index_id = eb_uint1(buffer_p);
+	search.start_page = eb_uint4(buffer_p + 2);
+	search.end_page   = search.start_page + eb_uint4(buffer_p + 6) - 1;
+
+	/*
+	 * Set canonicalization flags.
+	 */
 	availability = eb_uint1(buffer_p + 10);
 	if ((global_availability == 0x00 && availability == 0x02)
 	    || global_availability == 0x02) {
@@ -329,32 +337,44 @@ eb_load_subbook_indexes(book)
 	    search.long_vowel = (flags & 0x030000) >> 16;
 	    search.double_consonant = (flags & 0x00c000) >> 14;
 	    search.contracted_sound = (flags & 0x003000) >> 12;
-	    search.voiced_consonant = (flags & 0x000c00) >> 10;
-	    search.small_vowel = (flags & 0x000300) >> 8;
+	    search.small_vowel = (flags & 0x000c00) >> 10;
+	    search.voiced_consonant = (flags & 0x000300) >> 8;
 	    search.p_sound = (flags & 0x0000c0) >> 6;
-	} else {
+
+	} else if (search.index_id == 0x70 || search.index_id == 0x90) {
 	    search.katakana = EB_INDEX_STYLE_CONVERT;
 	    search.lower = EB_INDEX_STYLE_CONVERT;
 	    search.mark = EB_INDEX_STYLE_DELETE;
 	    search.long_vowel = EB_INDEX_STYLE_CONVERT;
 	    search.double_consonant = EB_INDEX_STYLE_CONVERT;
 	    search.contracted_sound = EB_INDEX_STYLE_CONVERT;
-	    search.voiced_consonant = EB_INDEX_STYLE_CONVERT;
 	    search.small_vowel = EB_INDEX_STYLE_CONVERT;
+	    search.voiced_consonant = EB_INDEX_STYLE_CONVERT;
 	    search.p_sound = EB_INDEX_STYLE_CONVERT;
-	}
-	if (book->character_code == EB_CHARCODE_ISO8859_1)
-	    search.space = EB_INDEX_STYLE_ASIS;
-	else
-	    search.space = EB_INDEX_STYLE_DELETE;
 
-	search.start_page = eb_uint4(buffer_p + 2);
-	search.end_page   = search.start_page + eb_uint4(buffer_p + 6) - 1;
+	} else {
+	    search.katakana = EB_INDEX_STYLE_ASIS;
+	    search.lower = EB_INDEX_STYLE_CONVERT;
+	    search.mark = EB_INDEX_STYLE_ASIS;
+	    search.long_vowel = EB_INDEX_STYLE_ASIS;
+	    search.double_consonant = EB_INDEX_STYLE_ASIS;
+	    search.contracted_sound = EB_INDEX_STYLE_ASIS;
+	    search.small_vowel = EB_INDEX_STYLE_ASIS;
+	    search.voiced_consonant = EB_INDEX_STYLE_ASIS;
+	    search.p_sound = EB_INDEX_STYLE_ASIS;
+	}
+
+	if (book->character_code == EB_CHARCODE_ISO8859_1
+	    || search.index_id == 0x72
+	    || search.index_id == 0x92) {
+	    search.space = EB_INDEX_STYLE_ASIS;
+	} else {
+            search.space = EB_INDEX_STYLE_DELETE;
+	}
 
 	/*
 	 * Identify search method.
 	 */
-	search.index_id = eb_uint1(buffer_p);
 	switch (search.index_id) {
 	case 0x00:
 	    memcpy(&subbook->text, &search, sizeof(EB_Search));

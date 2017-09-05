@@ -150,20 +150,10 @@ eb_match_word_latin(word, pattern, length)
 	    result = 0;
 	    break;
 	}
-	if (isalpha(*word_p)
-	    || (0xc0 <= *word_p && *word_p <= 0xd6)
-	    || (0xd8 <= *word_p && *word_p <= 0xde)
-	    || (0xe0 <= *word_p && *word_p <= 0xf6)
-	    || (0xf8 <= *word_p && *word_p <= 0xfe)) {
-	    if ((*word_p | 0x20) != (*pattern_p | 0x20)) {
-		result = *word_p - *pattern_p;
-		break;
-	    }
-	} else {
-	    if (*word_p != *pattern_p) {
-		result = *word_p - *pattern_p;
-		break;
-	    }
+
+	if (*word_p != *pattern_p) {
+	    result = *word_p - *pattern_p;
+	    break;
 	}
 	word_p++;
 	pattern_p++;
@@ -192,7 +182,6 @@ eb_match_word_jis(word, pattern, length)
     int i = 0;
     unsigned char *word_p = (unsigned char *)word;
     unsigned char *pattern_p = (unsigned char *)pattern;
-    unsigned char wc0, wc1, pc0, pc1;
     int result;
 
     LOG(("in: eb_match_word_jis(word=%s, pattern=%s)",
@@ -213,30 +202,13 @@ eb_match_word_jis(word, pattern, length)
 	    break;
 	}
 
-	wc0 = *word_p;
-	wc1 = *(word_p + 1);
-	pc0 = *pattern_p;
-	pc1 = *(pattern_p + 1);
-
-	if ((wc0 == 0x24 || wc0 == 0x25) && (pc0 == 0x24 || pc0 == 0x25)) {
-	    if (wc1 != pc1) {
-		result = wc1 - pc1;
-		break;
-	    }
-	} else if (wc0 == 0x23 && pc0 == 0x23 && isalpha(wc1)) {
-	    if ((wc1 | 0x20) != (pc1 | 0x20)) {
-		result = wc1 - pc1;
-		break;
-	    }
-	} else {
-	    if (wc0 != pc0) {
-		result = wc0 - pc0;
-		break;
-	    }
-	    if (wc1 != pc1) {
-		result = wc1 - pc1;
-		break;
-	    }
+	if (*word_p != *pattern_p) {
+	    result = *word_p - *pattern_p;
+	    break;
+	}
+	if (*(word_p + 1) != *(pattern_p + 1)) {
+	    result = *(word_p + 1) - *(pattern_p + 1);
+	    break;
 	}
 	word_p += 2;
 	pattern_p += 2;
@@ -284,20 +256,10 @@ eb_exact_match_word_latin(word, pattern, length)
 	    result = (i - length);
 	    break;
 	}
-	if (isalpha(*word_p)
-	    || (0xc0 <= *word_p && *word_p <= 0xd6)
-	    || (0xd8 <= *word_p && *word_p <= 0xde)
-	    || (0xe0 <= *word_p && *word_p <= 0xf6)
-	    || (0xf8 <= *word_p && *word_p <= 0xfe)) {
-	    if ((*word_p | 0x20) != (*pattern_p | 0x20)) {
-		result = *word_p - *pattern_p;
-		break;
-	    }
-	} else {
-	    if (*word_p != *pattern_p) {
-		result = *word_p - *pattern_p;
-		break;
-	    }
+
+	if (*word_p != *pattern_p) {
+	    result = *word_p - *pattern_p;
+	    break;
 	}
 	word_p++;
 	pattern_p++;
@@ -326,7 +288,6 @@ eb_exact_match_word_jis(word, pattern, length)
     int i = 0;
     unsigned char *word_p = (unsigned char *)word;
     unsigned char *pattern_p = (unsigned char *)pattern;
-    unsigned char wc0, wc1, pc0, pc1;
     int result;
 
     LOG(("in: eb_exact_match_word_jis(word=%s, pattern=%s)",
@@ -346,30 +307,14 @@ eb_exact_match_word_jis(word, pattern, length)
 	    result = *word_p - *pattern_p;
 	    break;
 	}
-	wc0 = *word_p;
-	wc1 = *(word_p + 1);
-	pc0 = *pattern_p;
-	pc1 = *(pattern_p + 1);
 
-	if ((wc0 == 0x24 || wc0 == 0x25) && (pc0 == 0x24 || pc0 == 0x25)) {
-	    if (wc1 != pc1) {
-		result = wc1 - pc1;
-		break;
-	    }
-	} else if (wc0 == 0x23 && pc0 == 0x23 && isalpha(wc1)) {
-	    if ((wc1 | 0x20) != (pc1 | 0x20)) {
-		result = wc1 - pc1;
-		break;
-	    }
-	} else {
-	    if (wc0 != pc0) {
-		result = wc0 - pc0;
-		break;
-	    }
-	    if (wc1 != pc1) {
-		result = wc1 - pc1;
-		break;
-	    }
+	if (*word_p != *pattern_p) {
+	    result = *word_p - *pattern_p;
+	    break;
+	}
+	if (*(word_p + 1) != *(pattern_p + 1)) {
+	    result = *(word_p + 1) - *(pattern_p + 1);
+	    break;
 	}
 	word_p += 2;
 	pattern_p += 2;

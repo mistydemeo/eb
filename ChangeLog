@@ -1,3 +1,15 @@
+2003-07-19  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.3.4.
+
+	* eb/subbook.c (eb_load_subbook_indexes): Fix a bug in word search
+	that EB Library sometimes cannot have found words.
+	* eb/match.c (eb_match_word_latin, eb_match_word_jis, 
+	eb_exact_match_word_latin, eb_exact_match_word_jis): Ditto. 
+
+	* eb/book.c (misleaded_book_table):
+	Add "Japanese-English-Spanish Jiten (YRRS-060)".
+
 2003-06-09  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.3.3.
