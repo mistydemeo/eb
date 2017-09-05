@@ -1,3 +1,8 @@
+Major changes in release 2.3.7:
+
+* Support EBG ``DUDEN Die sinn-und sachverwandten Worter'' and ``DUDEN
+  Das Fremdworterbuch''.
+
 Major changes in release 2.3.6:
 
 * Fix a bug for "Nihongo Goi Taikei" (EPWING, Iwanami Shoten).

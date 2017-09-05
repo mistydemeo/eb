@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -85,8 +85,8 @@ eb_match_exactword(word, pattern, length)
 	    return *wordp;
 
 	if (*wordp == '\0') {
-	    /* ignore spaces in the tail of the pattern */
-	    while (i < length && *pattp == ' ') {
+	    /* ignore spaces and NULs in the tail of the pattern */
+	    while (i < length && (*pattp == ' ' || *pattp == '\0')) {
 		pattp++;
 		i++;
 	    }

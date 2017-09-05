@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,6 +56,9 @@ static int offset;
 
 /* Page ID of the current page */
 static int id;
+
+/* Fixed length of entries in the current page */
+static int fixlen;
 
 /* How many entries in the current page */
 static int entrycount;
@@ -472,7 +475,6 @@ eb_search_word_internal(book)
 {
     int nextpage;
     int depth;
-    int len;
 
     /*
      * Search the word in intermediate indexes.
@@ -501,7 +503,7 @@ eb_search_word_internal(book)
 	 * Get some data from the read page.
 	 */
 	id = eb_uint1(pagebuf);
-	len = eb_uint1(pagebuf + 1);
+	fixlen = eb_uint1(pagebuf + 1);
 	entrycount = eb_uint2(pagebuf + 2);
 	pagebufp = pagebuf + 4;
 	offset = 4;
@@ -513,17 +515,17 @@ eb_search_word_internal(book)
 	 * Search a page of next level index.
 	 */
 	for (entryindex = 0; entryindex < entrycount; entryindex++) {
-	    if (EB_SIZE_PAGE < offset + len + 4) {
+	    if (EB_SIZE_PAGE < offset + fixlen + 4) {
 		eb_error = EB_ERR_UNEXP_START;
 		return -1;
 	    }
-	    if (compare(canonword, pagebufp, len) <= 0) {
-		nextpage = eb_uint4(pagebufp + len);
+	    if (compare(canonword, pagebufp, fixlen) <= 0) {
+		nextpage = eb_uint4(pagebufp + fixlen);
 		break;
 	    }
 
-	    pagebufp += len + 4;
-	    offset += len + 4;
+	    pagebufp += fixlen + 4;
+	    offset += fixlen + 4;
 	}
 	if (entrycount <= entryindex || page == nextpage) {
 	    cmpval = -1;
@@ -568,9 +570,43 @@ eb_hit_list_internal(book, hitlist, maxhits)
 	return 0;
 
     for (;;) {
-	if (id == 0x80 || id == 0xa0 || id == 0xc0 || id == 0xe0) {
+	if ((id == 0x80 || id == 0xa0 || id == 0xc0 || id == 0xe0)
+	    && fixlen != 0) {
 	    /*
-	     * The leaf index for alphabetic words.
+	     * The leaf index for alphabetic words with fixed length.
+	     * Find text and heading locations.
+	     */
+	    while (entryindex < entrycount) {
+		if (EB_SIZE_PAGE < offset + fixlen + 12) {
+		    eb_error = EB_ERR_UNEXP_START;
+		    return -1;
+		}
+
+		/*
+		 * Compare word and pattern.
+		 * If matched, add it to a hit list.
+		 */
+		cmpval = compare(word, pagebufp, fixlen);
+		if (cmpval == 0) {
+		    hit->heading.page = eb_uint4(pagebufp + fixlen + 6);
+		    hit->heading.offset = eb_uint2(pagebufp + fixlen + 10);
+		    hit->text.page = eb_uint4(pagebufp + fixlen);
+		    hit->text.offset = eb_uint2(pagebufp + fixlen + 4);
+		    hit++;
+		    hitcount++;
+		}
+		entryindex++;
+		offset += fixlen + 12;
+		pagebufp += fixlen + 12;
+
+		if (cmpval < 0 || maxhits <= hitcount)
+		    return hitcount;
+	    }
+
+	} else if ((id == 0x80 || id == 0xa0 || id == 0xc0 || id == 0xe0)
+	    && fixlen == 0) {
+	    /*
+	     * The leaf index for alphabetic words with variable length.
 	     * Find text and heading locations.
 	     */
 	    while (entryindex < entrycount) {
@@ -604,6 +640,7 @@ eb_hit_list_internal(book, hitlist, maxhits)
 		if (cmpval < 0 || maxhits <= hitcount)
 		    return hitcount;
 	    }
+
 	} else if (id == 0x90 || id == 0xb0 || id == 0xd0 || id == 0xf0) {
 	    /*
 	     * The leaf index for KANA words.
@@ -724,6 +761,7 @@ eb_hit_list_internal(book, hitlist, maxhits)
 
 	offset = 4;
 	id = eb_uint1(pagebuf);
+	fixlen = eb_uint1(pagebuf + 1);
 	entrycount = eb_uint2(pagebuf + 2);
 	entryindex = 0;
 	pagebufp = pagebuf + 4;

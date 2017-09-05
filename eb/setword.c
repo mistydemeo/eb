@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -487,7 +487,8 @@ eb_convert_lower_latin(word)
     unsigned char *w = (unsigned char *) word;
     
     while (*w != '\0') {
-	if ('a' <= *w && *w <= 'z') {
+	if (('a' <= *w && *w <= 'z')
+	    || (0xe0 <= *w && *w <= 0xf6) || (0xf8 <= *w && *w <= 0xfe)) {
 	    /*
 	     * This is a lower case letter.  Convert to upper case.
 	     */

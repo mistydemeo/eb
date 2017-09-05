@@ -1,5 +1,5 @@
-This is Info file ebfont-ja.info, produced by Makeinfo version 1.68
-from the input file ebfont-ja.texi.
+This is ebfont-ja.info, produced by makeinfo version 3.12s from
+ebfont-ja.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -28,8 +28,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.6 版です。 EB ライブラリバージョン 2.3.6
-に対応しています。
+   この文書は第 2.3.7 版です。 EB ライブラリバージョン 2.3.7 に対応して
+います。
 
 * Menu:
 
@@ -38,7 +38,7 @@ File: ebfont-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 * Invoking ebfont::             `ebfont' の実行
 * Summary of Options::          `ebfont' のオプション一覧
 
- -- The Detailed Node Listing --
+ --- The Detailed Node Listing ---
 
 `ebfont' の実行
 
@@ -52,19 +52,18 @@ File: ebfont-ja.info,  Node: Introduction,  Next: What is Local Character,  Prev
 はじめに
 ********
 
-   `ebfont' コマンドは、CD-ROM 書籍の外字のビットマップデータを
-読み込み、それを指定された画像形式に変換し、ファイルに書き出します。
-`ebfont' は EB ライブラリを使用しており、ライブラリと一緒に配
-布されています。
+   `ebfont' コマンドは、CD-ROM 書籍の外字のビットマップデータを読み込
+み、それを指定された画像形式に変換し、ファイルに書き出します。 `ebfont'
+は EB ライブラリを使用しており、ライブラリと一緒に配布されています。
 
-   `ebfont' はフリーソフトウェアです。あなたは、Free Software Foundation
+   `ebfont' はフリーソフトウェアです。あなたは、 Free Software Foundation
 が公表した GNU General Public License (GNU 一般公有使用許諾) バージョン
 2 あるいはそれ以降の各バージョンの中からいずれかを選択し、そのバージョ
 ンが定める条項に従って本プログラムを再頒布または変更することができます。
 
    `ebfont' は有用とは思いますが、頒布にあたっては、市場性及び特定目的
-適合性についての暗黙の保証を含めて、いかなる保証も行ないません。
-詳細については GNU General Public License をお読み下さい。
+適合性についての暗黙の保証を含めて、いかなる保証も行ないません。 詳細に
+ついては GNU General Public License をお読み下さい。
 
 
 File: ebfont-ja.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
@@ -72,37 +71,34 @@ File: ebfont-ja.info,  Node: What is Local Character,  Next: Invoking ebfont,  P
 外字とは
 ********
 
-   CD-ROM 書籍の多くは、書籍固有の文字、外字 (local characters) を定義し
-ています。 たとえば、CD-ROM
-書籍に使われる文字セットは発音記号を持っていないため、
-英和辞書の中には発音記号を定義しているものがあります。
+   CD-ROM 書籍の多くは、書籍固有の文字、外字 (local characters) を定義
+しています。 たとえば、CD-ROM 書籍に使われる文字セットは発音記号を持っ
+ていないため、 英和辞書の中には発音記号を定義しているものがあります。
 
-   CD-ROM 書籍は、外字のビットマップデータも持っています。 `ebfont'
-コマンドは、CD-ROM 書籍のビットマップデータを読み、
-それを指定された画像形式に変換し、ファイルに書き出します。 `ebfont'
-は、XBM (X BitMap format)、XPM (X PixMap format)、 GIF (Graphics
-Interchange Format) のうちのいずれか、または複数の画像
-ファイルを生成することができます。 デフォルトでは、XBM
-形式が選択されます。
+   CD-ROM 書籍は、外字のビットマップデータも持っています。 `ebfont' コ
+マンドは、CD-ROM 書籍のビットマップデータを読み、 それを指定された画像
+形式に変換し、ファイルに書き出します。 `ebfont' は、 XBM (X BitMap
+format)、XPM (X PixMap format)、 GIF (Graphics Interchange Format) のう
+ちのいずれか、または複数の画像ファイルを生成することができます。 デフ
+ォルトでは、XBM 形式が選択されます。
 
-   外字は、"半角" ("narrow") と "全角" ("wide") の 2 種
-類に分類されます。
-半角の文字のビットマップデータでは、高さは幅の約半分です。
-全角の文字のビットマップデータでは、高さと幅はほぼ同じです。 CD-ROM
-書籍は、一冊の中に両方の種類の外字を定義することが可能で、 `ebfont'
-は両方の種類の画像ファイルを生成します。
+   外字は、"半角" ("narrow") と "全角" ("wide") の 2 種類に分類されま
+す。 半角の文字のビットマップデータでは、高さは幅の約半分です。 全角の
+文字のビットマップデータでは、高さと幅はほぼ同じです。 CD-ROM 書籍は、
+一冊の中に両方の種類の外字を定義することが可能で、 `ebfont' は両方の種
+類の画像ファイルを生成します。
 
    CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して 4
 種類のサイズを定義しています。 外字の幅、高さ、サイズは次の通りです。
 
-高さ                     半角                     全角                     
-16                       8x16                     16x16                    
-24                       16x24                    24x24                    
-30                       16x30                    32x30                    
-48                       24x48                    48x48                    
+高さ                     半角                     全角
+16                       8x16                     16x16
+24                       16x24                    24x24
+30                       16x30                    32x30
+48                       24x48                    48x48
 
-デフォルトでは、`ebfont' は高さが 16 ピクセルのフォントの画像ファ
-イルを生成します。
+デフォルトでは、`ebfont' は高さが 16 ピクセルのフォントの画像ファイル
+を生成します。
 
 
 File: ebfont-ja.info,  Node: Invoking ebfont,  Next: Summary of Options,  Prev: What is Local Character,  Up: Top
@@ -114,34 +110,34 @@ File: ebfont-ja.info,  Node: Invoking ebfont,  Next: Summary of Options,  Prev: 
 
      % ebfont 書籍へのパス
 
-書籍へのパス には、CD-ROM 書籍のトップディレクトリ、つまり `CATALOG'
-または `CATALOGS' ファイルが存在するディレクトリを 指定します。
-複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
-できます。
+書籍へのパスには、CD-ROM 書籍のトップディレクトリ、つまり `CATALOG' ま
+たは `CATALOGS' ファイルが存在するディレクトリを指定します。 複数のパ
+スを書くことはできませんが、以下のように、パスの指定を省くことはできま
+す。
 
      % ebfont
 
-この場合、`ebfont' はカレントディレクトリの下に画像ファイルを生
-成します。 このとき、ファイル名の一般形式は次の通りです。
+この場合、`ebfont' はカレントディレクトリの下に画像ファイルを生成しま
+す。 このとき、ファイル名の一般形式は次の通りです。
 
      副本/高さ/narrow/文字番号.拡張子
      副本/高さ/wide/文字番号.拡張子
 
-拡張子 は `xbm'、`xpm'、`gif' のいずれかで、 文字番号 は 16 進数 4 桁
+拡張子は `xbm'、`xpm'、 `gif' のいずれかで、 文字番号は 16 進数 4 桁
 (`0' から `9' と `a' から `f') で、次のようになります。
 
      EJDICT/16/narrow/a121.xbm
      EJDICT/16/wide/a321.xbm
 
-`EJDICT/16/xbm/narrow' などの中間のディレクトリは、もし無けれ ば
+`EJDICT/16/xbm/narrow' などの中間のディレクトリは、もし無ければ
 `ebfont' が生成します。
 
-   `--output-directory' オプションを指定することで、`ebfont'
-はカレントディレクトリ以外のディレクトリに画像ファイルを出力すること
-ができます。 そのトップディレクトリは、`ebfont'
-を実行する前に作成されてい なければなりません。
+   `--output-directory' オプションを指定することで、`ebfont' はカレント
+ディレクトリ以外のディレクトリに画像ファイルを出力することができます。
+そのトップディレクトリは、`ebfont' を実行する前に作成されていなければ
+なりません。
 
-     % ebfont --output-directory ディレクトリ 書籍へのパス
+     % ebfont --output-directory ディレクトリ書籍へのパス
 
 * Menu:
 
@@ -155,13 +151,12 @@ File: ebfont-ja.info,  Node: Image Formats,  Next: Heights,  Prev: Invoking ebfo
 画像形式
 ========
 
-   `ebfont' は XBM, XPM, GIF (GIF89a) 形式の画像ファイルを生成するこ
-とができます。 画像形式は `--image-format' (`-i')
-オプションで指定します。 `--image-format'
-オプションは引数を一つ取り、そこにカンマ (`,')
-で区切って、画像形式の名前を並べて書きます。
-たとえば、以下のコマンドを実行すると、`ebfont' は XPM 形式と GIF
-形式の画像ファイルを生成します。
+   `ebfont' は XBM, XPM, GIF (GIF89a) 形式の画像ファイルを生成すること
+ができます。 画像形式は `--image-format' (`-i')
+オプションで指定します。 `--image-format' オプションは引数を一つ取り、
+そこにカンマ (`,') で区切って、画像形式の名前を並べて書きます。 たとえ
+ば、以下のコマンドを実行すると、`ebfont' は XPM 形式と GIF 形式の画像フ
+ァイルを生成します。
 
      % ebfont --image-format xpm,gif 書籍へのパス
 
@@ -169,9 +164,9 @@ File: ebfont-ja.info,  Node: Image Formats,  Next: Heights,  Prev: Invoking ebfo
 
      % ebfont --image-format xpm --image-format gif 書籍へのパス
 
-XPM と GIF 形式では、前景色は黒 (RGB の `#000000') に、背景色は
-透明になります。 `ebzip' は GIF の画像を生成する際に LZW
-圧縮アルゴリズムを使わ ないため、ファイルのサイズは相当大きくなります。
+XPM と GIF 形式では、前景色は黒 (RGB の `#000000') に、背景色は透明に
+なります。 `ebzip' は GIF の画像を生成する際に LZW 圧縮アルゴリズムを使
+わないため、ファイルのサイズは相当大きくなります。
 
 
 File: ebfont-ja.info,  Node: Heights,  Next: Subbooks,  Prev: Image Formats,  Up: Invoking ebfont
@@ -179,15 +174,14 @@ File: ebfont-ja.info,  Node: Heights,  Next: Subbooks,  Prev: Image Formats,  Up
 高さ
 ====
 
-   デフォルトでは、`ebfont' は、半角と全角それぞれについて、高さ 16
-ピクセルのフォントの画像ファイルを生成します。 `--font-height' (`-f')
-オプションを使用することで、他の高さ
-のフォントの画像ファイルを生成することができます。 `--font-height'
-オプションは引数を一つ取り、そこにカンマ (`,')
-で区切って、フォントの高さを並べて書きます。
-フォントの高さは、`16'、`24'、`30'、`48' のいずれ
-かでなくてはいけません。 たとえば、以下のコマンドを実行すると、`ebfont'
-は高さ 16 ピクセル と 24 ピクセルのフォントの画像ファイルを生成します。
+   デフォルトでは、`ebfont' は、半角と全角それぞれについて、高さ 16 ピ
+クセルのフォントの画像ファイルを生成します。 `--font-height' (`-f') オ
+プションを使用することで、他の高さのフォントの画像ファイルを生成するこ
+とができます。 `--font-height' オプションは引数を一つ取り、そこにカンマ
+(`,') で区切って、フォントの高さを並べて書きます。 フォントの高さは、
+`16'、`24'、`30'、`48' のいずれかでなくてはいけません。 たとえば、以下
+のコマンドを実行すると、`ebfont' は高さ 16 ピクセルと 24 ピクセルのフ
+ォントの画像ファイルを生成します。
 
      % ebfont --font-height 16,24 書籍へのパス
 
@@ -201,14 +195,14 @@ File: ebfont-ja.info,  Node: Subbooks,  Prev: Heights,  Up: Invoking ebfont
 副本
 ====
 
-   なにも設定しないと、`ebzip' はすべての副本 (subbook) を対象にして
-画像ファイルを生成しますが、`--subbook' (`-S') オプションを
-使うと、指定した副本の画像ファイルだけを生成することができます。
+   なにも設定しないと、`ebzip' はすべての副本 (subbook) を対象にして画
+像ファイルを生成しますが、`--subbook' (`-S') オプションを使うと、指定
+した副本の画像ファイルだけを生成することができます。
 
-   `--subbook' オプションは引数を一つ取り、そこにカンマ (`,')
-で区切って、副本のディレクトリ名を並べて書きます。 `ebinfo'
-コマンドを用いると、あなたの所有している書籍にどのような
-副本が含まれているのかを知ることができます。
+   `--subbook' オプションは引数を一つ取り、そこにカンマ (`,') で区切っ
+て、副本のディレクトリ名を並べて書きます。 `ebinfo'
+コマンドを用いると、あなたの所有している書籍にどのような副本が含まれて
+いるのかを知ることができます。
 
      % ebinfo /mnt/cdrom
      disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
@@ -237,18 +231,18 @@ File: ebfont-ja.info,  Node: Subbooks,  Prev: Heights,  Up: Invoking ebfont
        narrow font characters:
        wide font characters: 0xa321 -- 0xa27e
 
-(`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行:
+(`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行 :
 (ebinfo-ja)Invoking ebinfo.)。
-この例では、3 つの副本が書籍には含まれており、そのディレクトリ名は
+この例では、 3 つの副本が書籍には含まれており、そのディレクトリ名は
 `ENGLISH', `FRENCH', `GERMAN' だということが分かります。
 
-   次のコマンドを実行すると, `ebfont' は `ENGLISH' と `FRENCH'
-の画像ファイルだけを生成します。
+   次のコマンドを実行すると, `ebfont' は `ENGLISH' と `FRENCH' の画像フ
+ァイルだけを生成します。
 
      % ebfont --subbook english,french /mnt/cdrom
 
-ディレクトリ名の大文字・小文字の違いは、区別されません。 `--subbook'
-の引数は、次のように分けて書くこともできます。
+ディレクトリ名の大文字・小文字の違いは、区別されません。 `--subbook' の
+引数は、次のように分けて書くこともできます。
 
      % ebfont --subbook english --subbook french /mnt/cdrom
 
@@ -258,11 +252,10 @@ File: ebfont-ja.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: To
 `ebfont' のオプション一覧
 *************************
 
-   `ebzip' コマンドは、伝統的な一文字オプション名と覚えやすい長い
-オプション名の両方を扱うことができます。
-長いオプション名を表すには、`-' ではなく `--' を用います。
-オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
-す。
+   `ebzip' コマンドは、伝統的な一文字オプション名と覚えやすい長いオプ
+ション名の両方を扱うことができます。 長いオプション名を表すには、`-' で
+はなく `--' を用います。 オプション名が一意に決まる範囲内で、名前の後方
+部分を省略することができます。
 
 `-d'
 `--debug'
@@ -270,11 +263,11 @@ File: ebfont-ja.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: To
 
 `-f 高さ'
 `--font-height 高さ'
-     高さが 高さ の外字の画像ファイルを生成します。 高さ
-     は、高さをカンマ (`,') で区切って並べたもので なくてはなりません。
-     高さの指定として許されるのは、`16'、`24'、`30'、`48' です。
-     デフォルトでは、`ebfont' は高さが 16 ピクセルのフォントのもの
-     を生成します。 (詳しくは、*note 高さ: Heights.)。
+     高さが高さの外字の画像ファイルを生成します。 高さは、高さをカン
+     マ (`,') で区切って並べたものでなくてはなりません。 高さの指定と
+     して許されるのは、`16'、`24'、`30'、`48' です。 デフォルトでは、
+     `ebfont' は高さが 16 ピクセルのフォントのものを生成します。 (詳し
+     くは、*note 高さ: Heights.)。
 
 `-h'
 `--help'
@@ -282,27 +275,24 @@ File: ebfont-ja.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: To
 
 `-i 画像形式'
 `--image-format 画像形式'
-     画像形式 形式の画像ファイルを生成します。 画像形式
-     は、画像形式名をカンマ (`,') で区切って並べたも
-     のでなくてはなりません。 対応している画像形式の名前は
-     `xbm'、`xpm'、`gif' で す。 デフォルトで、`ebfont' は XBM
-     形式の画像ファイルを生成します。 (詳しくは、*note 画像形式: Image
-     Formats.)。
+     画像形式形式の画像ファイルを生成します。 画像形式は、画像形式名
+     をカンマ (`,') で区切って並べたものでなくてはなりません。 対応し
+     ている画像形式の名前は `xbm'、`xpm'、`gif' です。 デフォルトで、
+     `ebfont' は XBM 形式の画像ファイルを生成します。 (詳しくは、*note
+     画像形式: Image Formats.)。
 
 `-o ディレクトリ'
 `--output-directory ディレクトリ'
-     画像ファイルを ディレクトリ 以下に出力します。
-     デフォルトでは、`ebfont' はカレントディレクトリ (`.') の
-     下に画像ファイルを生成します。 (詳しくは、*note `ebfont' の実行:
-     Invoking ebfont.)。
+     画像ファイルをディレクトリ以下に出力します。 デフォルトでは、
+     `ebfont' はカレントディレクトリ (`.') の下に画像ファイルを生成し
+     ます。 (詳しくは、*note `ebfont' の実行: Invoking ebfont.)。
 
 `-S 副本'
 `--subbook 副本'
-     `ebfont' に、どの副本の外字を生成させるのかを指定します。 副本
-     は、副本のディレクトリ名をカンマ (`,') で区切って
-     並べたものでなくてはなりません。
-     デフォルトでは、すべての副本が生成の対象になります。
-     (詳しくは、*note 副本: Subbooks.)。
+     `ebfont' に、どの副本の外字を生成させるのかを指定します。
+     副本は、副本のディレクトリ名をカンマ (`,') で区切って並べたもので
+     なくてはなりません。 デフォルトでは、すべての副本が生成の対象にな
+     ります。 (詳しくは、*note 副本: Subbooks.)。
 
 `-v'
 `--version'
@@ -311,13 +301,13 @@ File: ebfont-ja.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: To
 
 
 Tag Table:
-Node: Top1078
-Node: Introduction1607
-Node: What is Local Character2424
-Node: Invoking ebfont4072
-Node: Image Formats5419
-Node: Heights6274
-Node: Subbooks7089
-Node: Summary of Options9053
+Node: Top1054
+Node: Introduction1586
+Node: What is Local Character2404
+Node: Invoking ebfont3959
+Node: Image Formats5303
+Node: Heights6161
+Node: Subbooks6979
+Node: Summary of Options8948
 
 End Tag Table

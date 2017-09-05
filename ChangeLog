@@ -1,3 +1,18 @@
+2000-01-22  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 2.3.7.
+
+	* eb/setword.c (eb_convert_lower_latin): Also convert alphaet
+	with an accent mark to the corresponding upper letter.
+
+	* eb/match.c (eb_match_exactword): Also ignores NULs in the
+	tail of a pattern.
+
+	* eb/search.c (eb_search_word_internal, eb_hit_list_word,
+	eb_hit_list_keyword, eb_hit_list_multi): Support ``DUDEN Die
+	sinn-und sachverwandten Worter'' and ``DUDEN Das Fremdworterbuch''.
+	They have leaf index pages of fixed length entires.  
+
 1999-12-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 2.3.6.
