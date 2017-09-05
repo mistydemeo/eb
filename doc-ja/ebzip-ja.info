@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.2 版です。EB ライブラリバージョン 2.3.2 に対応して
+   この文書は第 2.3.3 版です。EB ライブラリバージョン 2.3.3 に対応して
 います。
 
 * Menu:
@@ -122,9 +122,9 @@ File: ebzip-ja.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Pre
      `ebzip' で圧縮された、一冊の CD-ROM 書籍の圧縮状態に関する情報を出
      力します。
 
-`ebzip' は起動時に、`ebzip' コマンドの起動時の名前とコマンドラインオプ
-ションから動作を決定します。`ebzip' の一回の実行の間で、動作が変わるこ
-とはありません。
+`ebzip' は起動時に、起動時に使用されたコマンド名とコマンドラインオプシ
+ョンから動作を決定します。`ebzip' の一回の実行の間で、動作が変わること
+はありません。
 
    `ebzip' は `ebzip'、`ebunzip', `ebzipinfo' という異なる 3 つのコマン
 ド名でインストールされます。(DOS および Windows システム環境では、
@@ -143,7 +143,7 @@ File: ebzip-ja.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Pre
    加えて、コマンドラインオプションでも動作を決定することができます。そ
 のオプションとは `--compress'(`-z') および`--uncompress'(`-u') と
 `--information'(`-i') です。オプションは、起動時の名前より優先します。
-次の例においては、いずれの行も等価になります。
+次の例では、いずれの行も動作モードは「伸長」になります。
 
      ebunzip
      ebzip --uncompress
@@ -269,10 +269,10 @@ File: ebzip-ja.info,  Node: Compression Example 2,  Next: Compression Level,  Pr
 
      % ebzip --keep --output-directory /dict /cdrom
 
-出力側のディレクトリ `/dict' は空でも構いませんが、圧縮前にあらかじめつ
-くっておかなければならないので、注意して下さい。この例では、`--keep'
-オプションを使っています。デフォルトでは、`ebzip' は、圧縮後に元のファ
-イルを削除しますが、`--keep' オプションはこの振る舞いを抑制します。
+出力側のディレクトリ `/dict' は空でも構いませんが、圧縮前にあらかじめ作
+っておかなければならないので、注意して下さい。この例では、`--keep' オ
+プションを使っています。デフォルトでは、`ebzip' は、圧縮後に元のファイ
+ルを削除しますが、`--keep' オプションはこの振る舞いを抑制します。
 
    `/dict' と `/cdrom' のディレクトリ構成はほとんど同じですが、`/dict'
 の下の圧縮されたファイルには拡張子 `.ebz' が付いています。
@@ -310,9 +310,9 @@ File: ebzip-ja.info,  Node: Adjust Filenames,  Next: Test,  Prev: Compression Le
 ================
 
    以前の例に戻ってみましょう。ここでもう一度、CD-ROM 書籍を `/dict' の
-下にコピーしたものの、まだコピーしていないと仮定します。ただし、以前
-の例と違って、`/dict' の下のファイルのファイル名とディレクトリ名には大
-文字が使われ、ファイル名にはバージョン番号 `;1' が付いています。
+下にコピーしたものの、まだ圧縮していないと仮定します。ただし、以前の
+例と違って、`/dict' の下のファイルのファイル名とディレクトリ名には大文
+字が使われ、ファイル名にはバージョン番号 `;1' が付いています。
 
      /dict/CATALOG;1
      /dict/LANGUAGE;1
@@ -346,10 +346,11 @@ File: ebzip-ja.info,  Node: Adjust Filenames,  Next: Test,  Prev: Compression Le
 字・小文字の違いと拡張子を変えることができます。`--case' オプションは
 引数を一つ取り、それは `upper' か`lower' でなくてはいけません。このオ
 プションは、出力側のファイル名を大文字あるいは小文字になるようにします。
- 同様に `--suffix' オプションも引数を一つとり、それは`none'、
-`dot'、`version'、`both' のいずれかでなくてはいけません。このオプショ
-ンは出力側のファイル名の拡張子を、「なし」「点」「バージョン」「両
-方」(点 + バージョン) になるようにします。
+
+   同様に `--suffix' オプションも引数を一つとり、それは`none'、`dot'、
+`version'、`both' のいずれかでなくてはいけません。このオプションは出力
+側のファイル名の拡張子を、「なし」「点」「バージョン」「両方」(点 + バー
+ジョン) になるようにします。
 
 
 File: ebzip-ja.info,  Node: Test,  Next: Partial Compression,  Prev: Adjust Filenames,  Up: Compression
@@ -420,11 +421,11 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
      % ebzip --subbook english --subbook french /dict
 
 残りの副本 (この例では `GERMAN') のファイルは圧縮されることもコピーされ
-ることもありませんので、この時点ではまだ圧縮の作業は完了していません。
-この書籍を使用するためには、さらなる操作を行って残りの副本を圧縮するか、
- `ebrefile' コマンドを使って残りの副本を `CATALOG(S)' ファイルの副本
-登録リストから削除しなくてはなりません (詳しくは*note `ebzip' との連
-携: (ebrefile-ja)Combination with ebzip.)。
+ることもありませんので、この時点ではまだこの書籍に対する圧縮の作業は完
+了していません。この書籍を使用するためには、さらなる操作を行って残りの
+副本を圧縮するか、`ebrefile' コマンドを使って残りの副本を
+`CATALOG(S)' ファイルの副本登録リストから削除しなくてはなりません (詳し
+くは*note `ebzip' との連携: (ebrefile-ja)Combination with ebzip.)。
 
    副本同士で、異なる圧縮レベルを設定することは可能です(たとえば、
 `EJDICT' と `HOWTO' はレベル 0 で圧縮し、`TOUR' はレベル 2 で圧縮する)。
@@ -462,8 +463,8 @@ File: ebzip-ja.info,  Node: Compress Compressed EPWING,  Prev: Overwrite Old Fil
 ============================
 
    `ebzip' は EPWING 圧縮形式で圧縮された CD-ROM 書籍を圧縮することがで
-きます。`ebzip' は書籍を伸長してから、ebzip の圧縮形式で圧縮します。
-一般に ebzip の圧縮形式の方が EPWING 圧縮形式よりも良好なので、
+きます。`ebzip' は書籍を伸長してから、ebzip の圧縮形式で圧縮し直します。
+ 一般に ebzip の圧縮形式の方が EPWING 圧縮形式よりも良好なので、
 `ebzip' によって圧縮された書籍は元のものよりも小さくなります。
 
 
@@ -580,8 +581,8 @@ File: ebzip-ja.info,  Node: Uncompress Compressed EPWING,  Prev: Options for Unc
 
    `ebzip' は EPWING 圧縮形式で圧縮された CD-ROM 書籍を伸長することがで
 きます。しかしながら、伸長した書籍を圧縮し直して、元の書籍を復元するこ
-とはできません。`ebzip' は EPWING 圧縮形式の伸長には対応していますが、
-圧縮には対応していません。
+とはできません。言い換えると、`ebzip' は EPWING 圧縮形式の伸長には対
+応していますが、圧縮には対応していません。
 
 
 File: ebzip-ja.info,  Node: Information,  Next: Delete a Book,  Prev: Uncompression,  Up: Top
@@ -972,10 +973,8 @@ File: ebzip-ja.info,  Node: Index Part,  Next: Header Part,  Prev: Data Part,  U
      |クス 1   |クス 2   |  ...........  |クス N   |クス END |
      +---------+---------+--           --+---------+---------+
 
-   スライス P のインデックスの次のインデックスは、スライス P の末尾の次
-のバイトを表しますので、圧縮されたスライスの大きさはインデックスから算
-出できます。圧縮されたスライスの大きさがスライスサイズに等しいときは、
-そのスライスのデータは実際には圧縮されていないことを示します。
+   圧縮されたスライスの大きさがスライスサイズに等しいときは、そのスライ
+スのデータは実際には圧縮されていないことを示します。
 
    元のファイルが空だったときは、インデックス部はインデックスを一つだけ
 持ちます。このインデックスは圧縮されたファイルの大きさを表します。
@@ -1001,7 +1000,7 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。EB ライブラリバージョン 2.3.2 では、1 (2 進
+     圧縮モードを表します。EB ライブラリバージョン 2.3.3 では、1 (2 進
      数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
@@ -1042,30 +1041,30 @@ Tag Table:
 Node: Top1036
 Node: Introduction2600
 Node: Action and Command Name3944
-Node: Invoking ebzip5654
-Node: Compression6286
-Node: Compression Example 16886
-Node: Compression Example 28460
-Node: Compression Level10014
-Node: Adjust Filenames10524
-Node: Test12657
-Node: Partial Compression13004
-Node: Overwrite Old Files15557
-Node: Compress Compressed EPWING16353
-Node: Uncompression16785
-Node: Uncompression Example17172
-Node: Options for Uncompression18692
-Node: Uncompress Compressed EPWING20230
-Node: Information20659
-Node: Information Example20998
-Node: Options for Information21704
-Node: Delete a Book22273
-Node: Summary of Options22569
-Node: Comparision Result27010
-Node: Compressed File Format29429
-Node: Format Overview29834
-Node: Data Part30691
-Node: Index Part33378
-Node: Header Part36236
+Node: Invoking ebzip5662
+Node: Compression6294
+Node: Compression Example 16894
+Node: Compression Example 28468
+Node: Compression Level10021
+Node: Adjust Filenames10531
+Node: Test12665
+Node: Partial Compression13012
+Node: Overwrite Old Files15579
+Node: Compress Compressed EPWING16375
+Node: Uncompression16812
+Node: Uncompression Example17199
+Node: Options for Uncompression18719
+Node: Uncompress Compressed EPWING20257
+Node: Information20700
+Node: Information Example21039
+Node: Options for Information21745
+Node: Delete a Book22314
+Node: Summary of Options22610
+Node: Comparision Result27051
+Node: Compressed File Format29470
+Node: Format Overview29875
+Node: Data Part30732
+Node: Index Part33419
+Node: Header Part36125
 
 End Tag Table

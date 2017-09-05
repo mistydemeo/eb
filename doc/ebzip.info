@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.2, for EB Library version 2.3.2.
+   This is edition 2.3.3, for EB Library version 2.3.3.
 
 * Menu:
 
@@ -103,7 +103,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 2.3.2, for EB Library version 2.3.2.
+   This is edition 2.3.3, for EB Library version 2.3.3.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -143,8 +143,8 @@ Otherwise, the default action is compression.
 
    In addition, you can specify the action by the command line options;
 `--compress' (`-z'), `--uncompress' (`-u') and `--information' (`-i').
-They are prior to invoked names.  In the following example, all lines
-are equivalent:
+They are prior to invoked names.  In the following example, "compress"
+is the action of all the lines:
 
      ebunzip
      ebzip --uncompress
@@ -429,14 +429,14 @@ Case of the directory names are not sensitve.  An argument to
      % ebzip --subbook english --subbook french /dict
 
 Files in the rest subbooks (`GERMAN' in this example) are not
-compressed nor copied, so that the compression procedure is incompleted
-at this point.  In order to use the book, you must compress the rest
-subbooks in a further operation, or deletes the rest subbooks from a
-subbook list in the `CATALOG(S)' file by using the `ebrefile' command
-(*Note Combination with `ebzip': (ebrefile)Combination with ebzip, for
-more details).  You can compress subbooks with different compression
-levels (e.g. compress `ENGLISH' and `FRENCH' with level 0, and compress
-`GERMAN' with level 2).
+compressed nor copied, so that the compression procedure for the book
+is incompleted at this point.  In order to use the book, you must
+compress the rest subbooks in a further operation, or deletes the rest
+subbooks from a subbook list in the `CATALOG(S)' file by using the
+`ebrefile' command (*Note Combination with `ebzip':
+(ebrefile)Combination with ebzip, for more details).  You can compress
+subbooks with different compression levels (e.g. compress `ENGLISH' and
+`FRENCH' with level 0, and compress `GERMAN' with level 2).
 
    Regardless of the `--subbook' option, the `LANGUAGE' file is always
 compressed.
@@ -470,7 +470,7 @@ Compress Compressed EPWING CD-ROM Book
 ======================================
 
    `ebzip' can compress a CD-ROM book compressed with the EPWING
-compression format.  It uncompress the book, and then compresses the
+compression format.  It uncompress the book, and then recompresses the
 book with the ebzip compression format.  Since the ebzip compression is
 generally better than the EPWING compression format, the book
 compressed by `ebzip' is smaller than original.
@@ -588,9 +588,9 @@ Uncompress Compressed EPWING CD-ROM Book
 
    `ebzip' can uncompress a CD-ROM book compressed with the EPWING
 compression format.  However, `ebzip' cannot restore the original
-compressed book by compressing the uncompressed book again.  `ebzip'
-support uncompression of the EPWING compression format, but doesn't
-support compression.
+compressed book by compressing the uncompressed book again.  In other
+words, `ebzip' support uncompression of the EPWING compression format,
+but doesn't support compression.
 
 
 File: ebzip.info,  Node: Information,  Next: Delete a Book,  Prev: Uncompression,  Up: Top
@@ -986,10 +986,8 @@ the size of the compressed file.
      | index 1 | index 2 |  .......  | index N |index END|
      +---------+---------+--       --+---------+---------+
 
-   Size of each compressed slice can be calculated by the indexes,
-because next index of the slice P represents the next byte of the end of
-the slice P.  If its size is equal to the slice size, the data of the
-slice is not compressed accutually.
+   If its size is equal to the slice size, the data of the slice is not
+compressed accutually.
 
    If an original file is empty, the index part has only one index.
 The index represents the size of the compressed file.
@@ -1017,7 +1015,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     2.3.2, only 1 (0001 in binary digits) can be prescribed as this
+     2.3.3, only 1 (0001 in binary digits) can be prescribed as this
      version.
 
 `compression level (4 bits of the least-significant-bit side)'
@@ -1057,30 +1055,30 @@ Tag Table:
 Node: Top1060
 Node: Introduction2803
 Node: Action and Command Name4188
-Node: Invoking ebzip5780
-Node: Compression6551
-Node: Compression Example 17208
-Node: Compression Example 28788
-Node: Compression Level10331
-Node: Adjust Filenames10934
-Node: Test13070
-Node: Partial Compression13415
-Node: Overwrite Old Files15998
-Node: Compress Compressed EPWING16746
-Node: Uncompression17243
-Node: Uncompression Example17685
-Node: Options for Uncompression19242
-Node: Uncompress Compressed EPWING20750
-Node: Information21236
-Node: Information Example21623
-Node: Options for Information22275
-Node: Delete a Book22864
-Node: Summary of Options23162
-Node: Comparision Result27511
-Node: Compressed File Format30078
-Node: Format Overview30504
-Node: Data Part31360
-Node: Index Part34161
-Node: Header Part36700
+Node: Invoking ebzip5797
+Node: Compression6568
+Node: Compression Example 17225
+Node: Compression Example 28805
+Node: Compression Level10348
+Node: Adjust Filenames10951
+Node: Test13087
+Node: Partial Compression13432
+Node: Overwrite Old Files16028
+Node: Compress Compressed EPWING16776
+Node: Uncompression17275
+Node: Uncompression Example17717
+Node: Options for Uncompression19274
+Node: Uncompress Compressed EPWING20782
+Node: Information21284
+Node: Information Example21671
+Node: Options for Information22323
+Node: Delete a Book22912
+Node: Summary of Options23210
+Node: Comparision Result27559
+Node: Compressed File Format30126
+Node: Format Overview30552
+Node: Data Part31408
+Node: Index Part34209
+Node: Header Part36597
 
 End Tag Table

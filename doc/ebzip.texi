@@ -202,7 +202,7 @@ In addition, you can specify the action by the command line options;
 @samp{--compress} (@samp{-z}), @samp{--uncompress} (@samp{-u}) and
 @samp{--information} (@samp{-i}).
 They are prior to invoked names.
-In the following example, all lines are equivalent:
+In the following example, "compress" is the action of all the lines:
 
 @example
 @group
@@ -575,8 +575,8 @@ An argument to @samp{--subbook} can be splitted like as follows:
 
 @noindent
 Files in the rest subbooks (@code{GERMAN} in this example) are not
-compressed nor copied, so that the compression procedure is incompleted
-at this point.
+compressed nor copied, so that the compression procedure for the book
+is incompleted at this point.
 In order to use the book, you must compress the rest subbooks in a
 further operation, or deletes the rest subbooks from a subbook list in
 the @file{CATALOG(S)} file by using the @code{ebrefile} command
@@ -621,7 +621,7 @@ Similary, when the @samp{--no-overwrite} option is specified,
 
 @code{ebzip} can compress a CD-ROM book compressed with the EPWING
 compression format.
-It uncompress the book, and then compresses the book with the ebzip
+It uncompress the book, and then recompresses the book with the ebzip
 compression format.
 Since the ebzip compression is generally better than the EPWING
 compression format, the book compressed by @code{ebzip} is smaller than
@@ -765,8 +765,8 @@ You don't have to specify the @samp{--level} option at uncompression.
 compression format.
 However, @code{ebzip} cannot restore the original compressed book by
 compressing the uncompressed book again.
-@code{ebzip} support uncompression of the EPWING compression format,
-but doesn't support compression.
+In other words, @code{ebzip} support uncompression of the EPWING
+compression format, but doesn't support compression.
 
 @c ===================================================================
 @node Information, Delete a Book, Uncompression, Top
@@ -1226,9 +1226,6 @@ This index also represents the size of the compressed file.
 @end group
 @end example
 
-Size of each compressed slice can be calculated by the indexes, because
-next index of the slice @var{p} represents the next byte of the end of
-the slice @var{p}.
 If its size is equal to the slice size, the data of the slice is not
 compressed accutually.
 

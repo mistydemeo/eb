@@ -1308,7 +1308,7 @@ zipinfo_book(book)
  *
  * `filename' is a filename to be adjusted.
  * Upon return, `filename' are converted to upper or lower case,
- * and add a suffix according to `fcase' and 'fsuffix'.
+ * and a suffix is added according with `fcase' and 'fsuffix'.
  */
 static void
 fix_filename(filename, fcase, fsuffix)
@@ -1321,7 +1321,7 @@ fix_filename(filename, fcase, fsuffix)
     int have_dot;
 
     /*
-     * Check whether `filename' contains `.' in its filename, or not.
+     * Check whether `filename' contains `.', or not.
      */
     rslash = strrchr(filename, '/');
     if (rslash == NULL)
@@ -1337,7 +1337,7 @@ fix_filename(filename, fcase, fsuffix)
 	strcat(filename, ";1");
 
     /*
-     * Convert characters in the filename to upper or lower.
+     * Convert characters in the filename to upper or lower case.
      */
     if (fcase == EB_CASE_UPPER) {
 	for (p = filename; *p != '\0'; p++) {
@@ -1352,7 +1352,10 @@ fix_filename(filename, fcase, fsuffix)
     }
 
 #ifdef DOS_FILE_PATH
-    eb_canonicalize_filename(filename);
+    for (p = filename; *p != '\0'; p++) {
+	if (*p == '/')
+	    *p = '\\';
+    }
 #endif
 }
 
