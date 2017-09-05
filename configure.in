@@ -1,0 +1,147 @@
+dnl *
+dnl * Process this file with autoconf to produce a configure script.
+dnl *
+AC_INIT(eb/eb.c)
+AC_PREREQ(2.12)
+AM_INIT_AUTOMAKE(eb, 2.2)
+
+dnl *
+dnl * Library version info.
+dnl *
+LIBEB_VERSION_INFO=2:0:1
+AC_SUBST(LIBEB_VERSION_INFO)
+
+dnl *
+dnl * Set mailing address.
+dnl *
+MAILING_ADDRESS='m-kasahr@sra.co.jp'
+AC_SUBST(MAILING_ADDRESS)
+AC_DEFINE_UNQUOTED(MAILING_ADDRESS, "$MAILING_ADDRESS")
+
+dnl *
+dnl * --enable-ja-doc option.
+dnl *
+AC_ARG_ENABLE(ja-doc,
+[  --enable-ja-doc         install Japanese documents [default=yes]],
+[case "${enableval}" in
+   yes) ja_doc=true  ;;
+   no)  ja_doc=false ;;
+   *)   AC_MSG_ERROR(invalid argument to --enable-ja-doc) ;;
+esac], ja_doc=true)
+AM_CONDITIONAL(ENABLE_JA_DOC, test ${ja_doc} = true)
+
+dnl *
+dnl * --with-zlib option.
+dnl *
+AC_ARG_WITH(zlib,
+[  --with-zlib             use installed zlib [default=no]],
+[case "${withval}" in
+   yes|no) with_zlib=${withval} ;;
+   *)   AC_MSG_ERROR(invalid argument to --with-zlib) ;;
+esac], with_zlib=no)
+AM_CONDITIONAL(WITH_ZLIB, test ${with_zlib} = yes)
+
+dnl *
+dnl * --with-zlib-includes option.
+dnl *
+AC_ARG_WITH(zlib-includes,
+[  --with-zlib-includes=DIR
+                          zlib include files are in DIR],
+[zincludedir="${withval}"], [zincludedir=''])
+
+dnl *
+dnl * --with-zlib-libraries option.
+dnl *
+AC_ARG_WITH(zlib-libraries,
+[  --with-zlib-libraries=DIR
+                          zlib library files are in DIR],
+[zlibdir="${withval}"], [zlibdir=''])
+
+if test ${with_zlib} = yes ; then
+   if test "X${zincludedir}" != X ; then
+      INCLUDES_FOR_LIBZ="-I${zincludedir}"
+   else
+      INCLUDES_FOR_LIBZ=''
+   fi
+   if test "X${zlibdir}" != X ; then
+      LDADD_FOR_LIBZ="-L${zlibdir} -lz"
+      DEPENDENCIES_FOR_LIBZ=''
+   else
+      LDADD_FOR_LIBZ="-lz"
+      DEPENDENCIES_FOR_LIBZ=''
+   fi
+else
+   INCLUDES_FOR_LIBZ='-I$(top_srcdir)/zlib'
+   LDADD_FOR_LIBZ='$(top_builddir)/zlib/libz.la'
+   DEPENDENCIES_FOR_LIBZ='$(top_builddir)/zlib/libz.la'
+fi
+AC_SUBST(INCLUDES_FOR_LIBZ)
+AC_SUBST(LDADD_FOR_LIBZ)
+AC_SUBST(DEPENDENCIES_FOR_LIBZ)
+
+dnl * 
+dnl * Subdirectories.
+dnl *
+AC_CONFIG_SUBDIRS(zlib)
+
+dnl * 
+dnl * Alternative Programs.
+dnl * 
+AM_PROG_LIBTOOL
+AC_PROG_CC
+AC_PROG_RANLIB
+AC_PROG_LN_S
+AC_PROG_INSTALL
+
+AC_PATH_PROG(PERL, perl, no)
+if test "$PERL" = no ; then
+   AC_MSG_WARN(perl not found)
+   PERL=/usr/bin/perl
+fi
+
+dnl * 
+dnl * Compiler Characteristics.
+dnl * 
+AC_C_CONST
+
+dnl * 
+dnl * Header Files.
+dnl * 
+AC_HEADER_STDC
+AC_HEADER_STAT
+AC_HEADER_TIME
+AC_CHECK_HEADERS(string.h stdlib.h unistd.h limits.h memory.h fcntl.h \
+	utime.h)
+
+dnl * 
+dnl * Structures.
+dnl * 
+AX_HAVE_STRUCT_UTIMBUF
+
+dnl * 
+dnl * Library Functions.
+dnl * 
+AC_FUNC_VPRINTF
+AC_CHECK_FUNCS(strchr memcpy getcwd vsyslog utime)
+AC_REPLACE_FUNCS(strcasecmp strerror memset)
+
+dnl * 
+dnl * Typedefs.
+dnl * 
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_TYPE_MODE_T
+AC_CHECK_TYPE(ssize_t, int)
+
+AC_TYPE_SIGNAL
+if test "$ac_cv_type_signal" = void; then
+   AC_DEFINE(RETSIGTYPE_VOID)
+fi
+
+dnl * 
+dnl * Output Files.
+dnl * 
+AM_CONFIG_HEADER(config.h)
+AC_OUTPUT(Makefile eb/Makefile libebutils/Makefile ebappendix/Makefile \
+	ebfont/Makefile ebinfo/Makefile ebrefile/Makefile ebzip/Makefile \
+	doc/Makefile doc-ja/Makefile)

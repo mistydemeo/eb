@@ -1,0 +1,1265 @@
+\input texinfo	        @c -*-texinfo-*-
+@c %** start of header
+@setfilename ebzip.info
+@settitle ebzip
+@c %** end of header
+
+@include ebzip-ver.texi
+
+@dircategory CD-ROM Book Utilities
+@direntry
+* ebzip: (ebzip).               Compress and uncompress a CD-ROM book.
+@end direntry
+
+@ifinfo
+ebzip: Utility for compressing and uncompressing CD-ROM books, by Motoyuki Kasahara.
+
+Copyright @copyright{} 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end ifinfo
+
+@titlepage
+@title ebzip
+@subtitle Utility for compressing and uncompressing a CD-ROM book.
+@subtitle Edition @value{EDITION} for EB Library version @value{VERSION}
+@subtitle @value{UPDATED}
+@author by Motoyuki Kasahara
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end titlepage
+
+@node Top, Introduction, (dir), (dir)
+@ifinfo
+This is edition @value{EDITION}, for EB Library version @value{VERSION}.
+@end ifinfo
+
+@menu
+* Introduction::                Introduction.
+* Action and Command Name::     Action and Command Name.
+* Invoking ebzip::              Invoking @code{ebzip}.
+* Compression::                 About the Compression Action.
+* Uncompression::               About the Uncompression Action.
+* Information::                 About the Information Action.
+* Delete a Book::               Delete a Book.
+* Summary of Options::          Summary of Options to @code{ebzip}.
+* Comparision Result::          Comparision of Compression Results.
+* Compressed File Format::      Compressed File Format.
+
+ --- The Detailed Node Listing ---
+
+Compression
+
+* Compression Example 1::       Example of Compression (1).
+* Compression Example 2::       Example of Compression (2).
+* Compression Level::           Compression Level.
+* Adjust Filenames::            Adjust Filenames.
+* Test::                        Test.
+* Partial Compression::         Partial Compression.
+* Overwrite Old Files::         Overwrite Old Files.
+
+Uncompression
+
+* Uncompression Example::       Example of Uncompression.
+* Options for Uncompression::   Options for Uncompression.
+
+Information
+
+* Information Example::         Example of Information.
+* Options for Information::     Options for Information.
+
+Compressed File Format
+
+* Format Overview::             Overview about Compression File Format
+* Data Part::                   Data Part
+* Index Part::                  Index Part
+* Header Part::                 Header Part
+@end menu
+
+@c ===================================================================
+@node Introduction, Action and Command Name, Top, Top
+@chapter Introduction
+
+@code{ebzip} is a command to compress/uncompress CD-ROM books for 
+EB Library applications.
+EB Library applications can access compressed CD-ROM books without
+any functional restriction.
+(But, their access speed to compressed books may be slower than that
+to original books.)
+Since the compression data format is independent of CPU type,
+operating system, and file system, files compressed by @code{ebzip}
+can be interchanged.
+The @code{ebzip} command is distributed with EB Library.
+
+@code{ebzip} is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+@code{ebzip} is distributed in the hope that it will be useful,
+but @emph{without any warranty}; without even the implied warranty of
+merchantability or fitness for a particular purpose.  See the
+GNU General Public License for more details.
+
+In addition, you must follow the licenses of your CD-ROM books.
+Though @code{ebzip} is free software, your books may not be free.
+If the publishers of your CD-ROM don't permit to copy the book onto a
+hard disk (nor other strage devices), please give up compress the book.
+
+This is edition @value{EDITION}, for EB Library version @value{VERSION}.
+
+@c ===================================================================
+@node Action and Command Name, Invoking ebzip, Introduction, Top
+@chapter Action and Command Name
+
+@code{ebzip} has three @dfn{action} modes; compression, uncompression
+and information.
+
+@itemize @bullet
+@item compression
+@*
+Compress a CD-ROM book.
+
+@item uncompression
+@*
+Uncompress a CD-ROM book compressed by @code{ebzip}.
+
+@item information
+@*
+Output information about compression status of a CD-ROM book compressed
+by @code{ebzip}.
+
+@end itemize
+
+@noindent
+When @code{ebzip} is invoked, the action is determined by invoked
+name of the @code{ebzip} command and command line options to
+@code{ebzip}.
+The action is never changed during an execution of @code{ebzip}.
+@code{ebzip} has installed with three different names; @code{ebzip},
+@code{ebunzip} and @code{ebzipinfo}.
+Usually, they are hard-linked like as follows:
+
+@example
+@group
+% ls -li ebzip ebunzip ebzipinfo
+38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebunzip
+38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzip
+38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzipinfo
+@end group
+@end example
+
+@noindent
+When it is invoked as @code{ebunzip}, the default action is uncompression.
+When it is invoked as @code{ebzipinfo}, information is the default
+action.
+Otherwise, the default action is compression.
+
+In addition, you can specify the action by the command line options;
+@samp{--compress} (@samp{-z}), @samp{--uncompress} (@samp{-u}) and
+@samp{--information} (@samp{-i}).
+They are prior to invoked names.
+In the following example, all lines are equivalent:
+
+@example
+@group
+ebunzip
+ebzip --uncompress
+ebzipinfo --uncompress
+@end group
+@end example
+
+@c ===================================================================
+@node Invoking ebzip, Compression, Action and Command Name, Top
+@chapter Invoking @code{ebzip}
+
+Its usual way to invoke @code{ebzip}, @code{ebunzip} and @code{ebzipinfo}
+are as follows:
+
+@example
+@group
+% ebzip @var{book-path}
+% ebunzip @var{book-path}
+% ebzipinfo @var{book-path}
+@end group
+@end example
+
+@noindent
+@var{book-path} points to the top directory of a CD-ROM book where
+the file @file{CATALOG} or @file{CATALOGS} resides.
+@code{ebzip} compresses a book at @var{book-path},
+@code{ebunzip} uncompresses a book at @var{book-path},
+and @code{ebzipinfo} outputs information about a book at @var{book-path}.
+
+Though you cannot specify two or more book-paths, 
+you can omit book-path like as follows:
+
+@example
+@group
+% ebzip
+% ebunzip
+% ebzipinfo
+@end group
+@end example
+
+@noindent
+In this case, it is assumed that the current working directory
+(@file{.}) is specified.
+
+@c ===================================================================
+@node Compression, Uncompression, Invoking ebzip, Top
+@chapter Compression
+
+@code{ebzip} (equivalent to @code{ebunzip --compress} and
+@code{ebzipinfo --compress}) compresses a CD-ROM book.
+
+@menu
+* Compression Example 1::       Example of Compression (1).
+* Compression Example 2::       Example of Compression (2).
+* Compression Level::           Compression Level.
+* Adjust Filenames::            Adjust Filenames.
+* Test::                        Test.
+* Partial Compression::         Partial Compression.
+* Overwrite Old Files::         Overwrite Old Files.
+@end menu
+
+@c -------------------------------------------------------------------
+@node Compression Example 1, Compression Example 2, Compression, Compression
+@section Example of Compression (1)
+
+This section explains how to compress your CD-ROM book which has
+already copied on a hard disk.
+Supporse that you have already copied a CD-ROM book to @file{/dict}
+on a hard disk, but it is not compressed.
+The book has the following files under @file{/dict}.
+
+@example
+@group
+/dict/catalog
+/dict/language
+/dict/kanji/start
+/dict/english/start
+@end group
+@end example
+
+@noindent
+You can compress the book by the following way:
+
+@example
+% cd /dict
+% ebzip
+@end example
+
+@noindent
+This is equivalent to:
+
+@example
+% ebzip --output-directory /dict /dict
+@end example
+
+@noindent
+Compression may take a while.
+@code{ebzip} outputs status messages during the compression like as
+follows:
+
+@example
+@group
+==> compress /dict/kanji/start <==
+output to ./dict/kanji/start.ebz
+ 1.4% done: 2097152 -> 941887 bytes (44.9%)
+ 2.7% done: 4194304 -> 1865181 bytes (44.5%)
+ 4.1% done: 6291456 -> 2728150 bytes (43.4%)
+        : (snip)
+total: 154290176 -> 54881862 bytes (35.6%)
+@end group
+@end example
+
+@noindent
+When the compression has done, the directory structure under
+@file{/dict} is slightly changed.
+
+@example
+@group
+/dict/catalog
+/dict/language.ebz
+/dict/kanji/start.ebz
+/dict/english/start.ebz
+@end group
+@end example
+
+@noindent
+The suffix @samp{.ebz} is added to the some files (@file{/dict/language.ebz},
+@file{/dict/kanji/start.ebz} and @file{/dict/english/start.ebz}).
+They are compressed files.
+Other files are unchanged.
+
+@code{ebzip} compresses the following files; @file{START}, @file{HONMON},
+@file{LANGUAGE}, and font files under the @file{GAIJI} directories.
+
+@c -------------------------------------------------------------------
+@node Compression Example 2, Compression Level, Compression Example 1, Compression
+@section Example of Compression (2)
+
+This section shows another example.
+This section explains how to compress files in a CD-ROM disc and
+put them onto a hard disk.
+Suppose that and original CD-ROM book is mounted on @file{/cdrom}
+and that the book has the following files under @file{/cdrom}.
+
+@example
+@group
+/cdrom/catalog
+/cdrom/language
+/cdrom/german/start
+/cdrom/french/start
+/cdrom/italian/start
+@end group
+@end example
+
+Execute the following commands to compress the book an put it on
+@file{/dict}:
+
+@example
+@group
+% cd /dict
+% ebzip --keep /cdrom
+@end group
+@end example
+
+@noindent
+This is equivalent to:
+
+@example
+% ebzip --keep --output-directory /dict /cdrom
+@end example
+
+@noindent
+Please note that the output directory @file{/dict} may be empty, but
+it must have been created before compression.
+In this example, the @samp{--keep} option is used.
+By default, @code{ebzip} deletes original files after compression, but
+the @samp{--keep} option disables this behavior.
+
+The directory strcture under @file{/dict} and @file{/cdrom} are almost
+same, but the suffix @samp{.ebz} is added to the compressed files
+under @file{/dict}.
+
+@example
+@group
+/dict/catalog
+/dict/language.ebz
+/dict/german/start.ebz
+/dict/french/start.ebz
+/dict/italian/start.ebz
+@end group
+@end example
+
+@noindent
+The intermediate directories, @file{/dict/german}, @file{/dict/french}
+and @file{/dict/italian}, are created by @code{ebzip} if missing.
+@file{CATALOG} and @file{CATALOGS} are simply copied to the output
+directory.
+@code{ebzip} ignores files and directories not supported by EB Library.
+
+@c -------------------------------------------------------------------
+@node Compression Level, Adjust Filenames, Compression Example 2, Compression
+@section Compression Level
+
+@code{ebzip} supports four compression levels, from 0 to 3.
+The compression level 0 is the fastest compression/uncompression method,
+but it is the worst compression method.
+The compression level 3 is the best compression method but it is the
+slowest compression/uncompression method.
+The compression level is set by the @samp{--level} (@samp{-l}) option.
+
+@example
+% ebzip --level 2 --output-directory /dict /dict
+@end example
+
+@noindent
+The default level is 0 (fastest but worst).
+
+@c -------------------------------------------------------------------
+@node Adjust Filenames, Test, Compression Level, Compression
+@section Adjust Filenames
+
+Let's go back to the previous example.
+Again, supporsed that you have already copied a CD-ROM book to @file{/dict}
+on a hard disk, but it is not compressed.
+The book has the following files under @file{/dict}.
+However, unlike the previous example, file and directory names under
+@file{/dict} consist of upper case letters, and filenames have the
+version number @samp{;1} in their tails.
+
+@example
+@group
+/dict/CATALOG;1
+/dict/LANGUAGE;1
+/dict/GERMAN/START;1
+/dict/FRENCH/START;1
+/dict/ITALIAN/START;1
+@end group
+@end example
+
+After the compression by @code{ebzip}, they will be as the following:
+
+@example
+@group
+/dict/CATALOG;1
+/dict/LANGUAGE.EBZ;1
+/dict/GERMAN/START.EBZ;1
+/dict/FRENCH/START.EBZ;1
+/dict/ITALIAN/START.EBZ;1
+@end group
+@end example
+
+@noindent
+@code{ebzip} keeps @dfn{case} (upper or lower) and @dfn{suffix} of
+filenames as original form.
+The following table displayes how a filename of @file{start} file changes.
+
+@multitable @columnfractions .4 .3 .3
+@item case/suffix       @tab before compression @tab after compresssion
+@item lower/none        @tab start              @tab start.ebz
+@item lower/dot         @tab start.             @tab start.ebz
+@item lower/version     @tab start;1            @tab start.ebz;1
+@item lower/dot+version @tab start.;1           @tab start.ebz;1
+@item upper/none        @tab START              @tab START.EBZ
+@item upper/dot         @tab START.             @tab START.EBZ
+@item upper/version     @tab START;1            @tab START.EBZ;1
+@item upper/dot+version @tab START.;1           @tab START.EBZ;1
+@end multitable
+
+The @samp{--case} and @samp{--suffix} options allows you to
+modify these case and suffix styles of output filenames.
+The @samp{--case} option takes an argument, and it must be @samp{upper}
+or @samp{lower}.
+The option sets the case of output filenames to upper or lower.
+Also the @samp{--suffix} option takes an argument, and it must be
+@samp{none}, @samp{dot}, @samp{version} or @samp{both}.
+The option sets the suffix style of output filenames to none, dot,
+version or both (dot+version).
+
+@c -------------------------------------------------------------------
+@node Test, Partial Compression, Adjust Filenames, Compression
+@section Test
+
+Invoking @code{ebzip} with the @code{--test} (@code{-t}) option,
+@code{ebzip} doesn't write compressed data to actual files.
+This is usuful when you want to know the sizes of compressed files
+before compression.
+
+@example
+% ebzip --test /dict /dict
+@end example
+
+@c -------------------------------------------------------------------
+@node Partial Compression, Overwrite Old Files, Test, Compression
+@section Partial Compression
+
+@code{ebzip} compresses an entire book by default,
+but the @samp{--subbook} (@samp{-S}) option allows you to compress
+specified subbooks only.
+
+The @samp{--subbook} option takes an argument which is a list of
+directory names of subbooks to be compressed, separeted by a comma
+(@samp{,}).
+The @code{ebinfo} command tells you what subbooks your book contains
+and what their directory names are.
+
+@example
+@group
+% ebinfo /mnt/cdrom
+disc type: EB/EBG/EBXA
+character code: JIS X 0208
+the number of subbooks: 3
+@end group
+
+@group
+subbook 1:
+  title: New English Japanese Dictionary (4th edition)
+  directory: ENGLISH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+
+@end group
+@group
+subbook 2:
+  title: CD-ROM French Japanese Dictionary (3rd edition)
+  directory: FRENCH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+
+@end group
+@group
+subbook 3:
+  title: Pocket German Japanese Dictionary (3rd edition)
+  directory: GERMAN
+  search methods: menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+@end group
+@end example
+
+@noindent
+(@xref{Invoking ebinfo, , Invoking @code{ebinfo}, ebinfo, ebinfo},
+for more details about the @code{ebinfo} command).
+@*
+In this example, there are three subbooks in the book, and their
+directory names are @code{ENGLISH}, @code{FRENCH} and @code{GERMAN}.
+
+You can compress only @code{ENGLISH} and @code{FRENCH} by the following
+way:
+
+@example
+% ebzip --subbook english,french /dict
+@end example
+
+@noindent
+Case of the directory names are not sensitve.
+An argument to @samp{--subbook} can be splitted like as follows:
+
+@example
+% ebzip --subbook english --subbook french /dict
+@end example
+
+@noindent
+Files in the rest subbooks (@code{GERMAN} in this example) are not
+compressed nor copied, so that the compression procedure is incompleted
+at this point.
+In order to use the book, you must compress the rest subbooks in a
+further operation, or deletes the rest subbooks from a subbook list in
+the @file{CATALOG(S)} file by using the @code{ebrefile} command
+(@xref{Combination with ebzip, , Combination with @code{ebzip}, ebrefile,
+ebrefile}, for more details).
+You can compress subbooks with different compression levels
+(e.g. compress @code{ENGLISH} and @code{FRENCH} with level 0, and 
+compress @code{GERMAN} with level 2).
+
+Regardless of the @samp{--subbook} option, the @file{LANGUAGE} file is
+always compressed.
+
+@c -------------------------------------------------------------------
+@node Overwrite Old Files,  , Partial Compression, Compression
+@section Overwrite Old Files
+
+@code{ebzip} asks you whether a file may be overwritten or not when the
+file already exists.
+
+@example
+@group
+==> compress /dict/science/data/honmon <==
+output to /dict/science/data/honmon.ebz
+
+the file already exists: /dict/science/data/honmon.ebz
+do you wish to overwrite (y or n)? 
+@end group
+@end example
+
+@noindent
+Please answer @samp{y} or @samp{n}.
+If you answer as @samp{n}, @code{ebzip} skips the file.
+
+When the @samp{--force-overwrite} option is specified, @code{ebzip}
+overwrites existed files without confirmation.
+Similary, when the @samp{--no-overwrite} option is specified,
+@code{ebzip} skips the file without confirmation.
+
+@c ===================================================================
+@node Uncompression, Information, Compression, Top
+@chapter Uncompression
+
+@code{ebunzip} (equivalent to @code{ebzip --uncompress} and
+@code{ebzipinfo --uncompress}) uncompresses a CD-ROM book compressed
+by @code{ebzip}.
+
+@menu
+* Uncompression Example::       Example of Uncompression.
+* Options for Uncompression::   Options for Uncompression.
+@end menu
+
+@c -------------------------------------------------------------------
+@node Uncompression Example, Options for Uncompression, Uncompression, Uncompression
+@section Example of Uncompression 
+
+Uncompression procedure is closely similar to compression.
+Suppose that a compressed subbook resides under @file{/dict}.
+The book has the following files under @file{/dict}.
+
+@example
+@group
+/dict/catalog
+/dict/language.ebz
+/dict/kanji/start.ebz
+/dict/english/start.ebz
+@end group
+@end example
+
+@noindent
+Execute the following command to uncompress the book:
+
+@example
+% cd /dict
+% ebunzip
+@end example
+
+@noindent
+This is equivalent to:
+
+@example
+% ebunzip --output-directory /dict /dict
+@end example
+
+@noindent
+Uncompression may take a while.
+@code{ebunzip} outputs status messages during the uncompression like
+as follows:
+
+@example
+@group
+==> uncompress /dict/kanji/start.ebz <==
+output to ./kanji/start.ebz
+ 1.4% done: 941887 -> 2097152 bytes
+ 2.7% done: 1865181 -> 4194304 bytes
+ 4.1% done: 2728150 -> 6291456 bytes
+        : (snip)
+total: 54881862 -> 154290176 bytes
+@end group
+@end example
+
+@noindent
+During the uncompression, @code{ebunzip} asks you whether an existed file
+may be overwritten or not:
+
+@example
+@group
+==> uncompress /dict/kanji/start.ebz <==
+output to /dict/kanji/start
+
+the file already exists: /dict/kanji/start
+do you wish to overwrite (y or n)? 
+@end group
+@end example
+
+@noindent
+When the uncompression has done, the directory structure under
+@file{dict} is slightly changed.
+
+@example
+@group
+/dict/catalog
+/dict/language
+/dict/kanji/start
+/dict/english/start
+@end group
+@end example
+
+@noindent
+Uncompressed files change their filenames;
+the suffix @samp{.ebz} is removed from them.
+
+@c -------------------------------------------------------------------
+@node Options for Uncompression,  , Uncompression Example, Uncompression
+@section Options for Uncompression
+
+Most options have the same meanings at compression and uncompression.
+
+When the @samp{--keep} option is specified, @code{ebunzip} doesn't
+delete compressed files after uncompression.
+
+Invoking @code{ebunzip} with the @samp{--test} option, @code{ebunzip}
+doesn't write uncompressed data to acutual files.
+This option is usuful for checking validity of compressed files.
+@xref{Test}, for more details about the @samp{--test} option.
+
+When the @samp{--subbook} is specified, @code{ebunzip} only uncompresses
+specified subbooks, in addition with @file{LANGUAGE}.
+@xref{Partial Compression}, for more details about the @samp{--subbook}
+option.
+
+When the @samp{--force-overwrite} or @samp{--no-overwrite} option is
+specified, @code{ebunzip} overwrites or skips files without confirmation
+for overwriting.
+@xref{Overwrite Old Files}, for more details about the
+@samp{--force-overwrite} and @samp{--no-overwrite} options.
+
+By default, case (upper or lower) and suffix styles of filenames of
+uncompressed files are the same as those of compressed files.
+The @samp{--case} and @samp{--suffix} options allows you to modify
+the case and suffix styles of filenames of uncompressed files.
+@xref{Adjust Filenames}, for more details about the @samp{--case} and 
+@samp{--suffix} options.
+
+@code{ebunzip} ignores the @samp{--level} option.
+You don't have to specify the @samp{--level} option at uncompression.
+
+@c ===================================================================
+@node Information, Delete a Book, Uncompression, Top
+@chapter Information
+
+@code{ebzipinfo} (equivalent to @code{ebzip --information} and
+@code{ebunzip --information}) outputs information about compression
+status of a CD-ROM book.
+
+@menu
+* Information Example::         Example of Information.
+* Options for Information::     Options for Information.
+@end menu
+
+@c -------------------------------------------------------------------
+@node Information Example, Options for Information, Information, Information
+@section Example of Information
+
+Please type the following commands to output information of the
+compressed CD-ROM book at @file{/dict}.
+
+@example
+% ebzipifo /dict
+@end example
+
+@noindent
+@code{ebzipinfo} outputs information to standard out like as following:
+
+@example
+@group
+==> /dict/spanish/spanish/start.ebz <==
+compressed: 154290176 -> 54881862 bytes (35.6%)
+compresssion level: 0
+
+@end group
+@group
+==> /dict/spanish/language.ebz <==
+compressed: 12288 -> 4121 bytes (33.5%)
+compresssion level: 0
+
+@end group
+@group
+==> /dict/spanish/catalog <==
+not compressed
+@end group
+@end example
+
+@c -------------------------------------------------------------------
+@node Options for Information,  , Information Example, Information
+@section Options for Information
+
+When you invoke @code{ebzipinfo} with the @samp{--subbook} option, 
+@code{ebzipinfo} outputs information about files of the specified subbooks
+only, in addition with @file{LANGUAGE}, @file{CATALOG} and @file{CATALOGS}.
+@xref{Partial Compression}, for details about the @samp{--subbook} option.
+
+@code{ebzipinfo} ignores the following options; @samp{--force-overwrite},
+@samp{--keep}, @samp{--level}, @samp{--no-overwrite},
+@samp{--output-directory}, @samp{--quiet}, @samp{--silence}, @code{--suffix}
+and @samp{--test}.
+
+@c ===================================================================
+@node Delete a Book, Summary of Options, Information, Top
+@chapter Delete a Book
+
+@code{ebzip} doesn't support deletion of a compressed book on a hard
+disk.
+Please use the @code{rm} command, instead.
+
+@example
+% rm -r /dict
+@end example
+
+@noindent
+Please be careful in this operation.
+
+@c ===================================================================
+@node Summary of Options, Comparision Result, Delete a Book, Top
+@chapter Summary of @code{ebzip} Options
+
+The @code{ebzip} command supports both traditional single-letter
+options and mnemonic long option names.
+Long option names are indicated with @samp{--} instead of @samp{-}.
+Abbreviations for option names are allowed as long as they are unique.
+
+@table @code
+@item -c @var{case}
+@itemx --case @var{case}
+Output files which have filenames with upper or lower @var{case}
+letters.
+@var{case} must be @samp{upper} or @samp{lower}.
+When this option is not specified, the case of filenames of the output
+files comes to be the same as filenames of files in the input book.
+This option is ignored when the action is information, or when you
+specify the @samp{--test} (@samp{-t}) option.
+
+(@xref{Adjust Filenames}, for more details).
+
+@item -f
+@itemx --force-overwrite
+Overwrite existed files without confirmation.
+This option is ignored when the action is information, or when you
+specify the @samp{--test} (@samp{-t}) option.
+
+(@xref{Overwrite Old Files}, for more details).
+
+@item -h
+@itemx --help
+Output help message to standard out, then exit.
+
+@item -i
+@itemx --information
+Output compression status of the specified CD-ROM book.
+
+(@xref{Information}, for more details).
+
+@item -k
+@itemx --keep
+Don't delete an input file when the corresponding output file has
+been written.
+This option is ignored when the action is information, or when you
+specify the @samp{--test} (@samp{-t}) option.
+
+(@xref{Compression Example 2}, for more details).
+
+@item -l @var{integer}
+@itemx --level @var{integer}
+Specify compression level.
+@var{integer} must be @samp{0}, @samp{1}, @samp{2} or @samp{3}.
+The level 0 is fastest but least compression method.
+The level 3 is slowest but best compression method.
+The defalt level is 0.
+This option is ignored when the action is uncompression or information.
+
+(@xref{Compression Level}, for more details).
+
+@item -n
+@itemx --no-overwrite
+Skip existed files without confirmation for overwriting.
+This option is ignored when the action is information, or when you
+specify the @samp{--test} (@samp{-t}) option.
+
+(@xref{Overwrite Old Files}, for more details).
+
+@item -o @var{directory}
+@itemx --output-directory @var{directory}
+Specify a directory of output files.
+The default is the current directory (@samp{.}).
+This option is ignored when the action is information, or when you
+specify the @samp{--test} (@samp{-t}) option.
+
+@item -q
+@itemx --quiet
+@itemx --silence
+Supress all information and warning messages.
+However, when an output file has already exists, during
+compression/uncompresion, @code{ebzip} still asks you whether the output
+file may be overwritten or not.
+To supress this question, specify the @samp{--force-overwrite} (@samp{-f})
+or @samp{--no-overwrite} (@samp{-n}) option.
+This option is ignored when the action is uncompression or information.
+
+@item -s @var{suffix}
+@itemx --suffix @var{suffix}
+Specify the suffix of filenames of output files.
+@var{suffix} must be @samp{none}, @samp{dot}, @samp{version} or @samp{both}.
+When @var{suffix} is @samp{none}, no suffix is appended.
+When @var{suffix} is @samp{dot}, a dot (@samp{.}) is appended.
+When @var{suffix} is @samp{version}, a version number 1 (@samp{;1}) is
+appended.
+When @var{suffix} is @samp{both}, dot and version number 1 (@samp{.;1})
+is appended.
+If this option is not specified, suffixes of filenames of the output
+files comes to be the same as filenames of files in the input book.
+This option is ignored when the action is information, or when you
+specify the @samp{--test} (@samp{-t}) option.
+
+(@xref{Adjust Filenames}, for more details).
+
+@item -S @var{subbooks}
+@itemx --subbook @var{subbooks}
+Specify target subbooks to compress, uncompress or output information.
+@var{subbooks} must be a list of directory names of subbooks separeted
+by a comma (@samp{,}).
+By default, all subbooks are specified as target.
+
+(@xref{Partial Compression}, for more details).
+
+@item -t
+@itemx --test
+Don't write compression/uncompression data to the actual files.
+This option is ignored when the action is information.
+
+(@xref{Test}, for more details).
+
+@item -u
+@itemx --uncompress
+Uncompress a CD-ROM book.
+
+(@pxref{Uncompression}, for more details).
+
+@item -v
+@itemx --version
+Output version number to standard out, then exit.
+
+@item -z
+@itemx --compress
+Compress a CD-ROM book.
+
+(@xref{Compression}, for more details).
+
+@end table
+
+@c ===================================================================
+@node Comparision Result, Compressed File Format, Summary of Options, Top
+@appendix Comparision of Compression Results
+
+Compression result of the @file{START} file in a certain English-Japanese
+and Japanese-English dictionary (EBXA):
+
+@multitable @columnfractions .4 .3 .3
+@item compression level           @tab  file size        @tab  ratio
+@item (original)            @tab  154476544 bytes  @tab  100.0%
+@item level 0               @tab  54922039 bytes   @tab  35.6%
+@item level 1               @tab  49615791 bytes   @tab  32.1%
+@item level 2               @tab  45983464 bytes   @tab  29.8%
+@item level 3               @tab  43431397 bytes   @tab  28.1%
+@c @item level 4            @tab  41542738 bytes   @tab  26.9%
+@item (reference: gzip -6)  @tab  38712247 bytes   @tab  25.0%
+@end multitable
+
+Compression result of the @file{START} file in a certain English
+dictionary (EBG):
+
+@multitable @columnfractions .4 .3 .3
+@item compression level     @tab  file size       @tab  ratio
+@item (original)            @tab  55511040 bytes  @tab  100.0%
+@item level 0               @tab  25866491 bytes  @tab  46.6%
+@item level 1               @tab  24419066 bytes  @tab  44.0%
+@item level 2               @tab  23453212 bytes  @tab  42.2%
+@item level 3               @tab  22748840 bytes  @tab  41.0%
+@c @item level 4            @tab  22139989 bytes  @tab  39.9%
+@item (reference: gzip -6)  @tab  20930009 bytes  @tab  37.7%
+@end multitable
+
+Compression result of the @file{HONMON} file in a certain Japanese
+dictionary (EPWING):
+
+@multitable @columnfractions .4 .3 .3
+@item compression level     @tab  file size       @tab  ratio
+@item (original)            @tab  23642112 bytes  @tab  100.0%
+@item level 0               @tab   9927048 bytes  @tab  42.0%
+@item level 1               @tab   9213184 bytes  @tab  39.0%
+@item level 2               @tab   8767603 bytes  @tab  37.1%
+@item level 3               @tab   8495563 bytes  @tab  35.9%
+@c @item level 4            @tab   8336185 bytes  @tab  35.3%
+@item (reference: gzip -6)  @tab   8114658 bytes  @tab  34.3%
+@end multitable
+
+@c ===================================================================
+@node Compressed File Format,  , Comparision Result, Top
+@appendix Compressed File Format
+
+This chapter explains details about compressed file format used by
+@code{ebzip}.
+
+@menu
+* Format Overview::             Overview about Compression File Format
+* Data Part::                   Data Part
+* Index Part::                  Index Part
+* Header Part::                 Header Part
+@end menu
+
+@c -------------------------------------------------------------------
+@node Format Overview, Data Part, Compressed File Format, Compressed File Format
+@appendixsec Overview about Compression File Format
+
+The compressed file format has the following features.
+
+@itemize @bullet
+@item
+independent of CPU type, operating system, and file system.
+
+@item
+loss-less compression.@*
+You can recover an original file by uncompressing the compressed
+file.
+
+@item
+four compression levels.@*
+You can choose faster or better compression.
+@end itemize
+
+A compressed file consists of header, index and data parts.
+They are placed in that order.
+
+@example
+@group
++--------+-------------+-----------------------------+
+| header |    index    |            data             |
++--------+-------------+-----------------------------+
+                                                     EOF
+@end group
+@end example
+
+@c -------------------------------------------------------------------
+@node Data Part, Index Part, Format Overview, Compressed File Format
+@appendixsec Data Part
+
+An orignal file is compressed by the following processes.
+
+At first, @code{ebzip} slices an original file.
+Each @dfn{slice} except for the last slice (slice N in the following
+picture) has the same size.
+
+@example
+@group
++---------------+---------------+--   --+----------+
+|    slice 1    |    slice 2    |  ...  | slice N  |
++---------------+---------------+--   --+----------+
+                                                   EOF
+@end group
+@end example
+
+@noindent
+Slice size is determined by the compression level
+(@pxref{Compression Level}, about compression level):
+
+@multitable @columnfractions .5 .5
+@item compression level  @tab  slice size
+@item 0                  @tab   2048 bytes
+@item 1                  @tab   4096 bytes
+@item 2                  @tab   8192 bytes
+@item 3                  @tab  16384 bytes
+@end multitable
+
+@noindent
+Second, if the last slice is shorter than the slice size, @code{ebzip}
+extends the last slice to the slice size by padding bytes of 0x00.
+
+@example
+@group
+                                                    pad 
++---------------+---------------+--   --+---------+-----+
+|    slice 1    |    slice 2    |  ...  |    slice N    |
++---------------+---------------+--   --+---------+-----+
+                                                        EOF
+@end group
+@end example
+
+@noindent
+Finally, @code{ebzip} compresses each slice into the DEFLATE compressed
+data format, described in RFC 1951.
+A slice is compressed independently of another slice.
+Usually, each compressed slice occupies different size.
+If the number of bits of the compressed slice is not a multiple of 8,
+1 to 7 bits are padded to the number of bits come to a multiple of 8
+at the tail of the compressed slice.
+Thus, each compressed slice starts at byte boundary.
+The contents of the padded bits are undefined, but the padded bits are
+never used.
+
+@example
+@group
++------------+----------+--   --+--------------+
+| compressed |compressed|  ...  |  compressed  |
+|   slice 1  | slice 2  |  ...  |   slice N    |
++------------+----------+--   --+--------------+
+@end group
+@end example
+
+@noindent
+This is a @dfn{data part} of the compressed file format, which consists
+of compressed slices.
+
+The padding in the last slice is compressed as a part of the slice.
+When @code{ebunzip} recovers the last slice, it uncompresses the slice
+and then remove the padding.
+
+When a compressed slice is larger than or equal to slice size, 
+@code{ebzip} discards the compressed data of the slice.
+In this case, @code{ebzip} records original data as the compressed data
+for that slice instead.
+
+If an original file is empty, the data part is not appered in a
+compressed file.
+
+@c -------------------------------------------------------------------
+@node Index Part, Header Part, Data Part, Compressed File Format
+@appendixsec Index Part
+
+At compression, @code{ebzip} records an @dfn{index} for each compressed
+slice.
+An index represents a distance betweeen the beginning of the compressed
+file to the beginning of a compressed slice.
+The unit of the distance is byte.
+
+@example
+@group
++---------+---------+--           --+---------+---------+
+| index 1 | index 2 |  ...........  | index N |index END|
++---------+---------+--           --+---------+---------+
+     |         |                        |         |
+ +---+         +----+                   +------+  +-----------+
+ V                  V                          V              V
++------------------+------------------+--   --+--------------+
+|    compressed    |    compressed    |  ...  |  compressed  |
+|      slice 1     |     slice 2      |  ...  |   slice N    |
++------------------+------------------+--   --+--------------+
+@end group
+@end example
+
+@noindent
+Each index takes from 2 to 4 bytes, according with size of an original
+file:
+
+@multitable @columnfractions .7 .3
+@item original file size             @tab  index size
+@item        0 ...      65535 bytes  @tab  2 bytes
+@item    65535 ...   16777215 bytes  @tab  3 bytes
+@item 16777216 ... 4294967295 bytes  @tab  4 bytes
+@end multitable
+
+All multi-byte numbers in the indexes stored with the most significant
+byte first.
+For example, 0x1234 is stored as follows.
+First byte holds 0x12, and second byte holds 0x34.
+
+@example
+@group
++---------+---------+
+|0001 0010|0011 1000|
++---------+---------+
+  (0x12)    (0x34)
+@end group
+@end example
+
+The index part begins with the index for the compressed slice 1, and 
+the index for the compressed slice 2 follows it.
+The index for compressed slice N is followed by the index for END;
+index for the next byte of the end of the compressed slice N.
+This index also represents the size of the compressed file.
+
+@example
+@group
++---------+---------+--       --+---------+---------+
+| index 1 | index 2 |  .......  | index N |index END|
++---------+---------+--       --+---------+---------+
+@end group
+@end example
+
+Size of each compressed slice can be calculated by the indexes, because
+next index of the slice @var{p} represents the next byte of the end of
+the slice @var{p}.
+If its size is equal to the slice size, the data of the slice is not
+compressed accutually.
+
+If an original file is empty, the index part has only one index.
+The index represents the size of the compressed file.
+
+@c -------------------------------------------------------------------
+@node Header Part,  , Index Part, Compressed File Format
+@appendixsec Header Part
+
+A header part occupies 22 bytes.
+It consists of the following fields.
+
+@example
+@group
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|   magic ID   |*1| *2  |    file size    | Adler-32  |   mtime   |
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+ 0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21
+
+*1: zip mode and compression level
+*2: reserved area
+@end group
+@end example
+
+@table @code
+@item magic ID (5 bytes)
+It has the fixed value; 0x45, 0x42, 0x5a, 0x69, 0x70 (@samp{EBZip}
+in ASCII string).
+
+@item zip mode (4 bits of the most significant bit side)
+This identifies the compression mode.
+In EB Library version @value{VERSION}, only 1 (0001 in binary digits)
+can be prescribed as this version.
+
+@item compression level (4 bits of the least-significant-bit side)
+This identifies the compression level.
+
+@item reserved area (2 bytes)
+Reserved but not used.
+It is filled with 0x0000.
+
+@item file size (6 bytes)
+This contains the size of the original (uncompressed) file.
+
+@item Adler-32 (4 bytes)
+This is a checksum value of the uncompressed data computed according
+to Adler-32 algorithm described in RFC 1950.
+
+@item mtime (4 bytes)
+This gives the most recent modification time of the original file.
+This value is the time in seconds since 00:00:00 GMT, Jan. 1, 1970.
+@end table
+
+Both @code{zip mode} and @code{compression level} are packed into
+the 5th byte in the header.
+@code{zip mode} includes a most siginificant bit, and
+@code{compression level} includes least-significant-bit.
+If @code{zip mode} is 1 and @code{compression level} is 2, then
+5th byte of the header is 0x12.
+
+@example
+@group
+ MSB                         LSB
++---+---+---+---+---+---+---+---+
+| 0   0   0   1   0   0   1   0 | = 0x12
++---+---+---+---+---+---+---+---+
+   (zip mode)   | (compression level)
+@end group
+@end example
+
+All multi-byte numbers in the header are stored with the most
+significant byte first.
+
+@c -------------------------------------------------------------------
+@contents
+@bye

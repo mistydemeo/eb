@@ -1,0 +1,399 @@
+\input texinfo	        @c -*-texinfo-*-
+@c %** start of header
+@setfilename ebfont.info
+@settitle ebfont
+@c %** end of header
+
+@include ebfont-ver.texi
+
+@dircategory CD-ROM Book Utilities
+@direntry
+* ebfont: (ebfont).             Get font data in a CD-ROM book.
+@end direntry
+
+@ifinfo
+ebfont: Utility for getting font data in a CD-ROM book, by Motoyuki Kasahara.
+
+Copyright @copyright{} 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end ifinfo
+
+@titlepage
+@title ebfont
+@subtitle Utility for getting font data in a CD-ROM book.
+@subtitle Edition @value{EDITION} for EB Library version @value{VERSION}
+@subtitle @value{UPDATED}
+@author by Motoyuki Kasahara
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end titlepage
+
+@node Top, Introduction, (dir), (dir)
+@ifinfo
+This is edition @value{EDITION}, for EB Library version @value{VERSION}.
+@end ifinfo
+
+@menu
+* Introduction::                Introduction.
+* What is Local Character::     What is Local Character?
+* Invoking ebfont::             Invoking @code{ebfont}.
+* Summary of Options::          Summary of Options to @code{ebfont}.
+
+ --- The Detailed Node Listing ---
+
+Invoking @code{ebfont}
+
+* Image Formats::               Image Formats.
+* Heights::                     Heights.
+* Subbooks::                    Subbooks.
+@end menu
+
+@c ===================================================================
+@node Introduction, What is Local Character, Top, Top
+@chapter Introduction
+
+The @code{ebfont} command reads the bitmap data of the local defined
+characters in a CD-ROM book, convert them to specified image formats,
+and write them to files.
+@code{ebfont} uses EB Library and it is distributed with the library.
+
+@code{ebfont} is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+@code{ebfont} is distributed in the hope that it will be useful,
+but @emph{without any warranty}; without even the implied warranty of
+merchantability or fitness for a particular purpose.  See the
+GNU General Public License for more details.
+
+This is edition @value{EDITION}, for EB Library version @value{VERSION}.
+
+@c ===================================================================
+@node What is Local Character, Invoking ebfont, Introduction, Top
+@chapter What is Local Character?
+
+Many CD-ROM books define their local characters.
+For example, some English Japanese dictionaries define pronunciation
+marks as the local characters because the character set used in CD-ROM
+books doesn't have pronunciation marks.
+
+CD-ROM books also have bitmap data of the local characters.
+The @code{ebfont} command reads the bitmap data, convert them to a
+specified image formats, and write them to files.
+@code{ebfont} can generates image files as XBM (X BitMap format), XPM
+(X PixMap format) and/or GIF (Graphics Interchange Format).
+By default, XBM format is selected.
+
+Local characters are classified to two types; @dfn{narrow} and @dfn{wide}.
+In narrow type characters, the height of the bitmap data is about half
+of its width.
+In wide type characters, the width and height of the bitmap data are
+almost same.
+A CD-ROM book can defines local characters of both types.
+
+The internal fomrat specification of CD-ROM book defines four heights
+for local characters, for both narrow and wide types.
+Their witdths, heights and sizes are follows:
+
+@multitable @columnfractions .33 .33 .33
+@item height  @tab  narrow  @tab  wide
+@item 16      @tab   8x16   @tab  16x16
+@item 24      @tab  16x24   @tab  24x24
+@item 30      @tab  16x30   @tab  32x30
+@item 48      @tab  24x48   @tab  48x48
+@end multitable
+
+@noindent
+By deafult, @code{ebfont} generates image files for fonts with the
+height of 16 pixels.
+
+@c ===================================================================
+@node Invoking ebfont, Summary of Options, What is Local Character, Top
+@chapter Invoking @code{ebfont}
+
+Its usual way to invoke @code{ebfont} is as follows:
+
+@example
+% ebfont @var{book-path}
+@end example
+
+@noindent
+@var{book-path} points to the top directory of a CD-ROM book where
+the file @file{CATALOG} or @file{CATALOGS} resides.
+Though you cannot specify two or more book-paths, 
+you can omit book-path like as follows:
+
+@example
+% ebfont
+@end example
+
+@noindent
+In this case, it is assumed that the current working directory
+(@file{.}) is specified.
+
+@code{ebfont} generates image files under the current directory.
+The generic forms of their filenames are:
+
+@example
+@group
+@var{subbook}/@var{height}/narrow/@var{character-number}.@var{suffix}
+@var{subbook}/@var{height}/wide/@var{character-number}.@var{suffix}
+@end group
+@end example
+
+@noindent
+The @var{suffix} is @samp{xbm}, @samp{xpm} or @samp{gif}.
+The @var{character-number} is a hexadecimal number with 4 digits
+(@samp{0} to @samp{9}, and @samp{a} to @samp{f}), like this:
+
+@example
+@group
+EJDICT/16/narrow/a121.xbm
+EJDICT/16/wide/a321.xbm
+@end group
+@end example
+
+@noindent
+The intermediate directories such as @file{EJDICT/16/xbm/narrow} are
+created by @code{ebfont} if missing.
+
+@code{ebfont} can outputs image files not only under the current
+directory but also any directory by the @samp{--output-directory} option.
+The top directory must have been created before invoking @code{ebfont}.
+
+@example
+% ebfont --output-directory @var{directory} @var{book-path}
+@end example
+
+@menu
+* Image Formats::               Image Formats.
+* Heights::                     Heights.
+* Subbooks::                    Subbooks.
+@end menu
+
+@c -------------------------------------------------------------------
+@node Image Formats, Heights, Invoking ebfont, Invoking ebfont
+@section Image Formats
+
+@code{ebfont} can generates image files of XBM, XPM and GIF (GIF89a)
+formats.
+These image formats are specified at the @samp{--image-format} (@samp{-i})
+option.
+The @samp{--image-format} option takes an argument which is a list of
+image format mames separeted by a comma (@samp{,}).
+For example, @code{ebfont} generates image files of XPM and GIF formats
+by the following command:
+
+@example
+% ebfont --image-format xpm,gif @var{book-path}
+@end example
+
+@noindent
+An argument to @samp{--image-format} can be splitted like as follows:
+
+@example
+% ebfont --image-format xpm --image-format gif @var{book-path}
+@end example
+
+@noindent
+In the XPM and GIF formats, the foreground and background colors of 
+images are black (@samp{#000000} in RGB) and transparency.
+@code{ebzip} generates GIF images without LZW compression algolythm,
+so that the their sizes are too fat.
+
+@c -------------------------------------------------------------------
+@node Heights, Subbooks, Image Formats, Invoking ebfont
+@section Heights
+
+By deafult, @code{ebfont} generates image files for narrow and wide
+fonts with the height of 16 pixels.
+The @samp{--font-height} (@samp{-f}) option allows you to generate
+image files of fonts with other heights.
+The @samp{--font-height} option takes an argument which is a list of
+font heights separeted by a comma (@samp{,}).
+The font height must be @samp{16}, @samp{24}, @samp{30} and @samp{48}. 
+For example, @code{ebfont} generates image files of fonts with the heights
+of 16 and 24 pixels by the following command:
+
+@example
+% ebfont --font-height 16,24 @var{book-path}
+@end example
+
+@noindent
+An argument to @samp{--font-height} can be splitted like as follows:
+
+@example
+% ebfont --font-height 16 --font-height 24 @var{book-path}
+@end example
+
+@c -------------------------------------------------------------------
+@node Subbooks,  , Heights, Invoking ebfont
+@section Subbooks
+
+@code{ebfont} generates image files for all subbooks by default,
+but the @samp{--subbook} (@samp{-S}) option allows you to generates
+image files for specified subbooks only.
+
+The @samp{--subbook} option takes an argument which is a list of
+directory names of subbooks to be compressed, separeted by a comma
+(@samp{,}).
+The @code{ebinfo} command tells you what subbooks your book contains
+and what their directory names are.
+
+@example
+@group
+% ebinfo /mnt/cdrom
+disc type: EB/EBG/EBXA
+character code: JIS X 0208
+the number of subbooks: 3
+@end group
+
+@group
+subbook 1:
+  title: New English Japanese Dictionary (4th edition)
+  directory: ENGLISH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+
+@end group
+@group
+subbook 2:
+  title: CD-ROM French Japanese Dictionary (3rd edition)
+  directory: FRENCH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+
+@end group
+@group
+subbook 3:
+  title: Pocket German Japanese Dictionary (3rd edition)
+  directory: GERMAN
+  search methods: menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+@end group
+@end example
+
+@noindent
+(@xref{Invoking ebinfo, , Invoking @code{ebinfo}, ebinfo, ebinfo},
+for more details about the @code{ebinfo} command).
+@*
+In this example, there are three subbooks in the book, and their
+directory names are @code{ENGLISH}, @code{FRENCH} and @code{GERMAN}.
+
+Inkoing the following command, @code{ebfont} generates image files for
+@code{ENGLISH} and @code{FRENCH} only.
+
+@example
+% ebfont --subbook english,french /mnt/cdrom
+@end example
+
+@noindent
+Case of the directory names are not sensitve.
+An argument to @samp{--subbook} can be splitted like as follows:
+
+@example
+% ebfont --subbook english --subbook french /mnt/cdrom
+@end example
+
+@c ===================================================================
+@node Summary of Options,  , Invoking ebfont, Top
+@chapter Summary of @code{ebfont} Options
+
+The @code{ebfont} command supports both traditional single-letter
+options and mnemonic long option names.
+Long option names are indicated with @samp{--} instead of @samp{-}.
+Abbreviations for option names are allowed as long as they are unique.
+
+@table @code
+@item -d
+@itemx --debug
+Print debugging information to standard error.
+
+@item -f @var{heights}
+@itemx --font-height @var{heights}
+Generate image files of local characters with @var{heights}.
+@var{heights} must be a list of heights separated by a comma
+(@samp{,}).
+The valid heights are @samp{16}, @samp{24}, @samp{30} and @samp{48}.
+By default, @code{ebfont} generates fonts with a height of 16 pixels.
+(@xref{Heights}, for more details).
+
+@item -h
+@itemx --help
+Output help message to standard out, then exit.
+
+@item -i @var{formats}
+@itemx --image-format @var{formats}
+Generates image files as @var{formats}.
+@var{formats} must be a list of format names separated by a comma
+(@samp{,}).
+Supported format names are @samp{xbm}, @samp{xpm}, and @samp{gif}.
+By default, @samp{ebfont} generates image files as XBM format.
+(@xref{Image Formats}, for more details).
+
+@item -o @var{directory}
+@itemx --output-directory @var{directory}
+Output image files under @var{directory}.
+By default, @code{ebfont} generates image files under the current working
+directory (@code{.}).
+(@xref{Invoking ebfont}, for more details).
+
+@item -S @var{subbooks}
+@itemx --subbook @var{subbooks}
+Specify target subbooks in which @code{ebfont} generates local characters.
+@var{subbooks} must be a list of directory names of subbooks separeted
+by a comma (@samp{,}).
+By default, all subbooks are specified as target.
+(@xref{Subbooks}, for more details).
+
+@item -v
+@itemx --version
+Output version number to standard out, then exit.
+@end table
+
+@c ===================================================================
+@contents
+@bye

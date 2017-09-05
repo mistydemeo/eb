@@ -1,0 +1,298 @@
+#! @PERL@
+eval 'exec @PERL@ -S $0 ${1+"$@"}'
+    if 0;
+
+#                                                         -*- Perl -*-
+# Copyright (C) 1998  Motoyuki Kasahara
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+
+# Program name, program version and mailing address.
+$progname ='ebrefile';
+$version = '@VERSION@';
+$mailing_address = '@MAILING_ADDRESS@';
+
+#
+# Help messages.
+#
+$help = "Usage: $progname [option...] [input-directory]
+Options:
+  -c CASE  --case CASE
+                             output catalog(s) which has filename with CASE
+                             letters; upper or lower
+                             (default: depend on input catalog(s) file)
+  -h  --help                 display this help, then exit
+  -S SUBBOOK[,SUBBOOK...]  --subbook SUBBOOK[,SUBBOOK...]
+                             import SUBBOOK to new catalog(s)
+  -o DIRECTORY  --output-directory DIRECTORY
+                             output catalog(s) to DIRECTORY
+                             (default: .)
+  -s SUFFIX  --suffix SUFFIX
+                             output catalog(s) which has filenames with SUFFIX;
+                             none or period
+                             (default: none)
+  -v  --version              display version number, then exit
+
+Argument:
+  input-directory            input catalog(s) at this directory
+                             (default: .)
+
+Report bugs to $mailing_address.
+";
+
+$tryhelp = "try \`$0 --help\' for more information\n";
+
+#
+# Option list.
+#
+@option_list = ('-c --case              required-argument',
+		'-h --help              no-argument',
+		'-o --output-directory  required-argument',
+		'-s --suffix            required-argument',
+		'-S --subbook            required-argument',
+		'-v --version           no-argument');
+
+#
+# CATALOG filename lookup table.
+#
+%catalogs = ('eb upper none',        'CATALOG',     
+	     'eb upper period',      'CATALOG.',    
+	     'eb upper version',     'CATALOG;1',   
+	     'eb upper both',        'CATALOG.;1',
+	     'eb lower none',        'catalog',     
+	     'eb lower period',      'catalog.',    
+	     'eb lower version',     'catalog;1',   
+	     'eb lower both',        'catalog.;1',  
+	     'epwing upper none',    'CATALOGS',    
+	     'epwing upper period',  'CATALOGS.',   
+	     'epwing upper version', 'CATALOGS;1', 
+	     'epwing upper both',    'CATALOGS.;1',
+	     'epwing lower none',    'catalogs',    
+	     'epwing lower period',  'catalogs.',   
+	     'epwing lower version', 'catalogs;1',  
+	     'epwing lower both',    'catalogs.;1');
+
+%backups = ('eb upper none',        'CATALOG.BAK',     
+	    'eb upper period',      'CATALOG.BAK',    
+	    'eb upper version',     'CATALOG.BAK;1',   
+	    'eb upper both',        'CATALOG.BAK;1',
+	    'eb lower none',        'catalog.bak',     
+	    'eb lower period',      'catalog.bak',
+	    'eb lower version',     'catalog.bak;1',   
+	    'eb lower both',        'catalog.bak;1',  
+	    'epwing upper none',    'CATALOGS.BAK',    
+	    'epwing upper period',  'CATALOGS.BAK',   
+	    'epwing upper version', 'CATALOGS.BAK;1', 
+	    'epwing upper both',    'CATALOGS.BAK;1',
+	    'epwing lower none',    'catalogs.bak',    
+	    'epwing lower period',  'catalogs.bak',   
+	    'epwing lower version', 'catalogs.bak;1',  
+	    'epwing lower both',    'catalogs.bak;1');
+
+#
+# Parse command line options.
+#
+$case = '';
+$suffix = '';
+$indir = '.';
+$outdir = '.';
+
+&getopt_initialize(@option_list);
+while (($optname, $optarg) = &getopt_long) {
+    if ($optname eq '-c') {
+        if ($optarg !~ /^(upper|lower)$/i) {
+            warn "$0: unknown filename case \`$optarg\'\n";
+            die $tryhelp;
+        }
+	$case = "\L$optarg";
+    } elsif ($optname eq '-h') {
+	print $help;
+	exit(0);
+    } elsif ($optname eq '-o') {
+        $outdir = $optarg;
+    } elsif ($optname eq '-s') {
+        if ($optarg !~ /^(none|period|version|both)$/i) {
+            warn "$0: unknown suffix type \`$optarg\'\n";
+            warn $tryhelp;
+            exit(1);
+        }
+        $suffix = "\L$optarg";
+    } elsif ($optname eq '-S') {
+	$optarg =~ s/^[ \t]+//;
+	$optarg =~ s/[ \t]+$//;
+	foreach $sub (split(/,[ \t]*/, $optarg)) {
+	    $sub =~ tr/a-z/A-Z/;
+	    die "$0: subbook \`$sub\' specified twice\n"
+		if (grep($sub eq $_, @sub_imports));
+	    push(@sub_imports, $sub);
+	}
+    } elsif ($optname eq '-v') {
+ 	print "$progname (EB Library) version $version\n\n";
+	print "Copyright (c) 1998  Motoyuki Kasahara\n\n";
+	print "This is free software; you can redistribute it and/or modify\n";
+	print "it under the terms of the GNU General Public License as published by\n";
+	print "the Free Software Foundation; either version 2, or (at your option)\n";
+	print "any later version.\n\n";
+	print "This program is distributed in the hope that it will be useful,\n";
+	print "but WITHOUT ANY WARRANTY; without even the implied warranty\n";
+	print "of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n";
+	print "GNU General Public License for more details.\n";
+	exit(0);
+    } else {
+	die $tryhelp;
+    }
+}
+
+#
+# Parse non-option arguments.
+#
+$indir = shift if (0 < @ARGV);
+if (@ARGV != 0) {
+    warn "$0: too many arguments\n";
+    die $tryhelp;
+}
+
+#
+# Remove a slash (`/') in the tail of the directory names.
+#
+$indir =~ s/\/$//;
+$outdir =~ s/\/$//;
+
+#
+# Determine filenames CATALOG files.
+#
+$infile = '';
+foreach $i (keys(%catalogs)) {
+    if (-f "$indir/$catalogs{$i}") {
+	$infile = "$indir/$catalogs{$i}";
+	@_ = split(/[ \t]+/, $i);
+	$disc = $_[0];
+	$case = $_[1] if (!$case);
+	$suffix = $_[2] if (!$suffix);
+	break;
+    }
+}
+if ($infile eq '') {
+    die "$0: no catalog(s) file\n";
+}
+$outfile = $outdir . '/' . $catalogs{"$disc $case $suffix"};
+$bakfile = $outdir . '/' . $backups{"$disc $case $suffix"};
+
+#
+# Open the `CATALOG(S)' file to read.
+#
+if (!open(READ, $infile)) {
+    die "$0: cannot open the file, $!: $infile\n";
+}
+
+#
+# Get the number of subbooks in this book.
+#
+if (read(READ, $buf, 16) != 16) {
+    warn "$0: cannot read the file, $!: $infile\n";
+    close(READ);
+    exit(1);
+}
+$reserved1 = unpack('x2 C14', $buf);
+
+#
+# Scan the catalog.
+#
+$data_size = ($disc eq 'eb') ? 40 : 164;
+$title_size = ($disc eq 'eb') ? 30 : 80;
+for ($i = unpack('n', $buf); 0 < $i; $i--) {
+    if (read(READ, $buf, $data_size) != $data_size) {
+	warn "$0: cannot read the file, $!: $infile\n";
+	close(READ);
+	exit(1);
+    }
+    $sub = unpack("x2 x$title_size A8", $buf);
+    $sub =~ s/ .*//;
+    $sub =~ tr/a-z/A-Z/;
+    push(@sub_all, $sub);
+    $sub_data{$sub} = $buf;
+}
+
+#
+# Close the `CATALOG(S)' file.
+#
+close(READ);
+
+#
+# Check the subbook list.
+#
+foreach $sub (@sub_imports) {
+    die "$0: unknown subbook \`$sub\'\n" if (!grep($sub eq $_, @sub_all));
+}
+
+#
+# If `-S' option is not specified, import all subbooks.
+#
+@sub_imports = @sub_all if (@sub_imports == 0);
+
+#
+# Backup $outfile, if required.
+#
+if (-f $outfile) {
+    if (!rename($outfile, $bakfile)) {
+	die "$0: cannot rename the file, $!: $outfile to $bakfile\n";
+    }
+}
+
+#
+# Open the `CATALOG(S)' file to write.
+#
+if (!open(WRITE, ">$outfile")) {
+    die "$0: cannot open the file, $!: $outfile\n";
+}
+
+#
+# Write a header part.
+#
+$buf = pack("n C14", scalar(@sub_imports), $reserved1);
+if (!print(WRITE $buf)) {
+    warn "$0: cannot read the file, $!: $outfile\n";
+    close(WRITE);
+    exit(1);
+}
+
+#
+# Write subbook data.
+#
+foreach $sub (@sub_all) {
+    if (grep($sub eq $_, @sub_imports) && !print(WRITE $sub_data{$sub})) {
+	warn "$0: cannot read the file, $!: $outfile\n";
+	close(WRITE);
+	exit(1);
+    }
+}
+
+#
+# Fill padding data.
+#
+if (16 + $data_size * @sub_imports < 2048) {
+    $buf = "\0" x (2048 - (16 + $data_size * @sub_imports));
+    if (!print(WRITE $buf)) {
+	warn "$0: cannot read the file, $!: $outfile\n";
+	close(WRITE);
+	exit(1);
+    }
+}
+
+#
+# Close the `CATALOG(S)' file.
+#
+close(WRITE);
+
+# Local Variables: 
+# mode: perl
+# End: 

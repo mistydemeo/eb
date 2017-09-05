@@ -1,0 +1,445 @@
+\input texinfo	        @c -*-texinfo-*-
+@c %** start of header
+@setfilename ebrefile.info
+@settitle ebrefile
+@c %** end of header
+
+@include ebrefile-ver.texi
+
+@dircategory CD-ROM Book Utilities
+@direntry
+* ebrefile: (ebrefile).         Refile a catalog file in a CD-ROM book.
+@end direntry
+
+@ifinfo
+ebrefile: Refile a catalog file in a CD-ROM book, by Motoyuki Kasahara.
+
+Copyright @copyright{} 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end ifinfo
+
+@titlepage
+@title ebrefile
+@subtitle Refile a catalog file in a CD-ROM book.
+@subtitle Edition @value{EDITION} for EB Library version @value{VERSION}
+@subtitle @value{UPDATED}
+@author by Motoyuki Kasahara
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end titlepage
+
+@node Top, Introduction, (dir), (dir)
+@ifinfo
+This is edition @value{EDITION}, for EB Library version @value{VERSION}.
+@end ifinfo
+
+@menu
+* Introduction::                Introduction.
+* Invoking ebrefile::           Invoking @code{ebrefile}.
+* Summary of Options::          Summary of Options to @code{ebrefile}.
+
+ --- The Detailed Node Listing ---
+
+Invoking @code{ebrefile}
+
+* Select Subbooks::             Select Subbooks.
+* Adjust Filename::             Adjust Filename.
+* Combination with ebzip::      Combination with @code{ebzip}.
+@end menu
+
+@c ===================================================================
+@node Introduction, Invoking ebrefile, Top, Top
+@chapter Introduction
+
+A CD-ROM book usually has some @dfn{subbooks}.
+For example, a certain CD-ROM book has three subbooks; Japanese
+dictionary, Japense English dictinary and English Japanese dictionary.
+Each subbook itself is an independent @dfn{book}.
+
+@example
+@group
+            (CD-ROM book)
++-----------------------------------+
+|  [English Dicctionary] (subbook)  |
+|  [Japanese Dicctionary](subbook)  |
+|  [Encyclopedia]        (subbook)  |
++-----------------------------------+
+@end group
+@end example
+
+A CD-ROM book of EB/EBG/EBXA format has a file @file{CATALOG}, and a
+CD-ROM book of EPWING format has a file @file{CATALOGS}.
+The files define what subbooks the CD-ROM book has.
+They are resides at the top directory of the CD-ROM book.
+
+@code{ebrefile} reads an original catalog file and builds a new catalog
+file which defines the subbooks only specified by an user.
+In other words, @code{ebrefile} can deletes particular subbook definitions
+from a catalog file.
+If a CD-ROM book has three subbooks, @code{ebrefile} can imports any
+one or two subbooks to the new catalog file.
+The @code{ebrefile} command is useful when you want to copy only a
+part of a CD-ROM book to a hard disk. 
+@code{ebrefile} is a part of EB Library distribution.
+
+@code{ebrefile} is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+@code{ebrefile} is distributed in the hope that it will be useful,
+but @emph{without any warranty}; without even the implied warranty of
+merchantability or fitness for a particular purpose.  See the
+GNU General Public License for more details.
+
+In addition, you must follow the licenses of your CD-ROM books.
+Though @code{ebzip} is free software, your books may not be free.
+@code{ebrefile} modifies contents of a certain file in a CD-ROM book.
+Please be careful.
+
+This is edition @value{EDITION}, for EB Library version @value{VERSION}.
+
+@c ===================================================================
+@node Invoking ebrefile, Summary of Options, Introduction, Top
+@chapter Invoking @code{ebrefile}
+
+Its usual way to invoke @code{ebrefile} is as follows:
+
+@example
+% ebrefile @var{book-path}
+@end example
+
+@noindent
+@var{book-path} points to the top directory of a CD-ROM book where
+the file @file{CATALOG} or @file{CATALOGS} resides.
+Though you cannot specify two or more book-paths, 
+you can omit book-path like as follows:
+
+@example
+% ebrefile
+@end example
+
+@noindent
+In this case, @code{ebrefile} assumes that the current working directory
+(@file{.}) is specified.
+
+@menu
+* Select Subbooks::             Select Subbooks.
+* Adjust Filename::             Adjust Filename.
+* Combination with ebzip::      Combination with @code{ebzip}.
+@end menu
+
+@c -------------------------------------------------------------------
+@node Select Subbooks, Adjust Filename, Invoking ebrefile, Invoking ebrefile
+@section Select Subbooks
+
+By default, @code{ebrefile} imports all subbook definitions in an original
+catalog file to a new catalog file.
+In short, the new catalog file is simply copied from an original.
+The default behavoir is useless.
+@code{ebrefile} is usually invoked with @samp{--subbook} (@samp{-S})
+option.
+
+The @samp{--subbook} option takes an argument which is a list of
+directory names of subbooks to be imported, separeted by a comma
+(@samp{,}).
+The @code{ebinfo} command tells you what subbooks your book contains
+and what their directory names are.
+Suppose that the current working directory is a top directory of a
+CD-ROM book.
+
+@example
+@group
+% ebinfo
+disc type: EB/EBG/EBXA
+character code: JIS X 0208
+the number of subbooks: 3
+@end group
+
+@group
+subbook 1:
+  title: New English Japanese Dictionary (4th edition)
+  directory: ENGLISH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+
+@end group
+@group
+subbook 2:
+  title: CD-ROM French Japanese Dictionary (3rd edition)
+  directory: FRENCH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+
+@end group
+@group
+subbook 3:
+  title: Pocket German Japanese Dictionary (3rd edition)
+  directory: GERMAN
+  search methods: menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+@end group
+@end example
+
+@noindent
+(@xref{Invoking ebinfo, , Invoking @code{ebinfo}, ebinfo, ebinfo},
+for more details about the @code{ebinfo} command).
+@*
+In this example, there are three subbooks in the book, and their 
+directory names are @code{ENGLISH}, @code{FRENCH} and @code{GERMAN}.
+
+Invoking the following command, @code{ebrefile} build a new catalog file
+which has definitions of @code{ENGLISH} and @code{FRENCH} only.
+
+@example
+% ebrefile --subbook english,french
+@end example
+
+@noindent
+Case of the directory names are not sensitve.
+An argument to @samp{--subbook} can be splitted like as follows:
+
+@example
+% ebrefile --subbook english --subbook french
+@end example
+
+@noindent
+Since @code{ebrefile} cannot change an order of subbook definitions,
+an order of arguments to @samp{--subbook} is not matter.
+
+The original @file{CATALOG(S)} file is moved to @file{CATALOG(S).bak},
+and a new file is put as @file{CATALOG(S)}.
+It means that the top directory of the CD-ROM book must be writable.
+In other words, at least @file{CATALOG(S)} of the CD-ROM book must
+have already been copied to a hard disk before invoking @code{ebrefile}.
+(However, this rule is not applied when the @samp{--output-directory}
+option is used.
+@xref{Summary of Options, , @samp{--output-directory}}, for more details
+about the @samp{--output-directory} option).
+
+Invoke @code{ebinfo} again.
+The subbook @code{GERMGAN} is diappeared.
+
+@example
+@group
+% ebinfo
+disc type: EB/EBG/EBXA
+character code: JIS X 0208
+the number of subbooks: 2
+@end group
+
+@group
+subbook 1:
+  title: New English Japanese Dictionary (4th edition)
+  directory: ENGLISH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+
+@end group
+@group
+subbook 2:
+  title: CD-ROM French Japanese Dictionary (3rd edition)
+  directory: FRENCH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+@end group
+@end example
+
+If you have already copied whole the CD-ROM book onto a hard disk,
+you may remove files of the subbook @code{GERMAN}.
+When the directory name consists of upper case letters, type:
+
+@example
+% rm -r GERMAN
+@end example
+
+@noindent
+When the directory name consists of lower case letters, type:
+
+@example
+% rm -r german
+@end example
+
+@c -------------------------------------------------------------------
+@node Adjust Filename, Combination with ebzip, Select Subbooks, Invoking ebrefile
+@section Adjust Filename
+
+@code{ebrefile} keeps @dfn{case} (upper or lower) and @dfn{suffix} of
+the original catalog file.
+When the catalog filename is @file{catalogs;1} (case is lower, and suffix
+is @samp{;1}), @code{ebrefile} puts a new catalog file as
+@file{catalogs;1}, and backup the original catalog file as
+@file{catalogs.bak;1}.
+
+The following table displayes how a filename of @file{CATALOG(S)}
+file changes.
+
+@multitable @columnfractions .4 .3 .3
+@item case/suffix       @tab original file      @tab backup file
+@item lower/none        @tab catalog            @tab catalog.bak
+@item lower/dot         @tab catalog.           @tab catalog.bak
+@item lower/version     @tab catalog;1          @tab catalog.bak;1
+@item lower/dot+version @tab catalog.;1         @tab catalog.bak;1
+@item upper/none        @tab CATALOG            @tab CATALOG.BAK
+@item upper/dot         @tab CATALOG.           @tab CATALOG.BAK
+@item upper/version     @tab CATALOG;1          @tab CATALOG.BAK;1
+@item upper/dot+version @tab CATALOG.;1         @tab CATALOG.BAK;1
+@end multitable
+
+The @samp{--case} and @samp{--suffix} options allows you to modify
+these case and suffix styles of new catalog file and backup file.
+The @samp{--case} option takes an argument, and it must be @samp{upper}
+or @samp{lower}.
+The option sets the case of the filename @code{CATALOG(S)} and 
+@code{CATALOG(S).BAK} to upper or lower.
+Also the @samp{--suffix} option takes an argument, and it must be
+@samp{none}, @samp{dot}, @samp{version} or @samp{both}.
+The option sets the suffix style of the filename @code{CATALOG(S)}
+and @code{CATALOG(S).BAK} to none, dot, version or both (dot+version).
+
+@c -------------------------------------------------------------------
+@node Combination with ebzip,  , Adjust Filename, Invoking ebrefile
+@section Combination with @code{ebzip}
+
+@code{ebrefile} can be used together with the @code{ebzip} command,
+which compresses files in a CD-ROM book
+(@xref{Introduction, , Introduction, ebzip, ebzip}, for more details
+about the @code{ebzip} command).
+Usually, the same command line arguments are given to @code{ebzip}
+and @code{ebrefile}.
+
+Suppose that a CD-ROM book is mounted on @code{/cdrom}, and this
+book has three subbooks; @code{ENGLISH}, @code{FRENCH} and @code{GERMAN}.
+By the following operation, the subbook @code{ENGLISH} and @code{FRENCH}
+are compressed and put under the current working directory, and the
+subbook @code{GERMAN} are deleted from a subbook list.
+
+@example
+% ebzip --subbook english,french /cdrom
+% ebrefile --subbook english,french /cdrom
+@end example
+
+@noindent
+If you'd like to put the compressed files onto @file{/dict} instead
+of the current working directory, type the following:
+
+@example
+% ebzip --output-directory /dict --subbook english,french /cdrom
+% ebrefile --output-directory /dict --subbook english,french /cdrom
+@end example
+
+@noindent
+Case and suffix of filenames are adjusted by the @samp{--case} and
+@samp{--suffix} options.
+
+@example
+% ebzip --case lower --suffix none --subbook english,french /cdrom
+% ebrefile --case lower --suffix none --subbook english,french /cdrom
+@end example
+
+@c ===================================================================
+@node Summary of Options,  , Invoking ebrefile, Top
+@chapter Summary of @code{ebrefile} Options
+
+The @code{ebrefile} command supports both traditional single-letter
+options and mnemonic long option names.
+Long option names are indicated with @samp{--} instead of @samp{-}.
+Abbreviations for option names are allowed as long as they are unique.
+
+@table @code
+@item -c @var{case}
+@itemx --case @var{case}
+Output a catalog file which have filenames with upper or lower @var{case}
+letters.
+@var{case} must be @samp{upper} or @samp{lower}.
+When this option is not specified, the case of the new catalog filename
+comes to be the same as a filename of orignal catalog file.
+(@xref{Adjust Filename}, for more details).
+
+@item -h
+@itemx --help
+Output help message to standard out, then exit.
+
+@item -o @var{directory}
+@itemx --output-directory @var{directory}
+Output a new catalog file under @var{directory}.
+By default, @code{ebrefile} generates a new catalog file under the
+current working directory (@code{.}).
+(@xref{Invoking ebrefile}, for more details).
+
+@item -s @var{suffix}
+@itemx --suffix @var{suffix}
+Specify the suffix of filename of new catalog file.
+@var{suffix} must be @samp{none}, @samp{dot}, @samp{version} or @samp{both}.
+When @var{suffix} is @samp{none}, no suffix is appended.
+When @var{suffix} is @samp{dot}, a dot (@samp{.}) is appended.
+When @var{suffix} is @samp{version}, a version number 1 (@samp{;1}) is
+appended.
+When @var{suffix} is @samp{both}, dot and version number 1 (@samp{.;1})
+is appended.
+If this option is not specified, the suffix of the new catalog filename
+comes to be the same as a filename of original catalog file.
+(@xref{Adjust Filename}, for more details).
+
+@item -S @var{subbooks}
+@itemx --subbook @var{subbooks}
+Specify subbooks which @code{ebrefile} imports to a new catalog file.
+@var{subbooks} must be a list of directory names of subbooks separeted
+by a comma (@samp{,}).
+By default, all subbooks are specified as target.
+(@xref{Select Subbooks}, for more details).
+
+@item -v
+@itemx --version
+Output version number to standard out, then exit.
+@end table
+
+@c ===================================================================
+@contents
+@bye

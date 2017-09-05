@@ -1,0 +1,281 @@
+\input texinfo	        @c -*-texinfo-*-
+@c %** start of header
+@setfilename ebinfo-ja.info
+@settitle ebinfo
+@c %** end of header
+
+@include version.texi
+
+@dircategory CD-ROM Book Utilities
+@direntry
+* ebinfo-ja: (ebinfo-ja).       Get CD-ROM book information.
+@end direntry
+
+@ifinfo
+ebinfo: CD-ROM 書籍の情報を得るためのツール、笠原基之
+
+Copyright @copyright{} 1997, 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end ifinfo
+
+@titlepage
+@title ebinfo
+@subtitle CD-ROM 書籍の情報を得るためのツール
+@subtitle 第 @value{EDITION} 版 (EB ライブラリバージョン @value{VERSION} に対応)
+@subtitle @value{UDATED}
+@author 笠原 基之
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1997, 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end titlepage
+
+@node Top, Introduction, (dir), (dir)
+@ifinfo
+この文書は第 @value{EDITION} 版です。
+EB ライブラリバージョン @value{VERSION} に対応しています。
+@end ifinfo
+
+@menu
+* Introduction::                はじめに
+* Invoking ebinfo::             @code{ebinfo} の実行
+* Details about Information::   出力される情報の詳細ついて
+* Options to ebinfo::           @code{ebinfo} のオプション
+@end menu
+
+@c ===================================================================
+@node Introduction, Invoking ebinfo, Top, Top
+@chapter はじめに
+
+@code{ebinfo} コマンドは CD-ROM 書籍に関する様々な情報を出力します。
+@code{ebinfo} は EB ライブラリを使用しており、ライブラリと一緒に配布さ
+れています。
+
+@code{ebinfo} はフリーソフトウェアです。あなたは、Free Software Foundation
+が公表した GNU General Public License (GNU 一般公有使用許諾) バージョン 
+2 あるいはそれ以降の各バージョンの中からいずれかを選択し、そのバージョ
+ンが定める条項に従って本プログラムを再頒布または変更することができます。
+
+@code{ebinfo} は有用とは思いますが、頒布にあたっては、市場性及び特定目
+的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。
+詳細については GNU General Public License をお読み下さい。
+
+@c ===================================================================
+@node Invoking ebinfo, Details about Information, Introduction, Top
+@chapter @code{ebinfo} の実行
+
+@code{ebinfo} の一般的な起動方法は次の通りです。
+
+@example
+% ebinfo @var{書籍へのパス}
+@end example
+
+@noindent
+@var{書籍へのパス} には、CD-ROM 書籍のトップディレクトリ、つまり 
+@file{CATALOG} または @file{CATALOGS} ファイルが存在するディレクトリを
+指定します。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
+
+@example
+% ebinfo
+@end example
+
+@noindent
+この場合、@code{ebinfo} はカレントディレクトリ (@file{.}) が指定されたも
+のと判断します。
+@code{ebinfo} は指定された書籍に関する情報を、次のような感じで出力します。
+
+@example
+@group
+% ebinfo /mnt/cdrom
+disc type: EB/EBG/EBXA
+character code: JIS X 0208
+the number of subbooks: 2
+@end group
+
+@group
+subbook 1:
+  title: New English Japanese Dictionary (3rd edition)
+  directory: EJDICT
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+@end group
+
+@group
+subbook 2:
+  title: How to use the book
+  directory: HOWTO
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+@end group
+@end example
+
+副本 (subbook) が複合検索 (multi-search) に対応している場合、
+@samp{--multi-search} (または @samp{-m}) オプションを指定すると、
+@code{ebinfo} は複合検索に関する詳細な情報も合わせて出力します。
+複合検索に関する情報は、次のような感じになります。
+
+@example
+@group
+  multi search 1:
+    label 1: country or region
+    search methods: keyword
+    label 2: period
+    search methods: keyword 
+    label 3: category
+    search methods: keyword 
+    label 4: authority
+    search methods: keyword 
+@end group
+@group
+  multi search 2:
+    label 1: author
+    search methods: keyword
+    label 2: title
+    search methods: keyword 
+    label 3: date
+    search methods: keyword 
+    label 4: publisher
+    search methods: keyword 
+@end group
+@end example
+
+@c ===================================================================
+@node Details about Information, Options to ebinfo, Invoking ebinfo, Top
+@chapter 出力される情報の詳細ついて
+
+この節では、@code{ebinfo} が出力する情報の詳細について説明します。
+
+@table @asis
+@item disc type:
+その書籍の形式。EB/EBG/EBXA または EPWING です。
+
+@item character code:
+その書籍で使用されている文字コー。ISO 8859-1 または JIS X 0208 で
+す。
+
+@item the number of subbooks:
+その書籍に収録されている副本 (subbbok) の数。
+@end table
+
+加えて、その書籍のそれぞれの副本について、以下の情報が出力されます。
+
+@table @asis
+@item title:
+副本の題名。
+書籍が JIS X 0208 に書かれているときは、題名は EUC (Extended UNIX Code) 
+で表示されます。
+
+@item directory:
+その副本に関連するファイルが置かれるディレクトリの名前。
+英小文字は大文字に変換されます。
+
+@item search methods:
+副本が対応している検索方法の一覧。
+この一覧は、以下に記した検索方法の一部、もしくは全部から構成されます。
+
+@table @asis
+@item copyright
+著作権表示 (copyright notice)。
+厳密に言えば、これは検索方法ではないのですが、CD-ROM 書籍の内部形式の
+関係から、表示するようにしています。
+
+@item word
+前方一致検索 (Word search)。
+
+@item endword
+後方一致検索 (Endword search)。
+
+@item keyword
+条件検索 (Keyword search)。
+
+@item multi
+複合検索 (Multi search)。
+
+@item menu
+メニュー検索 (Menu search).
+
+@item graphic
+グラフィック検索 (Graphic search).
+
+@end table
+
+@item font sizes:
+副本が持つ、フォントのサイズの一覧。
+この一覧には、16, 24, 30, 48 という 4 つのサイズの一部、もしくは全部か
+ら構成されます。
+
+@item narrow font characters:
+副本が定義している半角文字の文字番号の範囲。
+
+@item wide font characters:
+副本が定義している全角文字の文字番号の範囲。
+
+@end table
+
+@c ===================================================================
+@node Options to ebinfo,  , Details about Information, Top
+@chapter @code{ebinfo} のオプション
+
+@code{ebinfo} コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、@samp{-} ではなく @samp{--} を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
+
+@table @code
+@item -h
+@itemx --help
+ヘルプメッセージを標準出力に出力して、終了します。
+
+@item -m
+@itemx --multi-search
+複合検索 (multi search) に関する情報も、合わせて出力します。
+
+@item -v
+@itemx --version
+バージョン番号を標準出力に出力して、終了します。
+@end table
+
+@c -------------------------------------------------------------------
+@contents
+@bye

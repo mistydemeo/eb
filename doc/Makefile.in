@@ -1,0 +1,413 @@
+# Makefile.in generated automatically by automake 1.3 from Makefile.am
+
+# Copyright (C) 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
+# This Makefile.in is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+
+SHELL = /bin/sh
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+
+DISTDIR =
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+top_builddir = ..
+
+ACLOCAL = @ACLOCAL@
+AUTOCONF = @AUTOCONF@
+AUTOMAKE = @AUTOMAKE@
+AUTOHEADER = @AUTOHEADER@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+transform = @program_transform_name@
+
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
+host_alias = @host_alias@
+host_triplet = @host@
+CC = @CC@
+DEPENDENCIES_FOR_LIBZ = @DEPENDENCIES_FOR_LIBZ@
+INCLUDES_FOR_LIBZ = @INCLUDES_FOR_LIBZ@
+LD = @LD@
+LDADD_FOR_LIBZ = @LDADD_FOR_LIBZ@
+LIBEB_VERSION_INFO = @LIBEB_VERSION_INFO@
+LIBTOOL = @LIBTOOL@
+LN_S = @LN_S@
+MAILING_ADDRESS = @MAILING_ADDRESS@
+MAKEINFO = @MAKEINFO@
+NM = @NM@
+PACKAGE = @PACKAGE@
+PERL = @PERL@
+RANLIB = @RANLIB@
+VERSION = @VERSION@
+
+info_TEXINFOS = eb.texi ebfont.texi ebinfo.texi ebrefile.texi ebzip.texi
+eb_TEXINFOS = eb-ver.texi disctype.c.texi subbook.c.texi
+ebfont_TEXINFOS = ebfont-ver.texi
+ebinfo_TEXINFOS = ebinfo-ver.texi
+ebrefile_TEXINFOS = ebrefile-ver.texi
+ebzip_TEXINFOS = ebzip-ver.texi
+
+samplesdir = $(srcdir)/../samples
+
+C2TEXI = $(srcdir)/c2texi
+
+CLEANFILES = vti.tmp disctype.c.texi subbook.c.texi
+EXTRA_DIST = stamp-eb stamp-ebfont stamp-ebinfo stamp-ebrefile stamp-ebzip \
+	c2texi
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+CONFIG_HEADER = ../config.h
+CONFIG_CLEAN_FILES = 
+TEXI2DVI = texi2dvi
+TEXINFO_TEX = $(srcdir)/texinfo.tex
+INFO_DEPS = eb.info ebfont.info ebinfo.info ebrefile.info ebzip.info
+DVIS = eb.dvi ebfont.dvi ebinfo.dvi ebrefile.dvi ebzip.dvi
+TEXINFOS = eb.texi ebfont.texi ebinfo.texi ebrefile.texi ebzip.texi
+DIST_COMMON =  $(eb_TEXINFOS) $(ebfont_TEXINFOS) $(ebinfo_TEXINFOS) \
+$(ebrefile_TEXINFOS) $(ebzip_TEXINFOS) Makefile.am Makefile.in mdate-sh \
+texinfo.tex
+
+
+DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
+
+TAR = tar
+GZIP = --best
+all: Makefile $(INFO_DEPS)
+
+.SUFFIXES:
+.SUFFIXES: .dvi .info .ps .texi .texinfo .txi
+$(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps doc/Makefile
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+
+eb.info: eb.texi $(eb_TEXINFOS)
+eb.dvi: eb.texi $(eb_TEXINFOS)
+
+
+ebfont.info: ebfont.texi $(ebfont_TEXINFOS)
+ebfont.dvi: ebfont.texi $(ebfont_TEXINFOS)
+
+
+ebinfo.info: ebinfo.texi $(ebinfo_TEXINFOS)
+ebinfo.dvi: ebinfo.texi $(ebinfo_TEXINFOS)
+
+
+ebrefile.info: ebrefile.texi $(ebrefile_TEXINFOS)
+ebrefile.dvi: ebrefile.texi $(ebrefile_TEXINFOS)
+
+
+ebzip.info: ebzip.texi $(ebzip_TEXINFOS)
+ebzip.dvi: ebzip.texi $(ebzip_TEXINFOS)
+
+
+DVIPS = dvips
+
+.texi.info:
+	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
+	cd $(srcdir) \
+	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
+
+.texi.dvi:
+	TEXINPUTS=$(srcdir):$$TEXINPUTS \
+	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
+
+.texi:
+	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
+	cd $(srcdir) \
+	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
+
+.texinfo.info:
+	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
+	cd $(srcdir) \
+	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
+
+.texinfo:
+	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
+	cd $(srcdir) \
+	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
+
+.texinfo.dvi:
+	TEXINPUTS=$(srcdir):$$TEXINPUTS \
+	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
+
+.txi.info:
+	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
+	cd $(srcdir) \
+	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
+
+.txi.dvi:
+	TEXINPUTS=$(srcdir):$$TEXINPUTS \
+	  MAKEINFO='$(MAKEINFO) -I $(srcdir)' $(TEXI2DVI) $<
+
+.txi:
+	@cd $(srcdir) && rm -f $@ $@-[0-9] $@-[0-9][0-9]
+	cd $(srcdir) \
+	  && $(MAKEINFO) `echo $< | sed 's,.*/,,'`
+.dvi.ps:
+	$(DVIPS) $< -o $@
+
+install-info-am: $(INFO_DEPS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(infodir)
+	@for file in $(INFO_DEPS); do \
+	  d=$(srcdir); \
+	  for ifile in `cd $$d && echo $$file $$file-[0-9] $$file-[0-9][0-9]`; do \
+	    if test -f $$d/$$ifile; then \
+	      echo " $(INSTALL_DATA) $$d/$$ifile $(DESTDIR)$(infodir)/$$ifile"; \
+	      $(INSTALL_DATA) $$d/$$ifile $(DESTDIR)$(infodir)/$$ifile; \
+	    else : ; fi; \
+	  done; \
+	done
+	@$(POST_INSTALL)
+	@if $(SHELL) -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
+	  for file in $(INFO_DEPS); do \
+	    echo " install-info --info-dir=$(DESTDIR)$(infodir) $(DESTDIR)$(infodir)/$$file";\
+	    install-info --info-dir=$(DESTDIR)$(infodir) $(DESTDIR)$(infodir)/$$file || :;\
+	  done; \
+	else : ; fi
+
+uninstall-info:
+	$(PRE_UNINSTALL)
+	@if $(SHELL) -c 'install-info --version | sed 1q | fgrep -s -v -i debian' >/dev/null 2>&1; then \
+	  ii=yes; \
+	else ii=; fi; \
+	for file in $(INFO_DEPS); do \
+	  test -z "$ii" \
+	    || install-info --info-dir=$(DESTDIR)$(infodir) --remove $$file; \
+	done
+	@$(NORMAL_UNINSTALL)
+	for file in $(INFO_DEPS); do \
+	  (cd $(DESTDIR)$(infodir) && rm -f $$file $$file-[0-9] $$file-[0-9][0-9]); \
+	done
+
+dist-info: $(INFO_DEPS)
+	for base in $(INFO_DEPS); do \
+	  d=$(srcdir); \
+	  for file in `cd $$d && eval echo $$base*`; do \
+	    test -f $(distdir)/$$file \
+	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	    || cp -p $$d/$$file $(distdir)/$$file; \
+	  done; \
+	done
+
+mostlyclean-aminfo:
+	-rm -f eb.aux eb.cp eb.cps eb.dvi eb.fn eb.fns eb.ky eb.kys eb.ps \
+	  eb.log eb.pg eb.toc eb.tp eb.tps eb.vr eb.vrs eb.op eb.tr \
+	  eb.cv eb.cn ebfont.aux ebfont.cp ebfont.cps ebfont.dvi \
+	  ebfont.fn ebfont.fns ebfont.ky ebfont.kys ebfont.ps \
+	  ebfont.log ebfont.pg ebfont.toc ebfont.tp ebfont.tps \
+	  ebfont.vr ebfont.vrs ebfont.op ebfont.tr ebfont.cv ebfont.cn \
+	  ebinfo.aux ebinfo.cp ebinfo.cps ebinfo.dvi ebinfo.fn \
+	  ebinfo.fns ebinfo.ky ebinfo.kys ebinfo.ps ebinfo.log \
+	  ebinfo.pg ebinfo.toc ebinfo.tp ebinfo.tps ebinfo.vr \
+	  ebinfo.vrs ebinfo.op ebinfo.tr ebinfo.cv ebinfo.cn \
+	  ebrefile.aux ebrefile.cp ebrefile.cps ebrefile.dvi \
+	  ebrefile.fn ebrefile.fns ebrefile.ky ebrefile.kys ebrefile.ps \
+	  ebrefile.log ebrefile.pg ebrefile.toc ebrefile.tp \
+	  ebrefile.tps ebrefile.vr ebrefile.vrs ebrefile.op ebrefile.tr \
+	  ebrefile.cv ebrefile.cn ebzip.aux ebzip.cp ebzip.cps \
+	  ebzip.dvi ebzip.fn ebzip.fns ebzip.ky ebzip.kys ebzip.ps \
+	  ebzip.log ebzip.pg ebzip.toc ebzip.tp ebzip.tps ebzip.vr \
+	  ebzip.vrs ebzip.op ebzip.tr ebzip.cv ebzip.cn
+
+clean-aminfo:
+
+distclean-aminfo:
+
+maintainer-clean-aminfo:
+	for i in $(INFO_DEPS); do \
+	  rm -f $$i; \
+	  if test "`echo $$i-[0-9]*`" != "$$i-[0-9]*"; then \
+	    rm -f $$i-[0-9]*; \
+	  fi; \
+	done
+tags: TAGS
+TAGS:
+
+
+distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
+
+subdir = doc
+
+distdir: $(DISTFILES)
+	@for file in $(DISTFILES); do \
+	  d=$(srcdir); \
+	  test -f $(distdir)/$$file \
+	  || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
+	  || cp -p $$d/$$file $(distdir)/$$file; \
+	done
+	$(MAKE) top_distdir="$(top_distdir)" distdir="$(distdir)" dist-info
+info: $(INFO_DEPS)
+dvi: $(DVIS)
+check: all
+	$(MAKE)
+installcheck:
+install-exec: 
+	@$(NORMAL_INSTALL)
+
+install-data: install-info-am
+	@$(NORMAL_INSTALL)
+
+install: install-exec install-data all
+	@:
+
+uninstall: uninstall-info
+
+install-strip:
+	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
+installdirs:
+	$(mkinstalldirs)  $(DESTDIR)$(infodir)
+
+
+mostlyclean-generic:
+	-test -z "$(MOSTLYCLEANFILES)" || rm -f $(MOSTLYCLEANFILES)
+
+clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+
+distclean-generic:
+	-rm -f Makefile $(DISTCLEANFILES)
+	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
+	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
+
+maintainer-clean-generic:
+	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
+mostlyclean:  mostlyclean-aminfo mostlyclean-generic
+
+clean:  clean-aminfo clean-generic mostlyclean
+
+distclean:  distclean-aminfo distclean-generic clean
+	-rm -f config.status
+	-rm -f libtool
+
+maintainer-clean:  maintainer-clean-aminfo maintainer-clean-generic \
+		distclean
+	@echo "This command is intended for maintainers to use;"
+	@echo "it deletes files that may require special tools to rebuild."
+
+.PHONY: install-info-am uninstall-info mostlyclean-aminfo \
+distclean-aminfo clean-aminfo maintainer-clean-aminfo tags distdir info \
+dvi installcheck install-exec install-data install uninstall all \
+installdirs mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
+
+
+@SET_MAKE@
+
+eb-ver.texi: stamp-eb
+	cp $(srcdir)/stamp-eb $(srcdir)/eb-ver.texi
+
+stamp-eb: eb.texi $(top_srcdir)/configure.in
+	@echo "@set UPDATED `cd $(srcdir) \
+	  && $(SHELL) ./mdate-sh eb.texi`" > vti.tmp
+	@echo "@set EDITION $(VERSION)" >> vti.tmp
+	@echo "@set VERSION $(VERSION)" >> vti.tmp
+	@cmp -s vti.tmp $(srcdir)/stamp-eb \
+	  || (echo "Updating $(srcdir)/stamp-eb"; \
+	      cp vti.tmp $(srcdir)/stamp-eb)
+	-@rm -f vti.tmp
+
+ebfont-ver.texi: stamp-ebfont
+	cp $(srcdir)/stamp-ebfont $(srcdir)/ebfont-ver.texi
+
+stamp-ebfont: ebfont.texi $(top_srcdir)/configure.in
+	@echo "@set UPDATED `cd $(srcdir) \
+	  && $(SHELL) ./mdate-sh ebfont.texi`" > vti.tmp
+	@echo "@set EDITION $(VERSION)" >> vti.tmp
+	@echo "@set VERSION $(VERSION)" >> vti.tmp
+	@cmp -s vti.tmp $(srcdir)/stamp-ebfont \
+	  || (echo "Updating $(srcdir)/stamp-ebfont"; \
+	      cp vti.tmp $(srcdir)/stamp-ebfont)
+	-@rm -f vti.tmp
+
+ebinfo-ver.texi: stamp-ebinfo
+	cp $(srcdir)/stamp-ebinfo $(srcdir)/ebinfo-ver.texi
+
+stamp-ebinfo: ebinfo.texi $(top_srcdir)/configure.in
+	@echo "@set UPDATED `cd $(srcdir) \
+	  && $(SHELL) ./mdate-sh ebinfo.texi`" > vti.tmp
+	@echo "@set EDITION $(VERSION)" >> vti.tmp
+	@echo "@set VERSION $(VERSION)" >> vti.tmp
+	@cmp -s vti.tmp $(srcdir)/stamp-ebinfo \
+	  || (echo "Updating $(srcdir)/stamp-ebinfo"; \
+	      cp vti.tmp $(srcdir)/stamp-ebinfo)
+	-@rm -f vti.tmp
+
+ebrefile-ver.texi: stamp-ebrefile
+	cp $(srcdir)/stamp-ebrefile $(srcdir)/ebrefile-ver.texi
+
+stamp-ebrefile: ebrefile.texi $(top_srcdir)/configure.in
+	@echo "@set UPDATED `cd $(srcdir) \
+	  && $(SHELL) ./mdate-sh ebrefile.texi`" > vti.tmp
+	@echo "@set EDITION $(VERSION)" >> vti.tmp
+	@echo "@set VERSION $(VERSION)" >> vti.tmp
+	@cmp -s vti.tmp $(srcdir)/stamp-ebrefile \
+	  || (echo "Updating $(srcdir)/stamp-ebrefile"; \
+	      cp vti.tmp $(srcdir)/stamp-ebrefile)
+	-@rm -f vti.tmp
+
+ebzip-ver.texi: stamp-ebzip
+	cp $(srcdir)/stamp-ebzip $(srcdir)/ebzip-ver.texi
+
+stamp-ebzip: ebzip.texi $(top_srcdir)/configure.in
+	@echo "@set UPDATED `cd $(srcdir) \
+	  && $(SHELL) ./mdate-sh ebzip.texi`" > vti.tmp
+	@echo "@set EDITION $(VERSION)" >> vti.tmp
+	@echo "@set VERSION $(VERSION)" >> vti.tmp
+	@cmp -s vti.tmp $(srcdir)/stamp-ebzip \
+	  || (echo "Updating $(srcdir)/stamp-ebzip"; \
+	      cp vti.tmp $(srcdir)/stamp-ebzip)
+	-@rm -f vti.tmp
+
+disctype.c.texi: $(C2TEXI) $(samplesdir)/disctype.c
+	-@rm -f disctype.c.texi
+	sed -e '1,/^$$/d' $(samplesdir)/disctype.c \
+	  | $(SHELL) $(C2TEXI) > disctype.c.texi
+
+subbook.c.texi: $(C2TEXI) $(samplesdir)/subbook.c
+	-@rm -f subbook.c
+	sed -e '1,/^$$/d' $(samplesdir)/subbook.c \
+	  | $(SHELL) $(C2TEXI) > subbook.c.texi
+
+# Tell versions [3.59,3.63) of GNU make to not export all variables.
+# Otherwise a system limit (for SysV at least) may be exceeded.
+.NOEXPORT:

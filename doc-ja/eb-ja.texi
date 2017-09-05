@@ -1,0 +1,1865 @@
+\input texinfo	        @c -*-texinfo-*-
+@c %** start of header
+@setfilename eb-ja.info
+@settitle EB Library
+@c %** end of header
+
+@include eb-ver.texi
+
+@dircategory CD-ROM Book Utilities
+@direntry
+* eb-ja: (eb-ja).               C library for accessing CD-ROM book.
+@end direntry
+
+@ifinfo
+EB Library: CD-ROM 書籍にアクセスするための C ライブラリ, 笠原基之
+
+Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end ifinfo
+
+@titlepage
+@title EB ライブラリ
+@subtitle CD-ROM 書籍にアクセスするための C ライブラリ
+@subtitle 第 @value{EDITION} 版 (EB ライブラリバージョン @value{VERSION} に対応)
+@subtitle @value{UPDATED}
+@author 笠原基之
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end titlepage
+
+@node Top, Introduction, (dir), (dir)
+@ifinfo
+この文書は第 @value{EDITION} 版です。
+この文書はまだ完成していません。
+@end ifinfo
+
+@menu
+* Introduction::                はじめに
+* Link::                        EB ライブラリを自分のプログラムにリンクする
+* Initialization::              初期化
+* Error Handling::              エラー処理
+* Subbook::                     副本
+* Search Basics::               検索の基礎知識
+* Word Search::                 前方一致、後方一致、完全一致検索
+
+* Index::                       索引
+
+@detailmenu
+ --- The Detailed Node Listing ---
+
+EB ライブラリを自分のプログラムにリンクする
+
+* Compilation::                 コンパイル
+* Configuration::               設定
+* Character Code::              文字コードについて
+
+初期化
+
+* Compressed Book::             圧縮された書籍
+* Initialization Sample::       サンプルプログラム
+* Initialization Data Types::   データ型
+* Initialization Functions::    関数
+
+エラー処理
+
+* Tolerance to Error::          エラーに対する寛容さ
+* Error Data Types::            データ型
+* Error Variables::             大域変数
+* Error Codes::                 エラーコード
+
+副本
+
+* Current Subbook::             現在選択中の副本
+* Subbook Sample::              サンプルプログラム
+* Subbook Data Types::          データ型
+* Subbook Functions::           関数
+
+前方一致、後方一致、完全一致検索
+
+* Get Remained Entries::        残っているエントリを取得
+* Word Search Data Types::      データ型
+* Word Search Functions::       関数
+
+索引
+
+* Data Type Index::             データ型の索引
+* Function Index::              関数の索引
+* Variable Index::              変数と定数の索引
+* Program Index::               サンプルプログラムの索引
+
+@end detailmenu
+@end menu
+
+@c ===================================================================
+@node Introduction, Link, Top, Top
+@chapter はじめに
+
+EB ライブラリは CD-ROM 書籍にアクセスするための C のライブラリです。
+UNIX 系 OS のシステム上で動作させることができます。
+EB ライブラリは EB, EBG, EBXA および EPWING 形式の CD-ROM 書籍に対応して
+います。
+これらの形式の CD-ROM 書籍は、日本で一般的に使われています。
+CD-ROM 書籍自体は ISO 9660 形式になっていますので、他の ISO 9660 形式と
+同じ要領でマウントすることができます。
+
+EB ライブラリは はフリーソフトウェアです。あなたは、Free Software
+Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
+バージョン 2 あるいはそれ以降の各バージョンの中からいずれかを選択し、
+そのバージョンが定める条項に従って本プログラムを再頒布または変更するこ
+とができます。
+
+EB ライブラリは有用とは思いますが、頒布にあたっては、市場性及び特定目
+的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細
+については GNU General Public License をお読みください。
+
+この文書は第 EB ライブラリバージョン @value{VERSION} に対応しています。
+この文書はまだ完成していません。
+
+@c ===================================================================
+@node Link, Initialization, Introduction, Top
+@chapter EB ライブラリを自分のプログラムにリンクする
+
+この章では、EB ライブラリを自分のプログラムにリンクする方法について説明
+します。
+
+@menu
+* Compilation::                 コンパイル
+* Configuration::               設定
+* Character Code::              文字コードについて
+@end menu
+
+@c -------------------------------------------------------------------
+@node Compilation, Configuration, Link, Link
+@section コンパイル
+
+EB ライブラリは、いくつかのヘッダおよびライブラリのファイルから構成され
+ています。
+EB ライブラリを @file{/usr/local} にインストールし、かつヘッダファイル
+のディレクトリ (@code{includedir}) をインストール時に変更していなければ、
+ヘッダファイルは @file{/usr/local/include/eb} にインストールされています。
+
+次のような行をあなたの書いた C プログラムに加えると、EB ライブラリのヘッ
+ダが読み込まれます。
+
+@example
+#include <eb/eb.h>
+#include <eb/error.h>
+@end example
+
+@noindent
+@file{eb.h} ではなく、@file{eb/eb.h} を読み込むことをお薦めします。
+
+コンパイル時に、EB ライブラリの位置を指定するために @samp{-I} オプショ
+ンを C コンパイラに与える必要があるかも知れません。
+
+@example
+cc -I/usr/local/include -c sample.c
+@end example
+
+リンク時には、@samp{-leb} と @samp{-lz} オプション (@samp{-lz} は
+zlib ライブラリをリンクします) を C コンパイラに与える必要があります。
+加えて、EB ライブラリと zlib の位置を指定するために、@samp{-L} オプショ
+ンを C コンパイラに与える必要があるかも知れません。
+EB ライブラリを @file{/usr/local} にインストールし、かつライブラリの
+ディレクトリ (@code{libdir}) をインストール時に変更していなければ、
+ライブラリファイルは @file{/usr/local/lib} にインストールされます。
+
+EB ライブラリと zlib ライブラリを両方とも @code{/usr/local/lib} にインス
+トールしたとすると、リンク時のコマンド行は次のようになります。
+
+@example
+cc sample.o -L/usr/local/lib -leb -lz
+@end example
+
+@noindent
+詳しくはあなたの C プリプロセッサ、C コンパイラ、リンカのマニュアルを読
+んで下さい。
+
+@c -------------------------------------------------------------------
+@node Configuration, Character Code, Compilation, Link
+@section 設定
+
+EB ライブラリのヘッダファイルには、次に記したように、OS およびサイトに固
+有な書き方が幾つか使われています。
+こうした固有の書き方について、あなたは自分のプログラムの中で設定を行わな
+ければならないかも知れません。
+
+@table @code
+@item const
+C コンパイラが @code{const} というキーワードに完全に対応していなければ、
+次のようにして @code{const} を空文字列と定義します。
+
+@example
+#define const 
+@end example
+
+@noindent
+Autoconf を使用しているなら、@code{AC_C_CONST} を @file{configure.in}
+に加えて下さい。
+
+@item off_t
+@code{off_t} が定義されていなければ、次のようにして @code{off_t} を
+@code{long} と定義します。
+
+@example
+#define off_t long
+@end example
+
+@noindent
+Autoconf を使用しているなら、@code{AC_TYPE_OFF_T} を
+@file{configure.in} に加えて下さい。
+
+@item size_t
+@code{size_t} が定義されていなければ、次のようにして @code{size_t} を
+@code{unsigned} と定義します。
+
+@example
+#define size_t unsigned
+@end example
+
+@noindent
+Autoconf を使用しているなら、@code{AC_TYPE_SIZE_T} を
+@file{configure.in} に加えて下さい。
+
+@item ssize_t
+@code{ssize_t} が定義されていなければ、次のようにして @code{ssize_t} を
+@code{int} と定義します。
+
+@example
+#define ssize_t int
+@end example
+
+@noindent
+Autoconf を使用しているなら、@code{AC_CHECK_TYPE(ssize_t, int)} を
+@file{configure.in} に加えて下さい。
+さらに、@file{configure.in} が @code{AC_CONFIG_HEADER} か
+@code{AM_CONFIG_HEADER} を含んでいるなら、@file{acconfig.h} に次の行を加
+えて下さい。
+
+@example
+@group
+/* Define to `int' if <sys/types.h> doesn't define.  */
+#undef ssize_t
+@end group
+@end example
+@end table
+
+@c -------------------------------------------------------------------
+@node Character Code,  , Configuration, Link
+@section 文字コードについて
+
+CD-ROM 書籍では、EBG 形式の書籍は ISO 8859-1 で書かれ、その他の書籍は
+JIS X 0208 で書かれています。
+
+EB ライブラリの API (Application Program Interface: アプリケーションとプ
+ログラムの間のインターフェース) では、EBG には ISO 8859-1 を用いています
+が、その他の書籍には JIS X 0208 ではなく EUC-JP を用いています。
+あなたが EB ライブラリの関数に日本語の文字列を渡すとき、その文字列は
+EUC-JP でなくてはなりません。また、あなたが EB ライブラリの関数から日本
+語の文字列を受け取るとき、その文字列は EUC-JP で書かれています。
+
+ただし、関数 @code{eb_rawtext()} はこの文字コードの規則には従いません。
+この関数は、一切の変換を行わずに文字列を返します。
+
+@c ===================================================================
+@node Initialization, Error Handling, Link, Top
+@chapter 初期化
+
+EB ライブラリでは、一冊の CD-ROM 書籍へのアクセスは、すべて
+@code{EB_Book} 型の一個のオブジェクトを介して行われます。
+
+@example
+EB_Book book;
+@end example
+
+@noindent
+もちろん、オブジェクトの領域は、@code{malloc()} で確保しても構いません。
+
+@example
+EB_Book *book_pointer;
+
+book_pointer = (EB_Book *) malloc(sizeof(EB_Book));
+@end example
+
+EB_Book オブジェクトの中身 (変数 @code{book} の中身、そして @code{book_pointer}
+が指す領域) はまだ初期化されていませんので、次の要領でオブジェクトを
+初期化します。
+
+@example
+eb_initialize(&book);
+eb_initialize(book_pointer);
+@end example
+
+@noindent
+@code{eb_initialize()} への渡す引数は @code{EB_Book} オブジェクトへのポ
+インタであって、@code{EB_Book} オブジェクトそのものではないことに注意し
+て下さい。
+EB ライブラリの関数の多くは、@code{EB_Book} オブジェクトへのポインタを第
+1 引数にとります。
+
+次に、@code{EB_Book} オブジェクトを CD-ROM 書籍の実体に結び付けます。
+これは、関数 @code{eb_bind()} によって行われます。
+
+@example
+@group
+(EB_Book オブジェクト)         (CD-ROM 書籍)
+     +-------+             +-------------------+
+     |       |  eb_bind()  |                   |
+     |       |=============|    /mnt/cdrom     |
+     +-------+             |                   |
+                           +-------------------+
+@end group
+@end example
+
+@noindent
+@code{eb_bind()} のサンプルソースコードです。
+
+@example
+@group
+if (eb_bind(&book, "/mnt/cdrom") == -1) @{
+    fprintf(stderr, "failed bind the book\n");
+    exit(1);
+@}
+@end group
+@end example
+
+@noindent
+パス @file{/mnt/cdrom} は書籍のトップディレクトリ、つまり @file{CATALOG}
+か @file{CATALOGS} ファイルのあるディレクトリです。
+@code{eb_bind()} は失敗すると、-1 を返します。
+しかしながら、戻り値の意味は今の段階では重要ではありません
+(エラー処理についての詳細は @pxref{Error Handling, , エラー処理})。
+
+@code{eb_bind()} とは反対に、@code{eb_clear()} はこの結び付きを解きます。 
+言い換えると、@code{EB_Book} オブジェクトは結び付きを解かれた状態
+(@dfn{unbound}) に戻ります 。
+書籍を閉じるときは、その書籍に結び付いている @code{EB_Book} オブジェクト
+に対して @code{eb_clear()} を呼ばなければいけません。
+書籍に結び付いているオブジェクトはファイルを何個か開いており、内部で
+メモリの割り当てを行っています。
+@code{eb_clear()} は開いているファイルをすべて閉じ、割り当てられたメモリ
+をすべて解放します。
+
+@example
+@group
+(EB_Book オブジェクト)         (CD-ROM 書籍)
+     +-------+             +-------------------+
+     |       |  eb_clear() |                   |
+     |       |=           =|    /mnt/cdrom     |
+     +-------+             |                   |
+                           +-------------------+
+@end group
+@end example
+
+@noindent
+@code{eb_clear()} のサンプルソースコードです。
+
+@example
+eb_clear(&book);
+@end example
+
+@noindent
+メモリを @code{malloc()} で確保した @code{EB_Book} オブジェクトは、オブ
+ジェクトが結び付きを解かれた状態のときに、@code{free()} で安全に解放する
+ことができます。
+
+@menu
+* Compressed Book::             圧縮された書籍
+* Initialization Sample::       サンプルプログラム
+* Initialization Data Types::   データ型
+* Initialization Functions::    関数
+@end menu
+
+@c -------------------------------------------------------------------
+@node Compressed Book, Initialization Sample, Initialization, Initialization
+@section 圧縮された書籍
+
+EB ライブラリは @code{ebzip} コマンドで圧縮した書籍にもアクセスするこ
+とができます。
+圧縮されたデータの伸長は EB ライブラリが自動的に行いますので、あなたは
+結び付けた辞書が圧縮されているかどうかを意識する必要はありません。
+
+(圧縮について詳しくは @pxref{Compression, , 圧縮, ebzip-ja, ebzip})。
+
+@c -------------------------------------------------------------------
+@node Initialization Sample, Initialization Data Types, Compressed Book, Initialization
+@section サンプルプログラム
+
+@pindex disctype.c
+@include disctype.c.texi
+
+@c -------------------------------------------------------------------
+@node Initialization Data Types, Initialization Functions, Initialization Sample, Initialization
+@section データ型
+
+この項で説明されているデータ型を使うには @file{eb/eb.h} を読み込んで下さ
+い。
+
+@example
+#include <eb/eb.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_Book
+
+データ型 @code{EB_Book} は一冊の CD-ROM 書籍を表します。
+EB ライブラリでは、CD-ROM 書籍へのアクセスはすべてこの型のオブジェクトを
+介して行われます。
+@end deftp
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_Disc_Code
+@vindex EB_DISC_EB
+@vindex EB_DISC_EPWING
+
+データ型 @code{EB_Disc_Code} は CD-ROM 書籍の形式コードを表します。
+現在のところ、@code{EB_DISC_EB} と @code{EB_DISC_EPWING} が形式コードと
+して定義されています。
+
+この型は符合付き整数型を用いて定義されていますので、2 つのコードを 2
+項演算子 @code{==} と @code{!=} で比べることができます。
+@end deftp
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_Character_Code
+@vindex EB_CHARCODE_ISO8859_1
+@vindex EB_CHARCODE_JISX0208
+
+データ型 @code{EB_Character_Code} は、CD-ROM 書籍で使用される文字コード
+を表します。
+現在のところ、@code{EB_CHARCODE_ISO8859_1} と
+@code{EB_CHARCODE_JISX0208} が文字コードとして定義されています。
+
+この型は符合付き整数型を用いて定義されていますので、2 つのコードを 2
+項演算子 @code{==} と @code{!=} で比べることができます。
+@end deftp
+
+@c -------------------------------------------------------------------
+@node Initialization Functions,  , Initialization Data Types, Initialization
+@section 関数
+
+この項で説明されている関数を使うには @file{eb/eb.h} を読み込んで下さい。
+
+@example
+#include <eb/eb.h>
+@end example
+
+(エラーコードと大域変数 @code{eb_error} に関する詳しいことは、
+@pxref{Error Handling, , エラー処理})。
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_initialize (EB_Book *@var{book})
+
+関数 @code{eb_initialize()} は @var{book} の指す @code{EB_Book} オブジェ
+クトを初期化します。
+各オブジェクトは、他の EB ライブラリの関数をそのオブジェクトに対して呼ぶ
+前に、ちょうど一回だけ初期化されなくてはなりません。
+
+初期化していないオブジェクトに対して EB ライブラリの他の関数を呼ばないで
+下さい。
+また、一つのオブジェクトに対して @code{eb_initialize()} を 2 度呼ばない
+で下さい。
+これらの行為は、メモリリークを起こします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_bind (EB_Book *@var{book}, const char *@var{path})
+
+関数 @code{eb_initialize()} は @var{book} の指す @code{EB_Book} オブジェ
+クトを、パス @var{path} にある CD-ROM 書籍に結び付けます。
+パスは書籍のトップディレクトリ、つまり @file{CATALOG} か
+@file{CATALOGS} ファイルのあるディレクトリでなくてはなりません。
+パスがスラッシュ (@code{/}) で始まっていなければ、カレントディレクトリ
+からの相対パスと見なします。
+空のパスは、カレントディレクトリ (@code{.}) と見なします。
+オブジェクトがすでに書籍に結び付いていた場合、その書籍との結び付きを解
+いてから、@var{path} にある書籍に結び付けます。
+
+書籍への結び付けが成功すれば、0 を返します。
+それ以外の場合は -1 を返し、@code{eb_errno} をセットします。
+このとき、オブジェクトは結び付きを解かれた状態になります。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_suspend (EB_Book *@var{book})
+
+関数 @code{eb_suspend()} は、@var{book} が指す @code{EB_Book} オブジェク
+トが現在選択中のもの、すなわち、選択中の副本、言語、フォントの高さをす
+べて未選択にします。
+オブジェクトが書籍に結び付いていないか、すでに一時休止状態になっている
+場合、関数は何もしません。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_clear (EB_Book *@var{book})
+
+関数 @code{eb_clear()} は、@var{book} が指す @code{EB_Book} オブジェク
+トの結び付きを解きます。
+オブジェクトが割り当てて管理していたメモリはすべて解放され、管理していた
+ファイルディスクリプタもすべて閉じられます。
+この関数は、書籍に結び付いていないオブジェクトに対しては何もしません。
+オブジェクトを再度使用する場合は、オブジェクトに対して @code{eb_bind()}
+を呼んで下さい。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_is_bound (EB_Book *@var{book})
+
+関数 @code{eb_is_bound()} は @var{book} が書籍に結び付いているかどうか
+を調べます。
+結び付いていれば、関数は 1 を返します。
+そうでなければ 0 を返し、@code{eb_error} を @code{EB_ERR_UNBOUND_BOOK}
+にセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun {const char *} eb_path (EB_Book *@var{book})
+
+関数 @code{eb_path()} は、@var{book} に結び付いている書籍のパスを返しま
+す。
+@var{book} はあらかじめ書籍に結び付いていなければなりません。
+
+関数が返すパスは常に @dfn{正規化された (canonicalized)} 形になっていま
+すので、返されるパスは @code{eb_bind()} で指定したものと異なっているか
+も知れません。
+ここで言う @dfn{正規化} とは、次のことを意味します。
+
+@itemize @bullet
+@item
+@code{eb_bind()} で相対パスが指定されていた場合は、絶対パスに変換される。
+@item
+@item
+@code{eb_bind()} で指定されたパスに @file{/..} が含まれていると、それ
+らはすべて直線的な形に変換される。
+@code{eb_bind()} で指定されたパスに @file{/.} が含まれていると、それら
+はすべて削除される。
+@item
+連続したスラッシュ (例: @file{//}) は一つにまとめられる。
+@item
+一個以上のスラッシュが末尾にあると、削除される。
+@end itemize
+
+成功すれば、この関数はパスを返します。
+失敗すると -1 を返し、@code{eb_error} をセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Disc_Code eb_disc_type (EB_Book *@var{book})
+
+関数 @code{eb_disc_type()} は @var{book} のディスクの形式を返します。
+@var{book} はあらかじめ書籍に結び付いていなければなりません。
+
+書籍が EB/EBG/EBXA なら @code{EB_DISC_EB} を返します。
+書籍が EPWING なら @code{EB_DISC_EPWING} を返します。
+関数が失敗した場合は -1 を返し、@code{eb_error} をセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Character_Code eb_character_code (EB_Book *@var{book})
+
+関数 @code{eb_character_type()} は @var{book} が書かれている文字コードを
+返します。
+@var{book} はあらかじめ書籍に結び付いていなければなりません。
+
+書籍が ISO 8859-1 で書かれているなら @code{EB_CHARCODE_ISO8859_1} を返し
+ます。
+書籍が JIS X 0208 で書かれているなら @code{EB_CHARCODE_JISX0208} を返し
+ます。
+関数が失敗した場合は -1 を返し、@code{eb_error} をセットします。
+@end deftypefun
+
+@c ===================================================================
+@node Error Handling, Subbook, Initialization, Top
+@chapter エラー処理
+
+EB ライブラリの関数は、指示された作業の遂行に失敗すると、大域変数
+@code{eb_error} をセットします。
+大域変数 @code{eb_error} は EB ライブラリの関数内で起きた最後のエラー
+のエラーコードを記録しています。
+
+EB ライブラリは、すべてのエラーコードに対するエラーメッセージを持って
+います。
+関数 @code{eb_error_message()} は、@code{eb_error} の現在の値に応じた
+エラーメッセージを返します。
+
+@example
+@group
+fprintf(stderr, "failed to bind a book, %s\n", eb_error_message());
+@end group
+@end example
+
+@code{eb_error} が @code{EB_ERR_TOO_LONG_FILENAME} にセットされていれ
+ば、次のようなエラーメッセージが出力されます。
+
+@example
+@group
+failed to bind a book, too long filename.
+@end group
+@end example
+
+@menu
+* Tolerance to Error::          エラーに対する寛容さ
+* Error Data Types::            データ型
+* Error Variables::             大域変数
+* Error Codes::                 エラーコード
+@end menu
+
+@c -------------------------------------------------------------------
+@node Tolerance to Error, Error Data Types, Error Handling, Error Handling
+@section エラーに対する寛容さ
+
+@code{EB_Book} オブジェクトは、状態に関するパラメタをいくつか持っていま
+す。
+オブジェクトが CD-ROM 書籍に結び付いているかどうかも、こうしたパラメタ
+のうちの一つです。
+引数に @code{EB_Book} オブジェクトへのポインタを取る関数には、あらかじ
+めオブジェクトのあるパラメタがセットされていることを期待しているものも
+あります。
+たとえば、@code{eb_path()} は、オブジェクトが書籍に結び付いていること
+を期待しています。
+
+もしも、書籍に結び付いていないオブジェクトを @code{eb_path()} に渡した
+らどうなるでしょうか。
+
+@example
+EB_Book book;
+
+eb_initialize(&book);
+eb_path(&book);        /* どうなるでしょうか */
+@end example
+
+@noindent
+この場合、@code{eb_path()} は @code{NULL} を返し、@code{eb_error} を
+@code{EB_ERR_UNBOUND_BOOK} にセットします。
+このように、EB ライブラリの関数は必要なパラメタがセットされていないオブ
+ジェクトを明確に拒絶します。
+
+しかしながら、次のようなことをすると、プログラムを異常終了させてしまい
+ます。
+
+@example
+eb_path(NULL);    /* 異常終了! */
+@end example
+
+@noindent
+関数の説明箇所に明示されている場合を除き、EB ライブラリの関数は与えられ
+たポインタが @code{NULL} かどうかは調べません。
+
+@c -------------------------------------------------------------------
+@node Error Data Types, Error Variables, Tolerance to Error, Error Handling
+@section データ型
+
+この項で説明されているデータ型を使うには @file{eb/error.h} を読み込んで
+下さい。
+
+@example
+#include <eb/error.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_Error_Code
+@vindex EB_NUM_ERRORS
+
+データ型 @code{EB_Error_Code} は、EB ライブラリで定義されているエラーコー
+ドを表します。
+EB ライブラリには @code{EB_NUM_ERRORS} 種類のエラーが定義されています。
+この型は符合付き整数型を用いて定義されていますので、2 つのコードを 2
+項演算子 @code{==} と @code{!=} で比べることができます。
+@end deftp
+
+@c -------------------------------------------------------------------
+@node Error Variables, Error Codes, Error Data Types, Error Handling
+@section 大域変数
+
+この項で説明されている大域変数のセット、参照、もしくはその両方を行うに
+は @file{eb/error.h} を読み込んで下さい。
+
+@example
+#include <eb/error.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypevar EB_Error_Code eb_error
+
+EB ライブラリの関数は、指示された作業が遂行できなかったときに、大域変数
+@code{eb_error} をセットします。
+大域変数 @code{eb_error} は EB ライブラリの関数内で起きた最後のエラーの
+エラーコードを記録しています。
+
+ライブラリの関数は、エラーを起こさずに作業を終えたとしても、この変数を
+クリアすることはしません。
+@code{eb_error} は最後に起きたエラーだけを保持しています。
+別のエラーが起きると、ライブラリの関数はこの変数を上書きします。
+あなたが自分のプログラムの中で、この変数を書き換えても構いません。
+@end deftypevar
+
+@c -------------------------------------------------------------------
+@node Error Codes,  , Error Variables, Error Handling
+@section エラーコード
+
+この項で説明されているエラーコードを使うには @file{eb/error.h} を読み
+込んで下さい。
+
+@example
+#include <eb/error.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_NO_ERR
+
+エラーは起きていない。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_MEMORY_EXHAUSTED
+
+EB ライブラリが @code{malloc()} を呼び出したが、@code{NULL} が返ってきた。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_EMPTY_FILENAME
+
+このエラーコードは時代遅れです。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_TOO_LONG_FILENAME
+
+長すぎるファイル名が与えられたのが原因で、@code{eb_bind()} か
+@code{eb_bind_appendix()} が失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_TOO_LONG_WORD
+
+長すぎる単語が与えられたのが原因で、@code{eb_search_word()} あるいは
+@code{eb_search_endword()}、@code{eb_search_exactword()} が失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_BAD_WORD
+
+与えられた単語に不正な文字が含まれていたために、@code{eb_search_word()}
+あるいは @code{eb_search_endword()}、@code{eb_search_exactword()} が失敗
+した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_EMPTY_WORD
+
+空の単語が与えられたために、@code{eb_search_word()} あるいは
+@code{eb_search_endword()}、@code{eb_search_exactword()} が失敗
+した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_GETCWD
+
+@code{getcwd()} もしくは @code{getwd()} が失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_OPEN_CAT
+
+EB ライブラリが、書籍の @file{CATALOG} ファイルまたは @file{CATALOGS} ファ
+イルを開くことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_OPEN_CATAPP
+
+EB ライブラリが、付録の @file{CATALOG} ファイルまたは @file{CATALOGS} ファ
+イルを開くことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_OPEN_LANG
+
+EB ライブラリが、書籍の @file{LANGUAGE} ファイルを開くことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_OPEN_START
+
+EB ライブラリが、書籍の @file{START} ファイルまたは @file{HONMON} ファイ
+ルを開くことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_OPEN_FONT
+
+EB ライブラリが、書籍のフォントファイル (@file{GAIJI} ディレクトリにある
+ファイル) を開くことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_OPEN_APP
+
+EB ライブラリが、付録の @file{APPENDIX} ファイルまたは @file{FUROKU} ファ
+イルを開くことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_READ_CAT
+
+EB ライブラリが、書籍の @file{CATALOG} ファイルまたは @file{CATALOGS} ファ
+イルを読みことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_READ_CATAPP
+
+EB ライブラリが、付録の @file{CATALOG} ファイルまたは @file{CATALOGS} ファ
+イルのシークに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_READ_CATAPP
+
+EB ライブラリが、付録の @file{CATALOG} ファイルまたは @file{CATALOGS} ファ
+イルを読むことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_READ_LANG
+
+EB ライブラリが、書籍の @file{LANGUAGE} ファイルを読むことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_READ_START
+
+EB ライブラリが、書籍の @file{START} ファイルまたは @file{HONMON} ファイ
+ルを読むことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_READ_FONT
+
+EB ライブラリが、書籍のフォントファイル (@file{GAIJI} ディレクトリにある
+ファイル) を読むことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_READ_APP
+
+EB ライブラリが、付録の @file{APPENDIX} ファイルまたは @file{FUROKU} ファ
+イルを読むことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_SEEK_CAT
+
+EB ライブラリが、書籍の @file{CATALOG} ファイルまたは @file{CATALOGS} ファ
+イルのシークに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_SEEK_CATAPP
+
+EB ライブラリが、付録の @file{APPENDIX} ファイルまたは @file{FUROKU} ファ
+イルを開くことに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_SEEK_LANG
+
+EB ライブラリが、書籍の @file{LANGUAGE} ファイルのシークに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_SEEK_START
+
+EB ライブラリが、書籍の @file{START} ファイルまたは @file{HONMON} ファイ
+ルのシークに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_SEEK_FONT
+
+EB ライブラリが、書籍のフォントファイル (@file{GAIJI} ディレクトリにある
+ファイル) のシークに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_FAIL_SEEK_APP
+
+EB ライブラリが、付録の @file{APPENDIX} ファイルまたは @file{FUROKU} ファ
+イルのシークに失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_UNEXP_CAT
+
+EB ライブラリが、書籍の @file{CATALOG} ファイルまたは @file{CATALOGS} ファ
+イル内で、期待しているものとは異なるデータに出くわした。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_UNEXP_CATAPP
+
+EB ライブラリが、付録の @file{CATALOG} ファイルまたは @file{CATALOGS} ファ
+イル内で、期待しているものとは異なるデータに出くわした。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_UNEXP_LANG
+
+EB ライブラリが、書籍の @file{LANGUAGE} ファイルイル内で、期待している
+ものとは異なるデータに出くわした。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_UNEXP_START
+
+EB ライブラリが、書籍の @file{START} ファイルまたは @file{HONMON} ファ
+イル内で、期待しているものとは異なるデータに出くわした。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_UNEXP_FONT
+
+EB ライブラリが、書籍のフォントファイル (@file{GAIJI} ディレクトリにある
+ファイル)内で、期待しているものとは異なるデータに出くわした。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_UNEXP_APP
+
+EB ライブラリが、書籍の @file{APPENDIX} ファイルまたは @file{FUROKU} ファ
+イル内で、期待しているものとは異なるデータに出くわした。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_UNBOUND_BOOK
+
+呼び出された EB ライブラリの関数は書籍に結び付けられた @code{EB_Book} 
+オブジェクトを要求しているが、与えられたオブジェクトは書籍に結び付けら
+れていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_UNBOUND_APP
+
+呼び出された EB ライブラリの関数は付録に結び付けられた @code{EB_Appendix} 
+オブジェクトを要求しているが、与えられたオブジェクトは付録に結び付けら
+れていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_LANG
+
+書籍は言語データを持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUB
+
+書籍は副本を一つも持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_APPSUB
+
+付録は副本を一つも持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_MSG
+
+選択していた付録はメッセージを一つも持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_FONT
+
+選択していた副本はフォントを一つも持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_START
+
+書籍内で選択されていた副本は、@file{CATALOG} ファイルも @file{CATALOGS} 
+ファイル持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_CUR_LANG
+
+呼び出された関数は、言語が選択されている @code{EB_Book} オブジェクトを引
+数としてとるが、与えられたオブジェクトでは選択されていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_CUR_SUB
+
+呼び出された関数は、副本が選択されている @code{EB_Book} オブジェクトを引
+数としてとるが、与えられたオブジェクトでは選択されていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_CUR_APPSUB
+
+呼び出された関数は、副本が選択されている @code{EB_Appendix} オブジェクト
+を引数としてとるが、与えられたオブジェクトでは選択されていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_CUR_FONT
+
+呼び出された関数は、フォントの高さが選択されている @code{EB_Book} オブジェ
+クトを引数としてとるが、与えられたオブジェクトでは選択されていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_LANG
+
+@code{EB_Book} オブジェクトと言語コードが関数に与えられたが、結び付け
+られている書籍はその言語コードの言語を持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_SUB
+
+@code{EB_Book} オブジェクトと副本コードが関数に与えられたが、結び付け
+られている書籍はその副本コードの副本を持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_APPSUB
+
+@code{EB_Appendix} オブジェクトと副本コードが関数に与えられたが、結び付
+けられている付録はその副本コードの副本を持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_MSG
+
+@code{EB_Book} オブジェクトとメッセージコードが関数に与えられたが、結び
+付けられている書籍で選択されていた言語は、そのメッセージコードのメッセー
+ジを持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_FONT
+
+@code{EB_Book} オブジェクトとフォントの高さが関数に与えられたが、結び
+付けられている書籍で選択されていた副本は、その高さのフォントを持ってい
+なかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_CHAR_BMP
+
+@code{EB_Book} オブジェクトと文字番号が関数に与えられたが、結び付けられ
+ている書籍で選択されていた副本は、その高さのフォントを持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_CHAR_TEXT
+
+@code{EB_Appendix} オブジェクトと文字番号が関数に与えられたが、結び付け
+られている付録は、その番号の文字の代替文字列を持っていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_SEARCH
+
+書籍が検索メソッドを持っていなかったので、
+@code{eb_search_word()} もしくは @code{eb_search_endword()}、
+@code{eb_search_exactword()} が失敗した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_HOOK
+
+不正なフックコードが関数に渡された。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_HOOK_WORKSPACE
+
+フック関数が -1 を返した。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_DIFF_CONTENT
+
+テキストデータの繰り返し取得がリクエストされたが、データの種類が前回指
+定されたときのものと異なっていた。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_DIFF_SUBBOOK 
+
+@code{EB_Book} オブジェクトが @code{eb_hit_list()}、@code{eb_heading()}、
+@code{eb_rawtext()} あるいは @code{eb_text()} に渡されたが、選択されてい
+た副本は前回呼び出されたときのものとは異なっていた。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_DIFF_BOOK
+
+@code{EB_Book} オブジェクトが @code{eb_hit_list()}、@code{eb_heading()}、
+@code{eb_rawtext()} あるいは @code{eb_text()} に渡されたが、
+@code{EB_Book} オブジェクトは前回呼び出されたときのものとは異なっていた。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_PREV_SEARCH
+
+@code{eb_hit_list()} が呼び出されたが、@code{eb_search_word()}、
+@code{eb_search_endword()}、@code{eb_search_exactword()} のいずれも、前
+もって呼ばれていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_PREV_CONTENT
+
+@code{eb_text()}、@code{eb_heading()}、@code{eb_rawtext()} のいずれかが
+呼ばれたが、@code{eb_seek()} が前もって呼ばれていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_MULTI_ID
+
+@code{EB_Book} オブジェクトと複合検索コードが関数に渡されたが、結び付け
+られた書籍で選択していた副本は、そのコードが割り当てられた複合検索を持っ
+ていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_ENTRY_ID
+
+@code{EB_Book} オブジェクトと複合検索エントリコードが関数に渡されたが、
+結び付けられた書籍で選択していた副本は、その複合検索エントリコードが割
+り当てられた複合検索エントリを持っていなかった。
+@end defvr
+
+@c ===================================================================
+@node Subbook, Search Basics, Error Handling, Top
+@chapter 副本
+
+大抵の場合、一冊の CD-ROM 書籍は複数の @dfn{副本 (subbook)} を持っていま
+す。
+たとえば、ある CD-ROM 書籍は、国語辞書、英々辞典、百科事典という 3 つの
+副本をもっています。
+それぞれの副本は、それ自体が独立した @dfn{書籍} になっています。
+
+@example
+@group
+       (CD-ROM 書籍)
++-------------------------+
+|    [国語辞典] (副本)    |
+|                         |
+|    [英々辞典] (副本)    |
+|                         |
+|    [百科事典] (副本)    |
++-------------------------+
+@end group
+@end example
+
+@noindent
+EB ライブラリは @dfn{副本コード (subbook code)} をそれぞれの副本に割り当
+てます。
+EB ライブラリは副本を識別するためにこのコードを用いますので、個々の副本
+コードは、書籍内で同じものがないようになっています。
+以下のソースコードは、@code{eb_subbook_list()} の例です。
+
+@example
+@group
+/* @code{book} が @code{EB_Book} の変数で、すでに書籍に結び付けら */
+/* れていると仮定しています。                           */
+EB_Subbook_Code subbook_codes[EB_MAX_SUBBOOKS];
+int count, i;
+
+count = eb_subbook_list(&book, subbook_codes);
+if (count == -1) @{
+    fprintf(stderr, "failed to get a subbook list, %s\n",
+        eb_error_message());
+@}
+@end group
+@end example
+
+@code{eb_subbook_list()} が成功すると、副本のリストが 
+@code{subbook_codes} に格納されます。
+リストの先頭の副本コードは @code{subbook_codes[0]} と表され、次のコー
+ドは @code{subbook_codes[1]}、という具合になります。
+@code{eb_subbook_list()} は書籍が持っている副本の数を返しますので、最
+後のコードは @code{subbook_codes[count -1]} と表されます。
+たとえば、最初の副本の題名は、次の要領で取得できます。
+
+@example
+title = eb_subbook_title2(&book, subbook_codes[0]);
+@end example
+
+@menu
+* Current Subbook::             現在選択中の副本
+* Subbook Sample::              サンプルプログラム
+* Subbook Data Types::          データ型
+* Subbook Functions::           関数
+@end menu
+
+@c -------------------------------------------------------------------
+@node Current Subbook, Subbook Sample, Subbook, Subbook
+@section 現在選択中の副本
+
+一冊の書籍の中では、同時に一つの副本だけが、
+@dfn{現在選択中の副本 (current subbook)} になることができます。
+単語の検索や、テキストの取得など、ほとんどの操作は現在選択中の副本に
+対してだけ行えます。
+関数 @code{eb_set_subbook()} で、副本の選択を行います。
+
+@example
+@group
+(EB_Book オブジェクト)                 (CD-ROM 書籍)
+     +--------+                  +-------------------------+
+     | 選択中 |                  |    [国語辞典] (副本)    |
+     | の副本 | eb_set_subbook() |                         |
+     |   *--------------------------->[英々辞典] (副本)    |
+     |        |                  |                         |
+     +--------+                  |    [百科事典] (副本)    |
+                                 +-------------------------+
+@end group
+@end example
+
+@noindent
+最初の段階では、いずれの副本も選択されていません。
+
+@code{eb_set_subbook()} は引数に、副本コードを引数にとります。
+関数が成功すると、そのコードに応じた副本が選択されます。
+以下のソースコードは @code{eb_set_subbook()} の例です。
+
+@example
+@group
+/* @code{book} が @code{EB_Book} の変数で、すでに書籍に結び付けら */
+/* れていると仮定しています。                           */
+EB_Subbook_Code subbook_codes[EB_MAX_SUBBOOKS];
+int count, i;
+
+count = eb_subbook_list(&book, subbook_codes);
+if (count == -1) @{
+    /* eb_subbook_list() が失敗 */
+@}
+
+for (i = 0; i < count; i++) @{
+    if (eb_set_subbook(&book, subbook_codes[i]) == -1) @{
+        /* eb_set_subbook() が失敗 */
+    @}
+@}
+@end group
+@end example
+
+@c -------------------------------------------------------------------
+@node Subbook Sample, Subbook Data Types, Current Subbook, Subbook
+@section サンプルプログラム
+
+@pindex subbook.c
+@include subbook.c.texi
+
+@c -------------------------------------------------------------------
+@node Subbook Data Types, Subbook Functions, Subbook Sample, Subbook
+@section データ型
+
+この項で説明されているデータ型を使うには @file{eb/eb.h} を読み込んで下さ
+い。
+
+@example
+#include <eb/eb.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_Subbook_Code
+
+データ型 @code{EB_Subbook_Code} は副本コードを表します。一冊の書籍の中
+の副本は、それぞれ一意の副本コードを持っています。
+この型は符合付き整数型を用いて定義されていますので、2 つのコードを 2
+項演算子 @code{==} と @code{!=} で比べることができます。
+@end deftp
+
+@c -------------------------------------------------------------------
+@node Subbook Functions,  , Subbook Data Types, Subbook
+@section 関数
+
+この項で説明されている関数を使うには @file{eb/eb.h} を読み込んで下さい。
+
+@example
+#include <eb/eb.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_initialize_all_subbooks (EB_Book *@var{book})
+
+関数 @code{eb_initialize_all_subbooks()} は @var{book} 内のすべての副本
+を初期化します。
+@var{book} は、あらかじめ書籍に結び付けられていなくてはなりません。
+
+通常、副本の初期化は、その副本が初めて選択されたときに行われます。
+この関数は、その初期化を先行して行います。
+この関数は、スタンドアロンで動作するサーバアプリケーションでは有効です。
+クライアントからの接続を受ける前に @code{eb_initialize_all_subbooks()}
+を呼んで下さい。
+接続したクライアントが副本をセットすることを要求した際に、初期化が終わっ
+ていますので、サーバは通常よりも早く応答することができます。
+
+成功すれば、関数は @var{book} 内の副本の数を返します。
+失敗した場合は、-1 を返し、@code{eb_error} をセットします。
+この関数が @var{book} の副本の選択状況を変化させることはありません。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_subbook_count (EB_Book *@var{book})
+
+関数 @code{eb_subbook_count()} は、@var{book} 内の副本の数を返します。
+@var{book} は、あらかじめ書籍に結び付けられていなくてはなりません。
+
+成功すれば、@var{book} 内の副本の数を返します。
+失敗した場合は、-1 を返し、@code{eb_error} をセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_subbook_list (EB_Book *@var{book}, EB_Subbook_Code *@var{list})
+@vindex EB_MAX_SUBBOOKS
+
+関数 @code{eb_subbook_list()} は、@var{book} 内の副本の副本コードのリス
+トを作成します。
+@var{book} は、あらかじめ書籍に結び付けられていなくてはなりません。
+この関数は、生成したリストを @code{EB_Subbook_Code} の配列にして、
+@var{list} に書き込みます。
+配列は、最大で @code{EB_MAX_SUBBOOKS} 個の要素を持ちます。
+
+成功すれば、関数は @var{book} 内の副本の数を返します。
+失敗した場合は、-1 を返し、@code{eb_error} をセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Subbook_Code eb_subbook (EB_Book *@var{book})
+
+関数 @code{eb_subbook()} は、@var{book} 内で現在選択中の副本の副本コー
+ドを返します。
+あらかじめ、@var{book} 内のいずれかの副本が選択されていなくてはなりませ
+ん。
+
+成功すれば、関数は @var{book} 内の副本の数を返します。
+失敗した場合は、-1 を返し、@code{eb_error} をセットます。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun {const char *} eb_subbook_title (EB_Book *@var{book})
+@vindex EB_MAXLEN_TITLE
+
+関数 @code{eb_subbook_title()} は @var{book} 内で現在選択中の副本の題名
+を返します。
+あらかじめ、@var{book} 内のいずれかの副本が選択されていなくてはなりませ
+ん。
+題名の文字列の長さは、最長で @code{EB_MAXLEN_TITLE} です。
+この長さにナル文字は含みません。
+題名は EUC-JP もしくは ISO 8859-1 で書かれています。
+
+成功すれば、関数は題名 (例: "英和辞典") を返します。
+失敗した場合は、@code{NULL} を返し、@code{eb_error} をセットます。
+
+関数の返す題名は、@var{book} 内に保管されている、定数 (const) の文字列
+であることに注意して下さい。
+@var{book} が書籍との結び付きを解かれると (つまり @var{book} に対して
+@code{eb_clear()} を呼ぶと)、題名の文字列も消滅します。
+したがって、結び付きを解かれた書籍の題名は参照しないで下さい。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun {const char *} eb_subbook_title2 (EB_Book *@var{book}, EB_Subbook_Code @var{code})
+
+関数 @code{eb_subbook_title2()} は @code{eb_subbook_title()} と同じで
+すが、引数 @var{code} で指定された副本の題名を返す点が異なります。
+@var{book} の副本は選択されていなくても構いませんが、あらかじめ
+@var{book} は書籍に結び付けられていなければなりません。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun {const char *} eb_subbook_directory (EB_Book *@var{book})
+@vindex EB_MAXLEN_BASENAME
+
+関数 @code{eb_subbook_title()} は @var{book} 内で現在選択中の副本のディ
+レクトリ名を返します。
+あらかじめ、@var{book} 内のいずれかの副本が選択されていなくてはなりませ
+ん。
+選択中の副本に属するファイルはすべて、CD-ROM 書籍のトップディレクトリか
+ら見てその相対ディレクトリの下に置かれています。
+ディレクトリ名の文字列の長さは、最長で @code{EB_MAXLEN_BASENAME} です。
+この長さにナル文字は含みません。
+ディレクトリ名は ISO 9660 で定義されている `d' 文字 (空白、数字、英大文
+字、アンダースコア) で構成されます。
+
+成功すれば、関数はディレクトリ名 (例: "JPDICT") を返します。
+失敗した場合は、@code{NULL} を返し、@code{eb_error} をセットます。
+
+関数の返すディレクトリ名は、@var{book} 内に保管されている、定数 (const)
+の文字列であることに注意して下さい。
+@var{book} が書籍との結び付きを解かれると (つまり @var{book} に対して
+@code{eb_clear} を呼ぶと)、ディレクトリ名の文字列も消滅します。
+したがって、結び付きを解かれた書籍のディレクトリ名は参照しないで下さい。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun {const char *} eb_subbook_directory2 (EB_Book *@var{book}, EB_Subbook_Code @var{code})
+
+関数 @code{eb_subbook_directory2()} は @code{eb_subbook_directory()} と
+同じですが、引数 @var{code} で指定された副本のディレクトリ名を返す点が異
+なります。
+@var{book} の副本は選択されていなくても構いませんが、あらかじめ
+@var{book} は書籍に結び付けられていなければなりません。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_set_subbook (EB_Book *@var{book}, EB_Subbook_Code @var{code})
+
+関数 @code{eb_set_subbook()} は @var{book} の副本を選択して @var{code} 
+に設定します。
+あらかじめ @var{book} が書籍に結び付けられていなければなりません。
+すでに副本を選択していた場合、この関数は副本を未選択にしてから、選択中
+の副本を @var{code} に設定します。
+
+成功すれば、0 を返します。
+失敗した場合は -1 を返し、@code{eb_error} をセットして、副本を未選択にし
+ます。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_unset_subbook (EB_Book *@var{book})
+
+関数 @code{eb_unset_subbook()} は、@var{book} 内で選択している副本を未
+選択にします。
+@var{book} が書籍に結び付いていないか、副本が選択されていない場合は、何
+もしません。
+@end deftypefun
+
+@c ===================================================================
+@node Search Basics, Word Search, Subbook, Top
+@chapter 検索の基礎知識
+
+CD-ROM 書籍において、もっとも重要な機能が検索です。
+現在、次のような検索メソッドが定義されています。
+
+@table @asis
+@item 前方一致検索 (word search)
+与えられた単語に対して、前方が一致するエントリを検索します。
+
+@item 後方一致検索 (end-word search)
+与えられた単語に対して、後方が一致するエントリを検索します。
+
+@item 完全一致検索 (exact-word search)
+与えられた単語と完全に一致するエントリを検索します。
+
+@item 条件検索 (keyword search)
+@itemx 複合検索 (multi search)
+与えられたキーワードに関連するエントリを検索します。
+(EB ライブラリは、まだこのメソッドをサポートしていません。)
+
+@item グラフィック検索
+クリック可能な画像マップです。
+(EB ライブラリは、まだこのメソッドをサポートしていません。)
+
+@item メニュー検索
+メニュー
+@end table
+
+@c ===================================================================
+@node Word Search, Index, Search Basics, Top
+@chapter 前方一致、後方一致、完全一致検索
+
+前方一致、後方一致、完全一致検索は、与えられた単語に一致するエントリを
+現在選択中の副本から探し出す検索メソッドです。
+前方一致検索は、与えられた単語に対して前方が一致するエントリを検索しま
+す。
+後方一致検索は、与えられた単語に対して後方が一致するエントリを検索しま
+す。
+完全一致検索は、与えられた単語と完全に一致するエントリを検索します。
+
+以下は、前方一致検索の例です。
+@samp{librar} で始まるエントリを探しています。
+
+@example
+#define MAX_HITS    50
+
+/* @code{book} が @code{EB_Book} の変数で、すでに書籍に結び付けら */
+/* れ、副本を選択していることを仮定しています。         */
+EB_Hit hits[MAX_HITS];
+int hitcount;
+
+if (eb_search_word(&book, "librar") == -1) @{
+    fprintf(stderr, "an error occurs.\n");
+    exit(1);
+@}
+hitcount = eb_hit_list(&book, hits, MAX_HITS);
+if (hitcount == -1) @{
+    fprintf(stderr, "an error occurs.\n");
+    exit(1);
+@}
+@end example
+
+@noindent
+関数 @code{eb_search_word()} は、前方一致検索をリクエストします。
+ただし、この関数はヒットしたエントリを返すことはしません。
+これは @code{eb_hit_list()} によって行われます。
+@code{eb_hit_list()} はヒットしたエントリを @code{hits} に記録し、記録し
+たエントリの個数を返します。
+この例では、@code{eb_hit_list()} は最大で @code{MAX_HITS} (= 50) 個
+のエントリを得ます。
+
+現在選択中の副本が英々辞典だとすると、少なくとも @samp{library} と
+@samp{librarian} という 2 つのエントリが得られれるでしょう。
+
+@example
+@group
++-------------+-------------+---
+| (librarian) |  (library)  |   
++-------------+-------------+---
+    hits[0]       hits[1]
+@end group
+@end example
+
+@noindent
+(@samp{library} と @samp{librarian} エントリの順序は、上の絵とは異なっ
+ているかも知れません。)
+
+@code{hits} の個々の要素は、ヒットしたエントリの @dfn{見出し (heading)}
+と @dfn{本文 (text)} の位置を抱えています。
+
+@example
+@group
+                     見出し
+                   +-----------+
+              +--->| librarian |
++----------+  |    +-----------+
+| heading ----+      本文
+|          |       +-------------------------------------+
+|    text -------->| librarian                           |
++----------+       | n. (1) A person who is a specialist |
+   hits[0]         | in library work. (2) ...            |
+                   +-------------------------------------+
+@end group
+@end example
+
+@noindent
+この章では、見出しと本文の取得方法については説明しません。
+@c @ref{}.
+
+@menu
+* Get Remained Entries::        残っているエントリを取得
+* Word Search Data Types::      データ型
+* Word Search Functions::       関数
+@end menu
+
+@c -------------------------------------------------------------------
+@node Get Remained Entries, Word Search Data Types, Word Search, Word Search
+@section 残っているエントリを取得
+
+前に述べたように、@code{eb_hit_list()} の 2 番目の引数は、ヒットしたエ
+ントリの最大取得数です。
+次の例では、たとえそれ以上の個数のエントリが一致したとしても、最大で
+@code{MAX_HITS} 個のエントリしか取得しません。
+
+@example
+hitcount = eb_hit_list(&book, hits, MAX_HITS);
+@end example
+
+@noindent
+残りのエントリを取得するには、@code{eb_hit_list()} が 0 を返すまで繰り返
+し呼び出します。
+
+@example
+@group
+for (;;) @{
+    hitcount = eb_hit_list(&book, hits, MAX_HITS);
+    if (hitcount == 0) @{
+        break;
+    @} else if (hitcount == -1) @{
+        fprintf(stderr, "an error occurs.\n");
+        exit(1);
+    @}
+    /* ヒットしたエントリの見出しを表示 */
+@}
+@end group
+@end example
+
+ただし、以下に挙げた動作を行うと、@code{eb_hit_list()} 内部の繰り返し
+に関する状態記録がリセットされてしまいます。
+リセット後は、残りのエントリをそれ以上取得することはできません。
+
+@itemize @bullet
+@item その @code{EB_Book} オブジェクトに対して、以下のいずれかの関数を呼
+び出す。
+@itemize @minus
+@item @code{eb_set_subbook()}
+@item @code{eb_unset_subbook()}
+@item @code{eb_initialize_all_subbooks()}
+@item @code{eb_bind()}
+@item @code{eb_clear()}
+@item @code{eb_suspend()}
+@end itemize
+
+@item @emph{任意} の @code{EB_Book} オブジェクトに対して、以下のいずれか
+の関数を呼び出す。
+@itemize @minus
+@item @code{eb_search_word()}
+@item @code{eb_search_endword()}
+@item @code{eb_search_exactword()}
+@end itemize
+
+@item 他の @code{EB_Book} オブジェクトに対して、以下のいずれかの関数を呼
+び出す。
+@itemize @minus
+@item @code{eb_hit_list()} (下記参照)
+@end itemize
+@end itemize
+
+@noindent
+@code{eb_hit_list()} を、前回とは異なる @code{EB_Book} オブジェクトを指
+定して呼び出すとエラーが生じます。
+このとき、関数は -1 を返し、@code{eb_error} をセットします。
+
+また、@code{eb_hit_list()} が失敗した場合 (-1 を返した場合) も、繰り返し
+に関する状態記録はリセットされます。
+
+@c -------------------------------------------------------------------
+@node Word Search Data Types, Word Search Functions, Get Remained Entries, Word Search
+@section データ型
+
+この項で説明されているデータを使うには @file{eb/eb.h} を読み込んで下さい。
+
+@example
+#include <eb/eb.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_Hit
+
+データ型 @code{EB_Hit} は検索したヒットしたエントリを表します。
+データ型は次のように定義されています。
+
+@example
+@group
+typedef struct @{
+    EB_Position heading;
+    EB_Position text;
+@} EB_Hit;
+@end group
+@end example
+
+@noindent
+直接メソッドのメンバを参照したり、セットしたりして構いません。
+@end deftp
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_Position
+
+データ型 @code{EB_Position} は副本の中身のデータの位置を表します。
+データ型は次のように定義されています。
+
+@example
+@group
+typedef struct @{
+    int page;
+    int offset;
+@} EB_Position;
+@end group
+@end example
+
+@noindent
+直接メソッドのメンバを参照したり、セットしたりして構いません。
+@end deftp
+
+@c -------------------------------------------------------------------
+@node Word Search Functions,  , Word Search Data Types, Word Search
+@section 関数
+
+この項で説明されている関数を使うには @file{eb/eb.h} を読み込んで下さい。
+
+@example
+#include <eb/eb.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_have_exactword_search (EB_Book *@var{book})
+
+関数 @code{eb_have_exactword_search()} は、@var{book} 内で現在選択中の副
+本が完全一致検索メソッドを持っていれば 1 を返します。
+メソッドをもっていないか、副本が選択されていない場合は、0 を返し、
+@code{eb_error} を @code{EB_ERR_NO_SUCH_SEARCH} にセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_search_exactword (EB_Book *@var{book}, const char *@var{inputword})
+
+関数 @code{eb_search_exactword()} は、@var{book} 内で現在選択中の副本
+の中から、@var{inputword} に完全に一致するものを検索します。
+あらかじめ、@var{book} 内のいずれかの副本が選択されていなくてはなりませ
+ん。
+@var{book} の文字コードに応じて、@var{inputword} は EUC-JP か ISO 8859-1
+で書かれていなくてはなりません。
+
+この関数は EB ライブラリに検索リクエストを送るだけです。
+ヒットしたエントリを返すことはしません。
+ヒットしたエントリの取得は @code{eb_hit_list()} が行います。
+
+成功すると、0 を返します。
+失敗した場合は、-1 を返し @code{eb_error} をセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_have_word_search (EB_Book *@var{book})
+
+関数 @code{eb_have_word_search()} は、@var{book} 内で現在選択中の副
+本が前方一致検索メソッドを持っていれば 1 を返します。
+メソッドをもっていないか、副本が選択されていない場合は、0 を返し、
+@code{eb_error} を @code{EB_ERR_NO_SUCH_SEARCH} にセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_search_word (EB_Book *@var{book}, const char *@var{inputword})
+
+関数 @code{eb_search_word()} は、@var{book} 内で現在選択中の副本
+の中から、前方が @var{inputword} に一致するものを検索します。
+あらかじめ、@var{book} 内のいずれかの副本が選択されていなくてはなりませ
+ん。
+@var{book} の文字コードに応じて、@var{inputword} は EUC-JP か ISO 8859-1
+で書かれていても構いません。
+
+この関数は EB ライブラリに検索リクエストを送るだけです。
+ヒットしたエントリを返すことはしません。
+ヒットしたエントリの取得は @code{eb_hit_list()} が行います。
+
+成功すると、0 を返します。
+失敗した場合は、-1 を返し @code{eb_error} をセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_have_endword_search (EB_Book *@var{book})
+
+関数 @code{eb_have_endword_search()} は、@var{book} 内で現在選択中の副
+本が後方一致検索メソッドを持っていれば 1 を返します。
+メソッドをもっていないか、副本が選択されていない場合は、0 を返し、
+@code{eb_error} を @code{EB_ERR_NO_SUCH_SEAARCH} にセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_search_endword (EB_Book *@var{book}, const char *@var{inputword})
+
+関数 @code{eb_search_endword()} は、@var{book} 内で現在選択中の副本
+の中から、後方が @var{inputword} に一致するものを検索します。
+あらかじめ、@var{book} 内のいずれかの副本が選択されていなくてはなりませ
+ん。
+@var{book} の文字コードに応じて、@var{inputword} は EUC-JP か ISO 8859-1
+で書かれていても構いません。
+
+この関数は EB ライブラリに検索リクエストを送るだけです。
+ヒットしたエントリを返すことはしません。
+ヒットしたエントリの取得は @code{eb_hit_list()} が行います。
+
+成功すると、0 を返します。
+失敗した場合は、-1 を返し @code{eb_error} をセットします。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_hit_list (EB_Book *@var{book}, EB_Hit *@var{hits}, int @var{maxhits})
+
+関数 @code{eb_hit_list()} はあらかじめ呼び出された
+@code{eb_search_exactword()}、@code{eb_search_word()}、もしくは
+@code{eb_search_endword()} でヒットしたエントリを取得します。
+したがって、この関数を呼ぶ前に、これらのうちのいずれかの関数の呼び出し
+に成功していなくてはなりません。
+そうでないと、関数は失敗します。
+
+@code{eb_hit_list()} に渡す @var{book} は、@code{eb_search_exactword()}
+(または @code{eb_search_word()} または @code{eb_search_endword()}) に渡
+したものと同じでなければなりません。
+@code{eb_hit_list()} に異なる @code{EB_Book} オブジェクトを渡すと、この
+関数は失敗します。
+
+@code{eb_hit_list()} は最大で @var{maxhits} 個のヒットエントリを
+@var{hits} に書き込みます。
+@code{eb_hit_list()} がそれを越える数のヒットエントリを見つけたときは最
+初の @var{maxhits} 個のエントリを取得します。
+残ったエントリは @code{eb_hit_list()} が 0 を返すまで繰り返し呼び出すこ
+とで取得できます (@pxref{Get Remained Entries, , 残っているエントリの取得})。
+
+成功すると、関数はヒットした @var{hits} に書き込んだエントリの個数を返
+します。
+失敗した場合は -1 を返し、@code{eb_error} をセットします。
+@end deftypefun
+
+@c ===================================================================
+@node Index,  , Word Search, Top
+@appendix 索引
+
+@menu
+* Data Type Index::             データ型の索引
+* Function Index::              関数の索引
+* Variable Index::              変数と定数の索引
+* Program Index::               サンプルプログラムの索引
+@end menu
+
+@c -------------------------------------------------------------------
+@node Data Type Index, Function Index, Index, Index
+@section データ型の索引
+
+@printindex tp
+
+@c -------------------------------------------------------------------
+@node Function Index, Variable Index, Data Type Index, Index
+@section 関数の索引
+
+@printindex fn
+
+@c -------------------------------------------------------------------
+@node Variable Index, Program Index, Function Index, Index
+@section 変数と定数の索引
+
+@printindex vr
+
+@c -------------------------------------------------------------------
+@node Program Index,  , Variable Index, Index
+@section プログラムの索引
+
+@printindex pg
+
+@c -------------------------------------------------------------------
+@contents
+@bye

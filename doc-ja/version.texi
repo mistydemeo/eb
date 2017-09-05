@@ -1,0 +1,3 @@
+@set UPDATED 1998 Ç¯ 10 ·î 7 Æü
+@set EDITION 2.2
+@set VERSION 2.2

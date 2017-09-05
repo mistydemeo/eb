@@ -1,0 +1,83 @@
+dnl *
+dnl * Process this file with autoconf to produce a configure script.
+dnl *
+AC_INIT(disctype.c)
+AC_PREREQ(2.12)
+AM_INIT_AUTOMAKE(eb-samples-ja, 2.2)
+
+dnl *
+dnl * --with-zlib option.
+dnl *
+AC_ARG_WITH(zlib,
+[  --with-zlib             use installed zlib [default=no]],
+[case "${withval}" in
+   yes|no) with_zlib=${withval} ;;
+   *)   AC_MSG_ERROR(invalid argument to --with-zlib) ;;
+esac], with_zlib=no)
+AM_CONDITIONAL(WITH_ZLIB, test ${with_zlib} = yes)
+
+dnl *
+dnl * --with-zlib-includes option.
+dnl *
+AC_ARG_WITH(zlib-includes,
+[  --with-zlib-includes=DIR
+                          zlib include files are in DIR],
+[zincludedir="${withval}"], [zincludedir=''])
+
+dnl *
+dnl * --with-zlib-libraries option.
+dnl *
+AC_ARG_WITH(zlib-libraries,
+[  --with-zlib-libraries=DIR
+                          zlib library files are in DIR],
+[zlibdir="${withval}"], [zlibdir=''])
+
+if test ${with_zlib} = yes ; then
+   if test "X${zincludedir}" != X ; then
+      INCLUDES_FOR_LIBZ="-I${zincludedir}"
+   else
+      INCLUDES_FOR_LIBZ=''
+   fi
+   if test "X${zlibdir}" != X ; then
+      LDADD_FOR_LIBZ="-L${zlibdir} -lz"
+      DEPENDENCIES_FOR_LIBZ=''
+   else
+      LDADD_FOR_LIBZ="-lz"
+      DEPENDENCIES_FOR_LIBZ=''
+   fi
+else
+   INCLUDES_FOR_LIBZ='-I$(srcdir)/../zlib'
+   LDADD_FOR_LIBZ='../zlib/libz.la'
+   DEPENDENCIES_FOR_LIBZ='../zlib/libz.la'
+fi
+AC_SUBST(INCLUDES_FOR_LIBZ)
+AC_SUBST(LDADD_FOR_LIBZ)
+AC_SUBST(DEPENDENCIES_FOR_LIBZ)
+
+dnl * 
+dnl * Alternative Programs.
+dnl * 
+AM_PROG_LIBTOOL
+AC_PROG_CC
+
+dnl * 
+dnl * Compiler Characteristics.
+dnl * 
+AC_C_CONST
+
+dnl * 
+dnl * Header Files.
+dnl * 
+AC_CHECK_HEADERS(stdlib.h)
+
+dnl * 
+dnl * Typedefs.
+dnl * 
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+AC_CHECK_TYPE(ssize_t, int)
+
+dnl * 
+dnl * Output Files.
+dnl * 
+AC_OUTPUT(Makefile)

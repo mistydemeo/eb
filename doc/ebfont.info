@@ -1,0 +1,318 @@
+This is Info file ebfont.info, produced by Makeinfo version 1.68 from
+the input file ebfont.texi.
+
+INFO-DIR-SECTION CD-ROM Book Utilities
+START-INFO-DIR-ENTRY
+* ebfont: (ebfont).             Get font data in a CD-ROM book.
+END-INFO-DIR-ENTRY
+
+   ebfont: Utility for getting font data in a CD-ROM book, by Motoyuki
+Kasahara.
+
+   Copyright (C) 1998  Motoyuki Kasahara
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by Free Software Foundation, Inc.
+
+
+File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
+
+   This is edition 2.2, for EB Library version 2.2.
+
+* Menu:
+
+* Introduction::                Introduction.
+* What is Local Character::     What is Local Character?
+* Invoking ebfont::             Invoking `ebfont'.
+* Summary of Options::          Summary of Options to `ebfont'.
+
+ -- The Detailed Node Listing --
+
+Invoking `ebfont'
+
+* Image Formats::               Image Formats.
+* Heights::                     Heights.
+* Subbooks::                    Subbooks.
+
+
+File: ebfont.info,  Node: Introduction,  Next: What is Local Character,  Prev: Top,  Up: Top
+
+Introduction
+************
+
+   The `ebfont' command reads the bitmap data of the local defined
+characters in a CD-ROM book, convert them to specified image formats,
+and write them to files.  `ebfont' uses EB Library and it is
+distributed with the library.
+
+   `ebfont' is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2, or (at your option) any
+later version.
+
+   `ebfont' is distributed in the hope that it will be useful, but
+*without any warranty*; without even the implied warranty of
+merchantability or fitness for a particular purpose.  See the GNU
+General Public License for more details.
+
+   This is edition 2.2, for EB Library version 2.2.
+
+
+File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
+
+What is Local Character?
+************************
+
+   Many CD-ROM books define their local characters.  For example, some
+English Japanese dictionaries define pronunciation marks as the local
+characters because the character set used in CD-ROM books doesn't have
+pronunciation marks.
+
+   CD-ROM books also have bitmap data of the local characters.  The
+`ebfont' command reads the bitmap data, convert them to a specified
+image formats, and write them to files.  `ebfont' can generates image
+files as XBM (X BitMap format), XPM (X PixMap format) and/or GIF
+(Graphics Interchange Format).  By default, XBM format is selected.
+
+   Local characters are classified to two types; "narrow" and "wide".
+In narrow type characters, the height of the bitmap data is about half
+of its width.  In wide type characters, the width and height of the
+bitmap data are almost same.  A CD-ROM book can defines local
+characters of both types.
+
+   The internal fomrat specification of CD-ROM book defines four heights
+for local characters, for both narrow and wide types.  Their witdths,
+heights and sizes are follows:
+
+height                   narrow                   wide                     
+16                       8x16                     16x16                    
+24                       16x24                    24x24                    
+30                       16x30                    32x30                    
+48                       24x48                    48x48                    
+
+By deafult, `ebfont' generates image files for fonts with the height of
+16 pixels.
+
+
+File: ebfont.info,  Node: Invoking ebfont,  Next: Summary of Options,  Prev: What is Local Character,  Up: Top
+
+Invoking `ebfont'
+*****************
+
+   Its usual way to invoke `ebfont' is as follows:
+
+     % ebfont BOOK-PATH
+
+BOOK-PATH points to the top directory of a CD-ROM book where the file
+`CATALOG' or `CATALOGS' resides.  Though you cannot specify two or more
+book-paths, you can omit book-path like as follows:
+
+     % ebfont
+
+In this case, it is assumed that the current working directory (`.') is
+specified.
+
+   `ebfont' generates image files under the current directory.  The
+generic forms of their filenames are:
+
+     SUBBOOK/HEIGHT/narrow/CHARACTER-NUMBER.SUFFIX
+     SUBBOOK/HEIGHT/wide/CHARACTER-NUMBER.SUFFIX
+
+The SUFFIX is `xbm', `xpm' or `gif'.  The CHARACTER-NUMBER is a
+hexadecimal number with 4 digits (`0' to `9', and `a' to `f'), like
+this:
+
+     EJDICT/16/narrow/a121.xbm
+     EJDICT/16/wide/a321.xbm
+
+The intermediate directories such as `EJDICT/16/xbm/narrow' are created
+by `ebfont' if missing.
+
+   `ebfont' can outputs image files not only under the current
+directory but also any directory by the `--output-directory' option.
+The top directory must have been created before invoking `ebfont'.
+
+     % ebfont --output-directory DIRECTORY BOOK-PATH
+
+* Menu:
+
+* Image Formats::               Image Formats.
+* Heights::                     Heights.
+* Subbooks::                    Subbooks.
+
+
+File: ebfont.info,  Node: Image Formats,  Next: Heights,  Prev: Invoking ebfont,  Up: Invoking ebfont
+
+Image Formats
+=============
+
+   `ebfont' can generates image files of XBM, XPM and GIF (GIF89a)
+formats.  These image formats are specified at the `--image-format'
+(`-i') option.  The `--image-format' option takes an argument which is
+a list of image format mames separeted by a comma (`,').  For example,
+`ebfont' generates image files of XPM and GIF formats by the following
+command:
+
+     % ebfont --image-format xpm,gif BOOK-PATH
+
+An argument to `--image-format' can be splitted like as follows:
+
+     % ebfont --image-format xpm --image-format gif BOOK-PATH
+
+In the XPM and GIF formats, the foreground and background colors of
+images are black (`#000000' in RGB) and transparency.  `ebzip'
+generates GIF images without LZW compression algolythm, so that the
+their sizes are too fat.
+
+
+File: ebfont.info,  Node: Heights,  Next: Subbooks,  Prev: Image Formats,  Up: Invoking ebfont
+
+Heights
+=======
+
+   By deafult, `ebfont' generates image files for narrow and wide fonts
+with the height of 16 pixels.  The `--font-height' (`-f') option allows
+you to generate image files of fonts with other heights.  The
+`--font-height' option takes an argument which is a list of font
+heights separeted by a comma (`,').  The font height must be `16',
+`24', `30' and `48'.  For example, `ebfont' generates image files of
+fonts with the heights of 16 and 24 pixels by the following command:
+
+     % ebfont --font-height 16,24 BOOK-PATH
+
+An argument to `--font-height' can be splitted like as follows:
+
+     % ebfont --font-height 16 --font-height 24 BOOK-PATH
+
+
+File: ebfont.info,  Node: Subbooks,  Prev: Heights,  Up: Invoking ebfont
+
+Subbooks
+========
+
+   `ebfont' generates image files for all subbooks by default, but the
+`--subbook' (`-S') option allows you to generates image files for
+specified subbooks only.
+
+   The `--subbook' option takes an argument which is a list of
+directory names of subbooks to be compressed, separeted by a comma
+(`,').  The `ebinfo' command tells you what subbooks your book contains
+and what their directory names are.
+
+     % ebinfo /mnt/cdrom
+     disc type: EB/EBG/EBXA
+     character code: JIS X 0208
+     the number of subbooks: 3
+     
+     subbook 1:
+       title: New English Japanese Dictionary (4th edition)
+       directory: ENGLISH
+       search methods: word endword keyword menu
+       font sizes: 16 24 30 48
+       narrow font characters: 0xa121 -- 0xa24e
+       wide font characters: 0xa321 -- 0xa27e
+     subbook 2:
+       title: CD-ROM French Japanese Dictionary (3rd edition)
+       directory: FRENCH
+       search methods: word endword keyword menu
+       font sizes: 16 24 30 48
+       narrow font characters:
+       wide font characters: 0xa321 -- 0xa27e
+     subbook 3:
+       title: Pocket German Japanese Dictionary (3rd edition)
+       directory: GERMAN
+       search methods: menu
+       font sizes: 16 24 30 48
+       narrow font characters:
+       wide font characters: 0xa321 -- 0xa27e
+
+(*Note Invoking `ebinfo': (ebinfo)Invoking ebinfo, for more details
+about the `ebinfo' command).
+In this example, there are three subbooks in the book, and their
+directory names are `ENGLISH', `FRENCH' and `GERMAN'.
+
+   Inkoing the following command, `ebfont' generates image files for
+`ENGLISH' and `FRENCH' only.
+
+     % ebfont --subbook english,french /mnt/cdrom
+
+Case of the directory names are not sensitve.  An argument to
+`--subbook' can be splitted like as follows:
+
+     % ebfont --subbook english --subbook french /mnt/cdrom
+
+
+File: ebfont.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: Top
+
+Summary of `ebfont' Options
+***************************
+
+   The `ebfont' command supports both traditional single-letter options
+and mnemonic long option names.  Long option names are indicated with
+`--' instead of `-'.  Abbreviations for option names are allowed as
+long as they are unique.
+
+`-d'
+`--debug'
+     Print debugging information to standard error.
+
+`-f HEIGHTS'
+`--font-height HEIGHTS'
+     Generate image files of local characters with HEIGHTS.  HEIGHTS
+     must be a list of heights separated by a comma (`,').  The valid
+     heights are `16', `24', `30' and `48'.  By default, `ebfont'
+     generates fonts with a height of 16 pixels.  (*Note Heights::, for
+     more details).
+
+`-h'
+`--help'
+     Output help message to standard out, then exit.
+
+`-i FORMATS'
+`--image-format FORMATS'
+     Generates image files as FORMATS.  FORMATS must be a list of
+     format names separated by a comma (`,').  Supported format names
+     are `xbm', `xpm', and `gif'.  By default, `ebfont' generates image
+     files as XBM format.  (*Note Image Formats::, for more details).
+
+`-o DIRECTORY'
+`--output-directory DIRECTORY'
+     Output image files under DIRECTORY.  By default, `ebfont'
+     generates image files under the current working directory (`.').
+     (*Note Invoking ebfont::, for more details).
+
+`-S SUBBOOKS'
+`--subbook SUBBOOKS'
+     Specify target subbooks in which `ebfont' generates local
+     characters.  SUBBOOKS must be a list of directory names of
+     subbooks separeted by a comma (`,').  By default, all subbooks are
+     specified as target.  (*Note Subbooks::, for more details).
+
+`-v'
+`--version'
+     Output version number to standard out, then exit.
+
+
+
+Tag Table:
+Node: Top1042
+Node: Introduction1587
+Node: What is Local Character2453
+Node: Invoking ebfont4124
+Node: Image Formats5545
+Node: Heights6439
+Node: Subbooks7200
+Node: Summary of Options9131
+
+End Tag Table

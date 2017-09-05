@@ -1,0 +1,280 @@
+\input texinfo	        @c -*-texinfo-*-
+@c %** start of header
+@setfilename ebinfo.info
+@settitle ebinfo
+@c %** end of header
+
+@include ebinfo-ver.texi
+
+@dircategory CD-ROM Book Utilities
+@direntry
+* ebinfo: (ebinfo).             Get CD-ROM book information.
+@end direntry
+
+@ifinfo
+ebinfo: Utility for getting CD-ROM book information, by Motoyuki Kasahara.
+
+Copyright @copyright{} 1997, 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end ifinfo
+
+@titlepage
+@title ebinfo
+@subtitle Utility for getting CD-ROM book information.
+@subtitle Edition @value{EDITION} for EB Library version @value{VERSION}
+@subtitle @value{UPDATED}
+@author by Motoyuki Kasahara
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1997, 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end titlepage
+
+@node Top, Introduction, (dir), (dir)
+@ifinfo
+This is edition @value{EDITION}, for EB Library version @value{VERSION}.
+@end ifinfo
+
+@menu
+* Introduction::                Introduction.
+* Invoking ebinfo::             Invoking @code{ebinfo}
+* Details about Information::   Details about Information
+* Options to ebinfo::           Options to @code{ebinfo}
+@end menu
+
+@c ===================================================================
+@node Introduction, Invoking ebinfo, Top, Top
+@chapter Introduction
+
+The @code{ebinfo} command outputs various information about a CD-ROM book.
+@code{ebinfo} uses EB Library and it is distributed with the library.
+
+@code{ebinfo} is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+@code{ebinfo} is distributed in the hope that it will be useful,
+but @emph{without any warranty}; without even the implied warranty of
+merchantability or fitness for a particular purpose.  See the
+GNU General Public License for more details.
+
+This is edition @value{EDITION}, for EB Library version @value{VERSION}.
+
+@c ===================================================================
+@node Invoking ebinfo, Details about Information, Introduction, Top
+@chapter Invoking @code{ebinfo}
+
+Its usual way to invoke @code{ebinfo} is as follows:
+
+@example
+% ebinfo @var{book-path}
+@end example
+
+@noindent
+@var{book-path} points to the top directory of a CD-ROM book where
+the file @file{CATALOG} or @file{CATALOGS} resides.
+Though you cannot specify two or more book-paths, 
+you can omit book-path like as follows:
+
+@example
+% ebinfo
+@end example
+
+@noindent
+In this case, @code{ebinfo} assumes that the current working directory
+(@file{.}) is specified.
+@code{ebinfo} outputs information about the specified book like as
+follows:
+
+@example
+@group
+% ebinfo /mnt/cdrom
+disc type: EB/EBG/EBXA
+character code: JIS X 0208
+the number of subbooks: 2
+@end group
+
+@group
+subbook 1:
+  title: New English Japanese Dictionary (3rd edition)
+  directory: EJDICT
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+@end group
+
+@group
+subbook 2:
+  title: How to use the book
+  directory: HOWTO
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+@end group
+@end example
+
+If a subbook in the book supports multi-search, @code{ebinfo} also
+outputs detail information about multi-search by specifying the
+@samp{--multi-search} (or @samp{-m}) option.
+The mulit-search information is like as follows.
+
+@example
+@group
+  multi search 1:
+    label 1: country or region
+    search methods: keyword
+    label 2: period
+    search methods: keyword 
+    label 3: category
+    search methods: keyword 
+    label 4: authority
+    search methods: keyword 
+@end group
+@group
+  multi search 2:
+    label 1: author
+    search methods: keyword
+    label 2: title
+    search methods: keyword 
+    label 3: date
+    search methods: keyword 
+    label 4: publisher
+    search methods: keyword 
+@end group
+@end example
+
+@c ===================================================================
+@node Details about Information, Options to ebinfo, Invoking ebinfo, Top
+@chapter Details about Information
+
+This section explains details about information output by ebinfo.
+
+@table @asis
+@item disc type:
+Disc format of the book; EB/EBG/EBXA or EPWING.
+
+@item character code:
+Character code used in the book; ISO 8859-1 or JIS X 0208.
+
+@item the number of subbooks:
+How many subbooks the book has.
+@end table
+
+In addition, the following items are displayed for each subbook in the
+book.
+
+@table @asis
+@item title:
+Title of the subbook.
+If the books is written in JIS X 0208, the title is written in Japanese
+EUC (Extended UNIX Code).
+
+@item directory:
+Directory name of a directory under which files of the subbook resides.
+Lower case letters in the directory name are converted to upper case.
+
+@item search methods:
+A list of search methods the subbook supports.
+The list consists of a part or all of the following items:
+
+@table @asis
+@item copyright
+copyright notice.
+Exactly to say, this is not a search method, but we list it here in
+the point view of internal format of CD-ROM book.
+
+@item word
+Word search.
+
+@item endword
+Endword search.
+
+@item keyword
+Keyword search.
+
+@item multi
+Multi search.
+
+@item menu
+Menu search.
+
+@item graphic
+Graphic search.
+
+@end table
+
+@item font sizes:
+A list of sizes which of fonts the subook has.
+The list consists of a part or all of the four items; 16, 24, 30 and 48.
+
+@item narrow font characters:
+Range of character numbers of a narrow font defined in the subbook.
+
+@item wide font characters:
+Range of character numbers of a wide font defined in the subbook.
+
+@end table
+
+@c ===================================================================
+@node Options to ebinfo,  , Details about Information, Top
+@chapter @code{ebinfo} Options
+
+The @code{ebinfo} command supports both traditional single-letter
+options and mnemonic long option names.
+Long option names are indicated with @samp{--} instead of @samp{-}.
+Abbreviations for option names are allowed as long as they are unique.
+
+@table @code
+@item -h
+@itemx --help
+Output help message to standard out, then exit.
+
+@item -m
+@itemx --multi-search
+Also output information about multi search.
+
+@item -v
+@itemx --version
+Output version number to standard out, then exit.
+@end table
+
+@c -------------------------------------------------------------------
+@contents
+@bye

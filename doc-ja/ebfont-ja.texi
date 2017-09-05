@@ -1,0 +1,402 @@
+\input texinfo	        @c -*-texinfo-*-
+@c %** start of header
+@setfilename ebfont-ja.info
+@settitle EB Library
+@c %** end of header
+
+@include ebfont-ver.texi
+
+@dircategory CD-ROM Book Utilities
+@direntry
+* ebfont-ja: (ebfont-ja).       Get font data in a CD-ROM book.
+@end direntry
+
+@ifinfo
+ebfont: Utility for generating font files of local characters in a CD-ROM book, by Motoyuki Kasahara.
+
+Copyright @copyright{} 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end ifinfo
+
+@titlepage
+@title ebfont
+@subtitle CD-ROM 書籍のフォントデータを取得するためのツール
+@subtitle 第 @value{EDITION} 版 (EB ライブラリバージョン @value{VERSION} に対応)
+@subtitle @value{UPDATED}
+@author 笠原基之
+
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1998  Motoyuki Kasahara
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by Free Software Foundation, Inc.
+@end titlepage
+
+@node Top, Introduction, (dir), (dir)
+@ifinfo
+この文書は第 @value{EDITION} 版です。
+EB ライブラリバージョン @value{VERSION} に対応しています。
+@end ifinfo
+
+@menu
+* Introduction::                はじめに
+* What is Local Character::     外字とは
+* Invoking ebfont::             @code{ebfont} の実行
+* Summary of Options::          @code{ebfont} のオプション一覧
+
+ --- The Detailed Node Listing ---
+
+@code{ebfont} の実行
+
+* Image Formats::               画像形式
+* Heights::                     高さ
+* Subbooks::                    副本
+@end menu
+
+@c ===================================================================
+@node Introduction, What is Local Character, Top, Top
+@chapter はじめに
+
+@code{ebfont} コマンドは、CD-ROM 書籍の外字のビットマップデータを
+読み込み、それを指定された画像形式に変換し、ファイルに書き出します。
+@code{ebfont} は EB ライブラリを使用しており、ライブラリと一緒に配
+布されています。
+
+@code{ebfont} はフリーソフトウェアです。あなたは、Free Software Foundation
+が公表した GNU General Public License (GNU 一般公有使用許諾) バージョン 
+2 あるいはそれ以降の各バージョンの中からいずれかを選択し、そのバージョ
+ンが定める条項に従って本プログラムを再頒布または変更することができます。
+
+@code{ebfont} は有用とは思いますが、頒布にあたっては、市場性及び特定目的
+適合性についての暗黙の保証を含めて、いかなる保証も行ないません。
+詳細については GNU General Public License をお読み下さい。
+
+@c ===================================================================
+@node What is Local Character, Invoking ebfont, Introduction, Top
+@chapter 外字とは
+
+CD-ROM 書籍の多くは、書籍固有の文字、外字 (local characters) を定義し
+ています。
+たとえば、CD-ROM 書籍に使われる文字セットは発音記号を持っていないため、
+英和辞書の中には発音記号を定義しているものがあります。
+
+CD-ROM 書籍は、外字のビットマップデータも持っています。
+@code{ebfont} コマンドは、CD-ROM 書籍のビットマップデータを読み、
+それを指定された画像形式に変換し、ファイルに書き出します。
+@code{ebfont} は、XBM (X BitMap format)、XPM (X PixMap format)、
+GIF (Graphics Interchange Format) のうちのいずれか、または複数の画像
+ファイルを生成することができます。
+デフォルトでは、XBM 形式が選択されます。
+
+外字は、@dfn{半角} (@dfn{narrow}) と @dfn{全角} (@dfn{wide}) の 2 種
+類に分類されます。
+半角の文字のビットマップデータでは、高さは幅の約半分です。
+全角の文字のビットマップデータでは、高さと幅はほぼ同じです。
+CD-ROM 書籍は、一冊の中に両方の種類の外字を定義することが可能で、
+@code{ebfont} は両方の種類の画像ファイルを生成します。
+
+CD-ROM 書籍の内部形式の仕様書では、半角と全角の両方の外字に対して 4 
+種類のサイズを定義しています。
+外字の幅、高さ、サイズは次の通りです。
+
+@multitable @columnfractions .33 .33 .33
+@item 高さ  @tab  半角   @tab  全角
+@item 16    @tab   8x16  @tab  16x16
+@item 24    @tab  16x24  @tab  24x24
+@item 30    @tab  16x30  @tab  32x30
+@item 48    @tab  24x48  @tab  48x48
+@end multitable
+
+@noindent
+デフォルトでは、@code{ebfont} は高さが 16 ピクセルのフォントの画像ファ
+イルを生成します。
+
+@c ===================================================================
+@node Invoking ebfont, Summary of Options, What is Local Character, Top
+@chapter @code{ebfont} の実行
+
+@code{ebfont} の一般的な起動方法は次の通りです。
+
+@example
+% ebfont @var{書籍へのパス}
+@end example
+
+@noindent
+@var{書籍へのパス} には、CD-ROM 書籍のトップディレクトリ、つまり 
+@file{CATALOG} または @file{CATALOGS} ファイルが存在するディレクトリを
+指定します。
+複数のパスを書くことはできませんが、以下のように、パスの指定を省くことは
+できます。
+
+@example
+% ebfont
+@end example
+
+@noindent
+この場合、@code{ebfont} はカレントディレクトリの下に画像ファイルを生
+成します。
+このとき、ファイル名の一般形式は次の通りです。
+
+@example
+@group
+@var{副本}/@var{高さ}/narrow/@var{文字番号}.@var{拡張子}
+@var{副本}/@var{高さ}/wide/@var{文字番号}.@var{拡張子}
+@end group
+@end example
+
+@noindent
+@var{拡張子} は @samp{xbm}、@samp{xpm}、@samp{gif} のいずれかで、
+@var{文字番号} は 16 進数 4 桁 (@samp{0} から @samp{9} と
+@samp{a} から @samp{f}) で、次のようになります。
+
+@example
+@group
+EJDICT/16/narrow/a121.xbm
+EJDICT/16/wide/a321.xbm
+@end group
+@end example
+
+@noindent
+@file{EJDICT/16/xbm/narrow} などの中間のディレクトリは、もし無けれ
+ば @code{ebfont} が生成します。
+
+@samp{--output-directory} オプションを指定することで、@code{ebfont}
+はカレントディレクトリ以外のディレクトリに画像ファイルを出力すること
+ができます。
+そのトップディレクトリは、@code{ebfont} を実行する前に作成されてい
+なければなりません。
+
+@example
+% ebfont --output-directory @var{ディレクトリ} @var{書籍へのパス}
+@end example
+
+@menu
+* Image Formats::               画像形式
+* Heights::                     高さ
+* Subbooks::                    副本
+@end menu
+
+@c -------------------------------------------------------------------
+@node Image Formats, Heights, Invoking ebfont, Invoking ebfont
+@section 画像形式
+
+@code{ebfont} は XBM, XPM, GIF (GIF89a) 形式の画像ファイルを生成するこ
+とができます。
+画像形式は @samp{--image-format} (@samp{-i}) オプションで指定します。
+@samp{--image-format} オプションは引数を一つ取り、そこにカンマ (@samp{,})
+で区切って、画像形式の名前を並べて書きます。
+たとえば、以下のコマンドを実行すると、@code{ebfont} は XPM 形式と GIF
+形式の画像ファイルを生成します。
+
+@example
+% ebfont --image-format xpm,gif @var{書籍へのパス}
+@end example
+
+@noindent
+@samp{--image-format} の引数は、次のように分けて書くこともできます。
+
+@example
+% ebfont --image-format xpm --image-format gif @var{書籍へのパス}
+@end example
+
+@noindent
+XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
+透明になります。
+@code{ebzip} は GIF の画像を生成する際に LZW 圧縮アルゴリズムを使わ
+ないため、ファイルのサイズは相当大きくなります。
+
+@c -------------------------------------------------------------------
+@node Heights, Subbooks, Image Formats, Invoking ebfont
+@section 高さ
+
+デフォルトでは、@code{ebfont} は、半角と全角それぞれについて、高さ 16 
+ピクセルのフォントの画像ファイルを生成します。
+@samp{--font-height} (@samp{-f}) オプションを使用することで、他の高さ
+のフォントの画像ファイルを生成することができます。
+@samp{--font-height} オプションは引数を一つ取り、そこにカンマ (@samp{,})
+で区切って、フォントの高さを並べて書きます。
+フォントの高さは、@samp{16}、@samp{24}、@samp{30}、@samp{48} のいずれ
+かでなくてはいけません。
+たとえば、以下のコマンドを実行すると、@code{ebfont} は高さ 16 ピクセル
+と 24 ピクセルのフォントの画像ファイルを生成します。
+
+@example
+% ebfont --font-height 16,24 @var{書籍へのパス}
+@end example
+
+@noindent
+@samp{--font-height} の引数は、次のように分けて書くこともできます。
+
+@example
+% ebfont --font-height 16 --font-height 24 @var{書籍へのパス}
+@end example
+
+@c -------------------------------------------------------------------
+@node Subbooks,  , Heights, Invoking ebfont
+@section 副本
+
+なにも設定しないと、@code{ebzip} はすべての副本 (subbook) を対象にして
+画像ファイルを生成しますが、@samp{--subbook} (@samp{-S}) オプションを
+使うと、指定した副本の画像ファイルだけを生成することができます。
+
+@samp{--subbook} オプションは引数を一つ取り、そこにカンマ (@samp{,}) 
+で区切って、副本のディレクトリ名を並べて書きます。
+@code{ebinfo} コマンドを用いると、あなたの所有している書籍にどのような
+副本が含まれているのかを知ることができます。
+
+@example
+@group
+% ebinfo /mnt/cdrom
+disc type: EB/EBG/EBXA
+character code: JIS X 0208
+the number of subbooks: 3
+@end group
+
+@group
+subbook 1:
+  title: New English Japanese Dictionary (4th edition)
+  directory: ENGLISH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 0xa121 -- 0xa24e
+  wide font characters: 0xa321 -- 0xa27e
+
+@end group
+@group
+subbook 2:
+  title: CD-ROM French Japanese Dictionary (3rd edition)
+  directory: FRENCH
+  search methods: word endword keyword menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+
+@end group
+@group
+subbook 3:
+  title: Pocket German Japanese Dictionary (3rd edition)
+  directory: GERMAN
+  search methods: menu
+  font sizes: 16 24 30 48
+  narrow font characters: 
+  wide font characters: 0xa321 -- 0xa27e
+@end group
+@end example
+
+@noindent
+(@code{ebinfo} コマンドに関しての詳細は、
+@pxref{Invoking ebinfo, , @code{ebinfo} の実行, ebinfo-ja, ebinfo-ja})。
+@*
+この例では、3 つの副本が書籍には含まれており、そのディレクトリ名は
+@code{ENGLISH}, @code{FRENCH}, @code{GERMAN} だということが分かります。
+
+次のコマンドを実行すると, @code{ebfont} は @code{ENGLISH} と
+@code{FRENCH} の画像ファイルだけを生成します。
+
+@example
+% ebfont --subbook english,french /mnt/cdrom
+@end example
+
+@noindent
+ディレクトリ名の大文字・小文字の違いは、区別されません。
+@samp{--subbook} の引数は、次のように分けて書くこともできます。
+
+@example
+% ebfont --subbook english --subbook french /mnt/cdrom
+@end example
+
+@c ===================================================================
+@node Summary of Options,  , Invoking ebfont, Top
+@chapter @code{ebfont} のオプション一覧
+
+@code{ebzip} コマンドは、伝統的な一文字オプション名と覚えやすい長い
+オプション名の両方を扱うことができます。
+長いオプション名を表すには、@samp{-} ではなく @samp{--} を用います。
+オプション名が一意に決まる範囲内で、名前の後方部分を省略することができま
+す。
+
+@table @code
+@item -d
+@itemx --debug
+デバッグ用の情報を、標準エラー出力に出力します。
+
+@item -f @var{高さ}
+@itemx --font-height @var{高さ}
+高さが @var{高さ} の外字の画像ファイルを生成します。
+@var{高さ} は、高さをカンマ (@samp{,}) で区切って並べたもので
+なくてはなりません。
+高さの指定として許されるのは、@samp{16}、@samp{24}、@samp{30}、@samp{48}
+です。
+デフォルトでは、@code{ebfont} は高さが 16 ピクセルのフォントのもの
+を生成します。
+(詳しくは、@pxref{Heights, , 高さ})。
+
+@item -h
+@itemx --help
+ヘルプメッセージを標準出力に出力して、終了します。
+
+@item -i @var{画像形式}
+@itemx --image-format @var{画像形式}
+@var{画像形式} 形式の画像ファイルを生成します。
+@var{画像形式} は、画像形式名をカンマ (@samp{,}) で区切って並べたも
+のでなくてはなりません。
+対応している画像形式の名前は @samp{xbm}、@samp{xpm}、@samp{gif} で
+す。
+デフォルトで、@samp{ebfont} は XBM 形式の画像ファイルを生成します。
+(詳しくは、@pxref{Image Formats, , 画像形式})。
+
+@item -o @var{ディレクトリ}
+@itemx --output-directory @var{ディレクトリ}
+画像ファイルを @var{ディレクトリ} 以下に出力します。
+デフォルトでは、@code{ebfont} はカレントディレクトリ (@code{.}) の
+下に画像ファイルを生成します。
+(詳しくは、@pxref{Invoking ebfont, , @code{ebfont} の実行})。
+
+@item -S @var{副本}
+@itemx --subbook @var{副本}
+@code{ebfont} に、どの副本の外字を生成させるのかを指定します。
+@var{副本} は、副本のディレクトリ名をカンマ (@samp{,}) で区切って
+並べたものでなくてはなりません。
+デフォルトでは、すべての副本が生成の対象になります。
+(詳しくは、@pxref{Subbooks, , 副本})。
+
+@item -v
+@itemx --version
+バージョン番号を標準出力に出力して、終了します。
+@end table
+
+@c ===================================================================
+@contents
+@bye

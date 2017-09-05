@@ -1,0 +1,224 @@
+This is Info file ebinfo.info, produced by Makeinfo version 1.68 from
+the input file ebinfo.texi.
+
+INFO-DIR-SECTION CD-ROM Book Utilities
+START-INFO-DIR-ENTRY
+* ebinfo: (ebinfo).             Get CD-ROM book information.
+END-INFO-DIR-ENTRY
+
+   ebinfo: Utility for getting CD-ROM book information, by Motoyuki
+Kasahara.
+
+   Copyright (C) 1997, 1998  Motoyuki Kasahara
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided that
+the entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by Free Software Foundation, Inc.
+
+
+File: ebinfo.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
+
+   This is edition 2.2, for EB Library version 2.2.
+
+* Menu:
+
+* Introduction::                Introduction.
+* Invoking ebinfo::             Invoking `ebinfo'
+* Details about Information::   Details about Information
+* Options to ebinfo::           Options to `ebinfo'
+
+
+File: ebinfo.info,  Node: Introduction,  Next: Invoking ebinfo,  Prev: Top,  Up: Top
+
+Introduction
+************
+
+   The `ebinfo' command outputs various information about a CD-ROM book.
+`ebinfo' uses EB Library and it is distributed with the library.
+
+   `ebinfo' is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2, or (at your option) any
+later version.
+
+   `ebinfo' is distributed in the hope that it will be useful, but
+*without any warranty*; without even the implied warranty of
+merchantability or fitness for a particular purpose.  See the GNU
+General Public License for more details.
+
+   This is edition 2.2, for EB Library version 2.2.
+
+
+File: ebinfo.info,  Node: Invoking ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
+
+Invoking `ebinfo'
+*****************
+
+   Its usual way to invoke `ebinfo' is as follows:
+
+     % ebinfo BOOK-PATH
+
+BOOK-PATH points to the top directory of a CD-ROM book where the file
+`CATALOG' or `CATALOGS' resides.  Though you cannot specify two or more
+book-paths, you can omit book-path like as follows:
+
+     % ebinfo
+
+In this case, `ebinfo' assumes that the current working directory (`.')
+is specified.  `ebinfo' outputs information about the specified book
+like as follows:
+
+     % ebinfo /mnt/cdrom
+     disc type: EB/EBG/EBXA
+     character code: JIS X 0208
+     the number of subbooks: 2
+     
+     subbook 1:
+       title: New English Japanese Dictionary (3rd edition)
+       directory: EJDICT
+       search methods: word endword keyword menu
+       font sizes: 16 24 30 48
+       narrow font characters: 0xa121 -- 0xa24e
+       wide font characters: 0xa321 -- 0xa27e
+     
+     subbook 2:
+       title: How to use the book
+       directory: HOWTO
+       search methods: word endword keyword menu
+       font sizes: 16 24 30 48
+       narrow font characters:
+       wide font characters: 0xa321 -- 0xa27e
+
+   If a subbook in the book supports multi-search, `ebinfo' also
+outputs detail information about multi-search by specifying the
+`--multi-search' (or `-m') option.  The mulit-search information is
+like as follows.
+
+       multi search 1:
+         label 1: country or region
+         search methods: keyword
+         label 2: period
+         search methods: keyword
+         label 3: category
+         search methods: keyword
+         label 4: authority
+         search methods: keyword
+       multi search 2:
+         label 1: author
+         search methods: keyword
+         label 2: title
+         search methods: keyword
+         label 3: date
+         search methods: keyword
+         label 4: publisher
+         search methods: keyword
+
+
+File: ebinfo.info,  Node: Details about Information,  Next: Options to ebinfo,  Prev: Invoking ebinfo,  Up: Top
+
+Details about Information
+*************************
+
+   This section explains details about information output by ebinfo.
+
+disc type:
+     Disc format of the book; EB/EBG/EBXA or EPWING.
+
+character code:
+     Character code used in the book; ISO 8859-1 or JIS X 0208.
+
+the number of subbooks:
+     How many subbooks the book has.
+
+   In addition, the following items are displayed for each subbook in
+the book.
+
+title:
+     Title of the subbook.  If the books is written in JIS X 0208, the
+     title is written in Japanese EUC (Extended UNIX Code).
+
+directory:
+     Directory name of a directory under which files of the subbook
+     resides.  Lower case letters in the directory name are converted
+     to upper case.
+
+search methods:
+     A list of search methods the subbook supports.  The list consists
+     of a part or all of the following items:
+
+    copyright
+          copyright notice.  Exactly to say, this is not a search
+          method, but we list it here in the point view of internal
+          format of CD-ROM book.
+
+    word
+          Word search.
+
+    endword
+          Endword search.
+
+    keyword
+          Keyword search.
+
+    multi
+          Multi search.
+
+    menu
+          Menu search.
+
+    graphic
+          Graphic search.
+
+font sizes:
+     A list of sizes which of fonts the subook has.  The list consists
+     of a part or all of the four items; 16, 24, 30 and 48.
+
+narrow font characters:
+     Range of character numbers of a narrow font defined in the subbook.
+
+wide font characters:
+     Range of character numbers of a wide font defined in the subbook.
+
+
+File: ebinfo.info,  Node: Options to ebinfo,  Prev: Details about Information,  Up: Top
+
+`ebinfo' Options
+****************
+
+   The `ebinfo' command supports both traditional single-letter options
+and mnemonic long option names.  Long option names are indicated with
+`--' instead of `-'.  Abbreviations for option names are allowed as
+long as they are unique.
+
+`-h'
+`--help'
+     Output help message to standard out, then exit.
+
+`-m'
+`--multi-search'
+     Also output information about multi search.
+
+`-v'
+`--version'
+     Output version number to standard out, then exit.
+
+
+
+Tag Table:
+Node: Top1042
+Node: Introduction1391
+Node: Invoking ebinfo2159
+Node: Details about Information4129
+Node: Options to ebinfo5835
+
+End Tag Table

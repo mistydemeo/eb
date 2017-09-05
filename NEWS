@@ -1,0 +1,121 @@
+Major changes in release 2.2:
+
+* Add documents of EB Library.
+
+Major changes in release 2.1.2:
+
+* Fix an version number of the shared EB library.
+* Use libtool that supports FreeBSD-ELF.
+
+Major changes in release 2.1.1:
+
+* Add some codes for Windows VC++.
+* Bug fixes.
+
+Major changes in release 2.1:
+
+* Bug fixes.
+
+Major changes in release 2.1beta2:
+
+* Add compression level 3 to `ebzip'.
+* Add the new command `ebrefile'.
+
+Major changes in release 2.1beta1:
+
+* Bug fixes.
+
+Major changes in release 2.1beta0:
+
+* Add document about `ebfont'.
+* Add Japanese documents.
+* Add `--with-zlib', `--with-zlib-includes', `--with-zlib-libraries'
+  options to `configure'.
+* Support CD-ROM book compression/uncompression.
+* Add the new command `ebzip'.
+* Rename the `--filename-case' option of ebappendix to `--case'.
+* Add `--no-catalogs' option of `ebappendix', again.
+* Add the `--subbook'(-S) option to `ebfont'.
+* Change directory structures `ebfont' generates.
+* Import zlib sources.
+* Bug fixes.
+
+Major changes in release 2.0.3:
+
+* Bug fixes.
+
+Major changes in release 2.0.2:
+
+* Bug fixes.
+
+Major changes in release 2.0.1:
+
+* No major change.
+
+Major changes in release 2.0:
+
+* Bug fixes.
+
+Major changes in release 2.0beta1:
+
+* Rename the `--filename-cases' option of ebappendix to `--filename-case'.
+* Bug fixes.
+
+Major changes in release 2.0beta0:
+
+* Support building a shared version of EB library by using GNU libtool.
+* Change functions' interfaces.
+  EB library has some incompatibilities between 1.0.x and 2.0.
+* Add Texinfo document for `ebinfo'.
+* Support almost features described in JIS X 4081-1996.
+* Change directory layout of the source code distribution.
+* Delete the `--no-catalogs' option of `ebappendix'.
+* Bug fixes.
+
+Major changes in release 1.0.6:
+
+* Bug fixes.
+
+Major changes in release 1.0.5:
+
+* Bug fixes.
+
+Major changes in release 1.0.4:
+
+* No major change.
+
+Major changes in release 1.0.3:
+
+* Support the Concise Oxford dicitionary.  
+* Fix Makefile.am for compilation on multiple architectures.
+  You can compile the package for more than one kind of computer at
+  the same time.
+* Change interface to bitmap conversion functions.
+* Bug fixes.
+
+Major changes in release 1.0.2:
+
+* Add functions to the EB library.
+  The functions generate image files of local defined characters
+  in a CD-ROM book.  Supported image formats are XBM, XPM, and GIF.
+* Bug fixes.
+
+Major changes in release 1.0.1:
+
+* Recognize display control sequences described in JIS X 4081-1996.
+* Support kanji word search for some EPWING books.
+* Support EPWING `Readers eiwa jiten', kenkyusha.
+* Bug fixes.
+
+Major changes in release 1.0:
+
+* Bug fixes.
+
+Major changes in release 1.0beta2:
+
+* Bug fixes.
+
+Major changes in release 1.0beta1:
+
+* Change the format of appendix data files.
+* Bug fixes.

@@ -1,0 +1,10 @@
+The sample programs of EB Library are placed at this directory, but
+they are *not* compiled together with the library.
+
+The compilation procedure of the programs is:
+
+	% ./configure [option...]
+	% make
+
+Since the programs link EB Library, you must have compiled EB Library
+beforehand.
