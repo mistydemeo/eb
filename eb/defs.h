@@ -402,11 +402,6 @@ typedef struct {
     int page;
 
     /*
-     * Length of pages.
-     */
-    int length;
-
-    /*
      * Index style flags.
      */
     EB_Index_Style_Code katakana;

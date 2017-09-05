@@ -57,9 +57,8 @@ char *memset();
  */
 /* method */
 #define CONTENT_TEXT		0
-#define CONTENT_MENU		1
-#define CONTENT_HEADING		2
-#define CONTENT_RAWTEXT		3
+#define CONTENT_HEADING		1
+#define CONTENT_RAWTEXT		2
 
 /*
  * Unexported variables.
@@ -319,13 +318,7 @@ eb_text(book, appendix, hookset, text, textsize)
 	if (textend)
 	    return 0;
     } else {
-	int page = location / EB_SIZE_PAGE + 1;
-
-	if (sub->menu.page != 0 && sub->menu.page <= page
-	    && page <= sub->menu.page + sub->menu.length)
-	    method = CONTENT_MENU;
-	else
-	    method = CONTENT_TEXT;
+	method = CONTENT_TEXT;
 
 	/*
 	 * Call the function bound to `EB_HOOK_INITIALIZE'.
@@ -393,7 +386,7 @@ eb_heading(book, appendix, hookset, text, textsize)
 	    eb_error = EB_ERR_DIFF_SUBBOOK;
 	    return -1;
 	}
-	if (method != CONTENT_TEXT) {
+	if (method != CONTENT_HEADING) {
 	    eb_error = EB_ERR_DIFF_CONTENT;
 	    return -1;
 	}
@@ -664,18 +657,14 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 	    case 0x1a: case 0x1b: case 0x1c: case 0x1d: case 0x1e: case 0x1f:
 	    case 0xe0:
 		/* emphasis; described in JIS X 4081-1996 */
-		if (book->disc_code == EB_DISC_EB) {
-		    if (pagerest < step + 1) {
-			eb_error = EB_ERR_UNEXP_START;
-			return -1;
-		    }
-		} else {
-		    if (pagerest < step + 2) {
-			eb_error = EB_ERR_UNEXP_START;
-			return -1;
-		    }
-		    step += 2;
+		if (pagerest < step + 2) {
+		    eb_error = EB_ERR_UNEXP_START;
+		    return -1;
 		}
+		/* Some old EB books don't take an argument. */
+		if (book->disc_code == EB_DISC_EPWING
+		    || eb_uint1(pagebufp + 2) < 0x1f)
+		    step += 2;
 		break;
 
 	    case 0x32:

@@ -373,7 +373,7 @@ eb_narrow_character_bitmap_jis(book, ch, bitmap)
 
     /*
      * Check for `ch'.  Is it in a range of bitmaps?
-     * This test works collectly even when the font doesn't exist in
+     * This test works correctly even when the font doesn't exist in
      * the current subbook because `start' and `end' have set to -1
      * in the case.
      */
@@ -438,7 +438,7 @@ eb_narrow_character_bitmap_latin(book, ch, bitmap)
 
     /*
      * Check for `ch'.  Is it in a range of bitmaps?
-     * This test works collectly even when the font doesn't exist in
+     * This test works correctly even when the font doesn't exist in
      * the current subbook because `start' and `end' have set to -1
      * in the case.
      */

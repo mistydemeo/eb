@@ -184,7 +184,7 @@ eb_narrow_character_text_jis(appendix, ch, text)
 
     /*
      * Check for `ch'.  Is it in a font?
-     * This test works collectly even when the font doesn't exist in
+     * This test works correctly even when the font doesn't exist in
      * the current subbook because `start' and `end' have set to -1
      * in the case.
      */
@@ -252,7 +252,7 @@ eb_narrow_character_text_latin(appendix, ch, text)
 
     /*
      * Check for `ch'.  Is it in a font?
-     * This test works collectly even when the font doesn't exist in
+     * This test works correctly even when the font doesn't exist in
      * the current subbook because `start' and `end' have set to -1
      * in the case.
      */

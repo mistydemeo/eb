@@ -378,9 +378,12 @@ eb_initialize_catalog(book)
      *      title of the 1st subbook: "%;%s%A%e%j!\%S%8%M%9!\%/%i%&%s"
      *   2. Shin Eiwa Waei Chujiten (earliest edition)
      *      title of the 1st subbook: "8&5f<R!!?71QOBCf<-E5".
+     *   3. EB Kagakugijutu Yougo Daijiten (YRRS-048)
+     *      title of the 1st subbook: "#E#B2J3X5;=QMQ8lBg<-E5".
      */
     if (strcmp(book->subbooks->title, "%;%s%A%e%j!\\%S%8%M%9!\\%/%i%&%s") == 0
-	|| strcmp(book->subbooks->title, "8&5f<R!!?71QOBCf<-E5") == 0) {
+	|| strcmp(book->subbooks->title, "8&5f<R!!?71QOBCf<-E5") == 0
+	|| strcmp(book->subbooks->title, "#E#B2J3X5;=QMQ8lBg<-E5") == 0) {
 	book->char_code = EB_CHARCODE_JISX0208;
 	for (i = 0, sub = book->subbooks; i < book->sub_count; i++, sub++)
 	    eb_jisx0208_to_euc(sub->title, sub->title);

@@ -213,7 +213,7 @@ eb_zopen(zip, filename)
 	return file;
 
     /*
-     * Check for basename of `filename'.
+     * Check for the basename of `filename'.
      * It must be `.../DATA/HONMON' or `.../data/honmon'.
      * If it is, add the suffix `2' to `zipped_filename'
      * (e.g. `HONMON;1' -> `HONMON2;1').
@@ -250,6 +250,33 @@ eb_zopen(zip, filename)
 	file = eb_zopen_epwzipped(zip, zipped_filename);
 	if (0 <= file)
 	    return file;
+    }
+
+    /*
+     * In some CD-ROM book discs, filename suffix is inconsistent.
+     * We remove or append `.' to the filename and try to open the
+     * file again.
+     */
+    strcpy(zipped_filename, filename);
+    if (*(filename + filename_length - 3) == '.') {
+	*(zipped_filename + filename_length - 3) = ';';
+	*(zipped_filename + filename_length - 2) = '1';
+	*(zipped_filename + filename_length - 1) = '\0';
+    } else if (*(filename + filename_length - 2) == ';') {
+	*(zipped_filename + filename_length - 2) = '.';
+	*(zipped_filename + filename_length - 1) = ';';
+	*(zipped_filename + filename_length)     = '1';
+	*(zipped_filename + filename_length + 1) = '\0';
+    } else if (*(filename + filename_length - 1) == '.') {
+	*(zipped_filename + filename_length - 1) = '\0';
+    } else {
+	*(zipped_filename + filename_length)     = '.';
+	*(zipped_filename + filename_length + 1) = '\0';
+    }
+    file = open(filename, O_RDONLY | O_BINARY);
+    if (0 <= file) {
+	zip->code = EB_ZIP_NONE;
+	return file;
     }
 
     return -1;

@@ -126,21 +126,8 @@ eb_initialize_subbook(book)
     sub->graphic.page = 0;
     sub->copyright.page = 0;
 
-    sub->word_alpha.length = 0;
-    sub->word_asis.length = 0;
-    sub->word_kana.length = 0;
-    sub->endword_alpha.length = 0;
-    sub->endword_asis.length = 0;
-    sub->endword_kana.length = 0;
-    sub->keyword.length = 0;
-    sub->menu.length = 0;
-    sub->graphic.length = 0;
-    sub->copyright.length = 0;
-
-    for (i = 0; i < EB_MAX_MULTI_SEARCHES; i++) {
+    for (i = 0; i < EB_MAX_MULTI_SEARCHES; i++)
 	sub->multi[i].page = 0;
-	sub->multi[i].length = 0;
-    }
 
     if (0 <= sub->sub_file) {
 	/*
@@ -313,7 +300,6 @@ eb_initialize_indexes(book)
 	    search.space = EB_INDEX_STYLE_DELETE;
 
 	search.page = eb_uint4(bufp + 2);
-	search.length = eb_uint4(bufp + 6);
 	search.entry_count = 0;
 
 	/*

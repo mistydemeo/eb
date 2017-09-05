@@ -1,6 +1,11 @@
+Major changes in release 2.3beta2:
+
+* Fix minor bugs.
+
 Major changes in release 2.3beta1:
 
 * Experimental EBXA-C support.
+* Experimental support of automatic stop-code detection.
 
 Major changes in release 2.3beta0:
 

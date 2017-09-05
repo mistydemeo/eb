@@ -1,3 +1,23 @@
+1999-04-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 2.3beta2.
+
+	* eb/subbook.c (eb_initialize_subbook): Don't access the removed
+	`length' member in the `EB_Search' structure.
+	* eb/text.c (eb_text): Likewise.  Don't tell text from menu.
+	* eb/text.c (CONTENT_MENU): Removed.
+
+1999-04-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/eb.c (eb_initialize_catalog): Force changing the character
+	code parameter of `EB Kagakugijutu Yougo Daijiten (YRRS-048)'
+	to JIS X 0208.
+
+1999-04-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/zio.c (eb_zopen): Remove and append `.' to a filename
+	and try to open the file, when failed to open the file.
+
 1999-03-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 2.3beta1.
@@ -532,7 +552,7 @@
 	* eb/eb.c (eb_initialize_catalog): Ignore font filenames
 	which beginning with a character 0x80...0xff.
 	* eb/filename.c (eb_catalog_filename_internal): Fix a gug;
-	Correctly addi a suffix to a filename.
+	add a suffix to a filename correctly.
 
 1998-06-09  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
