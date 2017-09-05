@@ -1,5 +1,0 @@
-#! /bin/sh
-
-echo "@example"
-sed -e 's/@/@@/g' -e 's/{/@{/g' -e 's/}/@}/g' ${1+"$@"}
-echo "@end example"

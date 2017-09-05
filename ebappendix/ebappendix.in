@@ -3,7 +3,7 @@ eval 'exec @PERL@ -S $0 ${1+"$@"}'
     if 0;
 
 #
-# Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
+# Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -51,6 +51,20 @@ Argument:
 Report bugs to $mailing_address.
 ";
 
+# Copyright message.
+$copyright = "Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+
+This is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+";
+
 # `try ...' message.
 $tryhelp = "try \`$0 --help\' for more information\n";
 
@@ -86,6 +100,7 @@ $dirmode = umask ^ 0777;
 		 '-t --test             no-argument',
 		 '-v --version          no-argument');
 
+
 #
 # Parse command line options.
 #
@@ -119,16 +134,8 @@ while (($optname, $optarg) = &getopt_long) {
 	}
 	$suffix = "\L$optarg";
     } elsif ($optname eq '-v') {
-        print "$progname (EB Library) version $version\n";
-        print "Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara\n\n";
-        print "This is free software; you can redistribute it and/or modify\n";
-        print "it under the terms of the GNU General Public License as published by\n";
-        print "the Free Software Foundation; either version 2, or (at your option)\n";
-        print "any later version.\n\n";
-        print "This program is distributed in the hope that it will be useful,\n";
-        print "but WITHOUT ANY WARRANTY; without even the implied warranty\n";
-        print "of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n";
-        print "GNU General Public License for more details.\n";
+	print "$progname (EB Library) version $version\n";
+	print $copyright;
 	exit(0);
     } elsif ($optname eq '-t') {
 	$check_only = 1;

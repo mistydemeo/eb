@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@
 #include <unistd.h>
 #endif
 
+#ifdef ENABLE_PTHREAD
+#include <pthread.h>
+#endif
+
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
@@ -37,281 +41,130 @@ eb_have_keyword_search(book)
     EB_Book *book;
 {
     /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
+    /*
      * Current subbook must have been set.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return 0;
-    }
+    if (book->subbook_current == NULL)
+	goto failed;
 
-    if (book->sub_current->keyword.page == 0) {
-	eb_error = EB_ERR_NO_SUCH_SEARCH;
-	return 0;
-    }
+    if (book->subbook_current->keyword.index_page == 0)
+	goto failed;
 
     return 1;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&book->lock);
+    return 0;
 }
 
-
-#if 0
-/*
- * Unexported variables.
- */
-static int (*compare) EB_P((const char *, const char *, size_t));
 
 /*
  * Keyword search.
  */
-int
-eb_search_keyword(book, hitlist, inputword, maxhits)
+EB_Error_Code
+eb_search_keyword(book, input_words)
     EB_Book *book;
-    EB_Hit *hitlist;
-    const char *inputword;
-    int maxhits;
+    const char *input_words[];
 {
-    /*
-     * Current subbook must have been set.
-     */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
-    }
+    EB_Error_Code error_code;
+    EB_Search_Context *context;
+    EB_Word_Code word_code;
+    int word_count;
+    int i;
 
     /*
-     * Record the parameters for eb_next_keyword().
+     * Lock the book.
      */
-    bookcode = book->code;
-    subcode = book->sub_current->code;
-    method = SEARCH_KEYWORD;
-
-    /*
-     * Choose a function to compare words.
-     */
-    compare = eb_match_word;
-
-    /*
-     * Make a fixed word and a canonicalized word to search from
-     * `inputword'.
-     */
-    if (eb_set_word(book, word, canonword, inputword) < 0)
-	return -1;
-
-    /*
-     * Get a page number.
-     */
-    page = book->sub_current->keyword.page;
-    if (page == 0L) {
-	eb_error = EB_ERR_NO_SUCH_SEARCH;
-	return -1;
-    }
-
-    /*
-     * Presearch.
-     */
-    if (eb_presearch(book) < 0)
-	return -1;
-
-    /*
-     * Search.
-     */
-    return eb_next_keyword(book, hitlist, maxhits);
-}
-
-
-/*
- * Continue the last keyword search.
- */
-int
-eb_next_keyword(book, hitlist, maxhits)
-    EB_Book *book;
-    EB_Hit *hitlist;
-    int maxhits;
-{
-    EB_Hit *hit = hitlist;
-    int hitsnum = 0;
-    int len;
-    int grpid;
+    eb_lock(&book->lock);
 
     /*
      * Current subbook must have been set.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
 
     /*
-     * If Book, subbook, or method is changed from the last search,
-     * give up searching.
+     * Check whether the current subbook has keyword search.
      */
-    if (bookcode == -1) {
-	eb_error = EB_ERR_NO_PREV_SEARCH;
-	return -1;
-    }
-    if (bookcode != book->code) {
-	eb_error = EB_ERR_DIFF_BOOK;
-	return -1;
-    }
-    if (subcode != book->sub_current->code) {
-	eb_error = EB_ERR_DIFF_SUBBOOK;
-	return -1;
-    }
-    if (method != SEARCH_ENDWORD) {
-	eb_error = EB_ERR_DIFF_SEARCH;
-	return -1;
+    if (book->subbook_current->keyword.index_page == 0) {
+	error_code = EB_ERR_NO_SUCH_SEARCH;
+	goto failed;
     }
 
-    if (cmp < 0)
-	return 0;
-
-    for (;;) {
-	if (id == 0x80 || id == 0xa0 || id == 0xc0 || id == 0xe0) {
-	    /*
-	     * The leaf index for alphabetic words.
-	     * Find text and heading locations.
-	     */
-	    while (i < count) {
-		if (EB_SIZE_PAGE < offset + 1) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
-		}
-		len = eb_uint1(bufp);
-		if (EB_SIZE_PAGE < offset + len + 13) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
-		}
-
-		cmp = compare(word, bufp + 1, len);
-		if (cmp == 0) {
-		    hit->heading.page = eb_uint4(bufp + len + 7);
-		    hit->heading.offset = eb_uint2(bufp + len + 11);
-		    hit->text.page = eb_uint4(bufp + len + 1);
-		    hit->text.offset = eb_uint2(bufp + len + 5);
-		    hitsnum++;
-		    hit++;
-		}
-		i++;
-		offset += len + 13;
-		bufp += len + 13;
-
-		if (cmp < 0 || maxhits <= hitsnum)
-		    return hitsnum;
-	    }
-	} else if (id == 0x90 || id == 0xb0 || id == 0xd0 || id == 0xf0) {
-	    /*
-	     * The leaf index for KANA words.
-	     * Find text and heading locations.
-	     */
-	    while (i < count) {
-		if (EB_SIZE_PAGE < offset + 2) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
-		}
-		grpid = eb_uint1(bufp);
-
-		if (grpid == 0x00) {
-		    /*
-		     * Single entry.
-		     */
-		    len = eb_uint1(bufp + 1);
-		    if (EB_SIZE_PAGE < offset + len + 14) {
-			eb_error = EB_ERR_UNEXP_START;
-			return -1;
-		    }
-
-		    cmp = compare(canonword, bufp + 2, len);
-		    if (cmp == 0 && compare(word, bufp + 2, len) == 0) {
-			hit->heading.page = eb_uint4(bufp + len + 8);
-			hit->heading.offset = eb_uint2(bufp +len + 12);
-			hit->text.page = eb_uint4(bufp + len + 2);
-			hit->text.offset = eb_uint2(bufp + len + 6);
-			hitsnum++;
-			hit++;
-		    }
-		    offset += len + 14;
-		    bufp += len + 14;
-
-		} else if (grpid == 0x80) {
-		    /*
-		     * Start of the group entry.
-		     */
-		    len = eb_uint1(bufp + 1);
-		    if (EB_SIZE_PAGE < offset + len + 4) {
-			eb_error = EB_ERR_UNEXP_START;
-			return -1;
-		    }
-		    cmp = compare(canonword, bufp + 4, len);
-		    bufp += len + 4;
-		    offset += len + 4;
-
-		} else if (grpid == 0xc0) {
-		    /*
-		     * Element of the group entry.
-		     */
-		    if (EB_SIZE_PAGE < offset + 7) {
-			eb_error = EB_ERR_UNEXP_START;
-			return -1;
-		    }
-
-		    if (cmp == 0 && compare(word, bufp + 2, len) == 0) {
-			hit->heading.page = headpage;
-			hit->heading.offset = headoffset;
-			hit->text.page = eb_uint4(bufp + len + 1);
-			hit->text.offset = eb_uint2(bufp + len + 5);
-			hitsnum++;
-			hit++;
-		    }
-		    offset += 7;
-		    bufp += 7;
-
-		} else {
-		    /*
-		     * Unknown group ID.
-		     */
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
-		}
-
-		i++;
-		if (cmp < 0 || maxhits <= hitsnum)
-		    return hitsnum;
-	    }
-	} else {
-	    /*
-	     * Unknown index page ID.
-	     */
-	    eb_error = EB_ERR_UNEXP_START;
-	    return -1;
-	}
+    /*
+     * Attach a search context for each keyword, and pre-search the
+     * keywords.
+     */
+    word_count = 0;
+    for (i = 0; i < EB_MAX_KEYWORDS; i++) {
+	if (input_words[i] == NULL)
+	    break;
 
 	/*
-	 * Read next page.
+	 * Initialize search context.
 	 */
-	if (id == 0xa0 || id == 0xe0 || id == 0xb0 || id == 0xf0) {
-	    cmp = -1;
-	    return hitsnum;
-	}
+	context = book->search_contexts + word_count;
+	context->code = EB_SEARCH_KEYWORD;
+	context->compare = eb_match_exactword;
+	context->page = book->subbook_current->keyword.index_page;
 
-	page++;
-	if (eb_zlseek(book->sub_current->zip, book->sub_current->sub_file,
-	    (page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
-	    eb_error = EB_ERR_FAIL_SEEK_START;
-	    return -1;
-	}
-	if (eb_zread(book->sub_current->zip, book->sub_current->sub_file,
-	    buf, EB_SIZE_PAGE) != EB_SIZE_PAGE) {
-	    eb_error = EB_ERR_FAIL_READ_START;
-	    return -1;
-	}
+	/*
+	 * Make a fixed word and a canonicalized word to search from
+	 * `input_words[i]'.
+	 */
+	error_code = eb_set_keyword(book, input_words[i], context->word,
+	    context->canonicalized_word, &word_code);
+	if (error_code == EB_ERR_EMPTY_WORD)
+	    continue;
+	else if (error_code != EB_SUCCESS)
+	    goto failed;
 
-	offset = 4;
-	id = eb_uint1(buf);
-	count = eb_uint2(buf + 2);
-	i = 0;
-	bufp = buf + 4;
+	/*
+	 * Pre-search.
+	 */
+	error_code = eb_presearch_word(book, context);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+
+	word_count++;
+    }
+    if (word_count == 0) {
+	error_code = EB_ERR_NO_WORD;
+	goto failed;
+    } else if (EB_MAX_KEYWORDS <= i) {
+	error_code =  EB_ERR_TOO_MANY_WORDS;
+	goto failed;
     }
 
-    /* not rearched */
-    return 0;
+    /*
+     * Set `EB_SEARCH_NONE' to the rest unused search context.
+     */
+    for (i = word_count; i < EB_MAX_KEYWORDS; i++)
+	(book->search_contexts + i)->code = EB_SEARCH_NONE;
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    book->search_contexts->code = EB_SEARCH_NONE;
+    eb_unlock(&book->lock);
+    return error_code;
 }
-#endif
+
+

@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +19,19 @@
 extern "C" {
 #endif
 
+#ifdef EB_BUILD_LIBRARY
+#include "defs.h"
+#else
+#include <eb/defs.h>
+#endif
+
 /*
  * Error codes.
  */
-#define EB_NO_ERR			0
+#define EB_SUCCESS			0
 #define EB_ERR_MEMORY_EXHAUSTED		1
-#define EB_ERR_EMPTY_FILENAME		2
-#define EB_ERR_TOO_LONG_FILENAME	3
+#define EB_ERR_EMPTY_FILE_NAME		2
+#define EB_ERR_TOO_LONG_FILE_NAME	3
 #define EB_ERR_TOO_LONG_WORD		4
 
 #define EB_ERR_BAD_WORD			5
@@ -35,28 +41,28 @@ extern "C" {
 #define EB_ERR_FAIL_OPEN_CATAPP		9
 
 #define EB_ERR_FAIL_OPEN_LANG		10
-#define EB_ERR_FAIL_OPEN_START		11
+#define EB_ERR_FAIL_OPEN_TEXT		11
 #define EB_ERR_FAIL_OPEN_FONT		12
 #define EB_ERR_FAIL_OPEN_APP		13
 #define EB_ERR_FAIL_READ_CAT		14
 
 #define EB_ERR_FAIL_READ_CATAPP		15
 #define EB_ERR_FAIL_READ_LANG		16
-#define EB_ERR_FAIL_READ_START		17
+#define EB_ERR_FAIL_READ_TEXT		17
 #define EB_ERR_FAIL_READ_FONT		18
 #define EB_ERR_FAIL_READ_APP		19
 
 #define EB_ERR_FAIL_SEEK_CAT		20
 #define EB_ERR_FAIL_SEEK_CATAPP		21
 #define EB_ERR_FAIL_SEEK_LANG		22
-#define EB_ERR_FAIL_SEEK_START		23
+#define EB_ERR_FAIL_SEEK_TEXT		23
 #define EB_ERR_FAIL_SEEK_FONT		24
 
 #define EB_ERR_FAIL_SEEK_APP		25
 #define EB_ERR_UNEXP_CAT		26
 #define EB_ERR_UNEXP_CATAPP		27
 #define EB_ERR_UNEXP_LANG		28
-#define EB_ERR_UNEXP_START		29
+#define EB_ERR_UNEXP_TEXT		29
 
 #define EB_ERR_UNEXP_FONT		30
 #define EB_ERR_UNEXP_APP		31
@@ -68,7 +74,7 @@ extern "C" {
 #define EB_ERR_NO_APPSUB		36
 #define EB_ERR_NO_MSG			37
 #define EB_ERR_NO_FONT			38
-#define EB_ERR_NO_START			39
+#define EB_ERR_NO_TEXT			39
 
 #define EB_ERR_NO_CUR_LANG		40
 #define EB_ERR_NO_CUR_SUB		41
@@ -88,51 +94,29 @@ extern "C" {
 #define EB_ERR_HOOK_WORKSPACE		53
 #define EB_ERR_DIFF_CONTENT		54
 
-#define EB_ERR_DIFF_SUBBOOK		55
-#define EB_ERR_DIFF_BOOK		56
-#define EB_ERR_NO_PREV_SEARCH		57
-#define EB_ERR_NO_PREV_CONTENT		58
-#define EB_ERR_NO_SUCH_MULTI_ID		59
+#define EB_ERR_NO_PREV_SEARCH		55
+#define EB_ERR_NO_SUCH_MULTI_ID		56
+#define EB_ERR_NO_SUCH_ENTRY_ID		57
+#define EB_ERR_TOO_MANY_WORDS		58
+#define EB_ERR_NO_WORD			59
 
-#define EB_ERR_NO_SUCH_ENTRY_ID		60
+#define EB_ERR_NO_CANDIDATES		60
 
 /*
  * The number of error codes.
  */
-#define EB_NUM_ERRORS			61
+#define EB_NUMBER_OF_ERRORS		61
 
 /*
  * The maximum length of an error message.
  */
-#define EB_MAXLEN_ERROR_MESSAGE		127
-
-/*
- * Type for error code.
- */
-typedef int EB_Error_Code;
-
-/*
- * The current error code.
- */
-extern EB_Error_Code eb_error;
-
-/*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#if defined(__STDC__) || defined(__cplusplus)
-#define EB_P(p) p
-#else /* not __STDC__ && not __cplusplus */
-#define EB_P(p) ()
-#endif /* not __STDC__ && not __cplusplus */
-#endif /* EB_P */
+#define EB_MAX_ERROR_MESSAGE_LENGTH	127
 
 /*
  * Function declarations.
  */
 /* error.c */
-const char *eb_error_message EB_P((void));
-const char *eb_error_message2 EB_P((EB_Error_Code));
+const char *eb_error_message EB_P((EB_Error_Code));
 
 #ifdef __cplusplus
 }

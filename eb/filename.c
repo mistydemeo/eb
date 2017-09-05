@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997  Motoyuki Kasahara
+ * Copyright (c) 1997, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 
 #include <stdio.h>
 #include <sys/types.h>
-#include <ctype.h>
 #include <sys/stat.h>
 
 #if defined(STDC_HEADERS) || defined(HAVE_STRING_H)
@@ -38,6 +37,10 @@
 #include <limits.h>
 #endif
 
+#ifdef ENABLE_PTHREAD
+#include <pthread.h>
+#endif
+
 /* for Visual C++ by KSK Jan/30/1998 */
 #if defined(HAVE_DIRECT_H) && defined(HAVE__GETDCWD)
 #include <direct.h>            /* for _getcwd(), _getdcwd() */
@@ -47,6 +50,7 @@
 
 #include "eb.h"
 #include "error.h"
+#include "internal.h"
 
 #ifndef HAVE_STRCHR
 #define strchr index
@@ -102,515 +106,587 @@ char *memset();
 /*
  * Unexported functions.
  */
-static int eb_catalog_filename_internal EB_P((const char *, size_t,
+static EB_Error_Code eb_catalog_file_name_internal EB_P((const char *, size_t,
     EB_Disc_Code *, EB_Case_Code *, EB_Suffix_Code *));
-static void eb_fix_filename_internal EB_P((char *, size_t, EB_Case_Code,
+static EB_Error_Code eb_canonicalize_file_name_internal EB_P((char *));
+static void eb_fix_file_name_internal EB_P((char *, size_t, EB_Case_Code,
     EB_Suffix_Code));
 
-
 /*
- * Inspect filename mode and disctype of `book'.
+ * Inspect file name mode and disctype of `book'.
  */
-int
-eb_catalog_filename(book)
+EB_Error_Code
+eb_catalog_file_name(book)
     EB_Book *book;
 {
-    if (eb_catalog_filename_internal(book->path, book->path_length,
-	&book->disc_code, &book->case_code, &book->suffix_code) < 0) {
-	eb_error = EB_ERR_FAIL_OPEN_CAT;
-	return -1;
-    }
+    EB_Error_Code error_code;
 
-    return 0;
+    error_code = eb_catalog_file_name_internal(book->path, book->path_length,
+	&book->disc_code, &book->case_code, &book->suffix_code);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    return EB_ERR_FAIL_OPEN_CAT;
 }
 
 
 /*
- * Inspect filename mode and disctype of `appendix'.
+ * Inspect file name mode and disctype of `appendix'.
  */
-int
-eb_appendix_catalog_filename(appendix)
+EB_Error_Code
+eb_appendix_catalog_file_name(appendix)
     EB_Appendix *appendix;
 {
-    if (eb_catalog_filename_internal(appendix->path, appendix->path_length,
-	&appendix->disc_code, &appendix->case_code, &appendix->suffix_code)
-	< 0) {
-	eb_error = EB_ERR_FAIL_OPEN_CATAPP;
-	return -1;
-    }
+    EB_Error_Code error_code;
 
-    return 0;
+    error_code = eb_catalog_file_name_internal(appendix->path,
+	appendix->path_length, &appendix->disc_code, &appendix->case_code,
+	&appendix->suffix_code);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    return EB_ERR_FAIL_OPEN_CATAPP;
 }
 
 
 /*
- * Subcontractor function for eb_catalog_filename() and
- * eb_appendix_catalog_filename().
+ * Subcontractor function for eb_catalog_file_name() and
+ * eb_appendix_catalog_file_name().
  */
-static int
-eb_catalog_filename_internal(path, pathlen, disccode, casecode, suffixcode)
+static EB_Error_Code
+eb_catalog_file_name_internal(path, path_length, disc_code, case_code,
+    suffix_code)
     const char *path;
-    size_t pathlen;
-    EB_Disc_Code *disccode;
-    EB_Case_Code *casecode;
-    EB_Suffix_Code *suffixcode;
+    size_t path_length;
+    EB_Disc_Code *disc_code;
+    EB_Case_Code *case_code;
+    EB_Suffix_Code *suffix_code;
 {
-    struct stat st;
-    char catalog[PATH_MAX + 1];
-    char *casep;
-    char *endp;
+    struct stat status;
+    char catalog_file_name[PATH_MAX + 1];
+    char *case_p;
+    char *end_p;
 
     /*
      * Open a catalog file, and check for disc type.
      * At first, it is assumed that this book is EB*.
      */
-    sprintf(catalog, "%s/%s", path, EB_FILENAME_CATALOG);
-    eb_canonicalize_filename(catalog);
-    endp = catalog + strlen(catalog);
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*casecode = EB_CASE_UPPER;
-	*suffixcode = EB_SUFFIX_NONE;
-	*disccode = EB_DISC_EB;
-	return 0;
+    sprintf(catalog_file_name, "%s/%s", path, EB_FILE_NAME_CATALOG);
+    eb_canonicalize_file_name_internal(catalog_file_name);
+    end_p = catalog_file_name + strlen(catalog_file_name);
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*case_code = EB_CASE_UPPER;
+	*suffix_code = EB_SUFFIX_NONE;
+	*disc_code = EB_DISC_EB;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ".");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EB;
-	*casecode = EB_CASE_UPPER;
-	*suffixcode = EB_SUFFIX_DOT;
-	return 0;
+    strcpy(end_p, ".");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EB;
+	*case_code = EB_CASE_UPPER;
+	*suffix_code = EB_SUFFIX_DOT;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ";1");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EB;
-	*casecode = EB_CASE_UPPER;
-	*suffixcode = EB_SUFFIX_VERSION;
-	return 0;
+    strcpy(end_p, ";1");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EB;
+	*case_code = EB_CASE_UPPER;
+	*suffix_code = EB_SUFFIX_VERSION;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ".;1");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EB;
-	*casecode = EB_CASE_UPPER;
-	*suffixcode = EB_SUFFIX_BOTH;
-	return 0;
+    strcpy(end_p, ".;1");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EB;
+	*case_code = EB_CASE_UPPER;
+	*suffix_code = EB_SUFFIX_BOTH;
+	return EB_SUCCESS;
     }
 
-    sprintf(catalog, "%s/%s", path, EB_FILENAME_CATALOG);
-    eb_canonicalize_filename(catalog);
-    endp = catalog + strlen(catalog);
-    for (casep = catalog + pathlen + 1; *casep != '\0'; casep++) {
-	if (isupper(*casep))
-	    *casep = tolower(*casep);
+    sprintf(catalog_file_name, "%s/%s", path, EB_FILE_NAME_CATALOG);
+    eb_canonicalize_file_name_internal(catalog_file_name);
+    end_p = catalog_file_name + strlen(catalog_file_name);
+    for (case_p = catalog_file_name + path_length + 1; *case_p != '\0';
+	 case_p++) {
+	if ('A' <= *case_p && *case_p <= 'Z')
+	    *case_p += ('a' - 'A');
     }
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EB;
-	*casecode = EB_CASE_LOWER;
-	*suffixcode = EB_SUFFIX_NONE;
-	return 0;
-    }
-
-    strcpy(endp, ".");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EB;
-	*casecode = EB_CASE_LOWER;
-	*suffixcode = EB_SUFFIX_DOT;
-	return 0;
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EB;
+	*case_code = EB_CASE_LOWER;
+	*suffix_code = EB_SUFFIX_NONE;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ";1");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EB;
-	*casecode = EB_CASE_LOWER;
-	*suffixcode = EB_SUFFIX_VERSION;
-	return 0;
+    strcpy(end_p, ".");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EB;
+	*case_code = EB_CASE_LOWER;
+	*suffix_code = EB_SUFFIX_DOT;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ".;1");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EB;
-	*casecode = EB_CASE_LOWER;
-	*suffixcode = EB_SUFFIX_BOTH;
-	return 0;
+    strcpy(end_p, ";1");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EB;
+	*case_code = EB_CASE_LOWER;
+	*suffix_code = EB_SUFFIX_VERSION;
+	return EB_SUCCESS;
+    }
+
+    strcpy(end_p, ".;1");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EB;
+	*case_code = EB_CASE_LOWER;
+	*suffix_code = EB_SUFFIX_BOTH;
+	return EB_SUCCESS;
     }
 
     /*
      * Next, it is assumed that this books is EPWING.
      */
-    sprintf(catalog, "%s/%s", path, EB_FILENAME_CATALOGS);
-    eb_canonicalize_filename(catalog);
-    endp = catalog + strlen(catalog);
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EPWING;
-	*casecode = EB_CASE_UPPER;
-	*suffixcode = EB_SUFFIX_NONE;
-	return 0;
+    sprintf(catalog_file_name, "%s/%s", path, EB_FILE_NAME_CATALOGS);
+    eb_canonicalize_file_name_internal(catalog_file_name);
+    end_p = catalog_file_name + strlen(catalog_file_name);
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EPWING;
+	*case_code = EB_CASE_UPPER;
+	*suffix_code = EB_SUFFIX_NONE;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ".");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EPWING;
-	*casecode = EB_CASE_UPPER;
-	*suffixcode = EB_SUFFIX_DOT;
-	return 0;
+    strcpy(end_p, ".");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EPWING;
+	*case_code = EB_CASE_UPPER;
+	*suffix_code = EB_SUFFIX_DOT;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ";1");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EPWING;
-	*casecode = EB_CASE_UPPER;
-	*suffixcode = EB_SUFFIX_VERSION;
-	return 0;
+    strcpy(end_p, ";1");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EPWING;
+	*case_code = EB_CASE_UPPER;
+	*suffix_code = EB_SUFFIX_VERSION;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ".;1");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EPWING;
-	*casecode = EB_CASE_UPPER;
-	*suffixcode = EB_SUFFIX_BOTH;
-	return 0;
+    strcpy(end_p, ".;1");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EPWING;
+	*case_code = EB_CASE_UPPER;
+	*suffix_code = EB_SUFFIX_BOTH;
+	return EB_SUCCESS;
     }
 
-    sprintf(catalog, "%s/%s", path, EB_FILENAME_CATALOGS);
-    eb_canonicalize_filename(catalog);
-    endp = catalog + strlen(catalog);
-    for (casep = catalog + pathlen + 1; *casep != '\0'; casep++) {
-	if (isupper(*casep))
-	    *casep = tolower(*casep);
+    sprintf(catalog_file_name, "%s/%s", path, EB_FILE_NAME_CATALOGS);
+    eb_canonicalize_file_name_internal(catalog_file_name);
+    end_p = catalog_file_name + strlen(catalog_file_name);
+    for (case_p = catalog_file_name + path_length + 1; *case_p != '\0';
+	 case_p++) {
+	if ('A' <= *case_p && *case_p <= 'Z')
+	    *case_p += ('a' - 'A');
     }
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EPWING;
-	*casecode = EB_CASE_LOWER;
-	*suffixcode = EB_SUFFIX_NONE;
-	return 0;
-    }
-
-    strcpy(endp, ".");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EPWING;
-	*casecode = EB_CASE_LOWER;
-	*suffixcode = EB_SUFFIX_DOT;
-	return 0;
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EPWING;
+	*case_code = EB_CASE_LOWER;
+	*suffix_code = EB_SUFFIX_NONE;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ";1");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EPWING;
-	*casecode = EB_CASE_LOWER;
-	*suffixcode = EB_SUFFIX_VERSION;
-	return 0;
+    strcpy(end_p, ".");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EPWING;
+	*case_code = EB_CASE_LOWER;
+	*suffix_code = EB_SUFFIX_DOT;
+	return EB_SUCCESS;
     }
 
-    strcpy(endp, ".;1");
-    if (stat(catalog, &st) == 0 && S_ISREG(st.st_mode)) {
-	*disccode = EB_DISC_EPWING;
-	*casecode = EB_CASE_LOWER;
-	*suffixcode = EB_SUFFIX_BOTH;
-	return 0;
+    strcpy(end_p, ";1");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EPWING;
+	*case_code = EB_CASE_LOWER;
+	*suffix_code = EB_SUFFIX_VERSION;
+	return EB_SUCCESS;
+    }
+
+    strcpy(end_p, ".;1");
+    if (stat(catalog_file_name, &status) == 0 && S_ISREG(status.st_mode)) {
+	*disc_code = EB_DISC_EPWING;
+	*case_code = EB_CASE_LOWER;
+	*suffix_code = EB_SUFFIX_BOTH;
+	return EB_SUCCESS;
     }
 
     /*
      * No catalog file is availabe.  Give up.
-     * (`eb_error' is set by caller.)
      */
-    return -1;
+    return EB_ERR_FAIL_OPEN_CAT;
 }
 
+
+/*
+ * Canonicalize `file_name' of a file in a book.
+ */
+EB_Error_Code
+eb_canonicalize_file_name(book, file_name)
+    EB_Book *book;
+    char *file_name;
+{
+    EB_Error_Code error_code;
+
+    error_code = eb_canonicalize_file_name_internal(file_name);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    return error_code;
+}
+
+
+/*
+ * Canonicalize `file_name' of a file in an appendix.
+ */
+EB_Error_Code
+eb_canonicalize_appendix_file_name(appendix, file_name)
+    EB_Appendix *appendix;
+    char *file_name;
+{
+    EB_Error_Code error_code;
+
+    error_code = eb_canonicalize_file_name_internal(file_name);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    return error_code;
+}
 
 #ifndef DOS_FILE_PATH
 
 /*
- * Canonicalize `filename' (UNIX version).
- * Replace `/./' and `/../' in `filename' to equivalent straight
- * forms.
+ * Canonicalize `file_name' (UNIX version).
+ * Replace `/./' and `/../' in `file_name' to equivalent straight
+ * form.  If an error occurs, -1 is returned and the error code
+ * is set to `error'.  Otherwise 0 is returned.
  */
-int
-eb_canonicalize_filename(filename)
-    char *filename;
+static EB_Error_Code
+eb_canonicalize_file_name_internal(file_name)
+    char *file_name;
 {
-    char curdir[PATH_MAX + 1];
-    char *src, *dst;
-    char *rslash;
-    size_t namelen, curlen;
+    char cwd[PATH_MAX + 1];
+    char *source;
+    char *destination;
+    char *slash;
+    size_t file_name_length;
+    size_t cwd_length;
     int i;
 
-    if (*filename != '/') {
+    if (*file_name != '/') {
 	/*
-	 * `filename' is an relative path.  Convert to an absolute
+	 * `file_name' is an relative path.  Convert to an absolute
 	 * path.
 	 */
-	if (getcwd(curdir, PATH_MAX + 1) == NULL) {
-	    eb_error = EB_ERR_FAIL_GETCWD;
-	    return -1;
-	}
-	curlen = strlen(curdir);
-	namelen = strlen(filename);
-	if (PATH_MAX < curlen + 1 + namelen) {
-	    eb_error = EB_ERR_TOO_LONG_FILENAME;
-	    return -1;
-	}
+	if (getcwd(cwd, PATH_MAX + 1) == NULL)
+	    return EB_ERR_FAIL_GETCWD;
+	cwd_length = strlen(cwd);
+	file_name_length = strlen(file_name);
+	if (PATH_MAX < cwd_length + 1 + file_name_length)
+	    return EB_ERR_TOO_LONG_FILE_NAME;
 
-	src = filename + namelen;
-	dst = filename + curlen + 1 + namelen;
-	for (i = 0; i <= namelen; i++)
-	    *dst-- = *src--;
-	*dst = '/';
+	source = file_name + file_name_length;
+	destination = file_name + cwd_length + 1 + file_name_length;
+	for (i = 0; i <= file_name_length; i++)
+	    *destination-- = *source--;
+	*destination = '/';
 
-	memcpy(filename, curdir, curlen);
+	memcpy(file_name, cwd, cwd_length);
     }
 
     /*
      * Canonicalize book->path.
      * Replace `.' and `..' segments in the path.
      */
-    src = filename;
-    dst = filename;
-    while (*src != '\0') {
-	if (*src != '/') {
-	    *dst++ = *src++;
+    source = file_name;
+    destination = file_name;
+    while (*source != '\0') {
+	if (*source != '/') {
+	    *destination++ = *source++;
 	    continue;
 	}
 
-	if (*(src + 1) == '/' || *(src + 1) == '\0') {
+	/*
+	 * `*source' is slash (`/')
+	 */
+	if (*(source + 1) == '/' || *(source + 1) == '\0') {
 	    /*
 	     * `//' -- Ignore 2nd slash (`/').
 	     */
-	    src++;
+	    source++;
 	    continue;
-	} else if (*(src + 1) == '.'
-	    && (*(src + 2) == '/' || *(src + 2) == '\0')) {
+	} else if (*(source + 1) == '.'
+	    && (*(source + 2) == '/' || *(source + 2) == '\0')) {
 	    /*
 	     * `/.' -- The current segment itself.  Removed.
 	     */
-	    src += 2;
-	} else if (*(src + 1) == '.' && *(src + 2) == '.'
-	    && (*(src + 3) == '/' || *(src + 3) == '\0')) {
+	    source += 2;
+	} else if (*(source + 1) == '.' && *(source + 2) == '.'
+	    && (*(source + 3) == '/' || *(source + 3) == '\0')) {
 	    /*
 	     * `/..' -- Back to a parent segment.
 	     */
-	    src += 3;
-	    *dst = '\0';
-	    rslash = strrchr(filename, '/');
-	    if (rslash == NULL)
-		dst = filename;
+	    source += 3;
+	    *destination = '\0';
+	    slash = strrchr(file_name, '/');
+	    if (slash == NULL)
+		destination = file_name;
 	    else
-		dst = rslash;
+		destination = slash;
 	} else
-	    *dst++ = *src++;
+	    *destination++ = *source++;
     }
-    *dst = '\0';
+    *destination = '\0';
 
     /*
      * When the path comes to be empty, set the path to `/'.
      */
-    if (*(filename) == '\0') {
-	*(filename) = '/';
-	*(filename + 1) = '\0';
+    if (*(file_name) == '\0') {
+	*(file_name) = '/';
+	*(file_name + 1) = '\0';
     }
 
-    return 0;
+    return EB_SUCCESS;
 }
 
 #else /* DOS_FILE_PATH */
 
 /*
- * Canonicalize `filename' (DOS version).
- * Replace `\.\' and `\..\' in `filename' to equivalent straight
- * forms.
+ * Canonicalize `file_name' (DOS version).
+ * Replace `\.\' and `\..\' in `file_name' to equivalent straight
+ * form.  If an error occurs, -1 is returned and the error code
+ * is set to `error'.  Otherwise 0 is returned.
  *
- * eb_canonicalize_filename(filename) for MSDOS by KSK Jan/30/1998
+ * eb_canonicalize_file_name_internal() for MSDOS by KSK Jan/30/1998
  */
-int
-eb_canonicalize_filename(filename)
-    char *filename;
+static EB_Error_Code
+eb_canonicalize_file_name_internal(file_name)
+    char *file_name;
 {
-    char curdir[PATH_MAX + 1];
-    char *src, *dst;
-    char *rslash;
-    size_t namelen, curlen;
-    char *pfilename;		/* filename without drive letter */
-    int curdrive;
-    int isunc;			/* is `filename' UNC path? */
+    char cwd[PATH_MAX + 1];
+    char *source;
+    char *destination;
+    char *slash;
+    size_t file_name_length;
+    size_t cwd_length;
+    char *pfile_name;		/* file_name without drive letter */
+    int current_drive;
+    int is_unc;			/* is `file_name' UNC path? */
     int i;
 
     /* canonicalize path name separator into '\' */
-    for (dst = filename; *dst; dst++) {
-	/* forget about SJIS pathname :-p */
-	if (*dst == '/') 
-	    *dst = '\\';
+    for (destination = file_name; *destination != '\0'; destination++) {
+	/* forget about SJIS file_name :-p */
+	if (*destination == '/') 
+	    *destination = '\\';
     }
     /* check a drive letter and UNC path */
-    namelen = strlen(filename);
-    curdrive = 0;
-    isunc = 0;
-    pfilename = filename;
-    if (namelen >= 2) {
-	if (isalpha(*filename) && (*(filename+1) == ':')) {
-	    curdrive = toupper(*filename) - 'A' + 1;
-	    pfilename = filename + 2;
-	} else if ((*filename == '\\') && (*(filename+1) == '\\')) {
-	    isunc = 1;
-	    pfilename = filename + 1;
+    file_name_length = strlen(file_name);
+    current_drive = 0;
+    is_unc = 0;
+    pfile_name = file_name;
+    if (file_name_length >= 2) {
+	if ('a' <= *file_name && *file_name <= 'z'
+	    && *(file_name + 1) == ':') {
+	    current_drive = *file_name - 'a' + 1;
+	    pfile_name = file_name + 2;
+	} else if ('A' <= *file_name && *file_name <= 'Z'
+	    && *(file_name + 1) == ':') {
+	    current_drive = *file_name - 'A' + 1;
+	    pfile_name = file_name + 2;
+	} else if (*file_name == '\\' && *(file_name + 1) == '\\') {
+	    is_unc = 1;
+	    pfile_name = file_name + 1;
 	}
     }
 
-    if (!isunc) {
-	if ((*pfilename != '\\') || (curdrive == 0)) {
-	    /* `filename' is a relative path or has no drive letter */
+    if (!is_unc) {
+	if (*pfile_name != '\\' || current_drive == 0) {
+	    /* `file_name' is a relative path or has no drive letter */
 
-	    if (curdrive == 0) {
-		/* `filename' has no drive letter */
-		if (getcwd(curdir, PATH_MAX + 1) == NULL) {
-		    eb_error = EB_ERR_FAIL_GETCWD;
-		    return -1;
-		}
-		if (*pfilename == '\\') {
-		    /* `filename' is a absolute path and has no drive letter */
-		    /* use only a drive letter */
-		    curdir[2] = '\0';
+	    if (current_drive == 0) {
+		/* `file_name' has no drive letter */
+		if (getcwd(cwd, PATH_MAX + 1) == NULL)
+		    return EB_ERR_FAIL_GETCWD;
+		if (*pfile_name == '\\') {
+		    /*
+		     * `file_name' is a absolute path and has no
+		     * drive letter use only a drive letter
+		     */
+		    cwd[2] = '\0';
 		}
 	    } else {
-		/* `filename' is a relative path with a drive letter  */
-		if (getdcwd(curdrive, curdir, PATH_MAX + 1) == NULL) {
-		    eb_error = EB_ERR_FAIL_GETCWD;
-		    return -1;
+		/* `file_name' is a relative path with a drive letter  */
+		if (getdcwd(current_drive, cwd, PATH_MAX + 1) == NULL) {
+		    return EB_ERR_FAIL_GETCWD;
 		}
 	    }
 
-	    curlen = strlen(curdir);
-	    namelen = strlen(pfilename);
-	    if (PATH_MAX < curlen + 1 + namelen) {
-		eb_error = EB_ERR_TOO_LONG_FILENAME;
+	    cwd_length = strlen(cwd);
+	    file_name_length = strlen(pfile_name);
+	    if (PATH_MAX < cwd_length + 1 + file_name_length) {
+		if (error != NULL)
+		    *error = EB_ERR_TOO_LONG_FILE_NAME;
 		return -1;
 	    }
-	    src = pfilename + namelen;
-	    dst = filename + curlen + 1 + namelen;
-	    for (i = 0; i <= namelen; i++) {
-		*dst-- = *src--;
+	    source = pfile_name + file_name_length;
+	    destination = file_name + cwd_length + 1 + file_name_length;
+	    for (i = 0; i <= file_name_length; i++) {
+		*destination-- = *source--;
 	    }
-	    *dst = '\\';
-	    memcpy(filename, curdir, curlen);
-	    pfilename = filename + 2;
+	    *destination = '\\';
+	    memcpy(file_name, cwd, cwd_length);
+	    pfile_name = file_name + 2;
 	}
     }
     /*
      * Canonicalize book->path.
      * Replace "." and ".." segments in the path.
      */
-    src = pfilename;
-    dst = pfilename;
-    while (*src != '\0') {
-	if (*src != '\\') {
-	    *dst++ = *src++;
+    source = pfile_name;
+    destination = pfile_name;
+    while (*source != '\0') {
+	if (*source != '\\') {
+	    *destination++ = *source++;
 	    continue;
 	}
 
-	if (*(src + 1) == '\\' || *(src + 1) == '\0') {
+	/*
+	 * `*source' is slash (`/')
+	 */
+	if (*(source + 1) == '\\' || *(source + 1) == '\0') {
 	    /*
 	     * `\\' -- Ignore 2nd backslash (`\').
 	     */
-	    src++;
+	    source++;
 	    continue;
-	} else if (*(src + 1) == '.'
-	    && (*(src + 2) == '\\' || *(src + 2) == '\0')) {
+	} else if (*(source + 1) == '.'
+	    && (*(source + 2) == '\\' || *(source + 2) == '\0')) {
 	    /*
 	     * `\.' -- The current segment itself.  Removed.
 	     */
-	    src += 2;
-	} else if (*(src + 1) == '.' && *(src + 2) == '.'
-	    && (*(src + 3) == '\\' || *(src + 3) == '\0')) {
+	    source += 2;
+	} else if (*(source + 1) == '.' && *(source + 2) == '.'
+	    && (*(source + 3) == '\\' || *(source + 3) == '\0')) {
 	    /*
 	     * `\..' -- Back to a parent segment.
 	     */
-	    src += 3;
-	    *dst = '\0';
-	    rslash = strrchr(pfilename, '\\');
-	    if (rslash == NULL)
-		dst = pfilename;
+	    source += 3;
+	    *destination = '\0';
+	    slash = strrchr(pfile_name, '\\');
+	    if (slash == NULL)
+		destination = pfile_name;
 	    else
-		dst = rslash;
+		destination = slash;
 	} else
-	    *dst++ = *src++;
+	    *destination++ = *source++;
     }
-    *dst = '\0';
+    *destination = '\0';
 
     /*
      * When the path comes to be empty, set the path to `\\'.
      */
-    if (*(pfilename) == '\0') {
-	*(pfilename) = '\\';
-	*(pfilename + 1) = '\0';
+    if (*(pfile_name) == '\0') {
+	*(pfile_name) = '\\';
+	*(pfile_name + 1) = '\0';
     }
 
-    return 0;
+    return EB_SUCCESS;
 }
 
 #endif /* DOS_FILE_PATH */
 
 
 /*
- * Fix cases and suffix of `filename' to adapt to `book'.
+ * Fix cases and suffix of `file_name' to adapt to `book'.
  */
 void
-eb_fix_filename(book, filename)
+eb_fix_file_name(book, file_name)
     EB_Book *book;
-    char *filename;
+    char *file_name;
 {
-    eb_fix_filename_internal(filename, book->path_length, book->case_code,
+    eb_fix_file_name_internal(file_name, book->path_length, book->case_code,
 	book->suffix_code);
 }
 
 
 /*
- * Fix cases and suffix of `filename' to adapt to `appendix'.
+ * Fix cases and suffix of `file_name' to adapt to `appendix'.
  */
 void
-eb_fix_appendix_filename(appendix, filename)
+eb_fix_appendix_file_name(appendix, file_name)
     EB_Appendix *appendix;
-    char *filename;
+    char *file_name;
 {
-    eb_fix_filename_internal(filename, appendix->path_length,
+    eb_fix_file_name_internal(file_name, appendix->path_length,
 	appendix->case_code, appendix->suffix_code);
 }
 
 
 /*
- * Subcontractor function for eb_fix_filename() and
- * eb_fix_appendix_filename().
+ * Subcontractor function for eb_fix_file_name() and
+ * eb_fix_appendix_file_name().
  */
 static void
-eb_fix_filename_internal(filename, pathlen, casecode, suffixcode)
-    char *filename;
-    size_t pathlen;
-    EB_Case_Code casecode;
-    EB_Suffix_Code suffixcode;
+eb_fix_file_name_internal(file_name, path_length, case_code, suffix_code)
+    char *file_name;
+    size_t path_length;
+    EB_Case_Code case_code;
+    EB_Suffix_Code suffix_code;
 {
     char *p;
 
     /*
-     * Change cases of the filename under `path' to lower cases, if needed.
+     * Change cases of the file_name under `path' to lower cases, if needed.
      */
-    if (casecode == EB_CASE_LOWER) {
-	for (p = filename + pathlen + 1; *p != '\0'; p++) {
-	    if (isupper(*p))
-		*p = tolower(*p);
+    if (case_code == EB_CASE_LOWER) {
+	for (p = file_name + path_length + 1; *p != '\0'; p++) {
+	    if ('A' <= *p && *p <= 'Z')
+		*p += ('a' - 'A');
 	}
     }
 
     /*
-     * Append `.', `;1', or `.;1' to the filename if needed.
+     * Append `.', `;1', or `.;1' to the file_name if needed.
      */
-    if (suffixcode == EB_SUFFIX_DOT)
-	strcat(filename, ".");
-    else if (suffixcode == EB_SUFFIX_VERSION)
-	strcat(filename, ";1");
-    else if (suffixcode == EB_SUFFIX_BOTH)
-	strcat(filename, ".;1");
+    if (suffix_code == EB_SUFFIX_DOT)
+	strcat(file_name, ".");
+    else if (suffix_code == EB_SUFFIX_VERSION)
+	strcat(file_name, ";1");
+    else if (suffix_code == EB_SUFFIX_BOTH)
+	strcat(file_name, ".;1");
 
     /*
      * Trim successive slashes (`/').
      */
-    eb_canonicalize_filename(filename);
+    eb_canonicalize_file_name_internal(file_name);
 }

@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,55 +26,49 @@ extern "C" {
 #endif
 
 /*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#if defined(__STDC__) || defined(__cplusplus)
-#define EB_P(p)	p
-#else /* not __STDC__ && not __cplusplus */
-#define EB_P(p)	()
-#endif /* not __STDC__ && not __cplusplus */
-#endif /* EB_P */
-
-/*
  * Function declarations.
  */
 /* appendix.c */
 void eb_initialize_appendix EB_P((EB_Appendix *));
-void eb_clear_appendix EB_P((EB_Appendix *));
+void eb_finalize_appendix EB_P((EB_Appendix *));
 void eb_suspend_appendix EB_P((EB_Appendix *));
-int eb_bind_appendix EB_P((EB_Appendix *, const char *));
+EB_Error_Code eb_bind_appendix EB_P((EB_Appendix *, const char *));
 int eb_is_appendix_bound EB_P((EB_Appendix *));
-const char *eb_appendix_path EB_P((EB_Appendix *));
+EB_Error_Code eb_appendix_path EB_P((EB_Appendix *, char *));
+
 /* appsub.c */
-int eb_initialize_appendix_subbook EB_P((EB_Appendix *));
-int eb_initialize_all_appendix_subbooks EB_P((EB_Appendix *));
-int eb_appendix_subbook_count EB_P((EB_Appendix *));
-int eb_appendix_subbook_list EB_P((EB_Appendix *, EB_Subbook_Code *));
-EB_Subbook_Code eb_appendix_subbook EB_P((EB_Appendix *));
-EB_Subbook_Code eb_appendix_subbook2 EB_P((EB_Appendix *, const char *));
-const char *eb_appendix_subbook_directory EB_P((EB_Appendix *));
-const char *eb_appendix_subbook_directory2 EB_P((EB_Appendix *,
-    EB_Subbook_Code));
-int eb_set_appendix_subbook EB_P((EB_Appendix *, EB_Subbook_Code));
+EB_Error_Code eb_initialize_appendix_subbook EB_P((EB_Appendix *));
+EB_Error_Code eb_initialize_all_appendix_subbooks EB_P((EB_Appendix *));
+EB_Error_Code eb_appendix_subbook_list EB_P((EB_Appendix *,
+    EB_Subbook_Code *, int *));
+EB_Error_Code eb_appendix_subbook EB_P((EB_Appendix *, EB_Subbook_Code *));
+EB_Error_Code eb_appendix_subbook_directory EB_P((EB_Appendix *, char *));
+EB_Error_Code eb_appendix_subbook_directory2 EB_P((EB_Appendix *,
+    EB_Subbook_Code, char *));
+EB_Error_Code eb_set_appendix_subbook EB_P((EB_Appendix *, EB_Subbook_Code));
 void eb_unset_appendix_subbook EB_P((EB_Appendix *));
+
 /* narwalt.c */
 int eb_have_narrow_alt EB_P((EB_Appendix *));
-int eb_narrow_alt_start EB_P((EB_Appendix *));
-int eb_narrow_alt_end EB_P((EB_Appendix *));
-int eb_narrow_alt_character_text EB_P((EB_Appendix *, int, char *));
-int eb_forward_narrow_alt_character EB_P((EB_Appendix *, int, int));
-int eb_backward_narrow_alt_character EB_P((EB_Appendix *, int, int));
+EB_Error_Code eb_narrow_alt_start EB_P((EB_Appendix *, int *));
+EB_Error_Code eb_narrow_alt_end EB_P((EB_Appendix *, int *));
+EB_Error_Code eb_narrow_alt_character_text EB_P((EB_Appendix *, int, char *));
+EB_Error_Code eb_forward_narrow_alt_character EB_P((EB_Appendix *, int,
+    int *));
+EB_Error_Code eb_backward_narrow_alt_character EB_P((EB_Appendix *, int,
+    int *));
+
 /* stopcode.c */
-int eb_have_stopcode EB_P((EB_Appendix *));
-int eb_stopcode EB_P((EB_Appendix *));
+int eb_have_stop_code EB_P((EB_Appendix *));
+EB_Error_Code eb_stop_code EB_P((EB_Appendix *, int *));
+
 /* widealt.c */
 int eb_have_wide_alt EB_P((EB_Appendix *));
-int eb_wide_alt_start EB_P((EB_Appendix *));
-int eb_wide_alt_end EB_P((EB_Appendix *));
-int eb_wide_alt_character_text EB_P((EB_Appendix *, int, char *));
-int eb_forward_wide_alt_character EB_P((EB_Appendix *, int, int));
-int eb_backward_wide_alt_character EB_P((EB_Appendix *, int, int));
+EB_Error_Code eb_wide_alt_start EB_P((EB_Appendix *, int *));
+EB_Error_Code eb_wide_alt_end EB_P((EB_Appendix *, int *));
+EB_Error_Code eb_wide_alt_character_text EB_P((EB_Appendix *, int, char *));
+EB_Error_Code eb_forward_wide_alt_character EB_P((EB_Appendix *, int, int *));
+EB_Error_Code eb_backward_wide_alt_character EB_P((EB_Appendix *, int, int *));
 
 #ifdef __cplusplus
 }

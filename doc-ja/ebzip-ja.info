@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.8 版です。 EB ライブラリバージョン 2.3.8 に対応して
-います。
+   この文書は第 3.0alpha0 版です。 EB ライブラリバージョン 3.0alpha0 に
+対応しています。
 
 * Menu:
 
@@ -225,14 +225,14 @@ File: ebzip-ja.info,  Node: Compression Example 1,  Next: Compression Example 2,
 圧縮には、しばらくかかることがあります。 圧縮の間、`ebzip' は、次のよう
 に状況を知らせるメッセージを出力します。
 
-     ==> compress /dict/kanji/start <==
-     output to ./dict/kanji/start.ebz
-      1.0% done (2097152 / 220069888 bytes)
-      1.9% done (4194304 / 220069888 bytes)
-      2.9% done (6291456 / 220069888 bytes)
+     ==> /dict/kanji/start を圧縮 <==
+     ./dict/kanji/start.ebz に出力
+      1.0% 処理済み (2097152 / 220069888 バイト)
+      1.9% 処理済み (4194304 / 220069888 バイト)
+      2.9% 処理済み (6291456 / 220069888 バイト)
              : (略)
-     completed (220069888 / 220069888 bytes)
-     220069888 -> 78163751 bytes (35.5%)
+     完了 (220069888 / 220069888 バイト)
+     220069888 -> 78163751 バイト (35.5%)
 
 圧縮が完了すると、`/dict' の下のディレクトリ構成は少し変化しています。
 
@@ -386,31 +386,30 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
 を知ることができます。
 
      % ebinfo /mnt/cdrom
-     disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
-     character code: JIS X 0208
-     the number of subbooks: 3
-     
-     subbook 1:
-       title: New English Japanese Dictionary (4th edition)
-       directory: ENGLISH
-       search methods: word endword keyword menu
-       font sizes: 16 24 30 48
-       narrow font characters: 0xa121 -- 0xa24e
-       wide font characters: 0xa321 -- 0xa27e
-     subbook 2:
-       title: CD-ROM French Japanese Dictionary (3rd edition)
-       directory: FRENCH
-       search methods: word endword keyword menu
-       font sizes: 16 24 30 48
-       narrow font characters:
-       wide font characters: 0xa321 -- 0xa27e
-     subbook 3:
-       title: Pocket German Japanese Dictionary (3rd edition)
-       directory: GERMAN
-       search methods: menu
-       font sizes: 16 24 30 48
-       narrow font characters:
-       wide font characters: 0xa321 -- 0xa27e
+     ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+     文字コード: JIS X 0208
+     副本の数: 3
+     副本 1:
+       題名: 新英和辞典（第四版）
+       ディレクトリ: ENGLISH
+       検索方式: 前方一致後方一致条件メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字: 0xa121 -- 0xa24e
+       全角フォントの文字: 0xa321 -- 0xa27e
+     副本 2:
+       題名: CD-ROM 仏和辞典（第三版）
+       ディレクトリ: FRENCH
+       検索方式: 前方一致後方一致条件メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字:
+       全角フォントの文字: 0xa321 -- 0xa27e
+     副本 3:
+       題名: ポケット独和辞典（第三版）
+       ディレクトリ: GERMAN
+       検索方式: メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字:
+       全角フォントの文字: 0xa321 -- 0xa27e
 
 (`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行 :
 (ebinfo-ja)Invoking ebinfo.)。
@@ -448,11 +447,11 @@ File: ebzip-ja.info,  Node: Overwrite Old Files,  Next: Compress Compressed EPWI
    書き込もうとしたファイルがすでに存在するとき、`ebzip' は上書きして
 良いかどうかの確認を求めてきます。
 
-     ==> compress /dict/science/data/honmon <==
-     output to /dict/science/data/honmon.ebz
+     ==> /dict/science/data/honmon を圧縮 <==
+     /dict/science/data/honmon.ebz に出力
      
-     the file already exists: /dict/science/data/honmon.ebz
-     do you wish to overwrite (y or n)?
+     ファイルがすでに存在します: /dict/science/data/honmon.ebz
+     上書きしますか (はい:y, いいえ:n)?
 
 `y' か `n' で答えて下さい。 `n' と答えると、`ebzip' はそのファイルを飛
 ばして、次に進みます。
@@ -515,23 +514,23 @@ File: ebzip-ja.info,  Node: Uncompression Example,  Next: Options for Uncompress
 伸長には、しばらくかかることがあります。 伸長の間、`ebunzip' は、次のよ
 うに状況を知らせるメッセージを出力します。
 
-     ==> uncompress /dict/kanji/start.ebz <==
-     output to ./kanji/start.ebz
-      5.1% done (4194304 / 82460672 bytes)
-     10.2% done (8388608 / 82460672 bytes)
-     15.3% done (12582912 / 82460672 bytes)
+     ==> /dict/kanji/start.ebz を伸長 <==
+     ./kanji/start.ebz に出力
+      5.1% 処理済み (4194304 / 82460672 バイト)
+     10.2% 処理済み (8388608 / 82460672 バイト)
+     15.3% 処理済み (12582912 / 82460672 バイト)
              : (略)
-     completed (82460672 / 82460672 bytes)
-     25681439 -> 82460672 bytes
+     完了 (82460672 / 82460672 バイト)
+     25681439 -> 82460672 バイト
 
 伸長の間、`ebunzip' は、すでに存在するファイルを上書きしても良いかどう
 か確認を求めてきます。
 
-     ==> uncompress /dict/kanji/start.ebz <==
-     output to /dict/kanji/start
+     ==> /dict/kanji/start.ebz を伸長 <==
+     /dict/kanji/start に出力
      
-     the file already exists: /dict/kanji/start
-     do you wish to overwrite (y or n)?
+     ファイルがすでに存在します: /dict/kanji/start
+     上書きしますか (はい:y, いいえ:n)?
 
 伸長が完了すると、`/dict' の下のディレクトリ構成は少し変化しています。
 
@@ -619,13 +618,11 @@ File: ebzip-ja.info,  Node: Information Example,  Next: Options for Information,
    `ebzipinfo' は標準出力に次のような情報を出力します。
 
      ==> /dict/spanish/spanish/start.ebz <==
-     compressed: 154290176 -> 54881862 bytes (35.6%)
-     compresssion level: 0
+     154290176 -> 54881862 バイト (35.6%, ebzip 圧縮レベル 0)
      ==> /dict/spanish/language.ebz <==
-     compressed: 12288 -> 4121 bytes (33.5%)
-     compresssion level: 0
+     compressed: 12288 -> 4121 バイト (33.5%, ebzip 圧縮レベル 0)
      ==> /dict/spanish/catalog <==
-     not compressed
+     2048 バイト (非圧縮)
 
 
 File: ebzip-ja.info,  Node: Options for Information,  Prev: Information Example,  Up: Information
@@ -1009,8 +1006,8 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 2.3.8 では、1 (2 進
-     数で 0001) だけが規定されています。
+     圧縮モードを表します。 EB ライブラリバージョン 3.0alpha0 では、 1
+     (2 進数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
      圧縮レベルを表します。
@@ -1048,32 +1045,32 @@ significant bit) を含んでいます。 `zip モード' が 1 で、 `圧縮レベル' が
 
 Tag Table:
 Node: Top1010
-Node: Introduction2577
-Node: Action and Command Name3929
-Node: Invoking ebzip5656
-Node: Compression6289
-Node: Compression Example 16890
-Node: Compression Example 28467
-Node: Compression Level10027
-Node: Adjust Filenames10540
-Node: Test12561
-Node: Partial Compression12910
-Node: Overwrite Old Files15494
-Node: Compress Compressed EPWING16292
-Node: Uncompression16730
-Node: Uncompression Example17117
-Node: Options for Uncompression18641
-Node: Uncompress Compressed EPWING20189
-Node: Information20634
-Node: Information Example20973
-Node: Options for Information21680
-Node: Delete a Book22255
-Node: Summary of Options22551
-Node: Comparision Result27019
-Node: Compressed File Format28979
-Node: Format Overview29383
-Node: Data Part30237
-Node: Index Part32812
-Node: Header Part35479
+Node: Introduction2585
+Node: Action and Command Name3937
+Node: Invoking ebzip5664
+Node: Compression6297
+Node: Compression Example 16898
+Node: Compression Example 28482
+Node: Compression Level10042
+Node: Adjust Filenames10555
+Node: Test12576
+Node: Partial Compression12925
+Node: Overwrite Old Files15411
+Node: Compress Compressed EPWING16207
+Node: Uncompression16645
+Node: Uncompression Example17032
+Node: Options for Uncompression18557
+Node: Uncompress Compressed EPWING20105
+Node: Information20550
+Node: Information Example20889
+Node: Options for Information21578
+Node: Delete a Book22153
+Node: Summary of Options22449
+Node: Comparision Result26917
+Node: Compressed File Format28877
+Node: Format Overview29281
+Node: Data Part30135
+Node: Index Part32710
+Node: Header Part35377
 
 End Tag Table

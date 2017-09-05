@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,10 @@
 #include <limits.h>
 #endif
 
+#ifdef ENABLE_PTHREAD
+#include <pthread.h>
+#endif
+
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
@@ -55,79 +59,81 @@
 /*
  * Get information about the current subbook.
  */
-int
+EB_Error_Code
 eb_initialize_multi_search(book)
     EB_Book *book;
 {
-    EB_Subbook *sub = book->sub_current;
-    EB_Search *multi;
-    EB_Multi_Entry *entry;
-    char buf[EB_SIZE_PAGE];
+    EB_Error_Code error_code;
+    EB_Subbook *sub = book->subbook_current;
+    EB_Multi_Search *multi;
+    EB_Search *entry;
+    char buffer[EB_SIZE_PAGE];
     char *bufp;
-    int indexcount;
-    int id;
+    int index_count;
+    int index_id;
     int page;
     int i, j, k;
 
-    for (i = 0, multi = sub->multi; i < sub->multi_count; i++, multi++) {
+    for (i = 0, multi = sub->multis; i < sub->multi_count; i++, multi++) {
 	/*
 	 * Read the index table page of the multi search.
 	 */
-	if (eb_zlseek(&(sub->zip), sub->sub_file,
-	    (multi->page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
-	    eb_error = EB_ERR_FAIL_SEEK_START;
-	    return -1;
+	if (eb_zlseek(&(sub->zip), sub->text_file,
+	    (multi->search.index_page - 1) * EB_SIZE_PAGE, SEEK_SET) < 0) {
+	    error_code = EB_ERR_FAIL_SEEK_TEXT;
+	    goto failed;
 	}
-	if (eb_zread(&(sub->zip), sub->sub_file, buf, EB_SIZE_PAGE)
+	if (eb_zread(&(sub->zip), sub->text_file, buffer, EB_SIZE_PAGE)
 	    != EB_SIZE_PAGE) {
-	    eb_error = EB_ERR_FAIL_READ_START;
-	    return -1;
+	    error_code = EB_ERR_FAIL_READ_TEXT;
+	    goto failed;
 	}
 
 	/*
 	 * Get the number of entries in this multi search.
 	 */
-	multi->entry_count = eb_uint2(buf);
+	multi->entry_count = eb_uint2(buffer);
 	if (EB_MAX_MULTI_SEARCHES <= multi->entry_count) {
-	    eb_error = EB_ERR_UNEXP_START;
-	    return -1;
+	    error_code = EB_ERR_UNEXP_TEXT;
+	    goto failed;
 	}
 
-	bufp = buf + 16;
+	bufp = buffer + 16;
 	for (j = 0, entry = multi->entries;
 	     j < multi->entry_count; j++, entry++) {
 	    /*
 	     * Get the number of indexes in this entry, and title
 	     * of this entry.
 	     */
-	    indexcount = eb_uint1(bufp);
-	    strncpy(entry->label, bufp + 2, EB_MAXLEN_MULTI_LABEL);
-	    entry->label[EB_MAXLEN_MULTI_LABEL] = '\0';
+	    index_count = eb_uint1(bufp);
+	    strncpy(entry->label, bufp + 2, EB_MAX_MULTI_LABEL_LENGTH);
+	    entry->label[EB_MAX_MULTI_LABEL_LENGTH] = '\0';
 	    eb_jisx0208_to_euc(entry->label, entry->label);
-	    bufp += EB_MAXLEN_MULTI_LABEL + 2;
+	    bufp += EB_MAX_MULTI_LABEL_LENGTH + 2;
 
 	    /*
 	     * Initialize index page information of the entry.
 	     */
-	    entry->page_word_asis = 0;
-	    entry->page_endword_asis = 0;
-	    entry->page_keyword = 0;
+	    entry->index_page = 0;
+	    entry->candidates_page = 0;
 
-	    for (k = 0; k < indexcount; k++) {
+	    for (k = 0; k < index_count; k++) {
 		/*
 		 * Get the index page information of the entry.
 		 */
-		id = eb_uint1(bufp);
+		index_id = eb_uint1(bufp);
 		page = eb_uint4(bufp + 2);
-		switch (id) {
+		switch (index_id) {
 		case 0x71:
-		    entry->page_endword_asis = page;
+		    if (entry->index_page == 0)
+			entry->index_page = page;
 		    break;
 		case 0x91:
-		    entry->page_word_asis = page;
-		    break;
 		case 0xa1:
-		    entry->page_keyword = page;
+		    entry->index_page = page;
+		    break;
+		case 0x01:
+		    entry->candidates_page = page;
 		    break;
 		}
 		bufp += 16;
@@ -135,7 +141,13 @@ eb_initialize_multi_search(book)
 	}
     }
 
-    return sub->multi_count;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    return error_code;
 }
 
 
@@ -148,363 +160,469 @@ eb_have_multi_search(book)
     EB_Book *book;
 {
     /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
+    /*
      * Current subbook must have been set.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return 0;
-    }
+    if (book->subbook_current == NULL)
+	goto failed;
 
-    if (book->sub_current->multi_count == 0) {
-	eb_error = EB_ERR_NO_SUCH_SEARCH;
-	return 0;
-    }
+    if (book->subbook_current->multi_count == 0)
+	goto failed;
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
 
     return 1;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&book->lock);
+    return 0;
 }
 
 
 /*
- * 
+ * Return a list of multi search ids in `book'.
  */
-int
-eb_multi_search_count(book)
+EB_Error_Code
+eb_multi_search_list(book, search_list, search_count)
     EB_Book *book;
+    EB_Multi_Search_Code *search_list;
+    int *search_count;
 {
-    /*
-     * The book must have been bound.
-     */
-    if (book->path == NULL) {
-	eb_error = EB_ERR_UNBOUND_BOOK;
-	return -1;
-    }
-
-    /*
-     * Current subbook must have been set.
-     */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
-    }
-
-    return book->sub_current->multi_count;
-}
-
-
-/*
- * 
- */
-int
-eb_multi_search_list(book, list)
-    EB_Book *book;
-    EB_Multi_Search_Code *list;
-{
-    EB_Subbook_Code *lp;
+    EB_Error_Code error_code;
+    EB_Subbook_Code *listp;
     int i;
 
     /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
+    /*
      * The book must have been bound.
      */
     if (book->path == NULL) {
-	eb_error = EB_ERR_UNBOUND_BOOK;
-	return -1;
+	error_code = EB_ERR_UNBOUND_BOOK;
+	goto failed;
     }
 
     /*
      * Current subbook must have been set.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
 
-    for (i = 0, lp = list; i < book->sub_current->multi_count; i++, lp++)
-	*lp = i;
+    *search_count = book->subbook_current->multi_count;
+    for (i = 0, listp = search_list; i < *search_count; i++, listp++)
+	*listp = i;
 
-    return book->sub_current->multi_count;
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *search_count = 0;
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
- * 
+ * Return a list of entries that the multi search `multi_id' in `book' has.
  */
-int
-eb_multi_entry_count(book, multi_id)
+EB_Error_Code
+eb_multi_entry_list(book, multi_id, entry_list, entry_count)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
+    EB_Multi_Entry_Code *entry_list;
+    int *entry_count;
 {
+    EB_Error_Code error_code;
+    EB_Subbook_Code *listp;
+    int i;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
     /*
      * The book must have been bound.
      */
     if (book->path == NULL) {
-	eb_error = EB_ERR_UNBOUND_BOOK;
-	return -1;
+	error_code = EB_ERR_UNBOUND_BOOK;
+	goto failed;
     }
 
     /*
      * Current subbook must have been set.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
 
     /*
      * `multi_id' must be a valid code.
      */
-    if (multi_id < 0 || book->sub_current->multi_count <= multi_id) {
-	eb_error = EB_ERR_NO_SUCH_MULTI_ID;
-	return -1;
+    if (multi_id < 0 || book->subbook_current->multi_count <= multi_id) {
+	error_code = EB_ERR_NO_SUCH_MULTI_ID;
+	goto failed;
     }
 
-    return book->sub_current->multi[multi_id].entry_count;
+    *entry_count = book->subbook_current->multis[multi_id].entry_count;
+    for (i = 0, listp = entry_list; i < *entry_count; i++, listp++)
+	*listp = i;
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *entry_count = 0;
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
- * 
+ * Return a lable of the entry `entry_id' in the multi search `multi_id'.
  */
-int
-eb_multi_entry_list(book, multi_id, list)
-    EB_Book *book;
-    EB_Multi_Search_Code multi_id;
-    EB_Multi_Entry_Code *list;
-{
-    EB_Subbook_Code *lp;
-    int entry_count;
-    int i;
-
-    /*
-     * The book must have been bound.
-     */
-    if (book->path == NULL) {
-	eb_error = EB_ERR_UNBOUND_BOOK;
-	return -1;
-    }
-
-    /*
-     * Current subbook must have been set.
-     */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
-    }
-
-    /*
-     * `multi_id' must be a valid code.
-     */
-    if (multi_id < 0 || book->sub_current->multi_count <= multi_id) {
-	eb_error = EB_ERR_NO_SUCH_MULTI_ID;
-	return -1;
-    }
-
-    entry_count = book->sub_current->multi[multi_id].entry_count;
-    for (i = 0, lp = list; i < entry_count; i++, lp++)
-	*lp = i;
-
-    return entry_count;
-}
-
-
-/*
- * 
- */
-const char *
-eb_multi_entry_label(book, multi_id, entry_id)
+EB_Error_Code
+eb_multi_entry_label(book, multi_id, entry_id, label)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
     EB_Multi_Entry_Code entry_id;
+    char *label;
 {
+    EB_Error_Code error_code;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
     /*
      * The book must have been bound.
      */
     if (book->path == NULL) {
-	eb_error = EB_ERR_UNBOUND_BOOK;
-	return NULL;
+	error_code = EB_ERR_UNBOUND_BOOK;
+	goto failed;
     }
 
     /*
      * Current subbook must have been set.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return NULL;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
 
     /*
      * `multi_id' must be a valid code.
      */
-    if (multi_id < 0 || book->sub_current->multi_count <= multi_id) {
-	eb_error = EB_ERR_NO_SUCH_MULTI_ID;
-	return NULL;
+    if (multi_id < 0 || book->subbook_current->multi_count <= multi_id) {
+	error_code = EB_ERR_NO_SUCH_MULTI_ID;
+	goto failed;
     }
 
     /*
      * `entry_id' must be a valid code.
      */
     if (entry_id < 0
-	|| book->sub_current->multi[multi_id].entry_count <= entry_id) {
-	eb_error = EB_ERR_NO_SUCH_ENTRY_ID;
-	return NULL;
+	|| book->subbook_current->multis[multi_id].entry_count <= entry_id) {
+	error_code = EB_ERR_NO_SUCH_ENTRY_ID;
+	goto failed;
     }
 
-    return book->sub_current->multi[multi_id].entries[entry_id].label;
+    strcpy(label,
+	book->subbook_current->multis[multi_id].entries[entry_id].label);
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *label = '\0';
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
- * 
+ * Whether the entry `entry_id' in the multi search `multi_id' has
+ * candidates or not.
  */
 int
-eb_multi_entry_have_exactword_search(book, multi_id, entry_id)
+eb_multi_entry_have_candidates(book, multi_id, entry_id)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
     EB_Multi_Entry_Code entry_id;
 {
-    return eb_multi_entry_have_word_search(book, multi_id, entry_id);
+    EB_Multi_Search *multi;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
+    /*
+     * The book must have been bound.
+     */
+    if (book->path == NULL)
+	goto failed;
+
+    /*
+     * Current subbook must have been set.
+     */
+    if (book->subbook_current == NULL)
+	goto failed;
+
+    /*
+     * `multi_id' must be a valid code.
+     */
+    if (multi_id < 0 || book->subbook_current->multi_count <= multi_id)
+	goto failed;
+
+    /*
+     * `entry_id' must be a valid code.
+     */
+    multi = book->subbook_current->multis + multi_id;
+    if (entry_id < 0 || multi->entry_count <= entry_id)
+	goto failed;
+
+    if (multi->entries[entry_id].candidates_page == 0)
+	goto failed;
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return 1;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&book->lock);
+    return 0;
 }
 
+
 /*
- * 
+ * Return a position of candidates for the entry `entry_id' in the multi
+ * search `multi_id'.
  */
-int
-eb_multi_entry_have_word_search(book, multi_id, entry_id)
+EB_Error_Code
+eb_multi_entry_candidates(book, multi_id, entry_id, position)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
     EB_Multi_Entry_Code entry_id;
+    EB_Position *position;
 {
-    EB_Search *multi;
+    EB_Error_Code error_code;
+    EB_Multi_Search *multi;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
 
     /*
      * The book must have been bound.
      */
     if (book->path == NULL) {
-	eb_error = EB_ERR_UNBOUND_BOOK;
-	return 0;
+	error_code = EB_ERR_UNBOUND_BOOK;
+	goto failed;
     }
 
     /*
      * Current subbook must have been set.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return 0;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
 
     /*
      * `multi_id' must be a valid code.
      */
-    if (multi_id < 0 || book->sub_current->multi_count <= multi_id) {
-	eb_error = EB_ERR_NO_SUCH_MULTI_ID;
-	return 0;
+    if (multi_id < 0 || book->subbook_current->multi_count <= multi_id) {
+	error_code = EB_ERR_NO_SUCH_MULTI_ID;
+	goto failed;
     }
 
     /*
      * `entry_id' must be a valid code.
      */
-    multi = book->sub_current->multi + multi_id;
+    multi = book->subbook_current->multis + multi_id;
     if (entry_id < 0 || multi->entry_count <= entry_id) {
-	eb_error = EB_ERR_NO_SUCH_ENTRY_ID;
-	return 0;
+	error_code = EB_ERR_NO_SUCH_ENTRY_ID;
+	goto failed;
     }
 
-    return (multi->entries[entry_id].page_word_asis != 0);
+    if (multi->entries[entry_id].candidates_page == 0) {
+	error_code = EB_ERR_NO_SUCH_SEARCH;
+	goto failed;
+    }
+
+    position->page = multi->entries[entry_id].candidates_page;
+    position->offset = 0;
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
- * 
+ * Multi search.
  */
-int
-eb_multi_entry_have_endword_search(book, multi_id, entry_id)
+EB_Error_Code
+eb_search_multi(book, multi_id, input_words)
     EB_Book *book;
     EB_Multi_Search_Code multi_id;
-    EB_Multi_Entry_Code entry_id;
+    const char *input_words[];
 {
-    EB_Search *multi;
+    EB_Error_Code error_code;
+    EB_Search_Context *context;
+    EB_Search *entry;
+    EB_Word_Code word_code;
+    int word_count;
+    int i;
 
     /*
-     * The book must have been bound.
+     * Lock the book.
      */
-    if (book->path == NULL) {
-	eb_error = EB_ERR_UNBOUND_BOOK;
-	return 0;
-    }
+    eb_lock(&book->lock);
 
     /*
      * Current subbook must have been set.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return 0;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
 
     /*
-     * `multi_id' must be a valid code.
+     * Check whether the current subbook has keyword search.
      */
-    if (multi_id < 0 || book->sub_current->multi_count <= multi_id) {
-	eb_error = EB_ERR_NO_SUCH_MULTI_ID;
-	return 0;
+    if (multi_id < 0 || book->subbook_current->multi_count <= multi_id) {
+	error_code = EB_ERR_NO_SUCH_SEARCH;
+	goto failed;
     }
 
     /*
-     * `entry_id' must be a valid code.
+     * Attach a search context for each keyword, and pre-search the
+     * keywords.
      */
-    multi = book->sub_current->multi + multi_id;
-    if (entry_id < 0 || multi->entry_count <= entry_id) {
-	eb_error = EB_ERR_NO_SUCH_ENTRY_ID;
-	return 0;
+    word_count = 0;
+    for (i = 0, entry = book->subbook_current->multis[multi_id].entries;
+	 i < book->subbook_current->multis[multi_id].entry_count;
+	 i++, entry++) {
+
+	if (input_words[i] == NULL)
+	    break;
+
+	/*
+	 * Initialize search context.
+	 */
+	context = book->search_contexts + word_count;
+	context->code = EB_SEARCH_MULTI;
+	context->compare = eb_match_exactword;
+	context->page = entry->index_page;
+	if (context->page == 0)
+	    continue;
+
+	/*
+	 * Make a fixed word and a canonicalized word to search from
+	 * `input_words[i]'.
+	 */
+	error_code = eb_set_multiword(book, multi_id, i, input_words[i],
+	    context->word, context->canonicalized_word, &word_code);
+	if (error_code == EB_ERR_EMPTY_WORD)
+	    continue;
+	else if (error_code != EB_SUCCESS)
+	    goto failed;
+
+	/*
+	 * Pre-search.
+	 */
+	error_code = eb_presearch_word(book, context);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+
+	word_count++;
     }
-
-    return (multi->entries[entry_id].page_endword_asis != 0);
-}
-
-
-/*
- * 
- */
-int
-eb_multi_entry_have_keyword_search(book, multi_id, entry_id)
-    EB_Book *book;
-    EB_Multi_Search_Code multi_id;
-    EB_Multi_Entry_Code entry_id;
-{
-    EB_Search *multi;
+    if (word_count == 0) {
+	error_code = EB_ERR_NO_WORD;
+	goto failed;
+    } else if (book->subbook_current->multis[multi_id].entry_count <= i
+	&& input_words[i] != NULL) {
+	error_code =  EB_ERR_TOO_MANY_WORDS;
+	goto failed;
+    }
 
     /*
-     * The book must have been bound.
+     * Set `EB_SEARCH_NONE' to the rest unused search context.
      */
-    if (book->path == NULL) {
-	eb_error = EB_ERR_UNBOUND_BOOK;
-	return 0;
-    }
+    for (i = word_count; i < EB_MAX_KEYWORDS; i++)
+	(book->search_contexts + i)->code = EB_SEARCH_NONE;
 
     /*
-     * Current subbook must have been set.
+     * Unlock the book.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return 0;
-    }
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
 
     /*
-     * `multi_id' must be a valid code.
+     * An error occurs...
      */
-    if (multi_id < 0 || book->sub_current->multi_count <= multi_id) {
-	eb_error = EB_ERR_NO_SUCH_MULTI_ID;
-	return 0;
-    }
-
-    /*
-     * `entry_id' must be a valid code.
-     */
-    multi = book->sub_current->multi + multi_id;
-    if (entry_id < 0 || multi->entry_count <= entry_id) {
-	eb_error = EB_ERR_NO_SUCH_ENTRY_ID;
-	return 0;
-    }
-
-    return (multi->entries[entry_id].page_keyword != 0);
+  failed:
+    book->search_contexts->code = EB_SEARCH_NONE;
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 

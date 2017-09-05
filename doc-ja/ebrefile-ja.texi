@@ -192,40 +192,40 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 
 @example
 @group
-% ebinfo
-disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
-character code: JIS X 0208
-the number of subbooks: 3
-@end group
-
-@group
-subbook 1:
-  title: New English Japanese Dictionary (4th edition)
-  directory: ENGLISH
-  search methods: word endword keyword menu
-  font sizes: 16 24 30 48
-  narrow font characters: 0xa121 -- 0xa24e
-  wide font characters: 0xa321 -- 0xa27e
+% ebinfo /mnt/cdrom
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 3
 
 @end group
 @group
-subbook 2:
-  title: CD-ROM French Japanese Dictionary (3rd edition)
-  directory: FRENCH
-  search methods: word endword keyword menu
-  font sizes: 16 24 30 48
-  narrow font characters: 
-  wide font characters: 0xa321 -- 0xa27e
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: ENGLISH
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
 
 @end group
 @group
-subbook 3:
-  title: Pocket German Japanese Dictionary (3rd edition)
-  directory: GERMAN
-  search methods: menu
-  font sizes: 16 24 30 48
-  narrow font characters: 
-  wide font characters: 0xa321 -- 0xa27e
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: FRENCH
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+@end group
+@group
+副本 3:
+  題名: ポケット独和辞典（第三版）
+  ディレクトリ: GERMAN
+  検索方式: メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
 @end group
 @end example
 
@@ -272,30 +272,30 @@ subbook 3:
 
 @example
 @group
-% ebinfo
-disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
-character code: JIS X 0208
-the number of subbooks: 2
-@end group
-
-@group
-subbook 1:
-  title: New English Japanese Dictionary (4th edition)
-  directory: ENGLISH
-  search methods: word endword keyword menu
-  font sizes: 16 24 30 48
-  narrow font characters: 0xa121 -- 0xa24e
-  wide font characters: 0xa321 -- 0xa27e
+% ebinfo /mnt/cdrom
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 2
 
 @end group
 @group
-subbook 2:
-  title: CD-ROM French Japanese Dictionary (3rd edition)
-  directory: FRENCH
-  search methods: word endword keyword menu
-  font sizes: 16 24 30 48
-  narrow font characters: 
-  wide font characters: 0xa321 -- 0xa27e
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: ENGLISH
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+@end group
+@group
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: FRENCH
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
 @end group
 @end example
 

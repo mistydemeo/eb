@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,10 @@
 #include <limits.h>
 #endif
 
+#ifdef ENABLE_PTHREAD
+#include <pthread.h>
+#endif
+
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
@@ -76,28 +80,29 @@ char *memset();
  * Read information from the `LANGUAGE' file in `book'.
  *
  * If succeeded, the number of languages in the book is returned.
- * Otherwise, -1 is returned and `eb_error' is set.
+ * Otherwise, -1 is returned.
  */
-int
+EB_Error_Code
 eb_initialize_languages(book)
     EB_Book *book;
 {
-    EB_Language *lng;
+    EB_Error_Code error_code;
+    EB_Language *language;
     EB_Zip zip;
     int file = -1;
+    char language_file_name[PATH_MAX + 1];
+    char buffer[EB_SIZE_PAGE];
+    char *buffer_p;
     int i;
-    char language[PATH_MAX + 1];
-    char buf[EB_SIZE_PAGE];
-    char *bufp;
 
     /*
      * Open the language file.
      */
-    sprintf(language, "%s/%s", book->path, EB_FILENAME_LANGUAGE);
-    eb_fix_filename(book, language);
-    file = eb_zopen(&zip, language);
+    sprintf(language_file_name, "%s/%s", book->path, EB_FILE_NAME_LANGUAGE);
+    eb_fix_file_name(book, language_file_name);
+    file = eb_zopen(&zip, language_file_name);
     if (file < 0) {
-	eb_error = EB_ERR_FAIL_OPEN_LANG;
+	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;
     }
 
@@ -105,24 +110,24 @@ eb_initialize_languages(book)
      * Get a character code of the book, and get the number of langueages
      * in the file.
      */
-    if (eb_zread(&zip, file, buf, 16) != 16) {
-	eb_error = EB_ERR_FAIL_READ_LANG;
+    if (eb_zread(&zip, file, buffer, 16) != 16) {
+	error_code = EB_ERR_FAIL_READ_LANG;
 	goto failed;
     }
 
-    book->char_code = eb_uint2(buf);
-    if (book->char_code != EB_CHARCODE_ISO8859_1
-	&& book->char_code != EB_CHARCODE_JISX0208
-	&& book->char_code != EB_CHARCODE_JISX0208_GB2312) {
-	eb_error = EB_ERR_UNEXP_LANG;
+    book->character_code = eb_uint2(buffer);
+    if (book->character_code != EB_CHARCODE_ISO8859_1
+	&& book->character_code != EB_CHARCODE_JISX0208
+	&& book->character_code != EB_CHARCODE_JISX0208_GB2312) {
+	error_code = EB_ERR_UNEXP_LANG;
 	goto failed;
     }
 
-    book->lang_count = eb_uint2(buf + 2);
-    if (EB_MAX_LANGUAGES < book->lang_count)
-	book->lang_count = EB_MAX_LANGUAGES;
-    if (book->lang_count == 0) {
-	eb_error = EB_ERR_UNEXP_LANG;
+    book->language_count = eb_uint2(buffer + 2);
+    if (EB_MAX_LANGUAGES < book->language_count)
+	book->language_count = EB_MAX_LANGUAGES;
+    if (book->language_count == 0) {
+	error_code = EB_ERR_UNEXP_LANG;
 	goto failed;
     }
 
@@ -130,27 +135,29 @@ eb_initialize_languages(book)
      * Allocate memories for language entries.
      */
     book->languages = (EB_Language *) malloc(sizeof(EB_Language)
-	* book->lang_count);
+	* book->language_count);
     if (book->languages == NULL) {
-	eb_error = EB_ERR_MEMORY_EXHAUSTED;
+	error_code = EB_ERR_MEMORY_EXHAUSTED;
 	goto failed;
     }
 
     /*
      * Get languege names.
      */
-    if (eb_zread(&zip, file, buf, (EB_MAXLEN_LANGNAME + 1)
-	* book->lang_count) != (EB_MAXLEN_LANGNAME + 1) * book->lang_count) {
-	eb_error = EB_ERR_FAIL_READ_LANG;
+    if (eb_zread(&zip, file, buffer, (EB_MAX_LANGUAGE_NAME_LENGTH + 1)
+	* book->language_count)
+	!= (EB_MAX_LANGUAGE_NAME_LENGTH + 1) * book->language_count) {
+	error_code = EB_ERR_FAIL_READ_LANG;
 	goto failed;
     }
-    for (i = 0, bufp = buf, lng = book->languages;
-	 i < book->lang_count; i++, bufp += EB_MAXLEN_LANGNAME + 1, lng++) {
-	lng->code = eb_uint1(bufp);
-	lng->offset = 0;
-	lng->msg_count = 0;
-	memcpy(lng->name, bufp + 1, EB_MAXLEN_LANGNAME);
-	*(lng->name + EB_MAXLEN_LANGNAME) = '\0';
+    for (i = 0, buffer_p = buffer, language = book->languages;
+	 i < book->language_count;
+	 i++, buffer_p += EB_MAX_LANGUAGE_NAME_LENGTH + 1, language++) {
+	language->code = eb_uint1(buffer_p);
+	language->offset = 0;
+	language->message_count = 0;
+	memcpy(language->name, buffer_p + 1, EB_MAX_LANGUAGE_NAME_LENGTH);
+	*(language->name + EB_MAX_LANGUAGE_NAME_LENGTH) = '\0';
     }
 
     /*
@@ -158,7 +165,7 @@ eb_initialize_languages(book)
      */
     eb_zclose(&zip, file);
 
-    return book->lang_count;
+    return EB_SUCCESS;
 
     /*
      * An error occurs...
@@ -166,90 +173,111 @@ eb_initialize_languages(book)
   failed:
     if (0 <= file)
 	eb_zclose(&zip, file);
-
     if (book->languages != NULL) {
 	free(book->languages);
 	book->languages = NULL;
     }
-
-    return -1;
-}
-
-
-/*
- * Return the number of languages int the book.
- */
-int
-eb_language_count(book)
-    EB_Book *book;
-{
-    /*
-     * The book must have been bound.
-     */
-    if (book->path == NULL) {
-	eb_error = EB_ERR_UNBOUND_BOOK;
-	return -1;
-    }
-
-    return book->lang_count;
+    return error_code;
 }
 
 
 /*
  * Make a list of languages the book has.
  */
-int
-eb_language_list(book, list)
+EB_Error_Code
+eb_language_list(book, language_list, language_count)
     EB_Book *book;
-    EB_Language_Code *list;
+    EB_Language_Code *language_list;
+    int *language_count;
 {
-    EB_Language *lng;
+    EB_Error_Code error_code;
+    EB_Language *language;
+    EB_Language_Code *list_p;
     int i;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
 
     /*
      * Language information in the book must have been initalized.
      */
     if (book->languages == NULL) {
-	eb_error = EB_ERR_NO_LANG;
-	return -1;
+	error_code = EB_ERR_NO_LANG;
+	goto failed;
     }
 
-    for (i = 0, lng = book->languages;
-	 i < book->lang_count; i++, list++, lng++)
-	*list = lng->code;
+    /*
+     * Make a language list.
+     */
+    for (i = 0, language = book->languages, list_p = language_list;
+	 i < book->language_count; i++, language++, list_p++)
+	*list_p = language->code;
+    *language_count = book->language_count;
 
-    return book->lang_count;
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *language_count = 0;
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
- * Test that the book supports a language `code'.
+ * Test that the book supports a language `language_code'.
  */
 int
-eb_have_language(book, code)
+eb_have_language(book, language_code)
     EB_Book *book;
-    EB_Language_Code code;
+    EB_Language_Code language_code;
 {
-    EB_Language *lng;
+    EB_Language *language;
     int i;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
 
     /*
      * Language information in the book must have been loaded.
      */
-    if (book->languages == NULL) {
-	eb_error = EB_ERR_NO_LANG;
-	return 0;
-    }
+    if (book->languages == NULL)
+	goto failed;
 
     /*
      * Find the language entry.
      */
-    for (i = 0, lng = book->languages; i < book->lang_count; i++, lng++) {
-	if (lng->code == code)
-	    return 1;
+    for (i = 0, language = book->languages; i < book->language_count;
+	 i++, language++) {
+	if (language->code == language_code)
+	    break;
     }
+    if (book->language_count <= i)
+	goto failed;
 
-    eb_error = EB_ERR_NO_SUCH_LANG;
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return 1;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&book->lock);
     return 0;
 }
 
@@ -257,94 +285,181 @@ eb_have_language(book, code)
 /*
  * Return the current language code.
  */
-EB_Language_Code
-eb_language(book)
+EB_Error_Code
+eb_language(book, language_code)
     EB_Book *book;
+    EB_Language_Code *language_code;
 {
+    EB_Error_Code error_code;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
     /*
      * Current language must have been set.
      */
-    if (book->lang_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_LANG;
-	return -1;
+    if (book->language_current == NULL) {
+	error_code = EB_ERR_NO_CUR_LANG;
+	goto failed;
     }
 
-    return book->lang_current->code;
+    /*
+     * Copy the language counter to `language_count'.
+     */
+    *language_code = book->language_current->code;
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *language_code = EB_LANGUAGE_INVALID;
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
  * Return a name of the current language.
  */
-const char *
-eb_language_name(book)
+EB_Error_Code
+eb_language_name(book, language_name)
     EB_Book *book;
+    char *language_name;
 {
+    EB_Error_Code error_code;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
     /*
      * Current language must have been set.
      */
-    if (book->lang_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_LANG;
-	return NULL;
+    if (book->language_current == NULL) {
+	error_code = EB_ERR_NO_CUR_LANG;
+	goto failed;
     }
 
-    return book->lang_current->name;
+    /*
+     * Copy the language name to `language_name'.
+     */
+    strcpy(language_name, book->language_current->name);
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *language_name = '\0';
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
- * Return a language name of the number `code'.
+ * Return a language name of the number `language_code'.
  */
-const char *
-eb_language_name2(book, code)
+EB_Error_Code
+eb_language_name2(book, language_code, language_name)
     EB_Book *book;
-    EB_Language_Code code;
+    EB_Language_Code language_code;
+    char *language_name;
 {
-    EB_Language *lng;
+    EB_Error_Code error_code;
+    EB_Language *language;
     int i;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
 
     /*
      * Language information in the book must have been initialized.
      */
     if (book->languages == NULL) {
-	eb_error = EB_ERR_NO_LANG;
-	return NULL;
+	error_code = EB_ERR_NO_LANG;
+	goto failed;
     }
 
     /*
      * Find the language entry.
      */
-    for (i = 0, lng = book->languages; i < book->lang_count; i++, lng++) {
-	if (lng->code == code)
-	    return lng->name;
+    for (i = 0, language = book->languages; i < book->language_count;
+	 i++, language++) {
+	if (language->code == language_code)
+	    break;
+    }
+    if (book->language_count <= i) {
+	error_code = EB_ERR_NO_SUCH_LANG;
+	goto failed;
     }
 
-    eb_error = EB_ERR_NO_SUCH_LANG;
-    return NULL;
+    /*
+     * Copy the language name to `language_name'.
+     */
+    strcpy(language_name, language->name);
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *language_name = '\0';
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
- * Set a language `code' as the current language.
+ * Set a language `language_code' as the current language.
  */
-int
-eb_set_language(book, code)
+EB_Error_Code
+eb_set_language(book, language_code)
     EB_Book *book;
-    EB_Language_Code code;
+    EB_Language_Code language_code;
 {
-    EB_Language *lng;
+    EB_Error_Code error_code;
     EB_Zip zip;
-    char *msg;
-    char language[PATH_MAX + 1];
+    EB_Language *language;
+    char language_file_name[PATH_MAX + 1];
+    char *message;
     int file = -1;
     int i;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
 
     /*
      * Language information in the book must have been initalized,
      * and memories for messages must have been alloated.
      */
     if (book->languages == NULL) {
-	eb_error = EB_ERR_NO_LANG;
+	error_code = EB_ERR_NO_LANG;
 	goto failed;
     }
 
@@ -352,36 +467,43 @@ eb_set_language(book, code)
      * If the language to set is the current languages, there is nothing
      * to be done.
      */
-    if (book->lang_current != NULL && book->lang_current->code == code)
-	return book->lang_current->msg_count;
+    if (book->language_current != NULL
+	&& book->language_current->code == language_code) {
+	language = book->language_current;
+	goto succeeded;
+    }
 
     /*
-     * Search a subbook which has language code `code'.
+     * Search a subbook which has language code `language_code'.
      */
-    for (i = 0, lng = book->languages; i < book->lang_count; i++, lng++) {
-	if (lng->code == code)
+    for (i = 0, language = book->languages; i < book->language_count;
+	 i++, language++) {
+	if (language->code == language_code)
 	    break;
     }
-    if (book->lang_count <= i) {
-	eb_error = EB_ERR_NO_SUCH_LANG;
+    if (book->language_count <= i) {
+	error_code = EB_ERR_NO_SUCH_LANG;
 	goto failed;
     }
 
     /*
      * Allocate memories for message buffer.
      */
-    if (book->messages == NULL && eb_initialize_messages(book) < 0)
-	goto failed;
+    if (book->messages == NULL) {
+	error_code = eb_initialize_messages(book);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+    }
 
     /*
      * Open the language file.
      * Length of the book path and subdir must be checked by caller.
      */
-    sprintf(language, "%s/%s", book->path, EB_FILENAME_LANGUAGE);
-    eb_fix_filename(book, language);
-    file = eb_zopen(&zip, language);
+    sprintf(language_file_name, "%s/%s", book->path, EB_FILE_NAME_LANGUAGE);
+    eb_fix_file_name(book, language_file_name);
+    file = eb_zopen(&zip, language_file_name);
     if (file < 0) {
-	eb_error = EB_ERR_FAIL_OPEN_LANG;
+	error_code = EB_ERR_FAIL_OPEN_LANG;
 	goto failed;
     }
 
@@ -389,36 +511,42 @@ eb_set_language(book, code)
      * Read messages.
      * Appends '\0' to each message.
      */
-    if (eb_zlseek(&zip, file, lng->offset, SEEK_SET) < 0) {
-	eb_error = EB_ERR_FAIL_SEEK_LANG;
+    if (eb_zlseek(&zip, file, language->offset, SEEK_SET) < 0) {
+	error_code = EB_ERR_FAIL_SEEK_LANG;
 	goto failed;
     }
-    for (i = 0, msg = book->messages;
-	 i < lng->msg_count; i++, msg += EB_MAXLEN_MESSAGE + 2) {
-	if (eb_zread(&zip, file, msg, EB_MAXLEN_MESSAGE + 1)
-	    != EB_MAXLEN_MESSAGE + 1) {
-	    eb_error = EB_ERR_FAIL_READ_LANG;
+    for (i = 0, message = book->messages;
+	 i < language->message_count;
+	 i++, message += EB_MAX_MESSAGE_LENGTH + 2) {
+	if (eb_zread(&zip, file, message, EB_MAX_MESSAGE_LENGTH + 1)
+	    != EB_MAX_MESSAGE_LENGTH + 1) {
+	    error_code = EB_ERR_FAIL_READ_LANG;
 	    goto failed;
 	}
-	*(msg + EB_MAXLEN_MESSAGE + 1) = '\0';
+	*(message + EB_MAX_MESSAGE_LENGTH + 1) = '\0';
     }
 
     /*
      * Convert messages from SJIS to JIS when language is Japanese.
      */
-    if (lng->code == EB_LANG_JAPANESE) {
-        for (i = 0, msg = book->messages;
-	     i < lng->msg_count; i++, msg += EB_MAXLEN_MESSAGE + 2)
-	    eb_sjis_to_euc(msg + 1, msg + 1);
+    if (language->code == EB_LANGUAGE_JAPANESE) {
+        for (i = 0, message = book->messages; i < language->message_count;
+	     i++, message += EB_MAX_MESSAGE_LENGTH + 2)
+	    eb_sjis_to_euc(message + 1, message + 1);
     }
-    book->lang_current = lng;
+    book->language_current = language;
 
     /*
      * Close the language file.
      */
     eb_zclose(&zip, file);
 
-    return lng->msg_count;
+    /*
+     * Unlock the book.
+     */
+  succeeded:
+    eb_unlock(&book->lock);
+    return EB_SUCCESS;
 
     /*
      * An error occurs...
@@ -426,8 +554,9 @@ eb_set_language(book, code)
   failed:
     if (0 <= file)
 	eb_zclose(&zip, file);
-    book->lang_current = NULL;
-    return -1;
+    book->language_current = NULL;
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
@@ -438,7 +567,9 @@ void
 eb_unset_language(book)
     EB_Book *book;
 {
-    book->lang_current = NULL;
+    eb_lock(&book->lock);
+    book->language_current = NULL;
+    eb_unlock(&book->lock);
 }
 
 

@@ -1,25 +1,40 @@
-if WITH_ZLIB
-ZLIB_SUBDIR = 
-else
+if INCLUDED_ZLIB
 ZLIB_SUBDIR = zlib
-endif
-
-if ENABLE_JA_DOC
-JA_DOC_SUBDIR = doc-ja
 else
-JA_DOC_SUBDIR = 
+ZLIB_SUBDIR = 
 endif
 
-if ENABLE_SAMPLES
-SAMPLES_SUBDIR = samples
+if INCLUDED_LIBINTL
+LIBINTL_SUBDIR = intl
 else
-SAMPLES_SUBDIR =
+LIBINTL_SUBDIR = 
 endif
 
-SUBDIRS = $(ZLIB_SUBDIR) eb libebutils ebappendix ebfont ebinfo ebrefile \
-	ebzip doc $(JA_DOC_SUBDIR) $(SAMPLES_SUBDIR)
+SUBDIRS = $(ZLIB_SUBDIR) $(LIBINTL_SUBDIR) eb libebutils ebappendix ebfont ebinfo \
+   ebrefile ebzip doc doc-ja po
 
-EXTRA_DIST = INSTALL-ja README-ja
+EXTRA_DIST = ChangeLog.0 INSTALL-ja README-ja move-if-change eb.conf.in
+CLEANFILES = eb.conf
 
 appendixdir = $(pkgdatadir)/appendix
 appendix_DATA =
+sysconf_DATA = eb.conf
+
+eb.conf: eb.conf.in Makefile
+	rm -f $@
+	sed -e 's;\@VERSION\@;$(VERSION);' \
+	   -e 's;\@EBCONF_EBINCS\@;$(EBCONF_EBINCS);' \
+	   -e 's;\@EBCONF_EBLIBS\@;$(EBCONF_EBLIBS);' \
+	   -e 's;\@EBCONF_ZLIBINCS\@;$(EBCONF_ZLIBINCS);' \
+	   -e 's;\@EBCONF_ZLIBLIBS\@;$(EBCONF_ZLIBLIBS);' \
+	   -e 's;\@ENABLE_PTHREAD\@;$(ENABLE_PTHREAD);' \
+	   -e 's;\@PTHREAD_CPPFLAGS\@;$(PTHREAD_CPPFLAGS);' \
+	   -e 's;\@PTHREAD_CFLAGS\@;$(PTHREAD_CFLAGS);' \
+	   -e 's;\@PTHREAD_LDFLAGS\@;$(PTHREAD_LDFLAGS);' \
+	   -e 's;\@USE_NLS\@;$(USE_NLS);' \
+	   -e 's;\@EBCONF_INTLINCS\@;$(EBCONF_INTLINCS);' \
+	   -e 's;\@EBCONF_INTLLIBS\@;$(EBCONF_INTLLIBS);' \
+	   $(srcdir)/$@.in > $@.tmp
+	cp $@.tmp $@
+	chmod 644 $@
+	rm -f $@.tmp

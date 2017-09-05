@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.8 版です。 EB ライブラリバージョン 2.3.8 に対応して
-います。
+   この文書は第 3.0alpha0 版です。 EB ライブラリバージョン 3.0alpha0 に
+対応しています。
 
 * Menu:
 
@@ -92,8 +92,8 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 使えるものであるとは限りません。 `ebrefile' は、CD-ROM 書籍のあるファ
 イルの内容に変更を加えます。 ご注意下さい。
 
-   この文書は第 2.3.8 版です。 EB ライブラリバージョン 2.3.8 に対応して
-います。
+   この文書は第 3.0alpha0 版です。 EB ライブラリバージョン 3.0alpha0 に
+対応しています。
 
 
 File: ebrefile-ja.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -138,32 +138,31 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
 べて書きます。 `ebinfo' コマンドを用いると、あなたの所有している書籍に
 どのような副本が含まれているのかを知ることができます。
 
-     % ebinfo
-     disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
-     character code: JIS X 0208
-     the number of subbooks: 3
-     
-     subbook 1:
-       title: New English Japanese Dictionary (4th edition)
-       directory: ENGLISH
-       search methods: word endword keyword menu
-       font sizes: 16 24 30 48
-       narrow font characters: 0xa121 -- 0xa24e
-       wide font characters: 0xa321 -- 0xa27e
-     subbook 2:
-       title: CD-ROM French Japanese Dictionary (3rd edition)
-       directory: FRENCH
-       search methods: word endword keyword menu
-       font sizes: 16 24 30 48
-       narrow font characters:
-       wide font characters: 0xa321 -- 0xa27e
-     subbook 3:
-       title: Pocket German Japanese Dictionary (3rd edition)
-       directory: GERMAN
-       search methods: menu
-       font sizes: 16 24 30 48
-       narrow font characters:
-       wide font characters: 0xa321 -- 0xa27e
+     % ebinfo /mnt/cdrom
+     ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+     文字コード: JIS X 0208
+     副本の数: 3
+     副本 1:
+       題名: 新英和辞典（第四版）
+       ディレクトリ: ENGLISH
+       検索方式: 前方一致後方一致条件メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字: 0xa121 -- 0xa24e
+       全角フォントの文字: 0xa321 -- 0xa27e
+     副本 2:
+       題名: CD-ROM 仏和辞典（第三版）
+       ディレクトリ: FRENCH
+       検索方式: 前方一致後方一致条件メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字:
+       全角フォントの文字: 0xa321 -- 0xa27e
+     副本 3:
+       題名: ポケット独和辞典（第三版）
+       ディレクトリ: GERMAN
+       検索方式: メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字:
+       全角フォントの文字: 0xa321 -- 0xa27e
 
 (`ebinfo' コマンドに関しての詳細は、 *note `ebinfo' の実行 :
 (ebinfo-ja)Invoking ebinfo.)。
@@ -195,25 +194,24 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
    もういちど `ebinfo' を起動してみましょう。 副本 `GERMAN' が消えてい
 ます。
 
-     % ebinfo
-     disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
-     character code: JIS X 0208
-     the number of subbooks: 2
-     
-     subbook 1:
-       title: New English Japanese Dictionary (4th edition)
-       directory: ENGLISH
-       search methods: word endword keyword menu
-       font sizes: 16 24 30 48
-       narrow font characters: 0xa121 -- 0xa24e
-       wide font characters: 0xa321 -- 0xa27e
-     subbook 2:
-       title: CD-ROM French Japanese Dictionary (3rd edition)
-       directory: FRENCH
-       search methods: word endword keyword menu
-       font sizes: 16 24 30 48
-       narrow font characters:
-       wide font characters: 0xa321 -- 0xa27e
+     % ebinfo /mnt/cdrom
+     ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+     文字コード: JIS X 0208
+     副本の数: 2
+     副本 1:
+       題名: 新英和辞典（第四版）
+       ディレクトリ: ENGLISH
+       検索方式: 前方一致後方一致条件メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字: 0xa121 -- 0xa24e
+       全角フォントの文字: 0xa321 -- 0xa27e
+     副本 2:
+       題名: CD-ROM 仏和辞典（第三版）
+       ディレクトリ: FRENCH
+       検索方式: 前方一致後方一致条件メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字:
+       全角フォントの文字: 0xa321 -- 0xa27e
 
    もし、CD-ROM 書籍全体をすでにハードディスクにコピーしているなら、 副
 本 `GERMAN' のファイルは削除しても構いません。 ディレクトリ名が大文字で
@@ -349,11 +347,11 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 
 Tag Table:
 Node: Top1026
-Node: Introduction1551
-Node: Invoking ebrefile3698
-Node: Select Subbooks4392
-Node: Adjust Filename8240
-Node: Combination with ebzip10086
-Node: Summary of Options11307
+Node: Introduction1559
+Node: Invoking ebrefile3714
+Node: Select Subbooks4408
+Node: Adjust Filename8106
+Node: Combination with ebzip9952
+Node: Summary of Options11173
 
 End Tag Table

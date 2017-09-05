@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,10 +67,10 @@ char *strerror();
 /*
  * Log name, mode and level.
  */
-static char *logname = NULL;
-static char logname_buffer[FAKELOG_MAXLEN_LOGNAME + 1];
-static int logmode = FAKELOG_TO_SYSLOG;
-static int loglevel = FAKELOG_ERR;
+static char *log_name = NULL;
+static char log_name_buffer[FAKELOG_MAX_LOG_NAME_LENGTH + 1];
+static int log_mode = FAKELOG_TO_SYSLOG;
+static int log_level = FAKELOG_ERR;
 
 /*
  * Set log name.
@@ -80,11 +80,11 @@ set_fakelog_name(name)
     const char *name;
 {
     if (name == NULL)
-        logname = NULL;
+        log_name = NULL;
     else {
-        strncpy(logname_buffer, name, FAKELOG_MAXLEN_LOGNAME);
-        logname_buffer[FAKELOG_MAXLEN_LOGNAME] = '\0';
-        logname = logname_buffer;
+        strncpy(log_name_buffer, name, FAKELOG_MAX_LOG_NAME_LENGTH);
+        log_name_buffer[FAKELOG_MAX_LOG_NAME_LENGTH] = '\0';
+        log_name = log_name_buffer;
     }
 }
 
@@ -96,7 +96,7 @@ void
 set_fakelog_mode(mode)
     int mode;
 {
-    logmode = mode;
+    log_mode = mode;
 }
 
 
@@ -119,10 +119,10 @@ set_fakelog_level(level)
     case LOG_NOTICE:
     case LOG_INFO:
     case LOG_DEBUG:
-	loglevel = level;
+	log_level = level;
 	break;
     default:
-	loglevel = FAKELOG_QUIET;
+	log_level = FAKELOG_QUIET;
 	break;
     }
 }
@@ -141,7 +141,7 @@ set_fakelog_level(level)
  * message, but the expanded message must not exceed  MAXLEN_EXPANDED
  * characters.
  */
-#define MAXLEN_EXPANDED    1023
+#define BUFFER_SIZE    1024
 
 #if (defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)) && defined(HAVE_VSYSLOG)
 #ifdef __STDC__
@@ -166,13 +166,13 @@ fakelog(priority, message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
 #if (defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)) && defined(HAVE_VSYSLOG)
     va_list ap;
 #endif
-    const char *msg;
-    char expanded[MAXLEN_EXPANDED + 1];
-    char *exp;
-    size_t exprest;
-    const char *errstr;
-    size_t errlen;
-    int logflag;
+    const char *message_p;
+    char buffer[BUFFER_SIZE];
+    char *buffer_p;
+    size_t buffer_rest_length;
+    const char *error_string;
+    size_t error_string_length;
+    int log_flag;
 
     /*
      * Convert `priority'.
@@ -180,46 +180,46 @@ fakelog(priority, message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
     switch (priority) {
 #ifdef LOG_EMERG
     case LOG_EMERG:
-	logflag = (FAKELOG_EMERG <= loglevel);
+	log_flag = (FAKELOG_EMERG <= log_level);
 	break;
 #endif
 #ifdef LOG_ALERT
     case LOG_ALERT:
-	logflag = (FAKELOG_ALERT <= loglevel);
+	log_flag = (FAKELOG_ALERT <= log_level);
 	break;
 #endif
 #ifdef LOG_CRIT
     case LOG_CRIT:
-	logflag = (FAKELOG_CRIT <= loglevel);
+	log_flag = (FAKELOG_CRIT <= log_level);
 	break;
 #endif
 #ifdef LOG_ERR
     case LOG_ERR:
-	logflag = (FAKELOG_ERR <= loglevel);
+	log_flag = (FAKELOG_ERR <= log_level);
 	break;
 #endif
 #ifdef LOG_WARNING
     case LOG_WARNING:
-	logflag = (FAKELOG_WARNING <= loglevel);
+	log_flag = (FAKELOG_WARNING <= log_level);
 	break;
 #endif
 #ifdef LOG_NOTICE
     case LOG_NOTICE:
-	logflag = (FAKELOG_NOTICE <= loglevel);
+	log_flag = (FAKELOG_NOTICE <= log_level);
 	break;
 #endif
 #ifdef LOG_INFO
     case LOG_INFO:
-	logflag = (FAKELOG_INFO <= loglevel);
+	log_flag = (FAKELOG_INFO <= log_level);
 	break;
 #endif
 #ifdef LOG_DEBUG
     case LOG_DEBUG:
-	logflag = (FAKELOG_DEBUG <= loglevel);
+	log_flag = (FAKELOG_DEBUG <= log_level);
 	break;
 #endif
     default:
-	logflag = 0;
+	log_flag = 0;
     }
 
     /*
@@ -236,7 +236,7 @@ fakelog(priority, message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
     /*
      * Output the message to syslog.
      */
-    if (logmode == FAKELOG_TO_SYSLOG || logmode == FAKELOG_TO_BOTH) {
+    if (log_mode == FAKELOG_TO_SYSLOG || log_mode == FAKELOG_TO_BOTH) {
 #if (defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)) && defined(HAVE_VSYSLOG)
 	vsyslog(priority, message, ap);
 #else /* not (defined(HAVE_VPRINTF) || ... */
@@ -249,70 +249,70 @@ fakelog(priority, message, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9)
     /*
      * Output the message to standard error.
      */
-    if ((logmode == FAKELOG_TO_STDERR || logmode == FAKELOG_TO_BOTH)
-	&& logflag) {
+    if ((log_mode == FAKELOG_TO_STDERR || log_mode == FAKELOG_TO_BOTH)
+	&& log_flag) {
 	/*
 	 * Output a command name.
 	 */
-	if (logname != NULL)
-	    fprintf(stderr, "%s: ", logname);
+	if (log_name != NULL)
+	    fprintf(stderr, "%s: ", log_name);
 
 	/*
-	 * Expand `%m' in `message', and copied into `expanded'.
+	 * Expand `%m' in `message', and copied into `buffer'.
 	 */
-	msg = message;
-	exp = expanded;
-	exprest = MAXLEN_EXPANDED;
-	errstr = strerror(errno);
-	errlen = strlen(errstr);
+	message_p = message;
+	buffer_p = buffer;
+	buffer_rest_length = BUFFER_SIZE - 1;
+	error_string = strerror(errno);
+	error_string_length = strlen(error_string);
 
-	while (*msg != '\0') {
-	    if (*msg == '%') {
-		if (*(msg + 1) == 'm') {
-		    if (exprest < errlen)
+	while (*message_p != '\0') {
+	    if (*message_p == '%') {
+		if (*(message_p + 1) == 'm') {
+		    if (buffer_rest_length < error_string_length)
 			break;
-		    strcpy(exp, errstr);
-		    exp += errlen;
-		    msg += 2;
-		    exprest -= errlen;
+		    strcpy(buffer_p, error_string);
+		    buffer_p += error_string_length;
+		    message_p += 2;
+		    buffer_rest_length -= error_string_length;
 		} else  {
-		    if (exprest < 2 || *(msg + 1) == '\0')
+		    if (buffer_rest_length < 2 || *(message_p + 1) == '\0')
 			break;
-		    *exp++ = *msg++;
-		    *exp++ = *msg++;
+		    *buffer_p++ = *message_p++;
+		    *buffer_p++ = *message_p++;
 		}
 	    } else {
-		if (exprest < 1)
+		if (buffer_rest_length < 1)
 		    break;
-		*exp++ = *msg++;
+		*buffer_p++ = *message_p++;
 	    }
 	}
-	*exp = '\0';
+	*buffer_p = '\0';
 	
 	/*
-	 * If `expanded' overflows, give up logging.
+	 * If `buffer' overflows, give up logging.
 	 */
-	if (*msg != '\0')
+	if (*message_p != '\0')
 	    return;
 
 	/*
-	 * Terminate `expanded'.
+	 * Terminate `buffer'.
 	 */
-	*exp = '\0';
+	*buffer_p = '\0';
 
 	/*
 	 * Print the message.
 	 */
 #if (defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)) && defined(HAVE_VSYSLOG)
 #ifdef HAVE_VPRINTF
-	vfprintf(stderr, expanded, ap);
+	vfprintf(stderr, buffer, ap);
 #else /* not HAVE_VPRINTF */
 #ifdef HAVE_DOPRNT
-	_doprnt(expanded, &ap, stderr);
+	_doprnt(buffer, &ap, stderr);
 #endif /* not HAVE_DOPRNT */
 #endif /* not HAVE_VPRINTF */
 #else /* not (defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)) && ... */
-	fprintf(stderr, expanded, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
+	fprintf(stderr, buffer, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
 #endif /* not (defined(HAVE_VPRINTF) || defined(HAVE_DOPRNT)) && ... */
 
 	fputc('\n', stderr);

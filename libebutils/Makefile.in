@@ -60,32 +60,67 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
+CATALOGS = @CATALOGS@
+CATOBJEXT = @CATOBJEXT@
 CC = @CC@
-DEPENDENCIES_FOR_LIBZ = @DEPENDENCIES_FOR_LIBZ@
+DATADIRNAME = @DATADIRNAME@
 DLLTOOL = @DLLTOOL@
+EBCONF_EBINCS = @EBCONF_EBINCS@
+EBCONF_EBLIBS = @EBCONF_EBLIBS@
+EBCONF_INTLINCS = @EBCONF_INTLINCS@
+EBCONF_INTLLIBS = @EBCONF_INTLLIBS@
+EBCONF_ZLIBINCS = @EBCONF_ZLIBINCS@
+EBCONF_ZLIBLIBS = @EBCONF_ZLIBLIBS@
+ENABLE_PTHREAD = @ENABLE_PTHREAD@
 EXEEXT = @EXEEXT@
-INCLUDES_FOR_LIBZ = @INCLUDES_FOR_LIBZ@
-LDADD_FOR_LIBZ = @LDADD_FOR_LIBZ@
+GENCAT = @GENCAT@
+GMOFILES = @GMOFILES@
+GMSGFMT = @GMSGFMT@
+GT_NO = @GT_NO@
+GT_YES = @GT_YES@
+INCLUDE_LOCALE_H = @INCLUDE_LOCALE_H@
+INSTOBJEXT = @INSTOBJEXT@
+INTLDEPS = @INTLDEPS@
+INTLINCS = @INTLINCS@
+INTLLIBS = @INTLLIBS@
+INTLOBJS = @INTLOBJS@
 LIBEB_VERSION_INFO = @LIBEB_VERSION_INFO@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAILING_ADDRESS = @MAILING_ADDRESS@
 MAKEINFO = @MAKEINFO@
+MKINSTALLDIRS = @MKINSTALLDIRS@
+MSGFMT = @MSGFMT@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PERL = @PERL@
+POFILES = @POFILES@
+POSUB = @POSUB@
+PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
+PTHREAD_CPPFLAGS = @PTHREAD_CPPFLAGS@
+PTHREAD_LDFLAGS = @PTHREAD_LDFLAGS@
 RANLIB = @RANLIB@
+USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
+USE_NLS = @USE_NLS@
 VERSION = @VERSION@
+ZLIBDEPS = @ZLIBDEPS@
+ZLIBINCS = @ZLIBINCS@
+ZLIBLIBS = @ZLIBLIBS@
+l = @l@
+localedir = @localedir@
 
 noinst_LIBRARIES = libebutils.a
-libebutils_a_SOURCES = fakelog.c getopt.c getopt1.c getumask.c makedir.c 	samefile.c yesno.c
+libebutils_a_SOURCES = ebutils.c fakelog.c getopt.c getopt1.c getumask.c 	makedir.c samefile.c yesno.c
 
 libebutils_a_LIBADD = @LIBOBJS@
 
-EXTRA_DIST = memset.c strcasecmp.c strerror.c getopt_long.pl
-
+EXTRA_DIST = memset.c strcasecmp.c strerror.c getopt_long.pl ebutils.h.in
+CLEANFILES = stamp-ebutils-h ebutils.h
+BUILT_SOURCES = ebutils.h
 noinst_HEADERS = fakelog.h getopt.h getumask.h makedir.h samefile.h yesno.h
+
+INCLUDES = -I$(top_srcdir) -I../intl -DUSE_FAKELOG
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
@@ -97,8 +132,8 @@ CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
 libebutils_a_DEPENDENCIES =  @LIBOBJS@
-libebutils_a_OBJECTS =  fakelog.$(OBJEXT) getopt.$(OBJEXT) \
-getopt1.$(OBJEXT) getumask.$(OBJEXT) makedir.$(OBJEXT) \
+libebutils_a_OBJECTS =  ebutils.$(OBJEXT) fakelog.$(OBJEXT) \
+getopt.$(OBJEXT) getopt1.$(OBJEXT) getumask.$(OBJEXT) makedir.$(OBJEXT) \
 samefile.$(OBJEXT) yesno.$(OBJEXT)
 AR = ar
 CFLAGS = @CFLAGS@
@@ -260,12 +295,14 @@ installdirs:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-rm -f Makefile $(CONFIG_CLEAN_FILES)
 	-rm -f config.cache config.log stamp-h stamp-h[0-9]*
 
 maintainer-clean-generic:
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 mostlyclean-am:  mostlyclean-noinstLIBRARIES mostlyclean-compile \
 		mostlyclean-libtool mostlyclean-tags \
 		mostlyclean-generic
@@ -308,12 +345,21 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 @SET_MAKE@
 
+ebutils.h: stamp-ebutils-h
+stamp-ebutils-h: ebutils.h.in Makefile
+	rm -f ebutils.h.tmp
+	sed -e 's;\@localedir\@;$(localedir);' \
+	   $(srcdir)/ebutils.h.in > ebutils.h.tmp
+	$(top_srcdir)/move-if-change ebutils.h.tmp ebutils.h
+	@echo timestamp > stamp-ebutils-h
+
 ### *.o dependencies ###
+ebutils.o: ebutils.c ../config.h ../eb/eb.h ../eb/error.h ebutils.h
 fakelog.o: fakelog.c ../config.h fakelog.h
 getopt.o: getopt.c getopt.h
 getopt1.o: getopt1.c getopt.h
 getumask.o: getumask.c ../config.h
-makedir.o: makedir.c ../config.h fakelog.h
+makedir.o: makedir.c ../config.h
 memset.o: memset.c ../config.h
 samefile.o: samefile.c ../config.h
 strcasecmp.o: strcasecmp.c ../config.h

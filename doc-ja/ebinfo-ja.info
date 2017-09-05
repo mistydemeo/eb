@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.8 版です。 EB ライブラリバージョン 2.3.8 に対応して
-います。
+   この文書は第 3.0alpha0 版です。 EB ライブラリバージョン 3.0alpha0 に
+対応しています。
 
 * Menu:
 
@@ -78,49 +78,47 @@ File: ebinfo-ja.info,  Node: Invoking ebinfo,  Next: Details about Information, 
 します。
 
      % ebinfo /mnt/cdrom
-     disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
-     character code: JIS X 0208
-     the number of subbooks: 2
-     
-     subbook 1:
-       title: New English Japanese Dictionary (3rd edition)
-       directory: EJDICT
-       search methods: word endword keyword menu
-       font sizes: 16 24 30 48
-       narrow font characters: 0xa121 -- 0xa24e
-       wide font characters: 0xa321 -- 0xa27e
-     
-     subbook 2:
-       title: How to use the book
-       directory: HOWTO
-       search methods: word endword keyword menu
-       font sizes: 16 24 30 48
-       narrow font characters:
-       wide font characters: 0xa321 -- 0xa27e
+     ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+     文字コード: JIS X 0208
+     副本の数: 2
+     副本  1:
+       題名: 新英和辞典（第三版）
+       ディレクトリ: EJDICT
+       検索方式: 前方一致後方一致条件メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字: 0xa121 -- 0xa24e
+       全角フォントの文字: 0xa321 -- 0xa27e
+     副本  2:
+       題名: この書籍の使い方
+       ディレクトリ: HOWTO
+       検索方式: 前方一致後方一致条件メニュー
+       フォントの大きさ: 16 24 30 48
+       半角フォントの文字:
+       全角フォントの文字: 0xa321 -- 0xa27e
 
    副本 (subbook) が複合検索 (multi-search) に対応している場合、
 `--multi-search' (または `-m') オプションを指定すると、 `ebinfo' は複合
 検索に関する詳細な情報も合わせて出力します。 複合検索に関する情報は、次
 のような感じになります。
 
-       multi search 1:
-         label 1: country or region
-         search methods: keyword
-         label 2: period
-         search methods: keyword
-         label 3: category
-         search methods: keyword
-         label 4: authority
-         search methods: keyword
+       複合検索 1:
+         ラベル 1: 国または地域
+           候補: 有
+         ラベル 2: 時期
+           候補: 無
+         ラベル 3: カテゴリ
+           候補: 有
+         ラベル 4: 出典
+           候補: 無
        multi search 2:
-         label 1: author
-         search methods: keyword
-         label 2: title
-         search methods: keyword
-         label 3: date
-         search methods: keyword
-         label 4: publisher
-         search methods: keyword
+         ラベル 1: 著者
+           候補: 無
+         ラベル 2: 題名
+           候補: 無
+         ラベル 3: 日付
+           候補: 無
+         ラベル 4: 出版社
+           候補: 無
 
 
 File: ebinfo-ja.info,  Node: Details about Information,  Next: Options to ebinfo,  Prev: Invoking ebinfo,  Up: Top
@@ -214,9 +212,9 @@ File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Details about Information
 
 Tag Table:
 Node: Top1007
-Node: Introduction1384
-Node: Invoking ebinfo2129
-Node: Details about Information4147
-Node: Options to ebinfo5868
+Node: Introduction1392
+Node: Invoking ebinfo2137
+Node: Details about Information3978
+Node: Options to ebinfo5699
 
 End Tag Table

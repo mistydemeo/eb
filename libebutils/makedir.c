@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -96,15 +96,15 @@ make_missing_directory(path, mode)
     const char *path;
     mode_t mode;
 {
-    struct stat st;
+    struct stat status;
 
-    if (stat(path, &st) < 0) {
+    if (stat(path, &status) < 0) {
 	if (mkdir(path, mode) < 0) {
 	    syslog(LOG_ERR, "cannot make the directory, %m: %s", path);
 	    return -1;
 	}
 	syslog(LOG_DEBUG, "debug: make the directory: %s", path);
-    } else if (!S_ISDIR(st.st_mode)) {
+    } else if (!S_ISDIR(status.st_mode)) {
 	syslog(LOG_ERR, "already exists, but not a directory: %s", path);
 	return -1;
     } else {
@@ -127,25 +127,25 @@ make_missing_directory_chain(path, mode)
     const char *path;
     mode_t mode;
 {
-    char tmppath[PATH_MAX + 1];
+    char temporary_path[PATH_MAX + 1];
     char *p;
 
     if (PATH_MAX < strlen(path)) {
-	strncpy(tmppath, path, PATH_MAX);
-	*(tmppath + PATH_MAX) = '\0';
-	syslog(LOG_ERR, "too long path: %s...", tmppath);
+	strncpy(temporary_path, path, PATH_MAX);
+	*(temporary_path + PATH_MAX) = '\0';
+	syslog(LOG_ERR, "too long path: %s...", temporary_path);
 	return -1;
     }
 
-    strcpy(tmppath, path);
-    for (p = strchr(tmppath, '/'); p != NULL; p = strchr(p + 1, '/')) {
+    strcpy(temporary_path, path);
+    for (p = strchr(temporary_path, '/'); p != NULL; p = strchr(p + 1, '/')) {
 	*p = '\0';
-	if (make_missing_directory(tmppath, mode) < 0)
+	if (make_missing_directory(temporary_path, mode) < 0)
 	    return -1;
 	*p = '/';
     }
 
-    if (make_missing_directory(tmppath, mode) < 0)
+    if (make_missing_directory(temporary_path, mode) < 0)
 	return -1;
 
     return 0;

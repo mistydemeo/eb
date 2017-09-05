@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +19,13 @@
 #include <stdio.h>
 #include <sys/types.h>
 
+#ifdef ENABLE_PTHREAD
+#include <pthread.h>
+#endif
+
 #include "eb.h"
 #include "error.h"
+#include "internal.h"
 
 /*
  * Examine whether the current subbook in `book' supports `GRAPHIC SEARCH'
@@ -31,19 +36,35 @@ eb_have_graphic_search(book)
     EB_Book *book;
 {
     /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
+    /*
      * Current subbook must have been set.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return 0;
-    }
+    if (book->subbook_current == NULL)
+	goto failed;
 
-    if (book->sub_current->graphic.page == 0) {
-	eb_error = EB_ERR_NO_SUCH_SEARCH;
-	return 0;
-    }
+    /*
+     * Check for the index page of graphic search.
+     */
+    if (book->subbook_current->graphic.index_page == 0)
+	goto failed;
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
 
     return 1;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&book->lock);
+    return 0;
 }
 
 

@@ -1,4 +1,5 @@
-This is ebinfo.info, produced by makeinfo version 4.0 from ebinfo.texi.
+This is Info file ebinfo.info, produced by Makeinfo version 1.68 from
+the input file ebinfo.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -8,7 +9,7 @@ END-INFO-DIR-ENTRY
    ebinfo: Utility for getting CD-ROM book information, by Motoyuki
 Kasahara.
 
-   Copyright (C) 1997, 1998, 1999  Motoyuki Kasahara
+   Copyright (C) 1997, 98, 99, 2000  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -27,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.8, for EB Library version 2.3.8.
+   This is edition 3.0alpha0, for EB Library version 3.0alpha0.
 
 * Menu:
 
@@ -51,11 +52,11 @@ Free Software Foundation; either version 2, or (at your option) any
 later version.
 
    `ebinfo' is distributed in the hope that it will be useful, but
-_without any warranty_; without even the implied warranty of
+*without any warranty*; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 2.3.8, for EB Library version 2.3.8.
+   This is edition 3.0alpha0, for EB Library version 3.0alpha0.
 
 
 File: ebinfo.info,  Node: Invoking ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
@@ -81,7 +82,6 @@ like as follows:
      disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
      character code: JIS X 0208
      the number of subbooks: 2
-     
      subbook 1:
        title: New English Japanese Dictionary (3rd edition)
        directory: EJDICT
@@ -89,7 +89,6 @@ like as follows:
        font sizes: 16 24 30 48
        narrow font characters: 0xa121 -- 0xa24e
        wide font characters: 0xa321 -- 0xa27e
-     
      subbook 2:
        title: How to use the book
        directory: HOWTO
@@ -105,22 +104,22 @@ like as follows.
 
        multi search 1:
          label 1: country or region
-         search methods: keyword
+           with candidates: yes
          label 2: period
-         search methods: keyword
+           with candidates: no
          label 3: category
-         search methods: keyword
+           with candidates: yes
          label 4: authority
-         search methods: keyword
+           with candidates: no
        multi search 2:
          label 1: author
-         search methods: keyword
+           with candidates: no
          label 2: title
-         search methods: keyword
+           with candidates: no
          label 3: date
-         search methods: keyword
+           with candidates: no
          label 4: publisher
-         search methods: keyword
+           with candidates: no
 
 
 File: ebinfo.info,  Node: Details about Information,  Next: Options to ebinfo,  Prev: Invoking ebinfo,  Up: Top
@@ -214,10 +213,10 @@ long as they are unique.
 
 
 Tag Table:
-Node: Top1022
-Node: Introduction1375
-Node: Invoking ebinfo2147
-Node: Details about Information4131
-Node: Options to ebinfo5858
+Node: Top1050
+Node: Introduction1411
+Node: Invoking ebinfo2191
+Node: Details about Information4149
+Node: Options to ebinfo5876
 
 End Tag Table

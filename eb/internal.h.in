@@ -1,0 +1,169 @@
+/*                                                            -*- C -*-
+ * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#ifndef EB_INTERNAL_H
+#define EB_INTERNAL_H
+
+#include <sys/types.h>
+
+#ifdef EB_BUILD_LIBRARY
+#include "defs.h"
+#else
+#include <eb/defs.h>
+#endif
+
+/*
+ * Text domain name.
+ */
+#define EB_TEXT_DOMAIN_NAME	"eb"
+
+/*
+ * Locale directory.
+ */
+#define LOCALEDIR		"@localedir@"
+
+/*
+ * Tricks for gettext.
+ */
+#define _(string) gettext(string)
+#ifdef gettext_noop
+#define N_(string) gettext_noop(string)
+#else
+#define N_(string) (string)
+#endif
+
+/*
+ * Huffman node types.
+ */
+#define EB_HUFFMAN_NODE_INTERMEDIATE	0
+#define EB_HUFFMAN_NODE_LEAF16		1
+#define EB_HUFFMAN_NODE_LEAF8		2
+#define EB_HUFFMAN_NODE_EOF		3
+
+/*
+ * CPP macro version of get_uint1(), ... get_uint4().
+ */
+#define eb_uint1(p) (*(const unsigned char *)(p))
+
+#define eb_uint2(p) ((*(const unsigned char *)(p) << 8) \
+	+ (*(const unsigned char *)((p) + 1)))
+
+#define eb_uint3(p) ((*(const unsigned char *)(p) << 16) \
+	+ (*(const unsigned char *)((p) + 1) << 8) \
+	+ (*(const unsigned char *)((p) + 2)))
+
+#define eb_uint4(p) ((*(const unsigned char *)(p) << 24) \
+	+ (*(const unsigned char *)((p) + 1) << 16) \
+	+ (*(const unsigned char *)((p) + 2) << 8) \
+	+ (*(const unsigned char *)((p) + 3)))
+
+#ifndef ENABLE_PTHREAD
+#define eb_lock(x)
+#define eb_unlock(x)
+#define eb_initialize_lock(x)
+#define eb_finalize_lock(x)
+#endif
+
+/*
+ * External variable declarations.
+ */
+/* eb*.c */
+extern int eb_option;
+
+/* hook.c */
+extern EB_Hookset eb_default_hookset;
+
+/*
+ * Function declarations.
+ */
+/* appendix.c */
+void eb_initialize_alt_cache EB_P((EB_Appendix *));
+
+/* ebunzip.c */
+int eb_ebunzip1_slice EB_P((char *, size_t, char *, size_t));
+
+/* epwunzip.c */
+int eb_epwunzip_slice EB_P((char *, int, EB_Huffman_Node *));
+
+/* filename.c */
+EB_Error_Code eb_catalog_file_name EB_P((EB_Book *));
+EB_Error_Code eb_appendix_catalog_file_name EB_P((EB_Appendix *));
+EB_Error_Code eb_canonicalize_file_name EB_P((EB_Book *, char *));
+EB_Error_Code eb_canonicalize_appendix_file_name EB_P((EB_Appendix *, char *));
+void eb_fix_file_name EB_P((EB_Book *, char *));
+void eb_fix_appendix_file_name EB_P((EB_Appendix *, char *));
+
+/* font.c */
+EB_Error_Code eb_initialize_fonts EB_P((EB_Book *));
+
+/* hook.c */
+void eb_initialize_default_hookset EB_P((void));
+
+/* jacode.c */
+void eb_jisx0208_to_euc EB_P((char *, const char *));
+void eb_sjis_to_euc EB_P((char *, const char *));
+
+/* language.c */
+EB_Error_Code eb_initialize_languages EB_P((EB_Book *));
+
+/* match.c */
+int eb_match_word EB_P((const char *, const char *, size_t));
+int eb_match_exactword EB_P((const char *, const char *, size_t));
+
+/* message.c */
+EB_Error_Code eb_initialize_messages EB_P((EB_Book *));
+
+/* multi.c */
+EB_Error_Code eb_initialize_multi_search EB_P((EB_Book *));
+
+/* search.c */
+void eb_initialize_search EB_P((EB_Book *));
+EB_Error_Code eb_presearch_word EB_P((EB_Book *, EB_Search_Context *));
+EB_Error_Code eb_hit_list EB_P((EB_Book *, int, EB_Hit *, int *));
+
+/* setword.c */
+EB_Error_Code eb_set_word EB_P((EB_Book *, const char *, char *, char *,
+    EB_Word_Code *));
+EB_Error_Code eb_set_endword EB_P((EB_Book *, const char *, char *, char *,
+    EB_Word_Code *));
+EB_Error_Code eb_set_keyword EB_P((EB_Book *, const char *, char *, char *,
+    EB_Word_Code *));
+EB_Error_Code eb_set_multiword EB_P((EB_Book *, EB_Multi_Search_Code,
+    EB_Multi_Entry_Code, const char *, char *, char *, EB_Word_Code *));
+
+/* subbook.c */
+EB_Error_Code eb_initialize_subbook EB_P((EB_Book *));
+
+/* text.c */
+void eb_initialize_text EB_P((EB_Book *));
+EB_Error_Code eb_forward_heading EB_P((EB_Book *));
+
+/* zio.c */
+int eb_zinitialize EB_P((void));
+void eb_zfinalize EB_P((void));
+int eb_zopen EB_P((EB_Zip *, const char *));
+int eb_zopen2 EB_P((EB_Zip *, const char *));
+int eb_zclose EB_P((EB_Zip *, int));
+off_t eb_zlseek EB_P((EB_Zip *, int, off_t, int));
+ssize_t eb_zread EB_P((EB_Zip *, int, char *, size_t));
+ssize_t eb_read_all EB_P((int, void *, size_t nbyte));
+
+/* memmove.c */
+#ifdef __STDC__
+void *eb_memmove(void *, const void *, size_t);
+#else
+char *eb_memmove();
+#endif
+
+#endif /* not EB_INTERNAL_H */

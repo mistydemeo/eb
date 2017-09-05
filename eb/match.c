@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,8 +26,6 @@
  * the pattern, 0 is returned.  Otherwise, an integer less than or 
  * greater than zero is returned.  The return value is depends on whether
  * the word is greater or less than the pattern in dictionary order.
- *
- * The function doesn't set `eb_error'.
  */
 int
 eb_match_word(word, pattern, length)
@@ -36,20 +34,20 @@ eb_match_word(word, pattern, length)
     size_t length;
 {
     int i = 0;
-    unsigned char *wordp = (unsigned char *)word;
-    unsigned char *pattp = (unsigned char *)pattern;
+    unsigned char *word_p = (unsigned char *)word;
+    unsigned char *pattern_p = (unsigned char *)pattern;
 
     for (;;) {
 	if (length <= i)
-	    return *wordp;
+	    return *word_p;
 
-	if (*wordp == '\0')
+	if (*word_p == '\0')
 	    return 0;
-	else if (*wordp != *pattp)
-	    return *wordp - *pattp;
+	else if (*word_p != *pattern_p)
+	    return *word_p - *pattern_p;
 	else {
-	    wordp++;
-	    pattp++;
+	    word_p++;
+	    pattern_p++;
 	}
 
 	i++;
@@ -67,8 +65,6 @@ eb_match_word(word, pattern, length)
  * Otherwise, an integer less than or greater than zero is returned.
  * The return value of the case is depends on whether the word is
  * greater or less than the pattern in dictionary order.
- *
- * The function doesn't set `eb_error'.
  */
 int
 eb_match_exactword(word, pattern, length)
@@ -77,25 +73,25 @@ eb_match_exactword(word, pattern, length)
     size_t length;
 {
     int i = 0;
-    unsigned char *wordp = (unsigned char *)word;
-    unsigned char *pattp = (unsigned char *)pattern;
+    unsigned char *word_p = (unsigned char *)word;
+    unsigned char *pattern_p = (unsigned char *)pattern;
 
     for (;;) {
 	if (length <= i)
-	    return *wordp;
+	    return *word_p;
 
-	if (*wordp == '\0') {
-	    /* ignore spaces and NULs in the tail of the pattern */
-	    while (i < length && (*pattp == ' ' || *pattp == '\0')) {
-		pattp++;
+	if (*word_p == '\0') {
+	    /* ignore spaces in the tail of the pattern */
+	    while (i < length && (*pattern_p == ' ' || *pattern_p == '\0')) {
+		pattern_p++;
 		i++;
 	    }
 	    return (i - length);
-	} else if (*wordp != *pattp) {
-	    return *wordp - *pattp;
+	} else if (*word_p != *pattern_p) {
+	    return *word_p - *pattern_p;
 	} else {
-	    wordp++;
-	    pattp++;
+	    word_p++;
+	    pattern_p++;
 	}
 
 	i++;

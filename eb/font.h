@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,30 +34,31 @@ extern "C" {
 #define EB_FONT_24		24
 #define EB_FONT_30		30
 #define EB_FONT_48		48
+#define EB_FONT_INVALID		-1
 
 /*
  * Font sizes.
  */
-#define EB_SIZE_NARROW_FONT_16	16
-#define EB_SIZE_WIDE_FONT_16	32
-#define EB_SIZE_NARROW_FONT_24	48
-#define EB_SIZE_WIDE_FONT_24	72
-#define EB_SIZE_NARROW_FONT_30	60
-#define EB_SIZE_WIDE_FONT_30	120
-#define EB_SIZE_NARROW_FONT_48	144
-#define EB_SIZE_WIDE_FONT_48	288
+#define EB_SIZE_NARROW_FONT_16		16
+#define EB_SIZE_WIDE_FONT_16		32
+#define EB_SIZE_NARROW_FONT_24		48
+#define EB_SIZE_WIDE_FONT_24		72
+#define EB_SIZE_NARROW_FONT_30		60
+#define EB_SIZE_WIDE_FONT_30		120
+#define EB_SIZE_NARROW_FONT_48		144
+#define EB_SIZE_WIDE_FONT_48		288
 
 /*
  * Font width.
  */
-#define EB_WIDTH_NARROW_FONT_16	8
-#define EB_WIDTH_WIDE_FONT_16	16
-#define EB_WIDTH_NARROW_FONT_24	16
-#define EB_WIDTH_WIDE_FONT_24	24
-#define EB_WIDTH_NARROW_FONT_30	16
-#define EB_WIDTH_WIDE_FONT_30	32
-#define EB_WIDTH_NARROW_FONT_48	24
-#define EB_WIDTH_WIDE_FONT_48	48
+#define EB_WIDTH_NARROW_FONT_16		8
+#define EB_WIDTH_WIDE_FONT_16		16
+#define EB_WIDTH_NARROW_FONT_24		16
+#define EB_WIDTH_WIDE_FONT_24		24
+#define EB_WIDTH_NARROW_FONT_30		16
+#define EB_WIDTH_WIDE_FONT_30		32
+#define EB_WIDTH_NARROW_FONT_48		24
+#define EB_WIDTH_WIDE_FONT_48		48
 
 /*
  * Bitmap image sizes.
@@ -93,62 +94,54 @@ extern "C" {
 #define EB_SIZE_FONT_IMAGE	EB_SIZE_WIDE_FONT_48_XPM	    
 
 /*
- * Trick for function protypes.
- */
-#ifndef EB_P
-#if defined(__STDC__) || defined(__cplusplus)
-#define EB_P(p) p
-#else /* not __STDC__ && not __cplusplus */
-#define EB_P(p) ()
-#endif /* not __STDC__ && not __cplusplus */
-#endif /* EB_P */
-
-/*
  * Function declarations.
  */
 /* bitmap.c */
-int eb_narrow_font_xbm_size EB_P((EB_Font_Code));
-int eb_narrow_font_xpm_size EB_P((EB_Font_Code));
-int eb_narrow_font_gif_size EB_P((EB_Font_Code));
-int eb_wide_font_xbm_size EB_P((EB_Font_Code));
-int eb_wide_font_xpm_size EB_P((EB_Font_Code));
-int eb_wide_font_gif_size EB_P((EB_Font_Code));
-size_t eb_bitmap_to_xbm EB_P((char *, const char *, int, int));
-size_t eb_bitmap_to_xpm EB_P((char *, const char *, int, int));
-size_t eb_bitmap_to_gif EB_P((char *, const char *, int, int));
+EB_Error_Code eb_narrow_font_xbm_size EB_P((EB_Font_Code, size_t *));
+EB_Error_Code eb_narrow_font_xpm_size EB_P((EB_Font_Code, size_t *));
+EB_Error_Code eb_narrow_font_gif_size EB_P((EB_Font_Code, size_t *));
+EB_Error_Code eb_wide_font_xbm_size EB_P((EB_Font_Code, size_t *));
+EB_Error_Code eb_wide_font_xpm_size EB_P((EB_Font_Code, size_t *));
+EB_Error_Code eb_wide_font_gif_size EB_P((EB_Font_Code, size_t *));
+void eb_bitmap_to_xbm EB_P((const char *, int, int, char *, size_t *));
+void eb_bitmap_to_xpm EB_P((const char *, int, int, char *, size_t *));
+void eb_bitmap_to_gif EB_P((const char *, int, int, char *, size_t *));
+
 /* font.c */
-EB_Font_Code eb_font EB_P((EB_Book *));
-int eb_set_font EB_P((EB_Book *, EB_Font_Code));
+EB_Error_Code eb_font EB_P((EB_Book *, EB_Font_Code *));
+EB_Error_Code eb_set_font EB_P((EB_Book *, EB_Font_Code));
 void eb_unset_font EB_P((EB_Book *));
-int eb_font_count EB_P((EB_Book *));
-int eb_font_list EB_P((EB_Book *, EB_Font_Code *));
+EB_Error_Code eb_font_list EB_P((EB_Book *, EB_Font_Code *, int *));
 int eb_have_font EB_P((EB_Book *, EB_Font_Code));
+
 /* narwfont.c */
 int eb_have_narrow_font EB_P((EB_Book *));
-int eb_narrow_font_width EB_P((EB_Book *));
-int eb_narrow_font_width2 EB_P((EB_Font_Code));
-int eb_narrow_font_size EB_P((EB_Book *));
-int eb_narrow_font_size2 EB_P((EB_Font_Code));
-const char *eb_narrow_font_filename EB_P((EB_Book *));
-const char *eb_narrow_font_filename2 EB_P((EB_Book *, EB_Font_Code));
-int eb_narrow_font_start EB_P((EB_Book *));
-int eb_narrow_font_end EB_P((EB_Book *));
-int eb_narrow_font_character_bitmap EB_P((EB_Book *, int, char *));
-int eb_forward_narrow_font_character EB_P((EB_Book *, int, int));
-int eb_backward_narrow_font_character EB_P((EB_Book *, int, int));
+EB_Error_Code eb_narrow_font_width EB_P((EB_Book *, int *));
+EB_Error_Code eb_narrow_font_width2 EB_P((EB_Font_Code, int *));
+EB_Error_Code eb_narrow_font_size EB_P((EB_Book *, size_t *));
+EB_Error_Code eb_narrow_font_size2 EB_P((EB_Font_Code, size_t *));
+EB_Error_Code eb_narrow_font_file_name EB_P((EB_Book *, char *));
+EB_Error_Code eb_narrow_font_file_name2 EB_P((EB_Book *, EB_Font_Code,
+    char *));
+EB_Error_Code eb_narrow_font_start EB_P((EB_Book *, int *));
+EB_Error_Code eb_narrow_font_end EB_P((EB_Book *, int *));
+EB_Error_Code eb_narrow_font_character_bitmap EB_P((EB_Book *, int, char *));
+EB_Error_Code eb_forward_narrow_font_character EB_P((EB_Book *, int, int *));
+EB_Error_Code eb_backward_narrow_font_character EB_P((EB_Book *, int, int *));
+
 /* widefont.c */
 int eb_have_wide_font EB_P((EB_Book *));
-int eb_wide_font_width EB_P((EB_Book *));
-int eb_wide_font_width2 EB_P((EB_Font_Code));
-int eb_wide_font_size EB_P((EB_Book *));
-int eb_wide_font_size2 EB_P((EB_Font_Code));
-const char *eb_wide_font_filename EB_P((EB_Book *));
-const char *eb_wide_font_filename2 EB_P((EB_Book *, EB_Font_Code));
-int eb_wide_font_start EB_P((EB_Book *));
-int eb_wide_font_end EB_P((EB_Book *));
-int eb_wide_font_character_bitmap EB_P((EB_Book *, int, char *));
-int eb_forward_wide_font_character EB_P((EB_Book *, int, int));
-int eb_backward_wide_font_character EB_P((EB_Book *, int, int));
+EB_Error_Code eb_wide_font_width EB_P((EB_Book *, int *));
+EB_Error_Code eb_wide_font_width2 EB_P((EB_Font_Code, int *));
+EB_Error_Code eb_wide_font_size EB_P((EB_Book *, size_t *));
+EB_Error_Code eb_wide_font_size2 EB_P((EB_Font_Code, size_t *));
+EB_Error_Code eb_wide_font_file_name EB_P((EB_Book *, char *));
+EB_Error_Code eb_wide_font_file_name2 EB_P((EB_Book *, EB_Font_Code, char *));
+EB_Error_Code eb_wide_font_start EB_P((EB_Book *, int *));
+EB_Error_Code eb_wide_font_end EB_P((EB_Book *, int *));
+EB_Error_Code eb_wide_font_character_bitmap EB_P((EB_Book *, int, char *));
+EB_Error_Code eb_forward_wide_font_character EB_P((EB_Book *, int, int *));
+EB_Error_Code eb_backward_wide_font_character EB_P((EB_Book *, int, int *));
 
 #ifdef __cplusplus
 }

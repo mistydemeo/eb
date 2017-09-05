@@ -40,15 +40,15 @@
  * memset() described in ISO 9899: 1990.
  */
 VOID *
-memset(str, c, len)
-    VOID *str;
-    int c;
-    size_t len;
+memset(stream, character, length)
+    VOID *stream;
+    int character;
+    size_t length;
 {
-    char *s = str;
+    char *s = stream;
 
-    while (0 < len--)
-	*s++ = c;
+    while (0 < length--)
+	*s++ = character;
 
-    return str;
+    return stream;
 }

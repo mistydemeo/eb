@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1999  Motoyuki Kasahara
+ * Copyright (c) 1997, 99, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,15 +19,158 @@
 #include <stdio.h>
 #include <sys/types.h>
 
+#ifdef ENABLE_PTHREAD
+#include <pthread.h>
+#endif
+
 #include "eb.h"
+#include "error.h"
+#include "internal.h"
 #include "text.h"
 #include "appendix.h"
 
 /*
+ * Default hookset.
+ */
+EB_Hookset eb_default_hookset;
+
+
+/*
+ * Initialize default hookset.
+ */
+void
+eb_initialize_default_hookset()
+{
+    eb_initialize_hookset(&eb_default_hookset);
+}
+
+
+/*
+ * Initialize a hookset.
+ */
+void
+eb_initialize_hookset(hookset)
+    EB_Hookset *hookset;
+{
+    int i;
+
+    eb_initialize_lock(&hookset->lock);
+
+    for (i = 0; i < EB_NUMBER_OF_HOOKS; i++) {
+	hookset->hooks[i].code = i;
+	hookset->hooks[i].function = NULL;
+    }
+    hookset->hooks[EB_HOOK_STOP_CODE].function
+	= eb_hook_stop_code;
+    hookset->hooks[EB_HOOK_NARROW_JISX0208].function
+	= eb_hook_euc_to_ascii;
+    hookset->hooks[EB_HOOK_NARROW_FONT].function
+	= eb_hook_narrow_character_text;
+    hookset->hooks[EB_HOOK_WIDE_FONT].function
+	= eb_hook_wide_character_text;
+}
+
+
+/*
+ * Finalize a hookset.
+ */
+void
+eb_finalize_hookset(hookset)
+    EB_Hookset *hookset;
+{
+    eb_finalize_lock(&hookset->lock);
+}
+
+
+/*
+ * Set a hook.
+ */
+EB_Error_Code
+eb_set_hook(hookset, hook)
+    EB_Hookset *hookset;
+    const EB_Hook *hook;
+{
+    EB_Error_Code error_code;
+
+    /*
+     * Lock the hookset.
+     */
+    eb_lock(&hookset->lock);
+
+    /*
+     * Set a hook.
+     */
+    if (hook->code < 0 || EB_NUMBER_OF_HOOKS <= hook->code) {
+	error_code = EB_ERR_NO_SUCH_HOOK;
+	goto failed;
+    }
+    hookset->hooks[hook->code].function = hook->function;
+
+    /*
+     * Unlock the hookset.
+     */
+    eb_unlock(&hookset->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&hookset->lock);
+    return error_code;
+}
+
+
+/*
+ * Set a list of hooks.
+ */
+EB_Error_Code
+eb_set_hooks(hookset, hook)
+    EB_Hookset *hookset;
+    const EB_Hook *hook;
+{
+    EB_Error_Code error_code;
+    const EB_Hook *h;
+    int i;
+
+    /*
+     * Lock the hookset.
+     */
+    eb_lock(&hookset->lock);
+
+    /*
+     * Set hooks.
+     */
+    for (i = 0, h = hook; i < EB_NUMBER_OF_HOOKS && h->code != EB_HOOK_NULL;
+	 i++, h++) {
+	if (hook->code < 0 || EB_NUMBER_OF_HOOKS <= hook->code) {
+	    error_code = EB_ERR_NO_SUCH_HOOK;
+	    goto failed;
+	}
+	hookset->hooks[h->code].function = h->function;
+    }
+
+    /*
+     * Unlock the hookset.
+     */
+    eb_unlock(&hookset->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&hookset->lock);
+    return error_code;
+}
+
+
+/*
  * EUC JP to ASCII conversion table.
  */
-static unsigned char
-euc2ascii_table_a1[] = {
+static const unsigned char euc_a1_to_ascii_table[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     /* 0x00 */
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     /* 0x08 */
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     /* 0x10 */
@@ -62,8 +205,7 @@ euc2ascii_table_a1[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     /* 0xf8 */
 };
 
-static unsigned char
-euc2ascii_table_a3[] = {
+static const unsigned char euc_a3_to_ascii_table[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     /* 0x00 */
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     /* 0x08 */
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,     /* 0x10 */
@@ -102,158 +244,135 @@ euc2ascii_table_a3[] = {
 /*
  * Convert the `workbuf' string from EUC to ASCII.
  */
-int
-eb_hook_euc_to_ascii(book, appendix, workbuf, code, argc, argv)
+EB_Error_Code
+eb_hook_euc_to_ascii(book, appendix, workbuf, hook_code, argc, argv)
     EB_Book *book;
     EB_Appendix *appendix;
     char *workbuf;
-    EB_Hook_Code code;
+    EB_Hook_Code hook_code;
     int argc;
     const int *argv;
 {
-    int inc1, inc2;
-    int outc = 0;
+    int in_code1, in_code2;
+    int out_code = 0;
 
-    inc1 = *((unsigned char *)workbuf);
-    inc2 = *((unsigned char *)workbuf + 1);
+    in_code1 = *((unsigned char *)workbuf);
+    in_code2 = *((unsigned char *)workbuf + 1);
 
-    if (inc1 == 0xa1)
-	outc = euc2ascii_table_a1[inc2];
-    else if (inc1 == 0xa3)
-	outc = euc2ascii_table_a3[inc2];
+    if (in_code1 == 0xa1)
+	out_code = euc_a1_to_ascii_table[in_code2];
+    else if (in_code1 == 0xa3)
+	out_code = euc_a3_to_ascii_table[in_code2];
 
-    if (outc == 0) {
-	*workbuf = inc1;
-	*(workbuf + 1) = inc2;
+    if (out_code == 0) {
+	*workbuf = in_code1;
+	*(workbuf + 1) = in_code2;
 	*(workbuf + 2) = '\0';
     } else {
-	*workbuf = outc;
+	*workbuf = out_code;
 	*(workbuf + 1) = '\0';
     }
-    return 0;
+
+    return EB_SUCCESS;
 }
 
 
 /*
  * Hook for stop-code.
  */
-int
-eb_hook_stopcode(book, appendix, workbuf, code, argc, argv)
+EB_Error_Code
+eb_hook_stop_code(book, appendix, workbuf, hook_code, argc, argv)
     EB_Book *book;
     EB_Appendix *appendix;
     char *workbuf;
-    EB_Hook_Code code;
+    EB_Hook_Code hook_code;
     int argc;
     const int *argv;
 {
-    if (appendix == NULL || appendix->sub_current == NULL
-	|| appendix->sub_current->stop0 == 0) {
-	if (argv[1] <= 0x01)
-	    return -1;
+    int is_stop_code = 0;
+
+    if (appendix == NULL
+	|| appendix->subbook_current == NULL
+	|| appendix->subbook_current->stop0 == 0) {
+	printf("%04x<=>0x1f41 && %04x<=>%04x --> %d\n", argv[0], argv[1],
+	    book->text_context.auto_stop_code, 
+	    (argv[0] == 0x1f41 && argv[1] == book->text_context.auto_stop_code));
+	if (argv[0] == 0x1f41 && argv[1] == book->text_context.auto_stop_code)
+	    is_stop_code = -1;
     } else {
-	if (argv[0] == appendix->sub_current->stop0
-	    && argv[1] == appendix->sub_current->stop1)
-	    return -1;
+	if (argv[0] == appendix->subbook_current->stop0
+	    && argv[1] == appendix->subbook_current->stop1)
+	    is_stop_code = -1;
     }
 
-    return 0;
-}
-
-
-/*
- * Hook for stop-code (obsoleted).
- */
-int
-eb_hook_stopcode_mixed(book, appendix, workbuf, code, argc, argv)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    char *workbuf;
-    EB_Hook_Code code;
-    int argc;
-    const int *argv;
-{
-    return eb_hook_stopcode(book, appendix, workbuf, code, argc, argv);
-}
-
-
-/*
- * Hook for stop-code (obsoleted).
- */
-int
-eb_hook_stopcode_dummy(book, appendix, workbuf, code, argc, argv)
-    EB_Book *book;
-    EB_Appendix *appendix;
-    char *workbuf;
-    EB_Hook_Code code;
-    int argc;
-    const int *argv;
-{
-    return eb_hook_stopcode(book, appendix, workbuf, code, argc, argv);
+    return is_stop_code;
 }
 
 
 /*
  * Hook for narrow local character.
  */
-int
-eb_hook_narrow_character_text(book, appendix, workbuf, code, argc, argv)
+EB_Error_Code
+eb_hook_narrow_character_text(book, appendix, workbuf, hook_code, argc, argv)
     EB_Book *book;
     EB_Appendix *appendix;
     char *workbuf;
-    EB_Hook_Code code;
+    EB_Hook_Code hook_code;
     int argc;
     const int *argv;
 {
     if (appendix == NULL 
-	|| eb_narrow_alt_character_text(appendix, argv[0], workbuf) < 0) {
+	|| eb_narrow_alt_character_text(appendix, argv[0], workbuf)
+	!= EB_SUCCESS) {
 	*workbuf = '<';
 	*(workbuf + 1) = '?';
 	*(workbuf + 2) = '>';
 	*(workbuf + 3) = '\0';
     }
 
-    return 0;
+    return EB_SUCCESS;
 }
 
 
 /*
  * Hook for wide local character.
  */
-int
-eb_hook_wide_character_text(book, appendix, workbuf, code, argc, argv)
+EB_Error_Code
+eb_hook_wide_character_text(book, appendix, workbuf, hook_code, argc, argv)
     EB_Book *book;
     EB_Appendix *appendix;
     char *workbuf;
-    EB_Hook_Code code;
+    EB_Hook_Code hook_code;
     int argc;
     const int *argv;
 {
     if (appendix == NULL
-	|| eb_wide_alt_character_text(appendix, argv[0], workbuf) < 0) {
+	|| eb_wide_alt_character_text(appendix, argv[0], workbuf)
+	!= EB_SUCCESS) {
 	*workbuf = '<';
 	*(workbuf + 1) = '?';
 	*(workbuf + 2) = '>';
 	*(workbuf + 3) = '\0';
     }
 
-    return 0;
+    return EB_SUCCESS;
 }
 
 
 /*
  * Convert `workbuf' to empty.
  */
-int
-eb_hook_empty(book, appendix, workbuf, code, argc, argv)
+EB_Error_Code
+eb_hook_empty(book, appendix, workbuf, hook_code, argc, argv)
     EB_Book *book;
     EB_Appendix *appendix;
     char *workbuf;
-    EB_Hook_Code code;
+    EB_Hook_Code hook_code;
     int argc;
     const int *argv;
 {
     *workbuf = '\0';
-    return 0;
+    return EB_SUCCESS;
 }
 
 

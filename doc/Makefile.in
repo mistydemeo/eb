@@ -60,26 +60,57 @@ POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 AS = @AS@
+CATALOGS = @CATALOGS@
+CATOBJEXT = @CATOBJEXT@
 CC = @CC@
-DEPENDENCIES_FOR_LIBZ = @DEPENDENCIES_FOR_LIBZ@
+DATADIRNAME = @DATADIRNAME@
 DLLTOOL = @DLLTOOL@
+EBCONF_EBINCS = @EBCONF_EBINCS@
+EBCONF_EBLIBS = @EBCONF_EBLIBS@
+EBCONF_INTLINCS = @EBCONF_INTLINCS@
+EBCONF_INTLLIBS = @EBCONF_INTLLIBS@
+EBCONF_ZLIBINCS = @EBCONF_ZLIBINCS@
+EBCONF_ZLIBLIBS = @EBCONF_ZLIBLIBS@
+ENABLE_PTHREAD = @ENABLE_PTHREAD@
 EXEEXT = @EXEEXT@
-INCLUDES_FOR_LIBZ = @INCLUDES_FOR_LIBZ@
-LDADD_FOR_LIBZ = @LDADD_FOR_LIBZ@
+GENCAT = @GENCAT@
+GMOFILES = @GMOFILES@
+GMSGFMT = @GMSGFMT@
+GT_NO = @GT_NO@
+GT_YES = @GT_YES@
+INCLUDE_LOCALE_H = @INCLUDE_LOCALE_H@
+INSTOBJEXT = @INSTOBJEXT@
+INTLDEPS = @INTLDEPS@
+INTLINCS = @INTLINCS@
+INTLLIBS = @INTLLIBS@
+INTLOBJS = @INTLOBJS@
 LIBEB_VERSION_INFO = @LIBEB_VERSION_INFO@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAILING_ADDRESS = @MAILING_ADDRESS@
 MAKEINFO = @MAKEINFO@
+MKINSTALLDIRS = @MKINSTALLDIRS@
+MSGFMT = @MSGFMT@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PERL = @PERL@
+POFILES = @POFILES@
+POSUB = @POSUB@
+PTHREAD_CFLAGS = @PTHREAD_CFLAGS@
+PTHREAD_CPPFLAGS = @PTHREAD_CPPFLAGS@
+PTHREAD_LDFLAGS = @PTHREAD_LDFLAGS@
 RANLIB = @RANLIB@
+USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
+USE_NLS = @USE_NLS@
 VERSION = @VERSION@
+ZLIBDEPS = @ZLIBDEPS@
+ZLIBINCS = @ZLIBINCS@
+ZLIBLIBS = @ZLIBLIBS@
+l = @l@
+localedir = @localedir@
 
-info_TEXINFOS = eb.texi ebfont.texi ebinfo.texi ebrefile.texi ebzip.texi
-eb_TEXINFOS = eb-ver.texi disctype.c.texi subbook.c.texi
+info_TEXINFOS = ebfont.texi ebinfo.texi ebrefile.texi ebzip.texi
 ebfont_TEXINFOS = ebfont-ver.texi
 ebinfo_TEXINFOS = ebinfo-ver.texi
 ebrefile_TEXINFOS = ebrefile-ver.texi
@@ -87,19 +118,16 @@ ebzip_TEXINFOS = ebzip-ver.texi
 
 samplesdir = $(srcdir)/../samples
 
-C2TEXI = $(srcdir)/c2texi
-
-CLEANFILES = vti.tmp disctype.c.texi subbook.c.texi
-EXTRA_DIST = stamp-eb stamp-ebfont stamp-ebinfo stamp-ebrefile stamp-ebzip 	c2texi
-
+CLEANFILES = vti.tmp
+EXTRA_DIST = stamp-ebfont stamp-ebinfo stamp-ebrefile stamp-ebzip
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../config.h
 CONFIG_CLEAN_FILES = 
 TEXI2DVI = texi2dvi
-INFO_DEPS = eb.info ebfont.info ebinfo.info ebrefile.info ebzip.info
-DVIS = eb.dvi ebfont.dvi ebinfo.dvi ebrefile.dvi ebzip.dvi
-TEXINFOS = eb.texi ebfont.texi ebinfo.texi ebrefile.texi ebzip.texi
-DIST_COMMON =  $(eb_TEXINFOS) $(ebfont_TEXINFOS) $(ebinfo_TEXINFOS) \
+INFO_DEPS = ebfont.info ebinfo.info ebrefile.info ebzip.info
+DVIS = ebfont.dvi ebinfo.dvi ebrefile.dvi ebzip.dvi
+TEXINFOS = ebfont.texi ebinfo.texi ebrefile.texi ebzip.texi
+DIST_COMMON =  $(ebfont_TEXINFOS) $(ebinfo_TEXINFOS) \
 $(ebrefile_TEXINFOS) $(ebzip_TEXINFOS) Makefile.am Makefile.in mdate-sh \
 texinfo.tex
 
@@ -117,10 +145,6 @@ $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-
-eb.info: eb.texi $(eb_TEXINFOS)
-eb.dvi: eb.texi $(eb_TEXINFOS)
 
 
 ebfont.info: ebfont.texi $(ebfont_TEXINFOS)
@@ -235,24 +259,22 @@ dist-info: $(INFO_DEPS)
 	done
 
 mostlyclean-aminfo:
-	-rm -f eb.aux eb.cp eb.cps eb.dvi eb.fn eb.fns eb.ky eb.kys eb.ps \
-	  eb.log eb.pg eb.toc eb.tp eb.tps eb.vr eb.vrs eb.op eb.tr \
-	  eb.cv eb.cn ebfont.aux ebfont.cp ebfont.cps ebfont.dvi \
-	  ebfont.fn ebfont.fns ebfont.ky ebfont.kys ebfont.ps \
-	  ebfont.log ebfont.pg ebfont.toc ebfont.tp ebfont.tps \
-	  ebfont.vr ebfont.vrs ebfont.op ebfont.tr ebfont.cv ebfont.cn \
-	  ebinfo.aux ebinfo.cp ebinfo.cps ebinfo.dvi ebinfo.fn \
-	  ebinfo.fns ebinfo.ky ebinfo.kys ebinfo.ps ebinfo.log \
-	  ebinfo.pg ebinfo.toc ebinfo.tp ebinfo.tps ebinfo.vr \
-	  ebinfo.vrs ebinfo.op ebinfo.tr ebinfo.cv ebinfo.cn \
-	  ebrefile.aux ebrefile.cp ebrefile.cps ebrefile.dvi \
-	  ebrefile.fn ebrefile.fns ebrefile.ky ebrefile.kys ebrefile.ps \
-	  ebrefile.log ebrefile.pg ebrefile.toc ebrefile.tp \
-	  ebrefile.tps ebrefile.vr ebrefile.vrs ebrefile.op ebrefile.tr \
-	  ebrefile.cv ebrefile.cn ebzip.aux ebzip.cp ebzip.cps \
-	  ebzip.dvi ebzip.fn ebzip.fns ebzip.ky ebzip.kys ebzip.ps \
-	  ebzip.log ebzip.pg ebzip.toc ebzip.tp ebzip.tps ebzip.vr \
-	  ebzip.vrs ebzip.op ebzip.tr ebzip.cv ebzip.cn
+	-rm -f ebfont.aux ebfont.cp ebfont.cps ebfont.dvi ebfont.fn ebfont.fns \
+	  ebfont.ky ebfont.kys ebfont.ps ebfont.log ebfont.pg \
+	  ebfont.toc ebfont.tp ebfont.tps ebfont.vr ebfont.vrs \
+	  ebfont.op ebfont.tr ebfont.cv ebfont.cn ebinfo.aux ebinfo.cp \
+	  ebinfo.cps ebinfo.dvi ebinfo.fn ebinfo.fns ebinfo.ky \
+	  ebinfo.kys ebinfo.ps ebinfo.log ebinfo.pg ebinfo.toc \
+	  ebinfo.tp ebinfo.tps ebinfo.vr ebinfo.vrs ebinfo.op ebinfo.tr \
+	  ebinfo.cv ebinfo.cn ebrefile.aux ebrefile.cp ebrefile.cps \
+	  ebrefile.dvi ebrefile.fn ebrefile.fns ebrefile.ky \
+	  ebrefile.kys ebrefile.ps ebrefile.log ebrefile.pg \
+	  ebrefile.toc ebrefile.tp ebrefile.tps ebrefile.vr \
+	  ebrefile.vrs ebrefile.op ebrefile.tr ebrefile.cv ebrefile.cn \
+	  ebzip.aux ebzip.cp ebzip.cps ebzip.dvi ebzip.fn ebzip.fns \
+	  ebzip.ky ebzip.kys ebzip.ps ebzip.log ebzip.pg ebzip.toc \
+	  ebzip.tp ebzip.tps ebzip.vr ebzip.vrs ebzip.op ebzip.tr \
+	  ebzip.cv ebzip.cn
 
 clean-aminfo:
 
@@ -353,19 +375,6 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 @SET_MAKE@
 
-eb-ver.texi: stamp-eb
-	cp $(srcdir)/stamp-eb $(srcdir)/eb-ver.texi
-
-stamp-eb: eb.texi $(top_srcdir)/configure.in
-	@echo "@set UPDATED `cd $(srcdir) \
-	  && $(SHELL) ./mdate-sh eb.texi`" > vti.tmp
-	@echo "@set EDITION $(VERSION)" >> vti.tmp
-	@echo "@set VERSION $(VERSION)" >> vti.tmp
-	@cmp -s vti.tmp $(srcdir)/stamp-eb \
-	  || (echo "Updating $(srcdir)/stamp-eb"; \
-	      cp vti.tmp $(srcdir)/stamp-eb)
-	-@rm -f vti.tmp
-
 ebfont-ver.texi: stamp-ebfont
 	cp $(srcdir)/stamp-ebfont $(srcdir)/ebfont-ver.texi
 
@@ -417,16 +426,6 @@ stamp-ebzip: ebzip.texi $(top_srcdir)/configure.in
 	  || (echo "Updating $(srcdir)/stamp-ebzip"; \
 	      cp vti.tmp $(srcdir)/stamp-ebzip)
 	-@rm -f vti.tmp
-
-disctype.c.texi: $(C2TEXI) $(samplesdir)/disctype.c.in
-	-@rm -f disctype.c.texi
-	sed -e '1,/^$$/d' -e '/ ja:/d' -e 's/ en://' \
-	  $(samplesdir)/disctype.c.in | $(SHELL) $(C2TEXI) > disctype.c.texi
-
-subbook.c.texi: $(C2TEXI) $(samplesdir)/subbook.c.in
-	-@rm -f subbook.c.texi
-	sed -e '1,/^$$/d' -e '/ ja:/d' -e 's/ en://' \
-	  $(samplesdir)/subbook.c.in | $(SHELL) $(C2TEXI) > subbook.c.texi
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

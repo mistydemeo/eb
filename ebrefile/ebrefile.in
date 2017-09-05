@@ -3,7 +3,7 @@ eval 'exec @PERL@ -S $0 ${1+"$@"}'
     if 0;
 
 #                                                         -*- Perl -*-
-# Copyright (C) 1998, 1999  Motoyuki Kasahara
+# Copyright (c) 1998, 99, 2000  Motoyuki Kasahara
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,6 +47,20 @@ Argument:
                              (default: .)
 
 Report bugs to $mailing_address.
+";
+
+# Copyright message.
+$copyright = "Copyright (c) 1998, 99, 2000  Motoyuki Kasahara
+
+This is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2, or (at your option)
+any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 ";
 
 $tryhelp = "try \`$0 --help\' for more information\n";
@@ -137,15 +151,7 @@ while (($optname, $optarg) = &getopt_long) {
 	}
     } elsif ($optname eq '-v') {
  	print "$progname (EB Library) version $version\n";
-	print "Copyright (c) 1998, 1999  Motoyuki Kasahara\n\n";
-	print "This is free software; you can redistribute it and/or modify\n";
-	print "it under the terms of the GNU General Public License as published by\n";
-	print "the Free Software Foundation; either version 2, or (at your option)\n";
-	print "any later version.\n\n";
-	print "This program is distributed in the hope that it will be useful,\n";
-	print "but WITHOUT ANY WARRANTY; without even the implied warranty\n";
-	print "of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n";
-	print "GNU General Public License for more details.\n";
+	print $copyright;
 	exit(0);
     } else {
 	die $tryhelp;
@@ -206,7 +212,7 @@ if (read(READ, $buf, 16) != 16) {
     close(READ);
     exit(1);
 }
-@reserved1 = unpack('x2 C14', $buf);
+$reserved1 = unpack('x2 C14', $buf);
 
 #
 # Scan the catalog.
@@ -262,7 +268,7 @@ if (!open(WRITE, ">$outfile")) {
 #
 # Write a header part.
 #
-$buf = pack("n C14", scalar(@sub_imports), @reserved1);
+$buf = pack("n C14", scalar(@sub_imports), $reserved1);
 if (!print(WRITE $buf)) {
     warn "$0: cannot read the file, $!: $outfile\n";
     close(WRITE);

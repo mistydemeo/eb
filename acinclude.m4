@@ -20,6 +20,7 @@ AC_CACHE_CHECK(for struct utimbuf, ax_cv_have_struct_utimbuf,
 #endif], [static struct utimbuf x; x.actime = x.modtime;
 ], [ax_cv_have_struct_utimbuf=yes], [ax_cv_have_struct_utimbuf=no])])
 if test $ax_cv_have_struct_utimbuf = yes; then
-   AC_DEFINE(HAVE_STRUCT_UTIMBUF)
+   AC_DEFINE(HAVE_STRUCT_UTIMBUF, 1,
+[Define if \`struct utimbuf' is declared -- usually in <utime.h>.])
 fi
 ])

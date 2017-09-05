@@ -304,14 +304,14 @@ CD-ROM 書籍がすでに @file{/dict} にコピーされているものの、まだ圧縮
 
 @example
 @group
-==> compress /dict/kanji/start <==
-output to ./dict/kanji/start.ebz
- 1.0% done (2097152 / 220069888 bytes)
- 1.9% done (4194304 / 220069888 bytes)
- 2.9% done (6291456 / 220069888 bytes)
+==> /dict/kanji/start を圧縮 <==
+./dict/kanji/start.ebz に出力
+ 1.0% 処理済み (2097152 / 220069888 バイト)
+ 1.9% 処理済み (4194304 / 220069888 バイト)
+ 2.9% 処理済み (6291456 / 220069888 バイト)
         : (略)
-completed (220069888 / 220069888 bytes)
-220069888 -> 78163751 bytes (35.5%)
+完了 (220069888 / 220069888 バイト)
+220069888 -> 78163751 バイト (35.5%)
 @end group
 @end example
 
@@ -517,39 +517,39 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @example
 @group
 % ebinfo /mnt/cdrom
-disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
-character code: JIS X 0208
-the number of subbooks: 3
-@end group
-
-@group
-subbook 1:
-  title: New English Japanese Dictionary (4th edition)
-  directory: ENGLISH
-  search methods: word endword keyword menu
-  font sizes: 16 24 30 48
-  narrow font characters: 0xa121 -- 0xa24e
-  wide font characters: 0xa321 -- 0xa27e
+ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
+文字コード: JIS X 0208
+副本の数: 3
 
 @end group
 @group
-subbook 2:
-  title: CD-ROM French Japanese Dictionary (3rd edition)
-  directory: FRENCH
-  search methods: word endword keyword menu
-  font sizes: 16 24 30 48
-  narrow font characters: 
-  wide font characters: 0xa321 -- 0xa27e
+副本 1:
+  題名: 新英和辞典（第四版）
+  ディレクトリ: ENGLISH
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 0xa121 -- 0xa24e
+  全角フォントの文字: 0xa321 -- 0xa27e
 
 @end group
 @group
-subbook 3:
-  title: Pocket German Japanese Dictionary (3rd edition)
-  directory: GERMAN
-  search methods: menu
-  font sizes: 16 24 30 48
-  narrow font characters: 
-  wide font characters: 0xa321 -- 0xa27e
+副本 2:
+  題名: CD-ROM 仏和辞典（第三版）
+  ディレクトリ: FRENCH
+  検索方式: 前方一致 後方一致 条件 メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
+
+@end group
+@group
+副本 3:
+  題名: ポケット独和辞典（第三版）
+  ディレクトリ: GERMAN
+  検索方式: メニュー
+  フォントの大きさ: 16 24 30 48
+  半角フォントの文字: 
+  全角フォントの文字: 0xa321 -- 0xa27e
 @end group
 @end example
 
@@ -599,11 +599,11 @@ subbook 3:
 
 @example
 @group
-==> compress /dict/science/data/honmon <==
-output to /dict/science/data/honmon.ebz
+==> /dict/science/data/honmon を圧縮 <==
+/dict/science/data/honmon.ebz に出力
 
-the file already exists: /dict/science/data/honmon.ebz
-do you wish to overwrite (y or n)? 
+ファイルがすでに存在します: /dict/science/data/honmon.ebz
+上書きしますか (はい:y, いいえ:n)?
 @end group
 @end example
 
@@ -678,14 +678,14 @@ do you wish to overwrite (y or n)?
 
 @example
 @group
-==> uncompress /dict/kanji/start.ebz <==
-output to ./kanji/start.ebz
- 5.1% done (4194304 / 82460672 bytes)
-10.2% done (8388608 / 82460672 bytes)
-15.3% done (12582912 / 82460672 bytes)
+==> /dict/kanji/start.ebz を伸長 <==
+./kanji/start.ebz に出力
+ 5.1% 処理済み (4194304 / 82460672 バイト)
+10.2% 処理済み (8388608 / 82460672 バイト)
+15.3% 処理済み (12582912 / 82460672 バイト)
         : (略)
-completed (82460672 / 82460672 bytes)
-25681439 -> 82460672 bytes
+完了 (82460672 / 82460672 バイト)
+25681439 -> 82460672 バイト
 @end group
 @end example
 
@@ -695,11 +695,11 @@ completed (82460672 / 82460672 bytes)
 
 @example
 @group
-==> uncompress /dict/kanji/start.ebz <==
-output to /dict/kanji/start
+==> /dict/kanji/start.ebz を伸長 <==
+/dict/kanji/start に出力
 
-the file already exists: /dict/kanji/start
-do you wish to overwrite (y or n)? 
+ファイルがすでに存在します: /dict/kanji/start
+上書きしますか (はい:y, いいえ:n)?
 @end group
 @end example
 
@@ -798,19 +798,17 @@ do you wish to overwrite (y or n)?
 @example
 @group
 ==> /dict/spanish/spanish/start.ebz <==
-compressed: 154290176 -> 54881862 bytes (35.6%)
-compresssion level: 0
+154290176 -> 54881862 バイト (35.6%, ebzip 圧縮レベル 0)
 
 @end group
 @group
 ==> /dict/spanish/language.ebz <==
-compressed: 12288 -> 4121 bytes (33.5%)
-compresssion level: 0
+compressed: 12288 -> 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 
 @end group
 @group
 ==> /dict/spanish/catalog <==
-not compressed
+2048 バイト (非圧縮)
 @end group
 @end example
 

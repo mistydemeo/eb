@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@
 /*
  * Maximum length of log-name.
  */
-#define FAKELOG_MAXLEN_LOGNAME	64
+#define FAKELOG_MAX_LOG_NAME_LENGTH	64
 
 /*
  * Fake syslog().

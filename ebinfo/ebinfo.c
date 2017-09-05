@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,11 +38,19 @@
 
 #include "fakelog.h"
 #include "getopt.h"
+#include "ebutils.h"
 
 #ifndef HAVE_STRCHR
 #define strchr index
 #define strrchr rindex
 #endif /* HAVE_STRCHR */
+
+#ifdef ENABLE_NLS
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
+#include <libintl.h>
+#endif
 
 /*
  * Trick for function protypes.
@@ -56,12 +64,21 @@
 #endif /* EB_P */
 
 /*
+ * Tricks for gettext.
+ */
+#define _(string) gettext(string)
+#ifdef gettext_noop
+#define N_(string) gettext_noop(string)
+#else
+#define N_(string) (string)
+#endif
+
+/*
  * Unexported functions.
  */
+static void output_error_message EB_P((EB_Error_Code));
 static int output_information EB_P((const char *, int));
-static void output_version EB_P((void));
 static void output_help EB_P((void));
-static void output_try_help EB_P((void));
 static void output_multi_information EB_P((EB_Book *));
 
 /*
@@ -76,22 +93,6 @@ static struct option long_options[] = {
 };
 
 /*
- * Generic name of the program.
- */
-const char *program_name = "ebinfo";
-
-/*
- * Program version.
- */
-const char *program_version = VERSION;
-
-/*
- * Actual program name. (argv[0])
- */
-const char *invoked_name;
-
-
-/*
  * Default output directory
  */
 #define DEFAULT_BOOK_DIRECTORY	"."
@@ -102,10 +103,22 @@ main(argc, argv)
     char *argv[];
 {
     int ch;
-    char *bookdir;
-    int multiflag;
+    char *book_path;
+    int multi_flag;
 
+    program_name = "ebinfo";
     invoked_name = argv[0];
+
+    /*
+     * Initialize locale data.
+     */
+#ifdef ENABLE_NLS
+#ifdef HAVE_SETLOCALE
+       setlocale(LC_ALL, "");
+#endif
+       bindtextdomain(TEXT_DOMAIN_NAME, LOCALEDIR);
+       textdomain(TEXT_DOMAIN_NAME);
+#endif
 
     /*
      * Set fakelog behavior.
@@ -117,7 +130,7 @@ main(argc, argv)
     /*
      * Parse command line options.
      */
-    multiflag = 0;
+    multi_flag = 0;
     for (;;) {
 	ch = getopt_long(argc, argv, short_options, long_options, NULL);
 	if (ch == EOF)
@@ -134,7 +147,7 @@ main(argc, argv)
 	    /*
 	     * Option `-m'.  Also output multi-search information.
 	     */
-	    multiflag = 1;
+	    multi_flag = 1;
 	    break;
 
 	case 'v':
@@ -154,7 +167,7 @@ main(argc, argv)
      * Check the number of rest arguments.
      */
     if (1 < argc - optind) {
-	fprintf(stderr, "%s: too many arguments\n", invoked_name);
+	fprintf(stderr, _("%s: too many arguments\n"), invoked_name);
 	output_try_help();
 	exit(1);
     }
@@ -163,11 +176,11 @@ main(argc, argv)
      * Output information about the book.
      */
     if (argc == optind)
-	bookdir = DEFAULT_BOOK_DIRECTORY;
+	book_path = DEFAULT_BOOK_DIRECTORY;
     else
-	bookdir = argv[optind];
+	book_path = argv[optind];
 
-    if (output_information(bookdir, multiflag) < 0)
+    if (output_information(book_path, multi_flag) < 0)
 	exit(1);
 
     return 0;
@@ -175,51 +188,68 @@ main(argc, argv)
 
 
 /*
+ * Output an error message to standard error.
+ */
+static void
+output_error_message(error_code)
+    EB_Error_Code error_code;
+{
+    fprintf(stderr, "%s: %s\n", invoked_name, eb_error_message(error_code));
+    fflush(stderr);
+}
+
+
+/*
  * Output information about the book at `path'.
- * If `multiflag' is enabled, multi-search information are also output.
+ * If `multi_flag' is enabled, multi-search information are also output.
  */
 static int
-output_information(path, multiflag)
-    const char *path;
-    int multiflag;
+output_information(book_path, multi_flag)
+    const char *book_path;
+    int multi_flag;
 {
     EB_Book book;
-    EB_Disc_Code disc;
-    EB_Character_Code char_code;
-    EB_Subbook_Code sub_list[EB_MAX_SUBBOOKS];
+    EB_Error_Code error_code;
+    EB_Disc_Code disc_code;
+    EB_Character_Code character_code;
+    EB_Subbook_Code subbook_list[EB_MAX_SUBBOOKS];
     EB_Font_Code font_list[EB_MAX_FONTS];
-    const char *str;
-    int start, end;
-    int sub_count;
+    char title[EB_MAX_TITLE_LENGTH + 1];
+    char directory[EB_MAX_BASE_NAME_LENGTH + 1];
+    int font_start, font_end;
+    int subbook_count;
     int font_count;
     int i, j;
 
     /*
      * Start to use a book.
      */
-    eb_initialize(&book);
-    if (eb_bind(&book, path) < 0)
+    eb_initialize_library();
+    eb_initialize_book(&book);
+    error_code = eb_bind(&book, book_path);
+    if (error_code != EB_SUCCESS)
 	goto failed;
 
     /*
      * Output disc type.
      */
-    disc = eb_disc_type(&book);
-    if (disc < 0)
+    error_code = eb_disc_type(&book, &disc_code);
+    if (error_code != EB_SUCCESS)
 	goto failed;
-    if (disc == EB_DISC_EB)
-	printf("disc type: EB/EBG/EBXA/EBXA-C/S-EBXA\n");
+    printf(_("disc type: "));
+    if (disc_code == EB_DISC_EB)
+	printf("EB/EBG/EBXA/EBXA-C/S-EBXA\n");
     else
-	printf("disc type: EPWING\n");
+	printf("EPWING\n");
 
     /*
      * Output character code.
      */
-    char_code = eb_character_code(&book);
-    if (char_code < 0)
+    error_code = eb_character_code(&book, &character_code);
+    if (error_code != EB_SUCCESS)
 	goto failed;
-    printf("character code: ");
-    switch (char_code) {
+    printf(_("character code: "));
+    switch (character_code) {
     case EB_CHARCODE_ISO8859_1:
 	printf("ISO 8859-1\n");
 	break;
@@ -227,111 +257,142 @@ output_information(path, multiflag)
 	printf("JIS X 0208\n");
 	break;
     case EB_CHARCODE_JISX0208_GB2312:
-	printf("JIS X 0208 and GB 2312\n");
+	printf("JIS X 0208 + GB 2312\n");
 	break;
     default:
-	printf("unknown\n");
+	printf(_("unknown\n"));
 	break;
     }
 
     /*
      * Output the number of subbooks in the book.
      */
-    sub_count = eb_subbook_list(&book, sub_list);
-    if (sub_count < 0)
+    error_code = eb_subbook_list(&book, subbook_list, &subbook_count);
+    if (error_code != EB_SUCCESS)
 	goto failed;
-    printf("the number of subbooks: %d\n\n", sub_count);
+    printf(_("the number of subbooks: %d\n\n"), subbook_count);
 
     /*
      * Output information about each subbook.
      */
-    for (i = 0; i < sub_count; i++) {
-	printf("subbook %d:\n", i + 1);
+    for (i = 0; i < subbook_count; i++) {
+	printf(_("subbook %d:\n"), i + 1);
 
 	/*
 	 * Output a title of the subbook.
 	 */
-	str = eb_subbook_title2(&book, sub_list[i]);
-	if (str == NULL)
-	    goto failed;
-	printf("  title: %s\n", str);
+	error_code = eb_subbook_title2(&book, subbook_list[i], title);
+	if (error_code != EB_SUCCESS)
+	    continue;
+	printf(_("  title: %s\n"), title);
 
 	/*
 	 * Output a directory name of the subbook.
 	 */
-	str = eb_subbook_directory2(&book, sub_list[i]);
-	if (str == NULL)
-	    goto failed;
-	printf("  directory: %s\n", str);
+	error_code = eb_subbook_directory2(&book, subbook_list[i], directory);
+	if (error_code != EB_SUCCESS)
+	    continue;
+	printf(_("  directory: %s\n"), directory);
 
 	/*
 	 * Set the current subbook to `i'.
 	 */
-	if (eb_set_subbook(&book, sub_list[i]) < 0) {
-	    fprintf(stderr, "%s: %s\n\n", invoked_name, eb_error_message());
-	    fflush(stderr);
+	error_code = eb_set_subbook(&book, subbook_list[i]);
+	if (error_code != EB_SUCCESS) {
+	    output_error_message(error_code);
 	    continue;
 	}
 
 	/*
 	 * Output supported methods.
 	 */
-	printf("  search methods: ");
+	printf(_("  search methods: "));
 	if (eb_have_word_search(&book))
-	    fputs("word ", stdout);
+	    fputs(_("word "), stdout);
 	if (eb_have_endword_search(&book))
-	    fputs("endword ", stdout);
+	    fputs(_("endword "), stdout);
 	if (eb_have_keyword_search(&book))
-	    fputs("keyword ", stdout);
+	    fputs(_("keyword "), stdout);
 	if (eb_have_multi_search(&book))
-	    fputs("multi ", stdout);
+	    fputs(_("multi "), stdout);
 	if (eb_have_graphic_search(&book))
-	    fputs("graphic ", stdout);
+	    fputs(_("graphic "), stdout);
 	if (eb_have_menu(&book))
-	    fputs("menu ", stdout);
+	    fputs(_("menu "), stdout);
 	if (eb_have_copyright(&book))
-	    fputs("copyright ", stdout);
+	    fputs(_("copyright "), stdout);
 	fputc('\n', stdout);
 
 	/*
 	 * Output a font list.
 	 */
-	fputs("  font sizes: ", stdout);
-	font_count = eb_font_list(&book, font_list);
-	for (j = 0; j < font_count; j++)
-	    printf("%d ", (int)font_list[j]);
-	fputc('\n', stdout);
+	fputs(_("  font sizes: "), stdout);
+	error_code = eb_font_list(&book, font_list, &font_count);
+	if (error_code != EB_SUCCESS) {
+	    fprintf(stderr, "%s: %s\n\n", invoked_name,
+		eb_error_message(error_code));
+	    fflush(stderr);
+	} else {
+	    for (j = 0; j < font_count; j++)
+		printf("%d ", (int)font_list[j]);
+	    fputc('\n', stdout);
+	}
 
 	/*
-	 * Output characters information about the font.
+	 * Output character range of the narrow font.
 	 */
+        fputs(_("  narrow font characters: "), stdout);
 	if (eb_have_narrow_font(&book)) {
-	    if (eb_set_font(&book, font_list[0]) < 0)
-		goto failed;
-	    start = eb_narrow_font_start(&book);
-	    if (start < 0)
-		goto failed;
-	    end = eb_narrow_font_end(&book);
-	    if (end < 0)
-		goto failed;
-	    printf("  narrow font characters: 0x%04x -- 0x%04x\n", start, end);
-	} else
-	    fputs("  narrow font characters: \n", stdout);
+	    do {
+		error_code = eb_set_font(&book, font_list[0]);
+		if (error_code != EB_SUCCESS) {
+		    output_error_message(error_code);
+		    break;
+		}
+		error_code = eb_narrow_font_start(&book, &font_start);
+		if (error_code != EB_SUCCESS) {
+		    output_error_message(error_code);
+		    break;
+		}
+		error_code = eb_narrow_font_end(&book, &font_end);
+		if (error_code != EB_SUCCESS) {
+		    output_error_message(error_code);
+		    break;
+		}
+		printf("0x%04x -- 0x%04x\n", font_start, font_end);
+	    } while (0);
+	} else {
+	    fputc('\n', stdout);
+	}
 
+	/*
+	 * Output character range of the wide font.
+	 */
+	printf(_("  wide font characters: "));
 	if (eb_have_wide_font(&book)) {
-	    if (eb_set_font(&book, font_list[0]) < 0)
-		goto failed;
-	    start = eb_wide_font_start(&book);
-	    if (start < 0)
-		goto failed;
-	    end = eb_wide_font_end(&book);
-	    if (end < 0)
-		goto failed;
-	    printf("  wide font characters: 0x%04x -- 0x%04x\n", start, end);
-	} else
-	    fputs("  wide font characters: \n", stdout);
+	    do {
+		error_code = eb_set_font(&book, font_list[0]);
+		if (error_code != EB_SUCCESS) {
+		    output_error_message(error_code);
+		    break;
+		}
+		error_code = eb_wide_font_start(&book, &font_start);
+		if (error_code != EB_SUCCESS) {
+		    output_error_message(error_code);
+		    break;
+		}
+		error_code = eb_wide_font_end(&book, &font_end);
+		if (error_code != EB_SUCCESS) {
+		    output_error_message(error_code);
+		    break;
+		}
+		printf("0x%04x -- 0x%04x\n", font_start, font_end);
+	    } while (0);
+	} else {
+	    fputc('\n', stdout);
+	}
 
-	if (multiflag)
+	if (multi_flag)
 	    output_multi_information(&book);
 	fputc('\n', stdout);
     }
@@ -340,7 +401,8 @@ output_information(path, multiflag)
     /*
      * End to use the book.
      */
-    eb_clear(&book);
+    eb_finalize_book(&book);
+    eb_finalize_library();
 
     return 0;
 
@@ -349,13 +411,13 @@ output_information(path, multiflag)
      */
   failed:
     fflush(stdout);
-    fprintf(stderr, "%s: %s\n", invoked_name, eb_error_message());
     fflush(stderr);
-    eb_clear(&book);
+    output_error_message(error_code);
+    eb_finalize_book(&book);
+    eb_finalize_library();
 
     return -1;
 }
-
 
 /*
  * Output information about multi searches.
@@ -364,60 +426,44 @@ static void
 output_multi_information(book)
     EB_Book *book;
 {
+    EB_Error_Code error_code;
     EB_Multi_Search_Code multi_list[EB_MAX_MULTI_SEARCHES];
     EB_Multi_Entry_Code entry_list[EB_MAX_MULTI_ENTRIES];
-    int multi_count, entry_count;
-    const char *label;
+    int multi_count;
+    int entry_count;
+    char entry_label[EB_MAX_MULTI_LABEL_LENGTH + 1];
     int i, j;
 
-    multi_count = eb_multi_search_list(book, multi_list);
+    error_code = eb_multi_search_list(book, multi_list, &multi_count);
+    if (error_code != EB_SUCCESS) {
+	output_error_message(error_code);
+	return;
+    }
     for (i = 0; i < multi_count; i++) {
-	printf("  multi search %d:\n", i + 1);
-	entry_count = eb_multi_entry_list(book, multi_list[i], entry_list);
-
+	printf(_("  multi search %d:\n"), i + 1);
+	error_code = eb_multi_entry_list(book, multi_list[i], entry_list,
+	    &entry_count);
+	if (error_code != EB_SUCCESS) {
+	    output_error_message(error_code);
+	    continue;
+	}
 	for (j = 0; j < entry_count; j++) {
-	    label = eb_multi_entry_label(book, multi_list[i], entry_list[j]);
-	    if (label == NULL) {
-		fprintf(stderr, "%s: %s\n\n", invoked_name,
-		    eb_error_message());
-		fflush(stderr);
+	    error_code = eb_multi_entry_label(book, multi_list[i],
+		entry_list[j], entry_label);
+	    if (error_code != EB_SUCCESS) {
+		output_error_message(error_code);
 		continue;
 	    }
 
-	    printf("    label %d: %s\n", j + 1, label);
-	    fputs("    search methods: ", stdout);
-	    if (eb_multi_entry_have_word_search(book, multi_list[i],
+	    printf(_("    label %d: %s\n"), j + 1, entry_label);
+	    fputs(_("      candidates: "), stdout);
+	    if (eb_multi_entry_have_candidates(book, multi_list[i],
 		entry_list[j]))
-		fputs("word ", stdout);
-	    if (eb_multi_entry_have_endword_search(book, multi_list[i],
-		entry_list[j]))
-		fputs("endword ", stdout);
-	    if (eb_multi_entry_have_keyword_search(book, multi_list[i],
-		entry_list[j]))
-		fputs("keyword ", stdout);
-	    fputc('\n', stdout);
+		fputs(_("exist\n"), stdout);
+	    else 
+		fputs(_("not-exist\n"), stdout);
 	}
     }
-    fflush(stdout);
-}
-
-
-/*
- * Output version number to stdandard out.
- */
-static void
-output_version()
-{
-    printf("%s (EB Library) version %s\n", program_name, program_version);
-    printf("Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara\n\n");
-    printf("This is free software; you can redistribute it and/or modify\n");
-    printf("it under the terms of the GNU General Public License as published by\n");
-    printf("the Free Software Foundation; either version 2, or (at your option)\n");
-    printf("any later version.\n\n");
-    printf("This program is distributed in the hope that it will be useful,\n");
-    printf("but WITHOUT ANY WARRANTY; without even the implied warranty\n");
-    printf("of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n");
-    printf("GNU General Public License for more details.\n");
     fflush(stdout);
 }
 
@@ -428,28 +474,18 @@ output_version()
 static void
 output_help()
 {
-    printf("Usage: %s [option...] [book-directory]\n",
+    printf(_("Usage: %s [option...] [book-directory]\n"),
 	program_name);
-    printf("Options:\n");
-    printf("  -h  --help                 display this help, then exit\n");
-    printf("  -m  --multi-search         also output multi-search information\n");
-    printf("  -v  --version              display version number, then exit\n");
-    printf("\nArgument:\n");
-    printf("  book-directory             top directory of a CD-ROM book\n");
-    printf("                             (default: %s)\n",
+    printf(_("Options:\n"));
+    printf(_("  -h  --help                 display this help, then exit\n"));
+    printf(_("  -m  --multi-search         also output multi-search information\n"));
+    printf(_("  -v  --version              display version number, then exit\n"));
+    printf(_("\nArgument:\n"));
+    printf(_("  book-directory             top directory of a CD-ROM book\n"));
+    printf(_("                             (default: %s)\n"),
 	DEFAULT_BOOK_DIRECTORY);
-    printf("\nReport bugs to %s.\n", MAILING_ADDRESS);
+    printf(_("\nReport bugs to %s.\n"), MAILING_ADDRESS);
     fflush(stdout);
 }
 
-
-/*
- * Output ``try ...'' message to standard error.
- */
-static void
-output_try_help()
-{
-    fprintf(stderr, "try `%s --help' for more information\n", invoked_name);
-    fflush(stderr);
-}
 

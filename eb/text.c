@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 99, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,14 @@
 #include <strings.h>
 #endif /* not STDC_HEADERS and not HAVE_STRING_H */
 
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#ifdef ENABLE_PTHREAD
+#include <pthread.h>
+#endif
+
 #ifndef HAVE_MEMCPY
 #define memcpy(d, s, n) bcopy((s), (d), (n))
 #ifdef __STDC__
@@ -43,8 +51,13 @@ char *memset();
 #endif /* not __STDC__ */
 #endif
 
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
+#ifndef HAVE_MEMMOVE
+#define memmove eb_memmove
+#endif
+
+#ifndef ENABLE_PTHREAD
+#define pthread_mutex_lock(m)
+#define pthread_mutex_unlock(m)
 #endif
 
 #include "eb.h"
@@ -53,776 +66,871 @@ char *memset();
 #include "text.h"
 
 /*
- * Local macros.
- */
-/* method */
-#define CONTENT_TEXT		0
-#define CONTENT_HEADING		1
-#define CONTENT_RAWTEXT		2
-
-/*
- * Unexported variables.
- */
-/* How many times call an eb_read_ function. */
-static int callcount;
-
-/* Book-code of the book in which you want to get content. */
-static EB_Book_Code bookcode = -1;
-
-/* Current subbook-code of the book. */
-static EB_Subbook_Code subcode = -1;
-
-/* Current method; one of CONTENT_*. */
-static int method = -1;
-
-/* Current offset pointer of the START or HONMON file. */
-static off_t location;
-
-/* Cached page. */
-static char pagebuf[EB_SIZE_PAGE];
-
-/* Current pointer to the cached page */
-static char *pagebufp;
-
-/* Rest data size of the cached page. */
-static size_t pagerest;
-
-/* Work buffer passed to hook functions. */
-static char workbuf[EB_MAXLEN_TEXT_WORK + 1];
-
-/* Length of a string in `workbuf'. */
-static size_t worklen;
-
-/* Hook to process the current modifier */
-static const EB_Hook *modhook;
-
-/* Hook to process the current reference */
-static const EB_Hook *refhook;
-
-/* Narrow character region flag. */
-static int narwflag;
-
-/* Whether a printable character is appeared in the current text content. */
-static int charapp;
-
-/* EOF flag of the current subbook. */
-static int bookeof;
-
-/* Whether the current text content ends or not. */
-static int textend;
-
-/* Skip until `skipcoe' appears, if set to 0 or positive integer. */
-static int skipcode;
-
-/* Null hook. */
-static const EB_Hook nullhook = {EB_HOOK_NULL, NULL};
-
-/* default hookset */
-static EB_Hookset default_hookset;
-
-/* Whether `default_hookset' is initialized or not. */
-static int default_hookset_initialized = 0;
-
-/*
  * The maximum number of arguments for an escape sequence.
  */
-#define EB_MAX_ARGV 4
+#define EB_MAX_ARGV 	4
 
 /*
- * Read next page when the length of rest data is less than the value.
+ * Read next when the length of cached data is shorter than this value.
  */
-#define SIZE_FEW_REST		16
+#define SIZE_FEW_REST	16
+
+/*
+ * Special skip-code that represents `no skip-code is set'.
+ */
+#define SKIP_CODE_NONE  -1
+
+/*
+ * Cache data buffer.
+ */
+static char cache_buffer[EB_SIZE_PAGE];
+
+/*
+ * Book code of which `cache_buffer' records data.
+ */
+static EB_Book_Code cache_book_code = EB_BOOK_NONE;
+
+/*
+ * Location of cache data loaded in `cache_buffer'.
+ */
+static off_t cache_location;
+
+/*
+ * Length of cache data loaded in `cache_buffer'.
+ */
+static size_t cache_length;
+
+/*
+ * Null hook.
+ */
+static const EB_Hook null_hook = {EB_HOOK_NULL, NULL};
+
+/*
+ * Mutex for cache variables.
+ */
+#ifdef ENABLE_PTHREAD
+static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 /*
  * Unexported functions.
  */
-static int eb_read_internal EB_P((EB_Book *, EB_Appendix *,
-    const EB_Hookset *, char *, size_t));
-
+static EB_Error_Code eb_read_text_internal EB_P((EB_Book *, EB_Appendix *,
+    const EB_Hookset *, size_t, char *, ssize_t *));
 
 /*
  * Initialize text processing status.
  */
 void
-eb_initialize_text()
+eb_initialize_text(book)
+    EB_Book *book;
 {
-    bookcode = -1;
-    subcode = -1;
-    method = -1;
-    callcount = 0;
-}
+    pthread_mutex_lock(&cache_mutex);
 
+    if (book->code == cache_book_code)
+	cache_book_code = EB_BOOK_NONE;
+    book->text_context.code = EB_TEXT_NONE;
 
-/*
- * Initialize a hookset.
- */
-void
-eb_initialize_hookset(hookset)
-    EB_Hookset *hookset;
-{
-    int i;
-
-    for (i = 0; i < EB_NUM_HOOKS; i++) {
-	hookset->hooks[i].code = i;
-	hookset->hooks[i].function = NULL;
-    }
-    hookset->hooks[EB_HOOK_STOPCODE].function = eb_hook_stopcode;
-    hookset->hooks[EB_HOOK_NARROW_JISX0208].function = eb_hook_euc_to_ascii;
-    hookset->hooks[EB_HOOK_NARROW_FONT].function
-	= eb_hook_narrow_character_text;
-    hookset->hooks[EB_HOOK_WIDE_FONT].function
-	= eb_hook_wide_character_text;
-}
-
-
-/*
- * Set a hook.
- */
-int
-eb_set_hook(hookset, hook)
-    EB_Hookset *hookset;
-    const EB_Hook *hook;
-{
-    if (hook->code < 0 || EB_NUM_HOOKS <= hook->code) {
-	eb_error = EB_ERR_NO_SUCH_HOOK;
-	return -1;
-    }
-
-    if (hook->code != EB_HOOK_NULL)
-	hookset->hooks[hook->code].function = hook->function;
-
-    return 0;
-}
-
-
-/*
- * Set a list of hooks.
- */
-int
-eb_set_hooks(hookset, hook)
-    EB_Hookset *hookset;
-    const EB_Hook *hook;
-{
-    const EB_Hook *hk;
-    int i;
-
-    for (i = 0, hk = hook;
-	 i < EB_NUM_HOOKS && hk->code != EB_HOOK_NULL; i++, hk++) {
-	if (hook->code < 0 || EB_NUM_HOOKS <= hook->code) {
-	    eb_error = EB_ERR_NO_SUCH_HOOK;
-	    return -1;
-	}
-	hookset->hooks[hk->code].function = hk->function;
-    }
-
-    return 0;
+    pthread_mutex_unlock(&cache_mutex);
 }
 
 
 /*
  * Reposition the offset of the subbook file.
  */
-int
-eb_seek(book, position)
+EB_Error_Code
+eb_seek_text(book, position)
     EB_Book *book;
     const EB_Position *position;
 {
+    EB_Error_Code error_code;
+
+    /*
+     * Lock cache data and the book.
+     */
+    pthread_mutex_lock(&cache_mutex);
+    eb_lock(&book->lock);
+
     /*
      * Current subbook must have been set and START file must be exist.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
-    if (book->sub_current->sub_file < 0) {
-	eb_error = EB_ERR_NO_START;
-	return -1;
+    if (book->subbook_current->text_file < 0) {
+	error_code = EB_ERR_NO_TEXT;
+	goto failed;
     }
 
     /*
-     * Initialize static variables.
+     * Initialize text-context variables.
      */
-    callcount = 0;
-    bookcode = book->code;
-    subcode = book->sub_current->code;
-    location = (position->page - 1) * EB_SIZE_PAGE + position->offset;
-    pagebufp = pagebuf;
-    pagerest = 0;
-    worklen = 0;
-    modhook = &nullhook;
-    refhook = &nullhook;
-    narwflag = 0;
-    charapp = 0;
-    bookeof = 0;
-    textend = 0;
-    skipcode = -1;
+    book->text_context.location = (position->page - 1) * EB_SIZE_PAGE
+	+ position->offset;
+    book->text_context.code = EB_TEXT_NONE;
+    book->text_context.work_length = 0;
+    book->text_context.work_step = 0;
+    book->text_context.narrow_flag = 0;
+    book->text_context.printable_count = 0;
+    book->text_context.file_end_flag = 0;
+    book->text_context.text_end_flag = 0;
+    book->text_context.skip_code = SKIP_CODE_NONE;
+    book->text_context.auto_stop_code = -1;
 
-    return 0;
+    /*
+     * Unlock cache data and the book.
+     */
+    eb_unlock(&book->lock);
+    pthread_mutex_unlock(&cache_mutex);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&book->lock);
+    pthread_mutex_unlock(&cache_mutex);
+    return error_code;
+}
+
+
+/*
+ * Get the current text position of the subbook file.
+ */
+EB_Error_Code
+eb_tell_text(book, position)
+    EB_Book *book;
+    EB_Position *position;
+{
+    EB_Error_Code error_code;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
+    /*
+     * Current subbook must have been set and START file must be exist.
+     */
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
+    }
+    if (book->subbook_current->text_file < 0) {
+	error_code = EB_ERR_NO_TEXT;
+	goto failed;
+    }
+
+    position->page = book->text_context.location / EB_SIZE_PAGE + 1;
+    position->offset = book->text_context.location % EB_SIZE_PAGE;
+
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
  * Get text in the current subbook in `book'.
  */
-int
-eb_text(book, appendix, hookset, text, textsize)
+EB_Error_Code
+eb_read_text(book, appendix, hookset, text_max_length, text, text_length)
     EB_Book *book;
     EB_Appendix *appendix;
     const EB_Hookset *hookset;
+    size_t text_max_length;
     char *text;
-    size_t textsize;
+    ssize_t *text_length;
 {
-    EB_Subbook *sub = book->sub_current;
+    EB_Error_Code error_code;
     const EB_Hook *hook;
+
+    /*
+     * Lock the book, appendix and hookset.
+     */
+    eb_lock(&book->lock);
+    if (appendix != NULL)
+	eb_lock(&appendix->lock);
+    if (hookset != NULL)
+	eb_lock(&hookset->lock);
 
     /*
      * Current subbook must have been set and START file must be exist.
      */
-    if (sub == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
-    if (sub->sub_file < 0) {
-	eb_error = EB_ERR_NO_START;
-	return -1;
+    if (book->subbook_current->text_file < 0) {
+	error_code = EB_ERR_NO_TEXT;
+	goto failed;
     }
 
     /*
-     * Use `default_hookset' when `hookset' is `NULL'.
+     * Use `eb_default_hookset' when `hookset' is `NULL'.
      */
-    if (hookset == NULL) {
-	if (!default_hookset_initialized) {
-	    eb_initialize_hookset(&default_hookset);
-	    default_hookset_initialized = 1;
-	}
-	hookset = &default_hookset;
-    }
+    if (hookset == NULL)
+	hookset = &eb_default_hookset;
 
-    if (0 < callcount) {
-	if (bookcode == -1) {
-	    eb_error = EB_ERR_NO_PREV_CONTENT;
-	    return -1;
+    /*
+     * Set text mode to `text'.
+     */
+    if (book->text_context.code != EB_TEXT_NONE) {
+	if (book->text_context.code != EB_TEXT_TEXT) {
+	    error_code = EB_ERR_DIFF_CONTENT;
+	    goto failed;
 	}
-	if (bookcode != book->code) {
-	    eb_error = EB_ERR_DIFF_BOOK;
-	    return -1;
-	}
-	if (subcode != sub->code) {
-	    eb_error = EB_ERR_DIFF_SUBBOOK;
-	    return -1;
-	}
-	if (method != CONTENT_TEXT) {
-	    eb_error = EB_ERR_DIFF_CONTENT;
-	    return -1;
-	}
-	if (textend)
-	    return 0;
     } else {
-	method = CONTENT_TEXT;
+	book->text_context.code = EB_TEXT_TEXT;
 
 	/*
 	 * Call the function bound to `EB_HOOK_INITIALIZE'.
 	 */
 	hook = hookset->hooks + EB_HOOK_INITIALIZE;
-	if (hook->function != NULL && hook->function(book, appendix, NULL,
-	    EB_HOOK_INITIALIZE, 0, NULL) < 0) {
-	    eb_error = EB_ERR_HOOK_WORKSPACE;
-	    return -1;
+	if (hook->function != NULL
+	    && hook->function(book, appendix, NULL, EB_HOOK_INITIALIZE, 0,
+		NULL) < 0) {
+	    error_code = EB_ERR_HOOK_WORKSPACE;
+	    goto failed;
 	}
     }
 
-    callcount++;
-    return eb_read_internal(book, appendix, hookset, text, textsize);
+    error_code = eb_read_text_internal(book, appendix, hookset,
+	text_max_length, text, text_length);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+
+    /*
+     * Unlock the book, appendix and hookset.
+     */
+    if (hookset != &eb_default_hookset)
+	eb_unlock(&hookset->lock);
+    if (appendix != NULL)
+	eb_unlock(&appendix->lock);
+    eb_unlock(&book->lock);
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *text = '\0';
+    *text_length = -1;
+    book->text_context.code = EB_TEXT_INVALID;
+    if (hookset != &eb_default_hookset)
+	eb_unlock(&hookset->lock);
+    if (appendix != NULL)
+	eb_unlock(&appendix->lock);
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
  * Get text in the current subbook in `book'.
  */
-int
-eb_heading(book, appendix, hookset, text, textsize)
+EB_Error_Code
+eb_read_heading(book, appendix, hookset, text_max_length, text, text_length)
     EB_Book *book;
     EB_Appendix *appendix;
     const EB_Hookset *hookset;
+    size_t text_max_length;
     char *text;
-    size_t textsize;
+    ssize_t *text_length;
 {
-    EB_Subbook *sub = book->sub_current;
+    EB_Error_Code error_code;
     const EB_Hook *hook;
+
+    /*
+     * Lock the book, appendix and hookset.
+     */
+    eb_lock(&book->lock);
+    if (appendix != NULL)
+	eb_lock(&appendix->lock);
+    if (hookset != NULL)
+	eb_lock(&hookset->lock);
 
     /*
      * Current subbook must have been set and START file must be exist.
      */
-    if (sub == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
-    if (sub->sub_file < 0) {
-	eb_error = EB_ERR_NO_START;
-	return -1;
+    if (book->subbook_current->text_file < 0) {
+	error_code = EB_ERR_NO_TEXT;
+	goto failed;
     }
 
     /*
-     * Use `default_hookset' when `hookset' is `NULL'.
+     * Use `eb_default_hookset' when `hookset' is `NULL'.
      */
-    if (hookset == NULL) {
-	if (!default_hookset_initialized) {
-	    eb_initialize_hookset(&default_hookset);
-	    default_hookset_initialized = 1;
-	}
-	hookset = &default_hookset;
-    }
+    if (hookset == NULL)
+	hookset = &eb_default_hookset;
 
-    if (0 < callcount) {
-	if (bookcode == -1) {
-	    eb_error = EB_ERR_NO_PREV_CONTENT;
-	    return -1;
+    /*
+     * Set text mode to `heading'.
+     */
+    if (book->text_context.code != EB_TEXT_NONE) {
+	if (book->text_context.code != EB_TEXT_HEADING) {
+	    error_code = EB_ERR_DIFF_CONTENT;
+	    goto failed;
 	}
-	if (bookcode != book->code) {
-	    eb_error = EB_ERR_DIFF_BOOK;
-	    return -1;
-	}
-	if (subcode != sub->code) {
-	    eb_error = EB_ERR_DIFF_SUBBOOK;
-	    return -1;
-	}
-	if (method != CONTENT_HEADING) {
-	    eb_error = EB_ERR_DIFF_CONTENT;
-	    return -1;
-	}
-	if (textend)
-	    return 0;
     } else {
-	method = CONTENT_HEADING;
+	book->text_context.code = EB_TEXT_HEADING;
 
 	/*
 	 * Call the function bound to `EB_HOOK_INITIALIZE'.
 	 */
 	hook = hookset->hooks + EB_HOOK_INITIALIZE;
-	if (hook->function != NULL && hook->function(book, appendix, NULL,
-	    EB_HOOK_INITIALIZE, 0, NULL) < 0) {
-	    eb_error = EB_ERR_HOOK_WORKSPACE;
-	    return -1;
+	if (hook->function != NULL
+	    && hook->function(book, appendix, NULL, EB_HOOK_INITIALIZE, 0,
+		NULL) < 0) {
+	    error_code = EB_ERR_HOOK_WORKSPACE;
+	    goto failed;
 	}
     }
 
-    callcount++;
-    return eb_read_internal(book, appendix, hookset, text, textsize);
+    error_code = eb_read_text_internal(book, appendix, hookset,
+	text_max_length, text, text_length);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+
+    /*
+     * Unlock the book, appendix and hookset.
+     */
+    if (hookset != &eb_default_hookset)
+	eb_unlock(&hookset->lock);
+    if (appendix != NULL)
+	eb_unlock(&appendix->lock);
+    eb_unlock(&book->lock);
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *text = '\0';
+    *text_length = -1;
+    book->text_context.code = EB_TEXT_INVALID;
+    if (hookset != &eb_default_hookset)
+	eb_unlock(&hookset->lock);
+    if (appendix != NULL)
+	eb_unlock(&appendix->lock);
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
  * Read data from the subbook file directly.
  */
-ssize_t
-eb_rawtext(book, buffer, length)
+EB_Error_Code
+eb_read_rawtext(book, text_max_length, text, text_length)
     EB_Book *book;
-    char *buffer;
-    size_t length;
+    size_t text_max_length;
+    char *text;
+    ssize_t *text_length;
 {
-    ssize_t ssize;
+    EB_Error_Code error_code;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
 
     /*
      * Current subbook must have been set and START file must be exist.
      */
-    if (book->sub_current == NULL) {
-	eb_error = EB_ERR_NO_CUR_SUB;
-	return -1;
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
     }
-    if (book->sub_current->sub_file < 0) {
-	eb_error = EB_ERR_NO_START;
-	return -1;
+    if (book->subbook_current->text_file < 0) {
+	error_code = EB_ERR_NO_TEXT;
+	goto failed;
     }
 
-    if (0 < callcount) {
-	if (bookcode == -1) {
-	    eb_error = EB_ERR_NO_PREV_CONTENT;
-	    return -1;
+    /*
+     * Set text mode to `rawtext'.
+     */
+    if (book->text_context.code != EB_TEXT_NONE) {
+	if (book->text_context.code != EB_TEXT_RAWTEXT) {
+	    error_code = EB_ERR_DIFF_CONTENT;
+	    goto failed;
 	}
-	if (bookcode != book->code) {
-	    eb_error = EB_ERR_DIFF_BOOK;
-	    return -1;
-	}
-	if (subcode != book->sub_current->code) {
-	    eb_error = EB_ERR_DIFF_SUBBOOK;
-	    return -1;
-	}
-	if (method != CONTENT_RAWTEXT) {
-	    eb_error = EB_ERR_DIFF_CONTENT;
-	    return -1;
-	}
-    } else
-	method = CONTENT_RAWTEXT;
-
-    callcount++;
+    } else {
+	book->text_context.code = EB_TEXT_RAWTEXT;
+    }
 
     /*
      * Seek START file and read data.
      */
-    if (eb_zlseek(&(book->sub_current->zip), 
-	book->sub_current->sub_file, location, SEEK_SET) == -1) {
-	eb_error = EB_ERR_FAIL_SEEK_START;
-	return -1;
+    if (eb_zlseek(&(book->subbook_current->zip), 
+	book->subbook_current->text_file, book->text_context.location,
+	SEEK_SET) == -1) {
+	error_code = EB_ERR_FAIL_SEEK_TEXT;
+	goto failed;
     }
-    ssize = eb_zread(&(book->sub_current->zip)
-	, book->sub_current->sub_file, buffer, length);
-    if (ssize != length)
-	eb_error = EB_ERR_FAIL_SEEK_START;
+    *text_length = eb_zread(&(book->subbook_current->zip),
+	book->subbook_current->text_file, text, text_max_length);
+    book->text_context.location += *text_length;
+    if (*text_length < 0) {
+	error_code = EB_ERR_FAIL_READ_TEXT;
+	goto failed;
+    }
 
-    return ssize;
+    /*
+     * Unlock the book.
+     */
+    eb_unlock(&book->lock);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *text_length = -1;
+    book->text_context.code = EB_TEXT_INVALID;
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 
 /*
  * Get text or heading.
  */
-static int
-eb_read_internal(book, appendix, hookset, text, textsize)
+static EB_Error_Code
+eb_read_text_internal(book, appendix, hookset, text_max_length, text,
+    text_length)
     EB_Book *book;
     EB_Appendix *appendix;
     const EB_Hookset *hookset;
+    size_t text_max_length;
     char *text;
-    size_t textsize;
+    ssize_t *text_length;
 {
-    char *textp = text;
+    EB_Error_Code error_code;
+    char *text_p = text;
     unsigned char c;
-    size_t textrest = textsize;
+    size_t text_rest_length = text_max_length;
+    char *cache_p;
     const EB_Hook *hook;
-    int step;
+    size_t cache_rest_length;
     int argv[EB_MAX_ARGV];
     int argc;
 
     /*
-     * If unprocessed data are rest in `workbuf', copy them to `textp'.
+     * Lock cache data.
      */
-    if (0 < worklen) {
-	if (textrest < worklen) {
-	    *textp = '\0';
-	    return 0;
-	}
-	strcpy(textp, workbuf);
-	textp += worklen;
-	textrest -= worklen;
-	worklen = 0;
+    pthread_mutex_lock(&cache_mutex);
+
+    /*
+     * If unprocessed data are rest in `book->text_context.work_buffer',
+     * copy them to `cache_p'.
+     */
+    if (0 < book->text_context.work_length) {
+	if (text_rest_length < book->text_context.work_length)
+	    goto succeeded;
+	strcpy(text_p, book->text_context.work_buffer);
+
+	cache_p += book->text_context.work_step;
+	cache_rest_length -= book->text_context.work_step;
+	book->text_context.location += book->text_context.work_step;
+
+	text_p += book->text_context.work_length;
+	text_rest_length -= book->text_context.work_length;
+
+	book->text_context.work_length = 0;
+	book->text_context.work_step = 0;
+    }
+
+    /*
+     * Do nothing if the text-end flag has been set.
+     */
+    if (book->text_context.text_end_flag)
+	goto succeeded;
+
+    /*
+     * Check for cache data.
+     * If cache data is not what we need, discard it.
+     */
+    if (book->code == cache_book_code
+	&& cache_location <= book->text_context.location
+	&& book->text_context.location < cache_location + cache_length) {
+	cache_p = cache_buffer
+	    + (book->text_context.location - cache_location);
+	cache_rest_length = cache_length
+	    - (book->text_context.location - cache_location);
+    } else {
+	cache_book_code = EB_BOOK_NONE;
+	cache_p = cache_buffer;
+	cache_length = 0;
+	cache_rest_length = 0;
     }
 
     for (;;) {
-	step = 0;
-	*workbuf = '\0';
+	book->text_context.work_step = 0;
+	*book->text_context.work_buffer = '\0';
 	argc = 1;
 
 	/*
-	 * If reached to the near of buffer's end, read next page.
+	 * If it reaches to the near of the end of the cache buffer,
+	 * then moves remaind cache text to the beginning of the cache
+	 * buffer, and reads next from a file.
 	 */
-	if (pagerest < SIZE_FEW_REST && !bookeof) {
-	    ssize_t len;
+	if (cache_rest_length < SIZE_FEW_REST
+	    && !book->text_context.file_end_flag) {
+	    ssize_t read_result;
 
-	    memcpy(pagebuf, pagebufp, pagerest);
-	    if (eb_zlseek(&(book->sub_current->zip), 
-		book->sub_current->sub_file, location, SEEK_SET) == -1) {
-		eb_error = EB_ERR_FAIL_SEEK_START;
-		return -1;
+	    if (0 < cache_rest_length)
+		memmove(cache_buffer, cache_p, cache_rest_length);
+	    if (eb_zlseek(&(book->subbook_current->zip), 
+		book->subbook_current->text_file, book->text_context.location,
+		SEEK_SET) == -1) {
+		error_code = EB_ERR_FAIL_SEEK_TEXT;
+		goto failed;
 	    }
-	    len = eb_zread(&(book->sub_current->zip), 
-		book->sub_current->sub_file, pagebuf + pagerest,
-		EB_SIZE_PAGE - pagerest);
-	    if (len < 0) {
-		eb_error = EB_ERR_FAIL_READ_START;
-		return -1;
-	    } else if (len != EB_SIZE_PAGE - pagerest)
-		bookeof = 1;
-	    location += len;
-	    pagebufp = pagebuf;
-	    pagerest += len;
+
+	    read_result = eb_zread(&(book->subbook_current->zip), 
+		book->subbook_current->text_file,
+		cache_buffer + cache_rest_length,
+		EB_SIZE_PAGE - cache_rest_length);
+	    if (read_result < 0) {
+		error_code = EB_ERR_FAIL_READ_TEXT;
+		goto failed;
+	    } else if (read_result != EB_SIZE_PAGE - cache_rest_length)
+		book->text_context.file_end_flag = 1;
+
+	    cache_book_code = book->code;
+	    cache_location = book->text_context.location - cache_rest_length;
+	    cache_length = cache_rest_length + read_result;
+	    cache_p = cache_buffer;
+	    cache_rest_length = cache_length;
 	}
 
 	/*
 	 * Get 1 byte from the buffer.
 	 */
-	if (pagerest < 1) {
-	    eb_error = EB_ERR_UNEXP_START;
-	    return -1;
+	if (cache_rest_length < 1) {
+	    error_code = EB_ERR_UNEXP_TEXT;
+	    goto failed;
 	}
-	c = eb_uint1(pagebufp);
+	c = eb_uint1(cache_p);
 
 	if (c == 0x1f) {
-	    const EB_Hook *ctlhook = &nullhook;
-
-	    if (pagerest < 2) {
-		eb_error = EB_ERR_UNEXP_START;
-		return -1;
-	    }
-	    step = 2;
-	    argv[0] = eb_uint2(pagebufp);
+	    hook = &null_hook;
 
 	    /*
-	     * Is is an escape sequences.
+	     * This is escape sequences.
 	     */
-	    switch (eb_uint1(pagebufp + 1)) {
+	    if (cache_rest_length < 2) {
+		error_code = EB_ERR_UNEXP_TEXT;
+		goto failed;
+	    }
+	    argv[0] = eb_uint2(cache_p);
+
+	    switch (eb_uint1(cache_p + 1)) {
 	    case 0x02:
 		/* beginning of text */
+		book->text_context.work_step = 2;
 		break;
 
 	    case 0x03:
-		/* end of text */
-		goto at_end;
+		/* end of text (don't set `work_step') */
+		book->text_context.text_end_flag = 1;
+		goto succeeded;
 
 	    case 0x04:
 		/* beginning of NARROW */
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_NARROW;
-		narwflag = 1;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_NARROW;
+		book->text_context.narrow_flag = 1;
 		break;
 
 	    case 0x05:
 		/* end of NARROW */
-		ctlhook = hookset->hooks + EB_HOOK_END_NARROW;
-		narwflag = 0;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_END_NARROW;
+		book->text_context.narrow_flag = 0;
 		break;
 
 	    case 0x06:
 		/* beginning of subscript */
-		modhook = hookset->hooks + EB_HOOK_SUBSCRIPT;
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_SUBSCRIPT;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_SUBSCRIPT;
 		break;
 
 	    case 0x07:
 		/* end of subscript */
-		modhook = &nullhook;
-		ctlhook = hookset->hooks + EB_HOOK_END_SUBSCRIPT;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_END_SUBSCRIPT;
 		break;
 
 	    case 0x09:
 		/* set indent */
-		if (pagerest < step + 2) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 4;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		ctlhook = hookset->hooks + EB_HOOK_SET_INDENT;
-		step += 2;
+		hook = hookset->hooks + EB_HOOK_STOP_CODE;
 		argc = 2;
-		argv[1] = eb_uint2(pagebufp + 2);
+		argv[1] = eb_uint2(cache_p + 2);
+		if (0 < book->text_context.printable_count
+		    && book->text_context.code == EB_TEXT_TEXT
+		    && hook->function != NULL
+		    && hook->function(book, appendix,
+			book->text_context.work_buffer, EB_HOOK_STOP_CODE,
+			argc, argv) < 0) {
+		    book->text_context.text_end_flag = 1;
+		    goto succeeded;
+		}
 
-		hook = hookset->hooks + EB_HOOK_STOPCODE;
-		if (charapp && method == CONTENT_TEXT && hook->function != NULL
-		    && hook->function(book, appendix, workbuf,
-			EB_HOOK_STOPCODE, argc, argv) < 0)
-		    goto at_end;
+		*(book->text_context.work_buffer) = '\0';
+		hook = hookset->hooks + EB_HOOK_SET_INDENT;
+		argc = 2;
+		argv[1] = eb_uint2(cache_p + 2);
 		break;
 
 	    case 0x0a:
 		/* newline */
-		if (method == CONTENT_HEADING) {
-		    textend = 1;
-		    goto at_end;
+		book->text_context.work_step = 2;
+		if (book->text_context.code == EB_TEXT_HEADING) {
+		    book->text_context.text_end_flag = 1;
+		    book->text_context.location
+			+= book->text_context.work_step;
+		    goto succeeded;
 		}
-		if (skipcode < 0) {
-		    *workbuf = '\n';
-		    *(workbuf + 1) = '\0';
+		if (book->text_context.skip_code == SKIP_CODE_NONE) {
+		    *book->text_context.work_buffer = '\n';
+		    *(book->text_context.work_buffer + 1) = '\0';
 		}
-		ctlhook = hookset->hooks + EB_HOOK_NEWLINE;
+		hook = hookset->hooks + EB_HOOK_NEWLINE;
 		break;
 
 	    case 0x0e:
 		/* beginning of superscript */
-		modhook = hookset->hooks + EB_HOOK_SUPERSCRIPT;
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_SUPERSCRIPT;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_SUPERSCRIPT;
 		break;
 
 	    case 0x0f:
 		/* end of superscript */
-		modhook = &nullhook;
-		ctlhook = hookset->hooks + EB_HOOK_END_SUPERSCRIPT;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_END_SUPERSCRIPT;
 		break;
 
 	    case 0x10:
 		/* beginning of newline prohibition */
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_NO_NEWLINE;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_NO_NEWLINE;
 		break;
 
 	    case 0x11:
 		/* end of newline prohibition */
-		ctlhook = hookset->hooks + EB_HOOK_END_NO_NEWLINE;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_END_NO_NEWLINE;
 		break;
 
 	    case 0x12:
 		/* beginning of emphasis */
-		modhook = hookset->hooks + EB_HOOK_EMPHASIS;
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_EMPHASIS;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_EMPHASIS;
 		break;
 
 	    case 0x13:
 		/* end of emphasis */
-		modhook = &nullhook;
-		ctlhook = hookset->hooks + EB_HOOK_END_EMPHASIS;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_END_EMPHASIS;
 		break;
 
 	    case 0x1a: case 0x1b: case 0x1c: case 0x1d: case 0x1e: case 0x1f:
 	    case 0xe0:
 		/* emphasis; described in JIS X 4081-1996 */
-		if (pagerest < step + 2) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 4;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
 		/* Some old EB books don't take an argument. */
-		if (book->disc_code == EB_DISC_EPWING
-		    || eb_uint1(pagebufp + 2) < 0x1f)
-		    step += 2;
+		if (book->disc_code != EB_DISC_EPWING
+		    && eb_uint1(cache_p + 2) >= 0x1f)
+		    book->text_context.work_step = 2;
 		break;
 
 	    case 0x32:
 		/* beginning of an anchor of the picture */
-		modhook = hookset->hooks + EB_HOOK_PICTURE;
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_PICTURE;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_PICTURE;
 		break;
 
 	    case 0x33:
 		/* beginning of an anchor of the sound */
-		refhook = hookset->hooks + EB_HOOK_SOUND;
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_PICTURE;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_PICTURE;
 		break;
 
 	    case 0x35: case 0x36: case 0x37: case 0x38: case 0x39: case 0x3a:
 	    case 0x3b: case 0x3c: case 0x3d: case 0x3e: case 0x3f:
-		skipcode = eb_uint1(pagebufp + 1) + 0x20;
+		book->text_context.work_step = 2;
+		book->text_context.skip_code = eb_uint1(cache_p + 1) + 0x20;
 		break;
 
 	    case 0x41:
 		/* beginning of the keyword */
-		if (pagerest < step + 2) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 4;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		refhook = hookset->hooks + EB_HOOK_KEYWORD;
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_KEYWORD;
-		step += 2;
+		hook = hookset->hooks + EB_HOOK_STOP_CODE;
 		argc = 2;
-		argv[1] = eb_uint2(pagebufp + 2);
+		argv[1] = eb_uint2(cache_p + 2);
+		if (0 < book->text_context.printable_count
+		    && book->text_context.code == EB_TEXT_TEXT
+		    && hook->function != NULL
+		    && hook->function(book, appendix,
+			book->text_context.work_buffer, EB_HOOK_STOP_CODE,
+			argc, argv) < 0) {
+		    book->text_context.text_end_flag = 1;
+		    goto succeeded;
+		}
+		if (book->text_context.auto_stop_code < 0)
+		    book->text_context.auto_stop_code = eb_uint2(cache_p + 2);
 
-		hook = hookset->hooks + EB_HOOK_STOPCODE;
-		if (charapp && method == CONTENT_TEXT && hook->function != NULL
-		    && hook->function(book, appendix, workbuf,
-			EB_HOOK_STOPCODE, argc, argv) < 0)
-		    goto at_end;
+		*(book->text_context.work_buffer) = '\0';
+		hook = hookset->hooks + EB_HOOK_BEGIN_KEYWORD;
+		argc = 2;
+		argv[1] = eb_uint2(cache_p + 2);
 		break;
 
 	    case 0x42:
 		/* beginning of the reference */
-		if (pagerest < step + 2) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 4;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		if (eb_uint1(pagebufp + 2) == 0x00)
-		    step += 2;
-		refhook = hookset->hooks + EB_HOOK_REFERENCE;
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_REFERENCE;
+		if (eb_uint1(cache_p + 2) != 0x00)
+		    book->text_context.work_step -= 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_REFERENCE;
 		break;
 
 	    case 0x43:
 		/* beginning of an entry of the menu */
-		refhook = hookset->hooks + EB_HOOK_MENU;
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_MENU;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_MENU;
 		break;
 
 	    case 0x44:
 		/* beginning of an anchor of the picture (old style?) */
-		if (pagerest < step + 10) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 12;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		modhook = hookset->hooks + EB_HOOK_PICTURE;
-		ctlhook = hookset->hooks + EB_HOOK_BEGIN_PICTURE;
-		step += 10;
+		hook = hookset->hooks + EB_HOOK_BEGIN_PICTURE;
 		break;
 
 	    case 0x45:
 		/* prefix of sound or picuture */
-		if (pagerest < step + 2) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 4;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		if (eb_uint1(pagebufp + 2) != 0x1f) {
+		if (eb_uint1(cache_p + 2) != 0x1f) {
 		    argc = 2;
-		    argv[1] = eb_bcd4(pagebufp + 2);
-		    step += 2;
+		    argv[1] = eb_bcd4(cache_p + 2);
 		}
 		break;
 
 	    case 0x49: case 0x4a: case 0x4b: case 0x4c: case 0x4d: case 0x4e:
 	    case 0x4f:
-		skipcode = eb_uint1(pagebufp + 1) + 0x20;
+		book->text_context.work_step = 2;
+		book->text_context.skip_code = eb_uint1(cache_p + 1) + 0x20;
 		break;
 
 	    case 0x52:
 		/* end of the picture */
-		if (pagerest < step + 6) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 8;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		refhook = &nullhook;
-		ctlhook = hookset->hooks + EB_HOOK_END_PICTURE;
-		step += 6;
+		hook = hookset->hooks + EB_HOOK_END_PICTURE;
 		argc = 3;
-		argv[1] = eb_bcd4(pagebufp + 2);
-		argv[2] = eb_bcd2(pagebufp + 6);
+		argv[1] = eb_bcd4(cache_p + 2);
+		argv[2] = eb_bcd2(cache_p + 6);
 		break;
 
 	    case 0x53:
 		/* end of the sound */
-		if (pagerest < step + 8) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 10;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		refhook = &nullhook;
-		ctlhook = hookset->hooks + EB_HOOK_END_SOUND;
-		step += 8;
+		hook = hookset->hooks + EB_HOOK_END_SOUND;
 		break;
 
 	    case 0x61:
 		/* end of the keyword */
-		refhook = &nullhook;
-		ctlhook = hookset->hooks + EB_HOOK_END_KEYWORD;
+		book->text_context.work_step = 2;
+		hook = hookset->hooks + EB_HOOK_END_KEYWORD;
 		break;
 
 	    case 0x62:
 		/* end of the reference */
-		if (pagerest < step + 6) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 8;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		refhook = &nullhook;
-		ctlhook = hookset->hooks + EB_HOOK_END_REFERENCE;
-		step += 6;
+		hook = hookset->hooks + EB_HOOK_END_REFERENCE;
 		argc = 3;
-		argv[1] = eb_bcd4(pagebufp + 2);
-		argv[2] = eb_bcd2(pagebufp + 6);
+		argv[1] = eb_bcd4(cache_p + 2);
+		argv[2] = eb_bcd2(cache_p + 6);
 		break;
 
 	    case 0x63:
 		/* end of an entry of the menu */
-		if (pagerest < step + 6) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 8;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		refhook = &nullhook;
-		ctlhook = hookset->hooks + EB_HOOK_END_MENU;
-		step += 6;
+		hook = hookset->hooks + EB_HOOK_END_MENU;
 		argc = 3;
-		argv[1] = eb_bcd4(pagebufp + 2);
-		argv[2] = eb_bcd2(pagebufp + 6);
+		argv[1] = eb_bcd4(cache_p + 2);
+		argv[2] = eb_bcd2(cache_p + 6);
 		break;
 
 	    case 0x64:
 		/* end of the picture (old style?) */
-		if (pagerest < step + 6) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		book->text_context.work_step = 8;
+		if (cache_rest_length < book->text_context.work_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
-		refhook = &nullhook;
-		ctlhook = hookset->hooks + EB_HOOK_END_PICTURE;
-		step += 6;
+		hook = hookset->hooks + EB_HOOK_END_PICTURE;
 		argc = 3;
-		argv[1] = eb_bcd4(pagebufp + 2);
-		argv[2] = eb_bcd2(pagebufp + 6);
+		argv[1] = eb_bcd4(cache_p + 2);
+		argv[2] = eb_bcd2(cache_p + 6);
 		break;
 
 	    case 0x70: case 0x71: case 0x72: case 0x73: case 0x74: case 0x75:
@@ -831,205 +939,404 @@ eb_read_internal(book, appendix, hookset, text, textsize)
 	    case 0x80: case 0x81: case 0x82: case 0x83: case 0x84: case 0x85:
 	    case 0x86: case 0x87: case 0x88: case 0x89: case 0x8a: case 0x8b:
 	    case 0x8c: case 0x8d: case 0x8e: case 0x8f:
-		skipcode = eb_uint1(pagebufp + 1) + 0x20;
+		book->text_context.work_step = 2;
+		book->text_context.skip_code = eb_uint1(cache_p + 1) + 0x20;
 		break;
 
 	    case 0xe1:
+		book->text_context.work_step = 2;
 		break;
 
 	    case 0xe4: case 0xe6: case 0xe8: case 0xea: case 0xec: case 0xee:
 	    case 0xf0: case 0xf2: case 0xf4: case 0xf6: case 0xf8: case 0xfa:
 	    case 0xfc: case 0xfe:
-		skipcode = eb_uint1(pagebufp + 1) + 0x01;
+		book->text_context.work_step = 2;
+		book->text_context.skip_code = eb_uint1(cache_p + 1) + 0x01;
 		break;
 
 	    default:
-		if (skipcode == eb_uint1(pagebufp + 1))
-		    skipcode = -1;
+		book->text_context.work_step = 2;
+		if (book->text_context.skip_code == eb_uint1(cache_p + 1))
+		    book->text_context.skip_code = SKIP_CODE_NONE;
 		break;
 	    }
 
-	    if (skipcode < 0 && ctlhook->function != NULL
-		&& ctlhook->function(book, appendix, workbuf, ctlhook->code,
-		    argc, argv) < 0) {
-		eb_error = EB_ERR_HOOK_WORKSPACE;
-		return -1;
+	    if (book->text_context.skip_code == SKIP_CODE_NONE
+		&& hook->function != NULL
+		&& hook->function(book, appendix,
+		    book->text_context.work_buffer, hook->code, argc, argv)
+		< 0) {
+		error_code = EB_ERR_HOOK_WORKSPACE;
+		goto failed;
 	    }
-	} else if (book->char_code == EB_CHARCODE_ISO8859_1) {
+
+	} else if (book->character_code == EB_CHARCODE_ISO8859_1) {
 	    /*
 	     * The book is mainly written in ISO 8859 1.
 	     */
-	    charapp = 1;
+	    book->text_context.printable_count++;
 
 	    if ((0x20 <= c && c < 0x7f) || (0xa0 <= c && c < 0xff)) {
 		/*
 		 * This is an ISO 8859 1 character.
 		 */
-		step = 1;
-		argv[0] = eb_uint1(pagebufp);
-		if (skipcode < 0) {
-		    *workbuf = c;
-		    *(workbuf + 1) = '\0';
+		book->text_context.work_step = 1;
+		argv[0] = eb_uint1(cache_p);
+		if (book->text_context.skip_code == SKIP_CODE_NONE) {
+		    *book->text_context.work_buffer = c;
+		    *(book->text_context.work_buffer + 1) = '\0';
 		    hook = hookset->hooks + EB_HOOK_ISO8859_1;
 		    if (hook->function != NULL
-			&& hook->function(book, appendix, workbuf,
-			    EB_HOOK_ISO8859_1, argc, argv) < 0) {
-			eb_error = EB_ERR_HOOK_WORKSPACE;
-			return -1;
+			&& hook->function(book, appendix,
+			    book->text_context.work_buffer, EB_HOOK_ISO8859_1,
+			    argc, argv) < 0) {
+			error_code = EB_ERR_HOOK_WORKSPACE;
+			goto failed;
 		    }
 		}
 	    } else {
 		/*
 		 * This is a local character.
 		 */
-		if (pagerest < 2) {
-		    eb_error = EB_ERR_UNEXP_START;
-		    return -1;
+		if (cache_rest_length < 2) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
 		}
 
-		step = 2;
-		argv[0] = eb_uint2(pagebufp);
-		if (skipcode < 0) {
-		    *workbuf = (unsigned char) c;
-		    *(workbuf + 1) = (unsigned char) eb_uint1(pagebufp + 1);
-		    *(workbuf + 2) = '\0';
+		book->text_context.work_step = 2;
+		argv[0] = eb_uint2(cache_p);
+		if (book->text_context.skip_code == SKIP_CODE_NONE) {
+		    *book->text_context.work_buffer = (unsigned char) c;
+		    *(book->text_context.work_buffer + 1)
+			= (unsigned char) eb_uint1(cache_p + 1);
+		    *(book->text_context.work_buffer + 2) = '\0';
 		    hook = hookset->hooks + EB_HOOK_NARROW_FONT;
 		    if (hook->function != NULL
-			&& hook->function(book, appendix, workbuf,
+			&& hook->function(book, appendix,
+			    book->text_context.work_buffer,
 			    EB_HOOK_NARROW_FONT, argc, argv) < 0) {
-			eb_error = EB_ERR_HOOK_WORKSPACE;
-			return -1;
+			error_code = EB_ERR_HOOK_WORKSPACE;
+			goto failed;
 		    }
 		}
 	    }
 
-	    if (skipcode < 0 && modhook->function != NULL
-		&& modhook->function(book, appendix, workbuf, modhook->code,
-		    0, argv) < 0) {
-		eb_error = EB_ERR_HOOK_WORKSPACE;
-		return -1;
-	    }
-	    if (skipcode < 0 && refhook->function != NULL
-		&& refhook->function(book, appendix, workbuf, refhook->code,
-		    0, argv) < 0) {
-		eb_error = EB_ERR_HOOK_WORKSPACE;
-		return -1;
-	    }
 	} else {
 	    /*
-	     * The book is written in JIS X 0208 (EB, EBXA, EPWING)
-	     * or JIS X 0208 & GB 2312 (EBXA-C).
+	     * The book is written in JIS X 0208 or JIS X 0208 + GB 2312.
 	     */
 	    int c2;
 
-	    charapp = 1;
-	    step = 2;
-	    argv[0] = eb_uint2(pagebufp);
+	    book->text_context.printable_count++;
+	    book->text_context.work_step = 2;
+	    argv[0] = eb_uint2(cache_p);
 
-	    if (pagerest < 2) {
-		eb_error = EB_ERR_UNEXP_START;
-		return -1;
+	    if (cache_rest_length < 2) {
+		error_code = EB_ERR_UNEXP_TEXT;
+		goto failed;
 	    }
 
-	    c2 = eb_uint1(pagebufp + 1);
+	    c2 = eb_uint1(cache_p + 1);
 
-	    if (0 <= skipcode) {
+	    if (book->text_context.skip_code != SKIP_CODE_NONE) {
 		/* nothing to be done. */
 	    } else if (0x20 < c && c < 0x7f && 0x20 < c2 && c2 < 0x7f) {
 		/*
 		 * This is a JIS X 0208 KANJI character.
 		 */
-		*workbuf = (unsigned char) (c | 0x80);
-		*(workbuf + 1) = (unsigned char) (c2 | 0x80);
-		*(workbuf + 2) = '\0';
-		if (narwflag) {
+		*book->text_context.work_buffer
+		    = (unsigned char) (c | 0x80);
+		*(book->text_context.work_buffer + 1)
+		    = (unsigned char) (c2 | 0x80);
+		*(book->text_context.work_buffer + 2) = '\0';
+
+		if (book->text_context.narrow_flag) {
 		    hook = hookset->hooks + EB_HOOK_NARROW_JISX0208;
-		    if (hook->function != NULL && hook->function(book,
-			appendix, workbuf, EB_HOOK_NARROW_JISX0208, 0, argv)
-			< 0) {
-			eb_error = EB_ERR_HOOK_WORKSPACE;
-			return -1;
+		    if (hook->function != NULL
+			&& hook->function(book, appendix,
+			    book->text_context.work_buffer,
+			    EB_HOOK_NARROW_JISX0208, 0, argv) < 0) {
+			error_code = EB_ERR_HOOK_WORKSPACE;
+			goto failed;
 		    }
 		} else {
 		    hook = hookset->hooks + EB_HOOK_WIDE_JISX0208;
 		    if (hook->function != NULL
-			&& hook->function(book, appendix, workbuf,
+			&& hook->function(book, appendix,
+			    book->text_context.work_buffer,
 			    EB_HOOK_WIDE_JISX0208, argc, argv) < 0) {
-			eb_error = EB_ERR_HOOK_WORKSPACE;
-			return -1;
+			error_code = EB_ERR_HOOK_WORKSPACE;
+			goto failed;
 		    }
 		}
 	    } else if (0x20 < c && c < 0x7f && 0xa0 < c2 && c2 < 0xff) {
 		/*
 		 * This is a GB 2312 HANJI character.
 		 */
-		*workbuf = (unsigned char) (c | 0x80);
-		*(workbuf + 1) = (unsigned char) c2;
-		*(workbuf + 2) = '\0';
+		*book->text_context.work_buffer = (unsigned char) (c | 0x80);
+		*(book->text_context.work_buffer + 1) = (unsigned char) c2;
+		*(book->text_context.work_buffer + 2) = '\0';
+
 		hook = hookset->hooks + EB_HOOK_GB2312;
-		if (hook->function != NULL && hook->function(book, appendix,
-		    workbuf, EB_HOOK_GB2312, 0, argv) < 0) {
-		    eb_error = EB_ERR_HOOK_WORKSPACE;
-		    return -1;
+		if (hook->function != NULL
+		    && hook->function(book, appendix,
+			book->text_context.work_buffer, EB_HOOK_GB2312, 0,
+			argv) < 0) {
+		    error_code = EB_ERR_HOOK_WORKSPACE;
+		    goto failed;
 		}
 	    } else {
 		/*
 		 * This is a local character.
 		 */
-		*workbuf = (unsigned char) c;
-		*(workbuf + 1) = (unsigned char) c2;
-		*(workbuf + 2) = '\0';
-		if (narwflag) {
+		*book->text_context.work_buffer = (unsigned char) c;
+		*(book->text_context.work_buffer + 1) = (unsigned char) c2;
+		*(book->text_context.work_buffer + 2) = '\0';
+
+		if (book->text_context.narrow_flag) {
 		    hook = hookset->hooks + EB_HOOK_NARROW_FONT;
-		    if (hook->function != NULL && hook->function(book, 
-			appendix, workbuf, EB_HOOK_NARROW_FONT, argc, argv)
-			< 0) {
-			eb_error = EB_ERR_HOOK_WORKSPACE;
-			return -1;
+		    if (hook->function != NULL
+			&& hook->function(book, appendix,
+			    book->text_context.work_buffer,
+			    EB_HOOK_NARROW_FONT, argc, argv) < 0) {
+			error_code = EB_ERR_HOOK_WORKSPACE;
+			goto failed;
 		    }
 		} else {
 		    hook = hookset->hooks + EB_HOOK_WIDE_FONT;
-		    if (hook->function != NULL && hook->function(book,
-			appendix, workbuf, EB_HOOK_WIDE_FONT, argc, argv)
-			< 0) {
-			eb_error = EB_ERR_HOOK_WORKSPACE;
-			return -1;
+		    if (hook->function != NULL
+			&& hook->function(book, appendix,
+			    book->text_context.work_buffer, EB_HOOK_WIDE_FONT,
+			    argc, argv) < 0) {
+			error_code = EB_ERR_HOOK_WORKSPACE;
+			goto failed;
 		    }
 		}
 	    }
-
-	    if (skipcode < 0 && modhook->function != NULL
-		&& modhook->function(book, appendix, workbuf, modhook->code,
-		    0, argv) < 0) {
-		eb_error = EB_ERR_HOOK_WORKSPACE;
-		return -1;
-	    }
-	    if (skipcode < 0 && refhook->function != NULL
-		&& refhook->function(book, appendix, workbuf, refhook->code,
-		    0, argv) < 0) {
-		eb_error = EB_ERR_HOOK_WORKSPACE;
-		return -1;
-	    }
 	}
-	pagebufp += step;
-	pagerest -= step;
 
-	worklen = strlen(workbuf);
-	if (textrest < worklen)
-	    goto at_end;
+	/*
+	 * Add a string in the work buffer to the text buffer.
+	 * If enough space is not left on the text buffer, it returns
+	 * immediately.
+	 */
+	book->text_context.work_length
+	    = strlen(book->text_context.work_buffer);
+	if (text_rest_length < book->text_context.work_length)
+	    break;
+	strcpy(text_p, book->text_context.work_buffer);
 
-	strcpy(textp, workbuf);
-	textp += worklen;
-	textrest -= worklen;
-	worklen = 0;
+	/*
+	 * Update variables.
+	 */
+	cache_p += book->text_context.work_step;
+	cache_rest_length -= book->text_context.work_step;
+	book->text_context.location += book->text_context.work_step;
+
+	text_p += book->text_context.work_length;
+	text_rest_length -= book->text_context.work_length;
+
+	book->text_context.work_length = 0;
+	book->text_context.work_step = 0;
+    }
+
+  succeeded:
+    *text_p = '\0';
+    *text_length = (text_p - text);
+
+    /*
+     * Unlock cache data.
+     */
+    pthread_mutex_unlock(&cache_mutex);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     * Discard cache if read error occurs.
+     */
+  failed:
+    if (error_code == EB_ERR_FAIL_READ_TEXT)
+	cache_book_code = EB_BOOK_NONE;
+    *text = '\0';
+    *text_length = -1;
+    book->text_context.code = EB_TEXT_INVALID;
+    pthread_mutex_unlock(&cache_mutex);
+    return error_code;
+}
+
+
+/*
+ * Forward text position to the next paragraph.
+ */
+EB_Error_Code
+eb_forward_text(book, hookset)
+    EB_Book *book;
+    const EB_Hookset *hookset;
+{
+    EB_Error_Code error_code;
+    char text[EB_SIZE_PAGE];
+    ssize_t text_length;
+
+    /*
+     * Lock the book and hookset.
+     */
+    eb_lock(&book->lock);
+    if (hookset != NULL)
+	eb_lock(&hookset->lock);
+
+    /*
+     * Current subbook must have been set and START file must be exist.
+     */
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
+    }
+    if (book->subbook_current->text_file < 0) {
+	error_code = EB_ERR_NO_TEXT;
+	goto failed;
     }
 
     /*
-     * At end.
+     * Clear work buffer in the text context.
      */
-  at_end:
-    *textp = '\0';
-    return (textp - text);
+    book->text_context.work_length = 0;
+
+    /*
+     * Use `eb_default_hookset' when `hookset' is `NULL'.
+     */
+    if (hookset == NULL)
+	hookset = &eb_default_hookset;
+
+    if (book->text_context.code != EB_TEXT_NONE) {
+	if (book->text_context.code != EB_TEXT_TEXT) {
+	    error_code = EB_ERR_DIFF_CONTENT;
+	    goto failed;
+	}
+    } else {
+	book->text_context.code = EB_TEXT_TEXT;
+    }
+
+    /*
+     * if the text-end flag has been set, we simply unset the flag
+     * and returns immediately.
+     */
+    if (book->text_context.text_end_flag) {
+	book->text_context.text_end_flag = 0;
+	goto succeeded;
+    }
+
+    for (;;) {
+	error_code = eb_read_text_internal(book, NULL, hookset,
+	    EB_SIZE_PAGE, text, &text_length);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+	if (text_length == 0)
+	    break;
+    }
+
+    /*
+     * Disable the text-end flag.
+     */
+    book->text_context.work_length = 0;
+    book->text_context.work_step = 0;
+    book->text_context.narrow_flag = 0;
+    book->text_context.printable_count = 0;
+    book->text_context.text_end_flag = 0;
+    book->text_context.skip_code = SKIP_CODE_NONE;
+
+    /*
+     * Unlock the book and hookset.
+     */
+  succeeded:
+    if (hookset != &eb_default_hookset)
+	eb_unlock(&hookset->lock);
+    eb_unlock(&book->lock);
+    pthread_mutex_unlock(&cache_mutex);
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     * Discard cache if read error occurs.
+     */
+  failed:
+    book->text_context.code = EB_TEXT_INVALID;
+    if (hookset != &eb_default_hookset)
+	eb_unlock(&hookset->lock);
+    eb_unlock(&book->lock);
+    return error_code;
+}
+
+
+/*
+ * Forward heading position to the next paragraph.
+ * (for keyword search.)
+ */
+EB_Error_Code
+eb_forward_heading(book)
+    EB_Book *book;
+{
+    EB_Error_Code error_code;
+    char text[EB_SIZE_PAGE];
+    ssize_t text_length;
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+
+    /*
+     * if the text-end flag has been set, we simply unset the flag
+     * and returns immediately.
+     */
+    if (book->text_context.text_end_flag) {
+	book->text_context.text_end_flag = 0;
+	goto succeeded;
+    }
+
+    /*
+     * Force setting context mode as heading mode.
+     */
+    book->text_context.code = EB_TEXT_HEADING;
+
+    /*
+     * Go to the beginning of the next heading.
+     */
+    for (;;) {
+	error_code = eb_read_text_internal(book, NULL, &eb_default_hookset,
+	    EB_SIZE_PAGE, text, &text_length);
+	if (error_code != EB_SUCCESS)
+	    goto failed;
+	if (text_length == 0)
+	    break;
+    }
+
+    /*
+     * Initialize the context flags.
+     */
+    book->text_context.work_length = 0;
+    book->text_context.work_step = 0;
+    book->text_context.narrow_flag = 0;
+    book->text_context.printable_count = 0;
+    book->text_context.text_end_flag = 0;
+    book->text_context.skip_code = SKIP_CODE_NONE;
+
+    /*
+     * Unlock cache data.
+     */
+  succeeded:
+    eb_unlock(&book->lock);
+    pthread_mutex_unlock(&cache_mutex);
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     * Discard cache if read error occurs.
+     */
+  failed:
+    book->text_context.code = EB_TEXT_INVALID;
+    eb_unlock(&book->lock);
+    return error_code;
 }
 
 

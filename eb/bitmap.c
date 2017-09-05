@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997  Motoyuki Kasahara
+ * Copyright (c) 1997, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 
 #include "eb.h"
 #include "error.h"
+#include "internal.h"
 #include "font.h"
 
 #ifndef HAVE_STRCHR
@@ -57,138 +58,204 @@ char *memset();
  * Return required buffer size for a narrow font character converted
  * to XBM image format.
  */
-int
-eb_narrow_font_xbm_size(height)
+EB_Error_Code
+eb_narrow_font_xbm_size(height, size)
     EB_Font_Code height;
+    size_t *size;
 {
+    EB_Error_Code error_code;
+
     switch (height) {
     case EB_FONT_16:
-        return EB_SIZE_NARROW_FONT_16_XBM;
+        *size = EB_SIZE_NARROW_FONT_16_XBM;
     case EB_FONT_24:
-        return EB_SIZE_NARROW_FONT_24_XBM;
+        *size = EB_SIZE_NARROW_FONT_24_XBM;
     case EB_FONT_30:
-        return EB_SIZE_NARROW_FONT_30_XBM;
+        *size = EB_SIZE_NARROW_FONT_30_XBM;
     case EB_FONT_48:
-        return EB_SIZE_NARROW_FONT_48_XBM;
+        *size = EB_SIZE_NARROW_FONT_48_XBM;
+    default:
+	goto failed;
     }
 
-    eb_error = EB_ERR_NO_SUCH_FONT;
-    return -1;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *size = 0;
+    return error_code;
 }
 
 /*
  * Return required buffer size for a narrow font character converted
  * to XPM image format.
  */
-int
-eb_narrow_font_xpm_size(height)
+EB_Error_Code
+eb_narrow_font_xpm_size(height, size)
     EB_Font_Code height;
+    size_t *size;
 {
+    EB_Error_Code error_code;
+
     switch (height) {
     case EB_FONT_16:
-        return EB_SIZE_NARROW_FONT_16_XPM;
+        *size = EB_SIZE_NARROW_FONT_16_XPM;
     case EB_FONT_24:
-        return EB_SIZE_NARROW_FONT_24_XPM;
+        *size = EB_SIZE_NARROW_FONT_24_XPM;
     case EB_FONT_30:
-        return EB_SIZE_NARROW_FONT_30_XPM;
+        *size = EB_SIZE_NARROW_FONT_30_XPM;
     case EB_FONT_48:
-        return EB_SIZE_NARROW_FONT_48_XPM;
+        *size = EB_SIZE_NARROW_FONT_48_XPM;
+    default:
+	goto failed;
     }
 
-    eb_error = EB_ERR_NO_SUCH_FONT;
-    return -1;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *size = 0;
+    return error_code;
 }
 
 /*
  * Return required buffer size for a narrow font character converted
  * to GIF image format.
  */
-int
-eb_narrow_font_gif_size(height)
+EB_Error_Code
+eb_narrow_font_gif_size(height, size)
     EB_Font_Code height;
+    size_t *size;
 {
+    EB_Error_Code error_code;
+
     switch (height) {
     case EB_FONT_16:
-        return EB_SIZE_NARROW_FONT_16_GIF;
+        *size = EB_SIZE_NARROW_FONT_16_GIF;
     case EB_FONT_24:
-        return EB_SIZE_NARROW_FONT_24_GIF;
+        *size = EB_SIZE_NARROW_FONT_24_GIF;
     case EB_FONT_30:
-        return EB_SIZE_NARROW_FONT_30_GIF;
+        *size = EB_SIZE_NARROW_FONT_30_GIF;
     case EB_FONT_48:
-        return EB_SIZE_NARROW_FONT_48_GIF;
+        *size = EB_SIZE_NARROW_FONT_48_GIF;
+    default:
+	goto failed;
     }
 
-    eb_error = EB_ERR_NO_SUCH_FONT;
-    return -1;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *size = 0;
+    return error_code;
 }
 
 /*
  * Return required buffer size for a wide font character converted
  * to XBM image format.
  */
-int
-eb_wide_font_xbm_size(height)
+EB_Error_Code
+eb_wide_font_xbm_size(height, size)
     EB_Font_Code height;
+    size_t *size;
 {
+    EB_Error_Code error_code;
+
     switch (height) {
     case EB_FONT_16:
-        return EB_SIZE_NARROW_FONT_16_XBM;
+        *size = EB_SIZE_NARROW_FONT_16_XBM;
     case EB_FONT_24:
-        return EB_SIZE_NARROW_FONT_24_XBM;
+        *size = EB_SIZE_NARROW_FONT_24_XBM;
     case EB_FONT_30:
-        return EB_SIZE_NARROW_FONT_30_XBM;
+        *size = EB_SIZE_NARROW_FONT_30_XBM;
     case EB_FONT_48:
-        return EB_SIZE_NARROW_FONT_48_XBM;
+        *size = EB_SIZE_NARROW_FONT_48_XBM;
+    default:
+	goto failed;
     }
 
-    eb_error = EB_ERR_NO_SUCH_FONT;
-    return -1;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *size = 0;
+    return error_code;
 }
 
 /*
  * Return required buffer size for a wide font character converted
  * to XPM image format.
  */
-int
-eb_wide_font_xpm_size(height)
+EB_Error_Code
+eb_wide_font_xpm_size(height, size)
     EB_Font_Code height;
+    size_t *size;
 {
+    EB_Error_Code error_code;
+
     switch (height) {
     case EB_FONT_16:
-        return EB_SIZE_NARROW_FONT_16_XPM;
+        *size = EB_SIZE_NARROW_FONT_16_XPM;
     case EB_FONT_24:
-        return EB_SIZE_NARROW_FONT_24_XPM;
+        *size = EB_SIZE_NARROW_FONT_24_XPM;
     case EB_FONT_30:
-        return EB_SIZE_NARROW_FONT_30_XPM;
+        *size = EB_SIZE_NARROW_FONT_30_XPM;
     case EB_FONT_48:
-        return EB_SIZE_NARROW_FONT_48_XPM;
+        *size = EB_SIZE_NARROW_FONT_48_XPM;
+    default:
+	goto failed;
     }
 
-    eb_error = EB_ERR_NO_SUCH_FONT;
-    return -1;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *size = 0;
+    return error_code;
 }
 
 /*
  * Return required buffer size for a wide font character converted
  * to GIF image format.
  */
-int
-eb_wide_font_gif_size(height)
+EB_Error_Code
+eb_wide_font_gif_size(height, size)
     EB_Font_Code height;
+    size_t *size;
 {
+    EB_Error_Code error_code;
+
     switch (height) {
     case EB_FONT_16:
-        return EB_SIZE_NARROW_FONT_16_GIF;
+        *size = EB_SIZE_NARROW_FONT_16_GIF;
     case EB_FONT_24:
-        return EB_SIZE_NARROW_FONT_24_GIF;
+        *size = EB_SIZE_NARROW_FONT_24_GIF;
     case EB_FONT_30:
-        return EB_SIZE_NARROW_FONT_30_GIF;
+        *size = EB_SIZE_NARROW_FONT_30_GIF;
     case EB_FONT_48:
-        return EB_SIZE_NARROW_FONT_48_GIF;
+        *size = EB_SIZE_NARROW_FONT_48_GIF;
+    default:
+	goto failed;
     }
 
-    eb_error = EB_ERR_NO_SUCH_FONT;
-    return -1;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *size = 0;
+    return error_code;
 }
 
 /*
@@ -197,9 +264,9 @@ eb_wide_font_gif_size(height)
 #define XBM_MAX_OCTETS_A_LINE		12
 
 /*
- * The basename of a XBM file.
+ * The base name of a XBM file.
  */
-#define XBM_BASENAME			"default"
+#define XBM_BASE_NAME			"default"
 
 /*
  * Convert a bitmap image to XBM format.
@@ -208,76 +275,79 @@ eb_wide_font_gif_size(height)
  * XBM image data.  `bitmap', `width', and `height' are bitmap
  * data, width, and height of the bitmap image.
  */
-size_t
-eb_bitmap_to_xbm(buffer, bitmap, width, height)
-    char *buffer;
+void
+eb_bitmap_to_xbm(bitmap, width, height, xbm, xbm_length)
     const char *bitmap;
     int width;
     int height;
+    char *xbm;
+    size_t *xbm_length;
 {
-    char *bufp = buffer;
-    const unsigned char *bitp;
+    char *xbm_p = xbm;
+    const unsigned char *bitmap_p = (const unsigned char *)bitmap;
     int bitmap_size = (width + 7) / 8 * height;
-    int ch;
+    int hex;
     int i;
 
     /*
-     * Write a header part.
+     * Output a header.
      */
-    sprintf(bufp, "#define %s_width %4d\n", XBM_BASENAME, width);
-    bufp = strchr(bufp, '\n') + 1;
-    sprintf(bufp, "#define %s_height %4d\n", XBM_BASENAME, height);
-    bufp = strchr(bufp, '\n') + 1;
-    sprintf(bufp, "static unsigned char %s_bits[] = {\n", XBM_BASENAME);
-    bufp = strchr(bufp, '\n') + 1;
+    sprintf(xbm_p, "#define %s_width %4d\n", XBM_BASE_NAME, width);
+    xbm_p = strchr(xbm_p, '\n') + 1;
+    sprintf(xbm_p, "#define %s_height %4d\n", XBM_BASE_NAME, height);
+    xbm_p = strchr(xbm_p, '\n') + 1;
+    sprintf(xbm_p, "static unsigned char %s_bits[] = {\n", XBM_BASE_NAME);
+    xbm_p = strchr(xbm_p, '\n') + 1;
 
     /*
-     * Write an image data part.
+     * Output image data.
      */
-    for (i = 0, bitp = (const unsigned char *)bitmap;
-	 i < bitmap_size; i++, bitp++) {
-	ch = 0;
-        if (*bitp & 0x80)
-            ch |= 0x01;
-        if (*bitp & 0x40)
-            ch |= 0x02;
-        if (*bitp & 0x20)
-            ch |= 0x04;
-        if (*bitp & 0x10)
-            ch |= 0x08;
-        if (*bitp & 0x08)
-            ch |= 0x10;
-        if (*bitp & 0x04)
-            ch |= 0x20;
-        if (*bitp & 0x02)
-            ch |= 0x40;
-        if (*bitp & 0x01)
-            ch |= 0x80;
+    for (i = 0; i < bitmap_size; i++) {
+	hex = 0;
+        if (*bitmap_p & 0x80)
+            hex |= 0x01;
+        if (*bitmap_p & 0x40)
+            hex |= 0x02;
+        if (*bitmap_p & 0x20)
+            hex |= 0x04;
+        if (*bitmap_p & 0x10)
+            hex |= 0x08;
+        if (*bitmap_p & 0x08)
+            hex |= 0x10;
+        if (*bitmap_p & 0x04)
+            hex |= 0x20;
+        if (*bitmap_p & 0x02)
+            hex |= 0x40;
+        if (*bitmap_p & 0x01)
+            hex |= 0x80;
+	bitmap_p++;
 
 	if (i % XBM_MAX_OCTETS_A_LINE != 0) {
-	    sprintf(bufp, ", 0x%02x", ch);
-	    bufp += 6;
+	    sprintf(xbm_p, ", 0x%02x", hex);
+	    xbm_p += 6;
 	} else if (i == 0) {
-	    sprintf(bufp, "   0x%02x", ch);
-	    bufp += 7;
+	    sprintf(xbm_p, "   0x%02x", hex);
+	    xbm_p += 7;
 	} else {
-	    sprintf(bufp, ",\n   0x%02x", ch);
-	    bufp += 9;
+	    sprintf(xbm_p, ",\n   0x%02x", hex);
+	    xbm_p += 9;
 	}
     }
     
-    memcpy(bufp, "};\n", 3);
-    bufp += 3;
+    /*
+     * Output a footer.
+     */
+    memcpy(xbm_p, "};\n", 3);
+    xbm_p += 3;
 
-    return (bufp - buffer);
+    *xbm_length = (xbm_p - xbm);
 }
 
-/********************************************************************/
 
 /*
- * The basename of a XPM file.
+ * The base name of a XPM file.
  */
-#define XPM_BASENAME		"default"
+#define XPM_BASE_NAME		"default"
 
 /*
  * The foreground and background colors of XPM image.
@@ -292,85 +362,88 @@ eb_bitmap_to_xbm(buffer, bitmap, width, height)
  * XPM image data.  `bitmap', `width', and `height' are bitmap
  * data, width, and height of the bitmap image.
  */
-size_t
-eb_bitmap_to_xpm(buffer, bitmap, width, height)
-    char *buffer;
+void
+eb_bitmap_to_xpm(bitmap, width, height, xpm, xpm_length)
     const char *bitmap;
     int width;
     int height;
+    char *xpm;
+    size_t *xpm_length;
 {
-    char *bufp = buffer;
-    const unsigned char *bitp;
+    char *xpm_p = xpm;
+    const unsigned char *bitmap_p = (const unsigned char *)bitmap;
     int i, j;
 
     /*
-     * Write a header part.
+     * Output a header.
      */
-    sprintf(bufp, "/* XPM */\n");
-    bufp = strchr(bufp, '\n') + 1;
+    sprintf(xpm_p, "/* XPM */\n");
+    xpm_p = strchr(xpm_p, '\n') + 1;
 
-    sprintf(bufp, "static char * %s[] = {\n", XPM_BASENAME);
-    bufp = strchr(bufp, '\n') + 1;
+    sprintf(xpm_p, "static char * %s[] = {\n", XPM_BASE_NAME);
+    xpm_p = strchr(xpm_p, '\n') + 1;
     
-    sprintf(bufp, "\"%d %d 2 1\",\n", width, height);
-    bufp = strchr(bufp, '\n') + 1;
+    sprintf(xpm_p, "\"%d %d 2 1\",\n", width, height);
+    xpm_p = strchr(xpm_p, '\n') + 1;
 
-    sprintf(bufp, "\" 	c %s\",\n", XPM_BACKGROUND_COLOR);
-    bufp = strchr(bufp, '\n') + 1;
+    sprintf(xpm_p, "\" 	c %s\",\n", XPM_BACKGROUND_COLOR);
+    xpm_p = strchr(xpm_p, '\n') + 1;
 
-    sprintf(bufp, "\". 	c %s\",\n", XPM_FOREGROUND_COLOR);
-    bufp = strchr(bufp, '\n') + 1;
+    sprintf(xpm_p, "\". 	c %s\",\n", XPM_FOREGROUND_COLOR);
+    xpm_p = strchr(xpm_p, '\n') + 1;
 
     /*
-     * Write an image data part.
+     * Output image data.
      */
-    for (i = 0, bitp = (const unsigned char *)bitmap; i < height; i++) {
+    for (i = 0; i < height; i++) {
 	if (0 < i) {
-	    strcpy(bufp, "\",\n\"");
-	    bufp += 4;
+	    strcpy(xpm_p, "\",\n\"");
+	    xpm_p += 4;
 	} else {
-	    *bufp++ = '\"';
+	    *xpm_p++ = '\"';
 	}
 
-	for (j = 0; j + 7 < width; j += 8, bitp++) {
-	    *bufp++ = (*bitp & 0x80) ? '.' : ' ';
-	    *bufp++ = (*bitp & 0x40) ? '.' : ' ';
-	    *bufp++ = (*bitp & 0x20) ? '.' : ' ';
-	    *bufp++ = (*bitp & 0x10) ? '.' : ' ';
-	    *bufp++ = (*bitp & 0x08) ? '.' : ' ';
-	    *bufp++ = (*bitp & 0x04) ? '.' : ' ';
-	    *bufp++ = (*bitp & 0x02) ? '.' : ' ';
-	    *bufp++ = (*bitp & 0x01) ? '.' : ' ';
+	for (j = 0; j + 7 < width; j += 8, bitmap_p++) {
+	    *xpm_p++ = (*bitmap_p & 0x80) ? '.' : ' ';
+	    *xpm_p++ = (*bitmap_p & 0x40) ? '.' : ' ';
+	    *xpm_p++ = (*bitmap_p & 0x20) ? '.' : ' ';
+	    *xpm_p++ = (*bitmap_p & 0x10) ? '.' : ' ';
+	    *xpm_p++ = (*bitmap_p & 0x08) ? '.' : ' ';
+	    *xpm_p++ = (*bitmap_p & 0x04) ? '.' : ' ';
+	    *xpm_p++ = (*bitmap_p & 0x02) ? '.' : ' ';
+	    *xpm_p++ = (*bitmap_p & 0x01) ? '.' : ' ';
 	}
 
 	if (j < width) {
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x80) ? '.' : ' ';
+		*xpm_p++ = (*bitmap_p & 0x80) ? '.' : ' ';
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x40) ? '.' : ' ';
+		*xpm_p++ = (*bitmap_p & 0x40) ? '.' : ' ';
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x20) ? '.' : ' ';
+		*xpm_p++ = (*bitmap_p & 0x20) ? '.' : ' ';
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x10) ? '.' : ' ';
+		*xpm_p++ = (*bitmap_p & 0x10) ? '.' : ' ';
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x08) ? '.' : ' ';
+		*xpm_p++ = (*bitmap_p & 0x08) ? '.' : ' ';
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x04) ? '.' : ' ';
+		*xpm_p++ = (*bitmap_p & 0x04) ? '.' : ' ';
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x02) ? '.' : ' ';
+		*xpm_p++ = (*bitmap_p & 0x02) ? '.' : ' ';
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x01) ? '.' : ' ';
-	    bitp++;
+		*xpm_p++ = (*bitmap_p & 0x01) ? '.' : ' ';
+	    bitmap_p++;
 	}
     }
 
-    memcpy(bufp, "\"};\n", 4);
-    bufp += 4;
+    /*
+     * Output a footer.
+     */
+    memcpy(xpm_p, "\"};\n", 4);
+    xpm_p += 4;
 
-    return (bufp - buffer);
+    *xpm_length = (xpm_p - xpm);
 }
 
-/********************************************************************/
 
 /*
  * The Foreground and background colors of GIF image.
@@ -383,7 +456,7 @@ eb_bitmap_to_xpm(buffer, bitmap, width, height)
  */
 #define GIF_PREAMBLE_LENGTH	38
 
-static unsigned char gif_preamble[GIF_PREAMBLE_LENGTH] = {
+static const unsigned char gif_default_preamble[GIF_PREAMBLE_LENGTH] = {
     /*
      * Header. (6 bytes)
      */
@@ -441,17 +514,26 @@ static unsigned char gif_preamble[GIF_PREAMBLE_LENGTH] = {
  * It requires four arguements.  `buffer' is buffer to store the
  * GIF image data.  `bitmap', `width', and `height' are bitmap
  * data, width, and height of the bitmap image.
+ *
+ * Note: This GIF image doesn't use LZW because of patent.
  */
-size_t
-eb_bitmap_to_gif(buffer, bitmap, width, height)
-    char *buffer;
+void
+eb_bitmap_to_gif(bitmap, width, height, gif, gif_length)
     const char *bitmap;
     int width;
     int height;
+    char *gif;
+    size_t *gif_length;
 {
-    unsigned char *bufp = (unsigned char *)buffer;
-    const unsigned char *bitp;
+    unsigned char *gif_p = (unsigned char *)gif;
+    const unsigned char *bitmap_p = (const unsigned char *)bitmap;
+    unsigned char gif_preamble[GIF_PREAMBLE_LENGTH];
     int i, j;
+
+    /*
+     * Copy the default preamble.
+     */
+    memcpy(gif_preamble, gif_default_preamble, GIF_PREAMBLE_LENGTH);
 
     /*
      * Set logical screen width and height.
@@ -479,51 +561,56 @@ eb_bitmap_to_gif(buffer, bitmap, width, height)
     gif_preamble[34] = height & 0xff;
     gif_preamble[35] = (height >> 8) & 0xff;
 
-    memcpy(bufp, gif_preamble, GIF_PREAMBLE_LENGTH);
-    bufp += GIF_PREAMBLE_LENGTH;
+    /*
+     * Output a preamble.
+     */
+    memcpy(gif_p, gif_preamble, GIF_PREAMBLE_LENGTH);
+    gif_p += GIF_PREAMBLE_LENGTH;
 
     /*
      * Output image data.
      */
-    bitp = (const unsigned char *)bitmap;
     for (i = 0;  i < height; i++) {
-	*bufp++ = (unsigned char)width;
-	for (j = 0; j + 7 < width; j += 8, bitp++) {
-	    *bufp++ = (*bitp & 0x80) ? 0x81 : 0x80;
-	    *bufp++ = (*bitp & 0x40) ? 0x81 : 0x80;
-	    *bufp++ = (*bitp & 0x20) ? 0x81 : 0x80;
-	    *bufp++ = (*bitp & 0x10) ? 0x81 : 0x80;
-	    *bufp++ = (*bitp & 0x08) ? 0x81 : 0x80;
-	    *bufp++ = (*bitp & 0x04) ? 0x81 : 0x80;
-	    *bufp++ = (*bitp & 0x02) ? 0x81 : 0x80;
-	    *bufp++ = (*bitp & 0x01) ? 0x81 : 0x80;
+	*gif_p++ = (unsigned char)width;
+	for (j = 0; j + 7 < width; j += 8, bitmap_p++) {
+	    *gif_p++ = (*bitmap_p & 0x80) ? 0x81 : 0x80;
+	    *gif_p++ = (*bitmap_p & 0x40) ? 0x81 : 0x80;
+	    *gif_p++ = (*bitmap_p & 0x20) ? 0x81 : 0x80;
+	    *gif_p++ = (*bitmap_p & 0x10) ? 0x81 : 0x80;
+	    *gif_p++ = (*bitmap_p & 0x08) ? 0x81 : 0x80;
+	    *gif_p++ = (*bitmap_p & 0x04) ? 0x81 : 0x80;
+	    *gif_p++ = (*bitmap_p & 0x02) ? 0x81 : 0x80;
+	    *gif_p++ = (*bitmap_p & 0x01) ? 0x81 : 0x80;
 	}
 
 	if (j < width) {
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x80) ? 0x81 : 0x80;
+		*gif_p++ = (*bitmap_p & 0x80) ? 0x81 : 0x80;
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x40) ? 0x81 : 0x80;
+		*gif_p++ = (*bitmap_p & 0x40) ? 0x81 : 0x80;
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x20) ? 0x81 : 0x80;
+		*gif_p++ = (*bitmap_p & 0x20) ? 0x81 : 0x80;
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x10) ? 0x81 : 0x80;
+		*gif_p++ = (*bitmap_p & 0x10) ? 0x81 : 0x80;
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x08) ? 0x81 : 0x80;
+		*gif_p++ = (*bitmap_p & 0x08) ? 0x81 : 0x80;
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x04) ? 0x81 : 0x80;
+		*gif_p++ = (*bitmap_p & 0x04) ? 0x81 : 0x80;
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x02) ? 0x81 : 0x80;
+		*gif_p++ = (*bitmap_p & 0x02) ? 0x81 : 0x80;
 	    if (j++ < width)
-		*bufp++ = (*bitp & 0x01) ? 0x81 : 0x80;
-	    bitp++;
+		*gif_p++ = (*bitmap_p & 0x01) ? 0x81 : 0x80;
+	    bitmap_p++;
 	}
     }
 
-    memcpy(bufp, "\001\011\000\073", 4);
-    bufp += 4;
+    /*
+     * Output a trailer.
+     */
+    memcpy(gif_p, "\001\011\000\073", 4);
+    gif_p += 4;
 
-    return ((char *)bufp - buffer);
+    *gif_length = ((char *)gif_p - gif);
 }
 
 

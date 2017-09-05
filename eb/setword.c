@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998, 2000  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,15 +28,21 @@
 #include <strings.h>
 #endif /* not STDC_HEADERS and not HAVE_STRING_H */
 
+#ifdef ENABLE_PTHREAD
+#include <pthread.h>
+#endif
+
 #include "eb.h"
 #include "error.h"
-
+#include "internal.h"
 
 /*
  * Unexported functions.
  */
-static EB_Word_Code eb_fix_word_latin EB_P((char *, const char *));
-static EB_Word_Code eb_fix_word_jis EB_P((char *, const char *));
+static EB_Error_Code eb_fix_word_latin EB_P((EB_Book *, const char *, char *,
+    EB_Word_Code *));
+static EB_Error_Code eb_fix_word_jis EB_P((EB_Book *, const char *, char *,
+    EB_Word_Code *));
 static void eb_convert_katakana_jis EB_P((char *));
 static void eb_convert_lower_latin EB_P((char *));
 static void eb_convert_lower_jis EB_P((char *));
@@ -60,177 +66,284 @@ static void eb_reverse_word_jis EB_P((char *));
  * If `inputword' is a KANA word,  EB_WORD_KANA is returned.
  * If `inputword' is a alphabetic word, EB_WORD_ALPHABET is returned.
  * Otherwise, -1 is returned.  It means that an error occurs.
- * `eb_error' is also set in this case.
  */
-EB_Word_Code
-eb_set_word(book, word, canonword, inputword)
+EB_Error_Code
+eb_set_word(book, input_word, word, canonicalized_word, word_code)
     EB_Book *book;
+    const char *input_word;
     char *word;
-    char *canonword;
-    const char *inputword;
+    char *canonicalized_word;
+    EB_Word_Code *word_code;
 {
-    EB_Word_Code wordcode;
+    EB_Error_Code error_code;
     const EB_Search *search;
 
     /*
-     * Make a fixed word and a canonicalized word from `inputword'.
+     * Make a fixed word and a canonicalized word from `input_word'.
      */
-    if (book->char_code == EB_CHARCODE_ISO8859_1)
-	wordcode = eb_fix_word_latin(word, inputword);
+    if (book->character_code == EB_CHARCODE_ISO8859_1)
+	error_code = eb_fix_word_latin(book, input_word, word, word_code);
     else
-	wordcode = eb_fix_word_jis(word, inputword);
-
-    if (wordcode == EB_WORD_ERROR)
-	return EB_WORD_ERROR;
-    strcpy(canonword, word);
+	error_code = eb_fix_word_jis(book, input_word, word, word_code);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+    strcpy(canonicalized_word, word);
 
     /*
      * Determine search method.
      */
-    switch (wordcode) {
-    case EB_WORD_ALPHA:
-	if (book->sub_current->word_alpha.page != 0)
-	    search = &book->sub_current->word_alpha;
-	else if (book->sub_current->word_asis.page != 0)
-	    search = &book->sub_current->word_asis;
+    switch (*word_code) {
+    case EB_WORD_ALPHABET:
+	if (book->subbook_current->word_alphabet.index_page != 0)
+	    search = &book->subbook_current->word_alphabet;
+	else if (book->subbook_current->word_asis.index_page != 0)
+	    search = &book->subbook_current->word_asis;
 	else {
-	    eb_error = EB_ERR_NO_SUCH_SEARCH;
-	    return -1;
+	    error_code = EB_ERR_NO_SUCH_SEARCH;
+	    goto failed;
 	}
 	break;
 
     case EB_WORD_KANA:
-	if (book->sub_current->word_kana.page != 0)
-	    search = &book->sub_current->word_kana;
-	else if (book->sub_current->word_asis.page != 0)
-	    search = &book->sub_current->word_asis;
+	if (book->subbook_current->word_kana.index_page != 0)
+	    search = &book->subbook_current->word_kana;
+	else if (book->subbook_current->word_asis.index_page != 0)
+	    search = &book->subbook_current->word_asis;
 	else {
-	    eb_error = EB_ERR_NO_SUCH_SEARCH;
-	    return -1;
+	    error_code = EB_ERR_NO_SUCH_SEARCH;
+	    goto failed;
 	}
 	break;
 
     case EB_WORD_OTHER:
-	if (book->sub_current->word_asis.page != 0)
-	    search = &book->sub_current->word_asis;
+	if (book->subbook_current->word_asis.index_page != 0)
+	    search = &book->subbook_current->word_asis;
 	else {
-	    eb_error = EB_ERR_NO_SUCH_SEARCH;
-	    return -1;
+	    error_code = EB_ERR_NO_SUCH_SEARCH;
+	    goto failed;
 	}
 	break;
 
     default:
-	return -1;
+	error_code = EB_ERR_NO_SUCH_SEARCH;
+	goto failed;
     }
 
     /*
      * Canonicalize the word.
      */
-    if (book->char_code == EB_CHARCODE_ISO8859_1) {
+    if (book->character_code == EB_CHARCODE_ISO8859_1) {
 	if (search->space == EB_INDEX_STYLE_DELETE) {
 	    eb_delete_spaces_latin(word);
-	    eb_delete_spaces_latin(canonword);
+	    eb_delete_spaces_latin(canonicalized_word);
 	}
 	if (search->lower == EB_INDEX_STYLE_CONVERT) {
 	    eb_convert_lower_latin(word);
-	    eb_convert_lower_latin(canonword);
+	    eb_convert_lower_latin(canonicalized_word);
 	}
     } else {
 	if (search->space == EB_INDEX_STYLE_DELETE) {
 	    eb_delete_spaces_jis(word);
-	    eb_delete_spaces_jis(canonword);
+	    eb_delete_spaces_jis(canonicalized_word);
 	}
 	if (search->katakana == EB_INDEX_STYLE_CONVERT)
-	    eb_convert_katakana_jis(canonword);
+	    eb_convert_katakana_jis(canonicalized_word);
 	if (search->lower == EB_INDEX_STYLE_CONVERT) {
 	    eb_convert_lower_jis(word);
-	    eb_convert_lower_jis(canonword);
+	    eb_convert_lower_jis(canonicalized_word);
 	}
 	if (search->mark == EB_INDEX_STYLE_DELETE) {
 	    eb_delete_marks_jis(word);
-	    eb_delete_marks_jis(canonword);
+	    eb_delete_marks_jis(canonicalized_word);
 	}
 	if (search->long_vowel == EB_INDEX_STYLE_CONVERT)
-	    eb_convert_long_vowels_jis(canonword);
+	    eb_convert_long_vowels_jis(canonicalized_word);
 	else if (search->long_vowel == EB_INDEX_STYLE_DELETE)
-	    eb_delete_long_vowels_jis(canonword);
+	    eb_delete_long_vowels_jis(canonicalized_word);
 	if (search->double_consonant == EB_INDEX_STYLE_CONVERT)
-	    eb_convert_double_consonants_jis(canonword);
+	    eb_convert_double_consonants_jis(canonicalized_word);
 	if (search->contracted_sound == EB_INDEX_STYLE_CONVERT)
-	    eb_convert_contracted_sounds_jis(canonword);
+	    eb_convert_contracted_sounds_jis(canonicalized_word);
 	if (search->small_vowel == EB_INDEX_STYLE_CONVERT)
-	    eb_convert_small_vowels_jis(canonword);
+	    eb_convert_small_vowels_jis(canonicalized_word);
 	if (search->voiced_consonant == EB_INDEX_STYLE_CONVERT)
-	    eb_convert_voiced_consonants_jis(canonword);
+	    eb_convert_voiced_consonants_jis(canonicalized_word);
 	if (search->p_sound == EB_INDEX_STYLE_CONVERT)
-	    eb_convert_p_sounds_jis(canonword);
+	    eb_convert_p_sounds_jis(canonicalized_word);
     }
 
-    return wordcode;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *word = '\0';
+    *canonicalized_word = '\0';
+    *word_code = EB_WORD_INVALID;
+    return error_code;
 }
 
 
 /*
  * Make a fixed word and a cannonicalized word for `ENDWORD SEARCH'.
  *
- * If `inputword' is a KANA word,  EB_WORD_KANA is retuend.
- * If `inputword' is a alphabetic word,  EB_WORD_ALPHABET is retuend.
+ * If `input_word' is a KANA word,  EB_WORD_KANA is retuend.
+ * If `input_word' is a alphabetic word,  EB_WORD_ALPHABET is retuend.
  * Otherwise, -1 is returned.  It means that an error occurs.
- * `eb_error' is also set in this case.
  */
-EB_Word_Code
-eb_set_endword(book, word, canonword, inputword)
+EB_Error_Code
+eb_set_endword(book, input_word, word, canonicalized_word, word_code)
     EB_Book *book;
+    const char *input_word;
     char *word;
-    char *canonword;
-    const char *inputword;
+    char *canonicalized_word;
+    EB_Word_Code *word_code;
 {
-    EB_Word_Code wordcode;
+    EB_Error_Code error_code;
 
-    wordcode = eb_set_word(book, word, canonword, inputword);
-    if (wordcode == EB_WORD_ERROR)
-	return EB_WORD_ERROR;
+    error_code = eb_set_word(book, input_word, word, canonicalized_word, 
+	word_code);
+    if (error_code != EB_SUCCESS)
+	goto failed;
 
-    if (book->char_code == EB_CHARCODE_ISO8859_1) {
+    if (book->character_code == EB_CHARCODE_ISO8859_1) {
 	eb_reverse_word_latin(word);
-	eb_reverse_word_latin(canonword);
+	eb_reverse_word_latin(canonicalized_word);
     } else {
 	eb_reverse_word_jis(word);
-	eb_reverse_word_jis(canonword);
+	eb_reverse_word_jis(canonicalized_word);
     }
 
-    return wordcode;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *word = '\0';
+    *canonicalized_word = '\0';
+    *word_code = EB_WORD_INVALID;
+    return error_code;
 }
 
 
 /*
- * Convert `inputword' to ISO 8859 1 and put it into `word'.
+ * Make a fixed word and a cannonicalized word for `KEYWORD SEARCH'.
  *
- * If `inputword' is a valid string to search, EB_WORD_ALPHA is returned.
- * Otherwise, -1 is returned.
+ * If `inputword' is a KANA word,  EB_WORD_KANA is returned.
+ * If `inputword' is a alphabetic word, EB_WORD_ALPHABET is returned.
+ * Otherwise, -1 is returned.  It means that an error occurs.
  */
-static int
-eb_fix_word_latin(word, inputword)
+EB_Error_Code
+eb_set_keyword(book, input_word, canonicalized_word, word, word_code)
+    EB_Book *book;
+    const char *input_word;
     char *word;
-    const char *inputword;
+    char *canonicalized_word;
+    EB_Word_Code *word_code;
 {
-    unsigned char *wp = (unsigned char *) word;
-    const unsigned char *inp = (const unsigned char *) inputword;
-    const unsigned char *tail;
-    unsigned char c1;
-    int keylen = 0;
+    EB_Error_Code error_code;
 
     /*
-     * Find the tail of `inputword'.
+     * Make a fixed word and a canonicalized word from `input_word'.
      */
-    tail = (const unsigned char *) inputword + strlen(inputword) - 1;
-    while ((const unsigned char *)inputword <= tail
+    if (book->character_code == EB_CHARCODE_ISO8859_1)
+	error_code = eb_fix_word_latin(book, input_word, word, word_code);
+    else
+	error_code = eb_fix_word_jis(book, input_word, word, word_code);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+    strcpy(canonicalized_word, word);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *word = '\0';
+    *canonicalized_word = '\0';
+    *word_code = EB_WORD_INVALID;
+    return error_code;
+}
+
+
+/*
+ * Make a fixed word and a cannonicalized word for `MULTI SEARCH'.
+ *
+ * If `inputword' is a KANA word,  EB_WORD_KANA is returned.
+ * If `inputword' is a alphabetic word, EB_WORD_ALPHABET is returned.
+ * Otherwise, -1 is returned.  It means that an error occurs.
+ */
+EB_Error_Code
+eb_set_multiword(book, multi_id, entry_id, input_word, word,
+    canonicalized_word, word_code)
+    EB_Book *book;
+    EB_Multi_Search_Code multi_id;
+    EB_Multi_Entry_Code entry_id;
+    const char *input_word;
+    char *word;
+    char *canonicalized_word;
+    EB_Word_Code *word_code;
+{
+    EB_Error_Code error_code;
+
+    /*
+     * Make a fixed word and a canonicalized word from `input_word'.
+     */
+    if (book->character_code == EB_CHARCODE_ISO8859_1)
+	error_code = eb_fix_word_latin(book, input_word, word, word_code);
+    else
+	error_code = eb_fix_word_jis(book, input_word, word, word_code);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+    strcpy(canonicalized_word, word);
+
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *word = '\0';
+    *canonicalized_word = '\0';
+    *word_code = EB_WORD_INVALID;
+    return error_code;
+}
+
+
+/*
+ * Convert `input_word' to ISO 8859 1 and put it into `word'.
+ *
+ * If `input_word' is a valid string to search, EB_WORD_ALPHABET is returned.
+ * Otherwise, -1 is returned.
+ */
+static EB_Error_Code
+eb_fix_word_latin(book, input_word, word, word_code)
+    EB_Book *book;
+    const char *input_word;
+    char *word;
+    EB_Word_Code *word_code;
+{
+    EB_Error_Code error_code;
+    unsigned char *wp = (unsigned char *) word;
+    const unsigned char *inp = (const unsigned char *) input_word;
+    const unsigned char *tail;
+    unsigned char c1;
+    int word_length = 0;
+
+    /*
+     * Find the tail of `input_word'.
+     */
+    tail = (const unsigned char *) input_word + strlen(input_word) - 1;
+    while ((const unsigned char *)input_word <= tail
 	&& (*tail == ' ' || *tail == '\t'))
 	tail--;
     tail++;
 
     /*
-     * Ignore spaces and tabs in the beginning of `inputword'.
+     * Ignore spaces and tabs in the beginning of `input_word'.
      */
     while (*inp == ' ' || *inp == '\t')
 	inp++;
@@ -240,9 +353,9 @@ eb_fix_word_latin(word, inputword)
 	 * Check for the length of the word.
 	 * If exceeded, return with an error code.
 	 */
-	if (EB_MAXLEN_WORD < keylen + 1) {
-	    eb_error = EB_ERR_TOO_LONG_WORD;
-	    return EB_WORD_ERROR;
+	if (EB_MAX_WORD_LENGTH < word_length + 1) {
+	    error_code = EB_ERR_TOO_LONG_WORD;
+	    goto failed;
 	}
 
 	c1 = *inp++;
@@ -263,23 +376,32 @@ eb_fix_word_latin(word, inputword)
 		inp++;
 	}
 
-	keylen++;
+	word_length++;
     }
     *wp = '\0';
 
-    if (keylen == 0) {
-	eb_error = EB_ERR_EMPTY_WORD;
-	return EB_WORD_ERROR;
+    if (word_length == 0) {
+	error_code = EB_ERR_EMPTY_WORD;
+	goto failed;
     }
 
-    return EB_WORD_ALPHA;
+    *word_code = EB_WORD_ALPHABET;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *word = '\0';
+    *word_code = EB_WORD_INVALID;
+    return error_code;
 }
 
 
 /*
- * Table used to convert JIS X 0208 to ASCII (subset of ISO 8859 1).
+ * Table used to convert JIS X 0208 to ASCII.
  */
-static unsigned int jisx0208_table[] = {
+static const unsigned int jisx0208_table[] = {
     /* 0x20 -- 0x2f */
     0x2121, 0x212a, 0x2149, 0x2174, 0x2170, 0x2173, 0x2175, 0x2147,
     0x214a, 0x214b, 0x2176, 0x215c, 0x2124, 0x215d, 0x2125, 0x213f, 
@@ -303,7 +425,7 @@ static unsigned int jisx0208_table[] = {
 /*
  * Table used to convert JIS X 0201 KATAKANA to JIS X 0208.
  */
-static unsigned int jisx0201_table[] = {
+static const unsigned int jisx0201_table[] = {
     /* 0xa0 -- 0xaf */
     0x0000, 0x2123, 0x2156, 0x2157, 0x2122, 0x2126, 0x2572, 0x2521, 
     0x2523, 0x2525, 0x2527, 0x2529, 0x2563, 0x2565, 0x2567, 0x2543, 
@@ -319,30 +441,33 @@ static unsigned int jisx0201_table[] = {
 };
 
 /*
- * Convert `inputword' to JIS X0208 and put it into `word'.
+ * Convert `input_word' to JIS X0208 and put it into `word'.
  *
- * If `inputword' is a valid string to search, EB_WORD_ALPHA or
+ * If `input_word' is a valid string to search, EB_WORD_ALPHABET or
  * EB_WORD_KANA is returned.
- * Otherwise, -1 is returned and `eb_error' is set.
+ * Otherwise, -1 is returned.
  */
-static int
-eb_fix_word_jis(word, inputword)
+static EB_Error_Code
+eb_fix_word_jis(book, input_word, word, word_code)
+    EB_Book *book;
     char *word;
-    const char *inputword;
+    const char *input_word;
+    EB_Word_Code *word_code;
 {
+    EB_Error_Code error_code;
     unsigned char *wp = (unsigned char *) word;
-    const unsigned char *inp = (const unsigned char *) inputword;
+    const unsigned char *inp = (const unsigned char *) input_word;
     const unsigned char *tail;
     unsigned char c1, c2;
-    int kana = 0;
-    int alphabet = 0;
-    int kanji = 0;
-    int keylen = 0;
+    int kana_count = 0;
+    int alphabet_count = 0;
+    int kanji_count = 0;
+    int word_length = 0;
 
     /*
-     * Find the tail of `inputword'.
+     * Find the tail of `input_word'.
      */
-    tail = (const unsigned char *) inputword + strlen(inputword) - 1;
+    tail = (const unsigned char *) input_word + strlen(input_word) - 1;
     for (;;) {
 	if (inp < tail && (*tail == ' ' || *tail == '\t'))
 	    tail--;
@@ -354,7 +479,7 @@ eb_fix_word_jis(word, inputword)
     tail++;
 
     /*
-     * Ignore spaces and tabs in the beginning of `inputword'.
+     * Ignore spaces and tabs in the beginning of `input_word'.
      */
     for (;;) {
 	if (*inp == ' ' || *inp == '\t')
@@ -370,9 +495,9 @@ eb_fix_word_jis(word, inputword)
 	 * Check for the length of the word.
 	 * If exceeded, return with an error code.
 	 */
-	if (EB_MAXLEN_WORD < keylen + 2) {
-	    eb_error = EB_ERR_TOO_LONG_WORD;
-	    return EB_WORD_ERROR;
+	if (EB_MAX_WORD_LENGTH < word_length + 2) {
+	    error_code = EB_ERR_TOO_LONG_WORD;
+	    goto failed;
 	}
 
 	/*
@@ -395,8 +520,8 @@ eb_fix_word_jis(word, inputword)
 	     */
 	    c2 = *inp++;
 	    if (c2 < 0xa1 || 0xfe < c2) {
-		eb_error = EB_ERR_BAD_WORD;
-		return EB_WORD_ERROR;
+		error_code = EB_ERR_BAD_WORD;
+		goto failed;
 	    }
 	    c1 &= 0x7f;
 	    c2 &= 0x7f;
@@ -405,14 +530,14 @@ eb_fix_word_jis(word, inputword)
 	     * `c1' is SS2.
 	     */
 	    if (c2 < 0xa1 || 0xdf < c2) {
-		eb_error = EB_ERR_BAD_WORD;
-		return EB_WORD_ERROR;
+		error_code = EB_ERR_BAD_WORD;
+		goto failed;
 	    }
 	    c2 = jisx0201_table[c2 - 0xa0];
 	    c1 = 0x25;
 	} else {
-	    eb_error = EB_ERR_BAD_WORD;
-	    return EB_WORD_ERROR;
+	    error_code = EB_ERR_BAD_WORD;
+	    goto failed;
 	}
 
 	/*
@@ -425,29 +550,36 @@ eb_fix_word_jis(word, inputword)
 	*wp++ = c2;
 
 	if (c1 == 0x23)
-	    alphabet++;
+	    alphabet_count++;
 	else if (c1 == 0x24 || c1 == 0x25)
-	    kana++;
+	    kana_count++;
 	else if (c1 != 0x21)
-	    kanji++;
+	    kanji_count++;
 
-	keylen += 2;
+	word_length += 2;
     }
     *wp = '\0';
 
-    if (keylen == 0) {
-	eb_error = EB_ERR_EMPTY_WORD;
-	return EB_WORD_ERROR;
+    if (word_length == 0) {
+	error_code = EB_ERR_EMPTY_WORD;
+	goto failed;
     }
-    if (alphabet == 0 && kana != 0 && kanji == 0)
-	return EB_WORD_KANA;
-    else if (alphabet != 0 && kana == 0 && kanji == 0)
-	return EB_WORD_ALPHA;
+    if (alphabet_count == 0 && kana_count != 0 && kanji_count == 0)
+	*word_code = EB_WORD_KANA;
+    else if (alphabet_count != 0 && kana_count == 0 && kanji_count == 0)
+	*word_code = EB_WORD_ALPHABET;
     else
-	return EB_WORD_OTHER;
+	*word_code = EB_WORD_OTHER;
 
-    /* not reached */
-    return EB_WORD_ERROR;
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    *word = '\0';
+    *word_code = EB_WORD_INVALID;
+    return error_code;
 }
 
 
@@ -458,22 +590,22 @@ static void
 eb_convert_katakana_jis(word)
     char *word;
 {
-    unsigned char *w = (unsigned char *) word;
+    unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*w != '\0' && *(w + 1) != '\0') {
-	c1 = *w;
-	c2 = *(w + 1);
+    while (*wp != '\0' && *(wp + 1) != '\0') {
+	c1 = *wp;
+	c2 = *(wp + 1);
 	
 	if (c1 == 0x25 && 0x21 <= c2 && c2 <= 0x76) {
 	    /*
 	     * This is a KATAKANA.  Convert to corresponding HIRAGANA.
 	     */
-	    *w = 0x24;
+	    *wp = 0x24;
 	}
-	w += 2;
+	wp += 2;
     }
-    *w = '\0';
+    *wp = '\0';
 }
 
 
@@ -484,19 +616,19 @@ static void
 eb_convert_lower_latin(word)
     char *word;
 {
-    unsigned char *w = (unsigned char *) word;
+    unsigned char *wp = (unsigned char *) word;
     
-    while (*w != '\0') {
-	if (('a' <= *w && *w <= 'z')
-	    || (0xe0 <= *w && *w <= 0xf6) || (0xf8 <= *w && *w <= 0xfe)) {
+    while (*wp != '\0') {
+	if (('a' <= *wp && *wp <= 'z')
+	    || (0xe0 <= *wp && *wp <= 0xf6) || (0xf8 <= *wp && *wp <= 0xfe)) {
 	    /*
 	     * This is a lower case letter.  Convert to upper case.
 	     */
-	    *w -= 0x20;
+	    *wp -= 0x20;
 	}
-	w++;
+	wp++;
     }
-    *w = '\0';
+    *wp = '\0';
 }
 
 
@@ -507,22 +639,22 @@ static void
 eb_convert_lower_jis(word)
     char *word;
 {
-    unsigned char *w = (unsigned char *) word;
+    unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*w != '\0' && *(w + 1) != '\0') {
-	c1 = *w;
-	c2 = *(w + 1);
+    while (*wp != '\0' && *(wp + 1) != '\0') {
+	c1 = *wp;
+	c2 = *(wp + 1);
 	
 	if (c1 == 0x23 && 0x61 <= c2 && c2 <= 0x7a) {
 	    /*
 	     * This is a lower case letter.  Convert to upper case.
 	     */
-	    *(w + 1) = c2 - 0x20;
+	    *(wp + 1) = c2 - 0x20;
 	}
-	w += 2;
+	wp += 2;
     }
-    *w = '\0';
+    *wp = '\0';
 }
 
 
@@ -533,34 +665,33 @@ static void
 eb_delete_marks_jis(word)
     char *word;
 {
-    unsigned char *iw = (unsigned char *) word;
-    unsigned char *ow = (unsigned char *) word;
+    unsigned char *in_wp = (unsigned char *) word;
+    unsigned char *out_wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*iw != '\0' && *(iw + 1) != '\0') {
-	c1 = *iw;
-	c2 = *(iw + 1);
+    while (*in_wp != '\0' && *(in_wp + 1) != '\0') {
+	c1 = *in_wp;
+	c2 = *(in_wp + 1);
 	
 	if (c1 != 0x21
 	    || (c2 != 0x26 && c2 != 0x3e && c2 != 0x47 && c2 != 0x5d)) {
 	    /*
 	     * This is not a character to be deleted.
 	     */
-	    *ow = c1;
-	    *(ow + 1) = c2;
-	    ow += 2;
+	    *out_wp = c1;
+	    *(out_wp + 1) = c2;
+	    out_wp += 2;
 	}
-	iw += 2;
+	in_wp += 2;
     }
-    *ow = '\0';
+    *out_wp = '\0';
 }
 
 
 /*
  * The table is used to convert long vowel marks.
  */
-static const char
-long_vowel_table[] = {
+static const char long_vowel_table[] = {
     0x22, /* a(21) -> A(22) */		0x22, /* A(22) -> A(22) */
     0x24, /* i(23) -> I(24) */		0x24, /* I(24) -> I(24) */
     0x26, /* u(25) -> U(26) */		0x26, /* U(26) -> U(26) */
@@ -614,32 +745,32 @@ static void
 eb_convert_long_vowels_jis(word)
     char *word;
 {
-    unsigned char *w = (unsigned char *) word;
+    unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
-    unsigned char prevc1 = '\0', prevc2 = '\0';
+    unsigned char previous_c1 = '\0', previous_c2 = '\0';
     
-    while (*w != '\0' && *(w + 1) != '\0') {
-	c1 = *w;
-	c2 = *(w + 1);
+    while (*wp != '\0' && *(wp + 1) != '\0') {
+	c1 = *wp;
+	c2 = *(wp + 1);
 	
 	if (c1 == 0x21 && c2 == 0x3c) {
 	    /*
 	     * The is a long vowel mark.
-	     * Convert to a vowel of the previous KANA character.
-	     * If previous character is not KANA, the conversion is
+	     * Convert to a vowel of the prev_ KANA character.
+	     * If prev_ character is not KANA, the conversion is
 	     * not done.
 	     */
-	    if ((prevc1 == 0x24 || prevc1 == 0x25)
-		&& 0x21 <= prevc2 && prevc2 <= 0x76) {
-		*w = prevc1;
-		*(w + 1) = long_vowel_table[prevc2 - 0x21];
+	    if ((previous_c1 == 0x24 || previous_c1 == 0x25)
+		&& 0x21 <= previous_c2 && previous_c2 <= 0x76) {
+		*wp = previous_c1;
+		*(wp + 1) = long_vowel_table[previous_c2 - 0x21];
 	    }
 	}
-	prevc1 = c1;
-	prevc2 = c2;
-	w += 2;
+	previous_c1 = c1;
+	previous_c2 = c2;
+	wp += 2;
     }
-    *w = '\0';
+    *wp = '\0';
 }
 
 
@@ -650,25 +781,25 @@ static void
 eb_delete_long_vowels_jis(word)
     char *word;
 {
-    unsigned char *iw = (unsigned char *) word;
-    unsigned char *ow = (unsigned char *) word;
+    unsigned char *in_wp = (unsigned char *) word;
+    unsigned char *out_wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*iw != '\0' && *(iw + 1) != '\0') {
-	c1 = *iw;
-	c2 = *(iw + 1);
+    while (*in_wp != '\0' && *(in_wp + 1) != '\0') {
+	c1 = *in_wp;
+	c2 = *(in_wp + 1);
 	
 	if (c1 != 0x21 || c2 != 0x3c) {
 	    /*
 	     * The is not a long vowel mark.
 	     */
-	    *ow = c1;
-	    *(ow + 1) = c2;
-	    ow += 2;
+	    *out_wp = c1;
+	    *(out_wp + 1) = c2;
+	    out_wp += 2;
 	}
-	iw += 2;
+	in_wp += 2;
     }
-    *ow = '\0';
+    *out_wp = '\0';
 }
 
 
@@ -679,23 +810,23 @@ static void
 eb_convert_double_consonants_jis(word)
     char *word;
 {
-    unsigned char *w = (unsigned char *) word;
+    unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*w != '\0' && *(w + 1) != '\0') {
-	c1 = *w;
-	c2 = *(w + 1);
+    while (*wp != '\0' && *(wp + 1) != '\0') {
+	c1 = *wp;
+	c2 = *(wp + 1);
 	
 	if ((c1 == 0x24 || c1 == 0x25) && c2 == 0x43) {
 	    /*
-	     * This is a double sound mark.  Convert to the
-	     * corresponding sound mark.
+	     * This is a double sound mark.  Convert to the corresponding
+	     * sound mark.
 	     */
-	    *(w + 1) = c2 + 1;
+	    *(wp + 1) = c2 + 1;
 	}
-	w += 2;
+	wp += 2;
     }
-    *w = '\0';
+    *wp = '\0';
 }
 
 
@@ -708,12 +839,12 @@ static void
 eb_convert_contracted_sounds_jis(word)
     char *word;
 {
-    unsigned char *w = (unsigned char *) word;
+    unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*w != '\0' && *(w + 1) != '\0') {
-	c1 = *w;
-	c2 = *(w + 1);
+    while (*wp != '\0' && *(wp + 1) != '\0') {
+	c1 = *wp;
+	c2 = *(wp + 1);
 	
 	if (c1 == 0x24 || c1 == 0x25) {
 	    /*
@@ -722,15 +853,15 @@ eb_convert_contracted_sounds_jis(word)
 	     * corresponding uncontracted sound mark.
 	     */
 	    if (c2 == 0x63 || c2 == 0x65 || c2 == 0x67 || c2 == 0x6e)
-		*(w + 1) = c2 + 1;
+		*(wp + 1) = c2 + 1;
 	    else if (c2 == 0x75)
-		*(w + 1) = 0x2b;
+		*(wp + 1) = 0x2b;
 	    else if (c2 == 0x76)
-		*(w + 1) = 0x31;
+		*(wp + 1) = 0x31;
 	}
-	w += 2;
+	wp += 2;
     }
-    *w = '\0';
+    *wp = '\0';
 }
 
 
@@ -742,12 +873,12 @@ static void
 eb_convert_small_vowels_jis(word)
     char *word;
 {
-    unsigned char *w = (unsigned char *) word;
+    unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*w != '\0' && *(w + 1) != '\0') {
-	c1 = *w;
-	c2 = *(w + 1);
+    while (*wp != '\0' && *(wp + 1) != '\0') {
+	c1 = *wp;
+	c2 = *(wp + 1);
 	
 	if (c1 == 0x24 || c1 == 0x25) {
 	    /*
@@ -756,19 +887,18 @@ eb_convert_small_vowels_jis(word)
 	     */
 	    if (c2 == 0x21 || c2 == 0x23 || c2 == 0x25 || c2 == 0x27
 		|| c2 == 0x29)
-		*(w + 1) = c2 + 1;
+		*(wp + 1) = c2 + 1;
 	}
-	w += 2;
+	wp += 2;
     }
-    *w = '\0';
+    *wp = '\0';
 }
 
 
 /*
  * The table is used to convert voiced consonant marks.
  */
-static const char
-voiced_consonant_table[] = {
+static const char voiced_consonant_table[] = {
     0x21, /* a(21) -> a(22) */		0x22, /* A(22) -> A(22) */
     0x23, /* i(23) -> i(24) */		0x24, /* I(24) -> I(24) */
     0x25, /* u(25) -> u(26) */		0x26, /* U(26) -> U(26) */
@@ -822,23 +952,23 @@ static void
 eb_convert_voiced_consonants_jis(word)
     char *word;
 {
-    unsigned char *w = (unsigned char *) word;
+    unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*w != '\0' && *(w + 1) != '\0') {
-	c1 = *w;
-	c2 = *(w + 1);
+    while (*wp != '\0' && *(wp + 1) != '\0') {
+	c1 = *wp;
+	c2 = *(wp + 1);
 	
 	if ((c1 == 0x24 || c1 == 0x25) && 0x21 <= c2 && c2 <= 0x76) {
 	    /*
 	     * This is a voiced constonat mark.  Convert to the
 	     * corresponding unvoiced constonant mark.
 	     */
-	    *(w + 1) = voiced_consonant_table[c2 - 0x21];
+	    *(wp + 1) = voiced_consonant_table[c2 - 0x21];
 	}
-	w += 2;
+	wp += 2;
     }
-    *w = '\0';
+    *wp = '\0';
 }
 
 
@@ -850,12 +980,12 @@ static void
 eb_convert_p_sounds_jis(word)
     char *word;
 {
-    unsigned char *w = (unsigned char *) word;
+    unsigned char *wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*w != '\0' && *(w + 1) != '\0') {
-	c1 = *w;
-	c2 = *(w + 1);
+    while (*wp != '\0' && *(wp + 1) != '\0') {
+	c1 = *wp;
+	c2 = *(wp + 1);
 	
 	if (c1 == 0x24 || c1 == 0x25) {
 	    /*
@@ -865,11 +995,11 @@ eb_convert_p_sounds_jis(word)
 	     */
 	    if (c2 == 0x51 || c2 == 0x54 || c2 == 0x57 || c2 == 0x5a
 		|| c2 == 0x5d)
-		*(w + 1) = c2 - 2;
+		*(wp + 1) = c2 - 2;
 	}
-	w += 2;
+	wp += 2;
     }
-    *w = '\0';
+    *wp = '\0';
 }
 
 
@@ -880,20 +1010,20 @@ static void
 eb_delete_spaces_latin(word)
     char *word;
 {
-    unsigned char *iw = (unsigned char *) word;
-    unsigned char *ow = (unsigned char *) word;
+    unsigned char *in_wp = (unsigned char *) word;
+    unsigned char *out_wp = (unsigned char *) word;
     
-    while (*iw != '\0') {
-	if (*iw != ' ') {
+    while (*in_wp != '\0') {
+	if (*in_wp != ' ') {
 	    /*
 	     * This is not a space character of ISO 8859 1.
 	     */
-	    *ow = *iw;
-	    ow++;
+	    *out_wp = *in_wp;
+	    out_wp++;
 	}
-	iw++;
+	in_wp++;
     }
-    *ow = '\0';
+    *out_wp = '\0';
 }
 
 
@@ -904,25 +1034,25 @@ static void
 eb_delete_spaces_jis(word)
     char *word;
 {
-    unsigned char *iw = (unsigned char *) word;
-    unsigned char *ow = (unsigned char *) word;
+    unsigned char *in_wp = (unsigned char *) word;
+    unsigned char *out_wp = (unsigned char *) word;
     unsigned char c1, c2;
     
-    while (*iw != '\0' && *(iw + 1) != '\0') {
-	c1 = *iw;
-	c2 = *(iw + 1);
+    while (*in_wp != '\0' && *(in_wp + 1) != '\0') {
+	c1 = *in_wp;
+	c2 = *(in_wp + 1);
 	
 	if (c1 != 0x21 || c2 != 0x21) {
 	    /*
 	     * This is not a space character of JIS X 0208.
 	     */
-	    *ow = c1;
-	    *(ow + 1) = c2;
-	    ow += 2;
+	    *out_wp = c1;
+	    *(out_wp + 1) = c2;
+	    out_wp += 2;
 	}
-	iw += 2;
+	in_wp += 2;
     }
-    *ow = '\0';
+    *out_wp = '\0';
 }
 
 
@@ -937,13 +1067,13 @@ eb_reverse_word_latin(word)
     char *word;
 {
     char *p1, *p2;
-    int len;
+    int word_length;
     char c;
 
-    len = strlen(word);
-    if (len == 0)
+    word_length = strlen(word);
+    if (word_length == 0)
 	return;
-    for (p1 = word, p2 = word + len - 1; p1 < p2; p1++, p2--) {
+    for (p1 = word, p2 = word + word_length - 1; p1 < p2; p1++, p2--) {
 	c = *p1;
 	*p1 = *p2;
 	*p2 = c;
@@ -962,18 +1092,15 @@ eb_reverse_word_jis(word)
     char *word;
 {
     char *p1, *p2;
-    int len;
+    int word_length;
     char c;
 
-    len = strlen(word);
-    if (len % 2 == 1) {
-	*(word + len - 1) = '\0';
-	len--;
+    word_length = strlen(word);
+    if (word_length % 2 == 1) {
+	*(word + word_length - 1) = '\0';
+	word_length--;
     }
-    if (len < 2)
-	return;
-    
-    for (p1 = word, p2 = word + len - 2; p1 < p2; p1 += 2, p2 -= 2) {
+    for (p1 = word, p2 = word + word_length - 2; p1 < p2; p1 += 2, p2 -= 2) {
 	c = *p1;
 	*p1 = *p2;
 	*p2 = c;

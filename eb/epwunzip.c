@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1999  Motoyuki Kasahara
+ * Copyright (c) 1999, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,9 +43,9 @@ char *memset();
 #endif /* not __STDC__ */
 #endif
 
-#include "defs.h"
+#include "eb.h"
+#include "error.h"
 #include "internal.h"
-
 
 /*
  * Uncompress an EPWING compressed slice.
@@ -60,83 +60,83 @@ eb_epwunzip_slice(out_buffer, in_file, huffman_tree)
     int in_file;
     EB_Huffman_Node *huffman_tree;
 {
-    EB_Huffman_Node *nodep;
+    EB_Huffman_Node *node_p;
     int bit;
     char in_buffer[EB_SIZE_PAGE];
-    unsigned char *in_bufp;
+    unsigned char *in_buffer_p;
     size_t in_read_length;
     int in_bit_index;
-    unsigned char *out_bufp;
+    unsigned char *out_buffer_p;
     size_t out_length;
 
-    in_bufp = (unsigned char *)in_buffer;
+    in_buffer_p = (unsigned char *)in_buffer;
     in_bit_index = 7;
     in_read_length = 0;
-    out_bufp = (unsigned char *)out_buffer;
+    out_buffer_p = (unsigned char *)out_buffer;
     out_length = 0;
 
     for (;;) {
 	/*
 	 * Descend the huffman tree until reached to the leaf node.
 	 */
-	nodep = huffman_tree;
-	while (nodep->type == EB_HUFFMAN_NODE_INTERMEDIATE) {
+	node_p = huffman_tree;
+	while (node_p->type == EB_HUFFMAN_NODE_INTERMEDIATE) {
 
 	    /*
 	     * If no data is left in the input buffer, read next chunk.
 	     */
-	    if ((unsigned char *)in_buffer + in_read_length <= in_bufp) {
+	    if ((unsigned char *)in_buffer + in_read_length <= in_buffer_p) {
 		in_read_length = eb_read_all(in_file, in_buffer, EB_SIZE_PAGE);
 		if (in_read_length <= 0)
 		    return -1;
-		in_bufp = (unsigned char *)in_buffer;
+		in_buffer_p = (unsigned char *)in_buffer;
 	    }
 
 	    /*
 	     * Step to a child.
 	     */
-	    bit = (*in_bufp >> in_bit_index) & 0x01;
+	    bit = (*in_buffer_p >> in_bit_index) & 0x01;
 
 	    if (bit == 1)
-		nodep = nodep->left;
+		node_p = node_p->left;
 	    else
-		nodep = nodep->right;
-	    if (nodep == NULL)
+		node_p = node_p->right;
+	    if (node_p == NULL)
 		return -1;
 
 	    if (0 < in_bit_index)
 		in_bit_index--;
 	    else {
 		in_bit_index = 7;
-		in_bufp++;
+		in_buffer_p++;
 	    }
 	}
 
-	if (nodep->type == EB_HUFFMAN_NODE_EOF) {
+	if (node_p->type == EB_HUFFMAN_NODE_EOF) {
 	    /*
 	     * Fill the rest of the output buffer with NUL,
              * when we meet an EOF mark before decode EB_SIZE_PAGE bytes.
 	     */
 	    if (out_length < EB_SIZE_PAGE) {
 #ifdef HAVE_MEMCPY
-		memset(out_bufp, EB_SIZE_PAGE - out_length, '\0');
+		memset(out_buffer_p, EB_SIZE_PAGE - out_length, '\0');
 #else
-		bzero(out_bufp, EB_SIZE_PAGE - out_length);
+		bzero(out_buffer_p, EB_SIZE_PAGE - out_length);
 #endif
 	    }
 	    return out_length;
-	} else if (nodep->type == EB_HUFFMAN_NODE_LEAF16) {
+	} else if (node_p->type == EB_HUFFMAN_NODE_LEAF16) {
 	    /*
 	     * The leaf is leaf16, decode 2 bytes character.
 	     */
 	    if (EB_SIZE_PAGE <= out_length)
 		return -1;
 	    else if (EB_SIZE_PAGE <= out_length + 1) {
-		*out_bufp++ = (nodep->value >> 8) & 0xff;
+		*out_buffer_p++ = (node_p->value >> 8) & 0xff;
 		out_length++;
 	    } else {
-		*out_bufp++ = (nodep->value >> 8) & 0xff;
-		*out_bufp++ = nodep->value & 0xff;
+		*out_buffer_p++ = (node_p->value >> 8) & 0xff;
+		*out_buffer_p++ = node_p->value & 0xff;
 		out_length += 2;
 	    }
 	} else {
@@ -145,7 +145,7 @@ eb_epwunzip_slice(out_buffer, in_file, huffman_tree)
 	     */
 	    if (EB_SIZE_PAGE <= out_length)
 		return -1;
-	    *out_bufp++ = nodep->value;
+	    *out_buffer_p++ = node_p->value;
 	    out_length++;
 	}
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,24 +25,33 @@
 
 #include "eb.h"
 #include "error.h"
+#include "internal.h"
+
+/*
+ * Undefine CPP macro version.
+ */
+#undef eb_uint1
+#undef eb_uint2
+#undef eb_uint3
+#undef eb_uint4
 
 /*
  * Get a BCD (binary coded decimal) packed integer with 2 bytes
  * from an octet stream.
  */
 unsigned
-eb_bcd2(mem)
-    const char *mem;
+eb_bcd2(stream)
+    const char *stream;
 {
-    unsigned val;
-    const unsigned char *umem = (const unsigned char *)mem;
+    unsigned value;
+    const unsigned char *s = (const unsigned char *)stream;
 
-    val  = ((*(umem    ) >> 4) & 0x0f) * 1000;
-    val += ((*(umem    )     ) & 0x0f) * 100;
-    val += ((*(umem + 1) >> 4) & 0x0f) * 10;
-    val += ((*(umem + 1)     ) & 0x0f);
+    value  = ((*(s    ) >> 4) & 0x0f) * 1000;
+    value += ((*(s    )     ) & 0x0f) * 100;
+    value += ((*(s + 1) >> 4) & 0x0f) * 10;
+    value += ((*(s + 1)     ) & 0x0f);
 
-    return val;
+    return value;
 }
 
 
@@ -51,22 +60,22 @@ eb_bcd2(mem)
  * from an octet stream.
  */
 unsigned
-eb_bcd4(mem)
-    const char *mem;
+eb_bcd4(stream)
+    const char *stream;
 {
-    unsigned val;
-    const unsigned char *umem = (const unsigned char *)mem;
+    unsigned value;
+    const unsigned char *s = (const unsigned char *)stream;
 
-    val  = ((*(umem    ) >> 4) & 0x0f) * 10000000;
-    val += ((*(umem    )     ) & 0x0f) * 1000000;
-    val += ((*(umem + 1) >> 4) & 0x0f) * 100000;
-    val += ((*(umem + 1)     ) & 0x0f) * 10000;
-    val += ((*(umem + 2) >> 4) & 0x0f) * 1000;
-    val += ((*(umem + 2)     ) & 0x0f) * 100;
-    val += ((*(umem + 3) >> 4) & 0x0f) * 10;
-    val += ((*(umem + 3)     ) & 0x0f);
+    value  = ((*(s    ) >> 4) & 0x0f) * 10000000;
+    value += ((*(s    )     ) & 0x0f) * 1000000;
+    value += ((*(s + 1) >> 4) & 0x0f) * 100000;
+    value += ((*(s + 1)     ) & 0x0f) * 10000;
+    value += ((*(s + 2) >> 4) & 0x0f) * 1000;
+    value += ((*(s + 2)     ) & 0x0f) * 100;
+    value += ((*(s + 3) >> 4) & 0x0f) * 10;
+    value += ((*(s + 3)     ) & 0x0f);
 
-    return val;
+    return value;
 }
 
 
@@ -75,23 +84,23 @@ eb_bcd4(mem)
  * from an octet stream.
  */
 unsigned
-eb_bcd6(mem)
-    const char *mem;
+eb_bcd6(stream)
+    const char *stream;
 {
-    unsigned val;
-    const unsigned char *umem = (const unsigned char *)mem;
+    unsigned value;
+    const unsigned char *s = (const unsigned char *)stream;
 
-    val  = ((*(umem + 1)     ) & 0x0f);
-    val += ((*(umem + 2) >> 4) & 0x0f) * 10;
-    val += ((*(umem + 2)     ) & 0x0f) * 100;
-    val += ((*(umem + 3) >> 4) & 0x0f) * 1000;
-    val += ((*(umem + 3)     ) & 0x0f) * 10000;
-    val += ((*(umem + 4) >> 4) & 0x0f) * 100000;
-    val += ((*(umem + 4)     ) & 0x0f) * 1000000;
-    val += ((*(umem + 5) >> 4) & 0x0f) * 10000000;
-    val += ((*(umem + 5)     ) & 0x0f) * 100000000;
+    value  = ((*(s + 1)     ) & 0x0f);
+    value += ((*(s + 2) >> 4) & 0x0f) * 10;
+    value += ((*(s + 2)     ) & 0x0f) * 100;
+    value += ((*(s + 3) >> 4) & 0x0f) * 1000;
+    value += ((*(s + 3)     ) & 0x0f) * 10000;
+    value += ((*(s + 4) >> 4) & 0x0f) * 100000;
+    value += ((*(s + 4)     ) & 0x0f) * 1000000;
+    value += ((*(s + 5) >> 4) & 0x0f) * 10000000;
+    value += ((*(s + 5)     ) & 0x0f) * 100000000;
 
-    return val;
+    return value;
 }
 
 
@@ -99,12 +108,12 @@ eb_bcd6(mem)
  * Get unsigned integer with 1 byte from an octet stream.
  */
 unsigned
-eb_uint1(mem)
-    const char *mem;
+eb_uint1(stream)
+    const char *stream;
 {
-    const unsigned char *umem = (const unsigned char *)mem;
+    const unsigned char *s = (const unsigned char *)stream;
 
-    return *umem;
+    return *s;
 }
 
 
@@ -112,13 +121,13 @@ eb_uint1(mem)
  * Get unsigned integer with 2 byte from an octet stream.
  */
 unsigned
-eb_uint2(mem)
-    const char *mem;
+eb_uint2(stream)
+    const char *stream;
 {
     unsigned value;
-    const unsigned char *umem = (const unsigned char *)mem;
+    const unsigned char *s = (const unsigned char *)stream;
 
-    value = (*umem << 8) + (*(umem + 1));
+    value = (*s << 8) + (*(s + 1));
     return value;
 }
 
@@ -127,14 +136,13 @@ eb_uint2(mem)
  * Get unsigned integer with 4 byte from an octet stream.
  */
 unsigned
-eb_uint4(mem)
-    const char *mem;
+eb_uint4(stream)
+    const char *stream;
 {
     unsigned value;
-    const unsigned char *umem = (const unsigned char *)mem;
+    const unsigned char *s = (const unsigned char *)stream;
 
-    value = (*umem << 24) + (*(umem + 1) << 16) + (*(umem + 2) << 8)
-	+ (*(umem + 3));
+    value = (*s << 24) + (*(s + 1) << 16) + (*(s + 2) << 8) + (*(s + 3));
     return value;
 }
 

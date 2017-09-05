@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1998, 1999  Motoyuki Kasahara
+ * Copyright (c) 1998, 99, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,6 +45,10 @@
 #include <fcntl.h>
 #else
 #include <sys/file.h>
+#endif
+
+#ifdef ENABLE_PTHREAD
+#include <pthread.h>
 #endif
 
 #ifndef HAVE_STRCHR
@@ -97,6 +101,11 @@ char *memset();
 #define VOID char
 #endif
 
+#ifndef ENABLE_PTHREAD
+#define pthread_mutex_lock(m)
+#define pthread_mutex_unlock(m)
+#endif
+
 #include "eb.h"
 #include "error.h"
 #include "internal.h"
@@ -118,6 +127,13 @@ static int cache_file = -1;
 static off_t cache_offset;
 
 /*
+ * Mutex for cache variables.
+ */
+#ifdef ENABLE_PTHREAD
+static pthread_mutex_t cache_mutex = PTHREAD_MUTEX_INITIALIZER;
+#endif
+
+/*
  * Unexported function.
  */
 static int eb_zopen_ebzipped EB_P((EB_Zip *zip, const char *));
@@ -126,221 +142,234 @@ static ssize_t eb_zread_ebzipped EB_P((EB_Zip *, int, char *, size_t));
 static ssize_t eb_zread_epwzipped EB_P((EB_Zip *, int, char *, size_t));
 
 /*
- * Clear `cache_buffer'.
- */
-void
-eb_zclear()
-{
-    if (cache_buffer != NULL)
-	free(cache_buffer);
-    cache_buffer = NULL;
-    cache_file = -1;
-}
-
-
-/*
- * Open `filename' for reading.
- * The file may have been compressed.
- * We also adjust the suffix of the filename.
+ * Initialize `cache_buffer'.
  */
 int
-eb_zopen(zip, filename)
-    EB_Zip *zip;
-    const char *filename;
+eb_zinitialize()
 {
-    char zipped_filename[PATH_MAX + 1];
-    size_t filename_length;
-    const char *filename_tail;
-    EB_Case_Code fcase;
-    const char *p;
-    int file;
+    pthread_mutex_lock(&cache_mutex);
 
     /*
-     * Try to open a normal file.
-     * If succeed, return immediately.
+     * Allocate memory for cache buffer.
      */
-    file = open(filename, O_RDONLY | O_BINARY);
-    if (0 <= file) {
-	zip->code = EB_ZIP_NONE;
-	return file;
+    if (cache_buffer == NULL) {
+	cache_buffer = (char *) malloc(EB_SIZE_PAGE << EB_MAX_EBZIP_LEVEL);
+	if (cache_buffer == NULL)
+	    goto failed;
     }
+
+    pthread_mutex_unlock(&cache_mutex);
+    return 0;
 
     /*
-     * Determine the letter case of the suffix of the zip filename.
+     * An error occurs...
      */
-    filename_length = strlen(filename);
-    filename_tail = filename + filename_length;
-
-    for (p = filename, fcase = EB_CASE_UPPER; *p != '\0'; p++) {
-	if ('A' <= *p && *p <= 'Z')
-	    fcase = EB_CASE_UPPER;
-	else if ('a' <= *p && *p <= 'z')
-	    fcase = EB_CASE_LOWER;
-    }
-	
-    /*
-     * Copy `filename' to `zipped_filename' and appennd a suffix (`.EBZ'
-     * or `.ebz') to `zipped_filename'.
-     *
-     * Though the length of `zipped_filename' is increased, it never
-     * overrun the buffer (PATH_MAX).  See eb_bind().
-     */
-    strcpy(zipped_filename, filename);
-    if (*(filename + filename_length - 3) == '.') {
-	if (fcase == EB_CASE_UPPER)
-	    strcpy(zipped_filename + filename_length - 2, "EBZ;1");
-	else
-	    strcpy(zipped_filename + filename_length - 2, "ebz;1");
-    } else if (*(filename + filename_length - 2) == ';') {
-	if (fcase == EB_CASE_UPPER)
-	    strcpy(zipped_filename + filename_length - 2, ".EBZ;1");
-	else
-	    strcpy(zipped_filename + filename_length - 2, ".ebz;1");
-    } else if (*(filename + filename_length - 1) == '.') {
-	if (fcase == EB_CASE_UPPER)
-	    strcpy(zipped_filename + filename_length, "EBZ");
-	else 
-	    strcpy(zipped_filename + filename_length, "ebz");
-    } else {
-	if (fcase == EB_CASE_UPPER)
-	    strcpy(zipped_filename + filename_length, ".EBZ");
-	else 
-	    strcpy(zipped_filename + filename_length, ".ebz");
-    }
-
-    /*
-     * Try to open a `*.EBZ' file.
-     */
-    file = eb_zopen_ebzipped(zip, zipped_filename);
-    if (0 <= file)
-	return file;
-
-    /*
-     * Check for the basename of `filename'.
-     * It must be `.../DATA/HONMON' or `.../data/honmon'.
-     * If it is, add the suffix `2' to `zipped_filename'
-     * (e.g. `HONMON;1' -> `HONMON2;1').
-     */
-    strcpy(zipped_filename, filename);
-
-#ifndef DOS_FILE_PATH /* (for UNIX) */
-    if (12 <= filename_length
-	&& (strcmp(filename_tail - 12, "/DATA/HONMON") == 0
-	    || strcmp(filename_tail - 12, "/data/honmon") == 0)) {
-	strcpy(zipped_filename + filename_length, "2");
-    } else if (13 <= filename_length
-	&& (strcmp(filename_tail - 13, "/DATA/HONMON.") == 0
-	    || strcmp(filename_tail - 13, "/data/honmon.") == 0)) {
-	strcpy(zipped_filename + filename_length - 1, "2.");
-    } else if (14 <= filename_length
-	&& (strcmp(filename_tail - 14, "/DATA/HONMON;1") == 0
-	    || strcmp(filename_tail - 14, "/data/honmon;1") == 0)) {
-	strcpy(zipped_filename + filename_length - 2, "2;1");
-    } else if (15 <= filename_length
-	&& (strcmp(filename_tail - 15, "/DATA/HONMON.;1") == 0
-	    || strcmp(filename_tail - 15, "/data/honmon.;1") == 0)) {
-	strcpy(zipped_filename + filename_length - 3, "2;1");
-    } else {
-	zipped_filename[0] = '\0';
-    }
-
-#else /* DOS_FILE_PATH (for DOS and Windows) */
-    if (12 <= filename_length
-	&& (strcmp(filename_tail - 12, "\\DATA\\HONMON") == 0
-	    || strcmp(filename_tail - 12, "\\data\\honmon") == 0)) {
-	strcpy(zipped_filename + filename_length, "2");
-    } else if (13 <= filename_length
-	&& (strcmp(filename_tail - 13, "\\DATA\\HONMON.") == 0
-	    || strcmp(filename_tail - 13, "\\data\\honmon.") == 0)) {
-	strcpy(zipped_filename + filename_length - 1, "2.");
-    } else if (14 <= filename_length
-	&& (strcmp(filename_tail - 14, "\\DATA\\HONMON;1") == 0
-	    || strcmp(filename_tail - 14, "\\data\\honmon;1") == 0)) {
-	strcpy(zipped_filename + filename_length - 2, "2;1");
-    } else if (15 <= filename_length
-	&& (strcmp(filename_tail - 15, "\\DATA\\HONMON.;1") == 0
-	    || strcmp(filename_tail - 15, "\\data\\honmon.;1") == 0)) {
-	strcpy(zipped_filename + filename_length - 3, "2;1");
-    } else {
-	zipped_filename[0] = '\0';
-    }
-
-#endif /* DOS_FILE_PATH */
-
-    /*
-     * Try to open a `HONMON2' file instead of `HONMON'.
-     */
-    if (zipped_filename[0] != '\0') {
-	file = eb_zopen_epwzipped(zip, zipped_filename);
-	if (0 <= file)
-	    return file;
-    }
-
-    /*
-     * In some CD-ROM book discs, filename suffix is inconsistent.
-     * We remove or append `.' to the filename and try to open the
-     * file again.
-     */
-    strcpy(zipped_filename, filename);
-    if (*(filename + filename_length - 3) == '.') {
-	*(zipped_filename + filename_length - 3) = ';';
-	*(zipped_filename + filename_length - 2) = '1';
-	*(zipped_filename + filename_length - 1) = '\0';
-    } else if (*(filename + filename_length - 2) == ';') {
-	*(zipped_filename + filename_length - 2) = '.';
-	*(zipped_filename + filename_length - 1) = ';';
-	*(zipped_filename + filename_length)     = '1';
-	*(zipped_filename + filename_length + 1) = '\0';
-    } else if (*(filename + filename_length - 1) == '.') {
-	*(zipped_filename + filename_length - 1) = '\0';
-    } else {
-	*(zipped_filename + filename_length)     = '.';
-	*(zipped_filename + filename_length + 1) = '\0';
-    }
-    file = open(filename, O_RDONLY | O_BINARY);
-    if (0 <= file) {
-	zip->code = EB_ZIP_NONE;
-	return file;
-    }
-
+  failed:
+    pthread_mutex_unlock(&cache_mutex);
     return -1;
 }
 
 
 /*
- * Open `filename' for reading.
+ * Clear `cache_buffer'.
+ */
+void
+eb_zfinalize()
+{
+    pthread_mutex_lock(&cache_mutex);
+
+    if (cache_buffer != NULL)
+	free(cache_buffer);
+    cache_buffer = NULL;
+    cache_file = -1;
+
+    pthread_mutex_unlock(&cache_mutex);
+}
+
+
+/*
+ * Open `file_name' for reading.
  * The file may have been compressed.
- * Unlink `eb_zopen', we never adjust the suffix of the filename.
+ * We also adjust the suffix of the file name.
  */
 int
-eb_zopen2(zip, filename)
+eb_zopen(zip, file_name)
     EB_Zip *zip;
-    const char *filename;
+    const char *file_name;
+{
+    char zipped_file_name[PATH_MAX + 1];
+    size_t file_name_length;
+    EB_Case_Code case_code;
+    const char *p;
+    int file;
+
+    /*
+     * Try to open an uncompressed file.
+     * If succeeds, return immediately.
+     */
+    file = open(file_name, O_RDONLY | O_BINARY);
+    if (0 <= file) {
+	zip->code = EB_ZIP_NONE;
+	return file;
+    }
+
+    /*
+     * Determine the letter case of the suffix of the zip file name.
+     */
+    file_name_length = strlen(file_name);
+    for (p = file_name, case_code = EB_CASE_UPPER; *p != '\0'; p++) {
+	if ('A' <= *p && *p <= 'Z')
+	    case_code = EB_CASE_UPPER;
+	else if ('a' <= *p && *p <= 'z')
+	    case_code = EB_CASE_LOWER;
+    }
+	
+    /*
+     * Copy `file_name' to `zipped_file_name' and appennd a suffix (`.EBZ'
+     * or `.ebz') to `zipped_file_name'.
+     *
+     * Though the length of `zipped_file_name' is increased, it never
+     * overrun the buffer (PATH_MAX).  See eb_bind().
+     */
+    strcpy(zipped_file_name, file_name);
+    if (*(file_name + file_name_length - 3) == '.') {
+	if (case_code == EB_CASE_UPPER)
+	    strcpy(zipped_file_name + file_name_length - 2, "EBZ;1");
+	else
+	    strcpy(zipped_file_name + file_name_length - 2, "ebz;1");
+    } else if (*(file_name + file_name_length - 2) == ';') {
+	if (case_code == EB_CASE_UPPER)
+	    strcpy(zipped_file_name + file_name_length - 2, ".EBZ;1");
+	else
+	    strcpy(zipped_file_name + file_name_length - 2, ".ebz;1");
+    } else if (*(file_name + file_name_length - 1) == '.') {
+	if (case_code == EB_CASE_UPPER)
+	    strcpy(zipped_file_name + file_name_length, "EBZ");
+	else 
+	    strcpy(zipped_file_name + file_name_length, "ebz");
+    } else {
+	if (case_code == EB_CASE_UPPER)
+	    strcpy(zipped_file_name + file_name_length, ".EBZ");
+	else 
+	    strcpy(zipped_file_name + file_name_length, ".ebz");
+    }
+
+    /*
+     * Try to open a `*.EBZ' file.
+     */
+    file = eb_zopen_ebzipped(zip, zipped_file_name);
+    if (0 <= file)
+	return file;
+
+    /*
+     * Check for the base name of `file_name'.
+     * It must be `.../DATA/HONMON' or `.../data/honmon'.
+     * If it is, add the suffix `2' to `zipped_file_name'
+     * (e.g. `HONMON;1' -> `HONMON2;1').
+     */
+    strcpy(zipped_file_name, file_name);
+    if (12 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 12, "/DATA/HONMON") == 0
+	    || strcmp(file_name + file_name_length - 12, "/data/honmon")
+	    == 0)) {
+	strcpy(zipped_file_name + file_name_length, "2");
+    } else if (13 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 13, "/DATA/HONMON.") == 0
+	    || strcmp(file_name + file_name_length - 13, "/data/honmon.")
+	    == 0)) {
+	strcpy(zipped_file_name + file_name_length - 1, "2.");
+    } else if (14 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 14, "/DATA/HONMON;1") == 0
+	    || strcmp(file_name + file_name_length - 14, "/data/honmon;1")
+	    == 0)) {
+	strcpy(zipped_file_name + file_name_length - 2, "2;1");
+    } else if (15 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 15, "/DATA/HONMON.;1") == 0
+	    || strcmp(file_name + file_name_length - 15, "/data/honmon.;1")
+	    == 0)) {
+	strcpy(zipped_file_name + file_name_length - 3, "2;1");
+    } else {
+	zipped_file_name[0] = '\0';
+    }
+
+    /*
+     * Try to open a `HONMON2' file instead of `HONMON'.
+     */
+    if (zipped_file_name[0] != '\0') {
+	file = eb_zopen_epwzipped(zip, zipped_file_name);
+	if (0 <= file)
+	    return file;
+    }
+
+    /*
+     * In some CD-ROM book discs, file_name suffix is inconsistent.
+     * We remove or append `.' to the file name and try to open the
+     * file again.
+     */
+    strcpy(zipped_file_name, file_name);
+    if (*(file_name + file_name_length - 3) == '.') {
+	*(zipped_file_name + file_name_length - 3) = ';';
+	*(zipped_file_name + file_name_length - 2) = '1';
+	*(zipped_file_name + file_name_length - 1) = '\0';
+    } else if (*(file_name + file_name_length - 2) == ';') {
+	*(zipped_file_name + file_name_length - 2) = '.';
+	*(zipped_file_name + file_name_length - 1) = ';';
+	*(zipped_file_name + file_name_length)     = '1';
+	*(zipped_file_name + file_name_length + 1) = '\0';
+    } else if (*(file_name + file_name_length - 1) == '.') {
+	*(zipped_file_name + file_name_length - 1) = '\0';
+    } else {
+	*(zipped_file_name + file_name_length)     = '.';
+	*(zipped_file_name + file_name_length + 1) = '\0';
+    }
+    file = open(file_name, O_RDONLY | O_BINARY);
+    if (0 <= file) {
+	zip->code = EB_ZIP_NONE;
+	return file;
+    }
+
+    /*
+     * No file has been opened.
+     */
+    return -1;
+}
+
+
+/*
+ * Open `file_name' for reading.
+ * The file may have been compressed.
+ * Unlink `eb_zopen', we never adjust the suffix of the file name.
+ */
+int
+eb_zopen2(zip, file_name)
+    EB_Zip *zip;
+    const char *file_name;
 {
     int file;
     int is_ebzipped;
     int is_epwzipped;
-    size_t filename_length;
-    const char *filename_tail;
+    size_t file_name_length;
 
-    filename_length = strlen(filename);
-    filename_tail = filename + filename_length;
+    /*
+     * Get the length of `file_name'.
+     */
+    file_name_length = strlen(file_name);
 
     /*
      * Try to open a `*.EBZ' file.
      */
     is_ebzipped = 0;
-    if (4 <= filename_length
-	&& (strcmp(filename + filename_length - 4, ".EBZ") == 0
-	    || strcmp(filename + filename_length - 4, ".ebz") == 0)) {
+    if (4 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 4, ".EBZ") == 0
+	    || strcmp(file_name + file_name_length - 4, ".ebz") == 0)) {
 	is_ebzipped = 1;
-    } else if (6 <= filename_length
-	&& (strcmp(filename + filename_length - 6, ".EBZ;1") == 0
-	    || strcmp(filename + filename_length - 6, ".ebz;1") == 0)) {
+    } else if (6 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 6, ".EBZ;1") == 0
+	    || strcmp(file_name + file_name_length - 6, ".ebz;1") == 0)) {
 	is_ebzipped = 1;
     }
     if (is_ebzipped) {
-	file = eb_zopen_ebzipped(zip, filename);
+	file = eb_zopen_ebzipped(zip, file_name);
 	return file;
     }
 
@@ -348,57 +377,37 @@ eb_zopen2(zip, filename)
      * Try to open a `HONMON2' file instead of `HONMON'.
      */
     is_epwzipped = 0;
-
-#ifndef DOS_FILE_PATH /* (for UNIX) */
-    if (13 <= filename_length
-	&& (strcmp(filename_tail - 13, "/DATA/HONMON2") == 0
-	    || strcmp(filename_tail - 13, "/data/honmon2") == 0)) {
+    if (13 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 13, "/DATA/HONMON2") == 0
+	    || strcmp(file_name + file_name_length - 13, "/data/honmon2")
+	    == 0)) {
 	is_epwzipped = 1;
-    } else if (14 <= filename_length
-	&& (strcmp(filename_tail - 14, "/DATA/HONMON2.") == 0
-	    || strcmp(filename_tail - 14, "/data/honmon2.") == 0)) {
+    } else if (14 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 14, "/DATA/HONMON2.") == 0
+	    || strcmp(file_name + file_name_length - 14, "/data/honmon2.")
+	    == 0)) {
 	is_epwzipped = 1;
-    } else if (15 <= filename_length
-	&& (strcmp(filename_tail - 15, "/DATA/HONMON2;1") == 0
-	    || strcmp(filename_tail - 15, "/data/honmon2;1") == 0)) {
+    } else if (15 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 15, "/DATA/HONMON2;1") == 0
+	    || strcmp(file_name + file_name_length - 15, "/data/honmon2;1")
+	    == 0)) {
 	is_epwzipped = 1;
-    } else if (16 <= filename_length
-	&& (strcmp(filename_tail - 16, "/DATA/HONMON2.;1") == 0
-	    || strcmp(filename_tail - 16, "/data/honmon2.;1") == 0)) {
-	is_epwzipped = 1;
-    }
-
-#else /* DOS_FILE_PATH (for DOS and Windows) */
-    if (13 <= filename_length
-	&& (strcmp(filename_tail - 13, "\\DATA\\HONMON2") == 0
-	    || strcmp(filename_tail - 13, "\\data\\honmon2") == 0)) {
-	is_epwzipped = 1;
-    } else if (14 <= filename_length
-	&& (strcmp(filename_tail - 14, "\\DATA\\HONMON2.") == 0
-	    || strcmp(filename_tail - 14, "\\data\\honmon2.") == 0)) {
-	is_epwzipped = 1;
-    } else if (15 <= filename_length
-	&& (strcmp(filename_tail - 15, "\\DATA\\HONMON2;1") == 0
-	    || strcmp(filename_tail - 15, "\\data\\honmon2;1") == 0)) {
-	is_epwzipped = 1;
-    } else if (16 <= filename_length
-	&& (strcmp(filename_tail - 16, "\\DATA\\HONMON2.;1")  == 0
-	    || strcmp(filename_tail - 16, "\\data\\honmon2.;1") == 0)) {
+    } else if (16 <= file_name_length
+	&& (strcmp(file_name + file_name_length - 16, "/DATA/HONMON2.;1") == 0
+	    || strcmp(file_name + file_name_length - 16, "/data/honmon2.;1")
+	    == 0)) {
 	is_epwzipped = 1;
     }
-
-#endif /* DOS_FILE_PATH */
-
     if (is_epwzipped) {
-        file = eb_zopen_epwzipped(zip, filename);
-        return file;
+	file = eb_zopen_epwzipped(zip, file_name);
+	return file;
     }
 
     /*
-     * Try to open a normal file.
-     * If succeed, return immediately.
+     * Try to open an uncompressed file.
+     * If succeeds, return immediately.
      */
-    file = open(filename, O_RDONLY | O_BINARY);
+    file = open(file_name, O_RDONLY | O_BINARY);
     if (0 <= file) {
 	zip->code = EB_ZIP_NONE;
 	zip->slice_size = EB_SIZE_PAGE;
@@ -410,6 +419,9 @@ eb_zopen2(zip, filename)
 	return file;
     }
 
+    /*
+     * No file has been opened.
+     */
     return -1;
 }
 
@@ -418,9 +430,9 @@ eb_zopen2(zip, filename)
  * Try to open an EBZIP compression file `*.EBZ'.
  */
 static int
-eb_zopen_ebzipped(zip, filename)
+eb_zopen_ebzipped(zip, file_name)
     EB_Zip *zip;
-    const char *filename;
+    const char *file_name;
 {
     char header[EB_SIZE_EBZIP_HEADER];
     int file = -1;
@@ -428,7 +440,7 @@ eb_zopen_ebzipped(zip, filename)
     /*
      * Try to open a `*.ebz' file.
      */
-    file = open(filename, O_RDONLY | O_BINARY);
+    file = open(file_name, O_RDONLY | O_BINARY);
     if (file < 0)
 	goto failed;
 
@@ -481,16 +493,16 @@ eb_zopen_ebzipped(zip, filename)
  * Try to open an EPWING compression file `HONMON2'.
  */
 static int
-eb_zopen_epwzipped(zip, filename)
+eb_zopen_epwzipped(zip, file_name)
     EB_Zip *zip;
-    const char *filename;
+    const char *file_name;
 {
     int file = -1;
     int leaf16_count;
     int leaf_count;
     char buffer[EPWZIP_BUFFER_SIZE];
-    char *bufp;
-    EB_Huffman_Node *tail_nodep;
+    char *buffer_p;
+    EB_Huffman_Node *tail_node_p;
     int i;
 
     /*
@@ -501,7 +513,7 @@ eb_zopen_epwzipped(zip, filename)
     /*
      * Open `HONMON2'.
      */
-    file = open(filename, O_RDONLY | O_BINARY);
+    file = open(file_name, O_RDONLY | O_BINARY);
     if (file < 0)
 	goto failed;
 
@@ -529,7 +541,6 @@ eb_zopen_epwzipped(zip, filename)
      * If the index of the non-first page in the last index group
      * is 0x0000, we assumes the data corresponding with the index
      * doesn't exist.
-     *
      */
     if (lseek(file, zip->index_location + (zip->index_length - 36) / 36 * 36,
 	SEEK_SET) < 0)
@@ -537,8 +548,8 @@ eb_zopen_epwzipped(zip, filename)
     if (eb_read_all(file, buffer, 36) != 36)
 	goto failed;
     zip->file_size = (zip->index_length / 36) * (EB_SIZE_PAGE * 16);
-    for (i = 1, bufp = buffer + 4 + 2; i < 16; i++, bufp += 2) {
-	if (eb_uint2(bufp) == 0)
+    for (i = 1, buffer_p = buffer + 4 + 2; i < 16; i++, buffer_p += 2) {
+	if (eb_uint2(buffer_p) == 0)
 	    break;
     }
     zip->file_size -= EB_SIZE_PAGE * (16 - i);
@@ -550,7 +561,7 @@ eb_zopen_epwzipped(zip, filename)
 	* leaf_count * 2);
     if (zip->huffman_nodes == NULL)
 	goto failed;
-    tail_nodep = zip->huffman_nodes;
+    tail_node_p = zip->huffman_nodes;
 
     /*
      * Make leafs for 16bit character.
@@ -560,21 +571,21 @@ eb_zopen_epwzipped(zip, filename)
     if (eb_read_all(file, buffer, EPWZIP_BUFFER_SIZE) != EPWZIP_BUFFER_SIZE)
 	goto failed;
 
-    bufp = buffer;
+    buffer_p = buffer;
     for (i = 0; i < leaf16_count; i++) {
-	if (buffer + EPWZIP_BUFFER_SIZE <= bufp) {
+	if (buffer + EPWZIP_BUFFER_SIZE <= buffer_p) {
 	    if (eb_read_all(file, buffer, EPWZIP_BUFFER_SIZE)
 		!= EPWZIP_BUFFER_SIZE)
 		goto failed;
-	    bufp = buffer;
+	    buffer_p = buffer;
 	}
-	tail_nodep->type = EB_HUFFMAN_NODE_LEAF16;
-	tail_nodep->value = eb_uint2(bufp);
-	tail_nodep->frequency = eb_uint2(bufp + 2);
-	tail_nodep->left = NULL;
-	tail_nodep->right = NULL;
-	bufp += 4;
-	tail_nodep++;
+	tail_node_p->type = EB_HUFFMAN_NODE_LEAF16;
+	tail_node_p->value = eb_uint2(buffer_p);
+	tail_node_p->frequency = eb_uint2(buffer_p + 2);
+	tail_node_p->left = NULL;
+	tail_node_p->right = NULL;
+	buffer_p += 4;
+	tail_node_p++;
     }
 
     /*
@@ -586,24 +597,24 @@ eb_zopen_epwzipped(zip, filename)
     if (eb_read_all(file, buffer, 512) != 512)
 	goto failed;
 
-    bufp = buffer;
+    buffer_p = buffer;
     for (i = 0; i < 256; i++) {
-	tail_nodep->type = EB_HUFFMAN_NODE_LEAF8;
-	tail_nodep->value = i;
-	tail_nodep->frequency = eb_uint2(bufp);
-	tail_nodep->left = NULL;
-	tail_nodep->right = NULL;
-	bufp += 2;
-	tail_nodep++;
+	tail_node_p->type = EB_HUFFMAN_NODE_LEAF8;
+	tail_node_p->value = i;
+	tail_node_p->frequency = eb_uint2(buffer_p);
+	tail_node_p->left = NULL;
+	tail_node_p->right = NULL;
+	buffer_p += 2;
+	tail_node_p++;
     }
 
     /*
      * Make a leaf for the end-of-page character.
      */
-    tail_nodep->type = EB_HUFFMAN_NODE_EOF;
-    tail_nodep->value = 256;
-    tail_nodep->frequency = 1;
-    tail_nodep++;
+    tail_node_p->type = EB_HUFFMAN_NODE_EOF;
+    tail_node_p->value = 256;
+    tail_node_p->frequency = 1;
+    tail_node_p++;
     
     /*
      * Sort the leaf nodes in frequency order.
@@ -646,24 +657,24 @@ eb_zopen_epwzipped(zip, filename)
 	/*
 	 * Initialize a new intermediate node.
 	 */
-	tail_nodep->type = EB_HUFFMAN_NODE_INTERMEDIATE;
-	tail_nodep->left = NULL;
-	tail_nodep->right = NULL;
+	tail_node_p->type = EB_HUFFMAN_NODE_INTERMEDIATE;
+	tail_node_p->left = NULL;
+	tail_node_p->right = NULL;
 
 	/*
 	 * Find for a least frequent node.
 	 * That node becomes a left child of the new intermediate node.
 	 */
 	least_nodep = NULL;
-	for (nodep = zip->huffman_nodes; nodep < tail_nodep; nodep++) {
+	for (nodep = zip->huffman_nodes; nodep < tail_node_p; nodep++) {
 	    if (nodep->frequency == 0)
 		continue;
 	    if (least_nodep == NULL
 		|| nodep->frequency <= least_nodep->frequency)
 		least_nodep = nodep;
 	}
-	tail_nodep->left = (struct eb_huffman_node *) least_nodep;
-	tail_nodep->frequency = least_nodep->frequency;
+	tail_node_p->left = least_nodep;
+	tail_node_p->frequency = least_nodep->frequency;
 	least_nodep->frequency = 0;
 
 	/*
@@ -671,24 +682,24 @@ eb_zopen_epwzipped(zip, filename)
 	 * That node becomes a right child of the new intermediate node.
 	 */
 	least_nodep = NULL;
-	for (nodep = zip->huffman_nodes; nodep < tail_nodep; nodep++) {
+	for (nodep = zip->huffman_nodes; nodep < tail_node_p; nodep++) {
 	    if (nodep->frequency == 0)
 		continue;
 	    if (least_nodep == NULL
 		|| nodep->frequency <= least_nodep->frequency)
 		least_nodep = nodep;
 	}
-	tail_nodep->right = (struct eb_huffman_node *) least_nodep;
-	tail_nodep->frequency += least_nodep->frequency;
+	tail_node_p->right = least_nodep;
+	tail_node_p->frequency += least_nodep->frequency;
 	least_nodep->frequency = 0;
 
-	tail_nodep++;
+	tail_node_p++;
     }
 
     /*
      * Set a root node of the huffman tree.
      */ 
-    zip->huffman_root = tail_nodep - 1;
+    zip->huffman_root = tail_node_p - 1;
     zip->code = EB_ZIP_EPWING;
 
     return file;
@@ -715,6 +726,8 @@ eb_zclose(zip, file)
     EB_Zip *zip;
     int file;
 {
+    pthread_mutex_lock(&cache_mutex);
+
     /*
      * If contents of the file is cached, clear the cache.
      */
@@ -730,6 +743,7 @@ eb_zclose(zip, file)
 	zip->huffman_root = NULL;
     }
 
+    pthread_mutex_unlock(&cache_mutex);
     return close(file);
 }
 
@@ -744,45 +758,49 @@ eb_zlseek(zip, file, offset, whence)
     off_t offset;
     int whence;
 {
-    /*
-     * If `file' is normal file, simply call lseek().
-     */
     if (zip->code == EB_ZIP_NONE)
+	/*
+	 * If `file' is not compressed, simply call lseek().
+	 */
 	return lseek(file, offset, whence);
-
-    /*
-     * Calculate `new_offset' according with `whence'.
-     */
-    switch (whence) {
-    case SEEK_SET:
-	zip->offset = offset;
-	break;
-    case SEEK_CUR:
-	zip->offset = zip->offset + offset;
-	break;
-    case SEEK_END:
-	zip->offset = zip->file_size - offset;
-	break;
-    default:
+    else {
+	/*
+	 * Calculate new offset according with `whence'.
+	 */
+	switch (whence) {
+	case SEEK_SET:
+	    zip->offset = offset;
+	    break;
+	case SEEK_CUR:
+	    zip->offset = zip->offset + offset;
+	    break;
+	case SEEK_END:
+	    zip->offset = zip->file_size - offset;
+	    break;
+	default:
 #ifdef EINVAL
-	errno = EINVAL;
+	    errno = EINVAL;
 #endif
-	return -1;
+	    return -1;
+	}
+
+	/*
+	 * Adjust offset.
+	 */
+	if (zip->offset < 0)
+	    zip->offset = 0;
+	if (zip->file_size < zip->offset)
+	    zip->offset = zip->file_size;
+
+	/*
+	 * Update `zip->offset'.
+	 * (We don't actually seek the file.)
+	 */
+	return zip->offset;
     }
 
-    /*
-     * Adjust offset.
-     */
-    if (zip->offset < 0)
-      	zip->offset = 0;
-    if (zip->file_size < zip->offset)
-        zip->offset = zip->file_size;
-
-    /*
-     * Update `zip->offset'.
-     * (We don't actually seek the file.)
-     */
-    return zip->offset;
+    /* never reached */
+    return -1;
 }
 
 
@@ -790,23 +808,27 @@ eb_zlseek(zip, file, offset, whence)
  * Read data from `file'.  (`file' may have been compressed.)
  */
 ssize_t
-eb_zread(zip, file, buffer, nbytes)
+eb_zread(zip, file, buffer, length)
     EB_Zip *zip;
     int file;
     char *buffer;
-    size_t nbytes;
+    size_t length;
 {
+    ssize_t read_length;
+
     /*
      * If `file' is not compressed, call read() and return.
      */
     if (zip->code == EB_ZIP_NONE)
-	return eb_read_all(file, buffer, nbytes);
+	read_length = eb_read_all(file, buffer, length);
     else if (zip->code == EB_ZIP_EBZIP1)
-	return eb_zread_ebzipped(zip, file, buffer, nbytes);
+	read_length = eb_zread_ebzipped(zip, file, buffer, length);
     else if (zip->code == EB_ZIP_EPWING)
-	return eb_zread_epwzipped(zip, file, buffer, nbytes);
+	read_length = eb_zread_epwzipped(zip, file, buffer, length);
+    else
+	read_length = -1;
 
-    return -1;
+    return read_length;
 }
 
 
@@ -814,34 +836,27 @@ eb_zread(zip, file, buffer, nbytes)
  * Read data from `file' compressed with the ebzip compression format.
  */
 static ssize_t
-eb_zread_ebzipped(zip, file, buffer, nbytes)
+eb_zread_ebzipped(zip, file, buffer, length)
     EB_Zip *zip;
     int file;
     char *buffer;
-    size_t nbytes;
+    size_t length;
 {
-    char tmp_buffer[EB_SIZE_PAGE << EB_MAX_EBZIP_LEVEL];
-    size_t read_nbytes = 0;
+    char temporary_buffer[EB_SIZE_PAGE << EB_MAX_EBZIP_LEVEL];
+    size_t read_length = 0;
     size_t zipped_slice_size;
     off_t slice_location;
     off_t next_slice_location;
     int n;
     
-    /*
-     * Allocate memory for cache buffer.
-     */
-    if (cache_buffer == NULL) {
-	cache_buffer = (char *) malloc(EB_SIZE_PAGE << EB_MAX_EBZIP_LEVEL);
-	if (cache_buffer == NULL)
-	    return -1;
-    }
+    pthread_mutex_lock(&cache_mutex);
 
     /*
      * Read data.
      */
-    while (read_nbytes < nbytes) {
+    while (read_length < length) {
 	if (zip->file_size <= zip->offset)
-	    return read_nbytes;
+	    goto succeeded;
 
 	/*
 	 * If data in `cache_buffer' is out of range, read data from `file'.
@@ -857,32 +872,32 @@ eb_zread_ebzipped(zip, file, buffer, nbytes)
 	     */
 	    if (lseek(file, zip->offset / zip->slice_size * zip->index_width
 		+ EB_SIZE_EBZIP_HEADER, SEEK_SET) < 0)
-		return -1;
-	    if (eb_read_all(file, tmp_buffer, zip->index_width * 2)
+		goto failed;
+	    if (eb_read_all(file, temporary_buffer, zip->index_width * 2)
 		!= zip->index_width * 2)
-		return -1;
+		goto failed;
 
 	    switch (zip->index_width) {
 	    case 2:
-		slice_location = eb_uint2(tmp_buffer);
-		next_slice_location = eb_uint2(tmp_buffer + 2);
+		slice_location = eb_uint2(temporary_buffer);
+		next_slice_location = eb_uint2(temporary_buffer + 2);
 		break;
 	    case 3:
-		slice_location = eb_uint3(tmp_buffer);
-		next_slice_location = eb_uint3(tmp_buffer + 3);
+		slice_location = eb_uint3(temporary_buffer);
+		next_slice_location = eb_uint3(temporary_buffer + 3);
 		break;
 	    case 4:
-		slice_location = eb_uint4(tmp_buffer);
-		next_slice_location = eb_uint4(tmp_buffer + 4);
+		slice_location = eb_uint4(temporary_buffer);
+		next_slice_location = eb_uint4(temporary_buffer + 4);
 		break;
 	    default:
-		return -1;
+		goto failed;
 	    }
 	    zipped_slice_size = next_slice_location - slice_location;
 
 	    if (next_slice_location <= slice_location
 		|| zip->slice_size < zipped_slice_size)
-		return -1;
+		goto failed;
 
 	    /*
 	     * Read a compressed slice from `file' and uncompress it.
@@ -890,15 +905,15 @@ eb_zread_ebzipped(zip, file, buffer, nbytes)
 	     * slice size.
 	     */
 	    if (lseek(file, slice_location, SEEK_SET) < 0)
-		return -1;
-	    if (eb_read_all(file, tmp_buffer, zipped_slice_size)
+		goto failed;
+	    if (eb_read_all(file, temporary_buffer, zipped_slice_size)
 		!= zipped_slice_size)
-		return -1;
+		goto failed;
 	    if (zip->slice_size == zipped_slice_size)
-		memcpy(cache_buffer, tmp_buffer, zip->slice_size);
+		memcpy(cache_buffer, temporary_buffer, zip->slice_size);
 	    else if (eb_ebunzip1_slice(cache_buffer, zip->slice_size,
-		tmp_buffer, zipped_slice_size) < 0)
-		return -1;
+		temporary_buffer, zipped_slice_size) < 0)
+		goto failed;
 
 	    cache_file = file;
 	}
@@ -907,17 +922,26 @@ eb_zread_ebzipped(zip, file, buffer, nbytes)
 	 * Copy data from `cache_buffer' to `buffer'.
 	 */
 	n = zip->slice_size - (zip->offset % zip->slice_size);
-	if (nbytes - read_nbytes < n)
-	    n = nbytes - read_nbytes;
+	if (length - read_length < n)
+	    n = length - read_length;
 	if (zip->file_size - zip->offset < n)
 	    n = zip->file_size - zip->offset;
-	memcpy(buffer + read_nbytes,
+	memcpy(buffer + read_length,
 	    cache_buffer + (zip->offset - cache_offset), n);
-	read_nbytes += n;
+	read_length += n;
 	zip->offset += n;
     }
 
-    return read_nbytes;
+  succeeded:
+    pthread_mutex_unlock(&cache_mutex);
+    return read_length;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    pthread_mutex_unlock(&cache_mutex);
+    return -1;
 }
 
 
@@ -925,32 +949,25 @@ eb_zread_ebzipped(zip, file, buffer, nbytes)
  * Read data from `file' compressed with the EPWING compression format.
  */
 static ssize_t
-eb_zread_epwzipped(zip, file, buffer, nbytes)
+eb_zread_epwzipped(zip, file, buffer, length)
     EB_Zip *zip;
     int file;
     char *buffer;
-    size_t nbytes;
+    size_t length;
 {
-    char tmp_buffer[36];
-    size_t read_nbytes = 0;
+    char temporary_buffer[36];
+    size_t read_length = 0;
     off_t page_location;
     int n;
     
-    /*
-     * Allocate memory for cache buffer.
-     */
-    if (cache_buffer == NULL) {
-	cache_buffer = (char *) malloc(EB_SIZE_PAGE << EB_MAX_EBZIP_LEVEL);
-	if (cache_buffer == NULL)
-	    return -1;
-    }
+    pthread_mutex_lock(&cache_mutex);
 
     /*
      * Read data.
      */
-    while (read_nbytes < nbytes) {
+    while (read_length < length) {
 	if (zip->file_size <= zip->offset)
-	    return read_nbytes;
+	    goto succeeded;
 
 	/*
 	 * If data in `cache_buffer' is out of range, read data from `file'.
@@ -965,11 +982,12 @@ eb_zread_epwzipped(zip, file, buffer, nbytes)
 	     */
 	    if (lseek(file, zip->index_location
 		+ zip->offset / (EB_SIZE_PAGE * 16) * 36, SEEK_SET) < 0)
-		return -1;
-	    if (eb_read_all(file, tmp_buffer, 36) != 36)
-		return -1;
-	    page_location = eb_uint4(tmp_buffer) + eb_uint2(tmp_buffer + 4
-		+ (zip->offset / EB_SIZE_PAGE % 16) * 2);
+		goto failed;
+	    if (eb_read_all(file, temporary_buffer, 36) != 36)
+		goto failed;
+	    page_location = eb_uint4(temporary_buffer)
+		+ eb_uint2(temporary_buffer + 4
+		    + (zip->offset / EB_SIZE_PAGE % 16) * 2);
 
 	    /*
 	     * Read a compressed page from `file' and uncompress it.
@@ -977,9 +995,9 @@ eb_zread_epwzipped(zip, file, buffer, nbytes)
 	     * page size.
 	     */
 	    if (lseek(file, page_location, SEEK_SET) < 0)
-		return -1;
+		goto failed;
 	    if (eb_epwunzip_slice(cache_buffer, file, zip->huffman_root) < 0)
-		return -1;
+		goto failed;
 
 	    cache_file = file;
 	}
@@ -988,17 +1006,26 @@ eb_zread_epwzipped(zip, file, buffer, nbytes)
 	 * Copy data from `cache_buffer' to `buffer'.
 	 */
 	n = EB_SIZE_PAGE - (zip->offset % EB_SIZE_PAGE);
-	if (nbytes - read_nbytes < n)
-	    n = nbytes - read_nbytes;
+	if (length - read_length < n)
+	    n = length - read_length;
 	if (zip->file_size - zip->offset < n)
 	    n = zip->file_size - zip->offset;
-	memcpy(buffer + read_nbytes,
+	memcpy(buffer + read_length,
 	    cache_buffer + (zip->offset - cache_offset), n);
-	read_nbytes += n;
+	read_length += n;
 	zip->offset += n;
     }
 
-    return read_nbytes;
+  succeeded:
+    pthread_mutex_unlock(&cache_mutex);
+    return read_length;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    pthread_mutex_unlock(&cache_mutex);
+    return -1;
 }
 
 
@@ -1007,29 +1034,29 @@ eb_zread_epwzipped(zip, file, buffer, nbytes)
  * It repeats to call read() until all data will have been read.
  */
 ssize_t
-eb_read_all(file, buffer, nbytes)
+eb_read_all(file, buffer, length)
     int file;
     VOID *buffer;
-    size_t nbytes;
+    size_t length;
 {
-    char *bufp = buffer;
-    ssize_t rest = nbytes;
+    char *buffer_p = buffer;
+    ssize_t rest_length = length;
     ssize_t n;
 
-    while (0 < rest) {
+    while (0 < rest_length) {
 	errno = 0;
-	n = read(file, bufp, rest);
+	n = read(file, buffer_p, rest_length);
 	if (n < 0) {
 	    if (errno == EINTR)
 		continue;
 	    return n;
 	} else if (n == 0)
-	    return nbytes - rest;
+	    return length - rest_length;
 	else {
-	    rest -= n;
-	    bufp += n;
+	    rest_length -= n;
+	    buffer_p += n;
 	}
     }
 
-    return nbytes;
+    return length;
 }

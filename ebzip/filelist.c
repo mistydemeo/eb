@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1999  Motoyuki Kasahara
+ * Copyright (c) 1999, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,62 +32,79 @@
 #include <stdlib.h>
 #endif
 
+#ifdef ENABLE_NLS
+#ifdef HAVE_LOCALE_H
+#include <locale.h>
+#endif
+#include <libintl.h>
+#endif
+
+/*
+ * Tricks for gettext.
+ */
+#define _(string) gettext(string)
+#ifdef gettext_noop
+#define N_(string) gettext_noop(string)
+#else
+#define N_(string) (string)
+#endif
+
 extern const char *invoked_name;
 
 /*
- * Initialize a filename list.
+ * Initialize a file name list.
  */
 void
-initialize_filename_list(filename_list, length)
-    const char **filename_list;
+initialize_file_name_list(file_name_list, length)
+    const char **file_name_list;
     int length;
 {
-    const char **f;
+    const char **list_p;
     int i;
 
-    for (i = 0, f = filename_list; i < length; i++, f++)
-	*f = NULL;
-    *f = NULL;
+    for (i = 0, list_p = file_name_list; i < length; i++, list_p++)
+	*list_p = NULL;
+    *list_p = NULL;
 }
 
 
 /*
- * Clear a filename list.
+ * Clear a file name list.
  */
 void
-clear_filename_list(filename_list)
-    const char **filename_list;
+clear_file_name_list(file_name_list)
+    const char **file_name_list;
 {
-    const char **f;
+    const char **list_p;
 
-    for (f = filename_list; *f != NULL; f++) {
-	free((char *)*f);
-	*f = NULL;
+    for (list_p = file_name_list; *list_p != NULL; list_p++) {
+	free((char *)*list_p);
+	*list_p = NULL;
     }
 }
 
 
 /*
- * Add a filename to a list.
+ * Add a file name to a list.
  */
 void
-add_filename_list(filename_list, filename)
-    const char **filename_list;
-    char *filename;
+add_file_name_list(file_name_list, file_name)
+    const char **file_name_list;
+    char *file_name;
 {
-    const char **f;
-    char *mem;
+    const char **list_p;
+    char *new_entry;
 
-    for (f = filename_list; *f != NULL; f++)
+    for (list_p = file_name_list; *list_p != NULL; list_p++)
 	;
 
-    mem = (char *) malloc(strlen(filename) + 1);
-    if (mem == NULL) {
-	fprintf(stderr, "%s: memory exhausted\n", invoked_name);
+    new_entry = (char *) malloc(strlen(file_name) + 1);
+    if (new_entry == NULL) {
+	fprintf(stderr, _("%s: memory exhausted\n"), invoked_name);
 	exit(1);
     }
-    strcpy(mem, filename);
+    strcpy(new_entry, file_name);
 
-    *f = mem;
+    *list_p = new_entry;
 }
 

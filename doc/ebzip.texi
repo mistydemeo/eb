@@ -14,7 +14,7 @@
 @ifinfo
 ebzip: Utility for compressing and uncompressing CD-ROM books, by Motoyuki Kasahara.
 
-Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
+Copyright @copyright{} 1998, 99, 2000  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -47,7 +47,7 @@ by Free Software Foundation, Inc.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
+Copyright @copyright{} 1998, 99, 2000  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -518,8 +518,8 @@ and what their directory names are.
 disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 3
-@end group
 
+@end group
 @group
 subbook 1:
   title: New English Japanese Dictionary (4th edition)
@@ -798,19 +798,17 @@ compressed CD-ROM book at @file{/dict}.
 @example
 @group
 ==> /dict/spanish/spanish/start.ebz <==
-compressed: 154290176 -> 54881862 bytes (35.6%)
-compresssion level: 0
+154290176 -> 54881862 bytes (35.6%, ebzip level 0 compression)
 
 @end group
 @group
 ==> /dict/spanish/language.ebz <==
-compressed: 12288 -> 4121 bytes (33.5%)
-compresssion level: 0
+compressed: 12288 -> 4121 bytes (33.5%, ebzip level 0 compression)
 
 @end group
 @group
 ==> /dict/spanish/catalog <==
-not compressed
+2048 bytes (not compressed)
 @end group
 @end example
 

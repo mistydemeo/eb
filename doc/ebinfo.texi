@@ -14,7 +14,7 @@
 @ifinfo
 ebinfo: Utility for getting CD-ROM book information, by Motoyuki Kasahara.
 
-Copyright @copyright{} 1997, 1998, 1999  Motoyuki Kasahara
+Copyright @copyright{} 1997, 98, 99, 2000  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -47,7 +47,7 @@ by Free Software Foundation, Inc.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1997, 1998, 1999  Motoyuki Kasahara
+Copyright @copyright{} 1997, 98, 99, 2000  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -127,8 +127,8 @@ follows:
 disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 2
-@end group
 
+@end group
 @group
 subbook 1:
   title: New English Japanese Dictionary (3rd edition)
@@ -137,8 +137,8 @@ subbook 1:
   font sizes: 16 24 30 48
   narrow font characters: 0xa121 -- 0xa24e
   wide font characters: 0xa321 -- 0xa27e
-@end group
 
+@end group
 @group
 subbook 2:
   title: How to use the book
@@ -159,24 +159,24 @@ The mulit-search information is like as follows.
 @group
   multi search 1:
     label 1: country or region
-    search methods: keyword
+      with candidates: yes
     label 2: period
-    search methods: keyword 
+      with candidates: no
     label 3: category
-    search methods: keyword 
+      with candidates: yes
     label 4: authority
-    search methods: keyword 
+      with candidates: no
 @end group
 @group
   multi search 2:
     label 1: author
-    search methods: keyword
+      with candidates: no
     label 2: title
-    search methods: keyword 
+      with candidates: no
     label 3: date
-    search methods: keyword 
+      with candidates: no
     label 4: publisher
-    search methods: keyword 
+      with candidates: no
 @end group
 @end example
 

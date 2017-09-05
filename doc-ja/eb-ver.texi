@@ -1,3 +1,0 @@
-@set UPDATED 2000 Ç¯ 6 ·î 24 Æü
-@set EDITION 2.3.8
-@set VERSION 2.3.8

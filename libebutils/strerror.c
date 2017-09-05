@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,11 +43,11 @@ extern int sys_nerr;
  * strerror() described in ISO 9899: 1990.
  */
 char *
-strerror(errnum)
-    int errnum;
+strerror(error_number)
+    int error_number;
 {
-    if (0 < errnum && errnum <= sys_nerr)
-        return sys_errlist[errnum];
+    if (0 < error_number && error_number <= sys_nerr)
+        return sys_errlist[error_number];
 
     return "Unknown error";
 }

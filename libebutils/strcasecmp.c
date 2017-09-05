@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 98, 2000  Motoyuki Kasahara
  *
  * This programs is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 /*
  * Character comparison table used in strcasecmp() and strncasecmp().
  */
-static const unsigned char cmp_table[] = {
+static const unsigned char comparison_table[] = {
     /* 0x00 -- 0x0f */
     '\000', '\001', '\002', '\003', '\004', '\005', '\006', '\007',
     '\010', '\011', '\012', '\013', '\014', '\015', '\016', '\017',
@@ -106,21 +106,22 @@ static const unsigned char cmp_table[] = {
  * Cases in the strings are insensitive.
  */
 int
-strcasecmp(s1, s2)
-    const char *s1;
-    const char *s2;
+strcasecmp(string1, string2)
+    const char *string1;
+    const char *string2;
 {
-    const unsigned char *us1 = (const unsigned char *)s1;
-    const unsigned char *us2 = (const unsigned char *)s2;
-    int cmp;
+    const unsigned char *string1_p = (const unsigned char *)string1;
+    const unsigned char *string2_p = (const unsigned char *)string2;
+    int comparison_result;
 
-    while (*us1 != '\0') {
-	cmp = (int)(cmp_table[(int)(*us1++)] - cmp_table[(int)(*us2++)]);
-	if (cmp != 0)
-	    return cmp;
+    while (*string1_p != '\0') {
+	comparison_result
+	    = comparison_table[*string1_p++] - comparison_table[*string2_p++];
+	if (comparison_result != 0)
+	    return comparison_result;
     }
 
-    return -(int)(cmp_table[(int)(*us2)]);
+    return -comparison_table[*string2_p];
 }
 
 
@@ -129,25 +130,26 @@ strcasecmp(s1, s2)
  * Cases in the strings are insensitive.
  */
 int
-strncasecmp(s1, s2, n)
-    const char *s1;
-    const char *s2;
+strncasecmp(string1, string2, n)
+    const char *string1;
+    const char *string2;
     size_t n;
 {
-    const unsigned char *us1 = (const unsigned char *)s1;
-    const unsigned char *us2 = (const unsigned char *)s2;
+    const unsigned char *string1_p = (const unsigned char *)string1;
+    const unsigned char *string2_p = (const unsigned char *)string2;
     size_t i = n;
-    int cmp;
+    int comparison_result;
 
-    while (*us1 != '\0') {
+    while (*string1_p != '\0') {
 	if (i-- <= 0)
 	    return 0;
-	cmp = (int)(cmp_table[(int)(*us1++)] - cmp_table[(int)(*us2++)]);
-	if (cmp != 0)
-	    return cmp;
+	comparison_result
+	    = comparison_table[*string1_p++] - comparison_table[*string2_p++];
+	if (comparison_result != 0)
+	    return comparison_result;
     }
 
-    return -(int)(cmp_table[(int)(*s2)]);
+    return -comparison_table[*string2];
 }
 
 

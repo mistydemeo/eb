@@ -1,0 +1,54 @@
+/*                                                            -*- C -*-
+ * Copyright (c) 2000  Motoyuki Kasahara
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#ifndef EBUTILS_H
+#define EBUTILS_H
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include "eb/eb.h"
+
+/*
+ * Text domain name for message catalog.
+ */
+#define TEXT_DOMAIN_NAME	"ebutils"
+
+/*
+ * Path to the locale directory.
+ */
+#define LOCALEDIR		"@localedir@"
+
+/*
+ * Global variables.
+ */
+extern const char *program_name;
+extern const char *program_version;
+extern const char *invoked_name;
+
+/*
+ * Function declarations.
+ */
+void output_try_help EB_P((void));
+void output_version EB_P((void));
+int parse_case_argument EB_P((const char *, EB_Case_Code *));
+int parse_suffix_argument EB_P((const char *, EB_Suffix_Code *));
+int parse_subbook_name_argument EB_P((const char *,
+    char [][EB_MAX_BASE_NAME_LENGTH  + 1], int *));
+EB_Subbook_Code find_subbook EB_P((EB_Book *, const char *));
+void fix_file_name EB_P((char *, EB_Case_Code, EB_Suffix_Code));
+void canonicalize_path EB_P((char *));
+
+#endif /* not EBUTILS_H */

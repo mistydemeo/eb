@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1999  Motoyuki Kasahara
+ * Copyright (c) 1997, 99, 2000  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,17 +24,17 @@
  * Convert a string from JIS X 0208 to EUC JP.
  */
 void
-eb_jisx0208_to_euc(outstr, instr)
-    char *outstr;
-    const char *instr;
+eb_jisx0208_to_euc(out_string, in_string)
+    char *out_string;
+    const char *in_string;
 {
-    unsigned char *op = (unsigned char *)outstr;
-    const unsigned char *ip = (unsigned char *)instr;
+    unsigned char *out_p = (unsigned char *)out_string;
+    const unsigned char *in_p = (unsigned char *)in_string;
 
-    while (*ip != '\0')
-	*op++ = ((*ip++) | 0x80);
+    while (*in_p != '\0')
+	*out_p++ = ((*in_p++) | 0x80);
 
-    *op = '\0';
+    *out_p = '\0';
 }
 
 
@@ -43,19 +43,19 @@ eb_jisx0208_to_euc(outstr, instr)
  * (Shift-JIS is used only in the `LANGUAGE' file.)
  */
 void
-eb_sjis_to_euc(outstr, instr)
-    char *outstr;
-    const char *instr;
+eb_sjis_to_euc(out_string, in_string)
+    char *out_string;
+    const char *in_string;
 {
-    unsigned char *op = (unsigned char *)outstr;
-    const unsigned char *ip = (unsigned char *)instr;
+    unsigned char *out_p = (unsigned char *)out_string;
+    const unsigned char *in_p = (unsigned char *)in_string;
     unsigned char c1, c2;
 
     for (;;) {
 	/*
 	 * Break at '\0'.
 	 */
-	c1 = *ip++;
+	c1 = *in_p++;
 	if (c1 == '\0')
 	    break;
 
@@ -63,17 +63,17 @@ eb_sjis_to_euc(outstr, instr)
 	    /*
 	     * JIS X 0201 Roman character.
 	     */
-	    *op++ = c1;
+	    *out_p++ = c1;
 	} else if (0xa1 <= c1 && c1 <= 0xdf) {
 	    /*
 	     * JIS X 0201 Kana.
 	     */
-	    *op++ = ' ';
+	    *out_p++ = ' ';
 	} else {
 	    /*
 	     * JIS X 0208 character.
 	     */
-	    c2 = *ip++;
+	    c2 = *in_p++;
 	    if (c2 == 0x00)
 		break;
 
@@ -95,12 +95,12 @@ eb_sjis_to_euc(outstr, instr)
 		c2 += 0x02;
 	    }
 
-	    *op++ = c1;
-	    *op++ = c2;
+	    *out_p++ = c1;
+	    *out_p++ = c2;
 	}
     }
 
-    *op = '\0';
+    *out_p = '\0';
 }
 
 
