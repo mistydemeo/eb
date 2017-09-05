@@ -1,3 +1,38 @@
+2010-01-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.4.2.
+
+	* eb/readtext.c (eb_read_text_internal): In the escape sequence
+	0x1c and 0x1d sections, separate EBXA-C codes from others.
+
+2010-01-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.ac (AC_INIT): Set version to 4.4.2.
+	* configure.ac (LIBEB_VERSION_INFO): Set LIBEB_VERSION_INFO to 15:0:2.
+
+	* ebzip/speedup.c (ebzip_set_zip_speedup):
+	Add missing ebzip_close() and ebzip_finalize() calls for zio.
+	* ebzip/ebzip.c (main): Don't call(1) just after unzip_book().
+	* ebzip/copyfile.c (ebzip_copy_file): Don't copy a file in
+	case of test mode.
+
+	* ebzip/unlinkfile.c: New file.
+	* ebzip/Makefile.am (ebzip_SOURCES): Add unlinkfile.c
+	* ebzip/zipfile.c (ebzip_zip_file): Don't call unlink() directly
+	for an input file. Call unlink_files_add() instead.
+	* ebzip/unzipfile.c (ebzip_unzip_file): Likewise.
+	* ebzip/copyfile.c (ebzip_copy_file): Likewise.
+	
+2009-05-02  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/text.h (EB_HOOK_BEGIN_UNICODE, EB_HOOK_END_UNICODE,
+	EB_HOOK_BEGIN_EBXAC_GAIJI, EB_HOOK_END_EBXAC_GAIJI,
+	EB_HOOK_EBXAC_GAIJI): Added.
+	* eb/defs.h (EB_NUMBER_OF_HOOKS): Defined as 54.
+	* eb/defs.h (EB_Text_Context_Struct): Add `ebxac_gaiji_flag'.
+	* eb/readtext.c (eb_read_text_internal): Also recognize escape 
+	sequences 0x0b, 0x0c, 0x1c and 0x1d.
+
 2009-03-14  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.4.1.
@@ -21,6 +56,8 @@
 	* eb/ebnet.h: Likewise.
 	
 2009-01-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.4.
 
 	* eb/zio.c (zio_open_ebzip): Always set zio->code to ZIO_EBZIP1,
 	regardless of ebzip-mode value in an EBZIP header.

@@ -206,6 +206,7 @@ eb_initialize_searches(EB_Book *book)
     eb_initialize_search(&subbook->keyword);
     eb_initialize_search(&subbook->cross);
     eb_initialize_search(&subbook->menu);
+    eb_initialize_search(&subbook->image_menu);
     eb_initialize_search(&subbook->copyright);
     eb_initialize_search(&subbook->text);
     eb_initialize_search(&subbook->sound);
@@ -248,6 +249,7 @@ eb_finalize_searches(EB_Book *book)
     eb_finalize_search(&subbook->endword_kana);
     eb_finalize_search(&subbook->keyword);
     eb_finalize_search(&subbook->menu);
+    eb_finalize_search(&subbook->image_menu);
     eb_finalize_search(&subbook->copyright);
     eb_finalize_search(&subbook->text);
     eb_finalize_search(&subbook->sound);

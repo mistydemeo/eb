@@ -585,12 +585,8 @@ ebzip_zip_file_internal(const char *out_file_name, const char *in_file_name,
     /*
      * Delete an original file unless the keep flag is set.
      */
-    if (!ebzip_test_flag && !ebzip_keep_flag && unlink(in_file_name) < 0) {
-	if (!ebzip_quiet_flag) {
-	    fprintf(stderr, _("%s: warning: failed to unlink the file: %s\n"),
-		invoked_name, in_file_name);
-	}
-    }
+    if (!ebzip_test_flag && !ebzip_keep_flag)
+	unlink_files_add(in_file_name);
 
     /*
      * Set owner, group, permission, atime and utime of `out_zio.file'.

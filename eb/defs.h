@@ -175,7 +175,7 @@ extern "C" {
 /*
  * The number of text hooks.
  */
-#define EB_NUMBER_OF_HOOKS		49
+#define EB_NUMBER_OF_HOOKS		54
 
 /*
  * The number of search contexts required by a book.
@@ -771,6 +771,11 @@ struct EB_Text_Context_Struct {
      * Whether the current text point is in the candidate word or not.
      */
     int is_candidate;
+
+    /*
+     * Whether the current text point is in EBXA-C gaiji area.
+     */
+    int ebxac_gaiji_flag;
 };
 
 /*

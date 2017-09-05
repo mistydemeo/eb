@@ -56,7 +56,7 @@ PROGRAMS = $(bin_PROGRAMS)
 am_ebzip_OBJECTS = ebzip.$(OBJEXT) ebzip1.$(OBJEXT) copyfile.$(OBJEXT) \
 	unzipbook.$(OBJEXT) unzipfile.$(OBJEXT) zipbook.$(OBJEXT) \
 	zipfile.$(OBJEXT) zipinfobook.$(OBJEXT) zipinfofile.$(OBJEXT) \
-	sebxa.$(OBJEXT) speedup.$(OBJEXT)
+	sebxa.$(OBJEXT) speedup.$(OBJEXT) unlinkfile.$(OBJEXT)
 ebzip_OBJECTS = $(am_ebzip_OBJECTS)
 am__DEPENDENCIES_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -219,7 +219,8 @@ LIBEB = $(top_builddir)/eb/libeb.la
 LIBEBUTILS = $(top_builddir)/libebutils/libebutils.a
 noinst_HEADERS = ebzip.h
 ebzip_SOURCES = ebzip.c ebzip1.c copyfile.c unzipbook.c unzipfile.c \
-	zipbook.c zipfile.c zipinfobook.c zipinfofile.c sebxa.c speedup.c
+	zipbook.c zipfile.c zipinfobook.c zipinfofile.c sebxa.c speedup.c \
+	unlinkfile.c
 
 ebzip_LDADD = $(LIBEBUTILS) $(LIBEB) $(ZLIBLIBS) $(INTLLIBS) $(ICONVLIBS)
 ebzip_DEPENDENCIES = $(LIBEB) $(LIBEBUTILS) $(ZLIBDEPS) $(INTLDEPS) \
@@ -308,6 +309,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ebzip1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sebxa.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speedup.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unlinkfile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unzipbook.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unzipfile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/zipbook.Po@am__quote@

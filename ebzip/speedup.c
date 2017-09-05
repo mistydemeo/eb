@@ -129,6 +129,8 @@ ebzip_set_zip_speedup(Zip_Speedup *speedup, const char *file_name,
 	speedup->regions[i].end_page = start_page + zio_uint1(buffer + 3) - 1;
     }
 
+    zio_close(&zio);
+    zio_finalize(&zio);
     return 0;
 
     /*

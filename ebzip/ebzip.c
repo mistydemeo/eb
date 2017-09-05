@@ -101,6 +101,11 @@ int ebzip_skip_flag_movie   = EBZIP_DEFAULT_SKIP_MOVIE;
 int ebzip_skip_flag_sound   = EBZIP_DEFAULT_SKIP_SOUND;
 
 /*
+ * List of files to be unlinked.
+ */
+String_List unlinking_files;
+
+/*
  * Operation modes.
  */
 #define EBZIP_ACTION_ZIP		0
@@ -191,6 +196,12 @@ main(int argc, char *argv[])
      */
     if (!isatty(0))
 	ebzip_overwrite_mode = EBZIP_OVERWRITE_NO;
+
+    /*
+     * Initialize list of files to be unlinked.
+     */
+
+    string_list_initialize(&unlinking_files);
 
     /*
      * Initialize EB Library.
@@ -392,7 +403,6 @@ main(int argc, char *argv[])
 	    subbook_name_count) < 0) {
 	    goto die;
 	}
-	exit(1);
 	break;
     case EBZIP_ACTION_INFO:
 	if (ebzip_zipinfo_book(book_path, subbook_name_list,
@@ -403,6 +413,8 @@ main(int argc, char *argv[])
     }
 
     eb_finalize_library();
+    unlink_files();
+    string_list_finalize(&unlinking_files);
 
     return 0;
 

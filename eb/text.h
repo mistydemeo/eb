@@ -105,6 +105,12 @@ extern "C" {
 #define EB_HOOK_BEGIN_CLICKABLE_AREA    47
 #define EB_HOOK_END_CLICKABLE_AREA      48
 
+#define EB_HOOK_BEGIN_UNICODE		49
+#define EB_HOOK_END_UNICODE		50
+#define EB_HOOK_BEGIN_EBXAC_GAIJI	51
+#define EB_HOOK_END_EBXAC_GAIJI		52
+#define EB_HOOK_EBXAC_GAIJI		53
+
 /*
  * Function declarations.
  */

@@ -148,12 +148,4 @@
 #define in6addr_loopback ebnet_in6addr_loopback
 #endif
 
-#ifndef HAVE_ATOLL
-#ifdef HAVE__ATOI64
-#define atoll _atoi64
-#else
-#define atoll atol
-#endif
-#endif
-
 #endif /* EB_BUILD_PRE_H */

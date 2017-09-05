@@ -113,6 +113,7 @@ eb_initialize_text_context(EB_Book *book)
     book->text_context.auto_stop_code = -1;
     book->text_context.candidate[0] = '\0';
     book->text_context.is_candidate = 0;
+    book->text_context.ebxac_gaiji_flag = 0;
 
     LOG(("out: eb_initialize_text_context()"));
 }
@@ -157,6 +158,7 @@ eb_reset_text_context(EB_Book *book)
     book->text_context.auto_stop_code = -1;
     book->text_context.candidate[0] = '\0';
     book->text_context.is_candidate = 0;
+    book->text_context.ebxac_gaiji_flag = 0;
 
     LOG(("out: eb_reset_text_context()"));
 }
@@ -330,6 +332,9 @@ eb_read_text(EB_Book *book, EB_Appendix *appendix, EB_Hookset *hookset,
 
 	if (book->subbook_current->menu.start_page <= position.page
 	    && position.page <= book->subbook_current->menu.end_page)
+	    book->text_context.code = EB_TEXT_OPTIONAL_TEXT;
+	else if (book->subbook_current->image_menu.start_page <= position.page
+	    && position.page <= book->subbook_current->image_menu.end_page)
 	    book->text_context.code = EB_TEXT_OPTIONAL_TEXT;
 	else if (book->subbook_current->copyright.start_page <= position.page
 	    && position.page <= book->subbook_current->copyright.end_page)
@@ -753,6 +758,18 @@ text_max_length=%ld, forward=%d)",
 		hook = hookset->hooks + EB_HOOK_NEWLINE;
 		break;
 
+	    case 0x0b:
+		/* beginning of unicode */
+		in_step = 2;
+		hook = hookset->hooks + EB_HOOK_BEGIN_UNICODE;
+		break;
+
+	    case 0x0c:
+		/* end of unicode */
+		in_step = 2;
+		hook = hookset->hooks + EB_HOOK_END_UNICODE;
+		break;
+
 	    case 0x0e:
 		/* beginning of superscript */
 		in_step = 2;
@@ -794,7 +811,7 @@ text_max_length=%ld, forward=%d)",
 		context->skip_code = 0x15;
 		break;
 
-	    case 0x1a: case 0x1b: case 0x1c: case 0x1d: case 0x1e: case 0x1f:
+	    case 0x1a: case 0x1b: case 0x1e: case 0x1f:
 		/* emphasis; described in JIS X 4081-1996 */
 		in_step = 4;
 		if (cache_rest_length < in_step) {
@@ -805,6 +822,44 @@ text_max_length=%ld, forward=%d)",
 		if (book->disc_code != EB_DISC_EPWING
 		    && eb_uint1(cache_p + 2) >= 0x1f)
 		    in_step = 2;
+		break;
+
+	    case 0x1c:
+		if (book->character_code == EB_CHARCODE_JISX0208_GB2312) {
+		    /* beginning of EBXA-C gaiji */
+		    in_step = 2;
+		    hook = hookset->hooks + EB_HOOK_BEGIN_EBXAC_GAIJI;
+		    context->ebxac_gaiji_flag = 1;
+		} else {
+		    in_step = 4;
+		    if (cache_rest_length < in_step) {
+			error_code = EB_ERR_UNEXP_TEXT;
+			goto failed;
+		    }
+		    /* Some old EB books don't take an argument. */
+		    if (book->disc_code != EB_DISC_EPWING
+			&& eb_uint1(cache_p + 2) >= 0x1f)
+			in_step = 2;
+		}
+		break;
+
+	    case 0x1d:
+		if (book->character_code == EB_CHARCODE_JISX0208_GB2312) {
+		    /* end of EBXA-C gaiji */
+		    in_step = 2;
+		    hook = hookset->hooks + EB_HOOK_END_EBXAC_GAIJI;
+		    context->ebxac_gaiji_flag = 0;
+		} else {
+		    in_step = 4;
+		    if (cache_rest_length < in_step) {
+			error_code = EB_ERR_UNEXP_TEXT;
+			goto failed;
+		    }
+		    /* Some old EB books don't take an argument. */
+		    if (book->disc_code != EB_DISC_EPWING
+			&& eb_uint1(cache_p + 2) >= 0x1f)
+			in_step = 2;
+		}
 		break;
 
 	    case 0x32:
@@ -1313,7 +1368,22 @@ text_max_length=%ld, forward=%d)",
 		    candidate_length += 2;
 		}
 
-		if (context->narrow_flag) {
+		if (context->ebxac_gaiji_flag) {
+		    hook = hookset->hooks + EB_HOOK_EBXAC_GAIJI;
+		    if (forward_only) {
+			; /* do nothing */
+		    } else if (hook->function == NULL) {
+			error_code = eb_write_text_byte2(book, c1 | 0x80,
+			    c2 | 0x80);
+			if (error_code != EB_SUCCESS)
+			    goto failed;
+		    } else {
+			error_code = hook->function(book, appendix, container,
+			    EB_HOOK_EBXAC_GAIJI, 0, argv);
+			if (error_code != EB_SUCCESS)
+			    goto failed;
+		    }
+		} else if (context->narrow_flag) {
 		    hook = hookset->hooks + EB_HOOK_NARROW_JISX0208;
 		    if (forward_only) {
 			; /* do nothing */

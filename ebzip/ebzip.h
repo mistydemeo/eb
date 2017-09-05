@@ -97,6 +97,7 @@ int strncasecmp(const char *, const char *, size_t);
 #include "getumask.h"
 #include "makedir.h"
 #include "samefile.h"
+#include "strlist.h"
 #include "yesno.h"
 
 /*
@@ -202,6 +203,8 @@ extern int ebzip_skip_flag_graphic;
 extern int ebzip_skip_flag_movie;
 extern int ebzip_skip_flag_sound;
 
+extern String_List unlinking_files;
+
 /*
  * Function declarations.
  */
@@ -258,5 +261,9 @@ void ebzip_finalize_zip_speedup(Zip_Speedup *speedup);
 int ebzip_set_zip_speedup(Zip_Speedup *speedup, const char *file_name,
     Zio_Code zio_code, int index_page);
 int ebzip_is_speedup_slice(Zip_Speedup *speedup, int slice, int zip_level);
+
+/* unlinkfile.c */
+int unlink_files_add(const char *file_name);
+void unlink_files();
 
 #endif /* EBZIP_H */
