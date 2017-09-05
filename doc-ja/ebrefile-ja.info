@@ -8,7 +8,7 @@ END-INFO-DIR-ENTRY
 
    ebrefile: CD-ROM 書籍のカタログファイルの再構築ツール, 笠原基之
 
-   Copyright (C) 1998  Motoyuki Kasahara
+   Copyright (C) 1998, 1999  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3beta0 版です。EB ライブラリバージョン 2.3beta0 に対
+   この文書は第 2.3beta1 版です。EB ライブラリバージョン 2.3beta1 に対
 応しています。
 
 * Menu:
@@ -61,11 +61,11 @@ File: ebrefile-ja.info,  Node: Introduction,  Next: Invoking ebrefile,  Prev: To
      |   [和英辞典] (副本)   |
      +-----------------------+
 
-   EB/EBG/EBXA 形式の CD-ROM 書籍は `CATALOG' というファイルを、EPWING
-形式の CD-ROM 書籍は `CATALOGS' というファイルを持っています。これらの
-ファイルは、その CD-ROM 書籍にはどんな副本が収められているのかを定義し
-ています。これらのファイルは、CD-ROM 書籍のトップディレクトリに置かれ
-ています。
+   EB/EBG/EBXA/EBXA-C 形式の CD-ROM 書籍は `CATALOG' というファイル
+を、EPWING 形式の CD-ROM 書籍は `CATALOGS' というファイルを持っています。
+ これらのファイルは、その CD-ROM 書籍にはどんな副本が収められているの
+かを定義しています。これらのファイルは、CD-ROM 書籍のトップディレクト
+リに置かれています。
 
    `ebrefile' は元のカタログファイルを読み、ユーザから指定された副本だ
 けを取り込んだ新しいカタログファイルを生成します。言い換えれば、
@@ -91,7 +91,7 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 使えるものであるとは限りません。`ebrefile' は、CD-ROM 書籍のあるファ
 イルの内容に変更を加えます。ご注意下さい。
 
-   この文書は第 2.3beta0 版です。EB ライブラリバージョン 2.3beta0 に対
+   この文書は第 2.3beta1 版です。EB ライブラリバージョン 2.3beta1 に対
 応しています。
 
 
@@ -138,7 +138,7 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
 どのような副本が含まれているのかを知ることができます。
 
      % ebinfo
-     disc type: EB/EBG/EBXA
+     disc type: EB/EBG/EBXA/EBXA-C
      character code: JIS X 0208
      the number of subbooks: 3
      
@@ -195,7 +195,7 @@ File: ebrefile-ja.info,  Node: Select Subbooks,  Next: Adjust Filename,  Prev: I
 す。
 
      % ebinfo
-     disc type: EB/EBG/EBXA
+     disc type: EB/EBG/EBXA/EBXA-C
      character code: JIS X 0208
      the number of subbooks: 2
      
@@ -345,12 +345,12 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 
 
 Tag Table:
-Node: Top1046
-Node: Introduction1574
-Node: Invoking ebrefile3698
-Node: Select Subbooks4391
-Node: Adjust Filename8193
-Node: Combination with ebzip10123
-Node: Summary of Options11338
+Node: Top1052
+Node: Introduction1580
+Node: Invoking ebrefile3713
+Node: Select Subbooks4406
+Node: Adjust Filename8222
+Node: Combination with ebzip10152
+Node: Summary of Options11367
 
 End Tag Table

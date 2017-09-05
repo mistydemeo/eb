@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -330,7 +330,7 @@ eb_initialize_catalog(book)
 	 */
 	strncpy(sub->title, buf + 2, titlesize);
 	sub->title[titlesize] = '\0';
-	if (book->char_code == EB_CHARCODE_JISX0208)
+	if (book->char_code != EB_CHARCODE_ISO8859_1)
 	    eb_jisx0208_to_euc(sub->title, sub->title);
 
 	/*

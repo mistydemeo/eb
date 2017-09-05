@@ -9,7 +9,7 @@ END-INFO-DIR-ENTRY
    ebfont: Utility for getting font data in a CD-ROM book, by Motoyuki
 Kasahara.
 
-   Copyright (C) 1998  Motoyuki Kasahara
+   Copyright (C) 1998, 1999  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3beta0, for EB Library version 2.3beta0.
+   This is edition 2.3beta1, for EB Library version 2.3beta1.
 
 * Menu:
 
@@ -66,7 +66,7 @@ later version.
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 2.3beta0, for EB Library version 2.3beta0.
+   This is edition 2.3beta1, for EB Library version 2.3beta1.
 
 
 File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
@@ -211,7 +211,7 @@ directory names of subbooks to be compressed, separeted by a comma
 and what their directory names are.
 
      % ebinfo /mnt/cdrom
-     disc type: EB/EBG/EBXA
+     disc type: EB/EBG/EBXA/EXBA-C
      character code: JIS X 0208
      the number of subbooks: 3
      
@@ -306,13 +306,13 @@ long as they are unique.
 
 
 Tag Table:
-Node: Top1042
-Node: Introduction1597
-Node: What is Local Character2473
-Node: Invoking ebfont4144
-Node: Image Formats5565
-Node: Heights6459
-Node: Subbooks7220
-Node: Summary of Options9151
+Node: Top1048
+Node: Introduction1603
+Node: What is Local Character2479
+Node: Invoking ebfont4150
+Node: Image Formats5571
+Node: Heights6465
+Node: Subbooks7226
+Node: Summary of Options9164
 
 End Tag Table

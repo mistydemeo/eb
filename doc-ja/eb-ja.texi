@@ -133,8 +133,8 @@ EB ライブラリを自分のプログラムにリンクする
 
 EB ライブラリは CD-ROM 書籍にアクセスするための C のライブラリです。
 UNIX 系 OS のシステム上で動作させることができます。
-EB ライブラリは EB, EBG, EBXA および EPWING 形式の CD-ROM 書籍に対応して
-います。
+EB ライブラリは EB, EBG, EBXA, EBXA-C および EPWING 形式の CD-ROM 書籍
+に対応しています。
 これらの形式の CD-ROM 書籍は、日本で一般的に使われています。
 CD-ROM 書籍自体は ISO 9660 形式になっていますので、他の ISO 9660 形式と
 同じ要領でマウントすることができます。
@@ -586,7 +586,7 @@ EB ライブラリでは、CD-ROM 書籍へのアクセスはすべてこの型のオブジェクトを
 関数 @code{eb_disc_type()} は @var{book} のディスクの形式を返します。
 @var{book} はあらかじめ書籍に結び付いていなければなりません。
 
-書籍が EB/EBG/EBXA なら @code{EB_DISC_EB} を返します。
+書籍が EB/EBG/EBXA/EBXA-C なら @code{EB_DISC_EB} を返します。
 書籍が EPWING なら @code{EB_DISC_EPWING} を返します。
 関数が失敗した場合は -1 を返し、@code{eb_error} をセットします。
 @end deftypefun

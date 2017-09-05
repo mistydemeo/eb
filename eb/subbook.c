@@ -125,8 +125,22 @@ eb_initialize_subbook(book)
     sub->menu.page = 0;
     sub->graphic.page = 0;
     sub->copyright.page = 0;
-    for (i = 0; i < EB_MAX_MULTI_SEARCHES; i++)
+
+    sub->word_alpha.length = 0;
+    sub->word_asis.length = 0;
+    sub->word_kana.length = 0;
+    sub->endword_alpha.length = 0;
+    sub->endword_asis.length = 0;
+    sub->endword_kana.length = 0;
+    sub->keyword.length = 0;
+    sub->menu.length = 0;
+    sub->graphic.length = 0;
+    sub->copyright.length = 0;
+
+    for (i = 0; i < EB_MAX_MULTI_SEARCHES; i++) {
 	sub->multi[i].page = 0;
+	sub->multi[i].length = 0;
+    }
 
     if (0 <= sub->sub_file) {
 	/*
@@ -225,7 +239,6 @@ eb_initialize_indexes(book)
     char *bufp;
     int id;
     int count;
-    int page;
     int avail;
     int global_avail; 
     int i;
@@ -263,8 +276,6 @@ eb_initialize_indexes(book)
      * Set each search method information.
      */
     for (i = 0, bufp = buf + 16; i < count; i++, bufp += 16) {
-	page = eb_uint4(bufp + 2);
-
 	/*
 	 * Set index style.
 	 */
@@ -301,7 +312,8 @@ eb_initialize_indexes(book)
 	else
 	    search.space = EB_INDEX_STYLE_DELETE;
 
-	search.page = page;
+	search.page = eb_uint4(bufp + 2);
+	search.length = eb_uint4(bufp + 6);
 	search.entry_count = 0;
 
 	/*
@@ -343,7 +355,7 @@ eb_initialize_indexes(book)
 	case 0xf4:
 	    if (book->disc_code == EB_DISC_EB
 		&& sub->font_count < EB_MAX_FONTS * 2)
-		sub->fonts[sub->font_count++].page = page;
+		sub->fonts[sub->font_count++].page = search.page;
 	    break;
 	case 0xff:
 	    if (sub->multi_count < EB_MAX_MULTI_SEARCHES) {

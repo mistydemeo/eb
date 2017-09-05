@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,6 +64,7 @@ extern "C" {
  */
 #define EB_CHARCODE_ISO8859_1		1
 #define EB_CHARCODE_JISX0208		2
+#define EB_CHARCODE_JISX0208_GB2312	3
 
 /*
  * Word types to search.
@@ -392,13 +393,18 @@ typedef struct {
 } EB_Multi_Entry;
 
 /*
- * EB_Search -- A multi-search in a subbook.
+ * EB_Search -- Search methods in a subbook.
  */
 typedef struct {
     /*
-     * Page number of the start page of a multi search table.
+     * Page number of the start page of an index.
      */
     int page;
+
+    /*
+     * Length of pages.
+     */
+    int length;
 
     /*
      * Index style flags.

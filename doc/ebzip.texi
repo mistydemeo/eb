@@ -14,7 +14,7 @@
 @ifinfo
 ebzip: Utility for compressing and uncompressing CD-ROM books, by Motoyuki Kasahara.
 
-Copyright @copyright{} 1998  Motoyuki Kasahara
+Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -47,7 +47,7 @@ by Free Software Foundation, Inc.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998  Motoyuki Kasahara
+Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -515,7 +515,7 @@ and what their directory names are.
 @example
 @group
 % ebinfo /mnt/cdrom
-disc type: EB/EBG/EBXA
+disc type: EB/EBG/EBXA/EBXA-C
 character code: JIS X 0208
 the number of subbooks: 3
 @end group
@@ -1030,6 +1030,7 @@ dictionary (EPWING V5):
 @item compression level     @tab  file size        @tab  ratio
 @item (uncompressed)        @tab  220069888 bytes  @tab 100.0%
 @item (original)            @tab  149139690 bytes  @tab  67.8%
+@item level 0               @tab   82973263 bytes  @tab  37.7%
 @item level 1               @tab   78163751 bytes  @tab  35.5%
 @end multitable
 

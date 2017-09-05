@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1998  Motoyuki Kasahara
+ * Copyright (c) 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

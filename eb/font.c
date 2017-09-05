@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -121,14 +121,14 @@ eb_initialize_eb_fonts(book)
 	fnt->width = eb_uint1(buf + 8);
 	fnt->height = eb_uint1(buf + 9);
 	fnt->start = eb_uint2(buf + 10);
-	if (book->char_code == EB_CHARCODE_JISX0208) {
-	    fnt->end = fnt->start + ((len / 0x5e) << 8) + (len % 0x5e) - 1;
-	    if (0x7e < (fnt->end & 0xff))
-		fnt->end += 0xa3;
-	} else {
+	if (book->char_code == EB_CHARCODE_ISO8859_1) {
 	    fnt->end = fnt->start + ((len / 0xfe) << 8) + (len % 0xfe) - 1;
 	    if (0xfe < (fnt->end & 0xff))
 		fnt->end += 3;
+	} else {
+	    fnt->end = fnt->start + ((len / 0x5e) << 8) + (len % 0x5e) - 1;
+	    if (0x7e < (fnt->end & 0xff))
+		fnt->end += 0xa3;
 	}
     }
 
@@ -184,14 +184,14 @@ eb_initialize_epwing_fonts(book)
 	fnt->width = eb_uint1(buf + 8);
 	fnt->height = eb_uint1(buf + 9);
 	fnt->start = eb_uint2(buf + 10);
-	if (book->char_code == EB_CHARCODE_JISX0208) {
-	    fnt->end = fnt->start + ((len / 0x5e) << 8) + (len % 0x5e) - 1;
-	    if (0x7e < (fnt->end & 0xff))
-		fnt->end += 0xa3;
-	} else {
+	if (book->char_code == EB_CHARCODE_ISO8859_1) {
 	    fnt->end = fnt->start + ((len / 0xfe) << 8) + (len % 0xfe) - 1;
 	    if (0xfe < (fnt->end & 0xff))
 		fnt->end += 3;
+	} else {
+	    fnt->end = fnt->start + ((len / 0x5e) << 8) + (len % 0x5e) - 1;
+	    if (0x7e < (fnt->end & 0xff))
+		fnt->end += 0xa3;
 	}
 
 	/*

@@ -14,7 +14,7 @@
 @ifinfo
 ebzip: CD-ROM 書籍の圧縮と伸長のためのツール, 笠原基之
 
-Copyright @copyright{} 1998  Motoyuki Kasahara
+Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -47,7 +47,7 @@ by Free Software Foundation, Inc.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998  Motoyuki Kasahara
+Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -516,7 +516,7 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 @example
 @group
 % ebinfo /mnt/cdrom
-disc type: EB/EBG/EBXA
+disc type: EB/EBG/EBXA/EBXA-C
 character code: JIS X 0208
 the number of subbooks: 3
 @end group

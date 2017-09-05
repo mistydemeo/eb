@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,8 @@ eb_initialize_languages(book)
 
     book->char_code = eb_uint2(buf);
     if (book->char_code != EB_CHARCODE_ISO8859_1
-	&& book->char_code !=  EB_CHARCODE_JISX0208) {
+	&& book->char_code != EB_CHARCODE_JISX0208
+	&& book->char_code != EB_CHARCODE_JISX0208_GB2312) {
 	eb_error = EB_ERR_UNEXP_LANG;
 	goto failed;
     }

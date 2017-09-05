@@ -208,7 +208,7 @@ output_information(path, multiflag)
     if (disc < 0)
 	goto failed;
     if (disc == EB_DISC_EB)
-	printf("disc type: EB/EBG/EBXA\n");
+	printf("disc type: EB/EBG/EBXA/EBXA-C\n");
     else
 	printf("disc type: EPWING\n");
 
@@ -218,10 +218,21 @@ output_information(path, multiflag)
     char_code = eb_character_code(&book);
     if (char_code < 0)
 	goto failed;
-    if (char_code == EB_CHARCODE_JISX0208)
-	printf("character code: JIS X 0208\n");
-    else 
-	printf("character code: ISO 8859-1\n");
+    printf("character code: ");
+    switch (char_code) {
+    case EB_CHARCODE_ISO8859_1:
+	printf("ISO 8859-1\n");
+	break;
+    case EB_CHARCODE_JISX0208:
+	printf("JIS X 0208\n");
+	break;
+    case EB_CHARCODE_JISX0208_GB2312:
+	printf("JIS X 0208 and GB 2312\n");
+	break;
+    default:
+	printf("unknown\n");
+	break;
+    }
 
     /*
      * Output the number of subbooks in the book.

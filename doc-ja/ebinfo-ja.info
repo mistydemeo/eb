@@ -8,7 +8,7 @@ END-INFO-DIR-ENTRY
 
    ebinfo: CD-ROM 書籍の情報を得るためのツール、笠原基之
 
-   Copyright (C) 1997, 1998  Motoyuki Kasahara
+   Copyright (C) 1997, 1998, 1999  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -78,7 +78,7 @@ File: ebinfo-ja.info,  Node: Invoking ebinfo,  Next: Details about Information, 
 します。
 
      % ebinfo /mnt/cdrom
-     disc type: EB/EBG/EBXA
+     disc type: EB/EBG/EBXA/EBXA-C
      character code: JIS X 0208
      the number of subbooks: 2
      
@@ -131,7 +131,7 @@ File: ebinfo-ja.info,  Node: Details about Information,  Next: Options to ebinfo
    この節では、`ebinfo' が出力する情報の詳細について説明します。
 
 disc type:
-     その書籍の形式。EB/EBG/EBXA または EPWING です。
+     その書籍の形式。EB/EBG/EBXA/EBXA-C または EPWING です。
 
 character code:
      その書籍で使用されている文字コー。ISO 8859-1 または JIS X 0208 で
@@ -213,10 +213,10 @@ File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Details about Information
 
 
 Tag Table:
-Node: Top1027
-Node: Introduction1399
-Node: Invoking ebinfo2142
-Node: Details about Information4142
-Node: Options to ebinfo5844
+Node: Top1033
+Node: Introduction1405
+Node: Invoking ebinfo2148
+Node: Details about Information4155
+Node: Options to ebinfo5864
 
 End Tag Table

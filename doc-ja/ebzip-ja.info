@@ -8,7 +8,7 @@ END-INFO-DIR-ENTRY
 
    ebzip: CD-ROM 書籍の圧縮と伸長のためのツール, 笠原基之
 
-   Copyright (C) 1998  Motoyuki Kasahara
+   Copyright (C) 1998, 1999  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3beta0 版です。EB ライブラリバージョン 2.3beta0 に対
+   この文書は第 2.3beta1 版です。EB ライブラリバージョン 2.3beta1 に対
 応しています。
 
 * Menu:
@@ -379,7 +379,7 @@ File: ebzip-ja.info,  Node: Partial Compression,  Next: Overwrite Old Files,  Pr
 知ることができます。
 
      % ebinfo /mnt/cdrom
-     disc type: EB/EBG/EBXA
+     disc type: EB/EBG/EBXA/EBXA-C
      character code: JIS X 0208
      the number of subbooks: 3
      
@@ -1001,7 +1001,7 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。EB ライブラリバージョン 2.3beta0 では、1 (2
+     圧縮モードを表します。EB ライブラリバージョン 2.3beta1 では、1 (2
      進数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
@@ -1039,33 +1039,33 @@ significant bit) を含んでいます。`zip モード' が 1 で、`圧縮レベル' が
 
 
 Tag Table:
-Node: Top1030
-Node: Introduction2600
-Node: Action and Command Name3944
-Node: Invoking ebzip5654
-Node: Compression6286
-Node: Compression Example 16886
-Node: Compression Example 28460
-Node: Compression Level10014
-Node: Adjust Filenames10524
-Node: Test12657
-Node: Partial Compression13004
-Node: Overwrite Old Files15550
-Node: Compress Compressed EPWING16346
-Node: Uncompression16778
-Node: Uncompression Example17165
-Node: Options for Uncompression18685
-Node: Uncompress Compressed EPWING20223
-Node: Information20652
-Node: Information Example20991
-Node: Options for Information21697
-Node: Delete a Book22266
-Node: Summary of Options22562
-Node: Comparision Result27003
-Node: Compressed File Format29422
-Node: Format Overview29827
-Node: Data Part30684
-Node: Index Part33371
-Node: Header Part36229
+Node: Top1036
+Node: Introduction2606
+Node: Action and Command Name3950
+Node: Invoking ebzip5660
+Node: Compression6292
+Node: Compression Example 16892
+Node: Compression Example 28466
+Node: Compression Level10020
+Node: Adjust Filenames10530
+Node: Test12663
+Node: Partial Compression13010
+Node: Overwrite Old Files15563
+Node: Compress Compressed EPWING16359
+Node: Uncompression16791
+Node: Uncompression Example17178
+Node: Options for Uncompression18698
+Node: Uncompress Compressed EPWING20236
+Node: Information20665
+Node: Information Example21004
+Node: Options for Information21710
+Node: Delete a Book22279
+Node: Summary of Options22575
+Node: Comparision Result27016
+Node: Compressed File Format29435
+Node: Format Overview29840
+Node: Data Part30697
+Node: Index Part33384
+Node: Header Part36242
 
 End Tag Table

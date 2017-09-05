@@ -14,7 +14,7 @@
 @ifinfo
 ebrefile: Refile a catalog file in a CD-ROM book, by Motoyuki Kasahara.
 
-Copyright @copyright{} 1998  Motoyuki Kasahara
+Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -47,7 +47,7 @@ by Free Software Foundation, Inc.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998  Motoyuki Kasahara
+Copyright @copyright{} 1998, 1999  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -103,8 +103,8 @@ Each subbook itself is an independent @dfn{book}.
 @end group
 @end example
 
-A CD-ROM book of EB/EBG/EBXA format has a file @file{CATALOG}, and a
-CD-ROM book of EPWING format has a file @file{CATALOGS}.
+A CD-ROM book of EB/EBG/EBXA/EBXA-C format has a file @file{CATALOG},
+and a CD-ROM book of EPWING format has a file @file{CATALOGS}.
 The files define what subbooks the CD-ROM book has.
 They are resides at the top directory of the CD-ROM book.
 
@@ -187,7 +187,7 @@ CD-ROM book.
 @example
 @group
 % ebinfo
-disc type: EB/EBG/EBXA
+disc type: EB/EBG/EBXA/EBXA-C
 character code: JIS X 0208
 the number of subbooks: 3
 @end group
@@ -265,7 +265,7 @@ The subbook @code{GERMGAN} is diappeared.
 @example
 @group
 % ebinfo
-disc type: EB/EBG/EBXA
+disc type: EB/EBG/EBXA/EBXA-C
 character code: JIS X 0208
 the number of subbooks: 2
 @end group

@@ -9,7 +9,7 @@ END-INFO-DIR-ENTRY
    ebinfo: Utility for getting CD-ROM book information, by Motoyuki
 Kasahara.
 
-   Copyright (C) 1997, 1998  Motoyuki Kasahara
+   Copyright (C) 1997, 1998, 1999  Motoyuki Kasahara
 
    Permission is granted to make and distribute verbatim copies of this
 manual provided the copyright notice and this permission notice are
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3beta0, for EB Library version 2.3beta0.
+   This is edition 2.3beta1, for EB Library version 2.3beta1.
 
 * Menu:
 
@@ -56,7 +56,7 @@ later version.
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 2.3beta0, for EB Library version 2.3beta0.
+   This is edition 2.3beta1, for EB Library version 2.3beta1.
 
 
 File: ebinfo.info,  Node: Invoking ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
@@ -79,7 +79,7 @@ is specified.  `ebinfo' outputs information about the specified book
 like as follows:
 
      % ebinfo /mnt/cdrom
-     disc type: EB/EBG/EBXA
+     disc type: EB/EBG/EBXA/EBXA-C
      character code: JIS X 0208
      the number of subbooks: 2
      
@@ -132,7 +132,7 @@ Details about Information
    This section explains details about information output by ebinfo.
 
 disc type:
-     Disc format of the book; EB/EBG/EBXA or EPWING.
+     Disc format of the book; EB/EBG/EBXA/EBXA-C or EPWING.
 
 character code:
      Character code used in the book; ISO 8859-1 or JIS X 0208.
@@ -215,10 +215,10 @@ long as they are unique.
 
 
 Tag Table:
-Node: Top1042
-Node: Introduction1401
-Node: Invoking ebinfo2179
-Node: Details about Information4149
-Node: Options to ebinfo5862
+Node: Top1048
+Node: Introduction1407
+Node: Invoking ebinfo2185
+Node: Details about Information4162
+Node: Options to ebinfo5882
 
 End Tag Table

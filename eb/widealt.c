@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -155,10 +155,10 @@ eb_wide_alt_character_text(appendix, ch, text)
 	return -1;
     }
 
-    if (appendix->sub_current->char_code == EB_CHARCODE_JISX0208)
-	return eb_wide_character_text_jis(appendix, ch, text);
-    else
+    if (appendix->sub_current->char_code == EB_CHARCODE_ISO8859_1)
 	return eb_wide_character_text_latin(appendix, ch, text);
+    else
+	return eb_wide_character_text_jis(appendix, ch, text);
 
     /* not reached */
     return 0;
@@ -339,30 +339,7 @@ eb_forward_wide_alt_character(appendix, ch, n)
     start = appendix->sub_current->wide_start;
     end = appendix->sub_current->wide_end;
 
-    if (appendix->sub_current->char_code == EB_CHARCODE_JISX0208) {
-	/*
-	 * Check for `ch'. (JIS X 0208)
-	 */
-	if (ch < start || end < ch || (ch & 0xff) < 0x21
-	    || 0x7e < (ch & 0xff)) {
-	    eb_error = EB_ERR_NO_SUCH_CHAR_TEXT;
-	    return -1;
-	}
-
-	/*
-	 * Get character number. (JIS X 0208)
-	 */
-	for (i = 0; i < n; i++) {
-	    if (0x7e <= (ch & 0xff))
-		ch += 0xa3;
-	    else
-		ch++;
-	    if (end < ch) {
-		eb_error = EB_ERR_NO_SUCH_CHAR_TEXT;
-		return -1;
-	    }
-	}
-    } else {
+    if (appendix->sub_current->char_code == EB_CHARCODE_ISO8859_1) {
 	/*
 	 * Check for `ch'. (ISO 8859 1)
 	 */
@@ -378,6 +355,29 @@ eb_forward_wide_alt_character(appendix, ch, n)
 	for (i = 0; i < n; i++) {
 	    if (0xfe <= (ch & 0xff))
 		ch += 3;
+	    else
+		ch++;
+	    if (end < ch) {
+		eb_error = EB_ERR_NO_SUCH_CHAR_TEXT;
+		return -1;
+	    }
+	}
+    } else {
+	/*
+	 * Check for `ch'. (JIS X 0208)
+	 */
+	if (ch < start || end < ch || (ch & 0xff) < 0x21
+	    || 0x7e < (ch & 0xff)) {
+	    eb_error = EB_ERR_NO_SUCH_CHAR_TEXT;
+	    return -1;
+	}
+
+	/*
+	 * Get character number. (JIS X 0208)
+	 */
+	for (i = 0; i < n; i++) {
+	    if (0x7e <= (ch & 0xff))
+		ch += 0xa3;
 	    else
 		ch++;
 	    if (end < ch) {
@@ -426,30 +426,7 @@ eb_backward_wide_alt_character(appendix, ch, n)
     start = appendix->sub_current->wide_start;
     end = appendix->sub_current->wide_end;
 
-    if (appendix->sub_current->char_code == EB_CHARCODE_JISX0208) {
-	/*
-	 * Check for `ch'. (JIS X 0208)
-	 */
-	if (ch < start || end < ch || (ch & 0xff) < 0x21
-	    || 0x7e < (ch & 0xff)) {
-	    eb_error = EB_ERR_NO_SUCH_CHAR_TEXT;
-	    return -1;
-	}
-
-	/*
-	 * Get character number. (JIS X 0208)
-	 */
-	for (i = 0; i < n; i++) {
-	    if ((ch & 0xff) <= 0x21)
-		ch -= 0xa3;
-	    else
-		ch--;
-	    if (ch < start) {
-		eb_error = EB_ERR_NO_SUCH_CHAR_TEXT;
-		return -1;
-	    }
-	}
-    } else {
+    if (appendix->sub_current->char_code == EB_CHARCODE_ISO8859_1) {
 	/*
 	 * Check for `ch'. (ISO 8859 1)
 	 */
@@ -465,6 +442,29 @@ eb_backward_wide_alt_character(appendix, ch, n)
 	for (i = 0; i < n; i++) {
 	    if ((ch & 0xff) <= 0x01)
 		ch -= 3;
+	    else
+		ch--;
+	    if (ch < start) {
+		eb_error = EB_ERR_NO_SUCH_CHAR_TEXT;
+		return -1;
+	    }
+	}
+    } else {
+	/*
+	 * Check for `ch'. (JIS X 0208)
+	 */
+	if (ch < start || end < ch || (ch & 0xff) < 0x21
+	    || 0x7e < (ch & 0xff)) {
+	    eb_error = EB_ERR_NO_SUCH_CHAR_TEXT;
+	    return -1;
+	}
+
+	/*
+	 * Get character number. (JIS X 0208)
+	 */
+	for (i = 0; i < n; i++) {
+	    if ((ch & 0xff) <= 0x21)
+		ch -= 0xa3;
 	    else
 		ch--;
 	    if (ch < start) {

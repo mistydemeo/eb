@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -343,10 +343,10 @@ eb_narrow_font_character_bitmap(book, ch, bitmap)
 	return -1;
     }
 
-    if (book->char_code == EB_CHARCODE_JISX0208)
-	return eb_narrow_character_bitmap_jis(book, ch, bitmap);
-    else
+    if (book->char_code == EB_CHARCODE_ISO8859_1)
 	return eb_narrow_character_bitmap_latin(book, ch, bitmap);
+    else
+	return eb_narrow_character_bitmap_jis(book, ch, bitmap);
 
     /* not reached */
     return 0;
@@ -518,30 +518,7 @@ eb_forward_narrow_font_character(book, ch, n)
     start = book->sub_current->narw_current->start;
     end = book->sub_current->narw_current->end;
 
-    if (book->char_code == EB_CHARCODE_JISX0208) {
-	/*
-	 * Check for `ch'. (JIS X 0208)
-	 */
-	if (ch < start || end < ch || (ch & 0xff) < 0x21
-	    || 0x7e < (ch & 0xff)) {
-	    eb_error = EB_ERR_NO_SUCH_CHAR_BMP;
-	    return -1;
-	}
-
-	/*
-	 * Get character number. (JIS X 0208)
-	 */
-	for (i = 0; i < n; i++) {
-	    if (0x7e <= (ch & 0xff))
-		ch += 0xa3;
-	    else
-		ch++;
-	    if (end < ch) {
-		eb_error = EB_ERR_NO_SUCH_CHAR_BMP;
-		return -1;
-	    }
-	}
-    } else {
+    if (book->char_code == EB_CHARCODE_ISO8859_1) {
 	/*
 	 * Check for `ch'. (ISO 8859 1)
 	 */
@@ -557,6 +534,29 @@ eb_forward_narrow_font_character(book, ch, n)
 	for (i = 0; i < n; i++) {
 	    if (0xfe <= (ch & 0xff))
 		ch += 3;
+	    else
+		ch++;
+	    if (end < ch) {
+		eb_error = EB_ERR_NO_SUCH_CHAR_BMP;
+		return -1;
+	    }
+	}
+    } else {
+	/*
+	 * Check for `ch'. (JIS X 0208)
+	 */
+	if (ch < start || end < ch || (ch & 0xff) < 0x21
+	    || 0x7e < (ch & 0xff)) {
+	    eb_error = EB_ERR_NO_SUCH_CHAR_BMP;
+	    return -1;
+	}
+
+	/*
+	 * Get character number. (JIS X 0208)
+	 */
+	for (i = 0; i < n; i++) {
+	    if (0x7e <= (ch & 0xff))
+		ch += 0xa3;
 	    else
 		ch++;
 	    if (end < ch) {
@@ -605,30 +605,7 @@ eb_backward_narrow_font_character(book, ch, n)
     start = book->sub_current->narw_current->start;
     end = book->sub_current->narw_current->end;
 
-    if (book->char_code == EB_CHARCODE_JISX0208) {
-	/*
-	 * Check for `ch'. (JIS X 0208)
-	 */
-	if (ch < start || end < ch || (ch & 0xff) < 0x21
-	    || 0x7e < (ch & 0xff)) {
-	    eb_error = EB_ERR_NO_SUCH_CHAR_BMP;
-	    return -1;
-	}
-
-	/*
-	 * Get character number. (JIS X 0208)
-	 */
-	for (i = 0; i < n; i++) {
-	    if ((ch & 0xff) <= 0x21)
-		ch -= 0xa3;
-	    else
-		ch--;
-	    if (ch < start) {
-		eb_error = EB_ERR_NO_SUCH_CHAR_BMP;
-		return -1;
-	    }
-	}
-    } else {
+    if (book->char_code == EB_CHARCODE_ISO8859_1) {
 	/*
 	 * Check for `ch'. (ISO 8859 1)
 	 */
@@ -644,6 +621,29 @@ eb_backward_narrow_font_character(book, ch, n)
 	for (i = 0; i < n; i++) {
 	    if ((ch & 0xff) <= 0x01)
 		ch -= 3;
+	    else
+		ch--;
+	    if (ch < start) {
+		eb_error = EB_ERR_NO_SUCH_CHAR_BMP;
+		return -1;
+	    }
+	}
+    } else {
+	/*
+	 * Check for `ch'. (JIS X 0208)
+	 */
+	if (ch < start || end < ch || (ch & 0xff) < 0x21
+	    || 0x7e < (ch & 0xff)) {
+	    eb_error = EB_ERR_NO_SUCH_CHAR_BMP;
+	    return -1;
+	}
+
+	/*
+	 * Get character number. (JIS X 0208)
+	 */
+	for (i = 0; i < n; i++) {
+	    if ((ch & 0xff) <= 0x21)
+		ch -= 0xa3;
 	    else
 		ch--;
 	    if (ch < start) {

@@ -14,7 +14,7 @@
 @ifinfo
 ebinfo: Utility for getting CD-ROM book information, by Motoyuki Kasahara.
 
-Copyright @copyright{} 1997, 1998  Motoyuki Kasahara
+Copyright @copyright{} 1997, 1998, 1999  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -47,7 +47,7 @@ by Free Software Foundation, Inc.
 
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1997, 1998  Motoyuki Kasahara
+Copyright @copyright{} 1997, 1998, 1999  Motoyuki Kasahara
 
 Permission is granted to make and distribute verbatim copies of
 this manual provided the copyright notice and this permission notice
@@ -124,7 +124,7 @@ follows:
 @example
 @group
 % ebinfo /mnt/cdrom
-disc type: EB/EBG/EBXA
+disc type: EB/EBG/EBXA/EBXA-C
 character code: JIS X 0208
 the number of subbooks: 2
 @end group
@@ -188,7 +188,7 @@ This section explains details about information output by ebinfo.
 
 @table @asis
 @item disc type:
-Disc format of the book; EB/EBG/EBXA or EPWING.
+Disc format of the book; EB/EBG/EBXA/EBXA-C or EPWING.
 
 @item character code:
 Character code used in the book; ISO 8859-1 or JIS X 0208.
