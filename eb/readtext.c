@@ -297,7 +297,8 @@ eb_read_text(book, appendix, hookset, container, text_max_length, text,
     if (hookset != NULL)
 	eb_lock(&hookset->lock);
     LOG(("in: eb_read_text(book=%d, appendix=%d, text_max_length=%ld)",
-	(int)book->code, (int)appendix->code, (long)text_max_length));
+	(int)book->code, (appendix != NULL) ? (int)appendix->code : 0,
+	(long)text_max_length));
 
     /*
      * Current subbook must have been set and START file must exist.
@@ -401,7 +402,8 @@ eb_read_heading(book, appendix, hookset, container, text_max_length, text,
     if (hookset != NULL)
 	eb_lock(&hookset->lock);
     LOG(("in: eb_read_heading(book=%d, appendix=%d, text_max_length=%ld)",
-	(int)book->code, (int)appendix->code, (long)text_max_length));
+	(int)book->code, (appendix != NULL) ? (int)appendix->code : 0,
+	(long)text_max_length));
 
     /*
      * Current subbook must have been set and START file must exist.
@@ -578,8 +580,8 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
     pthread_mutex_lock(&cache_mutex);
     LOG(("in: eb_read_text_internal(book=%d, appendix=%d, \
 text_max_length=%ld, forward=%d)",
-	(int)book->code, (int)appendix->code, (long)text_max_length,
-	forward_only));
+	(int)book->code, (appendix != NULL) ? (int)appendix->code : 0,
+	(long)text_max_length, forward_only));
 
     /*
      * Initialize variables.
@@ -1711,7 +1713,7 @@ eb_forward_text(book, appendix)
 
     eb_lock(&book->lock);
     LOG(("in: eb_forward_text(book=%d, appendix=%d)", (int)book->code,
-	(int)appendix->code));
+	(appendix != NULL) ? (int)appendix->code : 0));
 
     /*
      * Current subbook must have been set and START file must exist.
@@ -1850,7 +1852,7 @@ eb_backward_text(book, appendix)
 
     eb_lock(&book->lock);
     LOG(("in: eb_backward_text(book=%d, appendix=%d)", (int)book->code,
-	(int)appendix->code));
+	(appendix != NULL) ? (int)appendix->code : 0));
 
     /*
      * Current subbook must have been set and START file must exist.
