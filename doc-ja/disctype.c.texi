@@ -10,10 +10,10 @@
  *     disctype /cdrom
  *
  * 説明:
- *     このプログラムは一冊の CD-ROM 書籍の種類 (EB/EBG/EBXA か EPWING
- *     か) を表示します。`book-path' は書籍のトップディレクトリ、つま
- *     り CATALOG または CATALOGS ファイルの存在するディレクトリを指す
- *     ようにします。
+ *     このプログラムは一冊の CD-ROM 書籍の種類 (EB/EBG/EBXA/EBXA-C/
+ *     S-EBXA か EPWING か) を表示します。`book-path' は書籍のトップ
+ *     ディレクトリ、つまり CATALOG または CATALOGS ファイルの存在
+ *     するディレクトリを指すようにします。
  */
 
 #ifdef HAVE_CONFIG_H

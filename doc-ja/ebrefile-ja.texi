@@ -105,9 +105,9 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @end group
 @end example
 
-EB/EBG/EBXA/EBXA-C 形式の CD-ROM 書籍は @file{CATALOG} というファイル
-を、EPWING 形式の CD-ROM 書籍は @file{CATALOGS} というファイルを持って
-います。
+EB/EBG/EBXA/EBXA-C/S-EBXA 形式の CD-ROM 書籍は @file{CATALOG} という
+ファイルを、EPWING 形式の CD-ROM 書籍は @file{CATALOGS} というファイル
+を持っています。
 これらのファイルは、その CD-ROM 書籍にはどんな副本が収められているのか
 を定義しています。
 これらのファイルは、CD-ROM 書籍のトップディレクトリに置かれています。
@@ -193,7 +193,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @example
 @group
 % ebinfo
-disc type: EB/EBG/EBXA/EBXA-C
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 3
 @end group
@@ -273,7 +273,7 @@ subbook 3:
 @example
 @group
 % ebinfo
-disc type: EB/EBG/EBXA/EBXA-C
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 2
 @end group

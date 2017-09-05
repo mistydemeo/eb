@@ -123,7 +123,7 @@ EB ライブラリバージョン @value{VERSION} に対応しています。
 @example
 @group
 % ebinfo /mnt/cdrom
-disc type: EB/EBG/EBXA/EBXA-C
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 2
 @end group
@@ -187,7 +187,7 @@ subbook 2:
 
 @table @asis
 @item disc type:
-その書籍の形式。EB/EBG/EBXA/EBXA-C または EPWING です。
+その書籍の形式。EB/EBG/EBXA/EBXA-C/S-EBXA または EPWING です。
 
 @item character code:
 その書籍で使用されている文字コー。ISO 8859-1 または JIS X 0208 で

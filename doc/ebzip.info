@@ -1,4 +1,4 @@
-This is Info file ebzip.info, produced by Makeinfo version 1.68 from
+This is Info file ebzip.info, produced by Makeinfo version 1.67 from
 the input file ebzip.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.3, for EB Library version 2.3.3.
+   This is edition 2.3.4, for EB Library version 2.3.4.
 
 * Menu:
 
@@ -103,7 +103,7 @@ Though `ebzip' is free software, your books may not be free.  If the
 publishers of your CD-ROM don't permit to copy the book onto a hard
 disk (nor other strage devices), please give up compress the book.
 
-   This is edition 2.3.3, for EB Library version 2.3.3.
+   This is edition 2.3.4, for EB Library version 2.3.4.
 
 
 File: ebzip.info,  Node: Action and Command Name,  Next: Invoking ebzip,  Prev: Introduction,  Up: Top
@@ -388,7 +388,7 @@ directory names of subbooks to be compressed, separeted by a comma
 and what their directory names are.
 
      % ebinfo /mnt/cdrom
-     disc type: EB/EBG/EBXA/EBXA-C
+     disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
      character code: JIS X 0208
      the number of subbooks: 3
      
@@ -1015,7 +1015,7 @@ fields.
 
 `zip mode (4 bits of the most significant bit side)'
      This identifies the compression mode.  In EB Library version
-     2.3.3, only 1 (0001 in binary digits) can be prescribed as this
+     2.3.4, only 1 (0001 in binary digits) can be prescribed as this
      version.
 
 `compression level (4 bits of the least-significant-bit side)'
@@ -1063,22 +1063,22 @@ Node: Compression Level10348
 Node: Adjust Filenames10951
 Node: Test13087
 Node: Partial Compression13432
-Node: Overwrite Old Files16028
-Node: Compress Compressed EPWING16776
-Node: Uncompression17275
-Node: Uncompression Example17717
-Node: Options for Uncompression19274
-Node: Uncompress Compressed EPWING20782
-Node: Information21284
-Node: Information Example21671
-Node: Options for Information22323
-Node: Delete a Book22912
-Node: Summary of Options23210
-Node: Comparision Result27559
-Node: Compressed File Format30126
-Node: Format Overview30552
-Node: Data Part31408
-Node: Index Part34209
-Node: Header Part36597
+Node: Overwrite Old Files16035
+Node: Compress Compressed EPWING16783
+Node: Uncompression17282
+Node: Uncompression Example17724
+Node: Options for Uncompression19281
+Node: Uncompress Compressed EPWING20789
+Node: Information21291
+Node: Information Example21678
+Node: Options for Information22330
+Node: Delete a Book22919
+Node: Summary of Options23217
+Node: Comparision Result27566
+Node: Compressed File Format30133
+Node: Format Overview30559
+Node: Data Part31415
+Node: Index Part34216
+Node: Header Part36604
 
 End Tag Table

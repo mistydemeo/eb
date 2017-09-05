@@ -1,4 +1,4 @@
-This is Info file ebinfo.info, produced by Makeinfo version 1.68 from
+This is Info file ebinfo.info, produced by Makeinfo version 1.67 from
 the input file ebinfo.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.3, for EB Library version 2.3.3.
+   This is edition 2.3.4, for EB Library version 2.3.4.
 
 * Menu:
 
@@ -56,7 +56,7 @@ later version.
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 2.3.3, for EB Library version 2.3.3.
+   This is edition 2.3.4, for EB Library version 2.3.4.
 
 
 File: ebinfo.info,  Node: Invoking ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
@@ -79,7 +79,7 @@ is specified.  `ebinfo' outputs information about the specified book
 like as follows:
 
      % ebinfo /mnt/cdrom
-     disc type: EB/EBG/EBXA/EBXA-C
+     disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
      character code: JIS X 0208
      the number of subbooks: 2
      
@@ -132,7 +132,7 @@ Details about Information
    This section explains details about information output by ebinfo.
 
 disc type:
-     Disc format of the book; EB/EBG/EBXA/EBXA-C or EPWING.
+     Disc format of the book; EB/EBG/EBXA/EBXA-C/S-EBXA or EPWING.
 
 character code:
      Character code used in the book; ISO 8859-1 or JIS X 0208.
@@ -218,7 +218,7 @@ Tag Table:
 Node: Top1048
 Node: Introduction1401
 Node: Invoking ebinfo2173
-Node: Details about Information4150
-Node: Options to ebinfo5870
+Node: Details about Information4157
+Node: Options to ebinfo5884
 
 End Tag Table

@@ -23,9 +23,10 @@
  * en:     disctype /cdrom
  * en:
  * en: Description:
- * en:     This program shows disc type (EB/EBG/EBXA or EPWING) of a
- * en:     CD-ROM book.  `book-path' points to the top directory of
- * en:     the CD-ROM book where the file CATALOG or CATALOGS resides.
+ * en:     This program shows disc type (EB/EBG/EBXA/EBXA-C/S-EBXA or
+ * en:     EPWING) of a CD-ROM book.  `book-path' points to the top
+ * en:     directory of the CD-ROM book where the file CATALOG or CATALOGS
+ * en:     resides.
  * ja: ファイル名:
  * ja:     disctype.c
  * ja:
@@ -36,10 +37,10 @@
  * ja:     disctype /cdrom
  * ja:
  * ja: 説明:
- * ja:     このプログラムは一冊の CD-ROM 書籍の種類 (EB/EBG/EBXA か EPWING
- * ja:     か) を表示します。`book-path' は書籍のトップディレクトリ、つま
- * ja:     り CATALOG または CATALOGS ファイルの存在するディレクトリを指す
- * ja:     ようにします。
+ * ja:     このプログラムは一冊の CD-ROM 書籍の種類 (EB/EBG/EBXA/EBXA-C/
+ * ja:     S-EBXA か EPWING か) を表示します。`book-path' は書籍のトップ
+ * ja:     ディレクトリ、つまり CATALOG または CATALOGS ファイルの存在
+ * ja:     するディレクトリを指すようにします。
  */
 
 #ifdef HAVE_CONFIG_H

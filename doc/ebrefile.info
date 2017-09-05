@@ -1,4 +1,4 @@
-This is Info file ebrefile.info, produced by Makeinfo version 1.68 from
+This is Info file ebrefile.info, produced by Makeinfo version 1.67 from
 the input file ebrefile.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.3, for EB Library version 2.3.3.
+   This is edition 2.3.4, for EB Library version 2.3.4.
 
 * Menu:
 
@@ -62,10 +62,10 @@ independent "book".
      |  [Encyclopedia]        (subbook)  |
      +-----------------------------------+
 
-   A CD-ROM book of EB/EBG/EBXA/EBXA-C format has a file `CATALOG', and
-a CD-ROM book of EPWING format has a file `CATALOGS'.  The files define
-what subbooks the CD-ROM book has.  They are resides at the top
-directory of the CD-ROM book.
+   A CD-ROM book of EB/EBG/EBXA/EBXA-C/S-EBXA format has the file
+`CATALOG', and a CD-ROM book of EPWING format has the file `CATALOGS'.
+The files define what subbooks the CD-ROM book has.  They are resides
+at the top directory of the CD-ROM book.
 
    `ebrefile' reads an original catalog file and builds a new catalog
 file which defines the subbooks only specified by an user.  In other
@@ -91,7 +91,7 @@ Though `ebzip' is free software, your books may not be free.
 `ebrefile' modifies contents of a certain file in a CD-ROM book.
 Please be careful.
 
-   This is edition 2.3.3, for EB Library version 2.3.3.
+   This is edition 2.3.4, for EB Library version 2.3.4.
 
 
 File: ebrefile.info,  Node: Invoking ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -136,7 +136,7 @@ what their directory names are.  Suppose that the current working
 directory is a top directory of a CD-ROM book.
 
      % ebinfo
-     disc type: EB/EBG/EBXA/EBXA-C
+     disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
      character code: JIS X 0208
      the number of subbooks: 3
      
@@ -192,7 +192,7 @@ when the `--output-directory' option is used.  *Note
    Invoke `ebinfo' again.  The subbook `GERMGAN' is diappeared.
 
      % ebinfo
-     disc type: EB/EBG/EBXA/EBXA-C
+     disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
      character code: JIS X 0208
      the number of subbooks: 2
      
@@ -343,10 +343,10 @@ allowed as long as they are unique.
 Tag Table:
 Node: Top1054
 Node: Introduction1580
-Node: Invoking ebrefile3633
-Node: Select Subbooks4329
-Node: Adjust Filename8127
-Node: Combination with ebzip9861
-Node: Summary of Options11173
+Node: Invoking ebrefile3643
+Node: Select Subbooks4339
+Node: Adjust Filename8151
+Node: Combination with ebzip9885
+Node: Summary of Options11197
 
 End Tag Table

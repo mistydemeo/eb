@@ -136,7 +136,7 @@ while (($optname, $optarg) = &getopt_long) {
 	    push(@sub_imports, $sub);
 	}
     } elsif ($optname eq '-v') {
- 	print "$progname (EB Library) version $version\n\n";
+ 	print "$progname (EB Library) version $version\n";
 	print "Copyright (c) 1998, 1999  Motoyuki Kasahara\n\n";
 	print "This is free software; you can redistribute it and/or modify\n";
 	print "it under the terms of the GNU General Public License as published by\n";

@@ -9,9 +9,10 @@
  *     disctype /cdrom
  *
  * Description:
- *     This program shows disc type (EB/EBG/EBXA or EPWING) of a
- *     CD-ROM book.  `book-path' points to the top directory of
- *     the CD-ROM book where the file CATALOG or CATALOGS resides.
+ *     This program shows disc type (EB/EBG/EBXA/EBXA-C/S-EBXA or
+ *     EPWING) of a CD-ROM book.  `book-path' points to the top
+ *     directory of the CD-ROM book where the file CATALOG or CATALOGS
+ *     resides.
  */
 
 #ifdef HAVE_CONFIG_H

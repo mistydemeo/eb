@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 2.3.3 版です。
+   この文書は第 2.3.4 版です。
 この文書はまだ完成していません。
 
 * Menu:
@@ -95,8 +95,8 @@ File: eb-ja.info,  Node: Introduction,  Next: Link,  Prev: Top,  Up: Top
 書籍にアクセスするための C のライブラリです。
 UNIX 系 OS
 のシステム上で動作させることができます。 EB
-ライブラリは EB, EBG, EBXA, EBXA-C および EPWING 形式の
-CD-ROM 書籍 に対応しています。
+ライブラリは EB, EBG, EBXA, EBXA-C, S-EBXA および EPWING
+形式の CD-ROM 書籍に対応しています。
 これらの形式の CD-ROM
 書籍は、日本で一般的に使われています。 CD-ROM
 書籍自体は ISO 9660
@@ -118,7 +118,7 @@ Foundation が公表した GNU General Public License (GNU
 をお読みください。
 
    この文書は第 EB ライブラリバージョン
-2.3.3 に対応しています。
+2.3.4 に対応しています。
 この文書はまだ完成していません。
 
 
@@ -413,10 +413,10 @@ File: eb-ja.info,  Node: Initialization Sample,  Next: Initialization Data Types
       *     disctype /cdrom
       *
       * 説明:
-      *     このプログラムは一冊の CD-ROM 書籍の種類 (EB/EBG/EBXA か EPWING
-      *     か) を表示します。`book-path' は書籍のトップディレクトリ、つま
-      *     り CATALOG または CATALOGS ファイルの存在するディレクトリを指す
-      *     ようにします。
+      *     このプログラムは一冊の CD-ROM 書籍の種類 (EB/EBG/EBXA/EBXA-C/
+      *     S-EBXA か EPWING か) を表示します。`book-path' は書籍のトップ
+      *     ディレクトリ、つまり CATALOG または CATALOGS ファイルの存在
+      *     するディレクトリを指すようにします。
       */
      
      #ifdef HAVE_CONFIG_H
@@ -705,10 +705,11 @@ Error Handling.)。
 
      はあらかじめ書籍に結び付いていなければなりません。
 
-     書籍が EB/EBG/EBXA/EBXA-C なら `EB_DISC_EB'
-     を返します。 書籍が EPWING なら `EB_DISC_EPWING'
-     を返します。 関数が失敗した場合は
-     -1 を返し、`eb_error' をセットします。
+     書籍が EB/EBG/EBXA/EBXA-C/S-EBXA なら `EB_DISC_EB'
+     を返します。 書籍が EPWING なら
+     `EB_DISC_EPWING' を返します。
+     関数が失敗した場合は -1 を返し、`eb_error'
+     をセットします。
 
  - Function: EB_Character_Code eb_character_code (EB_Book *BOOK)
      関数 `eb_character_type()' は BOOK
@@ -2374,34 +2375,34 @@ File: eb-ja.info,  Node: Program Index,  Prev: Variable Index,  Up: Index
 Tag Table:
 Node: Top1040
 Node: Introduction2727
-Node: Link3808
-Node: Compilation4210
-Node: Configuration5684
-Node: Character Code7215
-Node: Initialization7977
-Node: Compressed Book10891
-Node: Initialization Sample11326
-Node: Initialization Data Types13326
-Node: Initialization Functions14474
-Node: Error Handling18997
-Node: Tolerance to Error19903
-Node: Error Data Types21088
-Node: Error Variables21667
-Node: Error Codes22537
-Node: Subbook32308
-Node: Current Subbook34163
-Node: Subbook Sample35780
-Node: Subbook Data Types38130
-Node: Subbook Functions38656
-Node: Search Basics44243
-Node: Word Search45086
-Node: Get Remained Entries47644
-Node: Word Search Data Types49467
-Node: Word Search Functions50353
-Node: Index54781
-Node: Data Type Index55062
-Node: Function Index55650
-Node: Variable Index57369
-Node: Program Index61377
+Node: Link3815
+Node: Compilation4217
+Node: Configuration5691
+Node: Character Code7222
+Node: Initialization7984
+Node: Compressed Book10898
+Node: Initialization Sample11333
+Node: Initialization Data Types13348
+Node: Initialization Functions14496
+Node: Error Handling19031
+Node: Tolerance to Error19937
+Node: Error Data Types21122
+Node: Error Variables21701
+Node: Error Codes22571
+Node: Subbook32342
+Node: Current Subbook34197
+Node: Subbook Sample35814
+Node: Subbook Data Types38164
+Node: Subbook Functions38690
+Node: Search Basics44277
+Node: Word Search45120
+Node: Get Remained Entries47678
+Node: Word Search Data Types49501
+Node: Word Search Functions50387
+Node: Index54815
+Node: Data Type Index55096
+Node: Function Index55684
+Node: Variable Index57403
+Node: Program Index61411
 
 End Tag Table

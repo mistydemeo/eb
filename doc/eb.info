@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.3, for EB Library version 2.3.3.  This document
+   This is edition 2.3.4, for EB Library version 2.3.4.  This document
 is not completed.
 
 * Menu:
@@ -94,10 +94,10 @@ Introduction
 
    EB Library is a C library for accessing CD-ROM books.  It can be
 built on UNIX derived systems.  EB Library supports to access CD-ROM
-books of EB, EBG, EBXA, EBXA-C and EPWING formats.  CD-ROM books of
-those formats are popular in Japan.  Since CD-ROM books themseves are
-stands on the ISO 9660 format, you can mount the discs by the same way
-as other ISO 9660 discs.
+books of EB, EBG, EBXA, EBXA-C, S-EBXA and EPWING formats.  CD-ROM
+books of those formats are popular in Japan.  Since CD-ROM books
+themseves are stands on the ISO 9660 format, you can mount the discs by
+the same way as other ISO 9660 discs.
 
    EB Library is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -109,7 +109,7 @@ later version.
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This edition corresponds to version 2.3.3 of EB Library.  This
+   This edition corresponds to version 2.3.4 of EB Library.  This
 document is not completed.
 
 
@@ -339,9 +339,10 @@ Sample Program
       *     disctype /cdrom
       *
       * Description:
-      *     This program shows disc type (EB/EBG/EBXA or EPWING) of a
-      *     CD-ROM book.  `book-path' points to the top directory of
-      *     the CD-ROM book where the file CATALOG or CATALOGS resides.
+      *     This program shows disc type (EB/EBG/EBXA/EBXA-C/S-EBXA or
+      *     EPWING) of a CD-ROM book.  `book-path' points to the top
+      *     directory of the CD-ROM book where the file CATALOG or CATALOGS
+      *     resides.
       */
      
      #ifdef HAVE_CONFIG_H
@@ -521,7 +522,7 @@ global variable `eb_error').
      The function `eb_disc_type()' inspects the format type of BOOK.
      BOOK must have been bound beforehand.
 
-     If the book is EB/EBG/EBXA/EBXA-C, it returns the `EB_DISC_EB'.
+     If the book is EB/EBG/EBXA/EBXA-C/S-EBXA, it returns `EB_DISC_EB'.
      If the book is EPWING, it returns `EB_DISC_EPWING'.  If this
      function fails, it returns -1 and sets `eb_error'.
 
@@ -1697,35 +1698,35 @@ Sample Program Index
 Tag Table:
 Node: Top1038
 Node: Introduction2846
-Node: Link3877
-Node: Compilation4249
-Node: Configuration5703
-Node: Character Code7037
-Node: Initialization7725
-Node: Compressed Book10474
-Node: Initialization Sample10900
-Node: Initialization Data Types12848
-Node: Initialization Functions13975
-Node: Error Handling18065
-Node: Tolerance to Error19002
-Node: Error Data Types20108
-Node: Error Variables20651
-Node: Error Functions21476
-Node: Error Codes22601
-Node: Subbook31176
-Node: Current Subbook33247
-Node: Subbook Sample34972
-Node: Subbook Data Types37266
-Node: Subbook Functions37787
-Node: Search Basics43244
-Node: Word Search43964
-Node: Get Remained Entries46620
-Node: Word Search Data Types48410
-Node: Word Search Functions49270
-Node: Index53324
-Node: Data Type Index53620
-Node: Function Index54207
-Node: Variable Index56047
-Node: Program Index60134
+Node: Link3885
+Node: Compilation4257
+Node: Configuration5711
+Node: Character Code7045
+Node: Initialization7733
+Node: Compressed Book10482
+Node: Initialization Sample10908
+Node: Initialization Data Types12882
+Node: Initialization Functions14009
+Node: Error Handling18102
+Node: Tolerance to Error19039
+Node: Error Data Types20145
+Node: Error Variables20688
+Node: Error Functions21513
+Node: Error Codes22638
+Node: Subbook31213
+Node: Current Subbook33284
+Node: Subbook Sample35009
+Node: Subbook Data Types37303
+Node: Subbook Functions37824
+Node: Search Basics43281
+Node: Word Search44001
+Node: Get Remained Entries46657
+Node: Word Search Data Types48447
+Node: Word Search Functions49307
+Node: Index53361
+Node: Data Type Index53657
+Node: Function Index54244
+Node: Variable Index56084
+Node: Program Index60171
 
 End Tag Table

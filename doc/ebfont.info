@@ -1,4 +1,4 @@
-This is Info file ebfont.info, produced by Makeinfo version 1.68 from
+This is Info file ebfont.info, produced by Makeinfo version 1.67 from
 the input file ebfont.texi.
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 2.3.3, for EB Library version 2.3.3.
+   This is edition 2.3.4, for EB Library version 2.3.4.
 
 * Menu:
 
@@ -66,7 +66,7 @@ later version.
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 2.3.3, for EB Library version 2.3.3.
+   This is edition 2.3.4, for EB Library version 2.3.4.
 
 
 File: ebfont.info,  Node: What is Local Character,  Next: Invoking ebfont,  Prev: Introduction,  Up: Top
@@ -211,7 +211,7 @@ directory names of subbooks to be compressed, separeted by a comma
 and what their directory names are.
 
      % ebinfo /mnt/cdrom
-     disc type: EB/EBG/EBXA/EXBA-C
+     disc type: EB/EBG/EBXA/EXBA-C/S-EBXA
      character code: JIS X 0208
      the number of subbooks: 3
      
@@ -313,6 +313,6 @@ Node: Invoking ebfont4138
 Node: Image Formats5559
 Node: Heights6453
 Node: Subbooks7214
-Node: Summary of Options9152
+Node: Summary of Options9159
 
 End Tag Table

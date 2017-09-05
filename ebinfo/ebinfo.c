@@ -208,7 +208,7 @@ output_information(path, multiflag)
     if (disc < 0)
 	goto failed;
     if (disc == EB_DISC_EB)
-	printf("disc type: EB/EBG/EBXA/EBXA-C\n");
+	printf("disc type: EB/EBG/EBXA/EBXA-C/S-EBXA\n");
     else
 	printf("disc type: EPWING\n");
 

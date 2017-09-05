@@ -124,7 +124,7 @@ follows:
 @example
 @group
 % ebinfo /mnt/cdrom
-disc type: EB/EBG/EBXA/EBXA-C
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 2
 @end group
@@ -188,7 +188,7 @@ This section explains details about information output by ebinfo.
 
 @table @asis
 @item disc type:
-Disc format of the book; EB/EBG/EBXA/EBXA-C or EPWING.
+Disc format of the book; EB/EBG/EBXA/EBXA-C/S-EBXA or EPWING.
 
 @item character code:
 Character code used in the book; ISO 8859-1 or JIS X 0208.

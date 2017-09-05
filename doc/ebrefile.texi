@@ -103,8 +103,9 @@ Each subbook itself is an independent @dfn{book}.
 @end group
 @end example
 
-A CD-ROM book of EB/EBG/EBXA/EBXA-C format has a file @file{CATALOG},
-and a CD-ROM book of EPWING format has a file @file{CATALOGS}.
+A CD-ROM book of EB/EBG/EBXA/EBXA-C/S-EBXA format has the file
+@file{CATALOG},
+and a CD-ROM book of EPWING format has the file @file{CATALOGS}.
 The files define what subbooks the CD-ROM book has.
 They are resides at the top directory of the CD-ROM book.
 
@@ -187,7 +188,7 @@ CD-ROM book.
 @example
 @group
 % ebinfo
-disc type: EB/EBG/EBXA/EBXA-C
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 3
 @end group
@@ -265,7 +266,7 @@ The subbook @code{GERMGAN} is diappeared.
 @example
 @group
 % ebinfo
-disc type: EB/EBG/EBXA/EBXA-C
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 2
 @end group

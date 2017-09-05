@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 1997, 1998  Motoyuki Kasahara
+ * Copyright (c) 1997, 1998, 1999  Motoyuki Kasahara
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -75,5 +75,9 @@ int eb_wide_alt_end EB_P((EB_Appendix *));
 int eb_wide_alt_character_text EB_P((EB_Appendix *, int, char *));
 int eb_forward_wide_alt_character EB_P((EB_Appendix *, int, int));
 int eb_backward_wide_alt_character EB_P((EB_Appendix *, int, int));
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* not EB_APPENDIX_H */

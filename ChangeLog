@@ -1,3 +1,22 @@
+1999-10-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 2.3.4.
+
+	* eb/epwunzip.c (eb_epwunzip_slice): Fix a bug that an
+	application dumps core when the compression ratio of a target
+	page is over 100%.
+
+	* eb/appendix.h: Add missing `}' for extern "C".
+
+1999-10-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebrefile/ebrefile.in: When the `--version' option is specified,
+	don't put an empty line followed by the Copyright string.
+	* ebappendix/ebappendix.in: Likewise.
+
+	* ebinfo/ebinfo.c (output_information): Add `S-EBXA' to the
+	string `EB/EBG/EBXA/...'.
+
 1999-09-04  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 2.3.3.
@@ -27,8 +46,8 @@
 
 1999-04-17  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
-	* eb/eb.c (eb_initialize_catalog): Force changing the character
-	code parameter of `EB Kagakugijutu Yougo Daijiten (YRRS-048)'
+	* eb/eb.c (eb_initialize_catalog): Change the character code
+	parameter of `EB Kagakugijutu Yougo Daijiten (YRRS-048)'
 	to JIS X 0208.
 
 1999-04-11  Motoyuki Kasahara  <m-kasahr@sra.co.jp>

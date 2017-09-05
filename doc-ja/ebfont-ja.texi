@@ -279,7 +279,7 @@ XPM と GIF 形式では、前景色は黒 (RGB の @samp{#000000}) に、背景色は
 @example
 @group
 % ebinfo /mnt/cdrom
-disc type: EB/EBG/EBXA/EBXA-C
+disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 3
 @end group

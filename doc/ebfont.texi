@@ -280,7 +280,7 @@ and what their directory names are.
 @example
 @group
 % ebinfo /mnt/cdrom
-disc type: EB/EBG/EBXA/EXBA-C
+disc type: EB/EBG/EBXA/EXBA-C/S-EBXA
 character code: JIS X 0208
 the number of subbooks: 3
 @end group

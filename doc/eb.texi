@@ -134,8 +134,8 @@ Index
 
 EB Library is a C library for accessing CD-ROM books.
 It can be built on UNIX derived systems.
-EB Library supports to access CD-ROM books of EB, EBG, EBXA, EBXA-C and
-EPWING formats.
+EB Library supports to access CD-ROM books of EB, EBG, EBXA, EBXA-C,
+S-EBXA and EPWING formats.
 CD-ROM books of those formats are popular in Japan.
 Since CD-ROM books themseves are stands on the ISO 9660 format, you can
 mount the discs by the same way as other ISO 9660 discs.
@@ -580,7 +580,7 @@ Otherwise, it returns -1 and sets @code{eb_error}.
 The function @code{eb_disc_type()} inspects the format type of @var{book}.
 @var{book} must have been bound beforehand.
 
-If the book is EB/EBG/EBXA/EBXA-C, it returns the @code{EB_DISC_EB}.
+If the book is EB/EBG/EBXA/EBXA-C/S-EBXA, it returns @code{EB_DISC_EB}.
 If the book is EPWING, it returns @code{EB_DISC_EPWING}.
 If this function fails, it returns -1 and sets @code{eb_error}.
 @end deftypefun
