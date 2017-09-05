@@ -1,3 +1,12 @@
+1999-11-03  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 2.3.5.
+
+	* eb/font.c (eb_initialize_eb_fonts): If the number of characters
+	in a font is 0, ignore the font entry.  This fix is for "Nihongo
+	Goi Taikei" (EPWING, Iwanami Shoten).
+	* eb/font.c (eb_initialize_epwing_fonts): Likewise.
+
 1999-10-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 2.3.4.
