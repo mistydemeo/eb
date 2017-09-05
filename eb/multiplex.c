@@ -841,7 +841,7 @@ ebnet_set_book_name(int file, const char *book_name)
 	return -1;
 
     strncpy(entry->book_name, book_name, EBNET_MAX_BOOK_NAME_LENGTH + 1);
-    *(entry->book_name + EBNET_MAX_BOOK_NAME_LENGTH + 1) = '\0';
+    *(entry->book_name + EBNET_MAX_BOOK_NAME_LENGTH) = '\0';
 
     return 0;
 }

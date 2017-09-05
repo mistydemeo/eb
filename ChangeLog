@@ -1,3 +1,18 @@
+2008-01-14  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.3.1.
+
+	* ltmain.sh, config.sub, config.guess: Imported from libtool-1.5.24.
+
+2007-02-13  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ltmain.sh, config.sub, config.guess: Imported from libtool-1.5.22.
+
+	* eb/multiplex.c (ebnet_set_book_name): Fix a buffer overrun bug.
+	* eb/binary.c (eb_set_binary_mpeg): Fix a bug that it doesn't 
+	compose a movie file name correctly.
+	* eb/book.c (misleaded_book_table): Add Panasonic KX-EBP2 accessories.
+
 2006-08-31  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.3.

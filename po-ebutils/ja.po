@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ebutils 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2006-08-31 11:04+0900\n"
+"POT-Creation-Date: 2008-01-14 22:55+0900\n"
 "PO-Revision-Date: 2001-03-18 23:28+0900\n"
 "Last-Translator: Motoyuki Kasahara <m-kasahr@sra.co.jp>\n"
 "Language-Team: \n"
@@ -734,7 +734,8 @@ msgstr "  `ebunzip' として起動されたときは、省略時の動作は伸長になる。\n"
 #, c-format
 msgid ""
 "  When invoked as `ebzipinfo', listing information is the default action.\n"
-msgstr "  `ebunzipinfo' として起動されたときは、省略時の動作は情報の出力になる。\n"
+msgstr ""
+"  `ebunzipinfo' として起動されたときは、省略時の動作は情報の出力になる。\n"
 
 #: ../ebzip/ebzip.c:552
 #, c-format
@@ -746,7 +747,8 @@ msgstr "  `ebunzip.exe' として起動されたときは、省略時の動作は伸長になる。\n"
 msgid ""
 "  When invoked as `ebzipinf.exe', listing information is the default "
 "action.\n"
-msgstr "  `ebunzipinf.exe' として起動されたときは、省略時の動作は情報の出力になる。\n"
+msgstr ""
+"  `ebunzipinf.exe' として起動されたときは、省略時の動作は情報の出力になる。\n"
 
 #: ../ebzip/ebzip.c:555
 #, c-format

@@ -879,7 +879,7 @@ eb_set_binary_mpeg(EB_Book *book, const unsigned int *argv)
     LOG(("aux: eb_set_binary_mpeg(): movie_file_name=%s", movie_file_name));
 
     if (eb_find_file_name3(book->path, subbook->directory_name,
-	subbook->movie_directory_name, movie_file_name, movie_path_name)
+	subbook->movie_directory_name, movie_file_name, movie_file_name)
 	!= EB_SUCCESS) {
 	error_code = EB_ERR_NO_SUCH_BINARY;
 	goto failed;

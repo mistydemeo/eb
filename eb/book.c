@@ -266,6 +266,8 @@ static const char * const misleaded_book_table[] = {
     /* Japanese-English-Spanish Jiten (YRRS-060) */
     "#E#N#G!?#J#A#N!J!\\#S#P#A!K",
 
+     /* Panasonic KX-EBP2 accessories. */
+    "%W%m%7!<%I1QOB!&OB1Q<-E5",
     NULL
 };
 

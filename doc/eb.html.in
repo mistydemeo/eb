@@ -5958,7 +5958,7 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 
 <p>
 ただし、<code>book</code> が保存しているデータの長さが
-<var>max_text_length</var> を超えていると、何も書き込まずに関数は終了
+<var>text_max_length</var> を超えていると、何も書き込まずに関数は終了
 します。
 このとき、書き込めなかったデータは引き続き保存されます。
 つまり、<code>text_max_length</code> があまりに小さく、かつ保持している
@@ -6726,7 +6726,7 @@ XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
 
 <blockquote class="program">
 <pre>
-#include &lt;eb/eb.h&gt;
+#include &lt;eb/font.h&gt;
 </pre>
 </blockquote>
 
@@ -7658,7 +7658,7 @@ eb_set_binary_color_graphic(EB_Book *book, EB_Position *position);
 
 <p>
 非インライン用の終了フック <code>EB_HOOK_END_GRAPHIC</code> では、
-フック関数に渡す引数の <code>argv[1]</code> と <code>argv[2]</code> が、
+フック関数に渡す引数の <code>argv[2]</code> と <code>argv[3]</code> が、
 図版データのページ番号とオフセットになりますので、これを
 <code>eb_set_binary_color_graphic()</code> に渡してやります。 
 同様に、インライン用の終了フック <code>EB_HOOK_END_IN_GRAPHIC</code>

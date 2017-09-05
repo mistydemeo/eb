@@ -14,29 +14,34 @@ table {
 }
 
 h2 {
+    color:			#000000;
     font-size:			x-large;
-    background-color:		#cfcfcf;
     padding:			3px;
-    border-style:		solid;
-    border-width:		1px;
 }
 
 h3 {
+    color:			#ffffff;
+    background-color:		#8787a7;
     font-size:			large;
-    background-color:		#cfcfcf;
-    padding:			3px;
+    padding:			5px;
     border-style:		solid;
-    border-width:		1px;
+    border-width:		4px;
+    border-bottom-color:	#3f3f5f;
+    border-right-color:		#3f3f5f;
+    border-top-color:		#dfdfff;
+    border-left-color:		#dfdfff;
 }
 
 h4 {
-    font-size:          	medium;
-    border-color:		#afafaf;
-    border-left-style:  	solid;
+    color:			#000000;
+    background-color:		#dfdfff;
+    font-size:			medium;
+    border-color:		#3f3f5f;
+    border-left-style:		solid;
     border-bottom-style:	solid;
-    border-left-width:  	8px;
+    border-left-width:		8px;
     border-bottom-width:	2px;
-    padding:            	6px;
+    padding:			6px;
 }
 
 blockquote.program {
