@@ -672,7 +672,7 @@ eb_path_name_zio_code(path_name, default_zio_code, zio_code)
     const char *base_name;
     const char *dot;
 
-    base_name = strchr(path_name, '/');
+    base_name = strrchr(path_name, '/');
     if (base_name != NULL)
 	base_name++;
     else
