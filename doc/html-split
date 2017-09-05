@@ -94,7 +94,7 @@ $toc_tag = $options{t} if (defined($options{t}));
 if (defined($options{p})) {
     $out_prefix = $options{p};
 } else {
-    $out_prefix = basename($in_file, '.htm', '.html') . '-';
+    $out_prefix = basename($in_file, '.htm', '.html');
 }
 
 if (defined($options{s})) {
@@ -175,7 +175,7 @@ for (my $page = 0; $page < @toc; $page++) {
     }
 
     foreach my $j (@preamble) {
-	print OUT_FILE $j, "\n";
+	print OUT_FILE $j;
     }
 
     print OUT_FILE "<body>\n";

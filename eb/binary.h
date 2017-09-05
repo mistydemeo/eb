@@ -61,6 +61,8 @@ void eb_unset_binary(EB_Book *book);
 /* filename.c */
 EB_Error_Code eb_compose_movie_file_name(const unsigned int *argv,
     char *composed_file_name);
+EB_Error_Code eb_compose_movie_path_name(EB_Book *book,
+    const unsigned int *argv, char *composed_path_name);
 EB_Error_Code eb_decompose_movie_file_name(unsigned int *argv,
     const char *composed_file_name);
 

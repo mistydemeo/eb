@@ -642,6 +642,62 @@ eb_compose_movie_file_name(const unsigned int *argv, char *composed_file_name)
 
 
 /*
+ * This function is similar to eb_compose_movie_file_name(), but it
+ * returns full path of the movie file name.
+ */
+EB_Error_Code
+eb_compose_movie_path_name(EB_Book *book, const unsigned int *argv,
+    char *composed_path_name)
+{
+    EB_Subbook *subbook;
+    EB_Error_Code error_code;
+    char composed_file_name[EB_MAX_FILE_NAME_LENGTH + 1];
+
+    /*
+     * Lock the book.
+     */
+    eb_lock(&book->lock);
+    LOG(("in: eb_compose_movie_path_name(book=%d, argv=%x)",
+	(int)book->code, argv));
+
+    /*
+     * Current subbook must have been set.
+     */
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
+    }
+    subbook = book->subbook_current;
+
+    error_code = eb_compose_movie_file_name(argv, composed_file_name);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+
+    error_code = eb_find_file_name3(book->path, subbook->directory_name,
+	subbook->movie_directory_name, composed_file_name, composed_file_name);
+    if (error_code != EB_SUCCESS)
+	goto failed;
+    eb_compose_path_name3(book->path, subbook->directory_name,
+	subbook->movie_directory_name, composed_file_name, composed_path_name);
+
+    LOG(("out: eb_compse_movie_path_name() = %s",
+	eb_error_string(EB_SUCCESS)));
+
+    eb_unlock(&book->lock);
+    return EB_SUCCESS;
+
+    /*
+     * An error occurs...
+     */
+  failed:
+    LOG(("out: eb_compse_movie_path_name() = %s",
+	eb_error_string(error_code)));
+    eb_unlock(&book->lock);
+    return error_code;
+}
+
+
+/*
  * Decompose movie file name into argv[].  This is the reverse of
  * eb_compose_movie_file_name().  Note that lower letters are converted
  * to upper letters.

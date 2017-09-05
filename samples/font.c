@@ -93,7 +93,8 @@ main(int argc, char *argv[])
     subbook_index = atoi(argv[2]);
 
     /*「現在の副本 (current subbook)」を設定。*/
-    if (eb_set_subbook(&book, subbook_list[subbook_index]) < 0) {
+    error_code = eb_set_subbook(&book, subbook_list[subbook_index]);
+    if (error_code != EB_SUCCESS) {
         fprintf(stderr, "%s: failed to set the current subbook, %s\n",
             argv[0], eb_error_message(error_code));
         goto die;

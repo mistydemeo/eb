@@ -85,7 +85,6 @@ eb_initialize_subbooks(EB_Book *book)
 
 	subbook->search_title_page = 0;
 	eb_initialize_searches(book);
-	eb_initialize_multi_searches(book);
 	subbook->multi_count = 0;
 
 	eb_initialize_fonts(book);
@@ -123,9 +122,8 @@ eb_finalize_subbooks(EB_Book *book)
         zio_finalize(&subbook->movie_zio);
 
 	eb_finalize_searches(book);
-	eb_finalize_multi_searches(book);
-
  	eb_finalize_fonts(book);
+
 	subbook->narrow_current = NULL;
 	subbook->wide_current = NULL;
     }
@@ -420,6 +418,9 @@ eb_load_subbook_indexes(EB_Book *book)
 	    break;
 	case 0x80:
 	    memcpy(&subbook->keyword, &search, sizeof(EB_Search));
+	    break;
+	case 0x81:
+	    memcpy(&subbook->cross, &search, sizeof(EB_Search));
 	    break;
 	case 0x90:
 	    memcpy(&subbook->word_kana, &search, sizeof(EB_Search));

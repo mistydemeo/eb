@@ -335,7 +335,7 @@ eb_read_text(EB_Book *book, EB_Appendix *appendix, EB_Hookset *hookset,
 	    && position.page <= book->subbook_current->copyright.end_page)
 	    book->text_context.code = EB_TEXT_OPTIONAL_TEXT;
 	else
-	    book->text_context.code = EB_TEXT_TEXT;
+	    book->text_context.code = EB_TEXT_MAIN_TEXT;
 
 	hook = hookset->hooks + EB_HOOK_INITIALIZE;
 	if (hook->function != NULL) {
@@ -344,7 +344,7 @@ eb_read_text(EB_Book *book, EB_Appendix *appendix, EB_Hookset *hookset,
 	    if (error_code != EB_SUCCESS)
 		goto failed;
 	}
-    } else if (book->text_context.code != EB_TEXT_TEXT
+    } else if (book->text_context.code != EB_TEXT_MAIN_TEXT
 	&& book->text_context.code != EB_TEXT_OPTIONAL_TEXT) {
 	error_code = EB_ERR_DIFF_CONTENT;
 	goto failed;
@@ -732,7 +732,7 @@ text_max_length=%ld, forward=%d)",
 		argv[1] = eb_uint2(cache_p + 2);
 
 		if (0 < context->printable_count
-		    && context->code == EB_TEXT_TEXT) {
+		    && context->code == EB_TEXT_MAIN_TEXT) {
 		    if (eb_is_stop_code(book, appendix, argv[0], argv[1])) {
 			context->text_status = EB_TEXT_STATUS_SOFT_STOP;
 			goto succeeded;
@@ -863,7 +863,7 @@ text_max_length=%ld, forward=%d)",
 		argv[1] = eb_uint2(cache_p + 2);
 
 		if (0 < context->printable_count
-		    && context->code == EB_TEXT_TEXT) {
+		    && context->code == EB_TEXT_MAIN_TEXT) {
 		    if (eb_is_stop_code(book, appendix, argv[0], argv[1])) {
 			context->text_status = EB_TEXT_STATUS_SOFT_STOP;
 			goto succeeded;
@@ -1440,7 +1440,7 @@ eb_is_text_stopped(EB_Book *book)
 
     if (book->subbook_current != NULL) {
 	if (book->text_context.code == EB_TEXT_HEADING
-	    || book->text_context.code == EB_TEXT_TEXT
+	    || book->text_context.code == EB_TEXT_MAIN_TEXT
 	    || book->text_context.code == EB_TEXT_OPTIONAL_TEXT) {
 	    if (book->text_context.text_status != EB_TEXT_STATUS_CONTINUED
 		&& book->text_context.unprocessed == NULL) {
@@ -1695,11 +1695,11 @@ eb_forward_text(EB_Book *book, EB_Appendix *appendix)
     }
 
     if (book->text_context.code == EB_TEXT_SEEKED) {
-	book->text_context.code = EB_TEXT_TEXT;
+	book->text_context.code = EB_TEXT_MAIN_TEXT;
     } else if (book->text_context.code == EB_TEXT_INVALID) {
 	error_code = EB_ERR_NO_PREV_SEEK;
 	goto failed;
-    } else if (book->text_context.code != EB_TEXT_TEXT
+    } else if (book->text_context.code != EB_TEXT_MAIN_TEXT
 	&& book->text_context.code != EB_TEXT_OPTIONAL_TEXT) {
 	error_code = EB_ERR_DIFF_CONTENT;
 	goto failed;
@@ -1754,6 +1754,25 @@ eb_forward_heading(EB_Book *book)
     eb_lock(&book->lock);
     LOG(("in: eb_forward_heading(book=%d)", (int)book->code));
 
+    if (book->subbook_current == NULL) {
+	error_code = EB_ERR_NO_CUR_SUB;
+	goto failed;
+    }
+    if (zio_file(&book->subbook_current->text_zio) < 0) {
+	error_code = EB_ERR_NO_TEXT;
+	goto failed;
+    }
+
+    if (book->text_context.code == EB_TEXT_SEEKED) {
+	book->text_context.code = EB_TEXT_HEADING;
+    } else if (book->text_context.code == EB_TEXT_INVALID) {
+	error_code = EB_ERR_NO_PREV_SEEK;
+	goto failed;
+    } else if (book->text_context.code != EB_TEXT_HEADING) {
+	error_code = EB_ERR_DIFF_CONTENT;
+	goto failed;
+    }
+
     if (book->text_context.text_status == EB_TEXT_STATUS_SOFT_STOP) {
 	book->text_context.text_status = EB_TEXT_STATUS_CONTINUED;
 	goto succeeded;
@@ -1761,11 +1780,6 @@ eb_forward_heading(EB_Book *book)
 	error_code = EB_ERR_END_OF_CONTENT;
 	goto failed;
     }
-
-    /*
-     * Force setting context mode as heading mode.
-     */
-    book->text_context.code = EB_TEXT_HEADING;
 
     /*
      * Forward text.
@@ -1831,11 +1845,11 @@ eb_backward_text(EB_Book *book, EB_Appendix *appendix)
     }
 
     if (book->text_context.code == EB_TEXT_SEEKED) {
-	book->text_context.code = EB_TEXT_TEXT;
+	book->text_context.code = EB_TEXT_MAIN_TEXT;
     } else if (book->text_context.code == EB_TEXT_INVALID) {
 	error_code = EB_ERR_NO_PREV_SEEK;
 	goto failed;
-    } else if (book->text_context.code != EB_TEXT_TEXT
+    } else if (book->text_context.code != EB_TEXT_MAIN_TEXT
 	&& book->text_context.code != EB_TEXT_OPTIONAL_TEXT) {
 	error_code = EB_ERR_DIFF_CONTENT;
 	goto failed;
@@ -1948,7 +1962,7 @@ eb_backward_text(EB_Book *book, EB_Appendix *appendix)
 		backward_location = book->text_context.location;
 		goto loop_end;
 	    }
-	    if (book->text_context.code != EB_TEXT_TEXT
+	    if (book->text_context.code != EB_TEXT_MAIN_TEXT
 		|| eb_uint2(text_buffer_p) != stop_code0
 		|| eb_uint2(text_buffer_p + 2) != stop_code1) {
 		text_buffer_p--;

@@ -186,6 +186,10 @@ Copyright (c) 1997-2004  Motoyuki Kasahara
 <dd>
 条件検索 (Keyword search)。
 
+<dt>cross</dt>
+<dd>
+クロス検索 (Keyword search)。
+
 <dt>multi</dt>
 <dd>
 複合検索 (Multi search)。

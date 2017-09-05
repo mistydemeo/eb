@@ -667,6 +667,10 @@ end_position={%d,%d})",
 
     if (memcmp(temporary_buffer, "fmt ", 4) == 0) {
 	memcpy(context->cache_buffer + 12, temporary_buffer, 4);
+	if (context->size >= 4)
+	    context->size -= 4;
+	else
+	    context->size = 0;
 	context->cache_length = 16;
     } else {
 	if (zio_lseek(context->zio,
@@ -1198,7 +1202,8 @@ eb_read_binary_mono_graphic(EB_Book *book, size_t binary_max_length,
 	 */
 	if (context->offset != 0
 	    && context->offset % line_length == 0
-	    && zio_lseek(context->zio, line_length * -2, SEEK_CUR) < 0) {
+	    && zio_lseek(context->zio, (off_t)line_length * -2, SEEK_CUR)
+	    < 0) {
 	    error_code = EB_ERR_FAIL_SEEK_BINARY;
 	    goto failed;
 	}
@@ -1328,7 +1333,8 @@ eb_read_binary_gray_graphic(EB_Book *book, size_t binary_max_length,
 	 */
 	if (context->offset != 0
 	    && context->offset % line_length == 0
-	    && zio_lseek(context->zio, line_length * -2, SEEK_CUR) < 0) {
+	    && zio_lseek(context->zio, (off_t)line_length * -2, SEEK_CUR)
+	    < 0) {
 		error_code = EB_ERR_FAIL_SEEK_BINARY;
 		goto failed;
 	}

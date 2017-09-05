@@ -32,65 +32,6 @@
 #include "build-post.h"
 
 /*
- * Initialize all multi searches in the current subbook.
- */
-void
-eb_initialize_multi_searches(EB_Book *book)
-{
-    EB_Subbook *subbook;
-    EB_Multi_Search *multi;
-    EB_Search *entry;
-    int i, j;
-
-    LOG(("in: eb_initialize_multi_searches(book=%d)", (int)book->code));
-
-    subbook = book->subbook_current;
-
-    for (i = 0, multi = subbook->multis; i < EB_MAX_MULTI_SEARCHES;
-	 i++, multi++) {
-	eb_initialize_search(&multi->search);
-	multi->title[0] = '\0';
-	multi->entry_count = 0;
-	for (j = 0, entry = multi->entries;
-	     j < EB_MAX_MULTI_ENTRIES; j++, entry++) {
-	    eb_initialize_search(entry);
-	}
-    }
-
-    LOG(("out: eb_initialize_multi_searches()"));
-}
-
-
-/*
- * Finalize all multi searches in the current subbook.
- */
-void
-eb_finalize_multi_searches(EB_Book *book)
-{
-    EB_Subbook *subbook;
-    EB_Multi_Search *multi;
-    EB_Search *entry;
-    int i, j;
-
-    LOG(("in: eb_finalize_multi_searches(book=%d)", (int)book->code));
-
-    subbook = book->subbook_current;
-
-    for (i = 0, multi = subbook->multis; i < EB_MAX_KEYWORDS;
-	 i++, multi++) {
-	eb_finalize_search(&multi->search);
-	multi->entry_count = 0;
-	for (j = 0, entry = multi->entries;
-	     j < multi->entry_count; j++, entry++) {
-	    eb_finalize_search(entry);
-	}
-    }
-
-    LOG(("out: eb_finalize_multi_searches()"));
-}
-
-
-/*
  * Get information about the current subbook.
  */
 EB_Error_Code

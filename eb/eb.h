@@ -57,6 +57,11 @@ EB_Error_Code eb_character_code(EB_Book *book,
 /* copyright.h */
 int eb_have_copyright(EB_Book *book);
 EB_Error_Code eb_copyright(EB_Book *book, EB_Position *position);
+EB_Error_Code eb_search_cross(EB_Book *book,
+    const char * const input_words[]);
+
+/* cross.c */
+int eb_have_cross_search(EB_Book *book);
 
 /* eb.c */
 EB_Error_Code eb_initialize_library(void);

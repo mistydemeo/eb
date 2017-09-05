@@ -91,7 +91,7 @@
 /*
  * Text content currently read.
  */
-#define EB_TEXT_TEXT			1
+#define EB_TEXT_MAIN_TEXT		1
 #define EB_TEXT_HEADING			2
 #define EB_TEXT_RAWTEXT			3
 #define EB_TEXT_OPTIONAL_TEXT		4
@@ -106,6 +106,7 @@
 #define EB_SEARCH_ENDWORD		2
 #define EB_SEARCH_KEYWORD		3
 #define EB_SEARCH_MULTI			4
+#define EB_SEARCH_CROSS			5
 #define EB_SEARCH_NONE			-1
 
 /*
@@ -305,8 +306,6 @@ int eb_exact_match_word_kana_group(const char *word, const char *pattern,
 EB_Error_Code eb_initialize_messages(EB_Book *book);
 
 /* multi.c */
-void eb_initialize_multi_searches(EB_Book *book);
-void eb_finalize_multi_searches(EB_Book *book);
 EB_Error_Code eb_load_multi_searches(EB_Book *book);
 EB_Error_Code eb_load_multi_titles(EB_Book *book);
 

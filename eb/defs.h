@@ -163,6 +163,11 @@ extern "C" {
 #define EB_MAX_KEYWORDS			EB_MAX_MULTI_ENTRIES
 
 /*
+ * Maximum number of entries in a cross search.
+ */
+#define EB_MAX_CROSS_ENTRIES		EB_MAX_MULTI_ENTRIES
+
+/*
  * Maximum number of characters for alternation cache.
  */
 #define EB_MAX_ALTERNATION_CACHE	16
@@ -597,6 +602,7 @@ struct EB_Subbook_Struct {
     EB_Search endword_kana;
     EB_Search keyword;
     EB_Search menu;
+    EB_Search cross;
     EB_Search copyright;
     EB_Search text;
     EB_Search sound;

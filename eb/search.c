@@ -189,6 +189,9 @@ void
 eb_initialize_searches(EB_Book *book)
 {
     EB_Subbook *subbook;
+    EB_Multi_Search *multi;
+    EB_Search *entry;
+    int i, j;
 
     LOG(("in: eb_initialize_searches(book=%d)", (int)book->code));
 
@@ -201,10 +204,22 @@ eb_initialize_searches(EB_Book *book)
     eb_initialize_search(&subbook->endword_asis);
     eb_initialize_search(&subbook->endword_kana);
     eb_initialize_search(&subbook->keyword);
+    eb_initialize_search(&subbook->cross);
     eb_initialize_search(&subbook->menu);
     eb_initialize_search(&subbook->copyright);
     eb_initialize_search(&subbook->text);
     eb_initialize_search(&subbook->sound);
+
+    for (i = 0, multi = subbook->multis; i < EB_MAX_MULTI_SEARCHES;
+	 i++, multi++) {
+	eb_initialize_search(&multi->search);
+	multi->title[0] = '\0';
+	multi->entry_count = 0;
+	for (j = 0, entry = multi->entries;
+	     j < EB_MAX_MULTI_ENTRIES; j++, entry++) {
+	    eb_initialize_search(entry);
+	}
+    }
 
     LOG(("out: eb_initialize_searches(book=%d)", (int)book->code));
 }
@@ -217,6 +232,9 @@ void
 eb_finalize_searches(EB_Book *book)
 {
     EB_Subbook *subbook;
+    EB_Multi_Search *multi;
+    EB_Search *entry;
+    int i, j;
 
     LOG(("in: eb_finalize_searches(book=%d)", (int)book->code));
 
@@ -233,6 +251,16 @@ eb_finalize_searches(EB_Book *book)
     eb_finalize_search(&subbook->copyright);
     eb_finalize_search(&subbook->text);
     eb_finalize_search(&subbook->sound);
+
+    for (i = 0, multi = subbook->multis; i < EB_MAX_KEYWORDS;
+	 i++, multi++) {
+	eb_finalize_search(&multi->search);
+	multi->entry_count = 0;
+	for (j = 0, entry = multi->entries;
+	     j < multi->entry_count; j++, entry++) {
+	    eb_finalize_search(entry);
+	}
+    }
 
     LOG(("out: eb_finalize_searches()"));
 }
@@ -415,14 +443,16 @@ eb_hit_list(EB_Book *book, int max_hit_count, EB_Hit *hit_list, int *hit_count)
 	break;
 
     case EB_SEARCH_KEYWORD:
+    case EB_SEARCH_CROSS:
 	/*
-	 * In case of keyword search.
+	 * In case of keyword or cross search.
 	 */
 	for (;;) {
 	    int search_is_over = 0;
 
 	    for (i = 0; i < EB_MAX_KEYWORDS; i++) {
-		if (book->search_contexts[i].code != EB_SEARCH_KEYWORD)
+		if (book->search_contexts[i].code != EB_SEARCH_KEYWORD
+		    && book->search_contexts[i].code != EB_SEARCH_CROSS)
 		    break;
 		memcpy(&temporary_context, book->search_contexts + i,
 		    sizeof(EB_Search_Context));
@@ -444,7 +474,8 @@ eb_hit_list(EB_Book *book, int max_hit_count, EB_Hit *hit_list, int *hit_count)
 		temporary_hit_counts);
 
 	    for (i = 0; i < EB_MAX_MULTI_ENTRIES; i++) {
-		if (book->search_contexts[i].code != EB_SEARCH_KEYWORD)
+		if (book->search_contexts[i].code != EB_SEARCH_KEYWORD
+		    && book->search_contexts[i].code != EB_SEARCH_CROSS)
 		    break;
 		error_code = eb_hit_list_keyword(book,
 		    book->search_contexts + i, temporary_hit_counts[i],

@@ -99,13 +99,13 @@ main(int argc, char *argv[])
     }
         
     /* `bl' と EB ライブラリの利用を終了。*/
-    eb_finalize_book(&bl);
+    eb_finalize_booklist(&bl);
     eb_finalize_library();
     exit(0);
 
     /* エラー発生で終了するときの処理。*/
   die:
-    eb_finalize_book(&bl);
+    eb_finalize_booklist(&bl);
     eb_finalize_library();
     exit(1);
 }

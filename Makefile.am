@@ -1,19 +1,13 @@
 ACLOCAL_AMFLAGS = -I m4
 
-if INCLUDED_ZLIB
-ZLIB_SUBDIR = zlib
-else
-ZLIB_SUBDIR = 
-endif
-
 if ENABLE_SAMPLES
 SAMPLES_SUBDIR = samples
 else
 SAMPLES_SUBDIR =
 endif
 
-SUBDIRS = $(ZLIB_SUBDIR) eb libebutils ebappendix ebfont ebinfo \
-   ebrefile ebstopcode ebzip doc po-eb po-ebutils m4 $(SAMPLES_SUBDIR)
+SUBDIRS = eb libebutils ebappendix ebfont ebinfo ebrefile ebstopcode ebzip \
+	doc po-eb po-ebutils m4 $(SAMPLES_SUBDIR)
 
 EXTRA_DIST = ChangeLog.0 ChangeLog.1 move-if-change \
    eb.conf.in gttest.mo gttest.po misc/ebfixlog misc/ebdump

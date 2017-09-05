@@ -1,5 +1,0 @@
-zlib in this directory contains some private modifications to support
-GNU autoconf, automake and libtool.  The base version of zlib is 1.1.3.
-
-Motoyuki Kasahara
-m-kasahr@sra.co.jp

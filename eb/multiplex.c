@@ -539,6 +539,9 @@ ebnet_create_new_connection(const char *address, int port)
     int new_file = -1;
     int gai_error;
     char port_string[IN_PORTSTRLEN];
+#ifdef O_NONBLOCK
+    int file_flags;
+#endif
 
     if (port < 0 || 65535 < port)
 	goto failed;
@@ -562,6 +565,12 @@ ebnet_create_new_connection(const char *address, int port)
 	goto failed;
     if (connect(new_file, info_list->ai_addr, info_list->ai_addrlen) < 0)
 	goto failed;
+
+#ifdef O_NONBLOCK
+    file_flags = fcntl(new_file, F_GETFL, 0);
+    if (file_flags >= 0)
+	fcntl(new_file, F_SETFL, file_flags | O_NONBLOCK);
+#endif
 
     freeaddrinfo(info_list);
 

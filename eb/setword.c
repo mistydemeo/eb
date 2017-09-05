@@ -253,7 +253,8 @@ eb_set_endword(EB_Book *book, const char *input_word, char *word,
 
 
 /*
- * Make a fixed word and a cannonicalized word for `KEYWORD SEARCH'.
+ * Make a fixed word and a cannonicalized word for `KEYWORD SEARCH'
+ * or `CROSS SEARCH'.
  *
  * If `inputword' is a KANA word,  EB_WORD_KANA is returned.
  * If `inputword' is a alphabetic word, EB_WORD_ALPHABET is returned.

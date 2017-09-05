@@ -638,8 +638,8 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
     for (i = 0, subbook = book->subbooks; i < book->subbook_count;
 	 i++, subbook++) {
 	strcpy(subbook->text_file_name, EB_FILE_NAME_HONMON);
-	strcpy(subbook->graphic_file_name, EB_FILE_NAME_HONMON);
-	strcpy(subbook->sound_file_name, EB_FILE_NAME_HONMON);
+	*(subbook->graphic_file_name) = '\0';
+	*(subbook->sound_file_name) = '\0';
 	subbook->text_hint_zio_code = ZIO_PLAIN;
 	subbook->graphic_hint_zio_code = ZIO_PLAIN;
 	subbook->sound_hint_zio_code = ZIO_PLAIN;

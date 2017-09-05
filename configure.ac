@@ -1,7 +1,7 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT(eb, 4.1.3)
+AC_INIT(eb, 4.2)
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.54)
 AM_INIT_AUTOMAKE
@@ -9,11 +9,11 @@ AM_INIT_AUTOMAKE
 dnl *
 dnl * Library version info.
 dnl *
-LIBEB_VERSION_INFO=9:1:0
+LIBEB_VERSION_INFO=10:0:0
 AC_SUBST(LIBEB_VERSION_INFO)
 
 EB_VERSION_MAJOR=4
-EB_VERSION_MINOR=1
+EB_VERSION_MINOR=2
 AC_SUBST(EB_VERSION_MAJOR)
 AC_SUBST(EB_VERSION_MINOR)
 
@@ -137,16 +137,6 @@ if test $ENABLE_PTHREAD = yes; then
 fi
 
 dnl *
-dnl * --with-included-zlib option.
-dnl *
-AC_ARG_WITH(included-zlib,
-AC_HELP_STRING([--with-included-zlib], [use zlib included here]),
-    [case "${withval}" in
-    yes|no) included_zlib=${withval} ;;
-    *)      AC_MSG_ERROR(invalid argument to --with-included-zlib) ;;
-    esac], included_zlib=auto)
-
-dnl *
 dnl * --with-zlib-includes option.
 dnl *
 AC_ARG_WITH(zlib-includes,
@@ -177,38 +167,23 @@ fi
 dnl *
 dnl * Check for zlib.
 dnl *
-AC_MSG_CHECKING(for included zlib)
-if test $included_zlib = yes; then
-    try_zlib=yes
-else
-    save_CPPFLAGS=$CPPFLAGS
-    save_LIBS=$LIBS
-    CPPFLAGS="$CPPFLAGS $ZLIBINCS"
-    LIBS="$LIBS $ZLIBLIBS"
-    AC_TRY_LINK([#include <zlib.h>],
-        [z_stream stream; inflate(&stream, Z_FINISH); return 0;], 
-        try_zlib=no, try_zlib=yes)
-    CPPFLAGS=$save_CPPFLAGS
-    LIBS=$save_LIBS
-    if test $included_zlib = auto; then
-        included_zlib=$try_zlib
-    fi
-fi
+AC_MSG_CHECKING(for zlib)
+save_CPPFLAGS=$CPPFLAGS
+save_LIBS=$LIBS
+CPPFLAGS="$CPPFLAGS $ZLIBINCS"
+LIBS="$LIBS $ZLIBLIBS"
+AC_TRY_LINK([#include <zlib.h>],
+     [z_stream stream; inflate(&stream, Z_FINISH); return 0;], 
+     try_zlib=no, try_zlib=yes)
+CPPFLAGS=$save_CPPFLAGS
+LIBS=$save_LIBS
 AC_MSG_RESULT($try_zlib)
-if test $included_zlib = no; then
-    if test $try_zlib = yes; then
-        AC_MSG_ERROR(zlib not found)
-    fi
-fi
-if test $included_zlib = yes; then
-    ZLIBINCS='-I$(top_srcdir)/zlib'
-    ZLIBDEPS='$(top_builddir)/zlib/libz.la'
-    ZLIBLIBS='$(top_builddir)/zlib/libz.la'
+if test $try_zlib = yes; then
+    AC_MSG_ERROR(zlib not found)
 fi
 AC_SUBST(ZLIBINCS)
 AC_SUBST(ZLIBLIBS)
 AC_SUBST(ZLIBDEPS)
-AM_CONDITIONAL(INCLUDED_ZLIB, test $included_zlib = yes)
 
 dnl *
 dnl * --enable-ebnet option.
@@ -226,11 +201,6 @@ AC_ARG_ENABLE(ipv6,
 AC_HELP_STRING([--enable-ipv6],
     [IPv6 support for EBNET [[yes]] (if the system supports IPv6)]),
 [ENABLE_IPV6="${enableval}"], [ENABLE_IPV6='auto'])
-
-dnl * 
-dnl * Subdirectories.
-dnl *
-AC_CONFIG_SUBDIRS(zlib)
 
 dnl * 
 dnl * Compiler Characteristics.
@@ -318,13 +288,8 @@ fi
 dnl *
 dnl * Substitusion for eb.conf.
 dnl *
-if test $included_zlib = yes; then
-    EBCONF_ZLIBINCS='-I$(includedir)'
-    EBCONF_ZLIBLIBS='-L$(libdir) -lz'
-else
-    EBCONF_ZLIBINCS=$ZLIBINCS
-    EBCONF_ZLIBLIBS=$ZLIBLIBS
-fi
+EBCONF_ZLIBINCS=$ZLIBINCS
+EBCONF_ZLIBLIBS=$ZLIBLIBS
 AC_SUBST(EBCONF_ZLIBINCS)
 AC_SUBST(EBCONF_ZLIBLIBS)
 

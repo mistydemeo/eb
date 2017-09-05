@@ -405,6 +405,8 @@ output_information(const char *book_path, int multi_flag)
 	    fputs(_("endword "), stdout);
 	if (eb_have_keyword_search(&book))
 	    fputs(_("keyword "), stdout);
+	if (eb_have_cross_search(&book))
+	    fputs(_("cross "), stdout);
 	if (eb_have_multi_search(&book))
 	    fputs(_("multi "), stdout);
 	if (eb_have_menu(&book))

@@ -2434,6 +2434,7 @@ EB ライブラリでは、次のような検索メソッドが利用できます。
 <li>後方一致検索 (end-word search)
 <li>完全一致検索 (exact-word search)
 <li>条件検索 (keyword search)
+<li>クロス検索 (cross search)
 <li>複合検索 (multi search)
 </ul>
 
@@ -2630,6 +2631,22 @@ if (eb_hit_list(&amp;book, MAX_HITS, hits, &amp;hit_count)
 }
 </pre>
 </blockquote>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="cross-search">クロス検索</a></h3>
+
+<p>
+クロス検索は、条件検索の亜種とも言うべき検索メソッドです。
+EPWING や電子ブックをみても、どういうルールで使い分けがなされているのか
+分からない程、両者は実によく似ています。
+</p>
+
+<p>
+EB ライブラリでクロス検索を行う関数は <code>eb_search_cross()</code> 
+ですが、使い方は条件検索の関数 <code>eb_search_keyword()</code> と
+まったく同じです。
+使い方の詳細は、<a href="#keyword-search">「条件検索」</a> をご覧下さい。
+</p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
 <h3><a name="multi-search">複合検索</a></h3>
@@ -3132,6 +3149,50 @@ struct EB_Position_Struct {
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:multi_title"><code>EB_Error_Code eb_multi_title (EB_Book *<var>book</var>, EB_Multi_Search_Code <var>multi_id</var>, char *<var>title</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_multi_search_list()</code> は、<var>book</var> が選択中の
+副本に用意されている複合検索 <var>multi_id</var> の題名を <var>title</var>
+の指す領域に書き込みます。
+題目は最長で <code>EB_MAX_MULTI_TITLE_LENGTH</code> バイトになります。
+この長さに、ナル文字は含みません。
+</p>
+
+<p>
+書籍の文字コード
+(<a href="#eb_book-data-types">「[CD-ROM 書籍と <code>EB_Book</code> オブジェクト] データ型の詳細」</a> を参照のこと)
+が <code>EB_CHARCODE_ISO8859_1</code> なら、題目を表す文字列は ISO 8859-1
+になり、それ以外の文字コードなら日本語 EUC になります。
+</p>
+
+<p>
+書籍によっては、複合検索は用意していても、複合検索の題名データを持って
+いないことがあります。
+その場合、EB ライブラリが代わりに付けた題名が <var>title</var> に
+書き込まれます。
+</p>
+
+<p>
+書籍の文字コードが <code>EB_CHARCODE_ISO8859_1</code> なら、
+EB ライブラリが付ける題名は、"Multi Search 1", "Multi Search 2", ...
+になります。
+それ以外の文字コードであれば、題名は日本語 EUC で書かれた「複合検索 1」
+「複合検索 2」... という文字列になります。
+</p>
+	
+<p>
+成功すると、関数は <code>EB_SUCCESS</code> を返します。
+失敗すると、<var>label</var> の指す領域には空文字列を書き込み、原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+あらかじめ、<var>book</var> はいずれかの副本を選択していなくてはなりません。
+選択していない場合は、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:multi_entry_label"><code>EB_Error_Code eb_multi_entry_label (EB_Book *<var>book</var>, EB_Multi_Search_Code <var>multi_id</var>, int <var>entry_index</var>, char *<var>label</var>)</code></a></h4>
 
 <p>
@@ -3254,12 +3315,15 @@ struct EB_Position_Struct {
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:search_keyword"><code>EB_Error_Code eb_search_keyword (EB_Book *<var>book</var>, const char * const <var>input_words</var>[])</code></a></h4>
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:search_cross"><code>EB_Error_Code eb_search_cross (EB_Book *<var>book</var>, const char * const <var>input_words</var>[])</code></a></h4>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 <h4><a name="func:search_multi"><code>EB_Error_Code eb_search_multi (EB_Book *<var>book</var>, EB_Multi_Search_Code <var>multi_id</var>, const char * const <var>input_words</var>[])</code></a></h4>
 
 <p>
-関数 <code>eb_search_word()</code> は、<var>book</var> が選択中の副本に
-対する条件検索をリクエストします。
-同様に <code>eb_search_multi()</code> は複合検索をリクエストします。
+関数 <code>eb_search_keyword()</code> は、<var>book</var> が選択中の
+副本に対する条件検索をリクエストします。
+同様に <code>eb_search_cross()</code> はクロス検索を、
+<code>eb_search_multi()</code> は複合検索をそれぞれリクエストします。
 </p>
 
 <p>
@@ -3271,7 +3335,7 @@ struct EB_Position_Struct {
 </p>
 
 <p>
-どちらの関数も検索をリクエストするだけで、一致したエントリの情報を
+いずれの関数も検索をリクエストするだけで、一致したエントリの情報を
 返すことはしません。
 一致したエントリの取得には <code>eb_hit_list()</code> を使います。
 関数は、成功すると <code>EB_SUCCESS</code> を返します。
@@ -3304,7 +3368,8 @@ struct EB_Position_Struct {
 
 <p>
 末尾の NULL を除いた配列の要素数は、条件検索では <code>EB_MAX_KEYWORDS</code>
-以下、複合検索では <code>EB_MAX_MULTI_ENTRIES</code> 以下でなくては
+以下、クロス検索では <code>EB_MAX_CROSS_ENTRIES</code> 以下、
+複合検索では <code>EB_MAX_MULTI_ENTRIES</code> 以下でなくては
 なりません。
 個数が多すぎると <code>EB_ERRO_TOO_MANY_WORDS</code> を返します。
 空文字列の要素を差し引いた個数ではなく、単純に渡された要素数が上限を
@@ -3330,6 +3395,7 @@ struct EB_Position_Struct {
 <li><code>eb_search_endword()</code>  (後方一致検索)
 <li><code>eb_search_exactword()</code>  (完全一致検索)
 <li><code>eb_search_keyword()</code>  (条件検索)
+<li><code>eb_search_cross()</code>  (クロス検索)
 <li><code>eb_search_multi()</code>  (複合検索)
 </ul>
 
@@ -3362,6 +3428,7 @@ struct EB_Position_Struct {
 <li><code>eb_search_endword()</code>
 <li><code>eb_search_exactword()</code>
 <li><code>eb_search_keyword()</code>
+<li><code>eb_search_cross()</code>
 <li><code>eb_search_multi()</code>
 </ul>
 
@@ -3476,8 +3543,8 @@ struct EB_Position_Struct {
 </blockquote>
 
 <p>
-ところで、検索時に一致したエントリの見出しや本文を読み込む際にも、
-位置情報の指定には <code>EB_Position</code> 型が使われます。
+検索して見つかった一致エントリの見出しや本文を読み込む際にも、位置情報
+の指定には <code>EB_Position</code> 型が使われます。
 一致したエントリの情報は、関数 <code>eb_hit_list()</code> によって
 <code>EB_Hit</code> という型のオブジェクトに書き込まれますが、
 <code>EB_Hit</code> 型は次のように定義されています。
@@ -3926,6 +3993,91 @@ EBXA-C では、文字コードとして GB 2312 と JIS X 0208 が使われますが
 では、どちらも 0xa1a1 〜 0xfefe にマッピングされて衝突するため、最低
 でもどちらか一方をフックして文字の表現方法を変えないと、正しく出力
 できません。
+</p>
+
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="cross-search-result">クロス検索の検索結果</a></h3>
+
+<p>
+すでに <a href="#search">「検索」</a> の章で述べたように、CD-ROM 書籍
+には前方一致検索、後方一致検索といった複数の検索メソッドがあります。
+EB ライブラリで検索を行うと、どの検索メソッドでも、一致したエントリの
+情報は、以下のような <code>EB_Hit</code> 型のオブジェクトとして
+受け取ります。
+</p>
+
+<blockquote class="program">
+<pre>
+typedef struct {
+    EB_Position heading;   /* 見出しの位置 */
+    EB_Position text;      /* 本文の位置   */
+} EB_Hit;
+</pre>
+</blockquote>
+
+<p>
+しかしクロス検索では、<code>EB_Hit</code> の見出しと本文の位置は
+まったく同じになります。
+したがって、見出しと本文のテキストデータを読み込むには、他の検索メソッド
+のようにそれぞれの位置にシークして読み込むというやり方ではうまく
+いきません。
+</p>
+
+<p>
+以下に、クロス検索の見出しと本文を読み込むプログラム例を示します。
+</p>
+
+<blockquote class="program">
+<pre>
+/* 見出し位置へのシークを行う */
+if (eb_seek_text(&amp;book, &amp;hits[0].heading) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+/* 見出しの読み込みを行う */
+if (eb_read_heading(&amp;book, NULL, NULL, NULL, MAX_LENGTH,
+    heading, &amp;heading_length) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+/* 先ほど読み込んだ見出しの、次の部分へ飛ぶ */
+if (eb_forward_heading(&amp;book) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+/* 本文の読み込みを行う */
+if (eb_read_heading(&amp;book, NULL, NULL, NULL, MAX_LENGTH,
+    text, &amp;text_length) != EB_SUCCESS) {
+    fprintf(stderr, "an error occurs.\n");
+    return;
+}
+</pre>
+</blockquote class="program">
+
+<p>
+クロス検索でも、見出しの内容を読み込む方法は他の検索メソッドと変わり
+はなく、<code>eb_read_heading()</code> を使います。
+変わっているのは、本文の読み込みです。
+<code>eb_read_text()</code> ではなく、<code>eb_read_heading()</code>
+を使います。
+見出しを読み込むための関数 <code>eb_read_heading()</code> を、本文を
+読み込むために呼ぶというのは奇妙な話ですが、これはクロス検索の本文が
+見出しと同じ形式になっているためです。
+通常、見出しは一行程度しか書かれていませんが、実際のところクロス検索
+の本文も一行程度しかありません。
+</p>
+
+<p>
+また、本文は見出しのすぐ後に書かれているため、上記のように見出しを
+読み込んだ後で <code>eb_forward_heading()</code> という関数を呼び、
+その後で本文を読み込むためにもう一度 <code>eb_read_heading()</code> を
+呼ぶという変わった手順を踏みます。
+</p>
+
+<p>
+本文だけが必要で見出しが要らなければ、シーク直後に
+<code>eb_forward_heading()</code> を呼ぶようにします。
+その後で <code>eb_read_heading()</code> を呼ぶと、本文を読み込みます。
 </p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
@@ -6020,6 +6172,47 @@ EB ライブラリは、基本的なフック関数をいくつか用意しています。
 複合検索の候補一覧も同様です。)
 </p>
 
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:forward_heading"><code>EB_Error_Code eb_forward_heading (EB_Book *<var>book</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_forward_heading()</code> は、<var>book</var> が選択している
+副本の見出しのアクセス位置を後に移動させ、見出しの区切りを単位とした頭出し
+を行います。
+</p>
+
+<p>
+本文の頭出しを行う関数 <code>eb_forward_text()</code> の見出し版です。
+ただし、見出しで頭出しを行う機会は、クロス検索の本文取得に限られるため、
+<code>eb_backward_heading()</code> という関数は用意していません。
+</p>
+
+<p>
+この関数を呼ぶと、アクセス位置が次の見出しの開始位置まで移動します。
+(クロス検索では、見出し領域の中に「見出し」と「本文」が交互に書かれて
+いますが、データ構造上「本文」と「見出し」は区別が付きません。
+アクセス位置がクロス検索の見出し領域内の場合、この関数を呼ぶと最も近い
+「見出し」もしくは「本文」の開始位置まで移動します。)
+</p>
+
+<p>
+<code>eb_read_heading()</code> ではなく、<code>eb_read_text()</code> や
+<code>eb_read_rawtext()</code> の呼び出しに成功した後でこの関数を
+呼び出すと、<code>EB_ERR_DIFF_CONTENT</code> を返します。
+また、前もって <code>eb_seek_text()</code> でシークせずにこの関数を
+呼び出すと、<code>EB_ERR_NO_PREV_SEEK</code> を返します。
+</p>
+
+<p>
+この関数は、成功すると <code>EB_SUCCESS</code> を返し、失敗すると原因を示す
+エラーコードを返します。
+</p>
+
+<p>
+クロス検索以外の検索メソッドの見出しの格納位置に対して、この関数を
+呼ぶことも可能ですが、そのような必要に迫られる機会はないでしょう。
+</p>
+
 <!-- ================================================================ -->
 <h2><a name="local-character">外字</a></h2>
 
@@ -7766,6 +7959,7 @@ EB ライブラリでは、動画データのファイル名はフック関数
 用います。
 たとえば、個々の動画に一意の ID のようなものを振りたい場合は、ファイル
 名を ID として使うと良いかも知れません。
+なお、この関数で変換して得られるファイル名にはパスが含まれていません。
 </p>
 
 <p>
@@ -7774,7 +7968,7 @@ EB ライブラリでは、動画データのファイル名はフック関数
 に変換されたファイル名が格納されます。
 ファイル名は最長で <code>EB_MAX_DIRECTORY_NAME_LENGTH</code> (= 8) バイト
 になります。
-この長さには終端のナル文字の分を含んでいませんので、格納領域にははもう
+この長さには終端のナル文字の分を含んでいませんので、格納領域にはもう
 1 バイト余裕が要ります。
 </p>
 
@@ -7782,10 +7976,57 @@ EB ライブラリでは、動画データのファイル名はフック関数
 なお、格納されたファイル名は、実際に存在するファイル名とは若干異なって
 いる可能性があります。
 たとえば、英字の大文字と小文字、接尾子の有無などの違いがこれに当たります。
+この関数は、あくまで文字列に機械的に変換するだけなので、ファイルが実在
+するかどうかのチェックはしません。
 </p>
 
 <p>
 成功すると、関数は <code>EB_SUCCESS</code> を返します。
+</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<h4><a name="func:compose_movie_path_name"><code>EB_Error_Code eb_compose_movie_path_name (EB_Book *<var>book</var>, const unsigned int *<var>argv</var>, char *<var>composed_path_name</var>)</code></a></h4>
+
+<p>
+関数 <code>eb_compose_movie_path_name()</code> は、動画データのファイル名
+を通常の文字列に変換します。
+働きは、前述の関数 <code>eb_compose_movie_file_name()</code> に良く
+似ていますが、<code>eb_compose_movie_path_name()</code> が返すファイル名
+は、絶対パスの形式になっている点が異なります。
+</p>
+
+<p>
+また、<code>eb_compose_movie_path_name()</code> では、ファイル名が実在
+するかどうかのチェックを行うという点も、大きな違いです。
+ファイル名を文字列に変換した上で、英字の大文字と小文字の違いや接尾子の
+有無は、実在のファイルに合わせて調整したものを返します。
+したがって、パスを除いた部分で比較しても、
+<code>eb_compose_movie_file_name()</code> が返すファイル名とは必ずしも
+一致しません。
+</p>
+
+<p>
+引数 <code>book</code> は、動画ファイルを収録している副本を選択して
+おかなければなりません。
+副本を選択していなければ、<code>EB_ERR_NO_CUR_SUB</code> を返します。
+</p>
+
+<p>
+引数 <code>argv</code> の意味は、<code>eb_compose_movie_file_name()</code>
+と同じです。
+</p>
+
+<p>
+ファイル名の変換が成功すると、関数は <var>composed_path_name</var> が
+指す先の領域に、文字列形式に変換された動画ファイル名を格納し、
+<code>EB_SUCCESS</code> を返します。
+ファイル名は最長で <code>EB_MAX_PATH_LENGTH</code> バイトになります。
+この長さには終端のナル文字の分を含んでいませんので、格納領域にはもう
+1 バイト余裕が要ります。
+</p>
+
+<p>
+ファイル名が実在しないと、<code>EB_ERR_BAD_FILE_NAME</code> を返します。
 </p>
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -8738,7 +8979,7 @@ EBNET サーバの提供する書籍および appendix データの一覧を取得するには、
 まず <code>EB_BookList</code> 型のオブジェクトを用意する必要があります。
 </p>
 
-<blockquote="program">
+<blockquote class="program">
 <pre>
 EB_BookList bl;
 </pre>
@@ -8748,7 +8989,7 @@ EB_BookList bl;
 オブジェクトの領域は、<code>malloc()</code> で確保しても構いません。
 </p>
 
-<blockquote="program">
+<blockquote class="program">
 <pre>
 EB_BookList *bl_pointer;
 
@@ -8762,7 +9003,7 @@ bl_pointer = (EB_BookList *) malloc(sizeof(EB_BookList));
 これは、<code>eb_initialize_booklist()</code> という関数で行います。
 </p>
 
-<blockquote="program">
+<blockquote class="program">
 <pre>
 eb_initialize_booklist(&amp;bl);
 eb_initialize_booklist(bl_pointer);
@@ -8775,7 +9016,7 @@ eb_initialize_booklist(bl_pointer);
 オブジェクトを結びつけるには次のようにします。
 </p>
 
-<blockquote="program">
+<blockquote class="program">
 <pre>
 if (eb_bind_booklist(&amp;bl, "ebnet://localhost") != EB_SUCCESS) {
     printf("eb_bind_booklist() failed\n");
@@ -8799,7 +9040,7 @@ if (eb_bind_booklist(&amp;bl, "ebnet://localhost") != EB_SUCCESS) {
 と appendix データの題名を得ることができます。
 </p>
 
-<blockquote="program">
+<blockquote class="program">
 <pre>
 char *name, *title;
 int count, i;
@@ -8824,7 +9065,7 @@ for (i = 0; i &lt; count; i++) {
 行います。
 </p>
 
-<blockquote="program">
+<blockquote class="program">
 <pre>
 eb_finalize_booklist(&amp;bl);
 eb_finalize_booklist(bl_pointer);
@@ -8837,7 +9078,7 @@ eb_finalize_booklist(bl_pointer);
 を安全に解放することができます。
 </p>
 
-<blockquote="program">
+<blockquote class="program">
 <pre>
 free(bl_pointer);
 </pre>
@@ -8851,7 +9092,7 @@ free(bl_pointer);
 読み込んで下さい。
 </p>
 
-<blockquote="program">
+<blockquote class="program">
 <pre>
 #include &lt;eb/booklist.h&gt;
 </pre>
@@ -8879,7 +9120,7 @@ appendix の一覧を取得する際に用いるオクジェクトの型です。
 下さい。
 </p>
 
-<blockquote="program">
+<blockquote class="program">
 <pre>
 #include &lt;eb/booklist.h&gt;
 </pre>

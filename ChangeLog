@@ -1,3 +1,59 @@
+2005-05-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.2.
+
+	* eb/book.c (eb_load_catalog_epwing): Fix a bug that EB Library
+	sets wrong graphic and sound file names if target subbook has
+	HONMON2 only.
+
+	* eb/binary.c (eb_set_binary_wave): Fix a bug that the function
+	appends "fmt " to the wave data mistakenly.
+
+2005-04-18  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ltmain.sh, config.guess, config.sub, install-sh, m4/libtool.m4:
+	Import from libtool 1.5.18.
+
+2005-04-10  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/build-post.h.in (EB_TEXT_TEXT): Renamed to EB_TEXT_MAIN_TEXT.
+	* eb/ebinfo.c: Support `Cross Search'.
+
+	* eb/multiplex.c (ebnet_create_new_connection): Set stream socket
+	to non-blocking I/O mode.
+
+2005-03-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/binary.c (eb_read_binary_mono_graphic,
+	eb_read_binary_gray_graphic): Fix the 2nd argument to zio_lseek().
+	`line_length * -2' must be `(off_t)line_length * -2' since
+	`line_length' is `size_t' which is usually unsigned integral type.
+
+2005-02-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/multi.c (eb_initialize_multi_searches,
+	eb_finalize_multi_searches): Remove the internal functions.
+
+	* eb/defs.h (EB_Subbook_Struct): Add the member `cross'.
+	* eb/defs.h (EB_MAX_CROSS_ENTRIES): Defined.
+	* eb/build-post.h.in (EB_SEARCH_CROSS): Defined.
+	* eb/Makefile.am (libeb_la_SOURCES): Add `cross.c'.
+	* eb/cross.c: New file.
+	* eb/search.c (eb_initialize_searches, eb_hit_list): Support for
+	cross search.
+	* eb/subbook.c (eb_load_subbook_indexes): Ditto.
+
+	* eb/filename.c (eb_compose_movie_path_name): New function.
+
+	* configure.ac (AC_CONFIG_SUBDIRS): Remove `zlib'.
+	* Makefile.am (SUBDIRS): Remove $(ZLIB_SUBDIR).
+
+2005-01-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* ebrefile/ebrefile.c (copy_file, refile_book): `ebrefile'
+	preserves an original catalog file in an output directory as
+	"catalogs.old" and then it overwrites the original catalog file.
+
 2004-12-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.1.3.

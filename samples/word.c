@@ -61,7 +61,7 @@ main(int argc, char *argv[])
     int subbook_count;
     int subbook_index;
     int hit_count;
-    size_t heading_length;
+    ssize_t heading_length;
     int i;
 
     /* コマンド行引数をチェック。*/
