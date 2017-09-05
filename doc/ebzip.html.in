@@ -816,6 +816,7 @@ compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 
 <dl>
 <dt><code>-f</code></dt>
+<dt><code>--force-overwrite</code></dt>
 <dd>
 確認を求めずに、既に存在しているファイルを上書きします。
 このオプションは、情報出力の動作のときや、<samp>--test</samp>
@@ -824,15 +825,18 @@ compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 参照のこと)。
 
 <dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
 <dd>
 ヘルプメッセージを標準出力に出力して、終了します。
 
 <dt><code>-i</code></dt>
+<dt><code>--information</code></dt>
 <dd>
 指定された CD-ROM 書籍の圧縮状態を出力します
 (詳しくは、 <a href="#information">「情報出力」</a> を参照のこと)。
 
 <dt><code>-k</code></dt>
+<dt><code>--keep</code></dt>
 <dd>
 出力側のファイルを書き込み終わっても、対応する入力側のファイルは
 削除しません。
@@ -842,6 +846,7 @@ compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 を参照のこと)。
 
 <dt><code>-l <var>整数</var></code></dt>
+<dt><code>--level <var>整数</var></code></dt>
 <dd>
 圧縮レベルを指定します。
 <var>整数</var> は、<samp>0</samp>、<samp>1</samp>、<samp>2</samp>、
@@ -854,6 +859,7 @@ compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 (詳しくは、<a href="#compression-level">「圧縮レベル」</a> を参照のこと。)
 
 <dt><code>-n</code></dt>
+<dt><code>--no-overwrite</code></dt>
 <dd>
 既に存在するファイルがあった場合、上書きの確認を求めずに、そのファイル
 は飛ばして次のファイルに進みます。
@@ -863,6 +869,7 @@ compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 を参照のこと。)
 
 <dt><code>-o <var>ディレクトリ</var></code></dt>
+<dt><code>--output-directory <var>ディレクトリ</var></code></dt>
 <dd>
 出力側のファイルを置くディレクトリを指定します。
 指定しなかったときは、カレントディレクトリ (<samp>.</samp>) になります。
@@ -870,6 +877,8 @@ compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 (<samp>-t</samp>) オプションを指定したときは無視されます
 
 <dt><code>-q</code></dt>
+<dt><code>--quiet</code></dt>
+<dt><code>--silence</code></dt>
 <dd>
 情報、警告メッセージを出力しません。
 ただし、圧縮・伸長時に出力側のファイルが既に存在していると、
@@ -880,6 +889,7 @@ compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 このオプションは、情報出力の動作のときは、無視されます
 
 <dt><code>-s <var>型</var></code></dt>
+<dt><code>--skip-content <var>型</var></code></dt>
 <dd>
 無視するファイルのデータ型を指定します。
 <var>型</var> は、データ型の名前をカンマ (<samp>,</samp>) で区切って
@@ -890,6 +900,7 @@ compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 指定しなかったときは、どのファイルも無視されません。
 
 <dt><code>-S <var>副本</var></code></dt>
+<dt><code>--subbook <var>副本</var></code></dt>
 <dd>
 圧縮・伸長・情報出力の対象とする副本を指定します。
 <var>副本</var> は、副本のディレクトリ名をカンマ (<samp>,</samp>) で
@@ -899,27 +910,33 @@ compressed: 12288 -&gt; 4121 バイト (33.5%, ebzip 圧縮レベル 0)
 のこと。)
 
 <dt><code>-t</code></dt>
+<dt><code>--test</code></dt>
 <dd>
 圧縮・伸長したデータを、実際のファイルには書き込みません。
 このオプションは、情報出力の動作のときは無視されます。
 (詳しくは <a href="#test">「テスト」</a> を参照のこと。)
 
 <dt><code>-u</code></dt>
+<dt><code>--uncompress</code></dt>
 <dd>
 CD-ROM 書籍を伸長します。
 (詳しくは <a href="#uncompression">「伸長」</a> を参照のこと。)
 
 <dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
 <dd>
 バージョン番号を標準出力に出力して、終了します。
 
 <dt><code>-z</code></dt>
+<dt><code>--compress</code></dt>
 <dd>
 CD-ROM 書籍を圧縮します。
 (詳しくは <a href="#compression">「圧縮」</a> を参照のこと。)
 
 </dl>
 
+<!-- ================================================================ -->
+<h2><a name="compression-samples">圧縮結果の例</a></h2>
 
 <p>
 次の表は、ある英和・和英辞典 (EBXA) の <code>START</code> ファイルを
@@ -988,13 +1005,16 @@ CD-ROM 書籍を圧縮します。
 <tr><td>レベル 1              <td>  138137218 bytes  <td>  61.4%</tr>
 </table>
 
+<!-- ================================================================ -->
+<h2><a name="compressed-file-format">圧縮ファイルの形式</a></h2>
 
 <p>
 この章では、<code>ebzip</code> が扱っている圧縮ファイル形式の詳細について説
 明します。
 </p>
 
-
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="format-overview">圧縮ファイル形式の概要</a></h3>
 
 <p>
 圧縮ファイル形式は次のような特徴を持っています。
@@ -1024,6 +1044,8 @@ CD-ROM 書籍を圧縮します。
 </pre>
 </blockquote>
 
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="format-data-part">データ部</a></h3>
 
 <p>
 元のファイルは、次の行程で圧縮されます。
@@ -1118,6 +1140,8 @@ DEFLATE 圧縮データ形式で圧縮します。
 元のファイルが空だったときは、圧縮ファイルのデータ部はありません。
 </p>
 
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="format-index-part">インデックス部</a></h3>
 
 <p>
 圧縮時に、<code>ebzip</code> は圧縮した個々のスライスの 
@@ -1201,6 +1225,8 @@ DEFLATE 圧縮データ形式で圧縮します。
 このインデックスは圧縮されたファイルの大きさを表します。
 </p>
 
+<!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
+<h3><a name="format-header-part">ヘッダ部</a></h3>
 
 <p>
 ヘッダ部は 22 バイトからなります。

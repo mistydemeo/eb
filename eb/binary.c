@@ -188,6 +188,11 @@ width=%d, height=%d)",
      * If both width and height are 0,
      * we get real width, height and position of the graphic data.
      */
+    if (position->page <= 0 || position->offset < 0) {
+	error_code = EB_ERR_FAIL_SEEK_BINARY;
+	goto failed;
+    }
+
     if (width == 0 && height == 0) {
 	char buffer[22];
 
@@ -436,6 +441,11 @@ width=%d, height=%d)",
      * If both width and height are 0,
      * we get real width, height and position of the graphic data.
      */
+    if (position->page <= 0 || position->offset < 0) {
+	error_code = EB_ERR_FAIL_SEEK_BINARY;
+	goto failed;
+    }
+
     if (width == 0 && height == 0) {
 	char buffer[22];
 
@@ -602,6 +612,15 @@ end_position={%d,%d})",
     /*
      * Set binary context.
      */
+    if (start_position->page <= 0 || start_position->offset < 0) {
+	error_code = EB_ERR_FAIL_SEEK_BINARY;
+	goto failed;
+    }
+    if (end_position->page <= 0 || end_position->offset < 0) {
+	error_code = EB_ERR_FAIL_SEEK_BINARY;
+	goto failed;
+    }
+
     start_location = (start_position->page - 1) * EB_SIZE_PAGE
 	+ start_position->offset;
     end_location   = (end_position->page - 1)   * EB_SIZE_PAGE
@@ -753,8 +772,12 @@ eb_set_binary_color_graphic(EB_Book *book, const EB_Position *position)
     /*
      * Set binary context.
      */
-    context = &book->binary_context;
+    if (position->page <= 0 || position->offset < 0) {
+	error_code = EB_ERR_FAIL_SEEK_BINARY;
+	goto failed;
+    }
 
+    context = &book->binary_context;
     context->code = EB_BINARY_COLOR_GRAPHIC;
     context->zio = &book->subbook_current->graphic_zio;
     context->location = (position->page - 1) * EB_SIZE_PAGE + position->offset;

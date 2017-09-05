@@ -45,6 +45,7 @@ eb_initialize_library(void)
     eb_initialize_log();
 
     LOG(("in: eb_initialize_library()"));
+    LOG(("aux: EB Library version %s", EB_VERSION_STRING));
 
     eb_initialize_default_hookset();
 #ifdef ENABLE_NLS

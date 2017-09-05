@@ -290,19 +290,23 @@ travel           ワールドトラベルガイド
 
 <dl>
 <dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
 <dd>
 ヘルプメッセージを標準出力に出力して、終了します。
 
 <dt><code>-l</code></dt>
+<dt><code>--book-list</code></dt>
 <dd>
 通常の出力の代わりに、EBNET サーバが公開している書籍の一覧を出力します。
 コマンド行引数 <var>book-path</var> は遠隔アクセス識別子でなければなりません。
 
 <dt><code>-m</code></dt>
+<dt><code>--multi-search</code></dt>
 <dd>
 複合検索 (multi search) に関する情報も、合わせて出力します。
 
 <dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
 <dd>
 バージョン番号を標準出力に出力して、終了します。
 </dl>

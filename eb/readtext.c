@@ -203,8 +203,7 @@ eb_seek_text(EB_Book *book, const EB_Position *position)
 	goto failed;
     }
 
-    if (position->page <= 0
-	|| position->offset < 0 || EB_SIZE_PAGE <= position->offset) {
+    if (position->page <= 0 || position->offset < 0) {
 	error_code = EB_ERR_FAIL_SEEK_TEXT;
 	goto failed;
     }

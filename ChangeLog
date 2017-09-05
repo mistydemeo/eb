@@ -1,3 +1,34 @@
+2004-11-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.1.2.
+
+	* ebzip/ebzip.c (main): Also recognize `\' as a path separator when
+	DOS_FILE_PATH is defined.
+
+	* po-eb/Makefile.in, po-ebutils/Makefile.in (mkinstalldirs): 
+	Defined as `$(SHELL) $(top_srcdir)/mkinstalldirs'.
+	It was defined as `$(mkdir_p)', but it causes cycric reference
+	on FreeBSD-5.3-RELEASE.
+
+	* eb/readtext.c (eb_seek_text): Accept position whose offset is
+	greater than or equal to EB_SIZE_PAGE.
+	* eb/binary.c (eb_set_binary_mono_graphic, eb_set_binary_gray_graphic,
+	eb_set_binary_wave, eb_set_binary_color_graphic, eb_set_binary_mpeg): 
+	Don't accept position whose offset is less than 0.
+
+2004-11-22  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/search.c (eb_hit_list_word, eb_hit_list_keyword,
+	eb_hit_list_multi): Fix a historical bug that EB Library cannot
+	find matched entries in particular books.
+
+	* eb/eb.c (eb_initialize_library): In debug mode, EB Library
+	displays its version number.
+
+	* eb/searh.c (eb_presearch_word, eb_hit_list_word,
+	eb_hit_list_keyword, eb_hit_list_multi): The debug messages also
+	outputs index page number.
+
 2004-10-24  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.1.1.

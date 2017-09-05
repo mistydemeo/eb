@@ -189,25 +189,30 @@ A
 
 <dl>
 <dt><code>-c <var>コード</var></code></dt>
+<dt><code>--code <var>コード</var></code></dt>
 <dd>
 <var>コード</var> を区切りコードに指定します (例: "0x1f09 0x0001")。
 <code>ebstopcode</code> は、<var>コード</var> を見つけるまで本文を出力します。
 
 <dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
 <dd>
 ヘルプメッセージを標準出力に出力して、終了します。
 
 <dt><code>-l <var>長さ</var></code></dt>
+<dt><code>--length <var>長さ</var></code></dt>
 <dd>
 本文データを最長で <var>長さ</var> バイトまで出力します。
 <var>長さ</var> を 0 にすると、<code>ebstopcode</code> は本文全体を出力します。
 このオプションを指定しなかったときは、2048 になります。
 
 <dt><code>-n</code></dt>
+<dt><code>--no-candidates</code></dt>
 <dd>
 区切りコードの候補を出力しないようにします。
 
 <dt><code>-p <var>ページ:オフセット</var></code></dt>
+<dt><code>--text-position <var>ページ:オフセット</var></code></dt>
 <dd>
 本文データの出力をこの位置から開始します。
 <var>ページ</var> には 0 より大きい 16進整数を、<var>オフセット</var> には、
@@ -215,6 +220,7 @@ A
 このオプションを指定しなかったときは、本文データの先頭位置から出力します。
 
 <dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
 <dd>
 バージョン番号を標準出力に出力して、終了します。
 </dl>

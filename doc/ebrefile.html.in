@@ -323,17 +323,20 @@ CD-ROM 書籍が <code>/cdrom</code> にマウントされ、この書籍には
 
 <dl>
 <dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
 <dd>
 ヘルプメッセージを標準出力に出力して、終了します。
 
-<dt><code>-o <var>directory</var></code></dt>
+<dt><code>-o <var>ディレクトリ</var></code></dt>
+<dt><code>--output-directory <var>ディレクトリ</var></code></dt>
 <dd>
 新しいカタログファイルを置くディレクトリを指定します。
 指定しなかったときは、カレントディレクトリ (<samp>.</samp>) になります
 (詳しくは、<a href="#invoke-ebrefile">「<code>ebrefile</code> の実行」</a>
 を参照のこと)。
 
-<dt><code>-S <var>subbooks</var></code></dt>
+<dt><code>-S <var>副本</var></code></dt>
+<dt><code>--subbook <var>副本</var></code></dt>
 <dd>
 <code>ebrefile</code> が新しいカタログファイルに取り込むべき副本を指定します。
 <var>副本</var> は、副本のディレクトリ名をカンマ (<samp>,</samp>) で区切って
@@ -342,6 +345,7 @@ CD-ROM 書籍が <code>/cdrom</code> にマウントされ、この書籍には
 (詳しくは、<a href="#select-subbooks">「副本の選択」</a> を参照のこと)。
 
 <dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
 <dd>
 バージョン番号を標準出力に出力して、終了します。
 </dl>

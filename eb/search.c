@@ -296,9 +296,9 @@ eb_presearch_word(EB_Book *book, EB_Search_Context *context)
 	context->offset = 4;
 	cache_p = cache_buffer + 4;
 
-	LOG(("aux: eb_presearch_word(page_id=0x%02x, entry_length=%d, \
-entry_arrangement=%d, entry_count=%d)",
-	    context->page_id, context->entry_length,
+	LOG(("aux: eb_presearch_word(page=%d, page_id=0x%02x, \
+entry_length=%d, entry_arrangement=%d, entry_count=%d)",
+	    context->page, context->page_id, context->entry_length,
 	    context->entry_arrangement, context->entry_count));
 
 	/*
@@ -603,9 +603,9 @@ eb_hit_list_word(EB_Book *book, EB_Search_Context *context, int max_hit_count,
 
 	cache_p = cache_buffer + context->offset;
 
-	LOG(("aux: eb_hit_list_word(page_id=0x%02x, entry_length=%d, \
-entry_arrangement=%d, entry_count=%d)",
-	    context->page_id, context->entry_length,
+	LOG(("aux: eb_hit_list_word(page=%d, page_id=0x%02x, \
+entry_length=%d, entry_arrangement=%d, entry_count=%d)",
+	    context->page, context->page_id, context->entry_length,
 	    context->entry_arrangement, context->entry_count));
 
 	if (!PAGE_ID_IS_LEAF_LAYER(context->page_id)) {
@@ -734,9 +734,7 @@ entry_arrangement=%d, entry_count=%d)",
 		    context->comparison_result
 			= context->compare_single(context->canonicalized_word,
 			    cache_p + 2, context->entry_length);
-		    if (context->comparison_result == 0
-			&& context->compare_single(context->word, cache_p + 2,
-			    context->entry_length) == 0) {
+		    if (context->comparison_result == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
 			hit->heading.offset
@@ -931,9 +929,9 @@ eb_hit_list_keyword(EB_Book *book, EB_Search_Context *context,
 
 	cache_p = cache_buffer + context->offset;
 
-	LOG(("aux: eb_hit_list_keyword(page_id=0x%02x, entry_length=%d, \
-entry_arrangement=%d, entry_count=%d)",
-	    context->page_id, context->entry_length,
+	LOG(("aux: eb_hit_list_keyword(page=%d, page_id=0x%02x, \
+entry_length=%d, entry_arrangement=%d, entry_count=%d)",
+	    context->page, context->page_id, context->entry_length,
 	    context->entry_arrangement, context->entry_count));
 
 	if (!PAGE_ID_IS_LEAF_LAYER(context->page_id)) {
@@ -1061,9 +1059,7 @@ entry_arrangement=%d, entry_count=%d)",
 		    context->comparison_result
 			= context->compare_single(context->canonicalized_word,
 			    cache_p + 2, context->entry_length);
-		    if (context->comparison_result == 0
-			&& context->compare_single(context->word, cache_p + 2,
-			    context->entry_length) == 0) {
+		    if (context->comparison_result == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
 			hit->heading.offset
@@ -1265,9 +1261,9 @@ eb_hit_list_multi(EB_Book *book, EB_Search_Context *context, int max_hit_count,
 
 	cache_p = cache_buffer + context->offset;
 
-	LOG(("aux: eb_hit_list_multi(page_id=0x%02x, entry_length=%d, \
-entry_arrangement=%d, entry_count=%d)",
-	    context->page_id, context->entry_length,
+	LOG(("aux: eb_hit_list_multi(page=%d, page_id=0x%02x, \
+entry_length=%d, entry_arrangement=%d, entry_count=%d)",
+	    context->page, context->page_id, context->entry_length,
 	    context->entry_arrangement, context->entry_count));
 
 	if (!PAGE_ID_IS_LEAF_LAYER(context->page_id)) {
@@ -1395,9 +1391,7 @@ entry_arrangement=%d, entry_count=%d)",
 		    context->comparison_result
 			= context->compare_single(context->canonicalized_word,
 			    cache_p + 2, context->entry_length);
-		    if (context->comparison_result == 0
-			&& context->compare_single(context->word, cache_p + 2,
-			    context->entry_length) == 0) {
+		    if (context->comparison_result == 0) {
 			hit->heading.page
 			    = eb_uint4(cache_p + context->entry_length + 8);
 			hit->heading.offset

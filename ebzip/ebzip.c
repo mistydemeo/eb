@@ -29,6 +29,13 @@
 #include "ebzip.h"
 #include "ebutils.h"
 
+#if defined(DOS_FILE_PATH) && defined(HAVE_MBSTRING_H)
+/* a path may contain double-byte chars in SJIS. */
+#include <mbstring.h>
+#define strchr  _mbschr
+#define strrchr _mbsrchr
+#endif
+
 /*
  * Program name and version.
  */
@@ -124,6 +131,7 @@ main(int argc, char *argv[])
     char out_top_path[PATH_MAX + 1];
     char book_path[PATH_MAX + 1];
     int ch;
+    char *last_slash, *last_backslash;
     char *invoked_base_name;
 
     invoked_name = argv[0];
@@ -141,17 +149,26 @@ main(int argc, char *argv[])
 #endif
 
     /*
-     * Set default action.
-     */
-    invoked_base_name = strrchr(argv[0], '/');
-    if (invoked_base_name == NULL)
-	invoked_base_name = argv[0];
-    else
-	invoked_base_name++;
-
-    /*
      * Determine the default action.
      */
+    last_slash = strrchr(argv[0], '/');
+#ifndef DOS_FILE_PATH
+    last_backslash = NULL;
+#else
+    last_backslash = strrchr(argv[0], '\\');
+#endif
+
+    if (last_slash == NULL && last_backslash == NULL)
+	invoked_base_name = argv[0];
+    else if (last_slash == NULL)
+	invoked_base_name = last_backslash + 1;
+    else if (last_backslash == NULL)
+	invoked_base_name = last_slash + 1;
+    else if (last_slash < last_backslash)
+	invoked_base_name = last_backslash + 1;
+    else
+	invoked_base_name = last_slash + 1;
+
 #ifndef EXEEXT_EXE
     if (strcmp(invoked_base_name, "ebunzip") == 0)
 	action_mode = EBZIP_ACTION_UNZIP;

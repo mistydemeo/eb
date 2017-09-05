@@ -667,6 +667,7 @@ appendix のカタログファイルは、CD-ROM 書籍のカタログファイルの部分集合
 
 <dl>
 <dt><code>-b <var>書籍の形式</var></code></dt>
+<dt><code>--booktype <var>書籍の形式</var></code></dt>
 <dd>
 appendix を電子ブック、EPWING のどちらの形式のレイアウトに似せて作る
 のかを指定します。
@@ -683,14 +684,18 @@ appendix を電子ブック、EPWING のどちらの形式のレイアウトに似せて作る
 になります。)
 
 <dt><code>-d</code></dt>
+<dt><code>--debug</code></dt>
+<dt><code>--verbose</code></dt>
 <dd>
 デバッグ用のメッセージを、標準エラー出力に出力します。
 
 <dt><code>-h</code></dt>
+<dt><code>--help</code></dt>
 <dd>
 ヘルプメッセージを標準出力に出力して、終了します。
 
 <dt><code>-n</code></dt>
+<dt><code>--no-catalog</code></dt>
 <dd>
 カタログファイル (<code>catalog</code> および <code>catalogs</code>) を
 生成しません。
@@ -701,6 +706,7 @@ appendix を電子ブック、EPWING のどちらの形式のレイアウトに似せて作る
 を参照のこと)。
 
 <dt><code>-o <var>ディレクトリ</var></code></dt>
+<dt><code>--output-directory <var>ディレクトリ</var></code></dt>
 <dd>
 出力先のディレクトリを指定します。
 このオプションを省略すると、カレントディレクトリ (<code>.</code>) に
@@ -708,11 +714,13 @@ appendix を電子ブック、EPWING のどちらの形式のレイアウトに似せて作る
 ディレクトリが存在しなければ、自動的に生成されます。
 
 <dt><code>-t</code></dt>
+<dt><code>--test</code></dt>
 <dd>
 ファイルを出力しません。
 入力ファイルを読み込んで、内容のチェックだけを行います。
 
 <dt><code>-v</code></dt>
+<dt><code>--version</code></dt>
 <dd>
 バージョン番号を標準出力に出力して、終了します。
 </dl>
