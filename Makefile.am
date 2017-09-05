@@ -37,6 +37,7 @@ eb.conf: eb.conf.in Makefile
 	   -e 's;\@USE_NLS\@;$(USE_NLS);' \
 	   -e 's;\@EBCONF_INTLINCS\@;$(EBCONF_INTLINCS);' \
 	   -e 's;\@EBCONF_INTLLIBS\@;$(EBCONF_INTLLIBS);' \
+	   -e 's;\@ENABLE_EBNET\@;$(ENABLE_EBNET);' \
 	   $(srcdir)/$@.in > $@.tmp
 	cp $@.tmp $@
 	chmod 644 $@

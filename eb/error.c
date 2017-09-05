@@ -123,6 +123,8 @@ static const char * const error_strings[] = {
     /* 65 -- 69 */
     "EB_ERR_EBNET_SERVER_BUSY",
     "EB_ERR_EBNET_NO_PERMISSION",
+    "EB_ERR_UNBOUND_BOOKLIST",
+    "EB_ERR_NO_SUCH_BOOK",
 
     NULL
 };
@@ -243,6 +245,8 @@ static const char * const error_messages[] = {
     /* 65 -- 69 */
     N_("ebnet server is busy"),
     N_("no access permission"),
+    N_("booklist not bound"),
+    N_("no such book"),
 
     NULL
 };

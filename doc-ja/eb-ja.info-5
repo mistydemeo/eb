@@ -1,4 +1,4 @@
-これは eb-ja.info、 eb-ja.texi より makeinfo バージョン 4.5
+これは ./eb-ja.info、./eb-ja.texi より makeinfo バージョン 4.5
 によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -323,8 +323,8 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      いない場合、 もしくは外字フォントの高さが選択されていない場合は何
      もしません。
 
- - 機能 : void eb_font_list (EB_Book *BOOK, EB_Font_Code *FONT_LIST, int
-          *FONT_COUNT)
+ - 機能 : EB_Error_Code eb_font_list (EB_Book *BOOK, EB_Font_Code
+          *FONT_LIST, int *FONT_COUNT)
      関数 `eb_font_list()' は、選択中の副本が定義している外字の高さの
      一覧を `EB_Font_Code' 型の配列にして、FONT_LIST の指す領域に書き
      込みます。
@@ -1170,7 +1170,7 @@ File: eb-ja.info,  Node: Binary Data Functions,  Prev: MPEG Movie,  Up: Binary D
      成功すると、関数は `EB_SUCCESS' を返します。
 
 
-File: eb-ja.info,  Node: Appendix Data,  Next: Indice,  Prev: Binary Data,  Up: Top
+File: eb-ja.info,  Node: Appendix Data,  Next: Book List on Server,  Prev: Binary Data,  Up: Top
 
 appendix データ
 ***************

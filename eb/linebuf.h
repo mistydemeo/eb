@@ -41,7 +41,7 @@ typedef struct {
 /*
  * Function declarations.
  */
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 void initialize_line_buffer(Line_Buffer *);
 void finalize_line_buffer(Line_Buffer *);
 void set_line_buffer_timeout(Line_Buffer *, int);

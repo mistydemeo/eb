@@ -97,28 +97,28 @@
 #endif /* HAVE_STRCHR */
 
 #ifndef HAVE_STRCASECMP
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
-#else /* not __STDC__ or WIN32 */
+#else
 int strcasecmp()
 int strncasecmp();
-#endif /* not __STDC__ or WIN32 */
-#endif /* not HAVE_STRCASECMP or WIN32 */
+#endif
+#endif
 
 #ifndef HAVE_MEMCPY
 #define memcpy(d, s, n) bcopy((s), (d), (n))
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 void *memchr(const void *, int, size_t);
 int memcmp(const void *, const void *, size_t);
 void *memmove(void *, const void *, size_t);
 void *memset(void *, int, size_t);
-#else /* not __STDC__ or WIN32 */
+#else
 char *memchr();
 int memcmp();
 char *memmove();
 char *memset();
-#endif /* not __STDC__ or WIN32 */
+#endif
 #endif
 
 /*
@@ -182,12 +182,12 @@ char *memset();
  * Trick for function protypes.
  */
 #ifndef EB_P
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 #define EB_P(p) p
-#else /* not __STDC__ or WIN32 */
-#define EB_P(p) ()
-#endif /* not __STDC__ or WIN32 */
-#endif /* EB_P */
+#else
+#define EB_P(p)
+#endif
+#endif
 
 /*
  * Tricks for gettext.

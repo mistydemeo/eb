@@ -212,7 +212,7 @@ struct addrinfo {
 /*
  * Functions.
  */
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 const char *gai_strerror(int);
 void freeaddrinfo(struct addrinfo *);
 int getaddrinfo(const char *, const char *, const struct addrinfo *,

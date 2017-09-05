@@ -1,4 +1,3 @@
-/* automatically generated from defs.h.in. */
 /*                                                            -*- C -*-
  * Copyright (c) 1997, 98, 99, 2000, 01, 02
  *    Motoyuki Kasahara
@@ -28,24 +27,16 @@ extern "C" {
 #endif
 
 #ifdef EB_BUILD_LIBRARY
+#include "sysdefs.h"
 #include "zio.h"
 #else
+#include <eb/sysdefs.h>
 #include <eb/zio.h>
 #endif
 
-#if defined(EB_BUILD_LIBRARY) && defined(ENABLE_PTHREAD)
-#define EBCONF_ENABLE_PTHREAD
-#endif
-
-#ifdef EBCONF_ENABLE_PTHREAD
+#ifdef EB_ENABLE_PTHREAD
 #include <pthread.h>
 #endif
-
-/*
- * Library version.
- */
-#define EB_VERSION_MAJOR		4
-#define EB_VERSION_MINOR		0
 
 /*
  * Disc code
@@ -182,12 +173,12 @@ extern "C" {
  * Trick for function protypes.
  */
 #ifndef EB_P
-#if defined(__STDC__) || defined(__cplusplus) || defined(WIN32)
+#ifdef PROTOTYPES
 #define EB_P(p) p
-#else /* not (__STDC__ && __cplusplus && WIN32) */
-#define EB_P(p) ()
-#endif /* not (__STDC__ && __cplusplus && WIN32) */
-#endif /* EB_P */
+#else
+#define EB_P(p)
+#endif
+#endif
 
 /*
  * Types for various codes.
@@ -212,7 +203,7 @@ typedef int EB_Binary_Code;
 /*
  * Typedef for Structures.
  */
-#ifdef EBCONF_ENABLE_PTHREAD
+#ifdef EB_ENABLE_PTHREAD
 typedef struct EB_Lock_Struct              EB_Lock;
 #endif
 typedef struct EB_Position_Struct          EB_Position;
@@ -236,7 +227,7 @@ typedef struct EB_BookList                 EB_BookList;
 /*
  * Pthreads lock.
  */
-#ifdef EBCONF_ENABLE_PTHREAD
+#ifdef EB_ENABLE_PTHREAD
 struct EB_Lock_Struct {
     /*
      * Lock count.  (For emulating recursive lock).
@@ -253,7 +244,7 @@ struct EB_Lock_Struct {
      */
     pthread_mutex_t entity_mutex;
 };
-#endif /* EBCONF_ENABLE_PTHREAD */
+#endif /* EB_ENABLE_PTHREAD */
 
 /*
  * A pair of page and offset.
@@ -392,14 +383,14 @@ struct EB_Appendix_Struct {
     /*
      * ebnet socket file. 
      */
-#ifdef ENABLE_EBNET
+#ifdef EB_ENABLE_EBNET
     int ebnet_file;
 #endif
 
     /*
      * Lock.
      */
-#ifdef EBCONF_ENABLE_PTHREAD
+#ifdef EB_ENABLE_PTHREAD
     EB_Lock lock;
 #endif
 
@@ -918,14 +909,14 @@ struct EB_Book_Struct {
     /*
      * ebnet socket file. 
      */
-#ifdef ENABLE_EBNET
+#ifdef EB_ENABLE_EBNET
     int ebnet_file;
 #endif
 
     /*
      * Lock.
      */
-#ifdef EBCONF_ENABLE_PTHREAD
+#ifdef EB_ENABLE_PTHREAD
     EB_Lock lock;
 #endif
 };
@@ -974,7 +965,7 @@ struct EB_Hookset_Struct {
     /*
      * Lock.
      */
-#ifdef EBCONF_ENABLE_PTHREAD
+#ifdef EB_ENABLE_PTHREAD
     EB_Lock lock;
 #endif
 };
@@ -999,6 +990,11 @@ struct EB_BookList_Entry {
  */
 struct EB_BookList {
     /*
+     * Book List ID.
+     */
+    EB_Book_Code code;
+
+    /*
      * The number of book entries this list has.
      */
     int entry_count;
@@ -1012,6 +1008,13 @@ struct EB_BookList {
      * Book entries.
      */
     EB_BookList_Entry *entries;
+
+    /*
+     * Lock.
+     */
+#ifdef EB_ENABLE_PTHREAD
+    EB_Lock lock;
+#endif
 };
 
 /* for backward compatibility */

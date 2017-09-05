@@ -64,17 +64,17 @@
  */
 #ifndef HAVE_MEMCPY
 #define memcpy(d, s, n) bcopy((s), (d), (n))
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 void *memchr(const void *, int, size_t);
 int memcmp(const void *, const void *, size_t);
 void *memmove(void *, const void *, size_t);
 void *memset(void *, int, size_t);
-#else /* not __STDC__ or WIN32 */
+#else
 char *memchr();
 int memcmp();
 char *memmove();
 char *memset();
-#endif /* not __STDC__ or WIN32 */
+#endif
 #endif
 
 /*
@@ -108,7 +108,7 @@ char *memset();
  * Generic pointer type.
  */
 #ifndef VOID
-#if defined(__STDC__) || defined(WIN32)
+#if defined(__STDC__) || defined(__cplusplus)
 #define VOID void
 #else
 #define VOID char

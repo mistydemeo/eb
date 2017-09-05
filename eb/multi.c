@@ -830,6 +830,10 @@ eb_search_multi(book, multi_id, input_words)
 	 */
 	context = book->search_contexts + word_count;
 	context->code = EB_SEARCH_MULTI;
+
+	/*
+	 * Choose comparison functions.
+	 */
 	if (entry->candidates_page == 0) {
 	    if (book->character_code == EB_CHARCODE_ISO8859_1) {
 		context->compare_pre    = eb_pre_match_word;

@@ -1,4 +1,4 @@
-これは ebinfo-ja.info、 ebinfo-ja.texi より makeinfo バージョン 4.5
+これは ./ebinfo-ja.info、./ebinfo-ja.texi より makeinfo バージョン 4.5
 によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta3 版です。 EB ライブラリバージョン 4.0beta3 に対
-応しています。
+   この文書は第 4.0 版です。 EB ライブラリバージョン 4.0 に対応していま
+す。
 
 * Menu:
 
@@ -211,8 +211,12 @@ EBNET サーバの書籍一覧
      crossword        クロスワードパズル辞典
      travel           ワールドトラベルガイド
 
-このサーバは 3 つの書籍と 1 つの appendix (付録) を持っています。
-`encycl' という書籍の情報を見るには、次のようにします。
+「名前」の末尾に `.app' が付いているものは appendix (付録)、 それ以外は
+書籍本体です。 ただし、そのクライアントに対してアクセスを許可しない書籍
+や appendix は出力されません。
+
+   続けて、この中の `encycl' という書籍の情報を見るには、次のようにし
+ます。
 
      % ebinfo ebnet://dict.example.com/cncyclopedia
      ディスクの形式: EB/EBG/EBXA/EBXA-C/S-EBXA
@@ -258,11 +262,11 @@ File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Book list on EBNET server
 
 
 Tag Table:
-Node: Top1028
-Node: Introduction1466
-Node: Invoke ebinfo2209
-Node: Details about Information4161
-Node: Book list on EBNET server5890
-Node: Options to ebinfo7146
+Node: Top1031
+Node: Introduction1459
+Node: Invoke ebinfo2202
+Node: Details about Information4154
+Node: Book list on EBNET server5883
+Node: Options to ebinfo7270
 
 End Tag Table

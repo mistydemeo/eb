@@ -53,7 +53,7 @@
 #define NI_WITHSCOPEID		0
 #endif
 
-#ifdef WIN32
+#ifdef WINSOCK
 #define close closesocket
 #endif
 
@@ -284,9 +284,9 @@ ebnet_connect_socket(host, port, family)
 	 * There is an IPv6 or IPv4 socket with the server.
 	 * Duplicate the socket entry.
 	 */
-#ifndef WIN32
+#ifndef WINSOCK
 	new_file = dup(multiplex_entry->file);
-#else /* WIN32 */
+#else /* WINSOCK */
 	{
 	    WSAPROTOCOL_INFO info;
 
@@ -296,7 +296,7 @@ ebnet_connect_socket(host, port, family)
 	    new_file = WSASocket(FROM_PROTOCOL_INFO, FROM_PROTOCOL_INFO,
 		FROM_PROTOCOL_INFO, &info, 0, 0);
 	}
-#endif /* WIN32 */
+#endif /* WINSOCK */
 	if (new_file < 0)
 	    goto failed;
 

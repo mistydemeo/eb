@@ -17,7 +17,7 @@
 #include "eb.h"
 #include "build-post.h"
 
-#if defined(__STDC__) || defined(WIN32)
+#if defined(__STDC__) || defined(MSVC)
 #include <stdarg.h>
 #else
 #include <varargs.h>
@@ -98,19 +98,19 @@ eb_disable_log()
 /*
  * Log a message.
  */
-#if defined(__STDC__) || defined(WIN32)
+#if defined(__STDC__) || defined(MSVC)
 void
 eb_log(const char *message, ...)
-#else /* not __STDC__ or WIN32 */
+#else
 void
 eb_log(message, va_alist)
     const char *message;
     va_dcl 
-#endif /* not __STDC__ or WIN32 */
+#endif
 {
     va_list ap;
 
-#if defined(__STDC__) || defined(WIN32)
+#if defined(__STDC__) || defined(MSVC)
     va_start(ap, message);
 #else
     va_start(ap);

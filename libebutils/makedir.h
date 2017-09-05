@@ -24,7 +24,7 @@
 /*
  * Function declarations.
  */
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 int make_missing_directory(const char *, int);
 #else
 int make_missing_directory();

@@ -26,8 +26,10 @@ extern "C" {
 #include <eb/defs.h>
 #endif
 
-#if defined(__STDC__) || defined(WIN32)
+#if defined(__STDC__) || defined(__cplusplus) || defined(MSVC)
 #include <stdarg.h>
+#else
+#include <varargs.h>
 #endif
 
 /*

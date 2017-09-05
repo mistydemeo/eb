@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ebutils 4.0\n"
-"POT-Creation-Date: 2003-10-19 22:30+0900\n"
+"POT-Creation-Date: 2003-12-28 10:20+0900\n"
 "PO-Revision-Date: 2001-03-18 23:28+0900\n"
 "Last-Translator: Motoyuki Kasahara <m-kasahr@sra.co.jp>\n"
 "Language-Team: \n"
@@ -101,13 +101,13 @@ msgstr "%s: `%s...' は未知の画像形式名です\n"
 msgid "%s: unknown image format name `%s'\n"
 msgstr "%s: `%s' は未知の画像形式名です\n"
 
-#: ../ebfont/ebfont.c:627 ../ebinfo/ebinfo.c:610 ../ebrefile/ebrefile.c:361
+#: ../ebfont/ebfont.c:627 ../ebinfo/ebinfo.c:624 ../ebrefile/ebrefile.c:361
 #: ../ebzip/ebzip.c:468
 #, c-format
 msgid "Usage: %s [option...] [book-directory]\n"
 msgstr "使用法: %s [オプション...] [書籍のディレクトリ]\n"
 
-#: ../ebfont/ebfont.c:628 ../ebinfo/ebinfo.c:612 ../ebrefile/ebrefile.c:362
+#: ../ebfont/ebfont.c:628 ../ebinfo/ebinfo.c:626 ../ebrefile/ebrefile.c:362
 #: ../ebstopcode/ebstopcode.c:460 ../ebzip/ebzip.c:469
 msgid "Options:\n"
 msgstr "オプション:\n"
@@ -128,14 +128,14 @@ msgstr ""
 "                             高さは 16, 24, 30, 48 のいずれか\n"
 
 #: ../ebfont/ebfont.c:632 ../ebfont/ebfont.c:637 ../ebfont/ebfont.c:641
-#: ../ebfont/ebfont.c:649 ../ebinfo/ebinfo.c:619 ../ebrefile/ebrefile.c:366
+#: ../ebfont/ebfont.c:649 ../ebinfo/ebinfo.c:633 ../ebrefile/ebrefile.c:366
 #: ../ebrefile/ebrefile.c:374 ../ebstopcode/ebstopcode.c:474
 #: ../ebzip/ebzip.c:482 ../ebzip/ebzip.c:497
 #, c-format
 msgid "                             (default: %s)\n"
 msgstr "                             (省略時: %s)\n"
 
-#: ../ebfont/ebfont.c:634 ../ebinfo/ebinfo.c:613 ../ebrefile/ebrefile.c:363
+#: ../ebfont/ebfont.c:634 ../ebinfo/ebinfo.c:627 ../ebrefile/ebrefile.c:363
 #: ../ebstopcode/ebstopcode.c:463 ../ebzip/ebzip.c:471
 msgid "  -h  --help                 display this help, then exit\n"
 msgstr "  -h  --help                 このヘルプを表示して終了\n"
@@ -171,12 +171,12 @@ msgstr "                             処理対象の副本\n"
 msgid "                             (default: all subbooks)\n"
 msgstr "                             (省略時: すべての副本)\n"
 
-#: ../ebfont/ebfont.c:646 ../ebinfo/ebinfo.c:616 ../ebrefile/ebrefile.c:371
+#: ../ebfont/ebfont.c:646 ../ebinfo/ebinfo.c:630 ../ebrefile/ebrefile.c:371
 #: ../ebstopcode/ebstopcode.c:471 ../ebzip/ebzip.c:493
 msgid "  -v  --version              display version number, then exit\n"
 msgstr "  -v  --version              バージョン番号を表示して終了\n"
 
-#: ../ebfont/ebfont.c:647 ../ebinfo/ebinfo.c:617 ../ebrefile/ebrefile.c:372
+#: ../ebfont/ebfont.c:647 ../ebinfo/ebinfo.c:631 ../ebrefile/ebrefile.c:372
 #: ../ebstopcode/ebstopcode.c:472 ../ebzip/ebzip.c:495
 msgid ""
 "\n"
@@ -185,12 +185,12 @@ msgstr ""
 "\n"
 "引数:\n"
 
-#: ../ebfont/ebfont.c:648 ../ebinfo/ebinfo.c:618 ../ebrefile/ebrefile.c:373
+#: ../ebfont/ebfont.c:648 ../ebinfo/ebinfo.c:632 ../ebrefile/ebrefile.c:373
 #: ../ebstopcode/ebstopcode.c:473 ../ebzip/ebzip.c:496
 msgid "  book-directory             top directory of a CD-ROM book\n"
 msgstr "  書籍のディレクトリ         CD-ROM 書籍のトップディレクトリ\n"
 
-#: ../ebfont/ebfont.c:651 ../ebinfo/ebinfo.c:621 ../ebrefile/ebrefile.c:377
+#: ../ebfont/ebfont.c:651 ../ebinfo/ebinfo.c:635 ../ebrefile/ebrefile.c:377
 #: ../ebstopcode/ebstopcode.c:476 ../ebzip/ebzip.c:509
 #, c-format
 msgid ""
@@ -228,19 +228,19 @@ msgstr "名前"
 msgid "Title"
 msgstr "題名"
 
-#: ../ebinfo/ebinfo.c:324
+#: ../ebinfo/ebinfo.c:338
 msgid "disc type: "
 msgstr "ディスクの形式: "
 
-#: ../ebinfo/ebinfo.c:339
+#: ../ebinfo/ebinfo.c:353
 msgid "character code: "
 msgstr "文字コード: "
 
-#: ../ebinfo/ebinfo.c:351
+#: ../ebinfo/ebinfo.c:365
 msgid "unknown\n"
 msgstr "未知\n"
 
-#: ../ebinfo/ebinfo.c:364
+#: ../ebinfo/ebinfo.c:378
 #, c-format
 msgid ""
 "the number of subbooks: %d\n"
@@ -249,16 +249,16 @@ msgstr ""
 "副本の数: %d\n"
 "\n"
 
-#: ../ebinfo/ebinfo.c:370
+#: ../ebinfo/ebinfo.c:384
 #, c-format
 msgid "subbook %d:\n"
 msgstr "副本  %d:\n"
 
-#: ../ebinfo/ebinfo.c:380
+#: ../ebinfo/ebinfo.c:394
 msgid "  title: "
 msgstr "  題名: "
 
-#: ../ebinfo/ebinfo.c:392
+#: ../ebinfo/ebinfo.c:406
 #, c-format
 msgid "  directory: %s\n"
 msgstr "  ディレクトリ: %s\n"
@@ -266,87 +266,87 @@ msgstr "  ディレクトリ: %s\n"
 #.
 #. * Output supported methods.
 #.
-#: ../ebinfo/ebinfo.c:407
+#: ../ebinfo/ebinfo.c:421
 msgid "  search methods: "
 msgstr "  検索方式: "
 
-#: ../ebinfo/ebinfo.c:409
+#: ../ebinfo/ebinfo.c:423
 msgid "word "
 msgstr "前方一致 "
 
-#: ../ebinfo/ebinfo.c:411
+#: ../ebinfo/ebinfo.c:425
 msgid "endword "
 msgstr "後方一致 "
 
-#: ../ebinfo/ebinfo.c:413
+#: ../ebinfo/ebinfo.c:427
 msgid "keyword "
 msgstr "条件 "
 
-#: ../ebinfo/ebinfo.c:415
+#: ../ebinfo/ebinfo.c:429
 msgid "multi "
 msgstr "複合 "
 
-#: ../ebinfo/ebinfo.c:417
+#: ../ebinfo/ebinfo.c:431
 msgid "menu "
 msgstr "メニュー "
 
-#: ../ebinfo/ebinfo.c:419
+#: ../ebinfo/ebinfo.c:433
 msgid "copyright "
 msgstr "著作権表示 "
 
 #.
 #. * Output a font list.
 #.
-#: ../ebinfo/ebinfo.c:425
+#: ../ebinfo/ebinfo.c:439
 msgid "  font sizes: "
 msgstr "  フォントの大きさ: "
 
 #.
 #. * Output character range of the narrow font.
 #.
-#: ../ebinfo/ebinfo.c:447
+#: ../ebinfo/ebinfo.c:461
 msgid "  narrow font characters: "
 msgstr "  半角フォントの文字: "
 
 #.
 #. * Output character range of the wide font.
 #.
-#: ../ebinfo/ebinfo.c:475
+#: ../ebinfo/ebinfo.c:489
 msgid "  wide font characters: "
 msgstr "  全角フォントの文字: "
 
-#: ../ebinfo/ebinfo.c:559
+#: ../ebinfo/ebinfo.c:573
 #, c-format
 msgid "  multi search %d:\n"
 msgstr "  複合検索 %d:\n"
 
-#: ../ebinfo/ebinfo.c:573
+#: ../ebinfo/ebinfo.c:587
 msgid "    title: "
 msgstr "    題名: "
 
-#: ../ebinfo/ebinfo.c:586
+#: ../ebinfo/ebinfo.c:600
 #, c-format
 msgid "    label %d: "
 msgstr "    ラベル %d: "
 
-#: ../ebinfo/ebinfo.c:590
+#: ../ebinfo/ebinfo.c:604
 msgid "      candidates: "
 msgstr "      候補: "
 
-#: ../ebinfo/ebinfo.c:592
+#: ../ebinfo/ebinfo.c:606
 msgid "exist\n"
 msgstr "有\n"
 
-#: ../ebinfo/ebinfo.c:594
+#: ../ebinfo/ebinfo.c:608
 msgid "not-exist\n"
 msgstr "無\n"
 
-#: ../ebinfo/ebinfo.c:614
+#: ../ebinfo/ebinfo.c:628
 msgid ""
 "  -l  --book-list            output a list of books on an EBENT server\n"
 msgstr "  -l  --book-list            EBNET サーバ上の書籍リストを出力\n"
 
-#: ../ebinfo/ebinfo.c:615
+#: ../ebinfo/ebinfo.c:629
 msgid "  -m  --multi-search         also output multi-search information\n"
 msgstr "  -m  --multi-search         複合検索の情報も出力\n"
 

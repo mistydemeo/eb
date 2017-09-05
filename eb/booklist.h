@@ -32,10 +32,10 @@ extern "C" {
 /* booklist.c */
 void eb_initialize_booklist EB_P((EB_BookList *));
 void eb_finalize_booklist EB_P((EB_BookList *));
-EB_Error_Code eb_get_booklist EB_P((EB_BookList *, const char *));
-int eb_booklist_book_count EB_P((EB_BookList *));
-const char *eb_booklist_book_name EB_P((EB_BookList *, int));
-const char *eb_booklist_book_title EB_P((EB_BookList *, int));
+EB_Error_Code eb_bind_booklist EB_P((EB_BookList *, const char *));
+EB_Error_Code eb_booklist_book_count EB_P((EB_BookList *, int *));
+EB_Error_Code eb_booklist_book_name EB_P((EB_BookList *, int, char **));
+EB_Error_Code eb_booklist_book_title EB_P((EB_BookList *, int, char **));
 
 
 #ifdef __cplusplus

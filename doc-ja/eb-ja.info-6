@@ -1,4 +1,4 @@
-これは eb-ja.info、 eb-ja.texi より makeinfo バージョン 4.5
+これは ./eb-ja.info、./eb-ja.texi より makeinfo バージョン 4.5
 によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -273,7 +273,8 @@ File: eb-ja.info,  Node: Appendix Functions,  Next: Appendix Sample,  Prev: Appe
      後始末をしたオブジェクトに対して `eb_bind_appendix()'
      を呼ぶことで、 オブジェクトを再利用することができます。
 
- - 機能: void eb_bind_appendix (EB_Appendix *APP, const char *PATH)
+ - 機能 : EB_Error_Code eb_bind_appendix (EB_Appendix *APP, const char
+          *PATH)
      関数 `eb_bind_appendix()' は、APP の指す `EB_Appendix' オブジェク
      トを、パス PATH にある appendix に結び付けます。 パスには、
      appendix のトップディレクトリか遠隔アクセス識別子を指定します。
@@ -675,7 +676,326 @@ File: eb-ja.info,  Node: Appendix Sample,  Prev: Appendix Functions,  Up: Append
      }
 
 
-File: eb-ja.info,  Node: Indice,  Prev: Appendix Data,  Up: Top
+File: eb-ja.info,  Node: Book List on Server,  Next: Indice,  Prev: Appendix Data,  Up: Top
+
+サーバ上の書籍一覧
+******************
+
+   EBNET サーバから遠隔アクセスを行う際、サーバがそのクライアントに対し
+て アクセスを許可している書籍や appendix データの一覧を取得することが
+できます。
+
+   このとき、 EBNET サーバを指定する遠隔アクセス記述子には、特定の書籍や
+appendix データに対するアクセスとは異なり、書籍名は指定しません。 すな
+わち、一般形は次のようになります。
+
+     ebnet://ホスト:ポート/
+
+末尾の `/' はなくても構いません。 `:' とそれに続くポート番号は省略可能
+で、その場合は 22010 番ポートを利用することを意味します。
+
+   ebinfo コマンドの -book-list オプション指定時の挙動は、 EB
+ライブラリのこの機能によって実装されています。 (ebinfo
+についての詳細は、 *note EBNET サーバの書籍一覧 : (ebinfo-ja)Book list
+on EBNET server.。)
+
+     % ebinfo --book-list ebnet://localhost
+     名前             題名
+     encycl           ブラウンコンサイス百科事典
+     encycl.app       ブラウンコンサイス百科事典 (appendix)
+     crossword        クロスワードパズル辞典
+     travel           ワールドトラベルガイド
+
+   名前の末尾が `.app' になっているものは appendix データで、その他は
+書籍本体です。 この例の書籍 `encycl' に対してアクセスするなら、遠隔アク
+セス識別子は `ebnet://localhost/encycl' になります。
+
+   なお、クライアントに対してアクセスを許可していない書籍や appendix デ
+ータは、サーが側で一覧から除外されます。
+
+* Menu:
+
+* EB_BookList Object::          `EB_BookList' オブジェクト
+* BookList Data::               データ型の詳細
+* BookList Functions::          関数の詳細
+* BookList Sample::             サンプルプログラム
+
+
+File: eb-ja.info,  Node: EB_BookList Object,  Next: BookList Data,  Prev: Book List on Server,  Up: Book List on Server
+
+`EB_BookList' オブジェクト
+==========================
+
+   EBNET サーバの提供する書籍および appendix
+データの一覧を取得するには、 まず `EB_BookList' 型のオブジェクトを用意
+する必要があります。
+
+     EB_BookList bl;
+
+オブジェクトの領域は、`malloc()' で確保しても構いません。
+
+     EB_BookList *bl_pointer;
+     
+     bl_pointer = (EB_BookList *) malloc(sizeof(EB_BookList));
+
+   `EB_Book' オブジェクトと同様に、`EB_BookList' オブジェクトも使う前
+に中身を初期化する必要があります。 これは、`eb_initialize_booklist()'
+という関数で行います。
+
+     eb_initialize_booklist(&bl);
+     eb_initialize_booklist(bl_pointer);
+
+   初期化が完了したら、特定のサーバとオブジェクトを結びつけます。 たと
+えば、`ebnet://localhost' で表されるサーバに対して、オブジェクトを結び
+つけるには次のようにします。
+
+     if (eb_bind_booklist(&bl, "ebnet://localhost") != EB_SUCCESS) {
+         printf("eb_bind_booklist() failed\n");
+         return;
+     }
+
+これはちょうど、`EB_Book' オブジェクトに対して `eb_bind()' を呼ぶのと同
+じです。
+
+   こうして、ようやく書籍一覧の情報を取り出すことができます。 これには
+`eb_booklist_book_count()', `eb_booklist_book_name()',
+`eb_booklist_book_title()' という 3 つの関数を使用します。 これらの関数
+はそれぞれ、クライアントがアクセス可能な書籍の数、各書籍および
+appendix データの名称 (アクセス識別子として指定する名前)、 各書籍と
+appendix データの題名を得ることができます。
+
+     char *name, *title;
+     int count, i;
+     
+     count = eb_booklist_book_count(&bl);
+     for (i = 0; i < count; i++) {
+         if (eb_booklist_book_name(&bl, i, &name) != EB_SUCCESS) {
+             printf("eb_booklist_book_name(%d) failed\n", i);
+             return;
+         }
+         if (eb_booklist_book_title(&bl, i, &title) != EB_SUCCESS) {
+             printf("eb_booklist_book_title(%d) failed\n", i);
+             return;
+         }
+         printf("name = %s, title = %s\n", name, title);
+     }
+
+`EB_BookList' オブジェクトを使い終わったら、必ず後始末を行います。
+
+     eb_finalize_booklist(&bl);
+     eb_finalize_booklist(bl_pointer);
+
+   オブジェクトの領域を `malloc()' で確保した場合は、
+`eb_finalize_booklist()' を呼んだ後ならば、オブジェクトの領域を安全に
+解放することができます。
+
+     free(bl_pointer);
+
+
+File: eb-ja.info,  Node: BookList Data,  Next: BookList Functions,  Prev: EB_BookList Object,  Up: Book List on Server
+
+データ型の詳細
+==============
+
+   この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+
+     #include <eb/booklist.h>
+
+ - Data type: EB_BookList
+     `EB_BookList' 型は、EBNET サーバ上が使っている書籍および appendix
+     の一覧を取得する際に用いるオクジェクトの型です。
+
+     `EB_BookList' オブジェクトを使用する際は、まずそのオブジェクトに
+     対して `eb_initialize_booklist()'
+     を呼んで初期化する必要があります。
+
+
+File: eb-ja.info,  Node: BookList Functions,  Next: BookList Sample,  Prev: BookList Data,  Up: Book List on Server
+
+関数の詳細
+==========
+
+   この節で説明している関数を使うには、次のようにヘッダファイルを読み込
+んで下さい。
+
+     #include <eb/booklist.h>
+
+ - 機能: void eb_initialize_booklist (EB_BookList *BL)
+     関数 `eb_initialize_booklist()' は、BL の指す `EB_BookList' オブジ
+     ェクトを初期化します。 `EB_BookList' オブジェクトに対して EB ライ
+     ブラリの他の関数を呼ぶ前に、必ずそのオブジェクトを初期化しなくて
+     はなりません。 初期化していないオブジェクトに対して、EB ライブラリ
+     の他の関数を呼んだ場合の動作は未定義です。 また、すでに初期化した
+     オブジェクトに対して、 再度 `eb_initialize_booklist()' を呼んでは
+     いけません。 呼んだ場合の動作は未定義です。
+
+ - 機能 : EB_Error_Code eb_bind_booklist (EB_BookList *BL, const char
+          *PATH)
+     関数 `eb_bind_booklist()' は、APP の指す `EB_BookList' オブジェク
+     トを、遠隔アクセス記述子 PATH で指定された EBNET サーバに結び付け
+     ます。
+
+     オブジェクトがすでにサーバに結び付いていた場合、そのサーバとの結び
+     付きを解いてから、PATH にあるサーバに結び付けます。
+
+     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、オブジェ
+     クトをサーバとの結び付きを解かれた状態にして、原因を示すエラーコ
+     ードを返します。
+
+     PATH は、 `EB_MAX_PATH_LENGTH'
+     バイトに収まていなくてはなりません。 これを超えると、
+     `EB_ERR_TOO_LONG_FILE_NAME' を返します。 また、書籍名を指定してい
+     ない遠隔アクセス記述子でなければなりません。 それ以外の形式だと、
+     `EB_ERR_BAD_FILE_NAME' を返します。
+
+     使用している EB ライブラリのバイナリが、遠隔アクセスに非対応のもの
+     で ある場合、`EB_ERR_EBNET_UNSUPPORTED' が返ります。
+
+ - 機能: void eb_finalize_booklist (EB_BookList *BL)
+     関数 `eb_finalize_booklist()' は、BL が指す `EB_BookList' オブジェ
+     クトの後始末を行います。
+
+     オブジェクトが割り当てて管理していたメモリはすべて解放され、 ファ
+     イルディスクリプタもすべて閉じられます。 オブジェクトが EBNET サー
+     バと結び付いていた場合は、結び付きが解かれます。
+
+     後始末をしたオブジェクトに対して `eb_bind_booklist()'
+     を呼ぶことで、 オブジェクトを再利用することができます。
+
+ - 機能: int eb_booklist_book_count (EB_BookList *BL)
+     関数 `eb_booklist_book_count()' は、 EBNET
+     サーバがこのクライアントに対してアクセスを許可している書籍および
+     appendix データの数を取得します。
+
+     オブジェクト BL の指す `EB_BookList' オブジェクトは、 あらかじめ
+     EBNET サーバに結びついている必要があります。 結びついていない場合
+     は、`EB_ERR_UNBOUND_BOOKLIST' を返します。
+
+ - 機能 : EB_Error_Code eb_booklist_book_name (EB_BookList *BL, int I,
+          char **NAME)
+ - 機能 : EB_Error_Code eb_booklist_book_title (EB_BookList *BL, int I,
+          char **TITLE)
+     関数 `eb_booklist_book_name()' は、EBNET サーバの書籍や appendix
+     データの名称を取得します。 ここで言う「名称」とは、遠隔アクセス識
+     別子で指定する書籍名のことです。 つまり、`ebnet://localhost/dict'
+     の `dict' の部分を指します。 同様に、関数
+     `eb_booklist_book_title()' は、書籍や appendix
+     の題名を取得します。
+
+     いずれの関数も、EBNET サーバ上の何番目の書籍もしくは appendix の情
+     報を取得するのかを、引数 I で指定します。 先頭は 1 番目ではなく 0
+     番目になります。
+
+     成功すると、関数は書籍の名称、題名へのポインタを *NAME, *TITLE に
+     書き込み、`EB_SUCCESS' を返します。 なお、このポインタ値はオブジ
+     ェクト `bl' が保持している文字列を指すようになっています。 `bl'
+     に対して `eb_finalize_booklist()' を呼んでしまうと、この文字列も
+     参照不可能になってしまいますので、注意して下さい。
+
+     オブジェクト BL の指す `EB_BookList' オブジェクトは、 あらかじめ
+     EBNET サーバに結びついている必要があります。 結びついていない場合
+     は、`EB_ERR_UNBOUND_BOOKLIST' を返します。 また、I は 0 以上かつサ
+     ーバが提供している書籍および appendix の総数未満でなければなりま
+     せん。 これ以外の値のときは、`EB_ERR_NO_SUCH_BOOK' が返ります。
+
+
+File: eb-ja.info,  Node: BookList Sample,  Prev: BookList Functions,  Up: Book List on Server
+
+サンプルプログラム
+==================
+
+     /*
+      * 使用方法:
+      *     booklist <remote-access-ideintifier>
+      * 例:
+      *     booklist ebnet://localhost
+      * 説明:
+      *     <remote-access-ideintifier> で指定した EBNET サーバに接続し
+      *     て、サーバの提供する書籍、appendix の一覧を表示します。
+      */
+     #include "config.h"
+     
+     #include <stdio.h>
+     #include <stdlib.h>
+     
+     #include <eb/eb.h>
+     #include <eb/error.h>
+     #include <eb/booklist.h>
+     
+     int
+     main(argc, argv)
+         int argc;
+         char *argv[];
+     {
+         EB_Error_Code error_code;
+         EB_BookList bl;
+         int book_count;
+         char *name, *title;
+         int i;
+     
+         /* コマンド行引数をチェック。*/
+         if (argc != 2) {
+             fprintf(stderr, "Usage: %s book-path remote-access-identifier\n",
+                 argv[0]);
+             exit(1);
+         }
+     
+         /* EB ライブラリと `bl' を初期化。*/
+         eb_initialize_library();
+         eb_initialize_booklist(&bl);
+     
+         /* EBNET サーバを `bl' に結び付ける。*/
+         error_code = eb_bind_booklist(&bl, argv[1]);
+         if (error_code != EB_SUCCESS) {
+             fprintf(stderr, "%s: failed to bind the EBNET server, %s: %s\n",
+                 argv[0], eb_error_message(error_code), argv[1]);
+             goto die;
+         }
+     
+         /* サーバ上の書籍、appendix の個数を取得。*/
+         error_code = eb_booklist_book_count(&bl, &book_count);
+         if (error_code != EB_SUCCESS) {
+             fprintf(stderr, "%s: failed to get the number of books, %s\n",
+                 argv[0], eb_error_message(error_code));
+             goto die;
+         }
+     
+         for (i = 0; i < book_count; i++) {
+             /* 書籍、appendix の名称を取得。*/
+             error_code = eb_booklist_book_name(&bl, i, &name);
+             if (error_code != EB_SUCCESS) {
+                 fprintf(stderr, "%s: failed to get book name #%d, %s\n",
+                     argv[0], i, eb_error_message(error_code));
+                 goto die;
+             }
+     
+                 }
+             /* 書籍、appendix の題名を取得。*/
+             error_code = eb_booklist_book_name(&bl, i, &title);
+             if (error_code != EB_SUCCESS) {
+                 fprintf(stderr, "%s: failed to get book title #%d, %s\n",
+                     argv[0], i, eb_error_message(error_code));
+                 goto die;
+             }
+     
+             printf("%-20s  %s\n", name, title);
+         }
+     
+         /* `bl' と EB ライブラリの利用を終了。*/
+         eb_finalize_book(&bl);
+         eb_finalize_library();
+         exit(0);
+     
+         /* エラー発生で終了するときの処理。*/
+       die:
+         eb_finalize_book(&bl);
+         eb_finalize_library();
+         exit(1);
+     }
+
+
+File: eb-ja.info,  Node: Indice,  Prev: Book List on Server,  Up: Top
 
 索引
 ****
@@ -694,8 +1014,9 @@ File: eb-ja.info,  Node: Data Type Index,  Next: Function Index,  Prev: Indice, 
 
 * Menu:
 
-* Book <1>:                              Appendix Data Types.
-* Book:                                  EB_Book Data Types.
+* Book <1>:                              EB_Book Data Types.
+* Book:                                  Appendix Data Types.
+* BookList:                              BookList Data.
 * Character_Code:                        EB_Book Data Types.
 * Disc_Code:                             EB_Book Data Types.
 * Error_Code:                            Error Data Types.
@@ -727,10 +1048,14 @@ File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type
 * backward_wide_font_character:          Font Functions.
 * bind:                                  EB_Book Functions.
 * bind_appendix:                         Appendix Functions.
+* bind_booklist:                         BookList Functions.
 * bitmap_to_bmp:                         Font Functions.
 * bitmap_to_gif:                         Font Functions.
 * bitmap_to_xbm:                         Font Functions.
 * bitmap_to_xpm:                         Font Functions.
+* booklist_book_count:                   BookList Functions.
+* booklist_book_name:                    BookList Functions.
+* booklist_book_title:                   BookList Functions.
 * character_code:                        EB_Book Functions.
 * copyright:                             Text Data Functions.
 * current_candidate:                     Text Data Functions.
@@ -741,6 +1066,7 @@ File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type
 * error_string:                          Error Functions.
 * finalize_appendix:                     Appendix Functions.
 * finalize_book:                         EB_Book Functions.
+* finalize_booklist:                     BookList Functions.
 * finalize_hookset:                      Hookset Access Functions.
 * finalize_library:                      Init and Exit Functions.
 * font:                                  Font Functions.
@@ -771,6 +1097,7 @@ File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type
 * hook_wide_character_text:              Builtin Hook Functions.
 * initialize_appendix:                   Appendix Functions.
 * initialize_book:                       EB_Book Functions.
+* initialize_booklist:                   BookList Functions.
 * initialize_hookset:                    Hookset Access Functions.
 * initialize_library:                    Init and Exit Functions.
 * is_appendix_bound:                     Appendix Functions.
@@ -845,205 +1172,4 @@ File: eb-ja.info,  Node: Function Index,  Next: Variable Index,  Prev: Data Type
 * write_text_byte1:                      Text Data Functions.
 * write_text_byte2:                      Text Data Functions.
 * write_text_string:                     Text Data Functions.
-
-
-File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Indice
-
-変数と定数の索引
-================
-
-* Menu:
-
-* CHARCODE_INVALID:                      EB_Book Data Types.
-* CHARCODE_ISO8859_1:                    EB_Book Data Types.
-* CHARCODE_JISX0208:                     EB_Book Data Types.
-* CHARCODE_JISX0208_GB2312:              EB_Book Data Types.
-* DISC_EB:                               EB_Book Data Types.
-* DISC_EPWING:                           EB_Book Data Types.
-* DISC_INVALID:                          EB_Book Data Types.
-* ERR_BAD_DIR_NAME:                      Error Code List.
-* ERR_BAD_FILE_NAME:                     Error Code List.
-* ERR_BAD_WORD:                          Error Code List.
-* ERR_DIFF_CONTENT:                      Error Code List.
-* ERR_EBNET_FAIL_CONNECT:                Error Code List.
-* ERR_EBNET_NO_PERMISSION:               Error Code List.
-* ERR_EBNET_SERVER_BUSY:                 Error Code List.
-* ERR_EBNET_UNSUPPORTED:                 Error Code List.
-* ERR_EMPTY_WORD:                        Error Code List.
-* ERR_END_OF_CONTENT:                    Error Code List.
-* ERR_FAIL_GETCWD:                       Error Code List.
-* ERR_FAIL_OPEN_APP:                     Error Code List.
-* ERR_FAIL_OPEN_BINARY:                  Error Code List.
-* ERR_FAIL_OPEN_CAT:                     Error Code List.
-* ERR_FAIL_OPEN_CATAPP:                  Error Code List.
-* ERR_FAIL_OPEN_FONT:                    Error Code List.
-* ERR_FAIL_OPEN_TEXT:                    Error Code List.
-* ERR_FAIL_READ_APP:                     Error Code List.
-* ERR_FAIL_READ_BINARY:                  Error Code List.
-* ERR_FAIL_READ_CAT:                     Error Code List.
-* ERR_FAIL_READ_CATAPP:                  Error Code List.
-* ERR_FAIL_READ_FONT:                    Error Code List.
-* ERR_FAIL_READ_TEXT:                    Error Code List.
-* ERR_FAIL_SEEK_APP:                     Error Code List.
-* ERR_FAIL_SEEK_BINARY:                  Error Code List.
-* ERR_FAIL_SEEK_CAT:                     Error Code List.
-* ERR_FAIL_SEEK_CATAPP:                  Error Code List.
-* ERR_FAIL_SEEK_FONT:                    Error Code List.
-* ERR_FAIL_SEEK_TEXT:                    Error Code List.
-* ERR_MEMORY_EXHAUSTED:                  Error Code List.
-* ERR_NO_APPSUB:                         Error Code List.
-* ERR_NO_CANDIDATES:                     Error Code List.
-* ERR_NO_CUR_APPSUB:                     Error Code List.
-* ERR_NO_CUR_BINARY:                     Error Code List.
-* ERR_NO_CUR_FONT:                       Error Code List.
-* ERR_NO_CUR_SUB:                        Error Code List.
-* ERR_NO_FONT:                           Error Code List.
-* ERR_NO_PREV_SEARCH:                    Error Code List.
-* ERR_NO_PREV_SEEK:                      Error Code List.
-* ERR_NO_SUB:                            Error Code List.
-* ERR_NO_SUCH_APPSUB:                    Error Code List.
-* ERR_NO_SUCH_BINARY:                    Error Code List.
-* ERR_NO_SUCH_CHAR_BMP:                  Error Code List.
-* ERR_NO_SUCH_CHAR_TEXT:                 Error Code List.
-* ERR_NO_SUCH_ENTRY_ID:                  Error Code List.
-* ERR_NO_SUCH_FONT:                      Error Code List.
-* ERR_NO_SUCH_HOOK:                      Error Code List.
-* ERR_NO_SUCH_MULTI_ID:                  Error Code List.
-* ERR_NO_SUCH_SEARCH:                    Error Code List.
-* ERR_NO_SUCH_SUB:                       Error Code List.
-* ERR_NO_TEXT:                           Error Code List.
-* ERR_NO_WORD:                           Error Code List.
-* ERR_TOO_LONG_FILE_NAME:                Error Code List.
-* ERR_TOO_LONG_WORD:                     Error Code List.
-* ERR_TOO_MANY_WORDS:                    Error Code List.
-* ERR_UNBOUND_APP:                       Error Code List.
-* ERR_UNBOUND_BOOK:                      Error Code List.
-* ERR_UNEXP_APP:                         Error Code List.
-* ERR_UNEXP_BINARY:                      Error Code List.
-* ERR_UNEXP_CAT:                         Error Code List.
-* ERR_UNEXP_CATAPP:                      Error Code List.
-* ERR_UNEXP_FONT:                        Error Code List.
-* ERR_UNEXP_TEXT:                        Error Code List.
-* FONT_16:                               Font Data Types.
-* FONT_24:                               Font Data Types.
-* FONT_30:                               Font Data Types.
-* FONT_48:                               Font Data Types.
-* FONT_INVALID:                          Font Data Types.
-* HEIGHT_NARROW_FONT_16:                 Font Constants.
-* HEIGHT_NARROW_FONT_24:                 Font Constants.
-* HEIGHT_NARROW_FONT_30:                 Font Constants.
-* HEIGHT_NARROW_FONT_48:                 Font Constants.
-* HEIGHT_WIDE_FONT_16:                   Font Constants.
-* HEIGHT_WIDE_FONT_24:                   Font Constants.
-* HEIGHT_WIDE_FONT_30:                   Font Constants.
-* HEIGHT_WIDE_FONT_48:                   Font Constants.
-* HOOK_BEGIN_CANDIDATE:                  Hook Code List.
-* HOOK_BEGIN_COLOR_BMP:                  Hook Code List.
-* HOOK_BEGIN_COLOR_JPEG:                 Hook Code List.
-* HOOK_BEGIN_DECORATION:                 Hook Code List.
-* HOOK_BEGIN_EMPHASIS:                   Hook Code List.
-* HOOK_BEGIN_GRAY_GRAPHIC:               Hook Code List.
-* HOOK_BEGIN_IN_COLOR_BMP:               Hook Code List.
-* HOOK_BEGIN_IN_COLOR_JPEG:              Hook Code List.
-* HOOK_BEGIN_KEYWORD:                    Hook Code List.
-* HOOK_BEGIN_MONO_GRAPHIC:               Hook Code List.
-* HOOK_BEGIN_MPEG:                       Hook Code List.
-* HOOK_BEGIN_NARROW:                     Hook Code List.
-* HOOK_BEGIN_NO_NEWLINE:                 Hook Code List.
-* HOOK_BEGIN_REFERENCE:                  Hook Code List.
-* HOOK_BEGIN_SUBSCRIPT:                  Hook Code List.
-* HOOK_BEGIN_SUPERSCRIPT:                Hook Code List.
-* HOOK_BEGIN_WAVE:                       Hook Code List.
-* HOOK_END_CANDIDATE_GROUP:              Hook Code List.
-* HOOK_END_CANDIDATE_LEAF:               Hook Code List.
-* HOOK_END_COLOR_GRAPHIC:                Hook Code List.
-* HOOK_END_DECORATION:                   Hook Code List.
-* HOOK_END_EMPHASIS:                     Hook Code List.
-* HOOK_END_GRAY_GRAPHIC:                 Hook Code List.
-* HOOK_END_IN_COLOR_GRAPHIC:             Hook Code List.
-* HOOK_END_KEYWORD:                      Hook Code List.
-* HOOK_END_MONO_GRAPHIC:                 Hook Code List.
-* HOOK_END_MPEG:                         Hook Code List.
-* HOOK_END_NARROW:                       Hook Code List.
-* HOOK_END_NO_NEWLINE:                   Hook Code List.
-* HOOK_END_REFERENCE:                    Hook Code List.
-* HOOK_END_SUBSCRIPT:                    Hook Code List.
-* HOOK_END_SUPERSCRIPT:                  Hook Code List.
-* HOOK_END_WAVE:                         Hook Code List.
-* HOOK_GB2312:                           Hook Code List.
-* HOOK_INITIALIZE:                       Hook Code List.
-* HOOK_ISO8859_1:                        Hook Code List.
-* HOOK_NARROW_FONT:                      Hook Code List.
-* HOOK_NARROW_JISX0208:                  Hook Code List.
-* HOOK_NEWLINE:                          Hook Code List.
-* HOOK_NULL:                             Hook Code List.
-* HOOK_SET_INDENT:                       Hook Code List.
-* HOOK_WIDE_FONT:                        Hook Code List.
-* HOOK_WIDE_JISX0208:                    Hook Code List.
-* MAX_DIRECTORY_NAME_LENGTH <1>:         Subbook Functions.
-* MAX_DIRECTORY_NAME_LENGTH:             Appendix Functions.
-* MAX_FONTS:                             Font Functions.
-* MAX_KEYWORDS:                          Search Functions.
-* MAX_MULTI_ENTRIES:                     Search Functions.
-* MAX_MULTI_ENTRY_LABEL_LENGTH:          Search Functions.
-* MAX_MULTI_SEARCHES:                    Search Functions.
-* MAX_PATH_LENGTH:                       EB_Book Functions.
-* MAX_SUBBOOKS <1>:                      Subbook Functions.
-* MAX_SUBBOOKS:                          Appendix Functions.
-* MAX_TITLE_LENGTH:                      Subbook Functions.
-* MAX_WORD_LENGTH:                       Search Functions.
-* MULTI_INVALID:                         Search Data Types.
-* NUMBER_OF_ERRORS:                      Error Data Types.
-* NUMBER_OF_HOOKS:                       Text Data Types.
-* SIZE_NARROW_FONT_16:                   Font Constants.
-* SIZE_NARROW_FONT_16_BMP:               Font Constants.
-* SIZE_NARROW_FONT_16_GIF:               Font Constants.
-* SIZE_NARROW_FONT_16_XBM:               Font Constants.
-* SIZE_NARROW_FONT_16_XPM:               Font Constants.
-* SIZE_NARROW_FONT_24:                   Font Constants.
-* SIZE_NARROW_FONT_24_BMP:               Font Constants.
-* SIZE_NARROW_FONT_24_GIF:               Font Constants.
-* SIZE_NARROW_FONT_24_XBM:               Font Constants.
-* SIZE_NARROW_FONT_24_XPM:               Font Constants.
-* SIZE_NARROW_FONT_30:                   Font Constants.
-* SIZE_NARROW_FONT_30_BMP:               Font Constants.
-* SIZE_NARROW_FONT_30_GIF:               Font Constants.
-* SIZE_NARROW_FONT_30_XBM:               Font Constants.
-* SIZE_NARROW_FONT_30_XPM:               Font Constants.
-* SIZE_NARROW_FONT_48:                   Font Constants.
-* SIZE_NARROW_FONT_48_BMP:               Font Constants.
-* SIZE_NARROW_FONT_48_GIF:               Font Constants.
-* SIZE_NARROW_FONT_48_XBM:               Font Constants.
-* SIZE_NARROW_FONT_48_XPM:               Font Constants.
-* SIZE_WIDE_FONT_16:                     Font Constants.
-* SIZE_WIDE_FONT_16_BMP:                 Font Constants.
-* SIZE_WIDE_FONT_16_GIF:                 Font Constants.
-* SIZE_WIDE_FONT_16_XBM:                 Font Constants.
-* SIZE_WIDE_FONT_16_XPM:                 Font Constants.
-* SIZE_WIDE_FONT_24:                     Font Constants.
-* SIZE_WIDE_FONT_24_BMP:                 Font Constants.
-* SIZE_WIDE_FONT_24_GIF:                 Font Constants.
-* SIZE_WIDE_FONT_24_XBM:                 Font Constants.
-* SIZE_WIDE_FONT_24_XPM:                 Font Constants.
-* SIZE_WIDE_FONT_30:                     Font Constants.
-* SIZE_WIDE_FONT_30_BMP:                 Font Constants.
-* SIZE_WIDE_FONT_30_GIF:                 Font Constants.
-* SIZE_WIDE_FONT_30_XBM:                 Font Constants.
-* SIZE_WIDE_FONT_30_XPM:                 Font Constants.
-* SIZE_WIDE_FONT_48:                     Font Constants.
-* SIZE_WIDE_FONT_48_BMP:                 Font Constants.
-* SIZE_WIDE_FONT_48_GIF:                 Font Constants.
-* SIZE_WIDE_FONT_48_XBM:                 Font Constants.
-* SIZE_WIDE_FONT_48_XPM:                 Font Constants.
-* SUBBOOK_INVALID:                       Subbook Data Types.
-* SUCCESS:                               Error Code List.
-* WIDTH_NARROW_FONT_16:                  Font Constants.
-* WIDTH_NARROW_FONT_24:                  Font Constants.
-* WIDTH_NARROW_FONT_30:                  Font Constants.
-* WIDTH_NARROW_FONT_48:                  Font Constants.
-* WIDTH_WIDE_FONT_16:                    Font Constants.
-* WIDTH_WIDE_FONT_24:                    Font Constants.
-* WIDTH_WIDE_FONT_30:                    Font Constants.
-* WIDTH_WIDE_FONT_48:                    Font Constants.
-
 

@@ -40,7 +40,7 @@ typedef struct {
 /*
  * Function Declarations.
  */
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 void url_parts_initialize(URL_Parts *);
 void url_parts_finalize(URL_Parts *);
 const char *url_parts_url(URL_Parts *);

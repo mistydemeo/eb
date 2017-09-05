@@ -89,6 +89,7 @@ by Free Software Foundation, Inc.
 * Local Character::             外字
 * Binary Data::                 バイナリデータ
 * Appendix Data::               appendix データ
+* Book List on Server::         サーバ上の書籍一覧
 * Indice::                      索引
 
 @detailmenu
@@ -149,6 +150,7 @@ CD-ROM 書籍と @code{EB_Book} オブジェクト
 * Multi Search::                複合検索
 * EB_Hit::                      一致エントリの情報
 * Get Remained Entries::        残っているエントリの取得
+* Unify Duplicated Entries::    重複エントリの削除
 * Search Data Types::           データ型の詳細
 * Search Functions::            関数の詳細
 
@@ -200,6 +202,13 @@ appendix データ
 * Appendix Data Types::         
 * Appendix Functions::          関数の詳細
 * Appendix Sample::             サンプルプログラム
+
+サーバ上の書籍一覧
+
+* EB_BookList Object::          @code{EB_BookList} オブジェクト
+* BookList Data::               データ型の詳細
+* BookList Functions::          関数の詳細
+* BookList Sample::             サンプルプログラム
 
 索引
 
@@ -693,11 +702,11 @@ Autoconf はバージョン 2.50 以降が必要です。
 (もしくは @file{configure.in}) に、次の行を加えます。
 
 @example
-eb_LIB_EB3
+eb_LIB_EB4
 @end example
 
 @noindent
-マクロ @code{eb_LIB_EB3} は、EB ライブラリの使用に必要な一切のチェック
+マクロ @code{eb_LIB_EB4} は、EB ライブラリの使用に必要な一切のチェック
 を行い、さらに @file{configure} に次のオプションを追加します。
 
 @example
@@ -707,17 +716,17 @@ eb_LIB_EB3
 @noindent
 @file{eb.conf} は、EB ライブラリをインストールしたときの情報を記録した
 ファイルで、ライブラリと一緒にインストールされます。
-@code{eb_LIB_EB3} はこのファイルを読み込んで、C コンパイラに渡さなければ
+@code{eb_LIB_EB4} はこのファイルを読み込んで、C コンパイラに渡さなければ
 いけないオプションなどの情報を得ます。
 @samp{--eb-conf-file} は、@file{eb.conf} のファイル名を明示的に指定する
 オプションです。
 
-マクロ @code{eb_LIB_EB3} は、@file{eb3.m4} というファイルで提供されて
+マクロ @code{eb_LIB_EB4} は、@file{eb4.m4} というファイルで提供されて
 います。
 EB ライブラリを @file{/usr/local} にインストールし、個々のファイルの
 インストール先を変更していなければ、@file{/usr/local/share/aclocal} に
 インストールされます。
-この @file{eb3.m4} をソースコードの適当なディレクトリの下 (たとえば
+この @file{eb4.m4} をソースコードの適当なディレクトリの下 (たとえば
 @file{m4}) にコピーして下さい。
 
 @code{aclocal} コマンドで @file{aclocal.m4} を再生成する際は、
@@ -1956,6 +1965,24 @@ appendix は副本を一つも持っていない。
 からアクセスを拒否された。
 @end defvr
 
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_UNBOUND_BOOKLIST
+@xvindex ERR_EBNET_UNBOUND_BOOKLIST
+
+呼び出された EB ライブラリの関数は、遠隔ホストに結び付けられた
+@code{EB_BookList} オブジェクトを引数にとるが、与えられたオブジェクトは
+遠隔ホストに結び付けられていなかった。
+@end defvr
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@defvr Constant EB_ERR_NO_SUCH_BOOK
+@xvindex ERR_NO_SUCH_BOOK
+
+@code{EB_BookList} オブジェクトと書籍の要素番号を関数に渡されたが、
+@code{EB_BookList} に結び付けられた遠隔ホスト上には、その要素番号に該当
+する書籍は存在しない。
+@end defvr
+
 @c -------------------------------------------------------------------
 @node Error Functions,  , Error Code List, Error Handling
 @section 関数の詳細
@@ -2403,6 +2430,7 @@ EB ライブラリでは、検索を行うことができるのは、選択中の副本に対して
 * Multi Search::                複合検索
 * EB_Hit::                      一致エントリの情報
 * Get Remained Entries::        残っているエントリの取得
+* Unify Duplicated Entries::    重複エントリの削除
 * Search Data Types::           データ型の詳細
 * Search Functions::            関数の詳細
 @end menu
@@ -2735,7 +2763,7 @@ if (eb_hit_list(&book, MAX_HITS, hits, &hit_count)
 @pxref{Text Data, , テキストデータ}。
 
 @c -------------------------------------------------------------------
-@node Get Remained Entries, Search Data Types, EB_Hit, Search
+@node Get Remained Entries, Unify Duplicated Entries, EB_Hit, Search
 @section 残っているエントリの取得
 
 前に述べたように、@code{eb_hit_list()} を呼び出すときは、一致する
@@ -2779,7 +2807,49 @@ for (;;) @{
 一致エントリの取得をそれ以上続けることはできません。
 
 @c -------------------------------------------------------------------
-@node Search Data Types, Search Functions, Get Remained Entries, Search
+@node Unify Duplicated Entries, Search Data Types, Get Remained Entries, Search
+@section 重複エントリの削除
+
+@code{eb_hit_list()} を用いて一致したエントリを取得すると、中身が実質的に
+変わらないエントリが複数含まれていることがあります。
+EB ライブラリは、こうした重複エントリの削除は行いません。
+必要なら、アプリケーション側で行うことになります。
+
+重複を完璧に取り除くなら、以下のすべての条件に一致するエントリを
+重複エントリとみなし、二度目以降に出現したエントリを削除します。
+
+@itemize
+@item エントリの指す本文の位置が同じ
+@item エントリの指す見出しの文字列 (位置ではなく文字列そのもの) が同じ
+@end itemize
+
+@noindent
+(見出し文字列の取得方法については、
+@pxref{Text Data, , テキストデータ}。)
+
+重複は、直前のエントリに対してのみ起こるとは限りません。
+たとえば、@code{eb_hit_list()} で一致エントリが 50 個得られた場合、
+最後の 50 個目は前方の 49 個と重複検査を行う必要があります。
+したがって、全体ではエントリ同士の比較を 1 + 2 + ... + 49 = 1225 回
+行うことになります。
+
+書籍によっては重複エントリが取りきれない可能性もありますが、もう少し
+簡単な方法もいくつかあります。
+処理を簡単にする第一の方法は、重複エントリの判定条件を次のように変える
+ことです。
+
+@itemize
+@item エントリの指す本文の位置が同じ
+@item エントリの指す見出しの文字列の位置が同じ
+@end itemize
+
+さらに処理を簡単にするには、直前の 1個のエントリに対してだけ重複検査を
+行うという方法もあります。
+これなら、50 個の一致エントリに対して、比較は 49 回で済みます。
+ただしこの方法は、書籍によってはまったく効果がありません。
+
+@c -------------------------------------------------------------------
+@node Search Data Types, Search Functions, Unify Duplicated Entries, Search
 @section データ型の詳細
 
 この節で説明しているデータ型を使うには、次のようにヘッダファイルを
@@ -5872,7 +5942,7 @@ XBM はモノクロ図版用のデータ形式なので、色の設定はありません。
 @end deftypefun
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@deftypefun void eb_font_list (EB_Book *@var{book}, EB_Font_Code *@var{font_list}, int *@var{font_count})
+@deftypefun EB_Error_Code eb_font_list (EB_Book *@var{book}, EB_Font_Code *@var{font_list}, int *@var{font_count})
 @xfindex font_list
 @xvindex MAX_FONTS
 
@@ -6717,7 +6787,7 @@ EB ライブラリでは、動画データのファイル名はフック関数
 @end deftypefun
 
 @c ===================================================================
-@node Appendix Data, Indice, Binary Data, Top
+@node Appendix Data, Book List on Server, Binary Data, Top
 @chapter appendix データ
 
 @dfn{appendix} (@dfn{付録}) とは CD-ROM 書籍の補助データのことです。
@@ -7068,7 +7138,7 @@ CD-ROM 書籍へのアクセスは、すべてこの型のオブジェクトを介して行います。
 @end deftypefun
 
 @c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-@deftypefun void eb_bind_appendix (EB_Appendix *@var{app}, const char *@var{path})
+@deftypefun EB_Error_Code eb_bind_appendix (EB_Appendix *@var{app}, const char *@var{path})
 @xfindex bind_appendix
 
 関数 @code{eb_bind_appendix()} は、@var{app} の指す
@@ -7432,7 +7502,294 @@ eb_backward_narrow_font_character (book, -n, character_number);
 @include appendix-c.texi
 
 @c ===================================================================
-@node Indice,  , Appendix Data, Top
+@node Book List on Server, Indice, Appendix Data, Top
+@chapter サーバ上の書籍一覧
+
+EBNET サーバから遠隔アクセスを行う際、サーバがそのクライアントに対して
+アクセスを許可している書籍や appendix データの一覧を取得することが
+できます。
+
+このとき、EBNET サーバを指定する遠隔アクセス記述子には、特定の書籍や
+appendix データに対するアクセスとは異なり、書籍名は指定しません。
+すなわち、一般形は次のようになります。
+
+@example
+@group
+ebnet://@var{ホスト}:@var{ポート}/
+@end group
+@end example
+
+@noindent
+末尾の `/' はなくても構いません。
+@samp{:} とそれに続くポート番号は省略可能で、その場合は 22010 番ポート
+を利用することを意味します。
+
+ebinfo コマンドの --book-list オプション指定時の挙動は、EB ライブラリ
+のこの機能によって実装されています。
+(ebinfo についての詳細は、
+@pxref{Book list on EBNET server, , EBNET サーバの書籍一覧, ebinfo-ja, ebinfo-ja}。)
+
+@example
+@group
+% ebinfo --book-list ebnet://localhost
+名前             題名
+encycl           ブラウンコンサイス百科事典
+encycl.app       ブラウンコンサイス百科事典 (appendix)
+crossword        クロスワードパズル辞典
+travel           ワールドトラベルガイド
+@end group
+@end example
+
+名前の末尾が @samp{.app} になっているものは appendix データで、その他
+は書籍本体です。
+この例の書籍 @samp{encycl} に対してアクセスするなら、遠隔アクセス識別子
+は @code{ebnet://localhost/encycl} になります。
+
+なお、クライアントに対してアクセスを許可していない書籍や appendix データ
+は、サーが側で一覧から除外されます。
+
+@menu
+* EB_BookList Object::          @code{EB_BookList} オブジェクト
+* BookList Data::               データ型の詳細
+* BookList Functions::          関数の詳細
+* BookList Sample::             サンプルプログラム
+@end menu
+
+@c -------------------------------------------------------------------
+@node EB_BookList Object, BookList Data, Book List on Server, Book List on Server
+@section @code{EB_BookList} オブジェクト
+
+EBNET サーバの提供する書籍および appendix データの一覧を取得するには、
+まず @code{EB_BookList} 型のオブジェクトを用意する必要があります。
+
+@example
+EB_BookList bl;
+@end example
+
+@noindent
+オブジェクトの領域は、@code{malloc()} で確保しても構いません。
+
+@example
+@group
+EB_BookList *bl_pointer;
+
+bl_pointer = (EB_BookList *) malloc(sizeof(EB_BookList));
+@end group
+@end example
+
+@code{EB_Book} オブジェクトと同様に、@code{EB_BookList} オブジェクトも
+使う前に中身を初期化する必要があります。
+これは、@code{eb_initialize_booklist()} という関数で行います。
+
+@example
+@group
+eb_initialize_booklist(&bl);
+eb_initialize_booklist(bl_pointer);
+@end group
+@end example
+
+初期化が完了したら、特定のサーバとオブジェクトを結びつけます。
+たとえば、@code{ebnet://localhost} で表されるサーバに対して、オブジェクト
+を結びつけるには次のようにします。
+
+@example
+@group
+if (eb_bind_booklist(&bl, "ebnet://localhost") != EB_SUCCESS) @{
+    printf("eb_bind_booklist() failed\n");
+    return;
+@}
+@end group
+@end example
+
+@noindent
+これはちょうど、@code{EB_Book} オブジェクトに対して @code{eb_bind()}
+を呼ぶのと同じです。
+
+こうして、ようやく書籍一覧の情報を取り出すことができます。
+これには @code{eb_booklist_book_count()}, @code{eb_booklist_book_name()}, 
+@code{eb_booklist_book_title()} という 3 つの関数を使用します。
+これらの関数はそれぞれ、クライアントがアクセス可能な書籍の数、各書籍
+および appendix データの名称 (アクセス識別子として指定する名前)、
+各書籍と appendix データの題名を得ることができます。
+
+@example
+@group
+char *name, *title;
+int count, i;
+
+count = eb_booklist_book_count(&bl);
+for (i = 0; i < count; i++) @{
+    if (eb_booklist_book_name(&bl, i, &name) != EB_SUCCESS) @{
+        printf("eb_booklist_book_name(%d) failed\n", i);
+        return;
+    @}
+    if (eb_booklist_book_title(&bl, i, &title) != EB_SUCCESS) @{
+        printf("eb_booklist_book_title(%d) failed\n", i);
+        return;
+    @}
+    printf("name = %s, title = %s\n", name, title);
+@}
+@end group
+@end example
+
+@noindent
+@code{EB_BookList} オブジェクトを使い終わったら、必ず後始末を行います。
+
+@example
+eb_finalize_booklist(&bl);
+eb_finalize_booklist(bl_pointer);
+@end example
+
+オブジェクトの領域を @code{malloc()} で確保した場合は、
+@code{eb_finalize_booklist()} を呼んだ後ならば、オブジェクトの領域を
+安全に解放することができます。
+
+@example
+free(bl_pointer);
+@end example
+
+@c -------------------------------------------------------------------
+@node BookList Data, BookList Functions, EB_BookList Object, Book List on Server
+@section データ型の詳細
+
+この節で説明しているデータ型を使うには、次のようにヘッダファイルを
+読み込んで下さい。
+
+@example
+#include <eb/booklist.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftp {Data type} EB_BookList
+@xtindex BookList
+
+@code{EB_BookList} 型は、EBNET サーバ上が使っている書籍および appendix
+の一覧を取得する際に用いるオクジェクトの型です。
+
+@noindent
+@code{EB_BookList} オブジェクトを使用する際は、まずそのオブジェクトに
+対して @code{eb_initialize_booklist()} を呼んで初期化する必要があります。
+@end deftp
+
+@c -------------------------------------------------------------------
+@node BookList Functions, BookList Sample, BookList Data, Book List on Server
+@section 関数の詳細
+
+この節で説明している関数を使うには、次のようにヘッダファイルを読み込んで
+下さい。
+
+@example
+#include <eb/booklist.h>
+@end example
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_initialize_booklist (EB_BookList *@var{bl})
+@xfindex initialize_booklist
+
+関数 @code{eb_initialize_booklist()} は、@var{bl} の指す
+@code{EB_BookList} オブジェクトを初期化します。
+@code{EB_BookList} オブジェクトに対して EB ライブラリの他の関数を呼ぶ
+前に、必ずそのオブジェクトを初期化しなくてはなりません。
+初期化していないオブジェクトに対して、EB ライブラリの他の関数を呼んだ
+場合の動作は未定義です。
+また、すでに初期化したオブジェクトに対して、
+再度 @code{eb_initialize_booklist()} を呼んではいけません。
+呼んだ場合の動作は未定義です。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_bind_booklist (EB_BookList *@var{bl}, const char *@var{path})
+@xfindex bind_booklist
+
+関数 @code{eb_bind_booklist()} は、@var{app} の指す
+@code{EB_BookList} オブジェクトを、遠隔アクセス記述子 @var{path} で指定
+された EBNET サーバに結び付けます。
+
+オブジェクトがすでにサーバに結び付いていた場合、そのサーバとの結び付き
+を解いてから、@var{path} にあるサーバに結び付けます。
+
+成功すると、関数は @code{EB_SUCCESS} を返します。
+失敗すると、オブジェクトをサーバとの結び付きを解かれた状態にして、原因
+を示すエラーコードを返します。
+
+@var{path} は、@code{EB_MAX_PATH_LENGTH} バイトに収まていなくては
+なりません。
+これを超えると、@code{EB_ERR_TOO_LONG_FILE_NAME} を返します。
+また、書籍名を指定していない遠隔アクセス記述子でなければなりません。
+それ以外の形式だと、@code{EB_ERR_BAD_FILE_NAME} を返します。
+
+使用している EB ライブラリのバイナリが、遠隔アクセスに非対応のもので
+ある場合、@code{EB_ERR_EBNET_UNSUPPORTED} が返ります。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun void eb_finalize_booklist (EB_BookList *@var{bl})
+@xfindex finalize_booklist
+
+関数 @code{eb_finalize_booklist()} は、@var{bl} が指す @code{EB_BookList}
+オブジェクトの後始末を行います。
+
+オブジェクトが割り当てて管理していたメモリはすべて解放され、
+ファイルディスクリプタもすべて閉じられます。
+オブジェクトが EBNET サーバと結び付いていた場合は、結び付きが解かれます。
+
+後始末をしたオブジェクトに対して @code{eb_bind_booklist()} を呼ぶことで、
+オブジェクトを再利用することができます。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun int eb_booklist_book_count (EB_BookList *@var{bl})
+@xfindex booklist_book_count
+
+関数 @code{eb_booklist_book_count()} は、EBNET サーバがこのクライアント
+に対してアクセスを許可している書籍および appendix データの数を取得します。
+
+オブジェクト @var{bl} の指す @code{EB_BookList} オブジェクトは、
+あらかじめ EBNET サーバに結びついている必要があります。
+結びついていない場合は、@code{EB_ERR_UNBOUND_BOOKLIST} を返します。
+@end deftypefun
+
+@c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+@deftypefun EB_Error_Code eb_booklist_book_name (EB_BookList *@var{bl}, int @var{i}, char **@var{name})
+@deftypefunx EB_Error_Code eb_booklist_book_title (EB_BookList *@var{bl}, int @var{i}, char **@var{title})
+@xfindex booklist_book_name
+@xfindex booklist_book_title
+
+関数 @code{eb_booklist_book_name()} は、EBNET サーバの書籍や
+appendix データの名称を取得します。
+ここで言う「名称」とは、遠隔アクセス識別子で指定する書籍名のことです。
+つまり、@samp{ebnet://localhost/dict} の @samp{dict} の部分を指します。
+同様に、関数 @code{eb_booklist_book_title()} は、書籍や appendix の題名
+を取得します。
+
+いずれの関数も、EBNET サーバ上の何番目の書籍もしくは appendix の情報を
+取得するのかを、引数 @var{i} で指定します。
+先頭は 1 番目ではなく 0 番目になります。
+
+成功すると、関数は書籍の名称、題名へのポインタを *@var{name}, *@var{title}
+に書き込み、@code{EB_SUCCESS} を返します。
+なお、このポインタ値は オブジェクト @code{bl} が保持している文字列を指す
+ようになっています。
+@code{bl} に対して @code{eb_finalize_booklist()} を呼んでしまうと、この
+文字列も参照不可能になってしまいますので、注意して下さい。
+
+オブジェクト @var{bl} の指す @code{EB_BookList} オブジェクトは、
+あらかじめ EBNET サーバに結びついている必要があります。
+結びついていない場合は、@code{EB_ERR_UNBOUND_BOOKLIST} を返します。
+また、@var{i} は 0 以上かつサーバが提供している書籍および appendix の
+総数未満でなければなりません。
+これ以外の値のときは、@code{EB_ERR_NO_SUCH_BOOK} が返ります。
+@end deftypefun
+
+@c -------------------------------------------------------------------
+@node BookList Sample,  , BookList Functions, Book List on Server
+@section サンプルプログラム
+
+@pindex booklist.c
+@include booklist-c.texi
+
+@c ===================================================================
+@node Indice,  , Book List on Server, Top
 @appendix 索引
 
 @menu

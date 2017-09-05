@@ -187,11 +187,15 @@ Optional Feature List
    `configure' in this package recognizes the following `--enable-' and
 `--with-' options.
 
+`--enable-ebnet'
+     Enable remote access support.  The default value is `yes'.
+
 `--enable-ipv6'
      Enable IPv6 support for remote access.
      The default is `yes' if the system supports IPv6.  `configure'
      reports an error if you specify `yes' but `configure' fails to
-     compile a sample IPv6 program.
+     compile a sample IPv6 program.  `configure' ignores this option
+     if you also specify `--enable-ebnet=no'.
 
 `--enable-pthread'
      EB Library is compiled with pthread support codes.

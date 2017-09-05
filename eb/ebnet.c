@@ -90,7 +90,7 @@ static int write_string_all EB_P((int, int, const char *));
 void
 ebnet_initialize()
 {
-#ifdef WIN32
+#ifdef WINSOCK
     WSADATA wsa_data;
 
     WSAStartup(MAKEWORD(2, 2), &wsa_data);
@@ -104,7 +104,7 @@ ebnet_initialize()
  * Get a book list from a server.
  */
 EB_Error_Code
-ebnet_get_booklist(booklist, url)
+ebnet_bind_booklist(booklist, url)
     EB_BookList *booklist;
     const char *url;
 {
@@ -121,7 +121,7 @@ ebnet_get_booklist(booklist, url)
     int lost_sync;
     int retry_count = 0;
 
-    LOG(("in: ebnet_booklist(url=%s)", url));
+    LOG(("in: ebnet_bind_booklist(url=%s)", url));
 
   retry:
     lost_sync = 0;
@@ -191,7 +191,7 @@ ebnet_get_booklist(booklist, url)
 
     ebnet_disconnect_socket(ebnet_file);
     finalize_line_buffer(&line_buffer);
-    LOG(("out: ebnet_booklist() = %s", eb_error_string(EB_SUCCESS)));
+    LOG(("out: ebnet_bind_booklist() = %s", eb_error_string(EB_SUCCESS)));
     return EB_SUCCESS;
 
     /*
@@ -211,7 +211,7 @@ ebnet_get_booklist(booklist, url)
 	    goto retry;
 	}
     }
-    LOG(("out: ebnet_booklist() = %s", eb_error_string(error_code)));
+    LOG(("out: ebnet_bind_booklist() = %s", eb_error_string(error_code)));
     return error_code;
 }
 

@@ -1,5 +1,5 @@
-これは ebappendix-ja.info、 ebappendix-ja.texi より makeinfo バージョン
-4.5 によって作成されました。
+これは ./ebappendix-ja.info、./ebappendix-ja.texi より makeinfo
+バージョン 4.5 によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebappendix-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta3 版です。 EB ライブラリバージョン 4.0beta3 に対
-応しています。
+   この文書は第 4.0 版です。 EB ライブラリバージョン 4.0 に対応していま
+す。
 
 * Menu:
 
@@ -585,20 +585,20 @@ File: ebappendix-ja.info,  Node: Options to ebappendix,  Prev: Merge Appendix,  
 
 
 Tag Table:
-Node: Top1034
-Node: Introduction2089
-Node: What is Appendix2827
-Node: What is ebappendix4675
-Node: Write Appendix Source5349
-Node: What is catalog.app6786
-Node: Write catalog.app7801
-Node: What is subbook.app9227
-Node: subbook.app Syntax10047
-Node: Single Directives12091
-Node: Group Directives13484
-Node: Generate Appendix15671
-Node: Invoke ebappendix16174
-Node: Merge Appendix17141
-Node: Options to ebappendix19459
+Node: Top1037
+Node: Introduction2082
+Node: What is Appendix2820
+Node: What is ebappendix4668
+Node: Write Appendix Source5342
+Node: What is catalog.app6779
+Node: Write catalog.app7794
+Node: What is subbook.app9220
+Node: subbook.app Syntax10040
+Node: Single Directives12084
+Node: Group Directives13477
+Node: Generate Appendix15664
+Node: Invoke ebappendix16167
+Node: Merge Appendix17134
+Node: Options to ebappendix19452
 
 End Tag Table

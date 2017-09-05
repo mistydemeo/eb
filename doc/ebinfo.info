@@ -1,4 +1,5 @@
-This is ebinfo.info, produced by makeinfo version 4.2 from ebinfo.texi.
+これは ./ebinfo.info、./ebinfo.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 4.0beta3, for EB Library version 4.0beta3.
+   This is edition 4.0, for EB Library version 4.0.
 
 * Menu:
 
@@ -56,7 +57,7 @@ _without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 4.0beta3, for EB Library version 4.0beta3.
+   This is edition 4.0, for EB Library version 4.0.
 
 
 File: ebinfo.info,  Node: Invoke ebinfo,  Next: Details about Information,  Prev: Introduction,  Up: Top
@@ -179,6 +180,7 @@ search methods:
     graphic
           Graphic search.
 
+
 font sizes:
      A list of sizes which of fonts the subook has.  The list consists
      of a part or all of the four items; 16, 24, 30 and 48.
@@ -188,6 +190,7 @@ narrow font characters:
 
 wide font characters:
      Range of character numbers of a wide font defined in the subbook.
+
 
 
 File: ebinfo.info,  Node: Book list on EBNET server,  Next: Options to ebinfo,  Prev: Details about Information,  Up: Top
@@ -210,8 +213,9 @@ without book name.  For example,
      crossword        Crossword Puzzle Dictionary
      travel           World Travel Guide
 
-The server has three books and one appendix.  Then, you can see
-information about the book `encycl' by this way:
+An entry whose name ends with `.app' in the list is an appendix, and
+others are books.  Note that EBNET server doesn't show books and
+appendixes not permitted to be accessed from the client.
 
      % ebinfo ebnet://dict.example.com/cncyclopedia
      disc type: EB/EBG/EBXA/EBXA-C/S-EBXA
@@ -257,11 +261,11 @@ long as they are unique.
 
 
 Tag Table:
-Node: Top1028
-Node: Introduction1446
-Node: Invoke ebinfo2222
-Node: Details about Information4280
+Node: Top1046
+Node: Introduction1454
+Node: Invoke ebinfo2220
+Node: Details about Information4278
 Node: Book list on EBNET server6013
-Node: Options to ebinfo7291
+Node: Options to ebinfo7369
 
 End Tag Table

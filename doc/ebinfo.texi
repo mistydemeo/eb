@@ -284,8 +284,10 @@ travel           World Travel Guide
 @end example
 
 @noindent
-The server has three books and one appendix.
-Then, you can see information about the book @samp{encycl} by this way:
+An entry whose name ends with @samp{.app} in the list is an appendix,
+and others are books.
+Note that EBNET server doesn't show books and appendixes not permitted
+to be accessed from the client.
 
 @example
 @group

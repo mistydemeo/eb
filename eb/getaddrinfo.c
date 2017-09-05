@@ -109,20 +109,20 @@
 
 #ifndef HAVE_MEMCPY
 #define memcpy(d, s, n) bcopy((s), (d), (n))
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 void *memchr(const void *, int, size_t);
 int memcmp(const void *, const void *, size_t);
 void *memmove(void *, const void *, size_t);
 void *memset(void *, int, size_t);
-#else /* not __STDC__ or WIN32 */
+#else
 char *memchr();
 int memcmp();
 char *memmove();
 char *memset();
-#endif /* not __STDC__ or WIN32 */
-#endif /* not HAVE_MEMCPY */
+#endif
+#endif
 
-#if !defined(H_ERRNO_DECLARED) && !defined(WIN32)
+#if !defined(H_ERRNO_DECLARED) && !defined(WINSOCK)
 extern int h_errno;
 #endif
 
@@ -198,7 +198,7 @@ static pthread_mutex_t gai_mutex = PTHREAD_MUTEX_INITIALIZER;
 /*
  * Declaration of static functions.
  */
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 static int is_integer(const char *);
 static int is_address(const char *);
 static int itoa_length(int);
@@ -491,7 +491,7 @@ getaddrinfo(nodename, servname, hints, res)
     *res = head_res;
 
   end:
-#ifndef WIN32
+#ifndef WINSOCK
     h_errno = saved_h_errno;
 #else
     WSASetLastError(saved_h_errno);
@@ -588,7 +588,7 @@ getnameinfo(sa, salen, node, nodelen, serv, servlen, flags)
     }
 
   end:
-#ifndef WIN32
+#ifndef WINSOCK
     h_errno = saved_h_errno;
 #else
     WSASetLastError(saved_h_errno);

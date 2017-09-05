@@ -1,5 +1,5 @@
-This is ebstopcode.info, produced by makeinfo version 4.2 from
-ebstopcode.texi.
+これは ./ebstopcode.info、./ebstopcode.texi より makeinfo バージョン
+4.5 によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebstopcode.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 4.0beta3, for EB Library version 4.0beta3.
+   This is edition 4.0, for EB Library version 4.0.
 
 * Menu:
 
@@ -57,7 +57,7 @@ In that case, you have to tell EB Library a correct stop code using
    The `ebstopcode' command is a utility to analyze text stop code in a
 CD-ROM book.
 
-   This is edition 4.0beta3, for EB Library version 4.0beta3.
+   This is edition 4.0, for EB Library version 4.0.
 
 
 File: ebstopcode.info,  Node: Invoke ebstopcode,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -189,9 +189,9 @@ allowed as long as they are unique.
 
 
 Tag Table:
-Node: Top1040
-Node: Introduction1364
-Node: Invoke ebstopcode2227
-Node: Summary of Options5019
+Node: Top1058
+Node: Introduction1372
+Node: Invoke ebstopcode2225
+Node: Summary of Options5017
 
 End Tag Table

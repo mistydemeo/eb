@@ -1,4 +1,5 @@
-This is ebfont.info, produced by makeinfo version 4.2 from ebfont.texi.
+これは ./ebfont.info、./ebfont.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 4.0beta3, for EB Library version 4.0beta3.
+   This is edition 4.0, for EB Library version 4.0.
 
 * Menu:
 
@@ -65,7 +66,7 @@ _without any warranty_; without even the implied warranty of
 merchantability or fitness for a particular purpose.  See the GNU
 General Public License for more details.
 
-   This is edition 4.0beta3, for EB Library version 4.0beta3.
+   This is edition 4.0, for EB Library version 4.0.
 
 
 File: ebfont.info,  Node: What is Local Character,  Next: Invoke ebfont,  Prev: Introduction,  Up: Top
@@ -310,13 +311,13 @@ long as they are unique.
 
 
 Tag Table:
-Node: Top1030
-Node: Introduction1583
-Node: What is Local Character2459
-Node: Invoke ebfont4032
-Node: Image Formats5560
-Node: Heights6545
-Node: Subbooks7304
-Node: Summary of Options9237
+Node: Top1048
+Node: Introduction1591
+Node: What is Local Character2457
+Node: Invoke ebfont4030
+Node: Image Formats5558
+Node: Heights6543
+Node: Subbooks7302
+Node: Summary of Options9235
 
 End Tag Table

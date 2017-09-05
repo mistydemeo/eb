@@ -1,3 +1,99 @@
+2003-12-28  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/defs.h: Do not be generated from `eb/defs.h.in' any longer.
+	* eb/Makefile.am (EXTRA_DIST, MAINTAINERCLEANFILES): Delete
+	`stamp-defs-h' and `defs.h.in'.
+	* eb/Makefile.am (BUILT_SOURCES): Delete `defs.h'.
+
+	* configure.ac (AC_ARG_ENABLE): Add `--enable-ebnet' option.
+	* eb/Makefile.am (libeb_ebnet_sources): Define the variable according
+	with ENABLE_EBNET.
+
+	* samples/Makefile.am (noinst_PROGRAMS): Add `booklist'.
+	* doc-ja/Makefile.am (eb_ja_TEXINFOS, MAINTAINERCLEANFILES):
+	add `booklist-c.texi'.
+
+	* eb/zio.h: Fix TIME_WITH_SYS_TIME check code.
+
+	* eb/defs.h: Include `sysdefs.h'.  Use `EB_ENABLE_PTHREAD' and
+	`EB_ENABLE_EBNET', instead of `EBCONF_ENABLE_PTHREAD' and
+	`EBCONF_ENABLE_EBNET'.
+	* eb/Makefile.am (CLEANFILES): Add `stamp-sysdefs-h' and `sysdefs.h'.
+	* eb/Makefile.am (BUILT_SOURCES): Add `sysdefs.h'
+	* eb/Makefile.am (nodist_pkginclude_HEADERS): Defined.
+
+2003-12-22  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* m4/eb3.m4: Renamed to `eb4.m4'.
+	* m4/Makefile.am (m4data_DATA, EXTRA_DIST): Rename `eb4.m4' to
+	`eb3.m4'.
+
+	* Use Autoconf-2.59, Automake-1.8 and Libtool-1.5.
+	* m4/eb4.m4, m4/gettext.m4, m4/herrno.m4, m4/in6addr.m4,
+	m4/lcmessage.m4, m4/libtool.m4, m4/sockaddrin6.m4,
+	m4/utimbuf.m4, m4/voidpointer.m4: Quote function name to be defined
+	in AC_DEFUN.
+
+	* m4/eb4.m4 (AC_REQUIRE): Add AC_C_PROTOTYPES.
+
+2003-12-21  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb.conf.in: Always define EBCONF_ENABLE_EBNET.
+	* m4/eb3.m4: Check EBCONF_ENABLE_EBNET.
+	* eb/defs.h.in: Use EBCONF_ENABLE_EBNET instead of ENABLE_EBNET.
+
+	* eb/error.c, eb/error.h: Add two error codes EB_ERR_UNBOUND_BOOKLIST
+	and EB_ERR_NO_SUCH_BOOK.
+	* eb/defs.h, eb/booklist.c, eb/booklist.h: APIs for EB_BookList
+	are revised.  eb_booklist_book_count(), eb_booklist_book_name()
+	and eb_booklist_book_title() return EB_Error_Code.
+	* eb/defs.h, eb/booklist.c, eb/booklist.h: Support for pthread.
+	* eb/defs.h, eb/booklist.c, eb/booklist.h: Add internal object counter
+	for EB_BookList.
+
+2003-11-23  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* config.guess, config.sub, depcomp, install-sh, missing,
+	mkinstalldirs, doc/mdate-sh, doc-ja/mdate-sh:
+	Import from Autocomake-1.7.9.
+
+2003-11-22  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* m4/Makefile.am (EXTRA_DIST): Add `voidpointer.m4'.
+
+	* eb/search.c (eb_hit_list_keyword, eb_hit_list_multi): 
+	Don't perform comparison of input keyword and group entry element.
+
+	* eb/readtext.c (eb_read_text_internal): Fix a bug that EB Library
+	crashes when it outputs a debug log.
+
+2003-11-19  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* configure.ac (AC_C_VOID_POINTER, AC_C_PROTOTYPES): Added.
+	* configure.ac (AC_C_VOID_POINTER): Added.
+	* m4/voidpointer.m4: Define `AC_C_VOID_POINTER'.
+	* ebrefile/ebrefile.c, ebfont/ebfont.c, eb/zio.c, eb/memmove.c,
+	eb/zio.h, eb/urlparts.c, eb/urlparts.h, eb/linebuf.c, eb/build-pre.h,
+	eb/linebuf.h, eb/defs.h.in, eb/filename.c, eb/log.c, eb/multiplex.c,
+	eb/getaddrinfo.c, eb/eb.h, eb/getaddrinfo.h, eb/ebnet.c,
+	ebstopcode/ebstopcode.c, libebutils/getopt.c, libebutils/yesno.h,
+	libebutils/getopt.h, libebutils/ebutils.c, libebutils/makedir.h,
+	libebutils/getumask.h, libebutils/samefile.h, libebutils/memset.c,
+	ebinfo/ebinfo.c, ebzip/ebzip.h:
+	Use PROTOTYPES and VOID, instead of __STDC__ and WIN32.
+
+	* eb/log.c, eb/build-pre.h, eb/eb.h: Use `stdarg.h' if __STDC__ or
+	MSVC is defined.
+
+2003-11-12  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/match.c (eb_match_word_jis_kana): Rename the function to
+	`eb_match_word_kana_group'.
+	Add variant function eb_match_word_kana_group_single().
+	* eb/match.c (eb_exact_match_word_jis_kana): Rename the function to
+	`eb_exact_match_word_kana_group'.
+	Add variant function eb_match_exact_word_kana_group_single().
+
 2003-10-19  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.0beta3.

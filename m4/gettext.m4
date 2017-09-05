@@ -9,7 +9,7 @@
 
 # serial 5
 
-AC_DEFUN(eb_GNU_GETTEXT, [dnl
+AC_DEFUN([eb_GNU_GETTEXT], [dnl
   INTLINCS=
   INTLDEPS=
   INTLLIBS=

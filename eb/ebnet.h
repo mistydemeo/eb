@@ -78,7 +78,7 @@ ssize_t ebnet_get_file_size EB_P((int));
 
 /* ebnet.c */
 void ebnet_initialize EB_P((void));
-EB_Error_Code ebnet_get_booklist EB_P((EB_BookList *, const char *));
+EB_Error_Code ebnet_bind_booklist EB_P((EB_BookList *, const char *));
 EB_Error_Code ebnet_bind EB_P((EB_Book *, const char *));
 EB_Error_Code ebnet_bind_appendix EB_P((EB_Appendix *, const char *));
 void ebnet_finalize_book EB_P((EB_Book *));

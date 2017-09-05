@@ -58,7 +58,7 @@
 /*
  * Unexported functions.
  */
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 static void url_parts_canonicalize_path(char *);
 static void url_parts_expand_hex(char *);
 static void url_parts_convert_to_lower(char *);

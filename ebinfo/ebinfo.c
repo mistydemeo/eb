@@ -57,12 +57,12 @@
  * Trick for function protypes.
  */
 #ifndef EB_P
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 #define EB_P(p) p
-#else /* not __STDC__ or WIN32 */
-#define EB_P(p) ()
-#endif /* not __STDC__ or WIN32 */
-#endif /* EB_P */
+#else
+#define EB_P(p)
+#endif
+#endif
 
 /*
  * Tricks for gettext.
@@ -231,8 +231,8 @@ output_booklist(url)
     EB_BookList booklist;
     EB_Error_Code error_code;
     int book_count;
-    const char *name;
-    const char *title;
+    char *name;
+    char *title;
     size_t name_length;
     int i;
 
@@ -244,7 +244,7 @@ output_booklist(url)
 
     eb_initialize_booklist(&booklist);
 
-    error_code = eb_get_booklist(&booklist, url);
+    error_code = eb_bind_booklist(&booklist, url);
     if (error_code != EB_SUCCESS) {
 	output_error_message(error_code);
 	return error_code;
@@ -252,10 +252,24 @@ output_booklist(url)
 
     printf("%-20s  %s\n", _("Name"), _("Title"));
 
-    book_count = eb_booklist_book_count(&booklist);
+    error_code = eb_booklist_book_count(&booklist, &book_count);
+    if (error_code != EB_SUCCESS) {
+	output_error_message(error_code);
+	return error_code;
+    }
+
     for (i = 0; i < book_count; i++) {
-	name = eb_booklist_book_name(&booklist, i);
-	title = eb_booklist_book_title(&booklist, i);
+	error_code = eb_booklist_book_name(&booklist, i, &name);
+	if (error_code != EB_SUCCESS) {
+	    output_error_message(error_code);
+	    break;
+	}
+	error_code = eb_booklist_book_title(&booklist, i, &title);
+	if (error_code != EB_SUCCESS) {
+	    output_error_message(error_code);
+	    break;
+	}
+
 	name_length = strlen(name);
 
 	printf("%-20s  ", name);

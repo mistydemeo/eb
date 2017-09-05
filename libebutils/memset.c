@@ -30,7 +30,7 @@
 #include <sys/types.h>
 
 #ifndef VOID
-#if defined(__STDC__) || defined(WIN32)
+#if defined(__STDC__) || defined(__cplusplus)
 #define VOID void
 #else
 #define VOID char

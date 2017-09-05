@@ -1,4 +1,4 @@
-これは eb-ja.info、 eb-ja.texi より makeinfo バージョン 4.5
+これは ./eb-ja.info、./eb-ja.texi より makeinfo バージョン 4.5
 によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -273,6 +273,18 @@ File: eb-ja.info,  Node: Error Code List,  Next: Error Functions,  Prev: Error D
  - Constant: EB_ERR_EBNET_NO_PERMISSION
      遠隔ホストへの接続を行ったが、その書籍への利用権限がないため、サー
      バ からアクセスを拒否された。
+
+ - Constant: EB_ERR_UNBOUND_BOOKLIST
+     呼び出された EB ライブラリの関数は、遠隔ホストに結び付けられた
+     `EB_BookList'
+     オブジェクトを引数にとるが、与えられたオブジェクトは遠隔ホストに結
+     び付けられていなかった。
+
+ - Constant: EB_ERR_NO_SUCH_BOOK
+     `EB_BookList' オブジェクトと書籍の要素番号を関数に渡されたが、
+     `EB_BookList'
+     に結び付けられた遠隔ホスト上には、その要素番号に該当する書籍は存在
+     しない。
 
 
 File: eb-ja.info,  Node: Error Functions,  Prev: Error Code List,  Up: Error Handling
@@ -728,6 +740,7 @@ File: eb-ja.info,  Node: Search,  Next: Text Data,  Prev: Subbook,  Up: Top
 * Multi Search::                複合検索
 * EB_Hit::                      一致エントリの情報
 * Get Remained Entries::        残っているエントリの取得
+* Unify Duplicated Entries::    重複エントリの削除
 * Search Data Types::           データ型の詳細
 * Search Functions::            関数の詳細
 
@@ -988,7 +1001,7 @@ File: eb-ja.info,  Node: EB_Hit,  Next: Get Remained Entries,  Prev: Multi Searc
 トデータ: Text Data.。
 
 
-File: eb-ja.info,  Node: Get Remained Entries,  Next: Search Data Types,  Prev: EB_Hit,  Up: Search
+File: eb-ja.info,  Node: Get Remained Entries,  Next: Unify Duplicated Entries,  Prev: EB_Hit,  Up: Search
 
 残っているエントリの取得
 ========================
@@ -1025,7 +1038,46 @@ File: eb-ja.info,  Node: Get Remained Entries,  Next: Search Data Types,  Prev: 
 トリの取得をそれ以上続けることはできません。
 
 
-File: eb-ja.info,  Node: Search Data Types,  Next: Search Functions,  Prev: Get Remained Entries,  Up: Search
+File: eb-ja.info,  Node: Unify Duplicated Entries,  Next: Search Data Types,  Prev: Get Remained Entries,  Up: Search
+
+重複エントリの削除
+==================
+
+   `eb_hit_list()'
+を用いて一致したエントリを取得すると、中身が実質的に変わらないエントリ
+が複数含まれていることがあります。 EB ライブラリは、こうした重複エント
+リの削除は行いません。
+必要なら、アプリケーション側で行うことになります。
+
+   重複を完璧に取り除くなら、以下のすべての条件に一致するエントリを重
+複エントリとみなし、二度目以降に出現したエントリを削除します。
+
+   * エントリの指す本文の位置が同じ
+
+   * エントリの指す見出しの文字列 (位置ではなく文字列そのもの) が同じ
+
+(見出し文字列の取得方法については、 *note テキストデータ: Text Data.。)
+
+   重複は、直前のエントリに対してのみ起こるとは限りません。 たとえば、
+`eb_hit_list()' で一致エントリが 50 個得られた場合、 最後の 50 個目は前
+方の 49 個と重複検査を行う必要があります。 したがって、全体ではエントリ
+同士の比較を 1 + 2 + ... + 49 = 1225 回行うことになります。
+
+書籍によっては重複エントリが取りきれない可能性もありますが、もう少し簡
+単な方法もいくつかあります。 処理を簡単にする第一の方法は、重複エントリ
+の判定条件を次のように変えることです。
+
+   * エントリの指す本文の位置が同じ
+
+   * エントリの指す見出しの文字列の位置が同じ
+
+   さらに処理を簡単にするには、直前の 1個のエントリに対してだけ重複検査
+を 行うという方法もあります。 これなら、50 個の一致エントリに対して、比
+較は 49 回で済みます。 ただしこの方法は、書籍によってはまったく効果があ
+りません。
+
+
+File: eb-ja.info,  Node: Search Data Types,  Next: Search Functions,  Prev: Unify Duplicated Entries,  Up: Search
 
 データ型の詳細
 ==============
@@ -1077,263 +1129,4 @@ File: eb-ja.info,  Node: Search Data Types,  Next: Search Functions,  Prev: Get 
      また、不正な複合検索コード値を表す `EB_MULTI_INVALID'
      という特別な副本コードが定義されています。 利用可能な複合検索に対
      して、この複合検索コードが割り当てられることはありません。
-
-
-File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
-
-関数の詳細
-==========
-
-   この節で説明している関数を使うには、次のようにヘッダファイルを読み込
-んで下さい。
-
-     #include <eb/eb.h>
-
- - 機能: int eb_have_word_search (EB_Book *BOOK)
- - 機能: int eb_have_endword_search (EB_Book *BOOK)
- - 機能: int eb_have_exactword_search (EB_Book *BOOK)
-     関数 `eb_have_word_search()' は、BOOK が選択中の副本で前方一致検
-     索メソッドが利用可能どうかを調べます。 同様に
-     `eb_have_endword_search()' は後方一致検索メソッドについて、
-     `eb_have_exactword_search()' は完全一致検索メソッドについて利用可
-     能どうかを調べます。
-
-     利用可能なら 1 を返します。 メソッドを持っていないか、そもそも副本
-     が選択されていない場合は 0 を返します。
-
- - 機能: int eb_have_keyword_search (EB_Book *BOOK)
-     関数 `eb_have_keyword_search()' は、BOOK が選択中の副本で条件検索
-     メソッドが利用可能どうかを調べます。
-
-     利用可能なら 1 を返します。 メソッドを持っていないか、そもそも副本
-     が選択されていない場合は 0 を返します。
-
- - 機能: int eb_have_multi_search (EB_Book *BOOK)
-     関数 `eb_have_multi_search()' は、BOOK が選択中の副本で複合検索メ
-     ソッドが利用可能どうかを調べます。
-
-     最低 1 種類でも利用可能なら 1 を返します。 メソッドを持っていない
-     か、そもそも副本が選択されていない場合は 0 を返します。
-
- - 機能 : EB_Error_Code eb_multi_search_list (EB_Book *BOOK,
-          EB_Multi_Search_Code *MULTI_LIST, int *MULTI_COUNT)
-     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
-     いる複合検索を調べ、複合検索コードの一覧を `EB_Multi_Search_Code'
-     型の配列にして、MULTI_LIST の指す領域に書き込みます。 配列は、最大
-     で `EB_MAX_MULTI_SEARCHES' 個の要素を持ちます。 加えて、複合検索の
-     種類数を MULTI_COUNT の指す領域に書き込みます。
-
-     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、
-     SUBBOOK_COUNT の指す領域に 0 を書き込み、原因を示すエラーコードを
-     返します。
-
-     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
-     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
-
- - 機能 : EB_Error_Code eb_multi_entry_count (EB_Book *BOOK,
-          EB_Multi_Search_Code MULTI_ID, int *ENTRY_COUNT)
-     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
-     いる複合検索 MULTI_ID について調べ、入力語の個数を ENTRY_COUNT の
-     指す領域に書き込みます。
-
-     成功すると、関数は `EB_SUCCESS' を返します。 このとき書き込まれる
-     入力語の個数は、1 以上 `EB_MAX_MULTI_ENTRIES' 以下になります。 失
-     敗すると、ENTRY_COUNT の指す領域には 0 を書き込み、原因を示すエラ
-     ーコードを返します。
-
-     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
-     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
-
- - 機能 : EB_Error_Code eb_multi_entry_label (EB_Book *BOOK,
-          EB_Multi_Search_Code MULTI_ID, int ENTRY_INDEX, char *LABEL)
-     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
-     いる複合検索 MULTI_ID について調べ、ENTRY_INDEX 番目の検索語の題
-     目を LABEL の指す領域に書き込みます。 ENTRY_INDEX は、先頭の検索語
-     を 0 番目と数えます。 題目は最長で `EB_MAX_MULTI_LABEL_LENGTH' バ
-     イトになります。 この長さに、ナル文字は含みません。
-
-     書籍の文字コード (*note [CD-ROM 書籍と `EB_Book' オブジェクト] デ
-     ータ型の詳細: EB_Book Data Types.)  が `EB_CHARCODE_ISO8859_1' な
-     ら、題目を表す文字列は ISO 8859-1 になり、それ以外の文字コードな
-     ら日本語 EUC になります。
-
-     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、LABEL の
-     指す領域には空文字列を書き込み、原因を示すエラーコードを返します。
-
-     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
-     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
-
- - 機能 : int eb_multi_entry_have_candidates (EB_Book *BOOK,
-          EB_Multi_Search_Code MULTI_ID, int ENTRY_INDEX)
-     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
-     いる複合検索 MULTI_ID について調べ、ENTRY_INDEX 番目の検索語が候
-     補一覧を持っているかどうか調べます。 ENTRY_INDEX は、先頭の検索語
-     を 0 番目と数えます。
-
-     持っていれば 1 を返します。 持っていないか、そもそも副本が選択され
-     ていない場合、あるいは MULTI_ID, や ENTRY_INDEX が不正な値だった場
-     合は 0 を返します。
-
- - 機能 : EB_Error_Code eb_multi_entry_candidates (EB_Book *BOOK,
-          EB_Multi_Search_Code MULTI_ID, int ENTRY_INDEX, EB_Position
-          *POSITION)
-     関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
-     いる複合検索 MULTI_ID について調べ、ENTRY_INDEX 番目の検索語の候
-     補一覧の位置を POSITION の指す領域に書き込みます。 先頭の検索語が
-     0 番目になります。
-
-     成功すると、関数は `EB_SUCCESS' を返します。 失敗すると、POSITIN
-     の指す領域には `eb_seek_text()'
-     が必ず失敗する位置情報を書き込み、原因を示すエラーコードを返します。
-
-     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
-     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
-
- - 機能 : EB_Error_Code eb_search_word (EB_Book *BOOK, const char
-          *INPUT_WORD)
- - 機能 : EB_Error_Code eb_search_endword (EB_Book *BOOK, const char
-          *INPUT_WORD)
- - 機能 : EB_Error_Code eb_search_exactword (EB_Book *BOOK, const char
-          *INPUT_WORD)
-     関数 `eb_search_word()' は、BOOK が選択中の副本に対する前方一致検
-     索をリクエストします。 同様に `eb_search_endword()' は後方一致検索
-     を、 `eb_search_exactword()' は完全一致検索をリクエストします。
-
-     検索する語は、引数 INPUT_WORD で指定します。 ただし、これらの関数
-     は検索をリクエストするだけで、一致したエントリの情報を返すことは
-     しません。 一致したエントリの取得には `eb_hit_list()' を使います。
-     関数は、成功すると `EB_SUCCESS' を返します。 失敗すると、原因を示
-     すエラーコードを返します。 失敗すると、関数を呼び出す前にリクエス
-     トしていた検索の状態記録はリセットされますので、その状態のまま
-     `eb_hit_list()' を呼び出しても、やはり失敗に終わります。
-
-     書籍の文字コード (*note [CD-ROM 書籍と `EB_Book' オブジェクト] デ
-     ータ型の詳細: EB_Book Data Types.)  が `EB_CHARCODE_ISO8859_1' な
-     ら、関数に渡す検索語は ISO 8859-1
-     で書かれていなければなりません。 それ以外の文字コードの場合は、日
-     本語 EUC で書かれていなければなりません。 不正な文字番号を含んでい
-     た場合、関数は `EB_ERR_BAD_WORD' を返します。
-
-     加えて、検索語は 1 バイト以上、 `EB_MAX_WORD_LENGTH' (= 255)
-     バイト以下でなければなりません。
-     この長さに、ナル文字は含みません。 長すぎる場合は、
-     `EB_ERR_TOO_LONG_WORD' を、 長さが 0 (空文字列) の場合は
-     `EB_ERR_EMPTY_WORD' を返します。
-
-     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
-     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 なお、一致
-     するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
-
- - 機能 : EB_Error_Code eb_search_keyword (EB_Book *BOOK, const char *
-          const INPUT_WORDS[])
- - 機能 : EB_Error_Code eb_search_multi (EB_Book *BOOK,
-          EB_Multi_Search_Code MULTI_ID, const char * const
-          INPUT_WORDS[])
-     関数 `eb_search_word()' は、BOOK が選択中の副本に対する条件検索を
-     リクエストします。 同様に `eb_search_multi()' は複合検索をリクエス
-     トします。
-
-     検索する語は、引数 INPUT_WORDS で指定します。 条件検索と複合検索は
-     いずれも複数個の検索語を受け付けますので、検索語を配列にして渡し
-     ます。 このとき、配列の末尾の要素には `NULL' を置き、配列の終端を
-     明示します。
-
-     どちらの関数も検索をリクエストするだけで、一致したエントリの情報を
-     返すことはしません。 一致したエントリの取得には `eb_hit_list()' を
-     使います。 関数は、成功すると `EB_SUCCESS' を返します。
-     失敗すると、原因を示すエラーコードを返します。 失敗すると、関数を
-     呼び出す前にリクエストしていた検索の状態記録はリセットされますの
-     で、その状態のまま `eb_hit_list()' を呼び出しても、やはり失敗に終
-     わります。
-
-     書籍の文字コード (*note [CD-ROM 書籍と `EB_Book' オブジェクト] デ
-     ータ型の詳細: EB_Book Data Types.)  が `EB_CHARCODE_ISO8859_1' な
-     ら、関数に渡す検索語は ISO 8859-1
-     で書かれていなければなりません。 それ以外の文字コードの場合は、日
-     本語 EUC で書かれていなければなりません。 不正な文字番号を含んでい
-     た場合、関数は `EB_ERR_BAD_WORD' を返します。
-
-     加えて、個々の検索語は `EB_MAX_WORD_LENGTH' (= 255) バイト以下で
-     なければなりません。 この長さに、ナル文字は含みません。 長すぎる場
-     合は、`EB_ERR_TOO_LONG_WORD' を返します。 長さが 0 バイトの検索語
-     は無視されますが、少なくとも 1 個の検索語は長さが 1 以上ないとい
-     けません。 長さが 1 以上の検索語が 1 つもないときは、
-     `EB_ERR_NO_WORD' を返します。
-
-     末尾の NULL を除いた配列の要素数は、条件検索では `EB_MAX_KEYWORDS'
-     以下、複合検索では `EB_MAX_MULTI_ENTRIES'
-     以下でなくてはなりません。 個数が多すぎると
-     `EB_ERRO_TOO_MANY_WORDS' を返します。 空文字列の要素を差し引いた個
-     数ではなく、単純に渡された要素数が上限を超えているとエラーになり
-     ますので、注意が必要です。
-
-     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
-     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 なお、一致
-     するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
-
- - 機能 : EB_Error_Code eb_hit_list (EB_Book *BOOK, int MAX_HIT_COUNT,
-          EB_Hit *HIT_LIST, int *HIT_COUNT)
-     関数 `eb_hit_list()' は、あらかじめ以下のいずれかの関数でリクエス
-     ト された検索を実行し、一致したエントリを取得します。
-
-        * `eb_search_word()'  (前方一致検索)
-
-        * `eb_search_endword()'  (後方一致検索)
-
-        * `eb_search_exactword()'  (完全一致検索)
-
-        * `eb_search_keyword()'  (条件検索)
-
-        * `eb_search_multi()'  (複合検索)
-
-     したがって、この関数を呼ぶ前に、上記のいずれかの関数の呼び出しに成
-     功していなくてはなりません。
-
-     `eb_hit_list()' は最大で HIT_COUNT 個の一致エントリを HIT_LIST に
-     書き込みます。 そして、書き込んだ一致エントリの数を HIT_COUNT が指
-     す領域に書き込みます。
-     それ以上の個数の一致エントリが存在する場合、残ったエントリの情報は、
-     この関数を繰り返し呼び出すことで得ることができます。
-
-     ただし、以下に挙げた関数を呼び出すと、リクエストした検索に関する状
-     態記録がリセットされますので、一致したエントリの取得は継続できな
-     くなります。
-
-        * `eb_set_subbook()'
-
-        * `eb_unset_subbook()'
-
-        * `eb_load_all_subbooks()'
-
-        * `eb_bind()'
-
-        * `eb_finalize_book()'
-
-        * `eb_search_word()'
-
-        * `eb_search_endword()'
-
-        * `eb_search_exactword()'
-
-        * `eb_search_keyword()'
-
-        * `eb_search_multi()'
-
-     繰り返し呼んだ場合も、一致したエントリの情報はその都度 HIT_LIST の
-     先頭から書き込み、 HIT_COUNT が指す領域に書き込む値も、その回の
-     `eb_hit_list()' の呼び出しで書き込んだ一致エントリの数になります。
-
-     成功すると、この関数は `EB_SUCCESS' を返します。 たとえ一致したエ
-     ントリがなくても、処理が正常に終了すれば、関数は `EB_SUCCESS' を返
-     します。
-
-     失敗すると、HIT_COUNT が指す領域に 0 を書き込み、原因を示すエラー
-     コードを返します。 この場合、リクエストしていた検索の状態記録はリ
-     セットされますので、 これ以上 `eb_hit_list()' を呼んで、残った一致
-     エントリを取得することはできなくなります。
-
-     あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
-     選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 また、先に
-     挙げた検索のリクエストが成功していない状態でこの関数を呼ぶと、
-     `EB_ERR_NO_PREV_SEARCH' を返します。
 

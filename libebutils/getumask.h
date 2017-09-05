@@ -25,7 +25,7 @@
 /*
  * Function declarations.
  */
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 mode_t get_umask(void);
 #else
 mode_t get_umask();

@@ -1,5 +1,5 @@
-これは ebstopcode-ja.info、 ebstopcode-ja.texi より makeinfo バージョン
-4.5 によって作成されました。
+これは ./ebstopcode-ja.info、./ebstopcode-ja.texi より makeinfo
+バージョン 4.5 によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,8 +27,8 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebstopcode-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta3 版です。 EB ライブラリバージョン 4.0beta3 に対
-応しています。
+   この文書は第 4.0 版です。 EB ライブラリバージョン 4.0 に対応していま
+す。
 
 * Menu:
 
@@ -58,8 +58,8 @@ File: ebstopcode-ja.info,  Node: Introduction,  Next: Invoking ebstopcode,  Prev
    `ebstopcode' コマンドは、CD-ROM 書籍の本文の区切りコードを解析する
 ためのツールです。
 
-   この文書は第 4.0beta3 版です。 EB ライブラリバージョン 4.0beta3 に対
-応しています。
+   この文書は第 4.0 版です。 EB ライブラリバージョン 4.0 に対応していま
+す。
 
 
 File: ebstopcode-ja.info,  Node: Invoking ebstopcode,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -191,9 +191,9 @@ File: ebstopcode-ja.info,  Node: Summary of Options,  Prev: Invoking ebstopcode,
 
 
 Tag Table:
-Node: Top1042
-Node: Introduction1382
-Node: Invoking ebstopcode2418
-Node: Summary of Options5134
+Node: Top1045
+Node: Introduction1375
+Node: Invoking ebstopcode2401
+Node: Summary of Options5117
 
 End Tag Table

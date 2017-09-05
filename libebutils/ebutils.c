@@ -42,14 +42,14 @@
 #endif /* HAVE_STRCHR */
 
 #ifndef HAVE_STRCASECMP
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
-#else /* not __STDC__ or WIN32 */
+#else
 int strcasecmp();
 int strncasecmp();
-#endif /* not __STDC__ or WIN32 */
-#endif /* not HAVE_STRCASECMP */
+#endif
+#endif
 
 /*
  * The maximum length of path name.

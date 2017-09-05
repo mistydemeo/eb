@@ -23,7 +23,7 @@
 /*
  * Function declarations.
  */
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 int query_y_or_n(const char *);
 #else
 int query_y_or_n();

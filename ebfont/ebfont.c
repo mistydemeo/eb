@@ -66,14 +66,14 @@
 #include "ebutils.h"
 
 #ifndef HAVE_STRCASECMP
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 int strcasecmp(const char *, const char *);
 int strncasecmp(const char *, const char *, size_t);
-#else /* not __STDC__ or WIN32 */
+#else
 int strcasecmp()
 int strncasecmp();
-#endif /* not __STDC__ or WIN32 */
-#endif /* not HAVE_STRCASECMP */
+#endif
+#endif
 
 #ifndef HAVE_STRCHR
 #define strchr index
@@ -85,12 +85,12 @@ int strncasecmp();
 #endif
 
 #ifndef HAVE_STRERROR
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 char *strerror(int);
-#else /* not __STDC__ or WIN32 */
+#else
 char *strerror();
-#endif /* not __STDC__ or WIN32 */
-#endif /* HAVE_STRERROR */
+#endif
+#endif
 
 /*
  * The maximum length of path name.
@@ -107,12 +107,12 @@ char *strerror();
  * Trick for function protypes.
  */
 #ifndef EB_P
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 #define EB_P(p) p
-#else /* not __STDC__ or WIN32 */
-#define EB_P(p) ()
-#endif /* not __STDC__ or WIN32 */
-#endif /* EB_P */
+#else
+#define EB_P(p)
+#endif
+#endif
 
 /*
  * Tricks for gettext.

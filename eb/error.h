@@ -109,11 +109,14 @@ extern "C" {
 
 #define EB_ERR_EBNET_SERVER_BUSY	65
 #define EB_ERR_EBNET_NO_PERMISSION	66
+#define EB_ERR_UNBOUND_BOOKLIST		67
+#define EB_ERR_NO_SUCH_BOOK		68
+
 
 /*
  * The number of error codes.
  */
-#define EB_NUMBER_OF_ERRORS		67
+#define EB_NUMBER_OF_ERRORS		69
 
 /*
  * The maximum length of an error message.

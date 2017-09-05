@@ -1,4 +1,4 @@
-これは eb-ja.info、 eb-ja.texi より makeinfo バージョン 4.5
+これは ./eb-ja.info、./eb-ja.texi より makeinfo バージョン 4.5
 によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 4.0beta3 版です。
+   この文書は第 4.0 版です。
 
 * Menu:
 
@@ -43,6 +43,7 @@ File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 * Local Character::             外字
 * Binary Data::                 バイナリデータ
 * Appendix Data::               appendix データ
+* Book List on Server::         サーバ上の書籍一覧
 * Indice::                      索引
 
  --- The Detailed Node Listing ---
@@ -102,6 +103,7 @@ CD-ROM 書籍と `EB_Book' オブジェクト
 * Multi Search::                複合検索
 * EB_Hit::                      一致エントリの情報
 * Get Remained Entries::        残っているエントリの取得
+* Unify Duplicated Entries::    重複エントリの削除
 * Search Data Types::           データ型の詳細
 * Search Functions::            関数の詳細
 
@@ -154,6 +156,13 @@ appendix データ
 * Appendix Functions::          関数の詳細
 * Appendix Sample::             サンプルプログラム
 
+サーバ上の書籍一覧
+
+* EB_BookList Object::          `EB_BookList' オブジェクト
+* BookList Data::               データ型の詳細
+* BookList Functions::          関数の詳細
+* BookList Sample::             サンプルプログラム
+
 索引
 
 * Data Type Index::             データ型の索引
@@ -183,10 +192,10 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 4.0beta3 に対応しています。 本書
-の内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成す
-るには、お使用いのシステムに EB ライブラリバージョン 4.0beta3 と C コン
-パイラをインストールしておいて下さい。
+   この文書は、EB ライブラリバージョン 4.0 に対応しています。 本書の内
+容に沿って EB ライブラリを使ったアプリケーションプログラムを作成するに
+は、お使用いのシステムに EB ライブラリバージョン 4.0 と C コンパイラを
+インストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
 Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
@@ -556,7 +565,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 4.0beta3 のソースードを展開します。
+  1. EB ライブラリ 4.0 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -634,23 +643,23 @@ Autoconf を併用したコンパイル方法
    まず、アプリケーションプログラムの `configure.ac' (もしくは
 `configure.in') に、次の行を加えます。
 
-     eb_LIB_EB3
+     eb_LIB_EB4
 
-マクロ `eb_LIB_EB3' は、EB ライブラリの使用に必要な一切のチェックを行
+マクロ `eb_LIB_EB4' は、EB ライブラリの使用に必要な一切のチェックを行
 い、さらに `configure' に次のオプションを追加します。
 
        --with-eb-conf=FILE     eb.conf file is FILE [SYSCONFDIR/eb.conf]
 
 `eb.conf' は、EB ライブラリをインストールしたときの情報を記録したファ
-イルで、ライブラリと一緒にインストールされます。 `eb_LIB_EB3' はこのフ
+イルで、ライブラリと一緒にインストールされます。 `eb_LIB_EB4' はこのフ
 ァイルを読み込んで、C コンパイラに渡さなければいけないオプションなどの
 情報を得ます。 `--eb-conf-file' は、`eb.conf' のファイル名を明示的に指
 定するオプションです。
 
-   マクロ `eb_LIB_EB3' は、 `eb3.m4' というファイルで提供されています。
+   マクロ `eb_LIB_EB4' は、 `eb4.m4' というファイルで提供されています。
 EB ライブラリを `/usr/local' にインストールし、個々のファイルのインス
 トール先を変更していなければ、`/usr/local/share/aclocal' にインストー
-ルされます。 この `eb3.m4' をソースコードの適当なディレクトリの下 (たと
+ルされます。 この `eb4.m4' をソースコードの適当なディレクトリの下 (たと
 えば `m4') にコピーして下さい。
 
    `aclocal' コマンドで `aclocal.m4' を再生成する際は、 `-I' オプション

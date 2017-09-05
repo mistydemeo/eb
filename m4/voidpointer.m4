@@ -27,34 +27,20 @@ dnl * THE POSSIBILITY OF SUCH DAMAGE.
 dnl *
 
 dnl * 
-dnl * Check for struct sockaddr_in6
+dnl * Check for h_errno.
 dnl *
-AC_DEFUN([AC_STRUCT_SOCKADDR_IN6],
-[AC_CACHE_CHECK(for struct sockaddr_in6, ac_cv_struct_sockaddr_in6,
-[AC_TRY_COMPILE([
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>],[
-struct sockaddr_in6 address;
-], [ac_cv_struct_sockaddr_in6=yes], [ac_cv_struct_sockaddr_in6=no])])
-if test "$ac_cv_struct_sockaddr_in6" = yes; then
-    AC_DEFINE(HAVE_STRUCT_SOCKADDR_IN6, 1,
-[Define to 1 if <netinet/in.h> defines `struct sockaddr_in6'])
-fi])
-
-dnl * 
-dnl * Check for struct sockaddr_storage
-dnl * 
-AC_DEFUN([AC_STRUCT_SOCKADDR_STORAGE],
-[AC_CACHE_CHECK(for struct sockaddr_storage, ac_cv_struct_sockaddr_storage,
-[AC_TRY_COMPILE([
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>],[
-struct sockaddr_storage address;
-], [ac_cv_struct_sockaddr_storage=yes], [ac_cv_struct_sockaddr_storage=no])])
-if test "$ac_cv_struct_sockaddr_storage" = yes; then
-    AC_DEFINE(HAVE_STRUCT_SOCKADDR_STORAGE, 1,
-[Define to 1 if <netinet/in.h> defines `struct sockaddr_storage'])
-fi])
-
+AC_DEFUN([AC_C_VOID_POINTER],
+[AC_REQUIRE([AC_PROG_CC])
+AC_CACHE_CHECK([for (void *) support], ac_cv_c_void_pointer,
+[AC_TRY_COMPILE([],[
+void *p;
+], [ac_cv_c_void_pointer=yes], [ac_cv_c_void_pointer=no])])
+if test "$ac_cv_c_void_pointer" = yes; then
+    VOID=void
+else
+    VOID=char
+fi
+AC_DEFINE_UNQUOTED(VOID, $VOID,
+[Define to `void' if the C compiler supports (void *).
+Define to `char' otherwise.])
+])

@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = foreign
 
 LIBEB = ../eb/libeb.la
 
-noinst_PROGRAMS = initexit disctype subbook word text font appendix
+noinst_PROGRAMS = initexit disctype subbook word text font appendix booklist
 
 initexit_SOURCES = initexit.c
 initexit_LDADD = $(LIBEB) $(ZLIBLIBS) $(INTLLIBS)
@@ -31,6 +31,10 @@ font_DEPENDENCIES = $(LIBEB) $(ZLIBDEPS) $(INTLDEPS)
 appendix_SOURCES = appendix.c
 appendix_LDADD = $(LIBEB) $(ZLIBLIBS) $(INTLLIBS)
 appendix_DEPENDENCIES = $(LIBEB) $(ZLIBDEPS) $(INTLDEPS)
+
+booklist_SOURCES = booklist.c
+booklist_LDADD = $(LIBEB) $(ZLIBLIBS) $(INTLLIBS)
+booklist_DEPENDENCIES = $(LIBEB) $(ZLIBDEPS) $(INTLDEPS)
 
 EXTRA_DIST = README README-ja
 

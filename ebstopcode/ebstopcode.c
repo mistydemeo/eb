@@ -32,12 +32,12 @@
 #endif
 
 #ifndef HAVE_STRTOL
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 long strtol(const char *, char **, int);
-#else /* not __STDC__ or WIN32 */
+#else
 long strtol();
-#endif /* not __STDC__ or WIN32 */
-#endif /* not HAVE_STRTOL */
+#endif
+#endif
 
 /*
  * The maximum length of path name.
@@ -62,12 +62,12 @@ long strtol();
  * Trick for function protypes.
  */
 #ifndef EB_P
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 #define EB_P(p) p
-#else /* not __STDC__ or WIN32 */
-#define EB_P(p) ()
-#endif /* not __STDC__ or WIN32 */
-#endif /* EB_P */
+#else
+#define EB_P(p)
+#endif
+#endif
 
 /*
  * Tricks for gettext.

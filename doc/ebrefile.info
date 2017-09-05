@@ -1,5 +1,5 @@
-This is ebrefile.info, produced by makeinfo version 4.2 from
-ebrefile.texi.
+これは ./ebrefile.info、./ebrefile.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   This is edition 4.0beta3, for EB Library version 4.0beta3.
+   This is edition 4.0, for EB Library version 4.0.
 
 * Menu:
 
@@ -90,7 +90,7 @@ Though `ebzip' is free software, your books may not be free.
 `ebrefile' modifies contents of a certain file in a CD-ROM book.
 Please be careful.
 
-   This is edition 4.0beta3, for EB Library version 4.0beta3.
+   This is edition 4.0, for EB Library version 4.0.
 
 
 File: ebrefile.info,  Node: Invoke ebrefile,  Next: Summary of Options,  Prev: Introduction,  Up: Top
@@ -283,11 +283,11 @@ allowed as long as they are unique.
 
 
 Tag Table:
-Node: Top1036
-Node: Introduction1517
-Node: Invoke ebrefile3584
-Node: Select Subbooks4392
-Node: Combination with ebzip7944
-Node: Summary of Options9023
+Node: Top1054
+Node: Introduction1525
+Node: Invoke ebrefile3582
+Node: Select Subbooks4390
+Node: Combination with ebzip7942
+Node: Summary of Options9021
 
 End Tag Table

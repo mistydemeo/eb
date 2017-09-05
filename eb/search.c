@@ -1123,9 +1123,7 @@ entry_arrangement=%d, entry_count=%d)",
 		     * If matched, add it to a hit list.
 		     */
 		    if (context->in_group_entry
-			&& context->comparison_result == 0
-			&& context->compare_group(context->word,
-			    cache_p + 2, (size_t)eb_uint1(cache_p)) == 0) {
+			&& context->comparison_result == 0) {
 			error_code
 			    = eb_tell_text(book, &context->keyword_heading);
 			if (error_code != EB_SUCCESS)
@@ -1452,9 +1450,7 @@ entry_arrangement=%d, entry_count=%d)",
 		     * If matched, add it to a hit list.
 		     */
 		    if (context->in_group_entry
-			&& context->comparison_result == 0
-			&& context->compare_group(context->word,
-			    cache_p + 2, (size_t)eb_uint1(cache_p)) == 0) {
+			&& context->comparison_result == 0) {
 			hit->heading.page   = eb_uint4(cache_p + 7);
 			hit->heading.offset = eb_uint2(cache_p + 11);
 			hit->text.page      = eb_uint4(cache_p + 1);

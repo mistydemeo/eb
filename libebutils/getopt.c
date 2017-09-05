@@ -112,7 +112,7 @@ char *optarg;		/* argument associated with option */
 
 extern char *getenv();
 
-#if defined(__STDC__) || defined(WIN32)
+#ifdef PROTOTYPES
 static int getopt_internal(int, char * const *, const char *);
 static int gcd(int, int);
 static void permute_args(int, int, int, char * const *);

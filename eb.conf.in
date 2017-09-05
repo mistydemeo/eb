@@ -48,3 +48,6 @@ EBCONF_INTLINCS="@EBCONF_INTLINCS@"
 # gettext library files are in DIR.
 # (--with-gettext-libraries)
 EBCONF_INTLLIBS="@EBCONF_INTLLIBS@"
+
+# remote access is supported or not.
+EBCONF_ENABLE_EBNET="@ENABLE_EBNET@"

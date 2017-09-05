@@ -1,4 +1,4 @@
-これは eb-ja.info、 eb-ja.texi より makeinfo バージョン 4.5
+これは ./eb-ja.info、./eb-ja.texi より makeinfo バージョン 4.5
 によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
@@ -26,102 +26,109 @@ translation approved by Free Software Foundation, Inc.
 
 
 Indirect:
-eb-ja.info-1: 1027
-eb-ja.info-2: 48794
-eb-ja.info-3: 98438
-eb-ja.info-4: 133326
-eb-ja.info-5: 181038
-eb-ja.info-6: 228751
+eb-ja.info-1: 1030
+eb-ja.info-2: 49100
+eb-ja.info-3: 89269
+eb-ja.info-4: 135610
+eb-ja.info-5: 183317
+eb-ja.info-6: 231052
+eb-ja.info-7: 278450
 
 Tag Table:
 (Indirect)
-Node: Top1027
-Node: Introduction5695
-Node: Electronic Book and EPWING7542
-Node: Construction of This Book8658
-Node: Features9799
-Node: Header Files10834
-Node: Character Code11773
-Node: Compressed Book15817
-Node: Remote Access16785
-Node: Traditional System17416
-Node: Compilation18415
-Node: Compilation Simple Way19828
-Node: Compilation with Autoconf23215
-Node: Debug EB Library25320
-Node: Init and Exit27496
-Node: Init and Exit Sample28284
-Node: Init and Exit Functions29349
-Node: EB_Book31005
-Node: EB_Book Explanation31736
-Node: eb_bind to Remote Host33999
-Node: EB_Book Sample34884
-Node: EB_Book Data Types37452
-Node: EB_Book Functions39717
-Node: Error Handling44129
-Node: Error Code and Message44966
-Node: Tolerance to Error46720
-Node: Error Data Types48073
-Node: Error Code List48794
-Node: Error Functions57449
-Node: Subbook59099
-Node: Subbook Code60371
-Node: Current Subbook61981
-Node: Subbook Sample64016
-Node: Subbook Data Types66719
-Node: Subbook Functions67458
-Node: Search73217
-Node: Word Search74309
-Node: Keyword Search77200
-Node: Multi Search78656
-Node: EB_Hit82172
-Node: Get Remained Entries83758
-Node: Search Data Types85052
-Node: Search Functions86985
-Node: Text Data98438
-Node: Seek and Read Text Data99895
-Node: Text Data Format104020
-Node: Hook106707
-Node: Hook and Character Code110864
-Node: Copyright Notice112968
-Node: Menu114113
-Node: Multi Candidates118025
-Node: Stop Code Issue121964
-Node: Text Data Sample124454
-Node: Text Data Types128997
-Node: Hook Function Details130850
-Node: Hook Code List133326
-Node: Hookset Access Functions150063
-Node: Builtin Hook Functions153127
-Node: Text Data Functions156276
-Node: Local Character172977
-Node: Narrow & Wide Font174766
-Node: Font Size and Font Code176903
-Node: Current Font Height178464
-Node: Get Font181038
-Node: Convert Font183667
-Node: Local Character in Text184830
-Node: Font Data Types185488
-Node: Font Constants186231
-Node: Font Functions190289
-Node: Font Sample204176
-Node: Binary Data209009
-Node: Monochrome Image211185
-Node: Color Image214002
-Node: WAVE Sound216419
-Node: MPEG Movie217605
-Node: Binary Data Functions218812
-Node: Appendix Data227352
-Node: EB_Appendix228751
-Node: Appendix Subbook231232
-Node: Appendix Stop Code233101
-Node: Appendix Alternation Text234308
-Node: Appendix Data Types236255
-Node: Appendix Functions237171
-Node: Appendix Sample251300
-Node: Indice255212
-Node: Data Type Index255439
-Node: Function Index256352
-Node: Variable Index264248
+Node: Top1030
+Node: Introduction6016
+Node: Electronic Book and EPWING7853
+Node: Construction of This Book8969
+Node: Features10110
+Node: Header Files11145
+Node: Character Code12084
+Node: Compressed Book16128
+Node: Remote Access17096
+Node: Traditional System17727
+Node: Compilation18726
+Node: Compilation Simple Way20139
+Node: Compilation with Autoconf23521
+Node: Debug EB Library25626
+Node: Init and Exit27802
+Node: Init and Exit Sample28590
+Node: Init and Exit Functions29655
+Node: EB_Book31311
+Node: EB_Book Explanation32042
+Node: eb_bind to Remote Host34305
+Node: EB_Book Sample35190
+Node: EB_Book Data Types37758
+Node: EB_Book Functions40023
+Node: Error Handling44435
+Node: Error Code and Message45272
+Node: Tolerance to Error47026
+Node: Error Data Types48379
+Node: Error Code List49100
+Node: Error Functions58189
+Node: Subbook59839
+Node: Subbook Code61111
+Node: Current Subbook62721
+Node: Subbook Sample64756
+Node: Subbook Data Types67459
+Node: Subbook Functions68198
+Node: Search73957
+Node: Word Search75100
+Node: Keyword Search77991
+Node: Multi Search79447
+Node: EB_Hit82963
+Node: Get Remained Entries84549
+Node: Unify Duplicated Entries85850
+Node: Search Data Types87332
+Node: Search Functions89269
+Node: Text Data100722
+Node: Seek and Read Text Data102179
+Node: Text Data Format106304
+Node: Hook108991
+Node: Hook and Character Code113148
+Node: Copyright Notice115252
+Node: Menu116397
+Node: Multi Candidates120309
+Node: Stop Code Issue124248
+Node: Text Data Sample126738
+Node: Text Data Types131281
+Node: Hook Function Details133134
+Node: Hook Code List135610
+Node: Hookset Access Functions152342
+Node: Builtin Hook Functions155406
+Node: Text Data Functions158555
+Node: Local Character175256
+Node: Narrow & Wide Font177045
+Node: Font Size and Font Code179182
+Node: Current Font Height180743
+Node: Get Font183317
+Node: Convert Font185946
+Node: Local Character in Text187109
+Node: Font Data Types187767
+Node: Font Constants188510
+Node: Font Functions192568
+Node: Font Sample206464
+Node: Binary Data211297
+Node: Monochrome Image213473
+Node: Color Image216290
+Node: WAVE Sound218707
+Node: MPEG Movie219893
+Node: Binary Data Functions221100
+Node: Appendix Data229640
+Node: EB_Appendix231052
+Node: Appendix Subbook233533
+Node: Appendix Stop Code235402
+Node: Appendix Alternation Text236609
+Node: Appendix Data Types238556
+Node: Appendix Functions239472
+Node: Appendix Sample253621
+Node: Book List on Server257533
+Node: EB_BookList Object259160
+Node: BookList Data261498
+Node: BookList Functions262074
+Node: BookList Sample266072
+Node: Indice268986
+Node: Data Type Index269219
+Node: Function Index270188
+Node: Variable Index278450
 
 End Tag Table
