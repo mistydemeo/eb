@@ -972,16 +972,15 @@ character=0x%04x\n",
 		    subbook_directory, image_height, character_number);
 		goto failed;
 	    }
-	    (image_formats[image].function)(image_data, image_width,
-		image_height, bitmap_data, &image_size);
+	    (image_formats[image].function)(bitmap_data, image_width,
+		image_height, image_data, &image_size);
 	    if (save_image_file(file_name, image_data, image_size) < 0)
 		goto failed;
 
 	    /*
 	     * Toward next charahacter.
 	     */
-	    character_number = eb_forward_narrow_font_character(book, 1,
-		&character_number);
+	    eb_forward_narrow_font_character(book, 1, &character_number);
 	}
     }
 
@@ -1043,16 +1042,15 @@ character=0x%04x\n",
 		    subbook_directory, image_height, character_number);
 		goto failed;
 	    }
-	    (image_formats[image].function)(image_data, image_width,
-		image_height, bitmap_data, &image_size);
+	    (image_formats[image].function)(bitmap_data, image_width,
+		image_height, image_data, &image_size);
 	    if (save_image_file(file_name, image_data, image_size) < 0)
 		goto failed;
 
 	    /*
 	     * Toward next charahacter.
 	     */
-	    character_number = eb_forward_wide_font_character(book, 1,
-		&character_number);
+	    eb_forward_wide_font_character(book, 1, &character_number);
 	}
     }
 

@@ -44,6 +44,7 @@ static EB_Error_Code eb_fix_word_latin EB_P((EB_Book *, const char *, char *,
 static EB_Error_Code eb_fix_word_jis EB_P((EB_Book *, const char *, char *,
     EB_Word_Code *));
 static void eb_convert_katakana_jis EB_P((char *));
+static void eb_convert_hiragana_jis EB_P((char *));
 static void eb_convert_lower_latin EB_P((char *));
 static void eb_convert_lower_jis EB_P((char *));
 static void eb_delete_marks_jis EB_P((char *));
@@ -148,6 +149,8 @@ eb_set_word(book, input_word, word, canonicalized_word, word_code)
 	}
 	if (search->katakana == EB_INDEX_STYLE_CONVERT)
 	    eb_convert_katakana_jis(canonicalized_word);
+	else if (search->katakana == EB_INDEX_STYLE_REVERSED_CONVERT)
+	    eb_convert_hiragana_jis(canonicalized_word);
 	if (search->lower == EB_INDEX_STYLE_CONVERT) {
 	    eb_convert_lower_jis(word);
 	    eb_convert_lower_jis(canonicalized_word);
@@ -602,6 +605,32 @@ eb_convert_katakana_jis(word)
 	     * This is a KATAKANA.  Convert to corresponding HIRAGANA.
 	     */
 	    *wp = 0x24;
+	}
+	wp += 2;
+    }
+    *wp = '\0';
+}
+
+
+/*
+ * Convert HIRAGANA to KATAKANA in `word'.
+ */
+static void
+eb_convert_hiragana_jis(word)
+    char *word;
+{
+    unsigned char *wp = (unsigned char *) word;
+    unsigned char c1, c2;
+    
+    while (*wp != '\0' && *(wp + 1) != '\0') {
+	c1 = *wp;
+	c2 = *(wp + 1);
+	
+	if (c1 == 0x24 && 0x21 <= c2 && c2 <= 0x76) {
+	    /*
+	     * This is a HIRAGANA.  Convert to corresponding KATAKANA.
+	     */
+	    *wp = 0x25;
 	}
 	wp += 2;
     }

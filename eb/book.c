@@ -439,7 +439,7 @@ eb_initialize_catalog(book)
 		strncpy(font->file_name, buffer_p,
 		    EB_MAX_DIRECTORY_NAME_LENGTH);
 		font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
-		font->font_code = i;
+		font->font_code = j;
 		font->page = 1;
 		space = strchr(font->file_name, ' ');
 		if (space != NULL)
@@ -462,7 +462,7 @@ eb_initialize_catalog(book)
 		strncpy(font->file_name, buffer_p,
 		    EB_MAX_DIRECTORY_NAME_LENGTH);
 		font->file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
-		font->font_code = i;
+		font->font_code = j;
 		font->page = 1;
 		space = strchr(font->file_name, ' ');
 		if (space != NULL)
