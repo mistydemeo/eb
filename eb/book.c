@@ -638,8 +638,8 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
     for (i = 0, subbook = book->subbooks; i < book->subbook_count;
 	 i++, subbook++) {
 	strcpy(subbook->text_file_name, EB_FILE_NAME_HONMON);
-	*(subbook->graphic_file_name) = '\0';
-	*(subbook->sound_file_name) = '\0';
+	strcpy(subbook->graphic_file_name, EB_FILE_NAME_HONMON);
+	strcpy(subbook->sound_file_name, EB_FILE_NAME_HONMON);
 	subbook->text_hint_zio_code = ZIO_PLAIN;
 	subbook->graphic_hint_zio_code = ZIO_PLAIN;
 	subbook->sound_hint_zio_code = ZIO_PLAIN;
@@ -656,7 +656,7 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
 	if (zio_read(&zio, buffer, EB_SIZE_EPWING_CATALOG)
 	    != EB_SIZE_EPWING_CATALOG) {
 	    error_code = EB_ERR_FAIL_READ_CAT;
-	    break;
+	    goto failed;
 	}
 	if (*(buffer + 4) == '\0')
 	    continue;
@@ -664,6 +664,7 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
 	/*
 	 * Set a text file name and its compression hint.
 	 */
+	*(subbook->text_file_name) = '\0';
 	strncpy(subbook->text_file_name,
 	    buffer + 4, EB_MAX_DIRECTORY_NAME_LENGTH);
 	subbook->text_file_name[EB_MAX_DIRECTORY_NAME_LENGTH] = '\0';
@@ -682,6 +683,7 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
 	/*
 	 * Set a graphic file name and its compression hint.
 	 */
+	*(subbook->graphic_file_name) = '\0';
 	if ((data_types & 0x03) == 0x02) {
 	    strncpy(subbook->graphic_file_name, buffer + 44,
 		EB_MAX_DIRECTORY_NAME_LENGTH);
@@ -710,6 +712,7 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
 	/*
 	 * Set a sound file name and its compression hint.
 	 */
+	*(subbook->sound_file_name) = '\0';
 	if ((data_types & 0x03) == 0x01) {
 	    strncpy(subbook->sound_file_name, buffer + 44,
 		EB_MAX_DIRECTORY_NAME_LENGTH);
@@ -759,6 +762,7 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
     LOG(("out: eb_load_catalog_epwing() = %s", eb_error_string(error_code)));
     return error_code;
 }
+
 
 static Zio_Code
 eb_get_hint_zio_code(int catalog_hint_value)

@@ -1,3 +1,14 @@
+2005-08-14  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.2.1.
+
+	* eb/book.c (eb_load_catalog_epwing): Fix a bug that EB Library
+	sets wrong graphic and sound file names if target subbook contains
+	graphic and/or sound data in a text file.
+
+	* eb/book.c (eb_load_catalog_epwing): Correct a debug message
+	that shows EB_ERR_FAIL_READ_CAT error.
+
 2005-05-29  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.2.
