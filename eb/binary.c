@@ -1,5 +1,5 @@
 /*                                                            -*- C -*-
- * Copyright (c) 2001-2004  Motoyuki Kasahara
+ * Copyright (c) 2001-2005  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -632,7 +632,7 @@ end_position={%d,%d})",
     context->zio = &book->subbook_current->sound_zio;
     context->location = start_location;
     if (start_location < end_location)
-	context->size = end_location - start_location;
+	context->size = end_location - start_location + 1;
     else {
 	error_code = EB_ERR_UNEXP_BINARY;
 	goto failed;
@@ -667,11 +667,14 @@ end_position={%d,%d})",
 
     if (memcmp(temporary_buffer, "fmt ", 4) == 0) {
 	memcpy(context->cache_buffer + 12, temporary_buffer, 4);
-	if (context->size >= 4)
-	    context->size -= 4;
+	if (zio_read(context->zio, context->cache_buffer + 16, 28) != 28) {
+	    error_code = EB_ERR_FAIL_READ_BINARY;
+	    goto failed;
+	}
+	if (context->size >= 32)
+	    context->size -= 32;
 	else
 	    context->size = 0;
-	context->cache_length = 16;
     } else {
 	if (zio_lseek(context->zio,
 	    (book->subbook_current->sound.start_page - 1) * EB_SIZE_PAGE + 32,
@@ -693,7 +696,6 @@ end_position={%d,%d})",
 	*(unsigned char *)(context->cache_buffer + 43)
 	    = (context->size >> 24) & 0xff;
 
-	context->cache_length = 44;
 
 	/*
 	 * Seek sound file, again.
@@ -703,6 +705,7 @@ end_position={%d,%d})",
 	    goto failed;
 	}
     }
+    context->cache_length = 44;
 
     /*
      * Read and compose a WAVE header.

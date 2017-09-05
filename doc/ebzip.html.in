@@ -22,7 +22,7 @@
 <!-- #include "ebzip-toc.html" -->
 
 <p>
-Copyright (c) 1998-2004  Motoyuki Kasahara
+Copyright (c) 1998-2005  Motoyuki Kasahara
 </p>
 
 <!-- ================================================================ -->
@@ -80,19 +80,8 @@ CD-ROM 書籍の出版社がハードディスク (および他の補助記憶装置) に書籍を
 <code>ebzip</code> は <code>ebzip</code>、<code>ebunzip</code>, 
 <code>ebzipinfo</code> という異なる 3 つのコマンド名でインストール
 されます。
-(DOS および Windows システム環境では、<code>ebzipinfo</code> は
-<code>ebzipinf</code> に改名されています)。
-一般に、これらは次のようにハードリンクされています。
-</p>
-
-<blockquote>
-<pre>
-% ls -li ebzip ebunzip ebzipinfo
-38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebunzip
-38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzip
-38787 -rwxr-xr-x  3 bin   bin     73728 Jun 27 22:48 ebzipinfo
-</pre>
-</blockquote>
+(一部の環境では、<code>ebzipinfo</code> は <code>ebzipinf</code> 
+という名前になっています。)
 
 <p>
 <code>ebunzip</code> という名前で起動された場合は、伸長を行います。
@@ -267,9 +256,8 @@ CD-ROM 書籍がすでに <code>/dict</code> にコピーされているものの、まだ圧縮
 <h3><a name="compression-example-2">圧縮の実行例 (2)</a></h3>
 
 <p>
-この節では、もう一つ別の例を採り上げます。
-この節では、CD-ROM ディスクのファイルを圧縮し、それをハードディスクに
-置く方法について説明します。
+この節ではもう一つ別の例として、CD-ROM ディスクのファイルを圧縮し、それ
+をハードディスクに置く方法について説明します。
 元の CD-ROM 書籍が <code>/cdrom</code> にマウントされ、書籍は
 <code>/cdrom</code> の下に次のようなファイルを持っていると仮定します。
 </p>
@@ -357,7 +345,7 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 </blockquote>
 
 <p>
-無指定時のレベルは 0 (最も速いが圧縮率は最悪) です。
+無指定時のレベルは 0 (最速だが圧縮率は最悪) です。
 </p>
 
 <!-- = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =  -->
@@ -462,17 +450,18 @@ EB ライブラリが対応していないファイル、ディレクトリについては、
 作業は完了していません。
 この書籍を使用するためには、さらなる操作を行って残りの副本を圧縮するか、
 <code>ebrefile</code> コマンドを使って残りの副本を <code>catalog(s)</code>
-ファイルの副本登録リストから削除しなくてはなりません (詳しくは
+ファイルの副本登録リストから削除しなくてはなりません
+(<code>ebrefile</code> コマンドについて詳しくは、
 <a href="ebrefile.html">ebrefile コマンド のマニュアル</a>
 の「<code>ebzip</code> との連携」項を参照のこと)。
 </p>
 
 <p>
-副本同士で、異なる圧縮レベルを設定することも可能です
+副本の一部ずつを複数回に分けて圧縮する場合、すべての副本で同じ圧縮レベル
+を指定する必要はありません。
 (たとえば、<code>english</code> と <code>french</code> はレベル 0 で圧縮し、
 <code>german</code> はレベル 2 で圧縮する)。
 </p>
-
 
 <p>
 <samp>--skip-content</samp> (<samp>-s</samp>) は <samp>--subbook</samp>

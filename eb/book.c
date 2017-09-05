@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1997-2004  Motoyuki Kasahara
+ * Copyright (c) 1997-2005  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -494,6 +494,7 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
     EB_Font *font;
     Zio zio;
     Zio_Code zio_code;
+    int epwing_version;
     int data_types;
     int i, j;
 
@@ -528,6 +529,9 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
 	error_code = EB_ERR_UNEXP_CAT;
 	goto failed;
     }
+
+    epwing_version = eb_uint2(buffer + 2);
+    LOG(("aux: eb_load_catalog_epwing(): epwing_version=%d", epwing_version));
 
     /*
      * Allocate memories for subbook entries.
@@ -645,20 +649,26 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
 	subbook->sound_hint_zio_code = ZIO_PLAIN;
     }
 
+    if (epwing_version == 1)
+	goto succeeded;
+
     /*
-     * Read extended information about subbook.
+     * Read extra information about subbook.
      */
     for (i = 0, subbook = book->subbooks; i < book->subbook_count;
 	 i++, subbook++) {
 	/*
 	 * Read data from the catalog file.
+	 *
+	 * We don't complain about unexpected EOF.  In that case, we
+	 * return EB_SUCCESS.
 	 */
-	if (zio_read(&zio, buffer, EB_SIZE_EPWING_CATALOG)
-	    != EB_SIZE_EPWING_CATALOG) {
-	    if (i == 0)
-		break;
+	ssize_t read_result = zio_read(&zio, buffer, EB_SIZE_EPWING_CATALOG);
+	if (read_result < 0) {
 	    error_code = EB_ERR_FAIL_READ_CAT;
 	    goto failed;
+	} else if (read_result != EB_SIZE_EPWING_CATALOG) {
+	    break;
 	}
 	if (*(buffer + 4) == '\0')
 	    continue;
@@ -744,6 +754,7 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
     /*
      * Close the catalog file.
      */
+  succeeded:
     zio_close(&zio);
     zio_finalize(&zio);
 

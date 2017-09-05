@@ -1,7 +1,7 @@
 dnl *
 dnl * Make ready to link EB Library 3.x or 4.x.
 dnl *
-dnl * Copyright (c) 2000-2004  Motoyuki Kasahara
+dnl * Copyright (c) 2000-2005  Motoyuki Kasahara
 dnl *
 dnl * Redistribution and use in source and binary forms, with or without
 dnl * modification, are permitted provided that the following conditions

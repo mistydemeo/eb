@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2003-2004  Motoyuki Kasahara
+ * Copyright (c) 2003-2005  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -431,6 +431,14 @@ ebnet_get_addresses(const char *host, char *ipv6_address, char *ipv4_address)
 	    ipv6_address, INET6_ADDRSTRLEN + IF_NAMESIZE,
 	    dummy_service, sizeof(dummy_service),
 	    NI_NUMERICHOST | NI_NUMERICSERV | NI_WITHSCOPEID);
+#if NI_WITHSCOPEID != 0
+	if (gai_error != 0) {
+	    gai_error = getnameinfo(info->ai_addr, info->ai_addrlen,
+		ipv6_address, INET6_ADDRSTRLEN + IF_NAMESIZE,
+		dummy_service, sizeof(dummy_service),
+		NI_NUMERICHOST | NI_NUMERICSERV);
+	}
+#endif
 	if (gai_error == 0)
 	    break;
 	*ipv6_address = '\0';

@@ -1,12 +1,12 @@
 # 
-# Copyright (C) 2004  Motoyuki Kasahara
+# Copyright (C) 2005  Motoyuki Kasahara
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ebutils 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-08-15 17:11+0900\n"
+"POT-Creation-Date: 2005-11-26 10:17+0900\n"
 "PO-Revision-Date: 2001-03-18 23:28+0900\n"
 "Last-Translator: Motoyuki Kasahara <m-kasahr@sra.co.jp>\n"
 "Language-Team: \n"

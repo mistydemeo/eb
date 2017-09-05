@@ -1,5 +1,5 @@
 /*
- * copyright (c) 1997-2004  Motoyuki Kasahara
+ * copyright (c) 1997-2005  Motoyuki Kasahara
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions

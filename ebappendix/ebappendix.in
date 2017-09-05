@@ -4,7 +4,7 @@ eval 'exec @PERL@ -S $0 ${1+"$@"}'
     if 0;
 
 #
-# Copyright (c) 1997-2004  Motoyuki Kasahara
+# Copyright (c) 1997-2005  Motoyuki Kasahara
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -59,7 +59,7 @@ Report bugs to $mailing_address.
 ";
 
 # Copyright message.
-$copyright = "Copyright (c) 1997-2004  Motoyuki Kasahara\n";
+$copyright = "Copyright (c) 1997-2005  Motoyuki Kasahara\n";
 
 # `try ...' message.
 $tryhelp = "try \`$0 --help\' for more information\n";

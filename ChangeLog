@@ -1,3 +1,61 @@
+2005-11-26  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 4.2.2.
+	
+	* ltmain.sh, config.sub, config.guess, depcomp, install-sh:
+	Imported from libtool-1.5.20 and Automake-1.9.6.
+
+	* m4/lcmessage.m4, m4/gettext.m4, m4/sockaddrin6.m4, m4/in6addr.m4,
+	m4/sockinttypes.m4, configure.ac: Substitute AC_TRY_COMPILE, 
+	AC_TRY_LINK and AC_TRY_RUN with AC_COMPILE_IFELSE, AC_LINK_IFELSE 
+	and AC_RUN_IFELSE.
+
+2005-11-21  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* m4/gettext.m4: Check for existance of libintl and libiconv even
+	when `--with-gettext-libraries' or `--with-iconv-libraries' option
+	is not specified.
+	* m4/gettext.m4: Do not perform AC_TRY_RUN to check for gettext().
+	We perfomr AC_TRY_LINK instead.  On Debian Linux, the test program
+	doesn't succeed though gettext() is available.  The test program
+	called setlocale(LC_ALL, "en_US") but it didn't change the locale
+	to `en' or `en_US' since "en_US" is not acceptable locale name on
+	that environment.
+	* gttest.po, gttest.mo: Deleted.
+	* Makefile.am (EXTRA_DIST): Likewise.
+
+2005-10-20  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/binary.c (eb_set_binary_wave): Fix a bug that it set wrong
+	wave data size to `context'.
+	* eb/binary.c (eb_set_binary_wave): Fix a bug that it generated
+	wrong RIFF header when the CD-ROM book provided fmt block of the
+	wave data.
+
+	* eb/multiplex.c (ebnet_get_addresses): Retry getnameinfo()
+	without the NI_WITHSCOPEID flag if getnameinfo() with that flag
+	doesn't succeed.
+
+2005-10-25  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb.conf.in (EBCONF_ENABLE_NLS): Fix a bug that Makefile filled
+	an incorrect value.
+	* Makefile.am (eb.conf): Likewise.
+
+	* eb/book.c (eb_load_catalog_epwing): When EPWING version is 1,
+	the function never read an extra information block.
+
+2005-09-16  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/book.c (eb_load_catalog_epwing): Fix a bug that it sometimes
+	raises an error when the catalog file doesn't have extra information
+	block.
+
+2005-09-08  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* eb/search.c (eb_and_hit_lists): Fix a bug that it outputs
+        a wrong debug mesasge at the end of the function.
+
 2005-08-14  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 4.2.1.

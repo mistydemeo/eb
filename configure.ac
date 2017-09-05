@@ -1,7 +1,7 @@
 dnl *
 dnl * Process this file with autoconf to produce a configure script.
 dnl *
-AC_INIT(eb, 4.2.1)
+AC_INIT(eb, 4.2.2)
 AC_CONFIG_SRCDIR(eb/eb.c)
 AC_PREREQ(2.54)
 AM_INIT_AUTOMAKE
@@ -9,7 +9,7 @@ AM_INIT_AUTOMAKE
 dnl *
 dnl * Library version info.
 dnl *
-LIBEB_VERSION_INFO=10:1:0
+LIBEB_VERSION_INFO=10:2:0
 AC_SUBST(LIBEB_VERSION_INFO)
 
 EB_VERSION_MAJOR=4
@@ -113,10 +113,17 @@ else
     CPPFLAGS="$CPPFLAGS $PTHREAD_CPPFLAGS"
     CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
     LDFLAGS="$LDFLAGS $PTHREAD_LDFLAGS"
-    AC_TRY_LINK([#include <pthread.h>],
-        [static pthread_mutex_t m=PTHREAD_MUTEX_INITIALIZER; 
-	pthread_mutex_lock(&m);
-        return 0;], 
+    AC_LINK_IFELSE([
+#include <pthread.h>
+static pthread_mutex_t m=PTHREAD_MUTEX_INITIALIZER; 
+
+int
+main()
+{
+    pthread_mutex_lock(&m);
+    return 0;
+}
+], 
         try_pthread=yes, try_pthread=no)
     CPPFLAGS=$save_CPPFLAGS
     CFLAGS=$save_CFLAGS
@@ -172,13 +179,21 @@ save_CPPFLAGS=$CPPFLAGS
 save_LIBS=$LIBS
 CPPFLAGS="$CPPFLAGS $ZLIBINCS"
 LIBS="$LIBS $ZLIBLIBS"
-AC_TRY_LINK([#include <zlib.h>],
-     [z_stream stream; inflate(&stream, Z_FINISH); return 0;], 
-     try_zlib=no, try_zlib=yes)
+AC_LINK_IFELSE([
+#include <zlib.h>
+
+int
+main()
+{
+    z_stream stream; inflate(&stream, Z_FINISH);
+    return 0;
+}
+], 
+     try_zlib=yes, try_zlib=no)
 CPPFLAGS=$save_CPPFLAGS
 LIBS=$save_LIBS
 AC_MSG_RESULT($try_zlib)
-if test $try_zlib = yes; then
+if test $try_zlib = no; then
     AC_MSG_ERROR(zlib not found)
 fi
 AC_SUBST(ZLIBINCS)

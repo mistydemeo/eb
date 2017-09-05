@@ -39,7 +39,7 @@ EBCONF_PTHREAD_LDFLAGS="@PTHREAD_LDFLAGS@"
 
 # native language is supported or not.
 # (--enable-nls)
-EBCONF_ENABLE_NLS="@USE_NLS@"
+EBCONF_ENABLE_NLS="@ENABLE_NLS@"
 
 # gettext include files are in DIR.
 # (--with-gettext-includes)

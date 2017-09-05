@@ -1,5 +1,5 @@
 dnl *
-dnl * Copyright (c) 2001-2004  Motoyuki Kasahara
+dnl * Copyright (c) 2001-2005  Motoyuki Kasahara
 dnl *
 dnl * Redistribution and use in source and binary forms, with or without
 dnl * modification, are permitted provided that the following conditions
@@ -31,10 +31,10 @@ dnl * Check for struct in6_addr
 dnl * 
 AC_DEFUN([AC_STRUCT_IN6_ADDR],
 [AC_CACHE_CHECK(for struct in6_addr, ac_cv_struct_in6_addr,
-[AC_TRY_COMPILE([
+[AC_COMPILE_IFELSE([
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>],[
+#include <netinet/in.h>
 struct in6_addr address;
 ], [ac_cv_struct_in6_addr=yes], [ac_cv_struct_in6_addr=no])])
 if test "$ac_cv_struct_in6_addr" = yes; then
@@ -52,12 +52,17 @@ if test $ac_cv_struct_in6_addr = no; then
 else
     AC_CACHE_CHECK(for in6addr_any declaration in netinet/in.h,
     ac_cv_decl_in6addr_any,
-    [AC_TRY_COMPILE([
+    [AC_COMPILE_IFELSE([
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>],[
-unsigned char *address;
-address = (char *)&in6addr_any;
+#include <netinet/in.h>
+
+void
+testfunc()
+{
+    unsigned char *address;
+    address = (char *)&in6addr_any;
+}
 ], [ac_cv_decl_in6addr_any=yes], [ac_cv_decl_in6addr_any=no])])
     if test "$ac_cv_decl_in6addr_any" = yes; then
         AC_DEFINE(IN6ADDR_ANY_DECLARED, 1,
@@ -75,12 +80,17 @@ if test $ac_cv_struct_in6_addr = no; then
 else
     AC_CACHE_CHECK(for in6addr_loopback declaration in netinet/in.h,
     ac_cv_decl_in6addr_loopback,
-    [AC_TRY_COMPILE([
+    [AC_COMPILE_IFELSE([
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>],[
-unsigned char *address;
-address = (char *)&in6addr_loopback;
+#include <netinet/in.h>
+
+int
+testfunc()
+{
+    unsigned char *address;
+    address = (char *)&in6addr_loopback;
+}
 ], [ac_cv_decl_in6addr_loopback=yes], [ac_cv_decl_in6addr_loopback=no])])
     if test "$ac_cv_decl_in6addr_loopback" = yes; then
         AC_DEFINE(IN6ADDR_LOOPBACK_DECLARED, 1,
