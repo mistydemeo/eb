@@ -1650,5 +1650,5 @@ eb_and_hit_lists(EB_Hit and_list[EB_TMP_MAX_HITS], int *and_count,
     for (i = 0; i < hit_list_count; i++)
 	hit_counts[i] = hit_indexes[i];
 
-    LOG(("out: eb_and_hit_lists(and_count=%d)", and_count));
+    LOG(("out: eb_and_hit_lists(and_count=%d)", *and_count));
 }

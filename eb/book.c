@@ -655,6 +655,8 @@ eb_load_catalog_epwing(EB_Book *book, const char *catalog_path)
 	 */
 	if (zio_read(&zio, buffer, EB_SIZE_EPWING_CATALOG)
 	    != EB_SIZE_EPWING_CATALOG) {
+	    if (i == 0)
+		break;
 	    error_code = EB_ERR_FAIL_READ_CAT;
 	    goto failed;
 	}
