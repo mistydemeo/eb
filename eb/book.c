@@ -566,7 +566,7 @@ eb_initialize_language(book)
     }
 
     zio_close(&zio);
-    return EB_SUCCESS;
+    return;
 
     /*
      * An error occurs...
