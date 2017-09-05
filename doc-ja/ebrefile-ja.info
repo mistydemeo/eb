@@ -1,5 +1,5 @@
-This is ebrefile-ja.info, produced by makeinfo version 4.0 from
-ebrefile-ja.texi.
+これは ebrefile-ja.info、 ebrefile-ja.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebrefile-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3.2 版です。 EB ライブラリバージョン 3.3.2 に対応して
+   この文書は第 3.3.3 版です。 EB ライブラリバージョン 3.3.3 に対応して
 います。
 
 * Menu:
@@ -83,15 +83,15 @@ Foundation が公表した GNU General Public License (GNU 一般公有使用許諾)
 ができます。
 
    `ebrefile' は有用とは思いますが、頒布にあたっては、市場性及び特定目
-的適合性についての暗黙の保証を含めて、いかなる保証も行ないません。 詳
+的 適合性についての暗黙の保証を含めて、いかなる保証も行ないません。 詳
 細については GNU General Public License をお読み下さい。
 
    加えて、あなたは自分の所有する CD-ROM 書籍の使用許諾も守らなくてはい
-けません。 `ebrefile' はフリーソフトウェアですが、あなたの書籍が自由に
+け ません。 `ebrefile' はフリーソフトウェアですが、あなたの書籍が自由に
 使えるものであるとは限りません。 `ebrefile' は、CD-ROM 書籍のあるファ
 イルの内容に変更を加えます。 ご注意下さい。
 
-   この文書は第 3.3.2 版です。 EB ライブラリバージョン 3.3.2 に対応して
+   この文書は第 3.3.3 版です。 EB ライブラリバージョン 3.3.3 に対応して
 います。
 
 
@@ -278,11 +278,11 @@ File: ebrefile-ja.info,  Node: Summary of Options,  Prev: Invoking ebrefile,  Up
 
 
 Tag Table:
-Node: Top1034
-Node: Introduction1510
-Node: Invoking ebrefile3657
-Node: Select Subbooks4302
-Node: Combination with ebzip7694
-Node: Summary of Options8657
+Node: Top1049
+Node: Introduction1525
+Node: Invoking ebrefile3674
+Node: Select Subbooks4319
+Node: Combination with ebzip7711
+Node: Summary of Options8674
 
 End Tag Table

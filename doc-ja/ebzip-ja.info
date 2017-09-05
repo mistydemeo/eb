@@ -1,5 +1,5 @@
-This is ebzip-ja.info, produced by makeinfo version 4.0 from
-ebzip-ja.texi.
+これは ebzip-ja.info、 ebzip-ja.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebzip-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3.2 版です。 EB ライブラリバージョン 3.3.2 に対応して
+   この文書は第 3.3.3 版です。 EB ライブラリバージョン 3.3.3 に対応して
 います。
 
 * Menu:
@@ -97,7 +97,7 @@ File: ebzip-ja.info,  Node: Introduction,  Next: Action and Command Name,  Prev:
 ついては GNU General Public License をお読み下さい。
 
    加えて、あなたは自分の所有する CD-ROM 書籍の使用許諾も守らなくてはい
-けません。 `ebzip' はフリーソフトウェアですが、あなたの書籍が自由に使
+け ません。 `ebzip' はフリーソフトウェアですが、あなたの書籍が自由に使
 えるものであるとは限りません。 CD-ROM 書籍の出版社がハードディスク (お
 よび他の補助記憶装置)
 に書籍をコピーすることを許可していないのであれば、その書籍の圧縮は諦め
@@ -436,7 +436,7 @@ File: ebzip-ja.info,  Node: Compress Compressed Book,  Prev: Overwrite Old Files
 ====================
 
    S-EBXA および EPWING 規格においても圧縮形式を定義しており、CD-ROM 書
-籍にはこれらの圧縮形式を実際に採用しているものがあります。 これらの圧
+籍 にはこれらの圧縮形式を実際に採用しているものがあります。 これらの圧
 縮形式は、ebzip の圧縮形式とは異なるものです。
 
    `ebzip' は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
@@ -555,7 +555,7 @@ File: ebzip-ja.info,  Node: Uncompress Compressed Book,  Prev: Options for Uncom
 ====================
 
    S-EBXA および EPWING 規格では ebzip のものとは異なる圧縮形式を定義し
-ており、CD-ROM 書籍にはこれらの圧縮形式を実際に採用しているものがあり
+て おり、CD-ROM 書籍にはこれらの圧縮形式を実際に採用しているものがあり
 ます。 これらの圧縮形式は、ebzip の圧縮形式とは異なるものです。
 
    `ebzip' は S-EBXA や EPWING 圧縮形式で圧縮された CD-ROM 書籍も伸長
@@ -736,6 +736,7 @@ File: ebzip-ja.info,  Node: Summary of Options,  Next: Comparision Result,  Prev
 
      (詳しくは、*note 圧縮: Compression.)。
 
+
 
 File: ebzip-ja.info,  Node: Comparision Result,  Next: Compressed File Format,  Prev: Summary of Options,  Up: Top
 
@@ -871,7 +872,7 @@ File: ebzip-ja.info,  Node: Data Part,  Next: Index Part,  Prev: Format Overview
 て圧縮されます。 圧縮されたスライスのビット数が 8 の倍数でなければ、1
 〜 7 ビットを圧縮されたスライスの末尾に足し、8 の倍数になるようにしま
 す。 これにより、圧縮されたそれぞれのスライスはバイトの境界から開始され
-ます。 足されたビットの内容は未定義ですが、このビットは決して使用され
+ま す。 足されたビットの内容は未定義ですが、このビットは決して使用され
 ません。
 
      +------------+----------+--   --+--------------+
@@ -923,7 +924,7 @@ File: ebzip-ja.info,  Node: Index Part,  Next: Header Part,  Prev: Data Part,  U
 16777216 〜 4294967295 バイト                      4 バイト
 
    インデックス内での、複数バイトからなる数値はすべて、値の大きい方の部
-分を表すバイト (most significant byte) が先に来た形で記録されます。 た
+分 を表すバイト (most significant byte) が先に来た形で記録されます。 た
 とえば、0x1234 は次のように記録されます。 最初のバイトは 0x12 となり、
 次のバイトは 0x34 になります。
 
@@ -945,10 +946,10 @@ File: ebzip-ja.info,  Node: Index Part,  Next: Header Part,  Prev: Data Part,  U
      +---------+---------+--           --+---------+---------+
 
    圧縮されたスライスの大きさがスライスサイズに等しいときは、そのスライ
-スのデータは実際には圧縮されていないことを示します。
+ス のデータは実際には圧縮されていないことを示します。
 
    元のファイルが空だったときは、インデックス部はインデックスを一つだけ
-持ちます。 このインデックスは圧縮されたファイルの大きさを表します。
+持 ちます。 このインデックスは圧縮されたファイルの大きさを表します。
 
 
 File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File Format
@@ -971,7 +972,7 @@ File: ebzip-ja.info,  Node: Header Part,  Prev: Index Part,  Up: Compressed File
      う固定した値を持ちます。
 
 `zip モード (MSB 側の 4 ビット)'
-     圧縮モードを表します。 EB ライブラリバージョン 3.3.2 では、1 (2 進
+     圧縮モードを表します。 EB ライブラリバージョン 3.3.3 では、1 (2 進
      数で 0001) だけが規定されています。
 
 `圧縮レベル (LSB 側の 4 ビット)'
@@ -1009,32 +1010,32 @@ significant bit) を含んでいます。 `zip モード' が 1 で、 `圧縮レベル' が
 
 
 Tag Table:
-Node: Top1018
-Node: Introduction2526
-Node: Action and Command Name3878
-Node: Invoking ebzip5675
-Node: Compression6308
-Node: Compression Example 16856
-Node: Compression Example 28440
-Node: Compression Level10030
-Node: Test10525
-Node: Partial Compression10875
-Node: Overwrite Old Files13723
-Node: Compress Compressed Book14517
-Node: Uncompression15212
-Node: Uncompression Example15593
-Node: Options for Uncompression17118
-Node: Uncompress Compressed Book18292
-Node: Information18774
-Node: Information Example19113
-Node: Options for Information19802
-Node: Delete a Book20301
-Node: Summary of Options20597
-Node: Comparision Result24238
-Node: Compressed File Format26556
-Node: Format Overview26960
-Node: Data Part27814
-Node: Index Part30489
-Node: Header Part33156
+Node: Top1033
+Node: Introduction2541
+Node: Action and Command Name3894
+Node: Invoking ebzip5691
+Node: Compression6324
+Node: Compression Example 16872
+Node: Compression Example 28456
+Node: Compression Level10046
+Node: Test10541
+Node: Partial Compression10891
+Node: Overwrite Old Files13739
+Node: Compress Compressed Book14533
+Node: Uncompression15229
+Node: Uncompression Example15610
+Node: Options for Uncompression17135
+Node: Uncompress Compressed Book18309
+Node: Information18792
+Node: Information Example19131
+Node: Options for Information19820
+Node: Delete a Book20319
+Node: Summary of Options20615
+Node: Comparision Result24257
+Node: Compressed File Format26575
+Node: Format Overview26979
+Node: Data Part27833
+Node: Index Part30509
+Node: Header Part33179
 
 End Tag Table

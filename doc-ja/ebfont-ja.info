@@ -1,5 +1,5 @@
-This is ebfont-ja.info, produced by makeinfo version 4.0 from
-ebfont-ja.texi.
+これは ebfont-ja.info、 ebfont-ja.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -28,7 +28,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebfont-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3.2 版です。 EB ライブラリバージョン 3.3.2 に対応して
+   この文書は第 3.3.3 版です。 EB ライブラリバージョン 3.3.3 に対応して
 います。
 
 * Menu:
@@ -72,7 +72,7 @@ File: ebfont-ja.info,  Node: What is Local Character,  Next: Invoking ebfont,  P
 ********
 
    CD-ROM 書籍の多くは、書籍固有の文字、外字 (local characters) を定義
-しています。 たとえば、CD-ROM 書籍に使われる文字セットは発音記号を持っ
+し ています。 たとえば、CD-ROM 書籍に使われる文字セットは発音記号を持っ
 ていないため、 英和辞書の中には発音記号を定義しているものがあります。
 
    CD-ROM 書籍は、外字のビットマップデータも持っています。 `ebfont' コ
@@ -303,13 +303,13 @@ File: ebfont-ja.info,  Node: Summary of Options,  Prev: Invoking ebfont,  Up: To
 
 
 Tag Table:
-Node: Top1062
-Node: Introduction1594
-Node: What is Local Character2412
-Node: Invoking ebfont3979
-Node: Image Formats5329
-Node: Heights6261
-Node: Subbooks7082
-Node: Summary of Options8953
+Node: Top1077
+Node: Introduction1609
+Node: What is Local Character2427
+Node: Invoking ebfont3995
+Node: Image Formats5345
+Node: Heights6277
+Node: Subbooks7098
+Node: Summary of Options8969
 
 End Tag Table

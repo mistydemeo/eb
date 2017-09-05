@@ -264,12 +264,10 @@ eb_unset_font(book)
 	 * Close font files if the book is EPWING and font files are
 	 * opened.
 	 */
-	if (book->disc_code == EB_DISC_EPWING) {
-	    if (book->subbook_current->narrow_current != NULL)
-		zio_close(&book->subbook_current->narrow_current->zio);
-	    if (book->subbook_current->wide_current != NULL)
-		zio_close(&book->subbook_current->wide_current->zio);
-	}
+	if (book->subbook_current->narrow_current != NULL)
+	    zio_close(&book->subbook_current->narrow_current->zio);
+	if (book->subbook_current->wide_current != NULL)
+	    zio_close(&book->subbook_current->wide_current->zio);
 
 	book->subbook_current->narrow_current = NULL;
 	book->subbook_current->wide_current = NULL;

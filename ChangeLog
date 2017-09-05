@@ -1,3 +1,15 @@
+2003-06-09  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
+
+	* Version 3.3.3.
+
+	* configure.ac (AC_INIT): Set version to 3.3.3.
+	* configure.ac (LIBEB_VERSION_INFO): Set version to 7:3:1.
+
+	* eb/narwfont.c (eb_narrow_font_size2): Add missing `break' statements
+	in a `switch' block.
+
+	* eb/font.c (eb_unset_font): Fix file descriptor leak.
+
 2003-03-05  Motoyuki Kasahara  <m-kasahr@sra.co.jp>
 
 	* Version 3.3.2.

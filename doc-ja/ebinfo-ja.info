@@ -1,5 +1,5 @@
-This is ebinfo-ja.info, produced by makeinfo version 4.0 from
-ebinfo-ja.texi.
+これは ebinfo-ja.info、 ebinfo-ja.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -27,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: ebinfo-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3.2 版です。 EB ライブラリバージョン 3.3.2 に対応して
+   この文書は第 3.3.3 版です。 EB ライブラリバージョン 3.3.3 に対応して
 います。
 
 * Menu:
@@ -175,6 +175,7 @@ search methods:
     graphic
           グラフィック検索 (Graphic search).
 
+
 font sizes:
      副本が持つ、フォントのサイズの一覧。 この一覧には、16, 24, 30, 48
      という 4 つのサイズの一部、もしくは全部から構成されます。
@@ -184,6 +185,7 @@ narrow font characters:
 
 wide font characters:
      副本が定義している全角文字の文字番号の範囲。
+
 
 
 File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Details about Information,  Up: Top
@@ -211,10 +213,10 @@ File: ebinfo-ja.info,  Node: Options to ebinfo,  Prev: Details about Information
 
 
 Tag Table:
-Node: Top1013
-Node: Introduction1390
-Node: Invoking ebinfo2135
-Node: Details about Information3976
-Node: Options to ebinfo5697
+Node: Top1028
+Node: Introduction1405
+Node: Invoking ebinfo2150
+Node: Details about Information3991
+Node: Options to ebinfo5714
 
 End Tag Table

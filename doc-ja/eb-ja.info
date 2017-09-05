@@ -1,4 +1,5 @@
-This is eb-ja.info, produced by makeinfo version 4.0 from eb-ja.texi.
+これは eb-ja.info、 eb-ja.texi より makeinfo バージョン 4.5
+によって作成されました。
 
 INFO-DIR-SECTION CD-ROM Book Utilities
 START-INFO-DIR-ENTRY
@@ -26,7 +27,7 @@ translation approved by Free Software Foundation, Inc.
 
 File: eb-ja.info,  Node: Top,  Next: Introduction,  Prev: (dir),  Up: (dir)
 
-   この文書は第 3.3.2 版です。
+   この文書は第 3.3.3 版です。
 
 * Menu:
 
@@ -169,9 +170,9 @@ File: eb-ja.info,  Node: Introduction,  Next: Features,  Prev: Top,  Up: Top
 理解しておくことをお薦めします。 また、C 言語によるプログラミングについ
 ては、十分に理解していることを前提とします。
 
-   この文書は、EB ライブラリバージョン 3.3.2 に対応しています。 本書の
+   この文書は、EB ライブラリバージョン 3.3.3 に対応しています。 本書の
 内容に沿って EB ライブラリを使ったアプリケーションプログラムを作成する
-には、お使用いのシステムに EB ライブラリバージョン 3.3.2 と C コンパイ
+には、お使用いのシステムに EB ライブラリバージョン 3.3.3 と C コンパイ
 ラをインストールしておいて下さい。
 
    EB ライブラリはフリーソフトウェアです。 あなたは、 Free Software
@@ -209,7 +210,7 @@ CD-ROM は ISO 9660 形式なので、 CD-ROM
 
    EB ライブラリの開発者も、電子ブック、 EPWING 規格の全容は知りません。
 EB ライブラリでは JIS X 4081 の記述をもとに、電子ブック、EPWING を読め
-るようにしてあります。 しかしながら、規格の全容が分からない状態で開発
+る ようにしてあります。 しかしながら、規格の全容が分からない状態で開発
 しているため、残念ながら一部に正しく読めない書籍が存在します。
 
 
@@ -219,7 +220,7 @@ File: eb-ja.info,  Node: Construction of This Book,  Prev: Electronic Book and E
 ==================
 
    次章「EB ライブラリの特徴」では、EB ライブラリが対応している機能、対
-応していない機能について、簡単に説明します。 また、ライブラリの概略に
+応 していない機能について、簡単に説明します。 また、ライブラリの概略に
 関して、最初に知っておいたほうが良いと思われる事柄をいくつか説明してい
 ます。
 
@@ -234,7 +235,7 @@ File: eb-ja.info,  Node: Construction of This Book,  Prev: Electronic Book and E
 
 解説
      その章で解説する機能や概念についての基礎知識、EB ライブラリの仕様
-     の概要について解説しています。
+     の 概要について解説しています。
 
 サンプルプログラム
      「解説」ではプログラムの断片だけを示すことが多いので、動作可能な
@@ -284,7 +285,7 @@ EBXA-C, S-EBXA) と EPWING 形式の CD-ROM 書籍に対応しています。
    * 動画データの取得
 
    この章では、EB ライブラリの概要に関して、あらかじめ知っておいて頂い
-たほうが良いと思われるその他の事柄について、何点か説明します。
+た ほうが良いと思われるその他の事柄について、何点か説明します。
 
 * Menu:
 
@@ -338,7 +339,7 @@ File: eb-ja.info,  Node: Character Code,  Next: Compressed Book,  Prev: Header F
 ==========
 
    EB ライブラリでは、CD-ROM 書籍内のデータを文字列にしてアプリケーショ
-ンに渡す際の文字コードを規定しています。
+ン に渡す際の文字コードを規定しています。
 
    EBG (海外の電子ブック) については、データが ISO 8859-1 (ラテン文字 1、
  ただし制御文字を除く) で書かれているため、データのやり取りも ISO
@@ -524,7 +525,7 @@ File: eb-ja.info,  Node: Compilation Simple Way,  Next: Compilation with Autocon
 してしまいます。 そこで、この節では Autoconf を併用する代わりに、次の手
 順で回避します。
 
-  1. EB ライブラリ 3.3.2 のソースードを展開します。
+  1. EB ライブラリ 3.3.3 のソースードを展開します。
 
   2. ソースコードに付属している `configure' スクリプトを実行します。
      `configure' のコマンド行引数は、インストール時と同じものを指定し
@@ -597,7 +598,7 @@ Autoconf を併用したコンパイル方法
 =================================
 
    作業の前に、Autoconf, Automake, Libtool は、あらかじめインストールし
-ておいて下さい。 Autoconf はバージョン 2.50 以降が必要です。
+て おいて下さい。 Autoconf はバージョン 2.50 以降が必要です。
 
    まず、アプリケーションプログラムの `configure.ac' (もしくは
 `configure.in') に、次の行を加えます。
@@ -632,7 +633,7 @@ EB ライブラリを `/usr/local' にインストールし、個々のファイルのインス
      ACLOCAL_AMFLAGS = -I m4
 
    また、ソースコードのディレクトリに Libtool パッケージがまだ用意され
-ていなければ、用意します。 `libtoolize' コマンドを実行して下さい。
+て いなければ、用意します。 `libtoolize' コマンドを実行して下さい。
 Libtool パッケージが、ソースコードのディレクトリにコピーされます。
 
      libtoolize
@@ -794,13 +795,13 @@ File: eb-ja.info,  Node: Init and Exit Functions,  Prev: Init and Exit Sample,  
 
      #include <eb/eb.h>
 
- - Function: EB_Error_Code eb_initialize_library ()
+ - 機能: EB_Error_Code eb_initialize_library ()
      関数 `eb_initialize_library()' は、EB ライブラリを初期化します。
      アプリケーションプログラムは、EB ライブラリの他の関数を呼ぶ前に、
      必ず一回だけこの関数を呼ぶ必要があります。
 
      メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイ
-     ルした場合、`eb_initialize_library()' は `bindtextdomain()' を呼
+     ル した場合、`eb_initialize_library()' は `bindtextdomain()' を呼
      び出します。 したがって、アプリケーションプログラムが
      `setlocale()' を呼び出すのは、この関数を呼び出す前である必要があ
      ります。
@@ -813,7 +814,7 @@ File: eb-ja.info,  Node: Init and Exit Functions,  Prev: Init and Exit Sample,  
      `eb_initialize_library()' を呼んでもいけません。 呼んだ場合の動作
      は未定義です。
 
- - Function: void eb_finalize_library ()
+ - 機能: void eb_finalize_library ()
      関数 `eb_finalize_library()' は、EB ライブラリを使い終わった際の
      後始末を行います。 ただし、アプリケーションプログラム側で使用した
      `EB_Book'、`EB_Hookset'、`EB_Appendix' オブジェクトの後始末は行い
@@ -823,7 +824,7 @@ File: eb-ja.info,  Node: Init and Exit Functions,  Prev: Init and Exit Sample,  
      要があります。
 
      ライブラリの後始末をした後は、EB ライブラリのいかなる関数も呼んで
-     はいけません。 呼んだ場合の動作は未定義です。
+     は いけません。 呼んだ場合の動作は未定義です。
 
 
 File: eb-ja.info,  Node: EB_Book,  Next: Error Handling,  Prev: Init and Exit,  Up: Top
@@ -1073,7 +1074,7 @@ File: eb-ja.info,  Node: EB_Book Functions,  Prev: EB_Book Data Types,  Up: EB_B
 
      #include <eb/eb.h>
 
- - Function: void eb_initialize_book (EB_Book *BOOK)
+ - 機能: void eb_initialize_book (EB_Book *BOOK)
      関数 `eb_initialize_book()' は、BOOK の指す `EB_Book' オブジェクト
      を初期化します。 `EB_Book' オブジェクトに対して EB ライブラリの他
      の関数を呼ぶ前に、 必ずそのオブジェクトを初期化しなくてはなりませ
@@ -1082,7 +1083,7 @@ File: eb-ja.info,  Node: EB_Book Functions,  Prev: EB_Book Data Types,  Up: EB_B
      トに対して、再度 `eb_initialize_book()' を呼んではいけません。 呼
      んだ場合の動作は未定義です。
 
- - Function: EB_Error_Code eb_bind (EB_Book *BOOK, const char *PATH)
+ - 機能: EB_Error_Code eb_bind (EB_Book *BOOK, const char *PATH)
      関数 `eb_bind()' は、 BOOK の指す `EB_Book' オブジェクトを、パス
      PATH にある CD-ROM 書籍に結び付けます。 パスは書籍のトップディレク
      トリ、つまり `CATALOG' あるいは `CATALOGS' ファイルの存在するディ
@@ -1099,7 +1100,7 @@ File: eb-ja.info,  Node: EB_Book Functions,  Prev: EB_Book Data Types,  Up: EB_B
      は、絶対パスに変換した結果がこの長さに収まっていなくてはなりませ
      ん。 これを超えると、`EB_ERR_TOO_LONG_FILE_NAME' を返します。
 
- - Function: void eb_finalize_book (EB_Book *BOOK)
+ - 機能: void eb_finalize_book (EB_Book *BOOK)
      関数 `eb_finalize_book()' は、BOOK が指す `EB_Book' オブジェクトの
      後始末を行います。
 
@@ -1110,11 +1111,11 @@ File: eb-ja.info,  Node: EB_Book Functions,  Prev: EB_Book Data Types,  Up: EB_B
      後始末をしたオブジェクトに対して `eb_bind()' を呼ぶことで、 オブジ
      ェクトを再利用することができます。
 
- - Function: int eb_is_bound (EB_Book *BOOK)
+ - 機能: int eb_is_bound (EB_Book *BOOK)
      関数 `eb_is_bound()' は、BOOK が書籍に結び付いているかどうかを調
      べます。 結び付いていれば 1 を返し、そうでなければ 0 を返します。
 
- - Function: EB_Error_Code eb_path (EB_Book *BOOK const char *PATH)
+ - 機能: EB_Error_Code eb_path (EB_Book *BOOK const char *PATH)
      関数 `eb_path()' は、BOOK に結び付いている書籍のパスを、 PATH の指
      す領域に書き込みます。
 
@@ -1130,7 +1131,7 @@ File: eb-ja.info,  Node: EB_Book Functions,  Prev: EB_Book Data Types,  Up: EB_B
      と同じとは限りません。 たとえば、相対パスだった場合は、絶対パスに
      変換されます。
 
- - Function: EB_Error_Code eb_disc_type (EB_Book *BOOK, EB_Disc_Code
+ - 機能 : EB_Error_Code eb_disc_type (EB_Book *BOOK, EB_Disc_Code
           *DISC_CODE)
      関数 `eb_disc_type()' は、BOOK のディスクの形式を DISC_CODE の指す
      領域に書き込みます。 書き込むディスクの形式の値は、`EB_Disc_Code'
@@ -1144,7 +1145,7 @@ File: eb-ja.info,  Node: EB_Book Functions,  Prev: EB_Book Data Types,  Up: EB_B
      BOOK は、あらかじめ書籍に結び付いていなければなりません。 結びつい
      ていない場合は、`EB_ERR_UNBOUND_BOOK' を返します。
 
- - Function: EB_Error_Code eb_character_code (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_character_code (EB_Book *BOOK,
           EB_Character_Code *CHARACTER_CODE)
      関数 `eb_character_code()' は、 BOOK が書かれている文字コードを
      CHARACTER_CODE の指す領域に書き込みます。
@@ -1191,7 +1192,7 @@ File: eb-ja.info,  Node: Error Code and Message,  Next: Tolerance to Error,  Pre
 
    EB ライブラリの関数の多くは、戻り値として `EB_Error_Code' 型の値を返
 します。 処理が成功したときに返す値は `EB_SUCCESS' ですが、失敗したとき
-はエラーの原因に応じて様々な値を返します。 このため、EB ライブラリでは
+は エラーの原因に応じて様々な値を返します。 このため、EB ライブラリでは
 次のような `EB_SUCCESS' との比較処理がよく行われます。
 
      EB_Error_Code error_code;
@@ -1295,7 +1296,7 @@ File: eb-ja.info,  Node: Error Code List,  Next: Error Functions,  Prev: Error D
 ==================
 
    この節で説明しているエラーコードを使うには、次のようにヘッダファイル
-を読み込んで下さい。
+を 読み込んで下さい。
 
      #include <eb/error.h>
 
@@ -1408,7 +1409,7 @@ File: eb-ja.info,  Node: Error Code List,  Next: Error Functions,  Prev: Error D
  - Constant: EB_ERR_UNBOUND_BOOK
      呼び出された EB ライブラリの関数は、書籍に結び付けられた `EB_Book'
      オブジェクトを引数にとるが、与えられたオブジェクトは書籍に結び付け
-     られていなかった。
+     ら れていなかった。
 
  - Constant: EB_ERR_UNBOUND_APP
      呼び出された EB ライブラリの関数は、付録に結び付けられた
@@ -1433,7 +1434,8 @@ File: eb-ja.info,  Node: Error Code List,  Next: Error Functions,  Prev: Error D
 
  - Constant: EB_ERR_NO_CUR_APPSUB
      呼び出された関数は、副本が選択されている `EB_Appendix' オブジェク
-     トを引数にとるが、与えられたオブジェクトでは選択されていなかった。
+     ト
+     を引数にとるが、与えられたオブジェクトでは選択されていなかった。
 
  - Constant: EB_ERR_NO_CUR_FONT
      呼び出された関数は、外字が選択されている `EB_Book' オブジェクトを
@@ -1452,7 +1454,7 @@ File: eb-ja.info,  Node: Error Code List,  Next: Error Functions,  Prev: Error D
  - Constant: EB_ERR_NO_SUCH_APPSUB
      `EB_Appendix' オブジェクトと副本コードが関数に与えられたが、
      `EB_Appendix' オブジェクトに結び付けられている付録は、その副本コー
-     ドに一致する副本を持っていない。
+     ド に一致する副本を持っていない。
 
  - Constant: EB_ERR_NO_SUCH_FONT
      `EB_Book' オブジェクトと外字の縦のサイズが関数に与えられたが、
@@ -1462,7 +1464,7 @@ File: eb-ja.info,  Node: Error Code List,  Next: Error Functions,  Prev: Error D
  - Constant: EB_ERR_NO_SUCH_CHAR_BMP
      `EB_Book' オブジェクトと文字番号が関数に与えられたが、`EB_Book' オ
      ブジェクトに結び付けられていた書籍で選択中の副本は、その番号の外字
-     のビットマップデータを持っていない。
+     の ビットマップデータを持っていない。
 
  - Constant: EB_ERR_NO_SUCH_CHAR_TEXT
      `EB_Appendix' オブジェクトと文字番号が関数に与えられたが、
@@ -1532,14 +1534,14 @@ File: eb-ja.info,  Node: Error Functions,  Prev: Error Code List,  Up: Error Han
 
      #include <eb/error.h>
 
- - Function: const char * eb_error_string (EB_Error_Code ERROR_CODE)
+ - 機能: const char * eb_error_string (EB_Error_Code ERROR_CODE)
      関数 `eb_error_string()' は、エラーコード ERROR_CODE を文字列に変
      換したものを返します。 文字列の文字コードは、ASCII になります。 た
      とえば、エラーコード値 `EB_SUCCESS' を渡すと文字列 `"EB_SUCCESS"'
      を返します。 未知のエラーコードを渡したときは、`"EB_ERR_UNKNOWN"'
      を返します。
 
- - Function: const char * eb_error_message (EB_Error_Code ERROR_CODE)
+ - 機能: const char * eb_error_message (EB_Error_Code ERROR_CODE)
      関数 `eb_error_message()' は、エラーコード ERROR_CODE に対応した
      メッセージを文字列にして返します。 関数の返すメッセージは、英語か
      日本語になります。
@@ -1549,7 +1551,7 @@ File: eb-ja.info,  Node: Error Functions,  Prev: Error Code List,  Up: Error Han
      は、ASCII になります。
 
      メッセージの国際化機能 (NLS) を有効にして EB ライブラリをコンパイ
-     ルした場合は、ロケールの設定に応じてどちらの言語のメッセージを返
+     ル した場合は、ロケールの設定に応じてどちらの言語のメッセージを返
      すのかが決まります。 また、 GNU gettext バージョン 0.36 以降では
      iconv() と連携することにより、 メッセージの文字コードもロケールに
      応じて変化します。 gettext が iconv() との連携を行わなければ、英語
@@ -1570,7 +1572,7 @@ File: eb-ja.info,  Node: Subbook,  Next: Search,  Prev: Error Handling,  Up: Top
 EPWING では 1 枚の CD-ROM にまとめることができます。
 
    たとえば、ある CD-ROM 書籍は、国語辞書、英々辞典、百科事典という 3
-つの (印刷された本で言うところの)
+つ の (印刷された本で言うところの)
 「書籍」を持っていることもあり得ます。 紛らわしさを避けるために、EB ラ
 イブラリではここで言う「書籍」のことを "副本 (subbook)"
 と呼んでいます。
@@ -1818,7 +1820,7 @@ File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subb
 
      #include <eb/eb.h>
 
- - Function: EB_Error_Code eb_load_all_subbooks (EB_Book *BOOK)
+ - 機能: EB_Error_Code eb_load_all_subbooks (EB_Book *BOOK)
      関数 `eb_load_all_subbooks()' は、BOOK 内のすべての副本を初期化し
      ます。 通常、副本の初期化は、その副本が初めて選択されたときに自動
      的に行われますが、 この関数は初期化を前倒しで行います。 初期化の対
@@ -1838,8 +1840,8 @@ File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subb
      この関数を呼び出すと、 BOOK
      は、副本を選択していない状態になります。
 
- - Function: EB_Error_Code eb_subbook_list (EB_Book *BOOK,
-          EB_Subbook_Code *SUBBOOK_LIST, int *SUBBOOK_COUNT)
+ - 機能 : EB_Error_Code eb_subbook_list (EB_Book *BOOK, EB_Subbook_Code
+          *SUBBOOK_LIST, int *SUBBOOK_COUNT)
      関数 `eb_subbook_list()' は、 BOOK 内のすべて副本の副本コードを
      `EB_Subbook_Code' 型の配列にして、SUBBOOK_LIST の指す領域に書き込
      みます。 配列は、最大で `EB_MAX_SUBBOOKS' 個の要素を持ちます。 加
@@ -1853,7 +1855,7 @@ File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subb
      BOOK は、あらかじめ書籍に結び付けられていなくてはなりません。 結び
      ついていない場合は、`EB_ERR_UNBOUND_BOOK' を返します。
 
- - Function: EB_Error_Code eb_subbook (EB_Book *BOOK, EB_Subbook_Code
+ - 機能 : EB_Error_Code eb_subbook (EB_Book *BOOK, EB_Subbook_Code
           *SUBBOOK_CODE)
      関数 `eb_subbook()' は、 BOOK が選択中の副本の副本コードを
      SUBBOOK_CODE の指す領域に書き込みます。
@@ -1865,7 +1867,7 @@ File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subb
      あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
      選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
 
- - Function: EB_Error_Code eb_subbook_title (EB_Book *BOOK, char *TITLE)
+ - 機能: EB_Error_Code eb_subbook_title (EB_Book *BOOK, char *TITLE)
      関数 `eb_subbook_title()' は、BOOK が選択中の副本の題名を TITLE の
      指す領域に文字列として書き込みます。 題名の文字列の長さは、最長で
      `EB_MAX_TITLE_LENGTH' バイトです。 この長さは、末尾のナル文字を含
@@ -1882,7 +1884,7 @@ File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subb
      あらかじめ、BOOK 内のいずれかの副本が選択されていなくてはなりませ
      ん。 選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
 
- - Function: EB_Error_Code eb_subbook_title2 (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_subbook_title2 (EB_Book *BOOK,
           EB_Subbook_Code SUBBOOK_CODE, char *TITLE)
      `eb_subbook_title()' と似ていますが、選択中の副本ではなく、引数
      SUBBOOK_CODE で指定された副本の題名を書き込む点が異なります。
@@ -1891,7 +1893,7 @@ File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subb
      付けられていなければなりません。 結びついていない場合は、
      `EB_ERR_UNBOUND_BOOK' を返します。
 
- - Function: EB_Error_Code eb_subbook_directory (EB_Book *BOOK, char
+ - 機能 : EB_Error_Code eb_subbook_directory (EB_Book *BOOK, char
           *DIRECTORY)
      関数 `eb_subbook_directory()' は、BOOK 内で現在選択中の副本のデー
      タファイルを収めたディレクトリ名を、DIRECTORY の指す領域に書き込
@@ -1909,7 +1911,7 @@ File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subb
      あらかじめ、BOOK 内のいずれかの副本が選択されていなくてはなりませ
      ん。 選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
 
- - Function: EB_Error_Code eb_subbook_directory2 (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_subbook_directory2 (EB_Book *BOOK,
           EB_Subbook_Code SUBBOOK_CODE, char *DIRECTORY)
      `eb_subbook_directory()' と似ていますが、選択中の副本ではなく、引
      数 SUBBOOK_CODE で指定された副本のディレクトリ名を書き込む点が異
@@ -1919,8 +1921,8 @@ File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subb
      付けられていなければなりません。 結びついていない場合は、
      `EB_ERR_UNBOUND_BOOK' を返します。
 
- - Function: EB_Error_Code eb_set_subbook (EB_Book *BOOK,
-          EB_Subbook_Code CODE)
+ - 機能 : EB_Error_Code eb_set_subbook (EB_Book *BOOK, EB_Subbook_Code
+          CODE)
      関数 `eb_set_subbook()' は、BOOK の副本 CODE を選択します。 すで
      に副本を選択していた場合は、いったん未選択の状態にしてから副本
      SUBBOOK_CODE を選択します。
@@ -1934,7 +1936,7 @@ File: eb-ja.info,  Node: Subbook Functions,  Prev: Subbook Data Types,  Up: Subb
      あらかじめ、BOOK は書籍に結び付けられていなければなりません。 結び
      ついていない場合は、`EB_ERR_UNBOUND_BOOK' を返します。
 
- - Function: void eb_unset_subbook (EB_Book *BOOK)
+ - 機能: void eb_unset_subbook (EB_Book *BOOK)
      関数 `eb_unset_subbook()' は、BOOK が選択している副本を未選択の状
      態にします。 BOOK が書籍に結び付いていないか、副本が選択されていな
      い場合は、何もしません。
@@ -2104,7 +2106,7 @@ File: eb-ja.info,  Node: Multi Search,  Next: EB_Hit,  Prev: Keyword Search,  Up
 ========
 
    複合検索は、条件検索と同じく、複数個の入力語にすべて一致するエントリ
-を検索しますが、個々の入力語にあらかじめ題目が付けられています。
+を 検索しますが、個々の入力語にあらかじめ題目が付けられています。
 
    また、前方一致、後方一致、完全一致、条件検索はすべて、各副本につき
 一種類しかありませんが、複合検索だけは一つの副本の中で複数の種類が用意
@@ -2307,7 +2309,7 @@ File: eb-ja.info,  Node: Search Data Types,  Next: Search Functions,  Prev: Get 
           };
 
      ページ番号は 1 から始まり、ページ内のオフセットは 0 〜 2047 の範囲
-     となります。 ただし、アプリケーションプログラムを作成する上で、こ
+     と なります。 ただし、アプリケーションプログラムを作成する上で、こ
      のことを覚えておく必要はありません。
 
      アプリケーションプログラムは、直接 `EB_Position' オブジェクトのメ
@@ -2335,9 +2337,9 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
 
      #include <eb/eb.h>
 
- - Function: int eb_have_word_search (EB_Book *BOOK)
- - Function: int eb_have_endword_search (EB_Book *BOOK)
- - Function: int eb_have_exactword_search (EB_Book *BOOK)
+ - 機能: int eb_have_word_search (EB_Book *BOOK)
+ - 機能: int eb_have_endword_search (EB_Book *BOOK)
+ - 機能: int eb_have_exactword_search (EB_Book *BOOK)
      関数 `eb_have_word_search()' は、BOOK が選択中の副本で前方一致検
      索メソッドが利用可能どうかを調べます。 同様に
      `eb_have_endword_search()' は後方一致検索メソッドについて、
@@ -2347,21 +2349,21 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      利用可能なら 1 を返します。 メソッドを持っていないか、そもそも副本
      が選択されていない場合は 0 を返します。
 
- - Function: int eb_have_keyword_search (EB_Book *BOOK)
+ - 機能: int eb_have_keyword_search (EB_Book *BOOK)
      関数 `eb_have_keyword_search()' は、BOOK が選択中の副本で条件検索
      メソッドが利用可能どうかを調べます。
 
      利用可能なら 1 を返します。 メソッドを持っていないか、そもそも副本
      が選択されていない場合は 0 を返します。
 
- - Function: int eb_have_multi_search (EB_Book *BOOK)
+ - 機能: int eb_have_multi_search (EB_Book *BOOK)
      関数 `eb_have_multi_search()' は、BOOK が選択中の副本で複合検索メ
      ソッドが利用可能どうかを調べます。
 
      最低 1 種類でも利用可能なら 1 を返します。 メソッドを持っていない
      か、そもそも副本が選択されていない場合は 0 を返します。
 
- - Function: EB_Error_Code eb_multi_search_list (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_multi_search_list (EB_Book *BOOK,
           EB_Multi_Search_Code *MULTI_LIST, int *MULTI_COUNT)
      関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
      いる複合検索を調べ、複合検索コードの一覧を `EB_Multi_Search_Code'
@@ -2376,7 +2378,7 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
      選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
 
- - Function: EB_Error_Code eb_multi_entry_count (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_multi_entry_count (EB_Book *BOOK,
           EB_Multi_Search_Code MULTI_ID, int *ENTRY_COUNT)
      関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
      いる複合検索 MULTI_ID について調べ、入力語の個数を ENTRY_COUNT の
@@ -2390,7 +2392,7 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
      選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
 
- - Function: EB_Error_Code eb_multi_entry_label (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_multi_entry_label (EB_Book *BOOK,
           EB_Multi_Search_Code MULTI_ID, int ENTRY_INDEX, char *LABEL)
      関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
      いる複合検索 MULTI_ID について調べ、ENTRY_INDEX 番目の検索語の題
@@ -2409,7 +2411,7 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
      選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
 
- - Function: int eb_multi_entry_have_candidates (EB_Book *BOOK,
+ - 機能 : int eb_multi_entry_have_candidates (EB_Book *BOOK,
           EB_Multi_Search_Code MULTI_ID, int ENTRY_INDEX)
      関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
      いる複合検索 MULTI_ID について調べ、ENTRY_INDEX 番目の検索語が候
@@ -2420,7 +2422,7 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      ていない場合、あるいは MULTI_ID, や ENTRY_INDEX が不正な値だった場
      合は 0 を返します。
 
- - Function: EB_Error_Code eb_multi_entry_candidates (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_multi_entry_candidates (EB_Book *BOOK,
           EB_Multi_Search_Code MULTI_ID, int ENTRY_INDEX, EB_Position
           *POSITION)
      関数 `eb_multi_search_list()' は、BOOK が選択中の副本に用意されて
@@ -2435,12 +2437,12 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      あらかじめ、BOOK はいずれかの副本を選択していなくてはなりません。
      選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。
 
- - Function: EB_Error_Code eb_search_word (EB_Book *BOOK, const char
+ - 機能 : EB_Error_Code eb_search_word (EB_Book *BOOK, const char
           *INPUT_WORD)
- - Function: EB_Error_Code eb_search_endword (EB_Book *BOOK, const char
+ - 機能 : EB_Error_Code eb_search_endword (EB_Book *BOOK, const char
           *INPUT_WORD)
- - Function: EB_Error_Code eb_search_exactword (EB_Book *BOOK, const
-          char *INPUT_WORD)
+ - 機能 : EB_Error_Code eb_search_exactword (EB_Book *BOOK, const char
+          *INPUT_WORD)
      関数 `eb_search_word()' は、BOOK が選択中の副本に対する前方一致検
      索をリクエストします。 同様に `eb_search_endword()' は後方一致検索
      を、 `eb_search_exactword()' は完全一致検索をリクエストします。
@@ -2470,9 +2472,9 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 なお、一致
      するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
 
- - Function: EB_Error_Code eb_search_keyword (EB_Book *BOOK, const char
-          * const INPUT_WORDS[])
- - Function: EB_Error_Code eb_search_multi (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_search_keyword (EB_Book *BOOK, const char *
+          const INPUT_WORDS[])
+ - 機能 : EB_Error_Code eb_search_multi (EB_Book *BOOK,
           EB_Multi_Search_Code MULTI_ID, const char * const
           INPUT_WORDS[])
      関数 `eb_search_word()' は、BOOK が選択中の副本に対する条件検索を
@@ -2517,10 +2519,10 @@ File: eb-ja.info,  Node: Search Functions,  Prev: Search Data Types,  Up: Search
      選択していない場合は、`EB_ERR_NO_CUR_SUB' を返します。 なお、一致
      するエントリが最低 1 個あるかどうかは、戻り値には影響しません。
 
- - Function: EB_Error_Code eb_hit_list (EB_Book *BOOK, int
-          MAX_HIT_COUNT, EB_Hit *HIT_LIST, int *HIT_COUNT)
+ - 機能 : EB_Error_Code eb_hit_list (EB_Book *BOOK, int MAX_HIT_COUNT,
+          EB_Hit *HIT_LIST, int *HIT_COUNT)
      関数 `eb_hit_list()' は、あらかじめ以下のいずれかの関数でリクエス
-     トされた検索を実行し、一致したエントリを取得します。
+     ト された検索を実行し、一致したエントリを取得します。
 
         * `eb_search_word()' (前方一致検索)
 
@@ -2646,7 +2648,7 @@ File: eb-ja.info,  Node: Seek and Read Text Data,  Next: Text Data Format,  Prev
 (*note [検索] データ型の詳細: Search Data Types.)  のオブジェクトを用い
 ます。 たとえば、本文の先頭位置は、`eb_text()' という関数を使って次のよ
 うに取得できますが、このときも位置データは `EB_Position' 型オブジェク
-トに書き込まれます。
+ト に書き込まれます。
 
      EB_Position position;
      
@@ -2694,7 +2696,7 @@ File: eb-ja.info,  Node: Seek and Read Text Data,  Next: Text Data Format,  Prev
 
    ただし、`EB_Book' オブジェクトは、テキストデータの種類別に読み込み
 位置を覚えているわけではなく、全種類のテキストデータで共有する位置情報
-を一つ覚えているだけです。 たとえば、本文を読み込んだ後で、別の位置に
+を 一つ覚えているだけです。 たとえば、本文を読み込んだ後で、別の位置に
 シークして見出しを読み込むと、 `EB_Book' は本文の読み込み位置のことは忘
 れてしまいます。
 
@@ -2921,7 +2923,7 @@ File: eb-ja.info,  Node: Hook and Character Code,  Next: Copyright Notice,  Prev
 ========================
 
    前節では、エスケープシーケンスに対するフックを例にとりましたが、この
-他にも、EB ライブラリには文字に対するフックが用意されています。
+他 にも、EB ライブラリには文字に対するフックが用意されています。
 
 `EB_HOOK_ISO8859_1'
      ISO 8859-1 (ラテン文字 1)
@@ -2949,14 +2951,14 @@ File: eb-ja.info,  Node: Hook and Character Code,  Next: Copyright Notice,  Prev
      渡されます。
 
 いずれも、その文字がテキストデータ中に現れる度に、フック関数が呼び出さ
-れます。
+れ ます。
 
    上の記述を見ても分かるように、フック関数に渡される文字番号は、書籍の
 文字コードに応じて、ISO 8859-1, 日本語 EUC、中国語 EUC のいずれかの文
 字コードで表現されたものになります。
 
    フック関数を登録しなければ、その文字番号がテキストデータとしてそのま
-ま書き込まれます。
+ま 書き込まれます。
 
    もし、アプリケーションプログラムが、EB ライブラリの内部コードとは異
 なる文字コードを使用したい場合は、これらのフックのフック関数を登録して、
@@ -3015,7 +3017,7 @@ File: eb-ja.info,  Node: Menu,  Next: Multi Candidates,  Prev: Copyright Notice,
 が挙げられます。
 
    メニューでは「別項目参照」というエスケープシーケンスを多用して、階層
-的な構造になっているのが一般的です。 このエスケープシーケンスには、参
+的 な構造になっているのが一般的です。 このエスケープシーケンスには、参
 照先のテキストの位置が記録されています。
 
    たとえば、ある CD-ROM 書籍のメニューが次のようになっていたとします。
@@ -3046,7 +3048,7 @@ File: eb-ja.info,  Node: Menu,  Next: Multi Candidates,  Prev: Copyright Notice,
    別項目参照開始および終了シーケンスに対して、それぞれフック
 `EB_HOOK_BEGIN_REFERENCE' と `EB_HOOK_END_REFERENCE' が用意されていま
 す。 参照先の位置情報は、終了シーケンスへのフック関数に対して、引数とし
-て渡されます。 たとえば、`EB_HOOK_END_REFERENCE' へのフック関数の冒頭
+て 渡されます。 たとえば、`EB_HOOK_END_REFERENCE' へのフック関数の冒頭
 では、次のようにすると良いかも知れません。
 
      EB_Error_Code
@@ -3080,7 +3082,7 @@ File: eb-ja.info,  Node: Menu,  Next: Multi Candidates,  Prev: Copyright Notice,
      　　　　└─────┘　└─────┘　└─────┘
 
 この辞書の例では、メニューはここで終わりになっていますが、書籍によって
-はさらに第 3 層、第 4 層と続く場合もあります。 また、メニュー全体が均
+は さらに第 3 層、第 4 層と続く場合もあります。 また、メニュー全体が均
 一の階層数になっているとは限りません。 メニューの参照先が本文や著作権表
 示になっていることもあります。
 
@@ -3190,10 +3192,10 @@ File: eb-ja.info,  Node: Multi Candidates,  Next: Stop Code Issue,  Prev: Menu, 
 が用意されています。 終了シーケンスに対するフックは 2 種類あって、さら
 に次の階層へ続く場合に呼ばれる `EB_HOOK_END_CANDIDATE_GROUP' と、その
 語がそのまま入力語の候補となる場合に呼ばれる `EB_HOOK_END_GROUP_LEAF'
-に分かれています。
+に 分かれています。
 
    次の階層のデータの開始位置は、終了シーケンスのフック関数に、引数とし
-て渡ってきます。 (この点もメニューと同様なので、メニューの解説を参考に
+て 渡ってきます。 (この点もメニューと同様なので、メニューの解説を参考に
 して下さい。)
 
    終了シーケンスに対するフック関数の中では、`eb_current_candidate()'
@@ -3221,12 +3223,12 @@ File: eb-ja.info,  Node: Stop Code Issue,  Next: Text Data Sample,  Prev: Multi 
 に抜き出すことは、電子ブックや EPWING では不可能なのです。
 
    しかしながら、幸いにも市販の書籍の多くには、単語の説明の終了位置にだ
-け出現する、特有のエスケープシーケンスが存在します。 もちろん、このエ
+け 出現する、特有のエスケープシーケンスが存在します。 もちろん、このエ
 スケープシーケンスは本来「単語の説明の終了」を示すものではなく別の用途
 として用いるのですが、「終了位置」として代用できるという意味です。
 
    EB ライブラリでは、この「終了位置」の印に使えるエスケープシーケンス
-のことを、"区切りコード (stop code)" と呼んでいます。 EB ライブラリは
+の ことを、"区切りコード (stop code)" と呼んでいます。 EB ライブラリは
 区切りコードを自動判定する機能を持っていますが、判定は完璧ではないので
 外れることもあります。 外れると本文が途中で途切れたり、本文の続きが延々
 と出力されたりします。
@@ -3534,7 +3536,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 ==================
 
    この節で説明しているフックコードを使うには、次のようにヘッダファイル
-を読み込んで下さい。
+を 読み込んで下さい。
 
      #include <eb/text.h>
 
@@ -3579,7 +3581,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      なら `0x1f07' になります。
 
      フック関数を登録していない状態では、これらのフックはテキストデータ
-     に何も書き込みません。
+     に 何も書き込みません。
 
  - EB_HOOK_SET_INDENT:
      `EB_HOOK_SET_INDENT' は、テキストデータの行頭の字下げ指定を表すエ
@@ -3594,7 +3596,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      は 1 ずつ増えたり減ったりします。
 
      フック関数を登録していない状態では、このフックはテキストデータに何
-     も書き込みません。
+     も 書き込みません。
 
  - EB_HOOK_NEWLINE:
      `EB_HOOK_SET_NEWLINE' は、改行を表すエスケープシーケンスに対する
@@ -3609,7 +3611,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      ケープシーケンスのコードそのもので、`0x1f0a' になります。
 
      フック関数を登録していない状態では、このフックはテキストデータに何
-     も書き込みませんが、`eb_initialize_hookset()' で `EB_Hook' オブジ
+     も 書き込みませんが、`eb_initialize_hookset()' で `EB_Hook' オブジ
      ェクトを初期化すると、フック関数として `eb_hook_newline()' が自動
      的に登録されます。
 
@@ -3743,7 +3745,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
      は、外字の文字番号を表します。
 
      フック関数を登録していない状態では、このフックはテキストデータに何
-     も書き込みませんが、`eb_initialize_hookset()' で `EB_Hook' オブジ
+     も 書き込みませんが、`eb_initialize_hookset()' で `EB_Hook' オブジ
      ェクトを初期化すると、フック関数として
      `eb_hook_narrow_character_text()' および
      `eb_hook_wide_character_text()' が自動的に登録されます。
@@ -3825,7 +3827,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
  - EB_HOOK_BEGIN_GRAY_GRAPHIC:
  - EB_HOOK_END_GRAY_GRAPHIC:
      これらのフック名称は、グレースケール図版のために予約されていますが、
-     EB ライブラリ 3.3.2 ではまだ対応していません。
+     EB ライブラリ 3.3.3 ではまだ対応していません。
 
  - EB_HOOK_BEGIN_COLOR_BMP:
  - EB_HOOK_BEGIN_COLOR_JPEG:
@@ -3844,7 +3846,7 @@ File: eb-ja.info,  Node: Hook Code List,  Next: Hookset Access Functions,  Prev:
 
      フック `EB_HOOK_END_COLOR_BMP' が、フック関数に渡す `argc' は 3 で
      す。 `argv[0]' はエスケープシーケンスのコードそのもので、`0x1f6d'
-     になります。 `argv[1]' と `argv[2]' は、図版データのページ番号と
+     に なります。 `argv[1]' と `argv[2]' は、図版データのページ番号と
      オフセットです。 これは、`EB_Position' オブジェクト (*note [検索]
      データ型の詳細: Search Data Types.)  の `page' および `offset' メ
      ンバの値に相当します。
@@ -3938,7 +3940,7 @@ File: eb-ja.info,  Node: Hookset Access Functions,  Next: Builtin Hook Functions
 
      #include <eb/text.h>
 
- - Function: void eb_initialize_hookset (EB_Hookset *HOOKSET)
+ - 機能: void eb_initialize_hookset (EB_Hookset *HOOKSET)
      関数 `initialize_hookset()' は、HOOKSET の指す `EB_Hookset' オブジ
      ェクトを初期化します。 `EB_Hookiset' オブジェクトに対して EB ライ
      ブラリの他の関数を呼ぶ前に、 必ずそのオブジェクトを初期化しなくて
@@ -3956,7 +3958,7 @@ File: eb-ja.info,  Node: Hookset Access Functions,  Next: Builtin Hook Functions
      `EB_HOOK_NEWLINE'                  `eb_hook_newline()'
      上記以外のフック                   `NULL' (フック関数なし)
 
- - Function: EB_Error_Code eb_finalize_hookset (EB_Hookset *HOOKSET)
+ - 機能: EB_Error_Code eb_finalize_hookset (EB_Hookset *HOOKSET)
      関数 `eb_finalize_hookset()' は、HOOKSET が指す `EB_Hooksest' オブ
      ジェクトの後始末を行います。
 
@@ -3966,28 +3968,28 @@ File: eb-ja.info,  Node: Hookset Access Functions,  Next: Builtin Hook Functions
      後始末をしたオブジェクトに対して `eb_set_hook()', `eb_set_hooks()'
      を呼ぶことで、オブジェクトを再利用することができます。
 
- - Function: EB_Error_Code eb_set_hook (EB_Hookset *HOOKSET, const
-          EB_Hook *HOOK)
+ - 機能 : EB_Error_Code eb_set_hook (EB_Hookset *HOOKSET, const EB_Hook
+          *HOOK)
      関数 `eb_set_hook()' は、HOOKSET が指す `EB_Hooksest' オブジェクト
      に、フック関数を一つ登録します。 登録するフックの種類とフック関数
      は、HOOK で指定します。
 
      同じフックコードに複数回フック関数を登録しても、有効になるのは最後
-     に登録したものだけですので、注意して下さい。 フック関数として
+     に 登録したものだけですので、注意して下さい。 フック関数として
      `NULL' を指定すると、登録されているフックが解除されます。
 
      成功すると、この関数は `EB_SUCCESS' を返します。 失敗すると、原因
      を示すエラーコードを返します。
 
- - Function: EB_Error_Code eb_set_hooks (EB_Hookset *HOOKSET, const
-          EB_Hook *HOOKS)
+ - 機能 : EB_Error_Code eb_set_hooks (EB_Hookset *HOOKSET, const EB_Hook
+          *HOOKS)
      この関数は `eb_set_hook()' に似ていますが、任意の個数のフック関数
      を一度に登録できる点が異なります。
 
      登録するフックの種類とフック関数は、 HOOKS で指定します。 HOOKS は
      `EB_Hook' オブジェクトの配列 (の先頭) を指していなければなりませ
      ん。 また、この配列の末尾には、フックコード `EB_HOOK_NULL' をセッ
-     トした `EB_Hook' オブジェクトを配列要素として置く必要があります。
+     ト した `EB_Hook' オブジェクトを配列要素として置く必要があります。
 
      `eb_set_hooks()' は、配列の先頭から順番に、指定されたフックコード
      に対してフック関数を登録していきます。 エラーが発生すると、残りの
@@ -4011,12 +4013,12 @@ File: eb-ja.info,  Node: Builtin Hook Functions,  Next: Text Data Functions,  Pr
    いずれのフック関数も、引数 APPENDIX と CONTAINER に `NULL' を渡され
 ても、動作に支障はないようになっています。
 
- - Function: EB_Error_Code eb_hook_euc_to_ascii (EB_Book *BOOK,
-          EB_Appendix *APPENDIX, void *CONTAINER, EB_Hook_Code CODE,
-          int ARGC, const unsigned int *ARGV)
+ - 機能 : EB_Error_Code eb_hook_euc_to_ascii (EB_Book *BOOK, EB_Appendix
+          *APPENDIX, void *CONTAINER, EB_Hook_Code CODE, int ARGC,
+          const unsigned int *ARGV)
      `eb_hook_euc_to_ascii()' は、フックコード
      `EB_HOOK_NARROW_JISX0208' (半角 JIS X 0208 文字) のためのフック関
-     数です。
+     数 です。
 
      `EB_Hookset' オブジェクトを関数 `eb_initialiez_hookset()' で初期
      化すると、この関数が自動的に登録されます。
@@ -4028,10 +4030,10 @@ File: eb-ja.info,  Node: Builtin Hook Functions,  Next: Text Data Functions,  Pr
 
      常に `EB_SUCCESS' を返します。
 
- - Function: EB_Error_Code eb_hook_narrow_character_text (EB_Book
-          *BOOK, EB_Appendix *APPENDIX, void *CONTAINER, EB_Hook_Code
-          CODE, int ARGC, const unsigned int *ARGV)
- - Function: EB_Error_Code eb_hook_wide_character_text (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_hook_narrow_character_text (EB_Book *BOOK,
+          EB_Appendix *APPENDIX, void *CONTAINER, EB_Hook_Code CODE,
+          int ARGC, const unsigned int *ARGV)
+ - 機能 : EB_Error_Code eb_hook_wide_character_text (EB_Book *BOOK,
           EB_Appendix *APPENDIX, void *CONTAINER, EB_Hook_Code CODE,
           int ARGC, const unsigned int *ARGV)
      `eb_hook_narrow_character_text()' は、フックコード
@@ -4053,7 +4055,7 @@ File: eb-ja.info,  Node: Builtin Hook Functions,  Next: Text Data Functions,  Pr
 
      この関数は、常に `EB_SUCCESS' を返します。
 
- - Function: EB_Error_Code eb_hook_newline (EB_Book *BOOK, EB_Appendix
+ - 機能 : EB_Error_Code eb_hook_newline (EB_Book *BOOK, EB_Appendix
           *APPENDIX, void *CONTAINER, EB_Hook_Code CODE, int ARGC,
           const unsigned int *ARGV)
      `eb_hook_narrow_newline()' は、フックコード `EB_HOOK_NEWLINE' (改
@@ -4065,7 +4067,7 @@ File: eb-ja.info,  Node: Builtin Hook Functions,  Next: Text Data Functions,  Pr
      この関数は、テキストデータに `\n' を書き込みます。 常に
      `EB_SUCCESS' を返します。
 
- - Function: EB_Error_Code eb_hook_empty (EB_Book *BOOK, EB_Appendix
+ - 機能 : EB_Error_Code eb_hook_empty (EB_Book *BOOK, EB_Appendix
           *APPENDIX, void *CONTAINER, EB_Hook_Code CODE, int ARGC,
           const unsigned int *ARGV)
      `eb_hook_empty()' は、何もしないフック関数です。 常に `EB_SUCCESS'
@@ -4082,9 +4084,9 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
 
      #include <eb/text.h>
 
- - Function: int eb_have_text (EB_Book *BOOK)
- - Function: int eb_have_menu (EB_Book *BOOK)
- - Function: int eb_have_copyright (EB_Book *BOOK)
+ - 機能: int eb_have_text (EB_Book *BOOK)
+ - 機能: int eb_have_menu (EB_Book *BOOK)
+ - 機能: int eb_have_copyright (EB_Book *BOOK)
      関数 `eb_have_text()' は、BOOK の選択している副本が、本文を持って
      いるかどうかを調べます。 同様に、`eb_have_menu()' はメニューを持っ
      ているかどうか、 `eb_have_copyright()' は著作権表示を持っているか
@@ -4093,11 +4095,9 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      いずれの関数も、持っていれば 1 を返し、持っていなければ 0 を返しま
      す。 BOOK が副本を選択していない場合も 0 を返します。
 
- - Function: EB_Error_Code eb_text (EB_Book *BOOK, EB_Position
-          *POSITION)
- - Function: EB_Error_Code eb_menu (EB_Book *BOOK, EB_Position
-          *POSITION)
- - Function: EB_Error_Code eb_copyright (EB_Book *BOOK, EB_Position
+ - 機能: EB_Error_Code eb_text (EB_Book *BOOK, EB_Position *POSITION)
+ - 機能: EB_Error_Code eb_menu (EB_Book *BOOK, EB_Position *POSITION)
+ - 機能 : EB_Error_Code eb_copyright (EB_Book *BOOK, EB_Position
           *POSITION)
      関数 `eb_text()' は、 BOOK が選択している副本の本文の開始位置を
      POSITION の指す領域に書き込みます。 同様に、`eb_menu()' はメニュー
@@ -4113,8 +4113,8 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      す。 選択中の副本が、対象となるテキストデータを持っていなければ、
      `EB_ERR_NO_SUCH_SEARCH' を返します。
 
- - Function: EB_Error_Code eb_seek_text (EB_Book *BOOK, const
-          EB_Position *POSITION)
+ - 機能 : EB_Error_Code eb_seek_text (EB_Book *BOOK, const EB_Position
+          *POSITION)
      関数 `eb_seek_text()' は、BOOK が選択している副本のテキストデータ
      ファイルをシークします。 シーク位置は POSITION で指定します。 この
      とき、 POSITION は常にファイルの先頭からの位置として解釈されます。
@@ -4134,11 +4134,11 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      `EB_ERR_NO_TEXT' を返します。
 
      なお、書籍によっては、テキストデータを収めたファイルには他のデータ
-     も一緒に格納されていることがありますが、テキスト以外のデータにア
+     も 一緒に格納されていることがありますが、テキスト以外のデータにア
      クセスしても、テキストデータの現在位置、読み込みに関する状態記録
      は変化しません。
 
- - Function: EB_Error_Code eb_tell_text (EB_Book *BOOK, EB_Position
+ - 機能 : EB_Error_Code eb_tell_text (EB_Book *BOOK, EB_Position
           *POSITION)
      関数 `eb_seek_text()' は、BOOK が選択している副本のテキストデータ
      ファイルの現在のアクセス位置を返します。
@@ -4152,10 +4152,10 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      す。 選択中の副本にテキストデータが存在しないときは、
      `EB_ERR_NO_TEXT' を返します。
 
- - Function: EB_Error_Code eb_read_text (EB_Book *BOOK, EB_Appendix
+ - 機能 : EB_Error_Code eb_read_text (EB_Book *BOOK, EB_Appendix
           *APPENDIX, EB_Hookset *HOOKSET, void *CONTAINER, size_t
           TEXT_MAX_LENGTH, char *TEXT, ssize_t *TEXT_LENGTH)
- - Function: EB_Error_Code eb_read_heading (EB_Book *BOOK, EB_Appendix
+ - 機能 : EB_Error_Code eb_read_heading (EB_Book *BOOK, EB_Appendix
           *APPENDIX, EB_Hookset *HOOKSET, void *CONTAINER, size_t
           TEXT_MAX_LENGTH, char *TEXT, ssize_t *TEXT_LENGTH)
      関数 `eb_read_text()' と `eb_read_heading()' は、BOOK が選択してい
@@ -4216,7 +4216,7 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      しては、このような問題は起きません。)
 
      引数 CONTAINER は、アプリケーションプログラムからフック関数にデー
-     タを渡すためのものです。 `eb_read_text()', `eb_read_heading()' で
+     タ を渡すためのものです。 `eb_read_text()', `eb_read_heading()' で
      は、直接この引数の値を参照することはありません。
 
      引数 APPENDIX, CONTAINER は、そのままフック関数に渡されます。 これ
@@ -4246,13 +4246,13 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      `eb_seek_text()' を呼び出すか、`eb_set_subbook()' で副本を選択し
      直すと、保存していたデータは破棄されます。
 
- - Function: EB_Error_Code eb_read_rawtext (EB_Book *BOOK, size_t
+ - 機能 : EB_Error_Code eb_read_rawtext (EB_Book *BOOK, size_t
           TEXT_MAX_LENGTH, char *TEXT, ssize_t *TEXT_LENGTH)
      関数 `eb_read_rawtext()' は、BOOK が選択している副本のテキストデ
      ータファイルの現在のアクセス位置からデータを読み込みます。
 
      `eb_read_text()' と似ていますが、この関数はフックセットによるデー
-     タの加工や文字コードの変換を一切行わず、データを内部表現のまま返
+     タ の加工や文字コードの変換を一切行わず、データを内部表現のまま返
      します。 読み込むテキストデータの種類は、何であっても構いません。
 
      読み込んだテキストデータは TEXT
@@ -4271,8 +4271,8 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      す。
 
      また、この関数を呼び出すには、あらかじめ `eb_seek_text()' の呼び出
-     しを成功させ、テキストデータのアクセス位置がセットされた状態にし
-     ておかなくてはなりません。 シークをせずに呼び出すと、
+     し を成功させ、テキストデータのアクセス位置がセットされた状態にし
+     て おかなくてはなりません。 シークをせずに呼び出すと、
      `EB_ERR_NO_PREV_SEEK' を返します。
 
      この関数は、繰り返し呼び出すことで、前回読み込んだテキストデータの
@@ -4287,7 +4287,7 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      `eb_seek_text()' を呼び出すか、 `eb_set_subbook()' で副本を選択し
      直すまで続きます。
 
- - Function: int eb_is_text_stopped (EB_Book *BOOK)
+ - 機能: int eb_is_text_stopped (EB_Book *BOOK)
      関数 `eb_is_text_stopped()' は、最後に読み込んだテキストデータが
      末尾に達したかどうかを判定します。
 
@@ -4312,16 +4312,15 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      `text_max_length' の値を十分大きく取って下さい。
 
 
- - Function: EB_Error_Code eb_write_text_byte1 (EB_Book *BOOK, int
-          BYTE1)
- - Function: EB_Error_Code eb_write_text_byte2 (EB_Book *BOOK, int
-          BYTE1, int BYTE2)
- - Function: EB_Error_Code eb_write_text_string (EB_Book *BOOK, const
-          char *STRING)
- - Function: EB_Error_Code eb_write_text (EB_Book *BOOK, const char
+ - 機能: EB_Error_Code eb_write_text_byte1 (EB_Book *BOOK, int BYTE1)
+ - 機能 : EB_Error_Code eb_write_text_byte2 (EB_Book *BOOK, int BYTE1,
+          int BYTE2)
+ - 機能 : EB_Error_Code eb_write_text_string (EB_Book *BOOK, const char
+          *STRING)
+ - 機能 : EB_Error_Code eb_write_text (EB_Book *BOOK, const char
           *STREAM, size_t STREAM_LENGTH)
      これらの関数は、いずれもフック関数の中から、テキストデータを書き込
-     むために用います。
+     む ために用います。
      書き込むデータの種類によって、使い分けて下さい。
 
      `eb_write_text_byte1()' は、BYTE1 で指定した 1 バイトの値を書き込
@@ -4340,7 +4339,7 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      フック関数として呼び出されていないときに、これらの関数を呼び出した
      場合の動作は未定義です。
 
- - Function: const char * eb_current_candidate (EB_Book *BOOK)
+ - 機能: const char * eb_current_candidate (EB_Book *BOOK)
      関数 `eb_current_candidate()' は、アクセス中のテキストデータの現
      在位置に書かれている、複合検索の候補となる語を返します。
 
@@ -4367,9 +4366,9 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
      なお、この関数が返した文字列を参照できるのは、フック関数から戻るま
      での間だけですので、注意して下さい。
 
- - Function: EB_Error_Code eb_forward_text (EB_Book *BOOK, EB_Appendix
+ - 機能 : EB_Error_Code eb_forward_text (EB_Book *BOOK, EB_Appendix
           *APPENDIX)
- - Function: EB_Error_Code eb_backward_text (EB_Book *BOOK, EB_Appendix
+ - 機能 : EB_Error_Code eb_backward_text (EB_Book *BOOK, EB_Appendix
           *APPENDIX)
      関数 `eb_forward_text()' と `eb_backward_text()' は、 BOOK が選択
      している副本の本文のアクセス位置を前後に移動させ、 本文の区切りコ
@@ -4421,7 +4420,7 @@ File: eb-ja.info,  Node: Text Data Functions,  Prev: Builtin Hook Functions,  Up
 
      (メニューでは、個々の階層のメニューデータが、それぞれ独立したテキ
      ストデータになっているため、頭出しを行っても前後のメニューデータへ
-     は移動できません。 複合検索の候補一覧も同様です。)
+     は 移動できません。 複合検索の候補一覧も同様です。)
 
 
 File: eb-ja.info,  Node: Local Character,  Next: Binary Data,  Prev: Text Data,  Up: Top
@@ -4443,7 +4442,7 @@ Code.。)
 の外字を定義していることもあります。
 
    CD-ROM 書籍では、定義した外字の字形データ (つまりフォント) を用意し
-ています。 フォントはビットマップデータであり、書籍によっては大きさの
+て います。 フォントはビットマップデータであり、書籍によっては大きさの
 異なる数種類のフォントを用意しています。
 
    逆に言えば、外字に対して提供されるデータは、フォントだけです。 ある
@@ -4566,7 +4565,7 @@ height)" として指定することができます。 EB ライブラリで外字のフォント
      }
 
    このプログラムでは、高さ 24 ピクセルのフォントを選択中の副本が用意し
-ているものと仮定していますが、実際には用意していない副本も珍しくありま
+て いるものと仮定していますが、実際には用意していない副本も珍しくありま
 せん。 もし、副本が高さ 24 ピクセルのフォントを用意していなければ、
 `eb_set_font()' は `EB_ERR_NO_SUCH_FONT' を返します。
 
@@ -4608,7 +4607,7 @@ height)" として指定することができます。 EB ライブラリで外字のフォント
          printf("this subbook has wide font\n");
 
    なお、あらかじめ副本を選択しておかないと、外字の高さは選択できないの
-で注意して下さい。 `eb_set_subbook()' で選択中の副本を切り替えると、外
+で 注意して下さい。 `eb_set_subbook()' で選択中の副本を切り替えると、外
 字フォントの高さは常に未選択の状態に戻ります。
 
 
@@ -4717,8 +4716,8 @@ File: eb-ja.info,  Node: Local Character in Text,  Next: Font Data Types,  Prev:
    外字はテキストデータ (本文、メニューなど) の中で使われています。
 
    アプリケーションプログラムが、テキストデータ中に出現する外字を識別し
-て処理を行うには、外字に対するフックを設定して、フック関数の中で処理す
-ることになります。
+て 処理を行うには、外字に対するフックを設定して、フック関数の中で処理す
+る ことになります。
 
    外字に対するフックは、全角外字に対する `EB_HOOK_WIDE_FONT' と半角外
 字に対する `EB_HOOK_NARROW_FONT' の二種類があります。 いずれも、外字が
@@ -4873,10 +4872,9 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
 
      #include <eb/font.h>
 
- - Function: EB_Error_Code eb_font (EB_Book *BOOK, EB_Font_Code
-          *FONT_CODE)
+ - 機能: EB_Error_Code eb_font (EB_Book *BOOK, EB_Font_Code *FONT_CODE)
      関数 `eb_font()' は、選択している副本において、選択中の外字フォン
-     トの高さを表す外字コードを FONT_CODE の指す領域に書き込みます。
+     ト の高さを表す外字コードを FONT_CODE の指す領域に書き込みます。
 
      成功すると関数は `EB_SUCCESS' を返します。 失敗すると FONT_CODE の
      指す領域に `EB_FONT_INVALID' を書き込み、原因を示すエラーコードを
@@ -4886,7 +4884,7 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      外字が選択されていなければ、`EB_ERR_NO_CUR_FONT' を返します。 副本
      そのものを選択していない場合も、同様です。
 
- - Function: EB_Error_Code eb_set_font (EB_Book *BOOK, EB_Font_Code
+ - 機能 : EB_Error_Code eb_set_font (EB_Book *BOOK, EB_Font_Code
           FONT_CODE)
      関数 `eb_set_font()' は、選択中の副本における外字フォントの高さを
      セットします。 セットする外字フォントの「高さ」は、対応する外字コ
@@ -4898,21 +4896,21 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      FONT_CODE を選択します。
 
      失敗すると原因を示すエラーコードを返し、外字フォントの高さは未選択
-     の状態になります。
+     の 状態になります。
 
      あらかじめ、BOOK 内のいずれかの副本が選択されていなくてはなりませ
      ん。 BOOK が副本を選択していなければ、`EB_ERR_NO_CUR_SUB' を返し
      ます。 また、その副本が持っていない外字フォントの高さが指定される
      と、 `EB_ERR_NO_SUCH_FONT' を返します。
 
- - Function: void eb_unset_font (EB_Book *BOOK)
+ - 機能: void eb_unset_font (EB_Book *BOOK)
      関数 `eb_unset_font()' は、選択中の外字フォントの高さを未選択の状
      態に戻します。 BOOK が書籍に結び付いていない場合や副本が選択されて
      いない場合、 もしくは外字フォントの高さが選択されていない場合は何
      もしません。
 
- - Function: void eb_font_list (EB_Book *BOOK, EB_Font_Code *FONT_LIST,
-          int *FONT_COUNT)
+ - 機能 : void eb_font_list (EB_Book *BOOK, EB_Font_Code *FONT_LIST, int
+          *FONT_COUNT)
      関数 `eb_font_list()' は、選択中の副本が定義している外字の高さの
      一覧を `EB_Font_Code' 型の配列にして、FONT_LIST の指す領域に書き
      込みます。
@@ -4930,14 +4928,14 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      ん。 BOOK が副本を選択していなければ、`EB_ERR_NO_CUR_SUB' を返し
      ます。
 
- - Function: int eb_have_font (EB_Book *BOOK, EB_Font_Code FONT_CODE)
+ - 機能: int eb_have_font (EB_Book *BOOK, EB_Font_Code FONT_CODE)
      関数 `eb_font()' は、FONT_CODE で指定した高さの外字フォントを、選
      択中の副本が持っているかどうかを調べます。
 
      持っていれば 1 を返し、持っていなければ 0 を返します。 BOOK が副本
      を選択していない場合も 0 を返します。
 
- - Function: EB_Error_Code eb_font_height (EB_Book *BOOK, int *HEIGHT)
+ - 機能: EB_Error_Code eb_font_height (EB_Book *BOOK, int *HEIGHT)
      関数 `eb_font_height()' は、BOOK が選択中の外字フォントの高さ (縦
      方向のピクセル数) を HEIGHT の指す領域に書き込みます。
 
@@ -4947,14 +4945,14 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      あらかじめ、BOOK は外字フォントの高さを選択していなくてはなりませ
      ん。 選択していない場合は、`EB_ERR_NO_CUR_FONT' を返します。
 
- - Function: EB_Error_Code eb_font_height2 (EB_Font_Code FONT_CODE, int
+ - 機能 : EB_Error_Code eb_font_height2 (EB_Font_Code FONT_CODE, int
           *HEIGHT)
      `eb_font_height()' と似ていますが、選択中の副本ではなく、引数
      FONT_HEIGHT で指定された外字コードの高さ (縦方向のピクセル数) を
      書き込む点が異なります。
 
- - Function: int eb_have_narrow_font (EB_Book *BOOK)
- - Function: int eb_have_wide_font (EB_Book *BOOK)
+ - 機能: int eb_have_narrow_font (EB_Book *BOOK)
+ - 機能: int eb_have_wide_font (EB_Book *BOOK)
      関数 `eb_have_narrow_font()' は、選択中の副本が半角外字を定義して
      いるかどうかを調べます。 同様に、関数 `eb_have_wide_font()' は、全
      角外字を定義しているかどうかを調べます。
@@ -4962,10 +4960,8 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      定義していれば 1 を、定義していなければ 0 を返します。 BOOK が副本
      を選択していない場合も 0 を返します。
 
- - Function: EB_Error_Code eb_narrow_font_width (EB_Book *BOOK, int
-          *WIDTH)
- - Function: EB_Error_Code eb_wide_font_width (EB_Book *BOOK, int
-          *WIDTH)
+ - 機能: EB_Error_Code eb_narrow_font_width (EB_Book *BOOK, int *WIDTH)
+ - 機能: EB_Error_Code eb_wide_font_width (EB_Book *BOOK, int *WIDTH)
      関数 `eb_narrow_font_width()' は、BOOK が選択中の外字フォントの高
      さにおける半角外字の幅 (横方向のピクセル数) を、HEIGHT の指す領域
      に書き込みます。 同様に、`eb_wide_font_width()' は全角外字の幅を書
@@ -4977,18 +4973,16 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      あらかじめ、BOOK は外字の高さを選択していなくてはなりません。 選択
      していない場合は、`EB_ERR_NO_CUR_FONT' を返します。
 
- - Function: EB_Error_Code eb_narrow_font_width2 (EB_Font_Code
-          FONT_CODE, int *WIDTH)
- - Function: EB_Error_Code eb_wide_font_width2 (EB_Font_Code FONT_CODE,
+ - 機能 : EB_Error_Code eb_narrow_font_width2 (EB_Font_Code FONT_CODE,
           int *WIDTH)
+ - 機能 : EB_Error_Code eb_wide_font_width2 (EB_Font_Code FONT_CODE, int
+          *WIDTH)
      `eb_narrow_font_width()', `eb_wide_font_width()' と似ていますが、
      選択中の副本ではなく、引数 FONT_HEIGHT で指定された外字コードの幅
      (横方向のピクセル数) を書き込む点が異なります。
 
- - Function: EB_Error_Code eb_narrow_font_size (EB_Book *BOOK, size_t
-          *SIZE)
- - Function: EB_Error_Code eb_wide_font_size (EB_Book *BOOK, size_t
-          *SIZE)
+ - 機能: EB_Error_Code eb_narrow_font_size (EB_Book *BOOK, size_t *SIZE)
+ - 機能: EB_Error_Code eb_wide_font_size (EB_Book *BOOK, size_t *SIZE)
      関数 `eb_narrow_font_size()' は、BOOK が選択中の外字フォントの高
      さにおける半角外字一個分のデータサイズ (バイト数) を、SIZE の指す
      領域に書き込みます。 同様に、`eb_wide_font_size()' は全角外字のサ
@@ -5000,18 +4994,16 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      あらかじめ、BOOK は外字フォントの高さを選択していなくてはなりませ
      ん。 選択していない場合は、`EB_ERR_NO_CUR_FONT' を返します。
 
- - Function: EB_Error_Code eb_narrow_font_size2 (EB_Font_Code
-          FONT_CODE, size_t *SIZE)
- - Function: EB_Error_Code eb_wide_font_size2 (EB_Font_Code FONT_CODE,
+ - 機能 : EB_Error_Code eb_narrow_font_size2 (EB_Font_Code FONT_CODE,
+          size_t *SIZE)
+ - 機能 : EB_Error_Code eb_wide_font_size2 (EB_Font_Code FONT_CODE,
           size_t *SIZE)
      `eb_narrow_font_size()', `eb_wide_font_size()' と似ていますが、 選
      択中の副本ではなく、引数 FONT_HEIGHT で指定された外字コードの外字
      一個分のデータサイズを書き込む点が異なります。
 
- - Function: EB_Error_Code eb_narrow_font_start (EB_Book *BOOK, int
-          *START)
- - Function: EB_Error_Code eb_wide_font_start (EB_Book *BOOK, int
-          *START)
+ - 機能: EB_Error_Code eb_narrow_font_start (EB_Book *BOOK, int *START)
+ - 機能: EB_Error_Code eb_wide_font_start (EB_Book *BOOK, int *START)
      関数 `eb_narrow_font_start()' は、BOOK が選択中の副本における半角
      外字の先頭の文字番号 (半角外字の文字番号の中で最小のもの) を、
      START の指す領域に書き込みます。
@@ -5026,8 +5018,8 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      関数 `eb_wide_font_start()' は、半角外字ではなく全角外字について
      調べるという点を除いて、`eb_narrow_font_start()' と同じです。
 
- - Function: EB_Error_Code eb_narrow_font_end (EB_Book *BOOK, int *END)
- - Function: EB_Error_Code eb_wide_font_end (EB_Book *BOOK, int *END)
+ - 機能: EB_Error_Code eb_narrow_font_end (EB_Book *BOOK, int *END)
+ - 機能: EB_Error_Code eb_wide_font_end (EB_Book *BOOK, int *END)
      関数 `eb_narrow_font_end()' は、BOOK が選択中の副本における半角外
      字の最後の文字番号 (半角外字の文字番号の中で最大のもの) を、 START
      の指す領域に書き込みます。
@@ -5042,10 +5034,10 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      関数 `eb_wide_font_end()' は、半角外字ではなく全角外字について調
      べるという点を除いて、`eb_narrow_font_end()' と同じです。
 
- - Function: EB_Error_Code eb_narrow_font_character_bitmap (EB_Book
-          *BOOK, int CHARACTER_NUMBER, char *BITMAP)
- - Function: EB_Error_Code eb_wide_font_character_bitmap (EB_Book
-          *BOOK, int CHARACTER_NUMBER, char *BITMAP)
+ - 機能 : EB_Error_Code eb_narrow_font_character_bitmap (EB_Book *BOOK,
+          int CHARACTER_NUMBER, char *BITMAP)
+ - 機能 : EB_Error_Code eb_wide_font_character_bitmap (EB_Book *BOOK,
+          int CHARACTER_NUMBER, char *BITMAP)
      関数 `eb_narrow_font_character_bitmap()' は、BOOK が選択中の副本
      で定義している、半角外字のビットマップデータを取り出します。 取り
      出す外字の文字番号を、CHARACTER_NUMBER で指定します。
@@ -5069,10 +5061,10 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      ビットマップデータの形式については、 *note 外字フォントの取り出し :
      Get Font.。
 
- - Function: EB_Error_Code eb_forward_narrow_font_character (EB_Book
-          *BOOK, int N, int *CHARACTER_NUMBER)
- - Function: EB_Error_Code eb_forward_wide_font_character (EB_Book
-          *BOOK, int N, int *CHARACTER_NUMBER)
+ - 機能 : EB_Error_Code eb_forward_narrow_font_character (EB_Book *BOOK,
+          int N, int *CHARACTER_NUMBER)
+ - 機能 : EB_Error_Code eb_forward_wide_font_character (EB_Book *BOOK,
+          int N, int *CHARACTER_NUMBER)
      関数 `eb_forward_narrow_font_character()' は、BOOK が選択中の副本
      で定義されている半角外字の文字番号 CHARACTER_NUMBER の N 個後ろに
      位置する外字の文字番号を取得します。
@@ -5102,10 +5094,10 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      外字について操作するという点を除いて、
      `eb_forward_narrow_font_character()' と同じです。
 
- - Function: EB_Error_Code eb_backward_narrow_font_character (EB_Book
+ - 機能 : EB_Error_Code eb_backward_narrow_font_character (EB_Book
           *BOOK, int N, int *CHARACTER_NUMBER)
- - Function: EB_Error_Code eb_backward_wide_font_character (EB_Book
-          *BOOK, int N, int *CHARACTER_NUMBER)
+ - 機能 : EB_Error_Code eb_backward_wide_font_character (EB_Book *BOOK,
+          int N, int *CHARACTER_NUMBER)
      関数 `eb_backward_narrow_font_character()' は
      `eb_forward_narrow_font_character()' とはちょうど逆の関数です。
      BOOK が選択中の副本で定義されている半角外字の文字番号
@@ -5125,21 +5117,21 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
           /* 全角外字の場合 (n < 0) */
           eb_forward_wide_font_character (book, -n, character_number);
 
- - Function: EB_Error_Code eb_narrow_font_xbm_size (EB_Font_Code
-          HEIGHT, size_t *SIZE)
- - Function: EB_Error_Code eb_narrow_font_xpm_size (EB_Font_Code
-          HEIGHT, size_t *SIZE)
- - Function: EB_Error_Code eb_narrow_font_gif_size (EB_Font_Code
-          HEIGHT, size_t *SIZE)
- - Function: EB_Error_Code eb_narrow_font_bmp_size (EB_Font_Code
-          HEIGHT, size_t *SIZE)
- - Function: EB_Error_Code eb_wide_font_xbm_size (EB_Font_Code HEIGHT,
+ - 機能 : EB_Error_Code eb_narrow_font_xbm_size (EB_Font_Code HEIGHT,
           size_t *SIZE)
- - Function: EB_Error_Code eb_wide_font_xpm_size (EB_Font_Code HEIGHT,
+ - 機能 : EB_Error_Code eb_narrow_font_xpm_size (EB_Font_Code HEIGHT,
           size_t *SIZE)
- - Function: EB_Error_Code eb_wide_font_gif_size (EB_Font_Code HEIGHT,
+ - 機能 : EB_Error_Code eb_narrow_font_gif_size (EB_Font_Code HEIGHT,
           size_t *SIZE)
- - Function: EB_Error_Code eb_wide_font_bmp_size (EB_Font_Code HEIGHT,
+ - 機能 : EB_Error_Code eb_narrow_font_bmp_size (EB_Font_Code HEIGHT,
+          size_t *SIZE)
+ - 機能 : EB_Error_Code eb_wide_font_xbm_size (EB_Font_Code HEIGHT,
+          size_t *SIZE)
+ - 機能 : EB_Error_Code eb_wide_font_xpm_size (EB_Font_Code HEIGHT,
+          size_t *SIZE)
+ - 機能 : EB_Error_Code eb_wide_font_gif_size (EB_Font_Code HEIGHT,
+          size_t *SIZE)
+ - 機能 : EB_Error_Code eb_wide_font_bmp_size (EB_Font_Code HEIGHT,
           size_t *SIZE)
      最初の 4 つの関数 (`eb_narrow_font_xbm_size()' 〜
      `eb_narrow_font_bmp_size()') は、外字コード HEIGHT の半角外字一個
@@ -5154,13 +5146,13 @@ File: eb-ja.info,  Node: Font Functions,  Next: Font Sample,  Prev: Font Constan
      SIZE の指す領域に 0
      を書き込み、原因を示すエラーコードを返します。
 
- - Function: void eb_bitmap_to_xbm (const char *BITMAP, int WIDTH, int
+ - 機能 : void eb_bitmap_to_xbm (const char *BITMAP, int WIDTH, int
           HEIGHT, char *IMAGE, size_t *IMAGE_LENGTH)
- - Function: void eb_bitmap_to_xpm (const char *BITMAP, int WIDTH, int
+ - 機能 : void eb_bitmap_to_xpm (const char *BITMAP, int WIDTH, int
           HEIGHT, char *IMAGE, size_t *IMAGE_LENGTH)
- - Function: void eb_bitmap_to_gif (const char *BITMAP, int WIDTH, int
+ - 機能 : void eb_bitmap_to_gif (const char *BITMAP, int WIDTH, int
           HEIGHT, char *IMAGE, size_t *IMAGE_LENGTH)
- - Function: void eb_bitmap_to_bmp (const char *BITMAP, int WIDTH, int
+ - 機能 : void eb_bitmap_to_bmp (const char *BITMAP, int WIDTH, int
           HEIGHT, char *IMAGE, size_t *IMAGE_LENGTH)
      これら 4 つの関数は、 `eb_narrow_font_character()' または
      `eb_wide_font_character()' で取り出した外字のビットマップを XBM,
@@ -5349,8 +5341,8 @@ CD-ROM 書籍から取得する機能だけです。 表示したり再生したりする機能は用
    以下、この章では種類別にバイナリデータの扱い方について説明します。
 
    バイナリデータの種類毎にデータの取り出し方は微妙に異なりますが (これ
-はデータの収録方法が微妙に異なっているからに他なりません)、おおよそ手
-順は、次のようなものになります。
+は データの収録方法が微妙に異なっているからに他なりません)、おおよそ手
+順 は、次のようなものになります。
 
   1. テキストデータのフックを用いて、バイナリデータの参照情報を取得す
      る
@@ -5378,7 +5370,7 @@ File: eb-ja.info,  Node: Monochrome Image,  Next: Color Image,  Prev: Binary Dat
 ============
 
    2 階調のモノクロ図版は、電子ブック、EPWING 双方に存在し、EB ライブラ
-リではどちらも扱うことができます。 (電子ブックに存在する 16 階調のモノ
+リ ではどちらも扱うことができます。 (電子ブックに存在する 16 階調のモノ
 クロ図版は、今のところ EB ライブラリでは対応していません。)
 
    モノクロ図版データの内部形式は外字と同じですが、 EB ライブラリでは、
@@ -5406,7 +5398,7 @@ File: eb-ja.info,  Node: Monochrome Image,  Next: Color Image,  Prev: Binary Dat
 `eb_set_binary_mono_graphic()' への引数には、 `EB_Book'
 オブジェクトと、先ほど得た図版へのページ番号、オフセット、 幅、高さを渡
 します。 `EB_Book' オブジェクトは、これから取り出そうとしている図版を収
-録している副本をあらかじめ選択しておく必要があります。
+録 している副本をあらかじめ選択しておく必要があります。
 
      /* `eb_set_binary_mono_graphic()' の関数プロトタイプ */
      EB_Error_Code
@@ -5509,7 +5501,7 @@ WAVE (PCM) 音声
 していません。)
 
    WAVE 形式の音声データを取り出すには、まず WAVE 音声の参照開始と終了
-を表すエスケープシーケンスへのフック `EB_HOOK_BEGIN_WAVE' と
+を 表すエスケープシーケンスへのフック `EB_HOOK_BEGIN_WAVE' と
 `EB_HOOK_END_WAVE' を使います。
 
    フック `EB_HOOK_BEGIN_WAVE' がフック関数に渡す引数のうち、 `argv[2]'
@@ -5570,29 +5562,29 @@ File: eb-ja.info,  Node: Binary Data Functions,  Prev: MPEG Movie,  Up: Binary D
 
      #include <eb/binary.h>
 
- - Function: EB_Error_Code eb_set_binary_mono_graphic (EB_Book *BOOK,
-          const EB_Position *POSITION, int WIDTH, HEIGHT)
+ - 機能 : EB_Error_Code eb_set_binary_mono_graphic (EB_Book *BOOK, const
+          EB_Position *POSITION, int WIDTH, HEIGHT)
 
- - Function: EB_Error_Code eb_set_binary_color_graphic (EB_Book *BOOK,
+ - 機能 : EB_Error_Code eb_set_binary_color_graphic (EB_Book *BOOK,
           const EB_Position *POSITION)
 
- - Function: EB_Error_Code eb_set_binary_wave (EB_Book *BOOK, const
+ - 機能 : EB_Error_Code eb_set_binary_wave (EB_Book *BOOK, const
           EB_Position *START_POSITION, EB_Position *START_POSITION)
 
- - Function: EB_Error_Code eb_set_binary_mpeg (EB_Book *BOOK, const
+ - 機能 : EB_Error_Code eb_set_binary_mpeg (EB_Book *BOOK, const
           unsigned int *ARGV)
 
- - Function: EB_Error_Code eb_read_binary (EB_Book *BOOK, size_t
+ - 機能 : EB_Error_Code eb_read_binary (EB_Book *BOOK, size_t
           `binary_max_length', char *BINARY, ssize_t *BINARY_LENGTH)
 
- - Function: EB_Error_Code eb_compose_movie_file_name (const unsigned
-          int *ARGV, char *COMPOSED_FILE_NAME)
+ - 機能 : EB_Error_Code eb_compose_movie_file_name (const unsigned int
+          *ARGV, char *COMPOSED_FILE_NAME)
 
- - Function: EB_Error_Code eb_unset_binary (EB_Book *BOOK)
+ - 機能: EB_Error_Code eb_unset_binary (EB_Book *BOOK)
 
- - Function: EB_Error_Code eb_compose_movie_file_name (const unsigned
-          int *ARGV, char *COMPOSED_FILE_NAME)
- - Function: EB_Error_Code eb_decompose_movie_file_name (unsigned int
+ - 機能 : EB_Error_Code eb_compose_movie_file_name (const unsigned int
+          *ARGV, char *COMPOSED_FILE_NAME)
+ - 機能 : EB_Error_Code eb_decompose_movie_file_name (unsigned int
           *ARGV, const char *COMPOSED_FILE_NAME)
 
 
@@ -5940,83 +5932,83 @@ File: eb-ja.info,  Node: Variable Index,  Prev: Function Index,  Up: Index
 
 
 Tag Table:
-Node: Top1012
-Node: Introduction5120
-Node: Electronic Book and EPWING6961
-Node: Construction of This Book8076
-Node: Features9215
-Node: Header Files10198
-Node: Character Code11137
-Node: Compressed Book15178
-Node: Traditional System16151
-Node: Compilation17171
-Node: Compilation Simple Way18584
-Node: Compilation with Autoconf21968
-Node: Debug EB Library24065
-Node: Init and Exit26364
-Node: Init and Exit Sample27152
-Node: Init and Exit Functions28196
-Node: EB_Book29858
-Node: EB_Book Explanation30530
-Node: EB_Book Sample32785
-Node: EB_Book Data Types35252
-Node: EB_Book Functions37517
-Node: Error Handling41873
-Node: Error Code and Message42710
-Node: Tolerance to Error44463
-Node: Error Data Types45816
-Node: Error Code List46537
-Node: Error Functions54524
-Node: Subbook56181
-Node: Subbook Code57452
-Node: Current Subbook59062
-Node: Subbook Sample61097
-Node: Subbook Data Types63667
-Node: Subbook Functions64406
-Node: Search70195
-Node: Word Search71287
-Node: Keyword Search74167
-Node: Multi Search75623
-Node: EB_Hit79090
-Node: Get Remained Entries80676
-Node: Search Data Types81970
-Node: Search Functions83902
-Node: Text Data95396
-Node: Seek and Read Text Data96853
-Node: Text Data Format100976
-Node: Hook103663
-Node: Hook and Character Code107820
-Node: Copyright Notice109914
-Node: Menu111059
-Node: Multi Candidates114968
-Node: Stop Code Issue118905
-Node: Text Data Sample121329
-Node: Text Data Types125760
-Node: Hook Function Details127613
-Node: Hook Code List129987
-Node: Hookset Access Functions146715
-Node: Builtin Hook Functions149791
-Node: Text Data Functions152967
-Node: Local Character169756
-Node: Narrow & Wide Font171509
-Node: Font Size and Font Code173646
-Node: Current Font Height175207
-Node: Get Font177779
-Node: Convert Font180408
-Node: Local Character in Text181571
-Node: Font Data Types182227
-Node: Font Constants182970
-Node: Font Functions187028
-Node: Font Sample201114
-Node: Binary Data205807
-Node: Monochrome Image207812
-Node: Color Image210627
-Node: WAVE Sound213044
-Node: MPEG Movie214229
-Node: Binary Data Functions215425
-Node: Index216676
-Node: Data Type Index216900
-Node: Function Index217749
-Node: Variable Index224241
+Node: Top1027
+Node: Introduction5135
+Node: Electronic Book and EPWING6976
+Node: Construction of This Book8092
+Node: Features9233
+Node: Header Files10217
+Node: Character Code11156
+Node: Compressed Book15198
+Node: Traditional System16171
+Node: Compilation17191
+Node: Compilation Simple Way18604
+Node: Compilation with Autoconf21988
+Node: Debug EB Library24087
+Node: Init and Exit26386
+Node: Init and Exit Sample27174
+Node: Init and Exit Functions28218
+Node: EB_Book29874
+Node: EB_Book Explanation30546
+Node: EB_Book Sample32801
+Node: EB_Book Data Types35268
+Node: EB_Book Functions37533
+Node: Error Handling41863
+Node: Error Code and Message42700
+Node: Tolerance to Error44454
+Node: Error Data Types45807
+Node: Error Code List46528
+Node: Error Functions54525
+Node: Subbook56175
+Node: Subbook Code57447
+Node: Current Subbook59057
+Node: Subbook Sample61092
+Node: Subbook Data Types63662
+Node: Subbook Functions64401
+Node: Search70160
+Node: Word Search71252
+Node: Keyword Search74132
+Node: Multi Search75588
+Node: EB_Hit79056
+Node: Get Remained Entries80642
+Node: Search Data Types81936
+Node: Search Functions83869
+Node: Text Data95311
+Node: Seek and Read Text Data96768
+Node: Text Data Format100893
+Node: Hook103580
+Node: Hook and Character Code107737
+Node: Copyright Notice109834
+Node: Menu110979
+Node: Multi Candidates114891
+Node: Stop Code Issue118830
+Node: Text Data Sample121256
+Node: Text Data Types125687
+Node: Hook Function Details127540
+Node: Hook Code List129914
+Node: Hookset Access Functions146648
+Node: Builtin Hook Functions149712
+Node: Text Data Functions152874
+Node: Local Character169575
+Node: Narrow & Wide Font171329
+Node: Font Size and Font Code173466
+Node: Current Font Height175027
+Node: Get Font177601
+Node: Convert Font180230
+Node: Local Character in Text181393
+Node: Font Data Types182051
+Node: Font Constants182794
+Node: Font Functions186852
+Node: Font Sample200739
+Node: Binary Data205432
+Node: Monochrome Image207439
+Node: Color Image210256
+Node: WAVE Sound212673
+Node: MPEG Movie213859
+Node: Binary Data Functions215055
+Node: Index216278
+Node: Data Type Index216502
+Node: Function Index217351
+Node: Variable Index223843
 
 End Tag Table

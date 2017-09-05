@@ -406,12 +406,16 @@ eb_narrow_font_size2(font_code, size)
     switch (font_code) {
     case EB_FONT_16:
 	*size = EB_SIZE_NARROW_FONT_16;
+	break;
     case EB_FONT_24:
 	*size = EB_SIZE_NARROW_FONT_24;
+	break;
     case EB_FONT_30:
 	*size = EB_SIZE_NARROW_FONT_30;
+	break;
     case EB_FONT_48:
 	*size = EB_SIZE_NARROW_FONT_48;
+	break;
     default:
 	error_code = EB_ERR_NO_SUCH_FONT;
 	goto failed;
