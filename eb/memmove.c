@@ -45,23 +45,24 @@
  * memmove() described in ISO 9899: 1990.
  */
 VOID *
-eb_memmove(dest, src, len)
-    VOID *dest;
-    const VOID *src;
-    size_t len;
+memmove(destination, source, length)
+    VOID *destination;
+    const VOID *source;
+    size_t length;
 {
-    char *d = (char *)dest;
-    const char *s = (const char *)src;
+    char *d = (char *)destination;
+    const char *s = (const char *)source;
+    size_t i;
     
     if (s < d) {
-	s += len - 1;
-	d += len - 1;
-	while (0 < len--)
+	s += length - 1;
+	d += length - 1;
+	for (i = 0; i < length; i++)
 	    *d-- = *s--;
     } else if (s != d) {
-	while (0 < len--)
+	for (i = 0; i < length; i++)
 	    *d++ = *s++;
     }
 
-    return dest;
+    return destination;
 }

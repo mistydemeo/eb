@@ -46,10 +46,12 @@ memset(stream, character, length)
     int character;
     size_t length;
 {
-    char *s = stream;
+    unsigned char *s = (unsigned char *)stream;
+    unsigned char c = (unsigned char)character;
+    size_t i;
 
-    while (0 < length--)
-	*s++ = character;
+    for (i = 0; i < length; i++)
+	*s++ = c;
 
     return stream;
 }

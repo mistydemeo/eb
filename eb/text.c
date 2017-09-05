@@ -969,6 +969,15 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		hook = hookset->hooks + EB_HOOK_END_MONO_GRAPHIC;
 		break;
 
+	    case 0x53:
+		/* end of EB sound */
+		context->in_step = 10;
+		if (cache_rest_length < context->in_step) {
+		    error_code = EB_ERR_UNEXP_TEXT;
+		    goto failed;
+		}
+		break;
+
 	    case 0x59:
 		/* end of MPEG movie */
 		context->in_step = 2;
@@ -1212,12 +1221,12 @@ eb_read_text_internal(book, appendix, hookset, container, text_max_length,
 		/*
 		 * This is a GB 2312 HANJI character.
 		 */
-		argv[0] = eb_uint2(cache_p) | 0x0080;
+		argv[0] = eb_uint2(cache_p) | 0x8000;
 
 		if (context->is_candidate
 		    && candidate_length < EB_MAX_WORD_LENGTH - 1) {
-		    *candidate_p++ = c1;
-		    *candidate_p++ = c2 | 0x80;
+		    *candidate_p++ = c1 | 0x80;
+		    *candidate_p++ = c2;
 		    *candidate_p   = '\0';
 		    candidate_length += 2;
 		}
