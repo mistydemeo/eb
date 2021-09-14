@@ -921,7 +921,8 @@ eb_bitmap_to_bmp(const char *bitmap, int width, int height, char *bmp,
     else
 	line_pad_length = 0;
 
-    data_size = (width / 2 + line_pad_length) * height;
+    bitmap_line_length = (width + 7) / 8;
+    data_size = (bitmap_line_length + line_pad_length) * height;
     file_size = data_size + BMP_PREAMBLE_LENGTH;
 
     /*
@@ -950,7 +951,6 @@ eb_bitmap_to_bmp(const char *bitmap, int width, int height, char *bmp,
     bmp_p[37] = (data_size >> 24) & 0xff;
 
     bmp_p += BMP_PREAMBLE_LENGTH;
-    bitmap_line_length = (width + 7) / 8;
 
     for (i = height - 1; 0 <= i; i--) {
 	memcpy(bmp_p, bitmap + bitmap_line_length * i, bitmap_line_length);
