@@ -1560,7 +1560,7 @@ eb_is_text_stopped(EB_Book *book)
 {
     int is_stopped = 0;
 
-    eb_lock(book);
+    eb_lock(&book->lock);
     LOG(("in: eb_is_text_stopped(book=%d)", (int)book->code));
 
     if (book->subbook_current != NULL) {
